@@ -1,0 +1,3 @@
+grammar Grammatica;
+
+grammatica: CHAR;
