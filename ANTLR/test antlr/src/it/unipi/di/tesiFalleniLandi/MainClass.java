@@ -27,6 +27,6 @@ public class MainClass {
 		
 		System.out.println(tree.toStringTree(parser));
 		
-		System.out.println(tree.getChild(arg0));
+		//System.out.println(tree.getChild(arg0));
 	}
 }
