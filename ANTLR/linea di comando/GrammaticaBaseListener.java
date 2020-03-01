@@ -15,6 +15,18 @@ public class GrammaticaBaseListener implements GrammaticaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterInit(GrammaticaParser.InitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInit(GrammaticaParser.InitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterValue(GrammaticaParser.ValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -22,18 +34,6 @@ public class GrammaticaBaseListener implements GrammaticaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(GrammaticaParser.ValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCoppia(GrammaticaParser.CoppiaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCoppia(GrammaticaParser.CoppiaContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

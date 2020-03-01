@@ -7,6 +7,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface GrammaticaListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link GrammaticaParser#init}.
+	 * @param ctx the parse tree
+	 */
+	void enterInit(GrammaticaParser.InitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammaticaParser#init}.
+	 * @param ctx the parse tree
+	 */
+	void exitInit(GrammaticaParser.InitContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammaticaParser#value}.
 	 * @param ctx the parse tree
 	 */
@@ -16,14 +26,4 @@ public interface GrammaticaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValue(GrammaticaParser.ValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GrammaticaParser#coppia}.
-	 * @param ctx the parse tree
-	 */
-	void enterCoppia(GrammaticaParser.CoppiaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GrammaticaParser#coppia}.
-	 * @param ctx the parse tree
-	 */
-	void exitCoppia(GrammaticaParser.CoppiaContext ctx);
 }
