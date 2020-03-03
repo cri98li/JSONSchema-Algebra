@@ -1,21 +1,36 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.json.simple.JSONArray;
 
 public class Type implements JSONSchemaElement {
-
 	private String type;
+	private List<String> type_array;
 	
-	Type(String value){
+	public Type(String value){
 		type = value;
 	}
+	
+	public Type(JSONArray array){
+		type_array = new LinkedList<>();;
+		
+		Iterator<?> it = array.iterator();
+		
+		while(it.hasNext())
+			type_array.add((String) it.next());
+	}
+	
+	
 	
 	
 	@Override
 	public String toString() {
-		return type;
+		return "Type [type=" + type + ", type_array=" + type_array + "]";
 	}
-	
+
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub

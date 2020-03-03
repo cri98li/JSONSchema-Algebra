@@ -1,25 +1,18 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
-
-public class Not implements JSONSchemaElement {
-	private JSONSchema value;
+public class UnknowElement implements JSONSchemaElement {
+	private String unknow;
 	
-	public Not(JSONObject obj) {
-		value = new JSONSchema(obj);
+	public UnknowElement() {
+		
 	}
 	
-	
-	
-
 	@Override
 	public String toString() {
-		return "Not [value=" + value + "]";
+		return unknow;
 	}
 
-
-
-
+	
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub
@@ -31,5 +24,5 @@ public class Not implements JSONSchemaElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

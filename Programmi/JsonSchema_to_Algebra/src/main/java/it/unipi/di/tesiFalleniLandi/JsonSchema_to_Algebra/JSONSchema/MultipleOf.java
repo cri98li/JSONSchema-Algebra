@@ -1,24 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
-
-public class Not implements JSONSchemaElement {
-	private JSONSchema value;
+public class MultipleOf implements JSONSchemaElement{
+	private Long value = 1L;
 	
-	public Not(JSONObject obj) {
-		value = new JSONSchema(obj);
+	public MultipleOf(Long value) {
+		this.value = value;
 	}
 	
-	
-	
-
 	@Override
 	public String toString() {
-		return "Not [value=" + value + "]";
+		return "MultipleOf [value=" + value + "]";
 	}
-
-
-
 
 	@Override
 	public String toJSONString() {
@@ -31,5 +23,4 @@ public class Not implements JSONSchemaElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

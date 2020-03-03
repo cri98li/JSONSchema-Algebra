@@ -14,26 +14,20 @@ public class Items implements JSONSchemaElement{
 	private JSONSchema additionalItems_array;
 	private JSONSchema unevaluatedItems_array;
 	
-	private boolean inizialized;
+	private boolean initialized;
 	
 	public Items() {
 		
 	}
 	
 	public void setItems(JSONObject obj) {
-		inizialized = true;
+		initialized = true;
 		
 		items = new JSONSchema(obj);
 	}
 	
-	
-	
-	
-	
-	
-	
 	public void setItems(JSONArray array) {
-		inizialized = true;
+		initialized = true;
 		
 		items_array = new LinkedList<>();
 		
@@ -46,26 +40,21 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(JSONObject obj) {
-		inizialized = true;
+		initialized = true;
 
 		items = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(JSONObject obj) {
-		inizialized = true;
+		initialized = true;
 
 		items = new JSONSchema(obj);
 	}
 	
-	
 	public boolean isInitialized() {
-		return inizialized;
+		return initialized;
 	}
 	
-	
-	
-	
-
 	@Override
 	public String toString() {
 		return "Items [items_array=" + items_array + ", items=" + items + ", additionalItems_array="

@@ -1,12 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class JSONSchema implements JSONSchemaElement{
 	private Properties properties;
@@ -17,12 +14,18 @@ public class JSONSchema implements JSONSchemaElement{
 	private AllOf allOf;
 	private AnyOf anyOf;
 	private Items items;
+	private MultipleOf multipleOf;
+	private Length length;
+	private BetweenItems betweenItems;
+	private Contains contains;
+	private BetweenNumber betweenNumber;
 
 	public JSONSchema(JSONObject object) {
 		if_then_else = new If_Then_Else();
 		items = new Items();
-		
-		
+		length = new Length();
+		betweenItems = new BetweenItems();
+		betweenNumber = new BetweenNumber();
 		
 		
 		//inizio parsing
@@ -36,7 +39,11 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 			
 			case "type":
-				type = new Type((String) object.get(key));
+				try {
+					type = new Type((JSONArray)object.get(key));
+				}catch (ClassCastException e) {
+					type = new Type((String)object.get(key));
+				}
 				break;
 			
 			case "if":
@@ -69,16 +76,82 @@ public class JSONSchema implements JSONSchemaElement{
 				
 			case "items":
 				try {
-					items.setItems((JSONArray)object.get(key));
+					items.setItems((JSONArray) object.get(key));
 				} catch (ClassCastException e) {
-					items.setItems((JSONObject)object.get(key));
+					items.setItems((JSONObject) object.get(key));
 				}
+				break;
+			
+			case "minItems":
+				betweenItems.setMinItems((Long)object.get(key));
+				break;
+				
+			case "maxItems":
+				betweenItems.setMaxItems((Long)object.get(key));
+				break;
+				
+			case "multipleOf":
+				multipleOf = new MultipleOf((Long)object.get(key));
+				break;
+				
+			case "minLength":
+				length.setMinLength((Long)object.get(key));
+				break;
+				
+			case "maxLength":
+				length.setMaxLength((Long)object.get(key));
+				break;
+				
+			case "contains":
+				contains.setContains((JSONObject) object.get(key));
+				break;
+			
+			case "minContains":
+				contains.setMinContains((Long)object.get(key));
+				break;
+			
+			case "maxContains":
+				contains.setMaxContains((Long)object.get(key));
+				break;
+				
+			case "minimum":
+				betweenNumber.setMin((Long)object.get(key));
+				break;
+				
+			case "maximum":
+				betweenNumber.setMax((Long)object.get(key));
+				break;
+				
+			case "exclusiveMinimum":
+				try {
+					betweenNumber.setExclusiveMin((Boolean) object.get(key));
+				}catch(ClassCastException e) {
+					betweenNumber.setExclusiveMin((Long) object.get(key));
+				}
+				
+				break;
+				
+			case "exclusiveMaximum":
+				try {
+					betweenNumber.setExclusiveMax((Boolean) object.get(key));
+				}catch(ClassCastException e) {
+					betweenNumber.setExclusiveMax((Long) object.get(key));
+				}
+				
+				break;
+				
+				
+				
+				
+				
+				
+			default:
 				break;
 			}
 		}
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		String s =  "JSONSchema [";
 		
@@ -94,12 +167,30 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		s += (anyOf == null) ? "" : ", anyOf="+anyOf;
 		
+		s += (!items.isInitialized()) ? "" : ", items="+items;
+		
+		s += (multipleOf == null) ? "" : ", multipleOf="+multipleOf;
+		
+		s += (!length.isInitialized()) ? "" : ", length="+length;
+		
+		s += (!betweenItems.isInitialized()) ? "" : ", betweenItems="+betweenItems;
+		
+		s += (!contains.isInitialized()) ? "" : ", contains="+contains;
+		
 		
 		//RICORDA: nell'ultimo non ci va la virgola
 		
 		return s+"]";
-	}
+	}*/
 
+	@Override
+	public String toString() {
+		return "JSONSchema [properties=" + properties + "\r\n type=" + type + "\r\n if_then_else=" + if_then_else + "\r\n not="
+				+ not + "\r\n oneOf=" + oneOf + "\r\n allOf=" + allOf + "\r\n anyOf=" + anyOf + "\r\n items=" + items
+				+ "\r\n multipleOf=" + multipleOf + "\r\n length=" + length + "\r\n betweenItems=" + betweenItems + "]";
+	}
+	
+	
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub

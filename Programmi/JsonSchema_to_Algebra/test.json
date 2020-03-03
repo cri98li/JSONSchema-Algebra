@@ -1,18 +1,29 @@
 {
-    "type": "string",
-    "properties": {
-        "a": {
-            "type": "pollettu"
-        },
-        "b": {}
+"type": "array",
+"minItems" : 2,
+"maxItems" : 6,
+"minContains" : 1,
+"maxContains" : 19,
+"contains" : {
+    "type" : ["string", "number", "object", "boolean"]
+},
+  "items": [
+    {
+      "type": "number",
+      "multipleOf" : 10,
+      "maximum" : 20,
+      "exclusiveMinimum" : 0
     },
-
-    "if": {
-        "type": "cugino"
+    {
+      "type": "string",
+      "minLength" : 2,
+      "maxLength" : 7
     },
-    "then": {
-        "properties": {
-            "checco9811": {"type": "cugino"}
-        }
+    {
+      "type": "string"
+    },
+    {
+      "type": "string"
     }
+  ]
 }
