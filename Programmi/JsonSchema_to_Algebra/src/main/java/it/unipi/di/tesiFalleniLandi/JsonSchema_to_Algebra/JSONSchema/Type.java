@@ -9,22 +9,21 @@ import org.json.simple.JSONArray;
 public class Type implements JSONSchemaElement {
 	private String type;
 	private List<String> type_array;
-	
-	public Type(String value){
-		type = value;
-	}
-	
-	public Type(JSONArray array){
-		type_array = new LinkedList<>();;
+	public Type(Object obj){
+		try{
+			type = (String) obj;
+			return;
+		}catch(ClassCastException e) {}
+		
+		JSONArray array = (JSONArray) obj;
+		
+		type_array = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
 		
 		while(it.hasNext())
 			type_array.add((String) it.next());
 	}
-	
-	
-	
 	
 	@Override
 	public String toString() {

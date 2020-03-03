@@ -2,10 +2,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import java.util.Iterator;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONSchema implements JSONSchemaElement{
+	private Boolean booleanAsJSONSchema;
+	
+	
 	private Properties properties;
 	private Type type;
 	private If_Then_Else if_then_else;
@@ -19,132 +21,148 @@ public class JSONSchema implements JSONSchemaElement{
 	private BetweenItems betweenItems;
 	private Contains contains;
 	private BetweenNumber betweenNumber;
+	private Required required;
+	private Pattern pattern;
+	private UniqueItems uniqueItems;
+	private BetweenProperties betweenProperties;
 
-	public JSONSchema(JSONObject object) {
+	public JSONSchema(Object obj) {
+		JSONObject object;
+		try {
+			booleanAsJSONSchema = (Boolean) obj;
+			return;
+		}catch(ClassCastException e) {
+			object = (JSONObject) obj;
+		}
+		
 		if_then_else = new If_Then_Else();
 		items = new Items();
 		length = new Length();
 		betweenItems = new BetweenItems();
 		betweenNumber = new BetweenNumber();
-		
+		contains = new Contains();
+		betweenProperties = new BetweenProperties();
+		properties = new Properties();
 		
 		//inizio parsing
-		Iterator<Object> it = object.keySet().iterator();
+		Iterator<?> it = object.keySet().iterator();
 		
 		while(it.hasNext()) {
 			String key = (String) it.next();
 			switch(key) { 
 			case "properties":
-				properties = new Properties((JSONObject)object.get(key));
+				properties.setProperties(object.get(key));
 				break;
 			
 			case "type":
-				try {
-					type = new Type((JSONArray)object.get(key));
-				}catch (ClassCastException e) {
-					type = new Type((String)object.get(key));
-				}
+				type = new Type(object.get(key));
 				break;
 			
 			case "if":
-				if_then_else.setIf((JSONObject)object.get(key));
+				if_then_else.setIf(object.get(key));
 				break;
 				
 			case "then":
-				if_then_else.setThen((JSONObject)object.get(key));
+				if_then_else.setThen(object.get(key));
 				break;
 				
 			case "else":
-				if_then_else.setElse((JSONObject)object.get(key));
+				if_then_else.setElse(object.get(key));
 				break;
 			
 			case "not":
-				not = new Not((JSONObject)object.get(key));
+				not = new Not(object.get(key));
 				break;
 			
 			case "oneOf":
-				oneOf = new OneOf((JSONArray)object.get(key));
+				oneOf = new OneOf(object.get(key));
 				break;
 			
 			case "allOf":
-				allOf = new AllOf((JSONArray)object.get(key));
+				allOf = new AllOf(object.get(key));
 				break;
 			
 			case "anyOf":
-				anyOf = new AnyOf((JSONArray)object.get(key));
+				anyOf = new AnyOf(object.get(key));
 				break;
 				
 			case "items":
-				try {
-					items.setItems((JSONArray) object.get(key));
-				} catch (ClassCastException e) {
-					items.setItems((JSONObject) object.get(key));
-				}
+				items.setItems(object.get(key));
 				break;
 			
 			case "minItems":
-				betweenItems.setMinItems((Long)object.get(key));
+				betweenItems.setMinItems(object.get(key));
 				break;
 				
 			case "maxItems":
-				betweenItems.setMaxItems((Long)object.get(key));
+				betweenItems.setMaxItems(object.get(key));
 				break;
 				
 			case "multipleOf":
-				multipleOf = new MultipleOf((Long)object.get(key));
+				multipleOf = new MultipleOf(object.get(key));
 				break;
 				
 			case "minLength":
-				length.setMinLength((Long)object.get(key));
+				length.setMinLength(object.get(key));
 				break;
 				
 			case "maxLength":
-				length.setMaxLength((Long)object.get(key));
+				length.setMaxLength(object.get(key));
 				break;
 				
 			case "contains":
-				contains.setContains((JSONObject) object.get(key));
+				contains.setContains(object.get(key));
 				break;
 			
 			case "minContains":
-				contains.setMinContains((Long)object.get(key));
+				contains.setMinContains(object.get(key));
 				break;
 			
 			case "maxContains":
-				contains.setMaxContains((Long)object.get(key));
+				contains.setMaxContains(object.get(key));
 				break;
 				
 			case "minimum":
-				betweenNumber.setMin((Long)object.get(key));
+				betweenNumber.setMin(object.get(key));
 				break;
 				
 			case "maximum":
-				betweenNumber.setMax((Long)object.get(key));
+				betweenNumber.setMax(object.get(key));
 				break;
 				
 			case "exclusiveMinimum":
-				try {
-					betweenNumber.setExclusiveMin((Boolean) object.get(key));
-				}catch(ClassCastException e) {
-					betweenNumber.setExclusiveMin((Long) object.get(key));
-				}
-				
+				betweenNumber.setExclusiveMin(object.get(key));
 				break;
 				
 			case "exclusiveMaximum":
 				try {
-					betweenNumber.setExclusiveMax((Boolean) object.get(key));
+					betweenNumber.setExclusiveMax(object.get(key));
 				}catch(ClassCastException e) {
-					betweenNumber.setExclusiveMax((Long) object.get(key));
+					//e.printStackTrace();
+					betweenNumber.setExclusiveMax(object.get(key));
 				}
-				
 				break;
 				
+			case "required":
+				required = new Required(object.get(key));
+				break;
 				
+			case "pattern":
+				pattern = new Pattern((String) object.get(key));
+				break;
 				
+			case "uniqueItems":
+				uniqueItems = new UniqueItems(object.get(key));
+				break;
 				
+			case "minProperties":
+				betweenProperties.setMinProperties(object.get(key));
+				break;
 				
-				
+			case "maxProperties":
+				betweenProperties.setMaxProperties(object.get(key));
+				break;
+			
 			default:
 				break;
 			}
@@ -183,18 +201,26 @@ public class JSONSchema implements JSONSchemaElement{
 		return s+"]";
 	}*/
 
-	@Override
-	public String toString() {
-		return "JSONSchema [properties=" + properties + "\r\n type=" + type + "\r\n if_then_else=" + if_then_else + "\r\n not="
-				+ not + "\r\n oneOf=" + oneOf + "\r\n allOf=" + allOf + "\r\n anyOf=" + anyOf + "\r\n items=" + items
-				+ "\r\n multipleOf=" + multipleOf + "\r\n length=" + length + "\r\n betweenItems=" + betweenItems + "]";
-	}
+	
 	
 	
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	
+
+	@Override
+	public String toString() {
+		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\r\n  properties=" + properties
+				+ "\r\n  type=" + type + "\r\n  if_then_else=" + if_then_else + "\r\n  not=" + not
+				+ "\r\n  oneOf=" + oneOf + "\r\n  allOf=" + allOf + "\r\n  anyOf=" + anyOf + "\r\n  items="
+				+ items + "\r\n  multipleOf=" + multipleOf + "\r\n  length=" + length + "\r\n  betweenItems="
+				+ betweenItems + "\r\n  contains=" + contains + "\r\n  betweenNumber=" + betweenNumber
+				+ "\r\n  required=" + required + "\r\n  pattern=" + pattern + "\r\n  uniqueItems=" + uniqueItems
+				+ "\r\n  betweenProperties=" + betweenProperties + "]";
 	}
 
 	@Override

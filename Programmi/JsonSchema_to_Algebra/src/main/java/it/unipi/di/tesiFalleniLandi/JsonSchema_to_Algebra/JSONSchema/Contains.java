@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
 
 public class Contains implements JSONSchemaElement{
 	private JSONSchema contains;
@@ -11,17 +10,21 @@ public class Contains implements JSONSchemaElement{
 	
 	public Contains() { }
 	
-	public void setContains(JSONObject obj) {
+	public void setContains(Object obj) {
 		initialized = true;
 		contains = new JSONSchema(obj);
 	}
 	
-	public void setMinContains(Long value) {
+	public void setMinContains(Object obj) {
+		Long value = (Long) obj;
+		
 		initialized = true;
 		minContains = value;
 	}
 	
-	public void setMaxContains(Long value) {
+	public void setMaxContains(Object obj) {
+		Long value = (Long) obj;
+		
 		initialized = true;
 		maxContains = value;
 	}

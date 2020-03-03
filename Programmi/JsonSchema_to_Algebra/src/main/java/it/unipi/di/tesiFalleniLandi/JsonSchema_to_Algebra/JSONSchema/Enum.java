@@ -1,23 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-public class Not implements JSONSchemaElement {
-	private JSONSchema value;
+import java.util.List;
+
+public class Enum implements JSONSchemaElement{
+	private List<JSONSchema> _enum;
 	
-	public Not(Object obj) {
-		value = new JSONSchema(obj);
-	}
-	
-	
-	
-
-	@Override
-	public String toString() {
-		return "Not [value=" + value + "]";
-	}
-
-
-
-
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub
@@ -29,5 +16,6 @@ public class Not implements JSONSchemaElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }

@@ -1,34 +1,30 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-public class Length implements JSONSchemaElement{
-	private Long minLength = 0L;
-	private Long maxLength = null;
+public class BetweenProperties implements JSONSchemaElement{
+	private Long minProperties = 0L;
+	private Long maxProperties = null;
 	
 	private boolean initialized;
 	
-	public Length () { }
+	public BetweenProperties() { }
 	
-	public void setMinLength(Object obj) {
+	public void setMinProperties(Object obj) {
 		Long value = (Long) obj;
-		
-		initialized = true;
-		minLength = value;
+		minProperties = value;
 	}
 	
-	public void setMaxLength(Object obj) {
+	public void setMaxProperties(Object obj) {
 		Long value = (Long) obj;
-		
-		initialized = true;
-		maxLength = value;
+		maxProperties = value;
 	}
 	
 	public boolean isInitialized() {
 		return initialized;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Length [minLength=" + minLength + ", maxLength=" + maxLength + "]";
+		return "BetweenProperties [minProperties=" + minProperties + ", maxProperties=" + maxProperties + "]";
 	}
 
 	@Override
@@ -41,6 +37,6 @@ public class Length implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
+	};
+	
 }

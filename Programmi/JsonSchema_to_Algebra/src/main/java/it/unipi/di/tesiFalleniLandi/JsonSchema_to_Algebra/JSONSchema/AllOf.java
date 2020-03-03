@@ -5,19 +5,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
 	
-	public AllOf(JSONArray array) {
+	public AllOf(Object obj) {
+		JSONArray array = (JSONArray) obj;
 		allOf = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
 		
 		while(it.hasNext()) {
-			JSONObject element = (JSONObject) it.next();
-			allOf.add(new JSONSchema(element));
+			allOf.add(new JSONSchema(it.next()));
 		}
 	}
 	

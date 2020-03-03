@@ -10,15 +10,35 @@ import org.json.simple.JSONObject;
 public class Properties implements JSONSchemaElement{
 
 	private HashMap<String, JSONSchema> properties;
+	private HashMap<java.util.regex.Pattern, JSONSchema> patternProperties;
+	private HashMap<String, JSONSchema> additionalProperties;
 
-	public Properties(JSONObject object) {
+	public Properties() { }
+	
+	public void setProperties(Object obj) {
+		JSONObject object = (JSONObject) obj;
+		
 		properties = new HashMap<String, JSONSchema>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
 		while(it.hasNext()) {
 			String key = (String) it.next();
-			JSONSchema value = new JSONSchema((JSONObject)object.get(key));
+			JSONSchema value = new JSONSchema(object.get(key));
+			
+			properties.put(key, value);
+		}
+	}
+	
+	public void setPatternProperties(JSONObject obj) {
+		JSONObject object = (JSONObject) obj;
+		patternProperties = new HashMap<java.util.regex.Pattern, JSONSchema>();
+		
+		Iterator<?> it = object.keySet().iterator();
+		
+		while(it.hasNext()) {
+			String key = (String) it.next();
+			JSONSchema value = new JSONSchema(object.get(key));
 			
 			properties.put(key, value);
 		}
@@ -38,7 +58,10 @@ public class Properties implements JSONSchemaElement{
 
 	@Override
 	public String toString() {
-		return properties.toString();
+		return "Properties [properties=" + properties + "\\r\\n  patternProperties=" + patternProperties
+				+ "\\r\\n  additionalProperties=" + additionalProperties + "]";
 	}
+
+	
 
 }

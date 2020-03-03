@@ -14,37 +14,37 @@ public class BetweenNumber implements JSONSchemaElement{
 		excludedMin = false;
 	}
 	
-	public void setMax(Long max) {
+	public void setMax(Object obj) {
+		Long max = (Long) obj;
 		this.max_incl = max;
 		
 		if(excludedMax) max_incl-=1;
 	}
 	
-	public void setMin(Long min) {
+	public void setMin(Object obj) {
+		Long min = (Long) obj;
 		this.min_incl = min;
 		
 		if(excludedMin) min_incl+=1;
 	}
 	
 	
-	public void setExclusiveMax(Long max) {
-		this.max_incl = max-1;
-		excludedMax = true;
-		
+	public void setExclusiveMax(Object obj) {
+		try {
+			excludedMax = (boolean) obj;
+		}catch(ClassCastException e) {
+			this.max_incl = ((Long) obj) -1;
+			excludedMax = true;
+		}
 	}
 	
-	public void setExclusiveMin(Long min) {
-		this.min_incl = min +1;
-		excludedMin = true;
-	}
-	
-	public void setExclusiveMax(boolean value) {
-		excludedMax = value;
-		
-	}
-	
-	public void setExclusiveMin(boolean value) {
-		excludedMin = value;
+	public void setExclusiveMin(Object obj) {
+		try {
+			excludedMin = (boolean) obj;
+		}catch(ClassCastException e) {
+			this.min_incl = ((Long) obj) +1;
+			excludedMin = true;
+		}
 	}
 	
 	

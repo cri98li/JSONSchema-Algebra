@@ -1,20 +1,18 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-public class Not implements JSONSchemaElement {
-	private JSONSchema value;
+public class UniqueItems implements JSONSchemaElement{
+	private boolean uniqueItems;
 	
-	public Not(Object obj) {
-		value = new JSONSchema(obj);
+	public UniqueItems(Object obj){
+		uniqueItems = (boolean) obj;
 	}
 	
 	
 	
-
 	@Override
 	public String toString() {
-		return "Not [value=" + value + "]";
+		return "UniqueItems [uniqueItems=" + uniqueItems + "]";
 	}
-
 
 
 

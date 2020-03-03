@@ -6,29 +6,19 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
-public class OneOf implements JSONSchemaElement{
-	private List<JSONSchema> oneOf;
-	
-	public OneOf(Object obj) {
+public class Required implements JSONSchemaElement{
+	private List<String> required;
+
+	public Required(Object obj) {
 		JSONArray array = (JSONArray) obj;
-		oneOf = new LinkedList<>();
+		required = new LinkedList<>();;
 		
 		Iterator<?> it = array.iterator();
 		
-		while(it.hasNext()) {
-			oneOf.add(new JSONSchema(it.next()));
-		}
+		while(it.hasNext())
+			required.add((String) it.next());
 	}
 	
-	
-	
-	@Override
-	public String toString() {
-		return "OneOf [oneOf=" + oneOf + "]";
-	}
-
-
-
 	@Override
 	public String toJSONString() {
 		// TODO Auto-generated method stub
@@ -40,5 +30,6 @@ public class OneOf implements JSONSchemaElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	
 }

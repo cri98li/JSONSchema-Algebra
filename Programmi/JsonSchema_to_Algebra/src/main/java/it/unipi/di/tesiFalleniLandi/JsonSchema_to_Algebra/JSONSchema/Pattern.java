@@ -1,20 +1,20 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-public class Not implements JSONSchemaElement {
-	private JSONSchema value;
+public class Pattern implements JSONSchemaElement{
 	
-	public Not(Object obj) {
-		value = new JSONSchema(obj);
+	
+	private java.util.regex.Pattern pattern;
+	
+	public Pattern(String str) {
+		pattern = java.util.regex.Pattern.compile(str);
 	}
 	
 	
 	
-
 	@Override
 	public String toString() {
-		return "Not [value=" + value + "]";
+		return "Pattern [pattern=" + pattern + "]";
 	}
-
 
 
 

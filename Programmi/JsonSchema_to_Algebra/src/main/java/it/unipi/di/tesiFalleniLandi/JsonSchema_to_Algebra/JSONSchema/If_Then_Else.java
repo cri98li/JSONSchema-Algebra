@@ -1,7 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
-
 public class If_Then_Else implements JSONSchemaElement {
 	private JSONSchema ifStatement, thenStatement, elseStatement;
 	
@@ -13,17 +11,17 @@ public class If_Then_Else implements JSONSchemaElement {
 		ifStatement = new JSONSchema(obj);
 	}*/
 	
-	public void setIf(JSONObject obj) {
+	public void setIf(Object obj) {
 		inizialized = true;
 		ifStatement = new JSONSchema(obj);
 	}
 	
-	public void setThen(JSONObject obj) {
+	public void setThen(Object obj) {
 		inizialized = true;
 		thenStatement = new JSONSchema(obj);
 	}
 	
-	public void setElse(JSONObject obj) {
+	public void setElse(Object obj) {
 		inizialized = true;
 		elseStatement = new JSONSchema(obj);
 	}

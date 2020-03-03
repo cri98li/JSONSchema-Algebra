@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 
 public class Items implements JSONSchemaElement{
@@ -20,13 +19,14 @@ public class Items implements JSONSchemaElement{
 		
 	}
 	
-	public void setItems(JSONObject obj) {
-		initialized = true;
+	public void setItems(Object obj) {
+		JSONArray array = null;
+		try{
+			array = (JSONArray) obj;
+		}catch(ClassCastException e) {
+			items = new JSONSchema(obj);
+		}
 		
-		items = new JSONSchema(obj);
-	}
-	
-	public void setItems(JSONArray array) {
 		initialized = true;
 		
 		items_array = new LinkedList<>();
@@ -34,18 +34,17 @@ public class Items implements JSONSchemaElement{
 		Iterator<?> it = array.iterator();
 		
 		while(it.hasNext()) {
-			JSONObject element = (JSONObject) it.next();
-			items_array.add(new JSONSchema(element));
+			items_array.add(new JSONSchema(it.next()));
 		}
 	}
 	
-	public void setAdditionalItems(JSONObject obj) {
+	public void setAdditionalItems(Object obj) {
 		initialized = true;
 
 		items = new JSONSchema(obj);
 	}
 	
-	public void setUnevaluatedItems(JSONObject obj) {
+	public void setUnevaluatedItems(Object obj) {
 		initialized = true;
 
 		items = new JSONSchema(obj);

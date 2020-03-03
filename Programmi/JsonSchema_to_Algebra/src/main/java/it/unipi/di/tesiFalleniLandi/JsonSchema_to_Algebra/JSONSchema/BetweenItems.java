@@ -8,12 +8,16 @@ public class BetweenItems implements JSONSchemaElement{
 	
 	public BetweenItems() { }
 	
-	public void setMinItems(Long value) {
+	public void setMinItems(Object obj) {
+		Long value = (Long) obj;
+		
 		initialized = true;
 		minItems = value;
 	}
 	
-	public void setMaxItems(Long value) {
+	public void setMaxItems(Object obj) {
+		Long value = (Long) obj;
+		
 		initialized = true;
 		maxItems = value;
 	}
