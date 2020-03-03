@@ -1,0 +1,18 @@
+{
+    "type": "string",
+    "properties": {
+        "a": {
+            "type": "pollettu"
+        },
+        "b": {}
+    },
+
+    "if": {
+        "type": "cugino"
+    },
+    "then": {
+        "properties": {
+            "checco9811": {"type": "cugino"}
+        }
+    }
+}
