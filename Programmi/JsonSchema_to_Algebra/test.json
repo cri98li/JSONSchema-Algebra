@@ -1,29 +1,42 @@
 {
-"type": "array",
-"minItems" : 2,
-"maxItems" : 6,
-"minContains" : 1,
-"maxContains" : 19,
-"contains" : {
-    "type" : ["string", "number", "object", "boolean"]
-},
-  "items": [
-    {
-      "type": "number",
-      "multipleOf" : 10,
-      "maximum" : 20,
-      "exclusiveMinimum" : 0
+    "enum" : [3000, "a", ["c", 12, true], false],
+    "const" : "XOR",
+    "type": "array",
+    "minItems" : 2,
+    "maxItems" : 6,
+    "minContains" : 1,
+    "maxContains" : 19,
+    "contains" : {
+        "type" : ["string", "number", "object", "boolean"]
     },
-    {
-      "type": "string",
-      "minLength" : 2,
-      "maxLength" : 7
-    },
-    {
-      "type": "string"
-    },
-    {
-      "type": "string"
-    }
-  ]
+    "items": [
+        {
+          "type": "number",
+          "multipleOf" : 10,
+          "maximum" : 20,
+          "exclusiveMinimum" : 0
+        },
+        {
+          "type": "string",
+          "minLength" : 2,
+          "maxLength" : 7
+        },
+        {
+            "type": "string",
+            "required" : ["a"],
+            "properties" : {
+                "a" : true,
+                "b" : true
+            }
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "addiotinalItems" : {
+          "type" : "object",
+          "plutone" : {
+
+          }
+      }
 }

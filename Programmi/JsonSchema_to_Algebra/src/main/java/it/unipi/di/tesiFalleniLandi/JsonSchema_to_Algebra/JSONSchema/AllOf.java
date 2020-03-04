@@ -20,18 +20,20 @@ public class AllOf implements JSONSchemaElement{
 		}
 	}
 	
-	
 	@Override
 	public String toString() {
 		return "AllOf [allOf=" + allOf + "]";
 	}
 
-
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONArray toJSON() {
+		JSONArray array = new JSONArray();
+		
+		for(JSONSchema js : allOf)
+			array.add(js.toJSON());
+		
+		return array;
 	}
 
 	@Override

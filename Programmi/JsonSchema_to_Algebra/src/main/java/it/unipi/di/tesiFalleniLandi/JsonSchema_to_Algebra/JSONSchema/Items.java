@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 public class Items implements JSONSchemaElement{
@@ -60,10 +61,26 @@ public class Items implements JSONSchemaElement{
 				+ additionalItems_array + ", unevaluatedItems_array=" + unevaluatedItems_array + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(items_array != null) {
+			JSONArray array = new JSONArray();
+			for(JSONSchema js : items_array)
+				array.add(js.toJSON());
+			obj.put("items", array);
+		}
+		
+		if(additionalItems_array != null) obj.put("additionalItems", additionalItems_array.toJSON());
+		
+		if(unevaluatedItems_array != null) obj.put("unevaluatedItems", unevaluatedItems_array.toJSON());
+		
+		if(items != null) obj.put("items", items.toJSON());
+				
+		
+		return obj;
 	}
 
 	@Override

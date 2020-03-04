@@ -22,12 +22,13 @@ public class App
     	String path = "test.json";
     	JSONSchema root;
         
-        
         try (Reader reader = new FileReader(path)){
         	JSONObject object = (JSONObject) new JSONParser().parse(reader);
         	root = new JSONSchema(object);
         }
         
-        System.out.println(root);
+        //System.out.println(root);
+        
+        System.out.println(root.toJSON());
     }
 }

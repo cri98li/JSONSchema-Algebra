@@ -19,9 +19,8 @@ public class Pattern implements JSONSchemaElement{
 
 
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public String toJSON() {
+		return pattern.pattern();
 	}
 
 	@Override

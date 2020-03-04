@@ -1,11 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-public class If_Then_Else implements JSONSchemaElement {
+import org.json.simple.JSONObject;
+
+public class IfThenElse implements JSONSchemaElement {
 	private JSONSchema ifStatement, thenStatement, elseStatement;
 	
 	private boolean inizialized = false;
 	
-	public If_Then_Else(){ }
+	public IfThenElse(){ }
 	
 	/*public If_Then_Else(JSONObject obj){
 		ifStatement = new JSONSchema(obj);
@@ -36,10 +38,18 @@ public class If_Then_Else implements JSONSchemaElement {
 				+ elseStatement + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(ifStatement != null) obj.put("if", ifStatement.toJSON());
+		
+		if(thenStatement != null) obj.put("then", thenStatement.toJSON());
+		
+		if(elseStatement != null) obj.put("else", elseStatement.toJSON());
+		
+		return obj;
 	}
 
 	@Override

@@ -1,16 +1,17 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import java.util.Iterator;
+import java.util.Set;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONSchema implements JSONSchemaElement{
 	private Boolean booleanAsJSONSchema;
 	
-	
 	private Properties properties;
 	private Type type;
-	private If_Then_Else if_then_else;
+	private IfThenElse ifThenElse;
 	private Not not;
 	private OneOf oneOf;
 	private AllOf allOf;
@@ -25,6 +26,8 @@ public class JSONSchema implements JSONSchemaElement{
 	private Pattern pattern;
 	private UniqueItems uniqueItems;
 	private BetweenProperties betweenProperties;
+	private Enum _enum;
+	private Const _const;
 
 	public JSONSchema(Object obj) {
 		JSONObject object;
@@ -35,15 +38,6 @@ public class JSONSchema implements JSONSchemaElement{
 			object = (JSONObject) obj;
 		}
 		
-		if_then_else = new If_Then_Else();
-		items = new Items();
-		length = new Length();
-		betweenItems = new BetweenItems();
-		betweenNumber = new BetweenNumber();
-		contains = new Contains();
-		betweenProperties = new BetweenProperties();
-		properties = new Properties();
-		
 		//inizio parsing
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -51,23 +45,42 @@ public class JSONSchema implements JSONSchemaElement{
 			String key = (String) it.next();
 			switch(key) { 
 			case "properties":
+				if(properties == null) properties = new Properties();
 				properties.setProperties(object.get(key));
 				break;
 			
+			case "patternProperties":
+				if(properties == null) properties = new Properties();
+				properties.setPatternProperties(object.get(key));
+				break;
+				
+			case "additionalProperties":
+				if(properties == null) properties = new Properties();
+				properties.setAdditionalProperties(object.get(key));
+				break;
+			
+			case "additionalItems":
+				if(items == null) items = new Items();
+				items.setAdditionalItems(object);
+				break;
+
 			case "type":
 				type = new Type(object.get(key));
 				break;
 			
 			case "if":
-				if_then_else.setIf(object.get(key));
+				if(ifThenElse == null) ifThenElse = new IfThenElse();
+				ifThenElse.setIf(object.get(key));
 				break;
 				
 			case "then":
-				if_then_else.setThen(object.get(key));
+				if(ifThenElse == null) ifThenElse = new IfThenElse();
+				ifThenElse.setThen(object.get(key));
 				break;
 				
 			case "else":
-				if_then_else.setElse(object.get(key));
+				if(ifThenElse == null) ifThenElse = new IfThenElse();
+				ifThenElse.setElse(object.get(key));
 				break;
 			
 			case "not":
@@ -87,14 +100,17 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "items":
+				if(items == null) items = new Items();
 				items.setItems(object.get(key));
 				break;
 			
 			case "minItems":
+				if(betweenItems == null) betweenItems = new BetweenItems();
 				betweenItems.setMinItems(object.get(key));
 				break;
 				
 			case "maxItems":
+				if(betweenItems == null) betweenItems = new BetweenItems();
 				betweenItems.setMaxItems(object.get(key));
 				break;
 				
@@ -103,44 +119,48 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "minLength":
+				if(length == null) length = new Length();
 				length.setMinLength(object.get(key));
 				break;
 				
 			case "maxLength":
+				if(length == null) length = new Length();
 				length.setMaxLength(object.get(key));
 				break;
 				
 			case "contains":
+				if(contains == null) contains = new Contains();
 				contains.setContains(object.get(key));
 				break;
 			
 			case "minContains":
+				if(contains == null) contains = new Contains();
 				contains.setMinContains(object.get(key));
 				break;
 			
 			case "maxContains":
+				if(contains == null) contains = new Contains();
 				contains.setMaxContains(object.get(key));
 				break;
 				
 			case "minimum":
+				if(betweenNumber == null) betweenNumber = new BetweenNumber();
 				betweenNumber.setMin(object.get(key));
 				break;
 				
 			case "maximum":
+				if(betweenNumber == null) betweenNumber = new BetweenNumber();
 				betweenNumber.setMax(object.get(key));
 				break;
 				
 			case "exclusiveMinimum":
+				if(betweenNumber == null) betweenNumber = new BetweenNumber();
 				betweenNumber.setExclusiveMin(object.get(key));
 				break;
 				
 			case "exclusiveMaximum":
-				try {
-					betweenNumber.setExclusiveMax(object.get(key));
-				}catch(ClassCastException e) {
-					//e.printStackTrace();
-					betweenNumber.setExclusiveMax(object.get(key));
-				}
+				if(betweenNumber == null) betweenNumber = new BetweenNumber();
+				betweenNumber.setExclusiveMax(object.get(key));
 				break;
 				
 			case "required":
@@ -156,11 +176,21 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "minProperties":
+				if(betweenProperties == null) betweenProperties = new BetweenProperties();
 				betweenProperties.setMinProperties(object.get(key));
 				break;
 				
 			case "maxProperties":
+				if(betweenProperties == null) betweenProperties = new BetweenProperties();
 				betweenProperties.setMaxProperties(object.get(key));
+				break;
+				
+			case "enum":
+				_enum = new Enum(object.get(key));
+				break;
+				
+			case "const":
+				_const = new Const(object.get(key));
 				break;
 			
 			default:
@@ -169,58 +199,78 @@ public class JSONSchema implements JSONSchemaElement{
 		}
 	}
 
-	/*@Override
-	public String toString() {
-		String s =  "JSONSchema [";
-		
-		s += (properties == null) ? "" : ", properties="+properties;
-		
-		s += (type == null) ? "" : ", type="+type;
-		
-		s += (!if_then_else.isInitialized()) ? "" : ", if_then_else="+if_then_else;
-		
-		s += (oneOf == null) ? "" : ", oneOf="+oneOf;
-		
-		s += (allOf == null) ? "" : ", allOf="+allOf;
-		
-		s += (anyOf == null) ? "" : ", anyOf="+anyOf;
-		
-		s += (!items.isInitialized()) ? "" : ", items="+items;
-		
-		s += (multipleOf == null) ? "" : ", multipleOf="+multipleOf;
-		
-		s += (!length.isInitialized()) ? "" : ", length="+length;
-		
-		s += (!betweenItems.isInitialized()) ? "" : ", betweenItems="+betweenItems;
-		
-		s += (!contains.isInitialized()) ? "" : ", contains="+contains;
-		
-		
-		//RICORDA: nell'ultimo non ci va la virgola
-		
-		return s+"]";
-	}*/
-
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object toJSON() {
+		JSONObject schema = new JSONObject();
+
+		//caso boolean as a Schema
+		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
+		
+		if(_const != null) schema.put("const", _const.toJSON());
+		
+		if(_enum != null) schema.put("enum", _enum.toJSON());
+		
+		if(properties != null) putContent(schema, properties.toJSON());
+		
+		if(type != null) schema.put("type", type.toJSON());
+		
+		if(ifThenElse != null) putContent(schema, ifThenElse.toJSON());
+		
+		if(not != null) schema.put("not", not.toJSON());
+		
+		if(oneOf != null) schema.put("oneOf", oneOf.toJSON());
+		
+		if(anyOf != null) schema.put("anyOf", anyOf.toJSON());
+		
+		if(allOf != null) schema.put("allOf", allOf.toJSON());
+		
+		if(multipleOf != null) schema.put("multipleOf", multipleOf.toJSON());
+		
+		if(uniqueItems != null) schema.put("uniqueItems", uniqueItems.toJSON());
+		
+		if(required != null) schema.put("required", required.toJSON());
+		
+		if(pattern != null) schema.put("pattern", pattern.toJSON());
+		
+		if(betweenProperties != null) putContent(schema, betweenProperties.toJSON());
+		
+		if(betweenNumber != null) putContent(schema, betweenNumber.toJSON());
+		
+		if(contains != null) putContent(schema, contains.toJSON());
+		
+		if(length != null) putContent(schema, length.toJSON());
+		
+		if(betweenItems != null) putContent(schema, betweenItems.toJSON());
+		
+		if(items != null) putContent(schema, items.toJSON());
+		
+		return schema;
 	}
-
 	
+	//inserisce il contenuto di toPut in schema
+	private void putContent(JSONObject schema, JSONObject toPut) {
+		Set<?> keys = toPut.keySet();
+		for(Object key : keys) {
+			schema.put(key, toPut.get(key));
+		}
+	}
+	
+
 
 	@Override
 	public String toString() {
-		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\r\n  properties=" + properties
-				+ "\r\n  type=" + type + "\r\n  if_then_else=" + if_then_else + "\r\n  not=" + not
-				+ "\r\n  oneOf=" + oneOf + "\r\n  allOf=" + allOf + "\r\n  anyOf=" + anyOf + "\r\n  items="
-				+ items + "\r\n  multipleOf=" + multipleOf + "\r\n  length=" + length + "\r\n  betweenItems="
-				+ betweenItems + "\r\n  contains=" + contains + "\r\n  betweenNumber=" + betweenNumber
-				+ "\r\n  required=" + required + "\r\n  pattern=" + pattern + "\r\n  uniqueItems=" + uniqueItems
-				+ "\r\n  betweenProperties=" + betweenProperties + "]";
+		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\r\n properties=" + properties
+				+ "\r\n type=" + type + "\r\n ifThenElse=" + ifThenElse + "\r\n not=" + not + "\r\n oneOf="
+				+ oneOf + "\r\n allOf=" + allOf + "\r\n anyOf=" + anyOf + "\r\n items=" + items
+				+ "\r\n multipleOf=" + multipleOf + "\r\n length=" + length + "\r\n betweenItems=" + betweenItems
+				+ "\r\n contains=" + contains + "\r\n betweenNumber=" + betweenNumber + "\r\n required="
+				+ required + "\r\n pattern=" + pattern + "\r\n uniqueItems=" + uniqueItems
+				+ "\r\n betweenProperties=" + betweenProperties + "\r\n _enum=" + _enum + "\r\n _const=" + _const
+				+ "]";
 	}
 
 	@Override

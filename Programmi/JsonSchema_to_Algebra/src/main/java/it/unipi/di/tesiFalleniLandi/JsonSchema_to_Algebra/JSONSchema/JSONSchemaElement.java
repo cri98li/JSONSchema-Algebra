@@ -4,7 +4,7 @@ interface JSONSchemaElement {
 	
 	//public String toString();
 	
-	public String toJSONString();
+	public Object toJSON();
 	
 	public String toGrammarString();
 }

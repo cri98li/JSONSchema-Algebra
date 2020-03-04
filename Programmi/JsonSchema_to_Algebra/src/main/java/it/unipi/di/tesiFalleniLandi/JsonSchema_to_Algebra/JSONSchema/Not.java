@@ -7,21 +7,14 @@ public class Not implements JSONSchemaElement {
 		value = new JSONSchema(obj);
 	}
 	
-	
-	
-
 	@Override
 	public String toString() {
 		return "Not [value=" + value + "]";
 	}
 
-
-
-
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object toJSON() {
+		return value.toJSON();
 	}
 
 	@Override

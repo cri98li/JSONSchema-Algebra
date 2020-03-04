@@ -1,8 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import org.json.simple.JSONObject;
+
 public class BetweenProperties implements JSONSchemaElement{
-	private Long minProperties = 0L;
-	private Long maxProperties = null;
+	private Long minProperties;
+	private Long maxProperties;
 	
 	private boolean initialized;
 	
@@ -27,10 +29,16 @@ public class BetweenProperties implements JSONSchemaElement{
 		return "BetweenProperties [minProperties=" + minProperties + ", maxProperties=" + maxProperties + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(minProperties != null) obj.put("minProperties", minProperties);
+		
+		if(maxProperties != null) obj.put("maxProperties", maxProperties);
+		
+		return obj;
 	}
 
 	@Override

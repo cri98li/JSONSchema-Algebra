@@ -1,8 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import org.json.simple.JSONObject;
+
 public class Length implements JSONSchemaElement{
-	private Long minLength = 0L;
-	private Long maxLength = null;
+	private Long minLength;
+	private Long maxLength;
 	
 	private boolean initialized;
 	
@@ -31,10 +33,16 @@ public class Length implements JSONSchemaElement{
 		return "Length [minLength=" + minLength + ", maxLength=" + maxLength + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(minLength != null) obj.put("minLength", minLength);
+		
+		if(maxLength != null) obj.put("maxLength", maxLength);		
+		
+		return obj;
 	}
 
 	@Override

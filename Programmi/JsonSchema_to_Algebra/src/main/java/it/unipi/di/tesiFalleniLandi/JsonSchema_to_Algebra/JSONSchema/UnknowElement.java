@@ -14,7 +14,7 @@ public class UnknowElement implements JSONSchemaElement {
 
 	
 	@Override
-	public String toJSONString() {
+	public Object toJSON() {
 		// TODO Auto-generated method stub
 		return null;
 	}

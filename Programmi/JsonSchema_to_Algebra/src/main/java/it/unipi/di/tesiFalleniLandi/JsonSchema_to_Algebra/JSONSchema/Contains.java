@@ -1,10 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import org.json.simple.JSONObject;
 
 public class Contains implements JSONSchemaElement{
 	private JSONSchema contains;
-	private Long minContains = 0L;
-	private Long maxContains = null;
+	private Long minContains;
+	private Long maxContains;
 	
 	private boolean initialized;
 	
@@ -38,10 +39,16 @@ public class Contains implements JSONSchemaElement{
 		return "Contains [contains=" + contains + ", minContains=" + minContains + ", maxContains=" + maxContains + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(contains != null) obj.put("contains", contains.toJSON());
+		if(minContains != null) obj.put("minContains", minContains);
+		if(maxContains != null) obj.put("maxContains", maxContains);
+		
+		return obj;
 	}
 
 	@Override

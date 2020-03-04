@@ -28,10 +28,15 @@ public class AnyOf implements JSONSchemaElement{
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONArray toJSON() {
+		JSONArray array = new JSONArray();
+		
+		for(JSONSchema js : anyOf)
+			array.add(js.toJSON());
+		
+		return array;
 	}
 
 	@Override

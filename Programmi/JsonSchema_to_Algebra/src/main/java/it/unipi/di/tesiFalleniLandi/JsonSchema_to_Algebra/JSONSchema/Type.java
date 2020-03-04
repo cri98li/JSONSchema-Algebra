@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 public class Type implements JSONSchemaElement {
 	private String type;
 	private List<String> type_array;
+	
 	public Type(Object obj){
 		try{
 			type = (String) obj;
@@ -30,10 +31,15 @@ public class Type implements JSONSchemaElement {
 		return "Type [type=" + type + ", type_array=" + type_array + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object toJSON() {
+		if(type != null) return type;
+		
+		JSONArray array = new JSONArray();
+		for(String s : type_array)
+			array.add(s);
+		return array;
 	}
 
 	@Override

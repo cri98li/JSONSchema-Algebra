@@ -17,9 +17,8 @@ public class UniqueItems implements JSONSchemaElement{
 
 
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean toJSON() {
+		return uniqueItems;
 	}
 
 	@Override

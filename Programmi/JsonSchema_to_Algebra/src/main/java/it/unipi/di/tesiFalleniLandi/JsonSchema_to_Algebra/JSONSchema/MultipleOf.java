@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 public class MultipleOf implements JSONSchemaElement{
-	private Long value = 1L;
+	private Long value;
 	
 	public MultipleOf(Object obj) {
 		Long value = (Long) obj;
@@ -15,9 +15,8 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public Long toJSON() {
+		return value;
 	}
 
 	@Override

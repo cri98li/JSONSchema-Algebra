@@ -29,10 +29,15 @@ public class OneOf implements JSONSchemaElement{
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONArray toJSON() {
+		JSONArray array = new JSONArray();
+		
+		for(JSONSchema js : oneOf)
+			array.add(js.toJSON());
+		
+		return array;
 	}
 
 	@Override

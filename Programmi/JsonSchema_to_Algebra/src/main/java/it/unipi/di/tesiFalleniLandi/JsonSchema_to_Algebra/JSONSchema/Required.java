@@ -19,10 +19,15 @@ public class Required implements JSONSchemaElement{
 			required.add((String) it.next());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONArray toJSON() {
+		JSONArray array = new JSONArray();
+		
+		for(String s : required)
+			array.add(s);
+		
+		return array;
 	}
 
 	@Override

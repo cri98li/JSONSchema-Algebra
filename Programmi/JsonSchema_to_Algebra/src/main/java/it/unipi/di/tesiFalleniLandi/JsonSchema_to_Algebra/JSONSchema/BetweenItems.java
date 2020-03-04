@@ -1,8 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import org.json.simple.JSONObject;
+
 public class BetweenItems implements JSONSchemaElement{
-	private Long minItems = 0L;
-	private Long maxItems = null;
+	private Long minItems;
+	private Long maxItems;
 	
 	private boolean initialized;
 	
@@ -31,10 +33,15 @@ public class BetweenItems implements JSONSchemaElement{
 		return "BetweenItems [minItems=" + minItems + ", maxItems=" + maxItems + ", initialized=" + initialized + "]";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public String toJSONString() {
-		// TODO Auto-generated method stub
-		return null;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		
+		if(minItems != null) obj.put("minItems", minItems);
+		if(maxItems != null) obj.put("maxItems", maxItems);
+		
+		return obj;
 	}
 
 	@Override
