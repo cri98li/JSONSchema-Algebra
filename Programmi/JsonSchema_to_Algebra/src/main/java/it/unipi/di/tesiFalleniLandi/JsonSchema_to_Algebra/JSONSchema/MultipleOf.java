@@ -24,4 +24,9 @@ public class MultipleOf implements JSONSchemaElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public MultipleOf assertionSeparation() {
+		return new MultipleOf(value);
+	}
 }

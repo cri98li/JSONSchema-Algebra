@@ -57,4 +57,15 @@ public class Contains implements JSONSchemaElement{
 		return null;
 	}
 
+	@Override
+	public Contains assertionSeparation() {
+		Contains obj = new Contains();
+		
+		if(contains != null) obj.contains = contains.assertionSeparation();
+		if(minContains != null) obj.minContains = minContains;
+		if(maxContains != null) obj.maxContains = maxContains;
+		
+		return obj;
+	}
+
 }

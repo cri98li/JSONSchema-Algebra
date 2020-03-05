@@ -45,6 +45,16 @@ public class BetweenProperties implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public BetweenProperties assertionSeparation() {
+		BetweenProperties obj = new BetweenProperties();
+		
+		if(minProperties != null) obj.minProperties = minProperties;
+		if(maxProperties != null) obj.maxProperties = maxProperties;
+		
+		return obj;
 	};
 	
 }

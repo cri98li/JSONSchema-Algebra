@@ -24,5 +24,11 @@ public class UnknowElement implements JSONSchemaElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public JSONSchemaElement assertionSeparation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

@@ -50,4 +50,14 @@ public class BetweenItems implements JSONSchemaElement{
 		return null;
 	}
 
+	@Override
+	public BetweenItems assertionSeparation() {
+		BetweenItems obj = new BetweenItems();
+		
+		if(minItems != null) obj.minItems = minItems;
+		if(maxItems != null) obj.maxItems = maxItems;
+		
+		return obj;
+	}
+
 }

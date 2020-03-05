@@ -22,6 +22,12 @@ public class OneOf implements JSONSchemaElement{
 	
 	
 	
+	public OneOf() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "OneOf [oneOf=" + oneOf + "]";
@@ -44,6 +50,20 @@ public class OneOf implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public OneOf assertionSeparation() {
+		OneOf obj = new OneOf();
+		
+		obj.oneOf = new LinkedList<>();
+		for(JSONSchema s : oneOf)
+			obj.oneOf.add(s.assertionSeparation());
+			
+		
+		return obj;
 	}
 	
 }

@@ -26,6 +26,10 @@ public class Type implements JSONSchemaElement {
 			type_array.add((String) it.next());
 	}
 	
+	public Type() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public String toString() {
 		return "Type [type=" + type + ", type_array=" + type_array + "]";
@@ -46,6 +50,16 @@ public class Type implements JSONSchemaElement {
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Type assertionSeparation() {
+		Type obj = new Type();
+		
+		if(type != null) obj.type = type;
+		if(type_array != null) obj.type_array = new LinkedList<>(type_array);
+		
+		return obj;
 	}
 	
 }

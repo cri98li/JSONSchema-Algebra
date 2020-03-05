@@ -9,6 +9,9 @@ import org.json.simple.JSONArray;
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
 	
+	public AllOf() {
+	}
+	
 	public AllOf(Object obj) {
 		JSONArray array = (JSONArray) obj;
 		allOf = new LinkedList<>();
@@ -18,6 +21,11 @@ public class AllOf implements JSONSchemaElement{
 		while(it.hasNext()) {
 			allOf.add(new JSONSchema(it.next()));
 		}
+	}
+	
+	public void addElement(JSONSchema schema) {
+		if(allOf == null) allOf = new LinkedList<>();
+		allOf.add(schema);
 	}
 	
 	@Override
@@ -40,5 +48,17 @@ public class AllOf implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public AllOf assertionSeparation() {
+		AllOf obj = new AllOf();
+		
+		obj.allOf = new LinkedList<>();
+		for(JSONSchema s : allOf)
+			obj.allOf.add(s.assertionSeparation());
+			
+		
+		return obj;
 	}
 }

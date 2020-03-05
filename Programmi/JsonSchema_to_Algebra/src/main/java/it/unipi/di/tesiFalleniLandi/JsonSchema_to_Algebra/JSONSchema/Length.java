@@ -51,4 +51,14 @@ public class Length implements JSONSchemaElement{
 		return null;
 	}
 
+	@Override
+	public Length assertionSeparation() {
+		Length obj = new Length();
+		
+		if(minLength != null) obj.minLength = minLength;
+		if(maxLength != null) obj.maxLength = maxLength;
+		
+		return obj;
+	}
+
 }

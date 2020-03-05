@@ -19,6 +19,10 @@ public class Required implements JSONSchemaElement{
 			required.add((String) it.next());
 	}
 	
+	public Required() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONArray toJSON() {
@@ -34,6 +38,15 @@ public class Required implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Required assertionSeparation() {
+		Required obj = new Required();
+		
+		obj.required = new LinkedList<>(this.required);
+		
+		return obj;
 	}
 	
 	

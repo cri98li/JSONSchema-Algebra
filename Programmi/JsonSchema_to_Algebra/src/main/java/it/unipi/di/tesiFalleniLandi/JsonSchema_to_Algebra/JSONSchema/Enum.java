@@ -168,4 +168,26 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		// TODO Auto-generated method stub
 		return 1;
 	}
+
+	@Override
+	public Enum assertionSeparation() {
+		Enum _enum = new Enum();
+		
+		if(enumArray_str != null) _enum.enumArray_str = new LinkedList<>(enumArray_str);
+		
+		if(enumArray_num != null) _enum.enumArray_num = new LinkedList<>(enumArray_num);
+		
+		if(enumArray_bool != null) _enum.enumArray_bool = new LinkedList<>(enumArray_bool);
+		
+		if(enumArray_array != null) _enum.enumArray_array = new LinkedList<>(enumArray_array);
+		
+		_enum.thereIsNull = this.thereIsNull;
+		
+		if(enumArray_obj != null) {
+			for(JSONSchema s : enumArray_obj)
+				_enum.enumArray_obj.add(s.assertionSeparation());
+		}
+		
+		return _enum;
+	}
 }

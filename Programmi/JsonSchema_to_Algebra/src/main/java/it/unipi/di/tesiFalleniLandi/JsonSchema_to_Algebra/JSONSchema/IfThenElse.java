@@ -57,4 +57,16 @@ public class IfThenElse implements JSONSchemaElement {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public IfThenElse assertionSeparation() {
+		IfThenElse obj = new IfThenElse();
+		
+		if(ifStatement != null) obj.ifStatement = ifStatement.assertionSeparation();
+		if(thenStatement != null) obj.thenStatement = thenStatement.assertionSeparation();
+		if(elseStatement != null) obj.elseStatement = elseStatement.assertionSeparation();
+		
+		
+		return obj;
+	}
 }

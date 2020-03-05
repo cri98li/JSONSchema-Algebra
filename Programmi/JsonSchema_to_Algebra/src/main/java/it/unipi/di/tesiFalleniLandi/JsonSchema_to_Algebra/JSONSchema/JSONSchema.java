@@ -3,7 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONSchema implements JSONSchemaElement{
@@ -202,6 +201,12 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	
 	
+	public JSONSchema() {
+	}
+
+
+
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
@@ -259,7 +264,131 @@ public class JSONSchema implements JSONSchemaElement{
 		}
 	}
 	
-
+	public JSONSchema assertionSeparation() {
+		JSONSchema schema = new JSONSchema();
+		if(booleanAsJSONSchema != null) {
+			schema.booleanAsJSONSchema = booleanAsJSONSchema;
+			return schema;
+		}
+		
+		schema.allOf = new AllOf();
+		
+		
+		if(_const != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp._const = _const.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		if(_enum != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp._enum = _enum.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(properties != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.properties = properties.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(type != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.type = type.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(ifThenElse != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.ifThenElse = ifThenElse.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(not != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.not = not.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(items != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.items = items.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(multipleOf != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.multipleOf = multipleOf.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(length != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.length = length.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(betweenNumber != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.betweenNumber = betweenNumber.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(betweenItems != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.betweenItems = betweenItems.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(contains != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.contains = contains.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(required != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.required = required.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(pattern != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.pattern = pattern.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(uniqueItems != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.uniqueItems = uniqueItems.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(betweenProperties != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.betweenProperties = betweenProperties.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(oneOf != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.oneOf = oneOf.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(allOf != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.allOf = allOf.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		if(anyOf != null) {
+			JSONSchema tmp = new JSONSchema();
+			tmp.anyOf = anyOf.assertionSeparation();
+			schema.allOf.addElement(tmp);
+		}
+		
+		return schema;
+	}
 
 	@Override
 	public String toString() {

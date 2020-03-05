@@ -9,6 +9,12 @@ public class UniqueItems implements JSONSchemaElement{
 	
 	
 	
+	public UniqueItems() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "UniqueItems [uniqueItems=" + uniqueItems + "]";
@@ -25,6 +31,17 @@ public class UniqueItems implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public UniqueItems assertionSeparation() {
+		UniqueItems obj = new UniqueItems();
+		
+		obj.uniqueItems = this.uniqueItems;
+		
+		return obj;
 	}
 
 }

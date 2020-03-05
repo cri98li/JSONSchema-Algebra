@@ -88,6 +88,23 @@ public class Items implements JSONSchemaElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Items assertionSeparation() {
+		Items obj = new Items();
+		
+		if(items_array != null) {
+			obj.items_array = new LinkedList<>();
+			for(JSONSchema s : items_array)
+				obj.items_array.add(s.assertionSeparation());
+		}
+		
+		if(items != null) obj.items = items.assertionSeparation();
+		if(additionalItems_array != null) obj.additionalItems_array = additionalItems_array.assertionSeparation();
+		if(unevaluatedItems_array != null) obj.unevaluatedItems_array = unevaluatedItems_array.assertionSeparation();
+		
+		return obj;
+	}
 }
 
 

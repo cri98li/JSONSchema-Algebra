@@ -9,6 +9,16 @@
     "contains" : {
         "type" : ["string", "number", "object", "boolean"]
     },
+    "properties" : {
+        "a" : true,
+        "b" : {
+            "type": "number",
+            "multipleOf" : 16,
+        }
+    },
+    "if": true,
+    "then": false,
+    "else": true,
     "items": [
         {
           "type": "number",

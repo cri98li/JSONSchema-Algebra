@@ -29,6 +29,8 @@ public class App
         
         //System.out.println(root);
         
-        System.out.println(root.toJSON());
+        //System.out.println(root.toJSON());
+        
+        System.out.println(root.assertionSeparation().toJSON());
     }
 }

@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.json.simple.JSONObject;
@@ -140,5 +141,43 @@ public class Properties implements JSONSchemaElement{
 	public String toString() {
 		return "Properties [properties=" + properties + ", patternProperties=" + patternProperties
 				+ ", additionalProperties=" + additionalProperties + "]";
+	}
+
+	@Override
+	public Properties assertionSeparation() {
+		Properties obj = new Properties();
+		
+		if(properties != null) {
+			obj.properties = new HashMap<>();
+			Iterator<Entry<String, JSONSchema>> it = properties.entrySet().iterator();
+			while(it.hasNext()) {
+				Entry<String, JSONSchema> tmp = it.next();
+				obj.properties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
+			}
+		}
+		
+		if(patternProperties != null) {
+			obj.patternProperties = new HashMap<>();
+			Iterator<Entry<java.util.regex.Pattern, JSONSchema>> it = patternProperties.entrySet().iterator();
+			while(it.hasNext()) {
+				Entry<java.util.regex.Pattern, JSONSchema> tmp = it.next();
+				obj.patternProperties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
+			}
+		}
+		
+		if(additionalProperties != null) {
+			obj.additionalProperties = new HashMap<>();
+			Iterator<Entry<String, JSONSchema>> it = additionalProperties.entrySet().iterator();
+			while(it.hasNext()) {
+				Entry<String, JSONSchema> tmp = it.next();
+				obj.additionalProperties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
+			}
+		}
+		
+		if(booleanAsProperties != null) obj.booleanAsProperties = booleanAsProperties;
+		if(booleanAsPatternProperties != null) obj.booleanAsPatternProperties = booleanAsPatternProperties;
+		if(booleanAsAdditionalProperties != null) obj.booleanAsAdditionalProperties = booleanAsAdditionalProperties;
+		
+		return obj;
 	}
 }

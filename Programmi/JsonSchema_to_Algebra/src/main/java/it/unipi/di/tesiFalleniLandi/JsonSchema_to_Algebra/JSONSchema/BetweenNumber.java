@@ -73,4 +73,20 @@ public class BetweenNumber implements JSONSchemaElement{
 		return null;
 	}
 
+	@Override
+	public BetweenNumber assertionSeparation() {
+		BetweenNumber obj = new BetweenNumber();
+		
+		if(maximum != null) obj.maximum = maximum;
+		if(minimum != null) obj.minimum = minimum;
+		
+		if(exclusiveMaximum != null) obj.exclusiveMaximum = exclusiveMaximum;
+		if(exclusiveMinimum != null) obj.exclusiveMinimum = exclusiveMinimum;
+		
+		if(booleanExclusiveMaximum != null) obj.booleanExclusiveMaximum = booleanExclusiveMaximum;
+		if(booleanExclusiveMinimum != null) obj.booleanExclusiveMinimum = booleanExclusiveMinimum;
+		
+		return obj;
+	}
+
 }

@@ -21,6 +21,11 @@ public class AnyOf implements JSONSchemaElement{
 	}
 	
 	
+	public AnyOf() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	@Override
 	public String toString() {
 		return "AnyOf [anyOf=" + anyOf + "]";
@@ -43,5 +48,18 @@ public class AnyOf implements JSONSchemaElement{
 	public String toGrammarString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public AnyOf assertionSeparation() {
+		AnyOf obj = new AnyOf();
+		
+		obj.anyOf = new LinkedList<>();
+		for(JSONSchema s : anyOf)
+			obj.anyOf.add(s.assertionSeparation());
+			
+		
+		return obj;
 	}
 }
