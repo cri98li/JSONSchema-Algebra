@@ -6,8 +6,8 @@ public class Pattern implements JSONSchemaElement{
 
 	private java.util.regex.Pattern pattern;
 	
-	public Pattern(String str) {
-		pattern = java.util.regex.Pattern.compile(str);
+	public Pattern(Object str) {
+		pattern = java.util.regex.Pattern.compile((String)str);
 	}
 	
 	
