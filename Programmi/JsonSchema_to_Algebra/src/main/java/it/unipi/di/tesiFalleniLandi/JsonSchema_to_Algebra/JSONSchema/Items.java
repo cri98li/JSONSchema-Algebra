@@ -7,6 +7,8 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 
 public class Items implements JSONSchemaElement{
 	private List<JSONSchema> items_array;
@@ -85,8 +87,22 @@ public class Items implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		if(items != null) {
+			return String.format(GrammarStringDefinitions.ITEMS, items.toGrammarString() + "*");
+		}
+		
+		Iterator<JSONSchema> it = items_array.iterator();
+		if(it.hasNext())
+			str += it.next().toGrammarString();
+		
+		while(it.hasNext()) {
+			str += GrammarStringDefinitions.ITEMS_SEPARATOR + it.next().toGrammarString();
+		}
+		if(additionalItems_array != null)
+			str += additionalItems_array.toGrammarString() + "*";
+		
+		return String.format(GrammarStringDefinitions.ITEMS, str);
 	}
 
 	@Override

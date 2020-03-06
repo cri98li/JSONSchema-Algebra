@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Type implements JSONSchemaElement {
 	private String type;
 	private List<String> type_array;
@@ -27,7 +29,6 @@ public class Type implements JSONSchemaElement {
 	}
 	
 	public Type() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -48,7 +49,32 @@ public class Type implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
+		String str = "";
+		
+		if(type != null) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type));
+		
+		Iterator <String> it = type_array.iterator();
+		if(it.hasNext())
+			str +=String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+		
+		while(it.hasNext()) {
+			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+		}
+		
+		return str;
+	}
+	
+	private String jsonTypeToGrammar(String type) {
+		switch(type) {
+		case "array": return GrammarStringDefinitions.TYPE_ARRAY;
+		case "integer": return GrammarStringDefinitions.TYPE_INTEGER;
+		case "number": return GrammarStringDefinitions.TYPE_NUMBER;
+		case "string": return GrammarStringDefinitions.TYPE_STRING;
+		case "object": return GrammarStringDefinitions.TYPE_OBJECT;
+		case "boolean": return GrammarStringDefinitions.TYPE_BOOLEAN;
+		case "null": return GrammarStringDefinitions.TYPE_NULL;
+		}
+		
 		return null;
 	}
 

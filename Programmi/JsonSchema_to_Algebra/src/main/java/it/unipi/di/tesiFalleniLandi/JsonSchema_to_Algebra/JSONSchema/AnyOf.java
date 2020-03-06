@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class AnyOf implements JSONSchemaElement{
 	private List<JSONSchema> anyOf;
 	
@@ -31,8 +33,6 @@ public class AnyOf implements JSONSchemaElement{
 		return "AnyOf [anyOf=" + anyOf + "]";
 	}
 
-
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONArray toJSON() {
@@ -44,12 +44,18 @@ public class AnyOf implements JSONSchemaElement{
 		return array;
 	}
 
-	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		
+		Iterator<JSONSchema> it = anyOf.iterator();
+		if(it.hasNext()) 
+			str += it.next().toGrammarString();
+			
+		while(it.hasNext())
+			str += GrammarStringDefinitions.AND + it.next().toGrammarString();
+			
+		return String.format(GrammarStringDefinitions.ANYOF, str);
 	}
-
 
 	@Override
 	public AnyOf assertionSeparation() {

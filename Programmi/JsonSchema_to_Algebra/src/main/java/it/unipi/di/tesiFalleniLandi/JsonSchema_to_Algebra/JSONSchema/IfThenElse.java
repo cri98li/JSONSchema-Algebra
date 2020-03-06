@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class IfThenElse implements JSONSchemaElement {
 	private JSONSchema ifStatement, thenStatement, elseStatement;
 	
@@ -54,8 +56,18 @@ public class IfThenElse implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String if_str = "", then_str = "", else_str = "";
+		if(ifStatement != null) {
+			if_str = String.format(GrammarStringDefinitions.IF, ifStatement.toGrammarString());
+			if(thenStatement != null) {
+				then_str = String.format(GrammarStringDefinitions.THEN, thenStatement.toGrammarString());
+				if(elseStatement != null) {
+					else_str = String.format(GrammarStringDefinitions.ELSE, elseStatement.toGrammarString());
+				}
+			}
+		}
+		
+		return if_str + " " + then_str + " " + else_str;
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Contains implements JSONSchemaElement{
 	private JSONSchema contains;
 	private Long minContains;
@@ -53,8 +55,12 @@ public class Contains implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String min = "", max = "";
+		
+		if(minContains != null) min = minContains+"";
+		if(maxContains != null) max = maxContains+"";
+		
+		return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
 	}
 
 	@Override

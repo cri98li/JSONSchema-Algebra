@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Length implements JSONSchemaElement{
 	private Long minLength;
 	private Long maxLength;
@@ -47,8 +49,12 @@ public class Length implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String min = "", max = "";
+		
+		if(minLength != null) min = minLength+"";
+		if(maxLength != null) max = maxLength+"";
+		
+		return String.format(GrammarStringDefinitions.LENGTH, min, max);
 	}
 
 	@Override

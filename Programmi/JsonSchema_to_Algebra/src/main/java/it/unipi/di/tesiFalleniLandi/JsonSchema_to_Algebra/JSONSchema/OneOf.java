@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class OneOf implements JSONSchemaElement{
 	private List<JSONSchema> oneOf;
 	
@@ -48,8 +50,16 @@ public class OneOf implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		
+		Iterator<JSONSchema> it = oneOf.iterator();
+		if(it.hasNext()) 
+			str += it.next().toGrammarString();
+			
+		while(it.hasNext())
+			str += GrammarStringDefinitions.AND + it.next().toGrammarString();
+			
+		return String.format(GrammarStringDefinitions.ONEOF, str);
 	}
 
 

@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class BetweenNumber implements JSONSchemaElement{
 	private Long maximum;
 	private Long minimum;
@@ -16,17 +18,27 @@ public class BetweenNumber implements JSONSchemaElement{
 	}
 	
 	public void setMax(Object obj) {
-		this.maximum = (Long) obj;
+		if(booleanExclusiveMaximum != null && booleanExclusiveMaximum)
+			this.exclusiveMaximum = (Long) obj;
+		else
+			this.maximum = (Long) obj;
 	}
 	
 	public void setMin(Object obj) {
-		this.minimum = (Long) obj;
+		if(booleanExclusiveMinimum != null && booleanExclusiveMinimum)
+			this.exclusiveMaximum = (Long) obj;
+		else
+			this.minimum = (Long) obj;
 	}
 	
 	
 	public void setExclusiveMax(Object obj) {
 		try {
 			booleanExclusiveMaximum = (boolean) obj;
+			if(booleanExclusiveMaximum && maximum != null) {
+				exclusiveMaximum = maximum;
+				maximum = null;
+			}
 		}catch(ClassCastException e) {
 			this.exclusiveMaximum = (Long) obj;
 		}
@@ -35,6 +47,10 @@ public class BetweenNumber implements JSONSchemaElement{
 	public void setExclusiveMin(Object obj) {
 		try {
 			booleanExclusiveMinimum = (boolean) obj;
+			if(booleanExclusiveMinimum && minimum != null) {
+				exclusiveMinimum = minimum;
+				minimum = null;
+			}
 		}catch(ClassCastException e) {
 			this.exclusiveMinimum = (Long) obj;
 		}
@@ -69,8 +85,53 @@ public class BetweenNumber implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str1 = ""; //bet
+		String str2 = ""; //xbet
+		
+		
+		String min = "", max = "";
+		if(minimum != null) min = minimum+"";
+		if(maximum != null) max = maximum+"";
+		
+		if(minimum != null || maximum != null)
+			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
+		
+		
+		if(exclusiveMinimum != null) min = exclusiveMinimum+"";
+		if(exclusiveMaximum != null) max = exclusiveMaximum+"";
+		
+		if(exclusiveMinimum != null || exclusiveMaximum != null)
+			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
+		
+		
+		
+		
+		/*if(minimum != null && maximum != null) {
+			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, minimum, maximum);
+		}else if(minimum != null && maximum == null) {
+			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, minimum, GrammarStringDefinitions.POS_INFINITE);
+		}else if(minimum == null && maximum != null) {
+			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, GrammarStringDefinitions.NEG_INFINITE, maximum);
+		}else {
+			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, GrammarStringDefinitions.NEG_INFINITE, GrammarStringDefinitions.POS_INFINITE);
+		}
+		
+		if(exclusiveMinimum != null && exclusiveMaximum != null && booleanExclusiveMaximum && booleanExclusiveMinimum) {
+			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, exclusiveMinimum, exclusiveMaximum);
+		}else if(exclusiveMinimum != null && exclusiveMaximum == null && booleanExclusiveMaximum && !booleanExclusiveMinimum) {
+			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, exclusiveMinimum, GrammarStringDefinitions.POS_INFINITE);
+		}else if(exclusiveMinimum == null && exclusiveMaximum != null && !booleanExclusiveMaximum && booleanExclusiveMinimum) {
+			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, GrammarStringDefinitions.NEG_INFINITE, exclusiveMaximum);
+		}else {
+			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, GrammarStringDefinitions.NEG_INFINITE, GrammarStringDefinitions.POS_INFINITE);
+		}*/
+		
+		if(str1 == "" && str2 != null)
+			return str2;
+		if(str2 == "" && str1 != null)
+			return str1;
+		
+		return str1 + GrammarStringDefinitions.AND + str2;
 	}
 
 	@Override

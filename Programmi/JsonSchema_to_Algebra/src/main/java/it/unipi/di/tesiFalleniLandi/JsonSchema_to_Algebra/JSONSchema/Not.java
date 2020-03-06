@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Not implements JSONSchemaElement {
 	private JSONSchema value;
 	
@@ -23,8 +25,7 @@ public class Not implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format(GrammarStringDefinitions.NOT, value.toGrammarString());
 	}
 
 	@Override

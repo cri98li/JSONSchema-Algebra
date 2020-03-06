@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class UniqueItems implements JSONSchemaElement{
 	private boolean uniqueItems;
 	
@@ -29,8 +31,9 @@ public class UniqueItems implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		if(uniqueItems) return GrammarStringDefinitions.UNIQUEITEMS;
+		
+		return null; //non ci dovrei mai cadere
 	}
 
 

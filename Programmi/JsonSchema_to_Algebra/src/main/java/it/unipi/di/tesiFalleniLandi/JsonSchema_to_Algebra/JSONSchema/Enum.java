@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 
 public class Enum implements JSONSchemaElement, Comparable<Object>{
 	protected List<String> enumArray_str;
@@ -159,8 +161,32 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = ""; String separator = "; ";
+		
+		Iterator <?> it = enumArray_str.iterator();
+		while(it.hasNext()) str += (separator + it.next());
+		
+		it = enumArray_bool.iterator();
+		while(it.hasNext()) str += (separator + it.next());
+		
+		it = enumArray_num.iterator();
+		while(it.hasNext()) str += (separator + it.next());
+		
+		
+		
+		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
+		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
+		
+		it_JSE = enumArray_array.iterator();
+		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
+		
+		
+		
+		if(thereIsNull) str += (separator + "null");
+		
+		if(arrayOnly)
+			return "["+ str.subSequence(separator.length(), str.length()) + "]";
+		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
 
 	@Override

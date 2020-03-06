@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Pattern implements JSONSchemaElement{
 
 	private java.util.regex.Pattern pattern;
@@ -30,8 +32,7 @@ public class Pattern implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format(GrammarStringDefinitions.PATTERN, pattern);
 	}
 
 

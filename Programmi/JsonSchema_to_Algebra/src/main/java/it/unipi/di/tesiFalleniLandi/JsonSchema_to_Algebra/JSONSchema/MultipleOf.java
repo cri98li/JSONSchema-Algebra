@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class MultipleOf implements JSONSchemaElement{
 	private Long value;
 	
@@ -21,8 +23,7 @@ public class MultipleOf implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		return String.format(GrammarStringDefinitions.MULTIPLEOF, value);
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class BetweenItems implements JSONSchemaElement{
 	private Long minItems;
 	private Long maxItems;
@@ -46,8 +48,19 @@ public class BetweenItems implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		
+			if(minItems != null && maxItems != null) {
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, maxItems);
+			} else if (minItems != null && maxItems == null) {
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, "");
+			}else if(minItems == null && maxItems != null) {
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, "", maxItems);
+			}else {
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, "", "");
+			}
+			
+		return str;
 	}
 
 	@Override

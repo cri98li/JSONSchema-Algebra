@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Required implements JSONSchemaElement{
 	private List<String> required;
 
@@ -36,8 +38,18 @@ public class Required implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		
+		Iterator<String> it = required.iterator();
+		
+		if(it.hasNext())
+			str += String.format(GrammarStringDefinitions.REQUIRED, it.next());
+		
+		while(it.hasNext()) {
+			str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.REQUIRED, it.next());
+		}
+		
+		return str;
 	}
 
 	@Override

@@ -1,11 +1,15 @@
 {
     "enum" : [3000, "a", ["c", 12, true], false],
     "const" : "XOR",
-    "type": "array",
+    "not" : {"type": ["array", "number", "null"]},
     "minItems" : 2,
     "maxItems" : 6,
     "minContains" : 1,
+    "required": ["pippo"],
+    "minLength" : 2,
+    "maxLength" : 7,
     "maxContains" : 19,
+    "minProperties": 1,
     "contains" : {
         "type" : ["string", "number", "object", "boolean"]
     },
@@ -13,7 +17,7 @@
         "a" : true,
         "b" : {
             "type": "number",
-            "multipleOf" : 16,
+            "multipleOf" : 16
         }
     },
     "if": true,

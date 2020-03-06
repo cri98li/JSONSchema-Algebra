@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class BetweenProperties implements JSONSchemaElement{
 	private Long minProperties;
 	private Long maxProperties;
@@ -43,8 +45,12 @@ public class BetweenProperties implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String min = "", max = "";
+		
+		if(minProperties != null) min = minProperties+"";
+		if(maxProperties != null) max = maxProperties+"";
+		
+		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
 	}
 
 	@Override

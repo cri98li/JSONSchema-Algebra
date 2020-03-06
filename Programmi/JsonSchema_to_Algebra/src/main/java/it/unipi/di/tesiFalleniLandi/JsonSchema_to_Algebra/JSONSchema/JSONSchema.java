@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class JSONSchema implements JSONSchemaElement{
 	private Boolean booleanAsJSONSchema;
 	
@@ -273,12 +275,12 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		schema.allOf = new AllOf();
 		
-		
 		if(_const != null) {
 			JSONSchema tmp = new JSONSchema();
 			tmp._const = _const.assertionSeparation();
 			schema.allOf.addElement(tmp);
 		}
+		
 		if(_enum != null) {
 			JSONSchema tmp = new JSONSchema();
 			tmp._enum = _enum.assertionSeparation();
@@ -404,8 +406,53 @@ public class JSONSchema implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		
+		if(booleanAsJSONSchema != null) return booleanAsJSONSchema+"";
+		
+		if(type != null) str += GrammarStringDefinitions.AND + type.toGrammarString();
+		
+		if(allOf != null) str += GrammarStringDefinitions.AND + allOf.toGrammarString();
+		
+		if(oneOf != null) str += GrammarStringDefinitions.AND + oneOf.toGrammarString();
+		
+		if(anyOf != null) str += GrammarStringDefinitions.AND + anyOf.toGrammarString();
+		
+		if(not != null) str += GrammarStringDefinitions.AND + not.toGrammarString();
+		
+		if(betweenNumber != null) str += GrammarStringDefinitions.AND + betweenNumber.toGrammarString();
+		
+		if(betweenItems != null) str += GrammarStringDefinitions.AND + betweenItems.toGrammarString();
+		
+		if(items != null) str += GrammarStringDefinitions.AND + items.toGrammarString();
+		
+		if(required != null) str += GrammarStringDefinitions.AND + required.toGrammarString();
+		
+		if(pattern != null) str += GrammarStringDefinitions.AND + pattern.toGrammarString();
+		
+		if(length != null) str += GrammarStringDefinitions.AND + length.toGrammarString();
+		
+		if(betweenProperties != null) str += GrammarStringDefinitions.AND + betweenProperties.toGrammarString();
+		
+		if(contains != null) str += GrammarStringDefinitions.AND + contains.toGrammarString();
+		
+		if(multipleOf != null) str += GrammarStringDefinitions.AND + multipleOf.toGrammarString();
+		
+		if(_enum != null) str += GrammarStringDefinitions.AND + _enum.toGrammarString();
+		
+		if(_const != null) str += GrammarStringDefinitions.AND + _const.toGrammarString();
+		
+		if(uniqueItems != null) str += GrammarStringDefinitions.AND + uniqueItems.toGrammarString();
+		
+		if(ifThenElse != null) str += GrammarStringDefinitions.AND + ifThenElse.toGrammarString();
+		
+		/*
+		private Properties properties; -------------------- aspettiamo
+		 */
+		
+		
+		if(str.length() == 0) return "TODO";
+		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
 	}
 
 }
