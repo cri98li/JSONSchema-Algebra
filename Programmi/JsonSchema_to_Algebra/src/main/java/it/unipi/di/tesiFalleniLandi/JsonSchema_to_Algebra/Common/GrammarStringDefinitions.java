@@ -3,16 +3,21 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 //Per avere un output leggibile: https://www.prettifier.net/perl/
 
 public class GrammarStringDefinitions {
+	//JSON SCHEMA
+	public static final String JSONSCHEMA = "{%s}";
+	
+	//LOGIC OP
+	public static final String OR = " _OR ";
+	public static final String AND = ", \r\n";
+	
+	//RANGE
 	public static final String BETWEENNUMBER = "bet<%s,%s>";
 	public static final String BETWEENNUMBER_EXCL = "xbet<%s,%s>";
-	public static final String MULTIPLEOF = "mof(%s)";
 	public static final String BETWEENITEMS = "betitems<%s,%s>";
-	
 	public static final String BETWEENPROPERTIES = "pro<%s,%s>";
 	
-	//+-inf
-	public static final String POS_INFINITE = "-inf";
-	public static final String NEG_INFINITE = "+inf";
+	//MULTIPLE OF
+	public static final String MULTIPLEOF = "mof(%s)";
 	
 	//TYPE
 	public static final String TYPE = "%s";
@@ -24,10 +29,6 @@ public class GrammarStringDefinitions {
 		public static final String TYPE_ARRAY = "Arr";
 		public static final String TYPE_OBJECT = "Obj";
 		
-	public static final String OR = " _OR ";
-	public static final String AND = ", \r\n";
-		
-	public static final String JSONSCHEMA = "{%s}"; //Valore del prof: %s
 	
 	//allOf, anyOf, oneOf
 	public static final String ALLOF = "_AND(%s)";
