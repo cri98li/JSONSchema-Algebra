@@ -240,7 +240,7 @@ public class JSONSchema implements JSONSchemaElement{
 		for(Entry<String, JSONSchemaElement> entry : entries)
 			if(putContentKeywords.contains(entry.getKey()))
 				putContent(schema, (JSONObject) entry.getValue().toJSON());
-			else schema.put("enum", entry.getValue().toJSON());
+			else schema.put(entry.getKey(), entry.getValue().toJSON());
 		
 		return schema;
 	}
