@@ -69,7 +69,7 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			case "additionalItems":
 				jsonSchema.putIfAbsent("items", new Items());
-				((Items) jsonSchema.get("items")).setAdditionalItems(object);
+				((Items) jsonSchema.get("items")).setAdditionalItems(object.get(key));
 				break;
 
 			case "type":
