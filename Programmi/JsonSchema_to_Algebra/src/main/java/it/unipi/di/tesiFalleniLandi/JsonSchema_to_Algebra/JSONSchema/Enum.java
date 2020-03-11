@@ -8,7 +8,6 @@ import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
-
 public class Enum implements JSONSchemaElement, Comparable<Object>{
 	protected List<String> enumArray_str;
 	protected List<Long> enumArray_num;

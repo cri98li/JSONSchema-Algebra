@@ -16,6 +16,7 @@ public class JSONSchema implements JSONSchemaElement{
 	private Boolean booleanAsJSONSchema; //Per gestire il caso di schema booleano
 	
 	private HashMap<String, JSONSchemaElement> jsonSchema; //Dizionario di keywords presenti nello schema
+	
 
 	/**
 	 * Costruttore, prova a parsare un Object in boolean o in JSONObject.
@@ -283,6 +284,7 @@ public class JSONSchema implements JSONSchemaElement{
 	public String toString() {
 		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\\r\\n jsonSchema=" + jsonSchema + "]";
 	}
+	
 
 	@Override
 	public String toGrammarString() {
