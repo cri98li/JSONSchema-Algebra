@@ -1,22 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 public class UnknowElement implements JSONSchemaElement {
-	private String unknow;
+	private Object obj;
 	
-	public UnknowElement() {
-		
+	public UnknowElement(Object obj) {
+		 this.obj = obj;
 	}
-	
-	@Override
-	public String toString() {
-		return unknow;
-	}
-
 	
 	@Override
 	public Object toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		return obj;
 	}
 
 	@Override
@@ -27,8 +20,7 @@ public class UnknowElement implements JSONSchemaElement {
 
 	@Override
 	public JSONSchemaElement assertionSeparation() {
-		// TODO Auto-generated method stub
-		return null;
+		return new UnknowElement(obj);
 	}
 	
 }

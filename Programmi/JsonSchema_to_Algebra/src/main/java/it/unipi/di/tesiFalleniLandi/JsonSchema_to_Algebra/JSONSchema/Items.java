@@ -18,9 +18,7 @@ public class Items implements JSONSchemaElement{
 	
 	private boolean initialized;
 	
-	public Items() {
-		
-	}
+	public Items() {	}
 	
 	public void setItems(Object obj) {
 		JSONArray array = null;

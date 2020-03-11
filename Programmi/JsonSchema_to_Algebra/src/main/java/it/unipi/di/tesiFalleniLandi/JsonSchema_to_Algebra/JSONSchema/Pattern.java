@@ -4,10 +4,10 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 
 public class Pattern implements JSONSchemaElement{
 
-	private java.util.regex.Pattern pattern;
+	private String pattern;
 	
 	public Pattern(Object str) {
-		pattern = java.util.regex.Pattern.compile((String)str);
+		pattern = (String)str;
 	}
 	
 	
@@ -27,7 +27,7 @@ public class Pattern implements JSONSchemaElement{
 
 	@Override
 	public String toJSON() {
-		return pattern.pattern();
+		return pattern;
 	}
 
 	@Override
