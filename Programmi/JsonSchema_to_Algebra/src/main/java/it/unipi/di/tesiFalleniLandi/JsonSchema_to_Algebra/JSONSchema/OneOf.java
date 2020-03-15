@@ -76,4 +76,20 @@ public class OneOf implements JSONSchemaElement{
 		return obj;
 	}
 	
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		Iterator<JSONSchema> it = oneOf.iterator();
+		while(it.hasNext())
+			returnList.addAll(it.next().getRef());
+		
+		return returnList;
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
 }

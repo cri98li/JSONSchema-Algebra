@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Pattern implements JSONSchemaElement{
@@ -44,6 +48,20 @@ public class Pattern implements JSONSchemaElement{
 		obj.pattern = pattern;
 		
 		return obj;
+	}
+
+
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 
 }

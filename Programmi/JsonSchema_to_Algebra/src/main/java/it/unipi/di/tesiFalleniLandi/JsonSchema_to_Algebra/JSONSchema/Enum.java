@@ -215,4 +215,14 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		
 		return _enum;
 	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
 }

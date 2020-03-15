@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public class UnknowElement implements JSONSchemaElement {
 	private Object obj;
 	
@@ -21,6 +25,16 @@ public class UnknowElement implements JSONSchemaElement {
 	@Override
 	public JSONSchemaElement assertionSeparation() {
 		return new UnknowElement(obj);
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 	
 }

@@ -1,6 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.antlr4;
-
-// Generated from Grammatica.g4 by ANTLR 4.7.1
+// Generated from Grammatica.g4 by ANTLR 4.7.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -17,13 +15,49 @@ public class GrammaticaBaseListener implements GrammaticaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInit(GrammaticaParser.InitContext ctx) { }
+	@Override public void enterList(GrammaticaParser.ListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInit(GrammaticaParser.InitContext ctx) { }
+	@Override public void exitList(GrammaticaParser.ListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeAssertion(GrammaticaParser.TypeAssertionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeAssertion(GrammaticaParser.TypeAssertionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNewList(GrammaticaParser.NewListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNewList(GrammaticaParser.NewListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBetweenAssertion(GrammaticaParser.BetweenAssertionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBetweenAssertion(GrammaticaParser.BetweenAssertionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -36,6 +70,18 @@ public class GrammaticaBaseListener implements GrammaticaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(GrammaticaParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBetween(GrammaticaParser.BetweenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBetween(GrammaticaParser.BetweenContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

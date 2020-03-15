@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -201,6 +202,18 @@ public class JSONSchema implements JSONSchemaElement{
 			case "const":
 				jsonSchema.put("const", new Const(object.get(key)));
 				break;
+				
+			case "$ref":
+				jsonSchema.put("$ref", new Ref(object.get(key)));
+				break;
+				
+			case "$defs":
+				jsonSchema.put("$defs", new Defs(object.get(key)));
+				break;
+				
+			case "definitons":
+				jsonSchema.put("definitons", new Defs(object.get(key)));
+				break;
 			
 			default:
 				jsonSchema.put(key, new UnknowElement(object.get(key)));
@@ -304,6 +317,35 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		if(str.length() == 0 || str.contains("null")) return "TODO";
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
+	}
+
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(booleanAsJSONSchema != null) return returnList;
+		
+		Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
+		
+		for(Entry<String, JSONSchemaElement> entry : entrySet)
+			returnList.addAll(entry.getValue().getRef());
+		
+		return returnList;
+	}
+
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		if(!URIIterator.hasNext())
+			return this;
+		
+		String nextElement = URIIterator.next();
+		
+		if(jsonSchema.containsKey(nextElement))
+			return jsonSchema.get(nextElement).searchDef(URIIterator);
+		
+		return null;
 	}
 
 }

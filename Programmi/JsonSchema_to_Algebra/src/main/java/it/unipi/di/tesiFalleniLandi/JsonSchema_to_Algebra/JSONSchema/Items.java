@@ -119,6 +119,28 @@ public class Items implements JSONSchemaElement{
 		
 		return obj;
 	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(items_array != null) {
+			for(JSONSchema s : items_array)
+				returnList.addAll(s.getRef());
+		}
+		
+		if(items != null) returnList.addAll(items.getRef());
+		if(additionalItems_array != null) returnList.addAll(additionalItems_array.getRef());
+		if(unevaluatedItems_array != null) returnList.addAll(unevaluatedItems_array.getRef());
+		
+		return returnList;
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 

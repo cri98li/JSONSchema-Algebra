@@ -1,6 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.antlr4;
-
-// Generated from Grammatica.g4 by ANTLR 4.7.2
+// Generated from c:\Users\Cristiano Landi\Desktop\Tesi\ANTLR\test antlr\src\it\u005Cunipi\di\tesiFalleniLandi\antlr4\Grammatica.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GrammaticaParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -21,25 +19,16 @@ public class GrammaticaParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, INT=6, ID=7, WS=8, STRING=9;
 	public static final int
 		RULE_assertion_list = 0, RULE_s = 1, RULE_value = 2, RULE_between = 3;
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"assertion_list", "s", "value", "between"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
+	public static final String[] ruleNames = {
+		"assertion_list", "s", "value", "between"
+	};
 
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'{'", "','", "'}'", "'bet<'", "'>'"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, null, null, null, "INT", "ID", "WS", "STRING"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	private static final String[] _LITERAL_NAMES = {
+		null, "'{'", "','", "'}'", "'bet<'", "'>'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, null, null, "INT", "ID", "WS", "STRING"
+	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -108,11 +97,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(SContext.class,i);
 		}
 		public ListContext(Assertion_listContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitList(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Assertion_listContext assertion_list() throws RecognitionException {
@@ -174,33 +158,18 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(BetweenContext.class,0);
 		}
 		public BetweenAssertionContext(SContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitBetweenAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewListContext extends SContext {
 		public Assertion_listContext assertion_list() {
 			return getRuleContext(Assertion_listContext.class,0);
 		}
 		public NewListContext(SContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewList(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class TypeAssertionContext extends SContext {
 		public ValueContext value() {
 			return getRuleContext(ValueContext.class,0);
 		}
 		public TypeAssertionContext(SContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitTypeAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SContext s() throws RecognitionException {
@@ -257,11 +226,6 @@ public class GrammaticaParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_value; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ValueContext value() throws RecognitionException {
@@ -305,11 +269,6 @@ public class GrammaticaParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_between; }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitBetween(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final BetweenContext between() throws RecognitionException {

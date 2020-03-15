@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -65,6 +69,16 @@ public class Length implements JSONSchemaElement{
 		if(maxLength != null) obj.maxLength = maxLength;
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 
 }

@@ -1,5 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.List;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Not implements JSONSchemaElement {
@@ -35,6 +38,16 @@ public class Not implements JSONSchemaElement {
 		obj.value = value.assertionSeparation();
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return value.getRef();
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 
 }

@@ -60,6 +60,16 @@ public class Required implements JSONSchemaElement{
 		
 		return obj;
 	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
 	
 	
 }

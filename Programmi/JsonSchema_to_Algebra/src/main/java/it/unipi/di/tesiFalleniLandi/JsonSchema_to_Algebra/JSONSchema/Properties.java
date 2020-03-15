@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -158,5 +160,40 @@ public class Properties implements JSONSchemaElement{
 		if(booleanAsAdditionalProperties != null) obj.booleanAsAdditionalProperties = booleanAsAdditionalProperties;
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(booleanAsAdditionalProperties != null) return returnList;
+		
+		
+		if(properties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		if(patternProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		if(additionalProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,56 +1,14 @@
 {
     "enum" : [3000, "a", ["c", 12, true], false],
-    "const" : "XOR",
-    "not" : {"type": ["array", "number", "null"]},
-    "minItems" : 2,
-    "maxItems" : 6,
-    "minContains" : 1,
-    "required": ["pippo"],
-    "minLength" : 2,
-    "maxLength" : 7,
-    "maxContains" : 19,
-    "minProperties": 1,
-    "contains" : {
-        "type" : ["string", "number", "object", "boolean"]
-    },
-    "properties" : {
-        "a" : true,
-        "b" : {
-            "type": "number",
-            "multipleOf" : 16
-        }
-    },
-    "if": true,
-    "then": false,
-    "else": true,
-    "items": [
-        {
-          "type": "number",
-          "multipleOf" : 10,
-          "maximum" : 20,
-          "exclusiveMinimum" : 0
-        },
-        {
-          "type": "string",
-          "minLength" : 2,
-          "maxLength" : 7
-        },
-        {
-            "type": "string",
-            "required" : ["a"],
-            "properties" : {
-                "a" : true,
-                "b" : true
-            }
-        },
-        {
-          "type": "string"
-        }
-      ],
-      "addiotinalItems" : {
-          "type" : "object",
-          "plutone" : {
-
-          }
+    "$defs": {
+      "numeriPositivi" :{
+        "type": "number"
       }
+    },
+
+    "properties":{
+      "a": {
+        "$ref": "#/$defs/numeriPositivi"
+      }
+    }
 }

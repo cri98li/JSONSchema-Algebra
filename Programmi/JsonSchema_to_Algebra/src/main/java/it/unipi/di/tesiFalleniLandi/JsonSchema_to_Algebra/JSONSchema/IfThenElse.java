@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -80,5 +84,21 @@ public class IfThenElse implements JSONSchemaElement {
 		
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(ifStatement != null) returnList.addAll(ifStatement.getRef());
+		if(thenStatement != null) returnList.addAll(thenStatement.getRef());
+		if(elseStatement != null) returnList.addAll(elseStatement.getRef());
+		
+		return returnList;
+	}
+
+	@Override
+	public Defs searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 }
