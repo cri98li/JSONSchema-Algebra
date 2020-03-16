@@ -2,10 +2,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.List;
 
-public class Items_Assertion implements S{
+public class Items_Assertion implements Assertion{
 
-	private List<S> itemsArray;
-	private S additionalItems;
+	private List<Assertion> itemsArray;
+	private Assertion additionalItems;
 	
 	public Items_Assertion() {
 		

@@ -22,23 +22,6 @@ public class And_Assertion extends S {
 		andList.add(s);
 	}
 	
-	
-	@Override 
-	public And_Assertion visitList(GrammaticaParser.ListContext ctx) {
-		
-		System.out.println("apro array: ");
-		And_Assertion list = new And_Assertion();
-		
-		List<SContext> keywords = ctx.s();
-		
-		for(SContext key : keywords) {
-			S schema = visit(key);
-			list.add(schema);
-		}
-		
-		return list; 
-	}
-
 	@Override
 	public String toString() {
 		return "And_Assertion [andList=" + andList + "]";

@@ -74,14 +74,15 @@ public class Defs implements JSONSchemaElement{
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
-			obj.schemaDefs.put(entry.getKey(), (JSONSchema) entry.getValue().toJSON());
+			obj.schemaDefs.put(entry.getKey(), entry.getValue().assertionSeparation());
 		
 		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return "";
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Pro_Assertion implements S{
+public class Pro_Assertion implements Assertion{
 	
 	private Integer minProperties, maxProperties;
 	

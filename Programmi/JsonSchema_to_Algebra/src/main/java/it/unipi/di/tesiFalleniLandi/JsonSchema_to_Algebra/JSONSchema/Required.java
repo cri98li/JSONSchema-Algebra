@@ -44,13 +44,13 @@ public class Required implements JSONSchemaElement{
 		Iterator<String> it = required.iterator();
 		
 		if(it.hasNext())
-			str += String.format(GrammarStringDefinitions.REQUIRED, it.next());
+			str += it.next();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.REQUIRED, it.next());
+			str += GrammarStringDefinitions.AND + it.next();
 		}
 		
-		return str;
+		return String.format(GrammarStringDefinitions.REQUIRED, str);
 	}
 
 	@Override

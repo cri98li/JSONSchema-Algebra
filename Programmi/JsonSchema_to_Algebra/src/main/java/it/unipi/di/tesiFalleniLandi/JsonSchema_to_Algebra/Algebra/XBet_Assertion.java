@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class XBet_Assertion implements S{
+public class XBet_Assertion implements Assertion{
 	private Integer min, max;
 	
 	public void setMin(int min) {

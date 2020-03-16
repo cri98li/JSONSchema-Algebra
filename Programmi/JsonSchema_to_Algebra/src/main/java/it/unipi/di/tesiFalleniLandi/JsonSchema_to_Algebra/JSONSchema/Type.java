@@ -10,8 +10,8 @@ import org.json.simple.JSONArray;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Type implements JSONSchemaElement {
-	private String type;
-	private List<String> type_array;
+	protected String type;
+	protected List<String> type_array;
 	
 	public Type(Object obj){
 		try{
@@ -31,7 +31,7 @@ public class Type implements JSONSchemaElement {
 	
 	public Type() {
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Type [type=" + type + ", type_array=" + type_array + "]";
@@ -50,11 +50,10 @@ public class Type implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
 		
 		if(type != null) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type));
 		
-		Iterator <String> it = type_array.iterator();
+		/*Iterator <String> it = type_array.iterator();
 		if(it.hasNext())
 			str +=String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
 		
@@ -62,7 +61,8 @@ public class Type implements JSONSchemaElement {
 			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
 		}
 		
-		return str;
+		return str;*/
+		return ""; //non ci dovrei mai arrivare
 	}
 	
 	private String jsonTypeToGrammar(String type) {
@@ -82,10 +82,12 @@ public class Type implements JSONSchemaElement {
 	@Override
 	public Type assertionSeparation() {
 		Type obj = new Type();
+		if(type != null)
+			obj.type = type;
 		
-		if(type != null) obj.type = type;
-		if(type_array != null) obj.type_array = new LinkedList<>(type_array);
-		
+		if(type_array != null)
+			obj.type_array = new LinkedList<>(type_array);
+
 		return obj;
 	}
 

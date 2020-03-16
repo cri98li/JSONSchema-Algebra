@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -286,6 +285,31 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
+			//Type separation
+			if(entry.getKey().equals("type")) {
+				AnyOf anyOf = new AnyOf();
+				Type type = ((Type)entry.getValue());
+				
+				if(type.type_array != null)
+					for(String str : type.type_array) {
+						JSONSchema tmp = new JSONSchema();
+						Type t = new Type();
+						t.type = str;
+						tmp.jsonSchema.put("type", t);
+						anyOf.addElement(tmp);
+					}
+				else {
+					JSONSchema tmp = new JSONSchema();
+					tmp.jsonSchema.put("type", type);
+					anyOf.addElement(tmp);
+				}
+				
+				JSONSchema tmp = new JSONSchema();
+				tmp.jsonSchema.put("anyOf", anyOf);
+				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
+				continue;
+			}
+			
 			JSONSchema tmp = new JSONSchema();
 			tmp.jsonSchema.put(entry.getKey(), entry.getValue().assertionSeparation());
 			((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);

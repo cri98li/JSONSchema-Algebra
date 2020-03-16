@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Exist_Assertion implements S{
+public class Exist_Assertion implements Assertion{
 	private Integer min, max;
-	private S s;
+	private Assertion s;
 	
 	public Exist_Assertion() {
 		
@@ -16,7 +16,7 @@ public class Exist_Assertion implements S{
 		this.max = max;
 	}
 	
-	public void setS(S s) {
+	public void setS(Assertion s) {
 		this.s = s;
 	}
 	

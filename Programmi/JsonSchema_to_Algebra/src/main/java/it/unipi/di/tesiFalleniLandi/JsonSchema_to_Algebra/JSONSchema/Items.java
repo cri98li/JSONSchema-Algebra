@@ -88,7 +88,7 @@ public class Items implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		if(items != null) {
-			return String.format(GrammarStringDefinitions.ITEMS, items.toGrammarString() + "*");
+			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
 		}
 		
 		Iterator<JSONSchema> it = items_array.iterator();
@@ -96,12 +96,14 @@ public class Items implements JSONSchemaElement{
 			str += it.next().toGrammarString();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.ITEMS_SEPARATOR + it.next().toGrammarString();
+			str += "*" + it.next().toGrammarString();
 		}
-		if(additionalItems_array != null)
-			str += additionalItems_array.toGrammarString() + "*";
 		
-		return String.format(GrammarStringDefinitions.ITEMS, str);
+		String str2 = "null";
+		if(additionalItems_array != null)
+			str2 = additionalItems_array.toGrammarString();
+		
+		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
 	}
 
 	@Override

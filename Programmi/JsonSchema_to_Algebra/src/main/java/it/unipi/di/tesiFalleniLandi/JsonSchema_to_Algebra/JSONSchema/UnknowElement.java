@@ -40,7 +40,7 @@ public class UnknowElement implements JSONSchemaElement {
 
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
-		return null;
+		return new LinkedList<>();
 	}
 	
 }

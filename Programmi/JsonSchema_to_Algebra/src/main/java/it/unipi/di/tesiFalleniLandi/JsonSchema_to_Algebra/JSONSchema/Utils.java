@@ -23,12 +23,12 @@ public class Utils {
 	}
 	
 	public static JSONSchema normalize(JSONSchema root) {
-		normalizeRefDef(root);
+		referenceNormalization(root);
 		
 		return root.assertionSeparation();
 	}
 	
-	public static void normalizeRefDef(JSONSchema root) {
+	public static void referenceNormalization(JSONSchema root) {
 		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef());
 		
 		List<URI_JS> refList = root.getRef();

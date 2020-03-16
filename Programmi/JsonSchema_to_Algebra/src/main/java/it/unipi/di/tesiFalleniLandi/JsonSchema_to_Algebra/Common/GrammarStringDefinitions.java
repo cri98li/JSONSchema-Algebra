@@ -17,7 +17,7 @@ public class GrammarStringDefinitions {
 	public static final String BETWEENPROPERTIES = "pro<%s,%s>";
 	
 	//MULTIPLE OF
-	public static final String MULTIPLEOF = "mof(%s)";
+	public static final String MULTIPLEOF = "mof<%s>";
 	
 	//TYPE
 	public static final String TYPE = "%s";
@@ -36,10 +36,10 @@ public class GrammarStringDefinitions {
 	public static final String ONEOF = "_XOR(%s)";
 	
 	//not
-	public static final String NOT = "_NEG(%s)";
+	public static final String NOT = "_NOT(%s)";
 		
 	//required
-	public static final String REQUIRED = "%s:!true";
+	public static final String REQUIRED = "req(%s)";
 		
 	//pattern
 	public static final String PATTERN = "pattern(%s)";
@@ -48,8 +48,7 @@ public class GrammarStringDefinitions {
 	public static final String LENGTH = "length<%s,%s>";
 	
 	//items
-	public static final String ITEMS = "items(%s)";
-	public static final String ITEMS_SEPARATOR = ";";
+	public static final String ITEMS = "items(%s;%s)";
 	
 	//contains
 	public static final String CONTAINS = "contains<%s,%s>(%s)";
@@ -61,7 +60,7 @@ public class GrammarStringDefinitions {
 	public static final String UNIQUEITEMS = "uniqueItems";
 	
 	//if-then-else
-	public static final String IF = "if %s";
-	public static final String THEN = "then %s";
-	public static final String ELSE = "else %s";
+	public static final String IF_THEN_ELSE = "if %s => %s | %s";
+	/*public static final String THEN = "then %s";
+	public static final String ELSE = "else %s";*/
 }

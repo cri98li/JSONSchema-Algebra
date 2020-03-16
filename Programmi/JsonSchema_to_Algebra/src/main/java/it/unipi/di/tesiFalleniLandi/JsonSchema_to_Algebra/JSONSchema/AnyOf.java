@@ -27,6 +27,11 @@ public class AnyOf implements JSONSchemaElement{
 	public AnyOf() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void addElement(JSONSchema schema) {
+		if(anyOf == null) anyOf = new LinkedList<>();
+		anyOf.add(schema);
+	}
 
 
 	@Override

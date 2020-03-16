@@ -1,17 +1,19 @@
-package it.unipi.di.tesiFalleniLandi;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.io.IOException;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Parser;
-import it.unipi.di.tesiFalleniLandi.antlr4.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 
-public class MainClass {
+public class MainClass_Algebra {
 	public static void main(String[] args) throws IOException {
-		System.out.println("Hello world!");
-		CharStream input = CharStreams.fromStream(System.in); //inserisci input e poi premi CTRL+D
+        
+        CharStream input = CharStreams.fromStream(System.in); //inserisci input e poi premi CTRL+D
 		
 		long start = System.currentTimeMillis();
 		
@@ -28,8 +30,8 @@ public class MainClass {
 		System.out.println("Tempo di esecuzione [ms]: "+ (System.currentTimeMillis()-start));
 		
 		System.out.println(tree.toStringTree(parser));
-		System.out.println(schema.toString());
 		
-		//System.out.println(tree.getChild(arg0));
+		System.out.println(schema.toString());
+        
 	}
 }

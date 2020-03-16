@@ -20,13 +20,14 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public JSONSchemaElement assertionSeparation() {
-		Ref ref = new Ref(uri);
+		Ref ref = new Ref(uri.toString());
 		return ref;
 	}
 
 	@Override
 	public String toGrammarString() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return "";
 	}
 
 	@Override

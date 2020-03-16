@@ -1,8 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Bet_Assertion implements S{
+public class Bet_Assertion implements Assertion{
 	
 	private Integer min, max;
+	
+	public Bet_Assertion() {	}
+	
+	public Bet_Assertion(int min, int max) {
+		this.min = min;
+		this.max = max;
+	}
+	
 	public void setMin(int min) {
 		this.min = min;
 	}
@@ -19,4 +27,11 @@ public class Bet_Assertion implements S{
 		
 		return intersectedBet;
 	}
+
+	@Override
+	public String toString() {
+		return "Bet_Assertion [min=" + min + ", max=" + max + "]";
+	}
+	
+	
 }
