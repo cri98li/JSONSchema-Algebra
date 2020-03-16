@@ -1,13 +1,18 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Pattern implements JSONSchemaElement{
 
-	private java.util.regex.Pattern pattern;
+	private String pattern;
 	
-	public Pattern(String str) {
-		pattern = java.util.regex.Pattern.compile(str);
+	public Pattern(Object str) {
+		pattern = (String)str;
 	}
 	
 	
@@ -27,7 +32,7 @@ public class Pattern implements JSONSchemaElement{
 
 	@Override
 	public String toJSON() {
-		return pattern.pattern();
+		return pattern;
 	}
 
 	@Override
@@ -44,6 +49,27 @@ public class Pattern implements JSONSchemaElement{
 		obj.pattern = pattern;
 		
 		return obj;
+	}
+
+
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		return new LinkedList<>();
 	}
 
 }

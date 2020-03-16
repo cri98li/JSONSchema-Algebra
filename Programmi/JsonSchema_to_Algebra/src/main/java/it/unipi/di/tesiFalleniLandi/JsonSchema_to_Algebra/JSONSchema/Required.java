@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 
@@ -43,13 +44,13 @@ public class Required implements JSONSchemaElement{
 		Iterator<String> it = required.iterator();
 		
 		if(it.hasNext())
-			str += String.format(GrammarStringDefinitions.REQUIRED, it.next());
+			str += it.next();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.REQUIRED, it.next());
+			str += GrammarStringDefinitions.AND + it.next();
 		}
 		
-		return str;
+		return String.format(GrammarStringDefinitions.REQUIRED, str);
 	}
 
 	@Override
@@ -59,6 +60,21 @@ public class Required implements JSONSchemaElement{
 		obj.required = new LinkedList<>(this.required);
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		return new LinkedList<>();
 	}
 	
 	

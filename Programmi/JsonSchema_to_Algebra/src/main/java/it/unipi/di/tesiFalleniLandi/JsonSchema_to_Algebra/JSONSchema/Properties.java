@@ -1,7 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -11,20 +14,14 @@ import org.json.simple.JSONObject;
 public class Properties implements JSONSchemaElement{
 
 	private HashMap<String, JSONSchema> properties;
-	private HashMap<java.util.regex.Pattern, JSONSchema> patternProperties;
+	private HashMap<String, JSONSchema> patternProperties;
 	private HashMap<String, JSONSchema> additionalProperties;
 	
-	private Boolean booleanAsProperties;
-	private Boolean booleanAsPatternProperties;
 	private Boolean booleanAsAdditionalProperties;
 	
 	public Properties() { }
 	
 	public void setProperties(Object obj) {
-		try {
-			booleanAsProperties = (Boolean) obj;
-			return;
-		} catch(ClassCastException e) { }
 		
 		JSONObject object = (JSONObject) obj;
 		
@@ -41,13 +38,10 @@ public class Properties implements JSONSchemaElement{
 	}
 	
 	public void setPatternProperties(Object obj) {
-		try {
-			booleanAsPatternProperties = (Boolean) obj;
-			return;
-		} catch(ClassCastException e) { }
 		
 		JSONObject object = (JSONObject) obj;
-		patternProperties = new HashMap<java.util.regex.Pattern, JSONSchema>();
+		
+		patternProperties = new HashMap<String, JSONSchema>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -55,7 +49,7 @@ public class Properties implements JSONSchemaElement{
 			String key = (String) it.next();
 			JSONSchema value = new JSONSchema(object.get(key));
 			
-			properties.put(key, value);
+			patternProperties.put(key, value);
 		}
 	}
 	
@@ -63,7 +57,7 @@ public class Properties implements JSONSchemaElement{
 		try {
 			booleanAsAdditionalProperties = (Boolean) obj;
 			return;
-		} catch(ClassCastException e) { }
+		}catch(ClassCastException e) {	}
 		
 		JSONObject object = (JSONObject) obj;
 		
@@ -84,47 +78,37 @@ public class Properties implements JSONSchemaElement{
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
 		
-		if(booleanAsProperties == null) {
-			if(properties != null && !properties.isEmpty()){
-				JSONObject tmp = new JSONObject();
-				Set<String> keys = properties.keySet();
+		if(properties != null && !properties.isEmpty()){
+			JSONObject tmp = new JSONObject();
+			Set<String> keys = properties.keySet();
 				
-				for(String key : keys)
-					tmp.put(key, properties.get(key).toJSON());
+			for(String key : keys)
+				tmp.put(key, properties.get(key).toJSON());
 				
-				obj.put("properties", tmp);
-			}
-		}else {
-			obj.put("properties", booleanAsProperties);
+			obj.put("properties", tmp);
 		}
 		
-		if(booleanAsPatternProperties == null) {
-			if(patternProperties != null && !patternProperties.isEmpty()){
-				JSONObject tmp = new JSONObject();
-				Set<java.util.regex.Pattern> keys = patternProperties.keySet();
+		if(patternProperties != null && !patternProperties.isEmpty()){
+			JSONObject tmp = new JSONObject();
+			Set<String> keys = patternProperties.keySet();
 				
-				for(java.util.regex.Pattern key : keys)
-					tmp.put(key, patternProperties.get(key).toJSON());
+			for(String key : keys)
+				tmp.put(key, patternProperties.get(key).toJSON());
 				
-				obj.put("patternProperties", tmp);
-			}
-		}
-		else {
-			obj.put("patternProperties", booleanAsPatternProperties);
+			obj.put("patternProperties", tmp);
 		}
 		
-		if(booleanAsAdditionalProperties == null) {
+		if(booleanAsAdditionalProperties != null) {
 			if(additionalProperties != null && !additionalProperties.isEmpty()){
 				JSONObject tmp = new JSONObject();
 				Set<String> keys = additionalProperties.keySet();
-				
+					
 				for(String key : keys)
 					tmp.put(key, additionalProperties.get(key).toJSON());
-				
+					
 				obj.put("additionalProperties", tmp);
 			}
-		}
-		else {
+		} else {
 			obj.put("additionalProperties", booleanAsAdditionalProperties);
 		}
 		
@@ -158,9 +142,9 @@ public class Properties implements JSONSchemaElement{
 		
 		if(patternProperties != null) {
 			obj.patternProperties = new HashMap<>();
-			Iterator<Entry<java.util.regex.Pattern, JSONSchema>> it = patternProperties.entrySet().iterator();
+			Iterator<Entry<String, JSONSchema>> it = patternProperties.entrySet().iterator();
 			while(it.hasNext()) {
-				Entry<java.util.regex.Pattern, JSONSchema> tmp = it.next();
+				Entry<String, JSONSchema> tmp = it.next();
 				obj.patternProperties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
 			}
 		}
@@ -174,10 +158,100 @@ public class Properties implements JSONSchemaElement{
 			}
 		}
 		
-		if(booleanAsProperties != null) obj.booleanAsProperties = booleanAsProperties;
-		if(booleanAsPatternProperties != null) obj.booleanAsPatternProperties = booleanAsPatternProperties;
 		if(booleanAsAdditionalProperties != null) obj.booleanAsAdditionalProperties = booleanAsAdditionalProperties;
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(booleanAsAdditionalProperties != null) return returnList;
+		
+		
+		if(properties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		if(patternProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		if(additionalProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				returnList.addAll(entry.getValue().getRef());
+			}
+		}
+		
+		return returnList;
+	}
+
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		if(booleanAsAdditionalProperties != null) return returnList;
+		
+		if(properties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		if(patternProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		if(additionalProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		if(!URIIterator.hasNext())
+			return null;
+		
+		
+		switch(URIIterator.next()) {
+		case "properties":
+			URIIterator.remove();
+			String next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+			
+		case "patternProperties":
+			URIIterator.remove();
+			next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+			
+		case "additionalProperties":
+			URIIterator.remove();
+			next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+		}
+		
+		return null;
 	}
 }

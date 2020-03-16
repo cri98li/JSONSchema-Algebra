@@ -1,5 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -104,28 +109,6 @@ public class BetweenNumber implements JSONSchemaElement{
 			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
 		
 		
-		
-		
-		/*if(minimum != null && maximum != null) {
-			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, minimum, maximum);
-		}else if(minimum != null && maximum == null) {
-			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, minimum, GrammarStringDefinitions.POS_INFINITE);
-		}else if(minimum == null && maximum != null) {
-			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, GrammarStringDefinitions.NEG_INFINITE, maximum);
-		}else {
-			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, GrammarStringDefinitions.NEG_INFINITE, GrammarStringDefinitions.POS_INFINITE);
-		}
-		
-		if(exclusiveMinimum != null && exclusiveMaximum != null && booleanExclusiveMaximum && booleanExclusiveMinimum) {
-			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, exclusiveMinimum, exclusiveMaximum);
-		}else if(exclusiveMinimum != null && exclusiveMaximum == null && booleanExclusiveMaximum && !booleanExclusiveMinimum) {
-			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, exclusiveMinimum, GrammarStringDefinitions.POS_INFINITE);
-		}else if(exclusiveMinimum == null && exclusiveMaximum != null && !booleanExclusiveMaximum && booleanExclusiveMinimum) {
-			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, GrammarStringDefinitions.NEG_INFINITE, exclusiveMaximum);
-		}else {
-			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, GrammarStringDefinitions.NEG_INFINITE, GrammarStringDefinitions.POS_INFINITE);
-		}*/
-		
 		if(str1 == "" && str2 != null)
 			return str2;
 		if(str2 == "" && str1 != null)
@@ -150,4 +133,19 @@ public class BetweenNumber implements JSONSchemaElement{
 		return obj;
 	}
 
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		
+		return new LinkedList<>();
+	}
 }

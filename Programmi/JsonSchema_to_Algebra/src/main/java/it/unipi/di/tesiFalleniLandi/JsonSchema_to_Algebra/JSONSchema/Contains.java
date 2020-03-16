@@ -1,5 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -73,5 +78,25 @@ public class Contains implements JSONSchemaElement{
 		
 		return obj;
 	}
+	
+	@Override
+	public List<URI_JS> getRef() {
+		return contains.getRef();
+	}
 
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null; //non posso cercare cose qui dentro
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		returnList.addAll(Utils.addPathElement("contains",contains.collectDef()));
+		
+		return returnList;
+	}
+	
+	
 }

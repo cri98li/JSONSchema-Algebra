@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,9 +19,7 @@ public class Items implements JSONSchemaElement{
 	
 	private boolean initialized;
 	
-	public Items() {
-		
-	}
+	public Items() {	}
 	
 	public void setItems(Object obj) {
 		JSONArray array = null;
@@ -89,7 +88,7 @@ public class Items implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		if(items != null) {
-			return String.format(GrammarStringDefinitions.ITEMS, items.toGrammarString() + "*");
+			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
 		}
 		
 		Iterator<JSONSchema> it = items_array.iterator();
@@ -97,12 +96,14 @@ public class Items implements JSONSchemaElement{
 			str += it.next().toGrammarString();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.ITEMS_SEPARATOR + it.next().toGrammarString();
+			str += "*" + it.next().toGrammarString();
 		}
-		if(additionalItems_array != null)
-			str += additionalItems_array.toGrammarString() + "*";
 		
-		return String.format(GrammarStringDefinitions.ITEMS, str);
+		String str2 = "null";
+		if(additionalItems_array != null)
+			str2 = additionalItems_array.toGrammarString();
+		
+		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
 	}
 
 	@Override
@@ -120,6 +121,55 @@ public class Items implements JSONSchemaElement{
 		if(unevaluatedItems_array != null) obj.unevaluatedItems_array = unevaluatedItems_array.assertionSeparation();
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		if(items_array != null) {
+			for(JSONSchema s : items_array)
+				returnList.addAll(s.getRef());
+		}
+		
+		if(items != null) returnList.addAll(items.getRef());
+		if(additionalItems_array != null) returnList.addAll(additionalItems_array.getRef());
+		if(unevaluatedItems_array != null) returnList.addAll(unevaluatedItems_array.getRef());
+		
+		return returnList;
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		if(URIIterator.hasNext())
+			switch(URIIterator.next()) {
+			case "items":
+				URIIterator.remove();
+				return items.searchDef(URIIterator);
+			case "additionalItems":
+				URIIterator.remove();
+				return additionalItems_array.searchDef(URIIterator);
+			case "unevaluatedItems":
+				URIIterator.remove();
+				return unevaluatedItems_array.searchDef(URIIterator);
+			}
+		
+		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		if(items_array != null) {
+			//qui non lo posso trovare: come lo indicherei altrimenti?
+		}
+		
+		if(items != null) returnList.addAll(Utils.addPathElement("items",items.collectDef()));
+		if(additionalItems_array != null) returnList.addAll(Utils.addPathElement("additionalItems", additionalItems_array.collectDef()));
+		if(unevaluatedItems_array != null) returnList.addAll(Utils.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
+		
+		return returnList;
 	}
 }
 

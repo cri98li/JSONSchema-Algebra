@@ -1,5 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class UniqueItems implements JSONSchemaElement{
@@ -12,7 +17,6 @@ public class UniqueItems implements JSONSchemaElement{
 	
 	
 	public UniqueItems() {
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -45,6 +49,24 @@ public class UniqueItems implements JSONSchemaElement{
 		obj.uniqueItems = this.uniqueItems;
 		
 		return obj;
+	}
+
+
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
+
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		return new LinkedList<>();
 	}
 
 }

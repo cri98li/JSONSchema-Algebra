@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 
@@ -11,8 +12,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
 	
-	public AllOf() {
-	}
+	public AllOf() {	}
 	
 	public AllOf(Object obj) {
 		JSONArray array = (JSONArray) obj;
@@ -70,5 +70,26 @@ public class AllOf implements JSONSchemaElement{
 			
 		
 		return obj;
+	}
+
+	@Override
+	public List<URI_JS> getRef() {
+		List<URI_JS> returnList = new LinkedList<>();
+		
+		Iterator<JSONSchema> it = allOf.iterator();
+		while(it.hasNext())
+			returnList.addAll(it.next().getRef());
+		
+		return returnList;
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		return new LinkedList<>();
 	}
 }
