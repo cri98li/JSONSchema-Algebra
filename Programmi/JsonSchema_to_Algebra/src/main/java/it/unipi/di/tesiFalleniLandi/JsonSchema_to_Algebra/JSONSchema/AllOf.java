@@ -85,7 +85,12 @@ public class AllOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		return new LinkedList<>();
 	}
 }

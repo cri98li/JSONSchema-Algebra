@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,7 +35,23 @@ public class Defs implements JSONSchemaElement{
 		}
 	}
 	
-	private Defs() {
+	public JSONSchema containsDef(String key) {
+		return schemaDefs.get(key);
+	}
+	
+	public void addDef(String key, JSONSchema element) {
+		schemaDefs.put(key, element);
+	}
+	
+	/*
+	 * Unisce due Defs
+	 */
+	public void addDef(Defs defs) {
+		schemaDefs.putAll(defs.schemaDefs);
+	}
+	
+	public Defs() {	
+		schemaDefs = new HashMap<>();
 	}
 
 	@Override
@@ -80,13 +97,21 @@ public class Defs implements JSONSchemaElement{
 	}
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
-		if(!URIIterator.hasNext())
-			return null;
-		
-		String nextElement = URIIterator.next();
-		
-		return schemaDefs.get(nextElement).searchDef(URIIterator);
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		returnList.add(new AbstractMap.SimpleEntry<>("",this));
+		return returnList;
+	}
+
+	@Override
+	public String toString() {
+		return "Defs [schemaDefs=" + schemaDefs + "]";
+	}
+
+	
 }

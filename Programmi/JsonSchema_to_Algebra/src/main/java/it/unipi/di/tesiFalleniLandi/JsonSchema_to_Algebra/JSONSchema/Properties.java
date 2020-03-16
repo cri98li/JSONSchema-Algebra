@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -191,9 +192,66 @@ public class Properties implements JSONSchemaElement{
 		return returnList;
 	}
 
+
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
-		// TODO Auto-generated method stub
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		if(booleanAsAdditionalProperties != null) return returnList;
+		
+		if(properties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		if(patternProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		if(additionalProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet)
+				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		if(!URIIterator.hasNext())
+			return null;
+		
+		
+		switch(URIIterator.next()) {
+		case "properties":
+			URIIterator.remove();
+			String next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+			
+		case "patternProperties":
+			URIIterator.remove();
+			next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+			
+		case "additionalProperties":
+			URIIterator.remove();
+			next = URIIterator.next();
+			if(properties.containsKey(next)) {
+				URIIterator.remove();
+				return properties.get(next).searchDef(URIIterator);
+			}
+		}
+		
 		return null;
 	}
 }

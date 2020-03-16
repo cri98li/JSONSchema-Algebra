@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class UnknowElement implements JSONSchemaElement {
 	private Object obj;
@@ -33,7 +34,12 @@ public class UnknowElement implements JSONSchemaElement {
 	}
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
 		return null;
 	}
 	

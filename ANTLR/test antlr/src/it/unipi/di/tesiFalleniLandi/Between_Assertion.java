@@ -6,22 +6,24 @@ import it.unipi.di.tesiFalleniLandi.antlr4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.antlr4.GrammaticaParser.SContext;
 
 public class Between_Assertion extends S{
-	public int min, max;
+	private int min, max;
 	
 	public Between_Assertion() {
 		
 	}
 	
+	public Between_Assertion(int min, int max) {
+		this.min = min;
+		this.max = max;
+	}
+	
 	@Override
 	public Between_Assertion visitBetweenAssertion(GrammaticaParser.BetweenAssertionContext ctx) {
-		Between_Assertion bet = new Between_Assertion();
 		
-		//System.out.println(ctx.between().value(0));
-		//visit(ctx.between());
-		bet.min = Integer.valueOf(ctx.between().value(0).getText());
-		bet.max = Integer.valueOf(ctx.between().value(1).getText());
+		int min = Integer.valueOf(ctx.between().value(0).getText());
+		int max = Integer.valueOf(ctx.between().value(1).getText());
 		
-		return bet;
+		return new Between_Assertion(min, max);
 	}
 	@Override
 	public String toString() {

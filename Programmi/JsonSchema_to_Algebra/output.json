@@ -1,0 +1,1 @@
+{"$defs":{"numeriPositivi":{"type":"number"}},"additionalProperties":null,"enum":["a",3000,false,["c",12,true]],"properties":{"a":{"$ref":"#\/$defs\/numeriPositivi"},"b":{"$defs":{"numeriPiccoli":{"maximum":5},"numeriGrandi":{"minimum":5}}},"c":{"$ref":"#\/properties\/a"}}}

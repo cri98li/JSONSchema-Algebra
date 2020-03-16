@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -212,7 +213,7 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "definitons":
-				jsonSchema.put("definitons", new Defs(object.get(key)));
+				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 			
 			default:
@@ -227,7 +228,9 @@ public class JSONSchema implements JSONSchemaElement{
 		jsonSchema = new HashMap<>();
 	}
 
-	
+	public void addJSONSchemaElement(String key, JSONSchemaElement value) {
+		jsonSchema.put(key, value);
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -336,7 +339,7 @@ public class JSONSchema implements JSONSchemaElement{
 
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		if(!URIIterator.hasNext())
 			return this;
 		
@@ -346,6 +349,21 @@ public class JSONSchema implements JSONSchemaElement{
 			return jsonSchema.get(nextElement).searchDef(URIIterator);
 		
 		return null;
+	}
+
+
+	@Override
+	public List<Entry<String, Defs>> collectDef() {
+		List<Entry<String, Defs>> returnList = new LinkedList<>();
+		
+		Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
+		
+		for(Entry<String, JSONSchemaElement> entry : entrySet)
+			returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+		
+		jsonSchema.remove("$defs");
+		
+		return returnList;
 	}
 
 }

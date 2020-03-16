@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -137,9 +138,36 @@ public class Items implements JSONSchemaElement{
 	}
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
-		// TODO Auto-generated method stub
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		if(URIIterator.hasNext())
+			switch(URIIterator.next()) {
+			case "items":
+				URIIterator.remove();
+				return items.searchDef(URIIterator);
+			case "additionalItems":
+				URIIterator.remove();
+				return additionalItems_array.searchDef(URIIterator);
+			case "unevaluatedItems":
+				URIIterator.remove();
+				return unevaluatedItems_array.searchDef(URIIterator);
+			}
+		
 		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		if(items_array != null) {
+			//qui non lo posso trovare: come lo indicherei altrimenti?
+		}
+		
+		if(items != null) returnList.addAll(Utils.addPathElement("items",items.collectDef()));
+		if(additionalItems_array != null) returnList.addAll(Utils.addPathElement("additionalItems", additionalItems_array.collectDef()));
+		if(unevaluatedItems_array != null) returnList.addAll(Utils.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
+		
+		return returnList;
 	}
 }
 

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 
@@ -98,7 +99,31 @@ public class IfThenElse implements JSONSchemaElement {
 	}
 
 	@Override
-	public Defs searchDef(Iterator<String> URIIterator) {
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		if(URIIterator.hasNext())
+			switch(URIIterator.next()) {
+			case "if":
+				URIIterator.remove();
+				return ifStatement.searchDef(URIIterator);
+			case "then":
+				URIIterator.remove();
+				return thenStatement.searchDef(URIIterator);
+			case "else":
+				URIIterator.remove();
+				return elseStatement.searchDef(URIIterator);
+			}
+		
 		return null;
+	}
+
+	@Override
+	public List<Entry<String,Defs>> collectDef() {
+		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		
+		if(ifStatement != null) returnList.addAll(Utils.addPathElement("if", ifStatement.collectDef()));
+		if(thenStatement != null) returnList.addAll(Utils.addPathElement("then", thenStatement.collectDef()));
+		if(elseStatement != null) returnList.addAll(Utils.addPathElement("else", elseStatement.collectDef()));
+		
+		return returnList;
 	}
 }
