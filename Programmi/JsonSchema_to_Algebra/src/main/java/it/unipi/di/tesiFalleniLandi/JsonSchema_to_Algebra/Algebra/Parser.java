@@ -12,28 +12,12 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public And_Assertion visitNewList(GrammaticaParser.NewListContext ctx) { 
 		And_Assertion schema = (And_Assertion) visit(ctx.assertion_list());
+		
 		return schema;
 	}
 	
 	@Override 
 	public And_Assertion visitList(GrammaticaParser.ListContext ctx) {
-		
-		System.out.println("apro array: ");
-		And_Assertion list = new And_Assertion();
-		
-		List<AssertionContext> keywords = ctx.assertion();
-		
-		for(AssertionContext key : keywords) {
-			Assertion schema = visit(key);
-			list.add(schema);
-		}
-		
-		return list; 
-	}
-	
-	public And_Assertion visit(GrammaticaParser.All_of_assertionContext ctx) {
-		
-		System.out.println("apro array: ");
 		And_Assertion list = new And_Assertion();
 		
 		List<AssertionContext> keywords = ctx.assertion();
@@ -47,25 +31,61 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	}
 	
 	@Override
-	public Bet_Assertion visitBetweenAssertion(GrammaticaParser.BetweenAssertionContext ctx) {
-		int min = Integer.valueOf(ctx.between_assertion().numeric_value(0).getText());
-		int max = Integer.valueOf(ctx.between_assertion().numeric_value(1).getText());
+	public Bet_Assertion visitNewBetweenAssertion(GrammaticaParser.NewBetweenAssertionContext ctx) {
 		
-		return new Bet_Assertion(min, max);
+		Bet_Assertion bet = (Bet_Assertion) visit(ctx.between_assertion());
+
+		return bet;
 	}
+	
 	@Override
-	public Type_Assertion visitTypeAssertion(GrammaticaParser.TypeAssertionContext ctx) { 
-		System.out.println("type");
+	public Bet_Assertion visitParseBetweenAssertion(GrammaticaParser.ParseBetweenAssertionContext ctx) {
+		
+		IntegerAntlr min = (IntegerAntlr) visit(ctx.numeric_value(0));
+		IntegerAntlr max = (IntegerAntlr) visit(ctx.numeric_value(1));
+		
+		return new Bet_Assertion(min.getValue(), max.getValue());
+	}
+	
+
+	@Override 
+	public IntegerAntlr visitNumericValue(GrammaticaParser.NumericValueContext ctx) { 
+		
+		return new IntegerAntlr(Integer.valueOf(ctx.INT().getText()));
+	}
+	
+	
+	@Override
+	public IntegerAntlr visitNullValue(GrammaticaParser.NullValueContext ctx) {
+		IntegerAntlr value = new IntegerAntlr(null);
+
+		return value;
+	}
+
+	@Override
+	public Type_Assertion visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx) {  
+		StringAntlr type = (StringAntlr) visit(ctx.type_assertion());
+		
+		return new Type_Assertion(type.getValue()); 
+	}
+	
+	@Override
+	public StringAntlr visitParseTypeAssertion(GrammaticaParser.ParseTypeAssertionContext ctx) { 
 		String type = ctx.getText();
 		
-		return new Type_Assertion(type); 
+		return new StringAntlr(type); 
 	}
 	
 	@Override
-	public Not_Assertion visitNot_assertion(GrammaticaParser.Not_assertionContext ctx) {
-		Not_Assertion not = new Not_Assertion(visit(ctx.assertion_list()));
+	public Not_Assertion visitNewNot(GrammaticaParser.NewNotContext ctx) {
 		
-		return not;
+		return (Not_Assertion) visit(ctx.not_assertion());
+	}
+	
+	@Override
+	public Not_Assertion visitParseNot(GrammaticaParser.ParseNotContext ctx) {
+		
+		return new Not_Assertion(visit(ctx.assertion_list()));
 	}
 	
 	

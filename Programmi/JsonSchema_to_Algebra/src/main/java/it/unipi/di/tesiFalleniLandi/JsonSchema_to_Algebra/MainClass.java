@@ -17,7 +17,7 @@ public class MainClass
 {
     public static void main( String[] args ) throws FileNotFoundException, IOException, ParseException
     {
-    	System.out.println("avvia \r\n\t[1] MainClass_JSONSchema \r\n\t[2]MainClass_Algebra");
+    	System.out.println("avvia \r\n\t[1] MainClass_JSONSchema \r\n\t[2] MainClass_Algebra");
     	try (Scanner s = new Scanner(System.in)) {
 			switch(s.nextInt()) {
 			case 1:

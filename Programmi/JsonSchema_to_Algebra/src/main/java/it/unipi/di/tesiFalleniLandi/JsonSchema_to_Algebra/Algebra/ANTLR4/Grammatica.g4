@@ -6,9 +6,13 @@ grammar Grammatica;
 assertion_list : '{' assertion (',' assertion)* '}'		#list							
 	;
 
-assertion : 		type_assertion 						#TypeAssertion
-				|	assertion_list 				         #newList
-   				|	between_assertion         			#betweenAssertion
+assertion : 		type_assertion								#TypeAssertion 						
+				|	assertion_list 				         		#newList
+   				|	between_assertion	         				#betweenAssertion			
+   				|	not_assertion								#Not
+   											
+   				
+   				/* 
    				| 	xbetween_assertion					#xBetweenAssertion
    				|	bet_items_assertion					#betweenItems
    				|	length_assertion						#Length
@@ -17,7 +21,6 @@ assertion : 		type_assertion 						#TypeAssertion
    				|	all_of_assertion						#allOf
    				|	any_of_assertion						#anyOf
    				|	one_of_assertion						#oneOf
-   				|	not_assertion							#Not
    				|	required_assertion					#Required
    				|	unique_items_assertion				#UniqueItems
 				|	pattern_assertion					   	#Pattern
@@ -26,13 +29,21 @@ assertion : 		type_assertion 						#TypeAssertion
 				|	enum_assertion_assertion				#Enum
 				|	if_then_else_assertion			   	#ifThenElse
 				|	const_assertion			         	#Const
+				
+				*/
 	;
 
-numeric_value : INT | 'null';
+	
+type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr')	#TypeAssertion2;	
 
-type_assertion : 'Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr';
+between_assertion : 'bet<' numeric_value ',' numeric_value '>'	#betweenAssertion2;		
 
-between_assertion : 'bet<'numeric_value','numeric_value'>';
+not_assertion : '_NOT(' assertion_list ')'		#Not2;
+
+numeric_value :  	NULL		#NullValue
+				|		INT 	#NumericValue;
+
+/* 
 
 xbetween_assertion : 'xbet<'numeric_value','numeric_value'>';
 
@@ -49,8 +60,6 @@ all_of_assertion : '_AND(' assertion_list ')';
 one_of_assertion : '_XOR(' assertion_list ')';
 
 any_of_assertion : '_OR(' assertion_list ')';
-
-not_assertion : '_NOT(' assertion_list ')';
 
 required_assertion : 'req([' ID (',' ID)* '])';
 
@@ -69,21 +78,14 @@ if_then_else_assertion : assertion_list '=>' assertion_list '|' assertion_list;
 
 const_assertion : 'const(' JSON_VALUE ')';
 
+*/
 
+//JSON_VALUE : INT | ID;
 
-JSON_VALUE : INT | ID;
-
-
-
-
-
-
-
+NULL : 'null';
 INT : [0-9]+ ; // Define token INT as one or more digits
-ID : [a-zA-Z0-9_]+;
+//ID : [a-zA-Z0-9_]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
-
-
 
 
 
@@ -108,5 +110,7 @@ fragment HEX
    : [0-9a-fA-F]
    ;
 fragment SAFECODEPOINT
+   : ~ ["\\\u0000-\u001F]
+   ;
    : ~ ["\\\u0000-\u001F]
    ;

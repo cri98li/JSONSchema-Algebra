@@ -1,0 +1,11 @@
+{	bet<1,2>,
+ 	_NOT(
+ 		{
+ 			bet<1,null>
+ 		}),
+ 	 {
+ 	 	Str, Obj
+ 	 },
+ 	 Null,
+ 	 Arr
+}

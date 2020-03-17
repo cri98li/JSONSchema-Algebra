@@ -3,8 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
-
 public class And_Assertion implements Assertion{
 	private List<Assertion> andList;
 	

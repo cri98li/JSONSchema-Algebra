@@ -6,7 +6,7 @@ public class Bet_Assertion implements Assertion{
 	
 	public Bet_Assertion() {	}
 	
-	public Bet_Assertion(int min, int max) {
+	public Bet_Assertion(Integer min, Integer max) {
 		this.min = min;
 		this.max = max;
 	}
