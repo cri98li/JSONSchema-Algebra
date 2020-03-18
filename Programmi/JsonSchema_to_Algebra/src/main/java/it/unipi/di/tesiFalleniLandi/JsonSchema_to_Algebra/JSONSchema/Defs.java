@@ -30,7 +30,7 @@ public class Defs implements JSONSchemaElement{
 			try{
 				schemaDefs.putIfAbsent((String) entry.getKey(), new JSONSchema(entry.getValue()));
 			}catch(ClassCastException ex) {
-				System.out.println("Error: no valid Defs Object!");
+				System.out.println("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
 			}
 		}
 	}

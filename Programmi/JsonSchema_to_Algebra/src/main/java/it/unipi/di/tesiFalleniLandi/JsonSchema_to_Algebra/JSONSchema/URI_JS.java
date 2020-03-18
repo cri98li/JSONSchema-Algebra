@@ -32,9 +32,17 @@ public class URI_JS {
 
 	private void normalizeURI() {
 		//start: uri --> #/$defs/a/b/foo
+		normalizedName = "";
+		normalizedURI ="";
+		
+		//caso #
+		if(uri.equals("#")) {
+			normalizedName = "#";
+			return;
+		}
+		
 		String[] splittedURI = uri.split("/"); // expected: ["#", "$defs", "a", "b", "foo"]
 		
-		normalizedURI ="";
 		int i = 0;
 		
 		normalizedURI += "#/$defs/"; 	// uri --> #/$defs

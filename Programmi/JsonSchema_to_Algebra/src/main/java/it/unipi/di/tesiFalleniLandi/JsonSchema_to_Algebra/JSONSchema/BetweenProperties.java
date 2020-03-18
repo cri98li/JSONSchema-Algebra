@@ -10,25 +10,17 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenProperties implements JSONSchemaElement{
-	private Long minProperties;
-	private Long maxProperties;
-	
-	private boolean initialized;
+	private Object minProperties;
+	private Object maxProperties;
 	
 	public BetweenProperties() { }
 	
 	public void setMinProperties(Object obj) {
-		Long value = (Long) obj;
-		minProperties = value;
+		minProperties = obj;
 	}
 	
 	public void setMaxProperties(Object obj) {
-		Long value = (Long) obj;
-		maxProperties = value;
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
+		maxProperties = obj;
 	}
 
 	@Override

@@ -211,7 +211,7 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 				
-			case "definitons":
+			case "definitions":
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 			
@@ -285,7 +285,9 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
-			//Type separation
+			
+			
+			//TYPE SEPARATION
 			if(entry.getKey().equals("type")) {
 				AnyOf anyOf = new AnyOf();
 				Type type = ((Type)entry.getValue());
@@ -309,6 +311,14 @@ public class JSONSchema implements JSONSchemaElement{
 				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 				continue;
 			}
+			
+			
+			//$schema e %defs non vanno dentro allOf
+			if(entry.getKey().equals("$schema") || entry.getKey().equals("$defs")) {
+				schema.jsonSchema.put(entry.getKey(), entry.getValue());
+				continue;
+			}
+			
 			
 			JSONSchema tmp = new JSONSchema();
 			tmp.jsonSchema.put(entry.getKey(), entry.getValue().assertionSeparation());

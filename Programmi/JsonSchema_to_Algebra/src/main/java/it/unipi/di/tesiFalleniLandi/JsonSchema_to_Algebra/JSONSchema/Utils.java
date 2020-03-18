@@ -36,6 +36,7 @@ public class Utils {
 		Defs finalDefs = new Defs();
 		
 		for(URI_JS ref : refList) {
+			if(ref.toString().equals("#")) continue;
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
 				JSONSchema s = compareDefsRefs(entry, ref);

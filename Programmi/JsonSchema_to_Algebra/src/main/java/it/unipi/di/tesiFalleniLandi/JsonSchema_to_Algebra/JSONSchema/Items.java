@@ -27,6 +27,7 @@ public class Items implements JSONSchemaElement{
 			array = (JSONArray) obj;
 		}catch(ClassCastException e) {
 			items = new JSONSchema(obj);
+			return;
 		}
 		
 		initialized = true;

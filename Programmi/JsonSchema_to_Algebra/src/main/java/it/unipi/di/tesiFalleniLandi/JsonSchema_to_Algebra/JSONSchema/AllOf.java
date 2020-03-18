@@ -12,7 +12,9 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
 	
-	public AllOf() {	}
+	public AllOf() {
+		allOf = new LinkedList<>();
+	}
 	
 	public AllOf(Object obj) {
 		JSONArray array = (JSONArray) obj;

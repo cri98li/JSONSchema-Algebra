@@ -15,7 +15,7 @@ public class Properties implements JSONSchemaElement{
 
 	private HashMap<String, JSONSchema> properties;
 	private HashMap<String, JSONSchema> patternProperties;
-	private HashMap<String, JSONSchema> additionalProperties;
+	private JSONSchema additionalProperties;
 	
 	private Boolean booleanAsAdditionalProperties;
 	
@@ -59,18 +59,7 @@ public class Properties implements JSONSchemaElement{
 			return;
 		}catch(ClassCastException e) {	}
 		
-		JSONObject object = (JSONObject) obj;
-		
-		additionalProperties = new HashMap<String, JSONSchema>();
-		
-		Iterator<?> it = object.keySet().iterator();
-		
-		while(it.hasNext()) {
-			String key = (String) it.next();
-			JSONSchema value = new JSONSchema(object.get(key));
-			
-			additionalProperties.put(key, value);
-		}
+		additionalProperties = new JSONSchema(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -99,15 +88,8 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		if(booleanAsAdditionalProperties != null) {
-			if(additionalProperties != null && !additionalProperties.isEmpty()){
-				JSONObject tmp = new JSONObject();
-				Set<String> keys = additionalProperties.keySet();
-					
-				for(String key : keys)
-					tmp.put(key, additionalProperties.get(key).toJSON());
-					
-				obj.put("additionalProperties", tmp);
-			}
+			if(additionalProperties != null)
+				obj.put("additionalProperties", additionalProperties.toJSON());
 		} else {
 			obj.put("additionalProperties", booleanAsAdditionalProperties);
 		}
@@ -150,12 +132,9 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		if(additionalProperties != null) {
-			obj.additionalProperties = new HashMap<>();
-			Iterator<Entry<String, JSONSchema>> it = additionalProperties.entrySet().iterator();
-			while(it.hasNext()) {
-				Entry<String, JSONSchema> tmp = it.next();
-				obj.additionalProperties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
-			}
+			
+			obj.additionalProperties = additionalProperties.assertionSeparation();
+			
 		}
 		
 		if(booleanAsAdditionalProperties != null) obj.booleanAsAdditionalProperties = booleanAsAdditionalProperties;
@@ -182,12 +161,9 @@ public class Properties implements JSONSchemaElement{
 				returnList.addAll(entry.getValue().getRef());
 			}
 		}
-		if(additionalProperties != null) {
-			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
-			for(Entry<String, JSONSchema> entry : entrySet) {
-				returnList.addAll(entry.getValue().getRef());
-			}
-		}
+		if(additionalProperties != null) 
+			returnList.addAll(additionalProperties.getRef());
+		
 		
 		return returnList;
 	}
@@ -211,11 +187,8 @@ public class Properties implements JSONSchemaElement{
 				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		}
 		
-		if(additionalProperties != null) {
-			Set<Entry<String, JSONSchema>> entrySet = additionalProperties.entrySet();
-			for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
-		}
+		if(additionalProperties != null)
+			returnList.addAll(additionalProperties.collectDef());
 		
 		return returnList;
 	}

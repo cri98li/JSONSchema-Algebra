@@ -10,34 +10,22 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenItems implements JSONSchemaElement{
-	private Long minItems;
-	private Long maxItems;
-	
-	private boolean initialized;
+	private Object minItems;
+	private Object maxItems;
 	
 	public BetweenItems() { }
 	
 	public void setMinItems(Object obj) {
-		Long value = (Long) obj;
-		
-		initialized = true;
-		minItems = value;
+		minItems = obj;
 	}
 	
 	public void setMaxItems(Object obj) {
-		Long value = (Long) obj;
-		
-		initialized = true;
-		maxItems = value;
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
+		maxItems = obj;
 	}
 	
 	@Override
 	public String toString() {
-		return "BetweenItems [minItems=" + minItems + ", maxItems=" + maxItems + ", initialized=" + initialized + "]";
+		return "BetweenItems [minItems=" + minItems + ", maxItems=" + maxItems + "]";
 	}
 
 	@SuppressWarnings("unchecked")

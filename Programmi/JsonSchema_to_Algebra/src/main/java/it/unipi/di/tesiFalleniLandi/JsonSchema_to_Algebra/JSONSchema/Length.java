@@ -10,29 +10,17 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Length implements JSONSchemaElement{
-	private Long minLength;
-	private Long maxLength;
-	
-	private boolean initialized;
+	private Object minLength;
+	private Object maxLength;
 	
 	public Length () { }
 	
 	public void setMinLength(Object obj) {
-		Long value = (Long) obj;
-		
-		initialized = true;
-		minLength = value;
+		minLength = obj;
 	}
 	
 	public void setMaxLength(Object obj) {
-		Long value = (Long) obj;
-		
-		initialized = true;
-		maxLength = value;
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
+		maxLength = obj;
 	}
 	
 	@Override
