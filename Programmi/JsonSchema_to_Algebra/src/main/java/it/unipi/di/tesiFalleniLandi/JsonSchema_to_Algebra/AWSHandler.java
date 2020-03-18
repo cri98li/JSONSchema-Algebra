@@ -18,6 +18,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 
 	public GatewayResponse handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		try {
+			System.out.println("RICHIESTA: \r\n"+input.toString());
+			
+			
 			String action = (String) input.get("rawQueryString");
 			System.out.println(action);
 			switch(action.split("=")[1]) {
