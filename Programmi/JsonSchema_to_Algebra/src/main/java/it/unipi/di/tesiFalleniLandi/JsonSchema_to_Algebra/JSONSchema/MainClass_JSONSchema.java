@@ -31,7 +31,9 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     
     System.out.println(root.toJSON().toString().replace("\\", ""));
     
-    //System.out.println(root.assertionSeparation().toGrammarString());
     System.out.println(root.assertionSeparation().toJSON());
+    
+    root = root.assertionSeparation();
+    System.out.println(root.toGrammarString());
 	}
 }

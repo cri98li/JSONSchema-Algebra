@@ -54,13 +54,16 @@ public class AnyOf implements JSONSchemaElement{
 		String str = "";
 		
 		Iterator<JSONSchema> it = anyOf.iterator();
-		if(it.hasNext()) 
-			str += it.next().toGrammarString();
 			
-		while(it.hasNext())
-			str += GrammarStringDefinitions.AND + it.next().toGrammarString();
-			
-		return String.format(GrammarStringDefinitions.ANYOF, str);
+		while(it.hasNext()) {
+			String returnedValue = it.next().toGrammarString();
+			if(returnedValue == null || returnedValue.isEmpty())
+				continue;
+			str += GrammarStringDefinitions.AND + returnedValue;
+		}
+		
+		if(str.length() <= GrammarStringDefinitions.AND.length()) return "";
+		return String.format(GrammarStringDefinitions.ANYOF, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
 	}
 
 	@Override

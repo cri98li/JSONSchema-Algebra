@@ -344,15 +344,19 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
-		for(Entry<String, JSONSchemaElement> entry : entries)
-			str += GrammarStringDefinitions.AND + entry.getValue().toGrammarString();
+		for(Entry<String, JSONSchemaElement> entry : entries) {
+			String returnedValue = entry.getValue().toGrammarString();
+			if(returnedValue == null || returnedValue.isEmpty())
+				continue;
+			str += GrammarStringDefinitions.AND + returnedValue;
+		}
 		
 		/*
 		private Properties properties; -------------------- aspettiamo
 		 */
 		
 		
-		if(str.length() == 0 || str.contains("null")) return "TODO";
+		if(str.length() <= GrammarStringDefinitions.AND.length() || str.contains("null")) return "";
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
 	}
 

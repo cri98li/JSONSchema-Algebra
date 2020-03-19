@@ -19,8 +19,8 @@ public class UnknowElement implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		//return obj.toString();
+		return "";
 	}
 
 	@Override
