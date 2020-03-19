@@ -42,7 +42,7 @@ public class Length implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String min = "", max = "";
+		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
 		
 		if(minLength != null) min = minLength+"";
 		if(maxLength != null) max = maxLength+"";

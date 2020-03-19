@@ -61,7 +61,7 @@ public class IfThenElse implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		String if_str = "{}", then_str = "{}", else_str = "{}";
+		String if_str = "", then_str = "", else_str = "";
 		if(ifStatement != null) 
 			if_str = ifStatement.toGrammarString();
 		if(thenStatement != null)

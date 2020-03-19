@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Ref implements JSONSchemaElement{
 	private URI_JS uri;
 	
@@ -26,8 +28,7 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		//throw new UnsupportedOperationException();
-		return "";
+		return String.format(GrammarStringDefinitions.REF, uri.toString());
 	}
 
 	@Override

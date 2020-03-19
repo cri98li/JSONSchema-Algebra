@@ -57,13 +57,13 @@ public class AnyOf implements JSONSchemaElement{
 			
 		while(it.hasNext()) {
 			String returnedValue = it.next().toGrammarString();
-			if(returnedValue == null || returnedValue.isEmpty())
+			if(returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.AND + returnedValue;
 		}
 		
-		if(str.length() <= GrammarStringDefinitions.AND.length()) return "";
-		return String.format(GrammarStringDefinitions.ANYOF, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
+		if(str.isEmpty()) return "";
+		return String.format(GrammarStringDefinitions.ANYOF, str.substring(GrammarStringDefinitions.AND.length()));
 	}
 
 	@Override

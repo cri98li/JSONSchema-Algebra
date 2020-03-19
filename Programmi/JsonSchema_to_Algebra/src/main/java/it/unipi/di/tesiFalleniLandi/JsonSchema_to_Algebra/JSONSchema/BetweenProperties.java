@@ -42,7 +42,7 @@ public class BetweenProperties implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String min = "", max = "";
+		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
 		
 		if(minProperties != null) min = minProperties+"";
 		if(maxProperties != null) max = maxProperties+"";

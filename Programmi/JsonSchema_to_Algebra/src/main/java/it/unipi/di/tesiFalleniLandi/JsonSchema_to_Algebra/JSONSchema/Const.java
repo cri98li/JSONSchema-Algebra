@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Const extends Enum {
 
@@ -58,5 +61,26 @@ public class Const extends Enum {
 		return _const;
 	}
 
-	
+	@Override
+	public String toGrammarString() {
+		if(!enumArray_str.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_str.toString());
+		
+		if(!enumArray_num.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_num.toString());
+		
+		if(!enumArray_str.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_str.toString());
+		
+		if(!enumArray_bool.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_bool.toString());
+		
+		if(!enumArray_array.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_array.toString());
+		
+		
+		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
+		
+		return ""; //non ci dovrei mai cadere
+	}
 }

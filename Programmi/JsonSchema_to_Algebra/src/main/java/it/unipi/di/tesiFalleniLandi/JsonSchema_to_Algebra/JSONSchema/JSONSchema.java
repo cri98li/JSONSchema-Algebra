@@ -356,8 +356,8 @@ public class JSONSchema implements JSONSchemaElement{
 		 */
 		
 		
-		if(str.length() <= GrammarStringDefinitions.AND.length() || str.contains("null")) return "";
-		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
+		if(str.isEmpty()) return "";
+		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.AND.length()));
 	}
 
 

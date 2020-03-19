@@ -51,19 +51,20 @@ public class OneOf implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-String str = "";
+		String str = "";
 		
 		Iterator<JSONSchema> it = oneOf.iterator();
 			
 		while(it.hasNext()) {
 			String returnedValue = it.next().toGrammarString();
-			if(returnedValue == null || returnedValue.isEmpty())
+			if(returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.AND + returnedValue;
 		}
 		
-		if(str.length() <= GrammarStringDefinitions.AND.length()) return "";
-		return String.format(GrammarStringDefinitions.ONEOF, str.subSequence(GrammarStringDefinitions.AND.length(), str.length()));
+		if(str.isEmpty()) return "";
+		
+		return str;
 	}
 
 

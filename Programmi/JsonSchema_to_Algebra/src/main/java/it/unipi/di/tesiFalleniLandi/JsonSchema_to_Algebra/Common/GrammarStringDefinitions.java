@@ -7,7 +7,7 @@ public class GrammarStringDefinitions {
 	public static final String JSONSCHEMA = "{%s}";
 	
 	//LOGIC OP
-	public static final String OR = " _OR ";
+	public static final String OR = " V ";
 	public static final String AND = ", \r\n";
 	
 	//RANGE
@@ -39,7 +39,7 @@ public class GrammarStringDefinitions {
 	public static final String NOT = "_NOT(%s)";
 		
 	//required
-	public static final String REQUIRED = "req(%s)";
+	public static final String REQUIRED = "req([%s])";
 		
 	//pattern
 	public static final String PATTERN = "pattern(%s)";
@@ -53,14 +53,30 @@ public class GrammarStringDefinitions {
 	//contains
 	public static final String CONTAINS = "contains<%s,%s>(%s)";
 		
-	//enum & const
+	//enum
 	public static final String ENUM = "enum(%s)";
 	
-	//enum & const
+	//const
+	public static final String CONST = "const(%s)";
+	
+	//unique items
 	public static final String UNIQUEITEMS = "uniqueItems";
 	
+	public static final String DEFS = "def(%s).%s";
+	
 	//if-then-else
-	public static final String IF_THEN_ELSE = "if %s => %s | %s";
+	public static final String IF_THEN_ELSE = "(if %s => %s | %s)";
 	/*public static final String THEN = "then %s";
 	public static final String ELSE = "else %s";*/
+	
+	//properties
+	public static final String PROPERTIES = "[%s]";
+	public static final String SINGLEPROPERTIES = "%s::%s";
+	public static final String ADDITIONALPROPERTIES = "not(%s)::%s";
+	
+	//ref
+	public static final String REF = "ref(%s)";
+	
+	//null value
+	public static final String NULLVALUE = "null";
 }

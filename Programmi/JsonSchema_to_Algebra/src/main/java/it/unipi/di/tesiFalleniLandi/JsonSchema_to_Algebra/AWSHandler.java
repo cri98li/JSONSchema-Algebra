@@ -18,11 +18,12 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 
 	public GatewayResponse handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		try {
-			System.out.println("RICHIESTA: \r\n"+input.toString());
+
+			System.out.println("\tQUERY: "+input.get("rawQueryString"));
+			System.out.println("\tHEADERS: "+input.get("headers"));
 			
 			
 			String action = (String) input.get("rawQueryString");
-			System.out.println(action);
 			switch(action.split("=")[1]) {
 			case "toJSON":
 				return toJSON((String) input.get("body"));
@@ -42,13 +43,13 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			
 			
 			return new GatewayResponse("unsupported "+action, 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 		}
 		catch(Exception e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			
@@ -74,7 +75,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			return response;
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			
@@ -99,7 +100,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			return response;
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			
@@ -124,7 +125,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			return response;
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			
@@ -149,7 +150,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			return response;
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			
@@ -174,7 +175,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			return response;
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
-					501,
+					500,
 					Collections.singletonMap("type", "text"),
 					false);
 			

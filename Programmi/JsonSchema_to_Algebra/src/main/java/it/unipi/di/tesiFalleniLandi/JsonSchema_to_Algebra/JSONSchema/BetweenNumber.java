@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenNumber implements JSONSchemaElement{
-	//Memorizzandoli come Object non defo fare magheggi per castare in Long o Double
+	//Memorizzandoli come Object non devo fare magheggi per castare in Long o Double
 	private Object maximum;
 	private Object minimum;
 	
@@ -95,13 +95,12 @@ public class BetweenNumber implements JSONSchemaElement{
 		String str2 = ""; //xbet
 		
 		
-		String min = "", max = "";
+		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
 		if(minimum != null) min = minimum+"";
 		if(maximum != null) max = maximum+"";
 		
 		if(minimum != null || maximum != null)
 			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
-		
 		
 		if(exclusiveMinimum != null) min = exclusiveMinimum+"";
 		if(exclusiveMaximum != null) max = exclusiveMaximum+"";

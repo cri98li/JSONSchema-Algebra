@@ -10,6 +10,15 @@ public class And_Assertion implements Assertion{
 		andList = new LinkedList<>();
 	}
 	
+	public And_Assertion(List<Assertion> andList) {
+		super();
+		this.andList = andList;
+	}
+	
+	public And_Assertion(And_Assertion andAssertion) {
+		andList = andAssertion.andList;
+	}
+
 	public void add(Assertion s) {
 		andList.add(s);
 	}

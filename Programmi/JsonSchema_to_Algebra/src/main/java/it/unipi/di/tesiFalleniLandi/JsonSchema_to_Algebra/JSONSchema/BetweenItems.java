@@ -46,12 +46,12 @@ public class BetweenItems implements JSONSchemaElement{
 			if(minItems != null && maxItems != null) {
 				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, maxItems);
 			} else if (minItems != null && maxItems == null) {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, "");
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, GrammarStringDefinitions.NULLVALUE);
 			}else if(minItems == null && maxItems != null) {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, "", maxItems);
-			}else {
+				str = String.format(GrammarStringDefinitions.BETWEENITEMS, GrammarStringDefinitions.NULLVALUE, maxItems);
+			}/*else {
 				str = String.format(GrammarStringDefinitions.BETWEENITEMS, "", "");
-			}
+			}*/
 			
 		return str;
 	}

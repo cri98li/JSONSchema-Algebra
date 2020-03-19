@@ -6,46 +6,55 @@ grammar Grammatica;
 assertion_list : '{' assertion (',' assertion)* '}'		#list							
 	;
 
-assertion : 		type_assertion								#TypeAssertion 						
-				|	assertion_list 				         		#newList
-   				|	between_assertion	         				#betweenAssertion			
-   				|	not_assertion								#Not
-   											
-   				
+assertion : 		type_assertion								#NewTypeAssertion 						
+				|	assertion_list 				         		#NewList
+   				|	between_assertion	         				#NewBetweenAssertion			
+   				|	not_assertion								#NewNot
+   				| 	xbetween_assertion							#NewXBetweenAssertion
+   				|	all_of_assertion							#NewAllOf
+   				|	required_assertion							#NewRequired
+   				|	if_then_else_assertion			   			#NewIfThenElse
    				/* 
-   				| 	xbetween_assertion					#xBetweenAssertion
    				|	bet_items_assertion					#betweenItems
    				|	length_assertion						#Length
    				|	between_properties_assertion		#BetweenProperties
    				|	multiple_of_assertion				#multipleOf
-   				|	all_of_assertion						#allOf
    				|	any_of_assertion						#anyOf
    				|	one_of_assertion						#oneOf
-   				|	required_assertion					#Required
+   				
    				|	unique_items_assertion				#UniqueItems
 				|	pattern_assertion					   	#Pattern
 				|	items_assertion					   	#Items
 				|	contains_assertion				   	#Contains
 				|	enum_assertion_assertion				#Enum
-				|	if_then_else_assertion			   	#ifThenElse
+				
 				|	const_assertion			         	#Const
 				
 				*/
 	;
 
 	
-type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr')	#TypeAssertion2;	
+type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool')	#ParseTypeAssertion;	
 
-between_assertion : 'bet<' numeric_value ',' numeric_value '>'	#betweenAssertion2;		
+between_assertion : 'bet<' numeric_value ',' numeric_value '>'	#ParseBetweenAssertion;		
 
-not_assertion : '_NOT(' assertion_list ')'		#Not2;
+xbetween_assertion : 'xbet<' numeric_value ',' numeric_value '>'	#ParseXBetweenAssertion;	
+
+not_assertion : '_NOT(' assertion_list ')'		#ParseNot;
+
+all_of_assertion : '_AND(' assertion_list ')'		#ParseAllOf;	
+
+required_assertion : 'req([' ID (',' ID)* '])'	#ParseRequired;
+
+if_then_else_assertion : '(' assertion_list '=>' assertion_list '|' assertion_list ')'		#ParseIfThenElse
+						|	'(' assertion_list '=>' assertion_list ')'				#ParseIfThen
+						;
 
 numeric_value :  	NULL		#NullValue
 				|		INT 	#NumericValue;
 
 /* 
 
-xbetween_assertion : 'xbet<'numeric_value','numeric_value'>';
 
 length_assertion : 'length<'numeric_value','numeric_value'>';
 
@@ -55,13 +64,9 @@ between_properties_assertion : 'pro<'numeric_value','numeric_value'>';
 
 multiple_of_assertion : 'mof<'numeric_value'>';
 
-all_of_assertion : '_AND(' assertion_list ')';
-
 one_of_assertion : '_XOR(' assertion_list ')';
 
 any_of_assertion : '_OR(' assertion_list ')';
-
-required_assertion : 'req([' ID (',' ID)* '])';
 
 unique_items_assertion : 'uniqueItems';
 
@@ -74,7 +79,7 @@ contains_assertion : 'contains<' numeric_value ',' numeric_value '> ' assertion_
 
 enum_assertion_assertion : 'enum(' ID (',' ID)* ')';
 
-if_then_else_assertion : assertion_list '=>' assertion_list '|' assertion_list;
+
 
 const_assertion : 'const(' JSON_VALUE ')';
 
@@ -84,7 +89,7 @@ const_assertion : 'const(' JSON_VALUE ')';
 
 NULL : 'null';
 INT : [0-9]+ ; // Define token INT as one or more digits
-//ID : [a-zA-Z0-9_]+;
+ID : [a-zA-Z0-9_]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
 
 
@@ -110,7 +115,5 @@ fragment HEX
    : [0-9a-fA-F]
    ;
 fragment SAFECODEPOINT
-   : ~ ["\\\u0000-\u001F]
-   ;
    : ~ ["\\\u0000-\u001F]
    ;

@@ -19,7 +19,7 @@ public class UnknowElement implements JSONSchemaElement {
 
 	@Override
 	public String toGrammarString() {
-		//return obj.toString();
+		System.out.println("UNKNOWN ELEMENT: "+obj.toString());
 		return "";
 	}
 

@@ -47,6 +47,34 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewNot(GrammaticaParser.NewNotContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewXBetweenAssertion}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAllOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAllOf(GrammaticaParser.NewAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewRequired}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewRequired(GrammaticaParser.NewRequiredContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewIfThenElse}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewIfThenElse(GrammaticaParser.NewIfThenElseContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#type_assertion}.
 	 * @param ctx the parse tree
@@ -61,12 +89,47 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseBetweenAssertion(GrammaticaParser.ParseBetweenAssertionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseXBetweenAssertion}
+	 * labeled alternative in {@link GrammaticaParser#xbetween_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseNot}
 	 * labeled alternative in {@link GrammaticaParser#not_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParseNot(GrammaticaParser.ParseNotContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAllOf}
+	 * labeled alternative in {@link GrammaticaParser#all_of_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAllOf(GrammaticaParser.ParseAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseRequired}
+	 * labeled alternative in {@link GrammaticaParser#required_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseRequired(GrammaticaParser.ParseRequiredContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseIfThenElse}
+	 * labeled alternative in {@link GrammaticaParser#if_then_else_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseIfThenElse(GrammaticaParser.ParseIfThenElseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseIfThen}
+	 * labeled alternative in {@link GrammaticaParser#if_then_else_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseIfThen(GrammaticaParser.ParseIfThenContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NullValue}
 	 * labeled alternative in {@link GrammaticaParser#numeric_value}.

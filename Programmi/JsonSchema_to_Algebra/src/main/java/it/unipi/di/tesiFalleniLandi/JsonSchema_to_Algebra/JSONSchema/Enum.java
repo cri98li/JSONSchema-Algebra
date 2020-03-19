@@ -186,6 +186,7 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		
 		if(arrayOnly)
 			return "["+ str.subSequence(separator.length(), str.length()) + "]";
+		
 		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
 

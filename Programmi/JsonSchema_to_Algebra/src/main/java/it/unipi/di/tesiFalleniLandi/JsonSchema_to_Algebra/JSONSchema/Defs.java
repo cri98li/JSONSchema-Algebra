@@ -11,6 +11,8 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Defs implements JSONSchemaElement{
 
 	private HashMap<String, JSONSchema> schemaDefs;
@@ -81,8 +83,17 @@ public class Defs implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		//throw new UnsupportedOperationException();
-		return "";
+		//da pensare a defs del documento corrente #
+		
+		String defs = "";
+		
+		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
+
+		for(Entry<String, JSONSchema> entry : entrySet)
+			defs+= GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+		
+		if(defs.isEmpty()) return ""; //definizione non ancora supportata
+		return defs.substring(GrammarStringDefinitions.AND.length());
 	}
 
 	@Override

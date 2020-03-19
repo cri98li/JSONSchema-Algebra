@@ -14,19 +14,13 @@ public class UniqueItems implements JSONSchemaElement{
 		uniqueItems = (boolean) obj;
 	}
 	
-	
-	
 	public UniqueItems() {
 	}
-
-
 
 	@Override
 	public String toString() {
 		return "UniqueItems [uniqueItems=" + uniqueItems + "]";
 	}
-
-
 
 	@Override
 	public Boolean toJSON() {
@@ -39,8 +33,6 @@ public class UniqueItems implements JSONSchemaElement{
 		
 		return null; //non ci dovrei mai cadere
 	}
-
-
 
 	@Override
 	public UniqueItems assertionSeparation() {

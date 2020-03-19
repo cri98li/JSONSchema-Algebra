@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 
 public class Properties implements JSONSchemaElement{
 
@@ -17,7 +19,7 @@ public class Properties implements JSONSchemaElement{
 	private HashMap<String, JSONSchema> patternProperties;
 	private JSONSchema additionalProperties;
 	
-	private Boolean booleanAsAdditionalProperties;
+	//private Boolean booleanAsAdditionalProperties;
 	
 	public Properties() { }
 	
@@ -54,11 +56,6 @@ public class Properties implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalProperties(Object obj) {
-		try {
-			booleanAsAdditionalProperties = (Boolean) obj;
-			return;
-		}catch(ClassCastException e) {	}
-		
 		additionalProperties = new JSONSchema(obj);
 	}
 	
@@ -87,20 +84,43 @@ public class Properties implements JSONSchemaElement{
 			obj.put("patternProperties", tmp);
 		}
 		
-		if(booleanAsAdditionalProperties != null) {
-			if(additionalProperties != null)
-				obj.put("additionalProperties", additionalProperties.toJSON());
-		} else {
-			obj.put("additionalProperties", booleanAsAdditionalProperties);
-		}
+		if(additionalProperties != null)
+			obj.put("additionalProperties", additionalProperties.toJSON());
 		
 		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+		String strAdditionalProp ="";
+		
+		if(properties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
+				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
+			}
+		}
+		
+		if(patternProperties != null) {
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
+				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
+			}
+				
+		}
+		
+		if(!str.isEmpty()) {
+			str = str.substring(GrammarStringDefinitions.AND.length());
+			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.AND.length());
+		}
+		
+		if(additionalProperties != null) 
+			strAdditionalProp = String.format(GrammarStringDefinitions.ADDITIONALPROPERTIES, strAdditionalProp, additionalProperties.toGrammarString());
+		
+		return String.format(GrammarStringDefinitions.PROPERTIES, str, strAdditionalProp);
 	}
 
 	@Override
@@ -131,13 +151,8 @@ public class Properties implements JSONSchemaElement{
 			}
 		}
 		
-		if(additionalProperties != null) {
-			
+		if(additionalProperties != null)
 			obj.additionalProperties = additionalProperties.assertionSeparation();
-			
-		}
-		
-		if(booleanAsAdditionalProperties != null) obj.booleanAsAdditionalProperties = booleanAsAdditionalProperties;
 		
 		return obj;
 	}
@@ -145,9 +160,6 @@ public class Properties implements JSONSchemaElement{
 	@Override
 	public List<URI_JS> getRef() {
 		List<URI_JS> returnList = new LinkedList<>();
-		
-		if(booleanAsAdditionalProperties != null) return returnList;
-		
 		
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
@@ -172,8 +184,6 @@ public class Properties implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
-		
-		if(booleanAsAdditionalProperties != null) return returnList;
 		
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();

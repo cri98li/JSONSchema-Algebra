@@ -22,9 +22,7 @@ public class Required implements JSONSchemaElement{
 			required.add((String) it.next());
 	}
 	
-	public Required() {
-		// TODO Auto-generated constructor stub
-	}
+	public Required() {	}
 
 	@SuppressWarnings("unchecked")
 	@Override
