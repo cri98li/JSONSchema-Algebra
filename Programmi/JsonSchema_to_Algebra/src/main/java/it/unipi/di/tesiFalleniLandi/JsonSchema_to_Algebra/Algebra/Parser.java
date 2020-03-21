@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaBaseVisitor;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Numeric_valueContext;
 
 public class Parser extends GrammaticaBaseVisitor<Assertion>{
 
@@ -152,7 +153,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	public Required_Assertion visitParseRequired(GrammaticaParser.ParseRequiredContext ctx) {
 		Required_Assertion req = new Required_Assertion();
 				
-		List<TerminalNode> strList = ctx.ID();
+		List<TerminalNode> strList = ctx.STRING();
 		
 		for(TerminalNode str : strList) {
 			req.add(str.getText());
@@ -160,6 +161,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		
 		return req;
 	}
+	
 	@Override 
 	public IfThenElse_Assertion visitNewIfThenElse(GrammaticaParser.NewIfThenElseContext ctx) { 
 		
@@ -183,5 +185,44 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		return  new IfThenElse_Assertion(ifStat, thenStat, null); 
 	}
 	
+	@Override
+	public Enum_Assertion visitNewEnum(GrammaticaParser.NewEnumContext ctx) { 
+		
+		return (Enum_Assertion) visit(ctx.enum_assertion_assertion()); 
+	}
+	
+	@Override
+	public Enum_Assertion visitParseEnum(GrammaticaParser.ParseEnumContext ctx) { 
+		Enum_Assertion _enum = new Enum_Assertion();
+		
+		List<Numeric_valueContext> valueList = ctx.numeric_value();
+		
+		for(Numeric_valueContext value : valueList) {
+			AntlrValue tmp = (AntlrValue) visit(value);
+			_enum.add(tmp.getValue().toString());
+		}
+		
+		return _enum;
+	}
+	
+	@Override 
+	public Mof_Assertion visitNewMultipleOf(GrammaticaParser.NewMultipleOfContext ctx) { 
+		
+		return (Mof_Assertion) visit(ctx.multiple_of_assertion()); 
+	}
+	
+	@Override 
+	public Mof_Assertion visitParseMultipleOf(GrammaticaParser.ParseMultipleOfContext ctx) { 
+		
+		IntegerAntlr value = (IntegerAntlr) visit(ctx.numeric_value());
+		
+		return new Mof_Assertion(value.getValue()); 
+	}
+	
+	@Override 
+	public StringAntlr visitStringValue(GrammaticaParser.StringValueContext ctx) { 
+		
+		return new StringAntlr(ctx.STRING().getText()); 
+	}
 	
 }

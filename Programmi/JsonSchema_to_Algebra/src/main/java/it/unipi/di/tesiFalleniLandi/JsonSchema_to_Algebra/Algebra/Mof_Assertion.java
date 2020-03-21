@@ -6,4 +6,11 @@ public class Mof_Assertion implements Assertion{
 	public Mof_Assertion(int mof) {
 		this.mof = mof;
 	}
+
+	@Override
+	public String toString() {
+		return "Mof_Assertion [mof=" + mof + "]";
+	}
+	
+	
 }

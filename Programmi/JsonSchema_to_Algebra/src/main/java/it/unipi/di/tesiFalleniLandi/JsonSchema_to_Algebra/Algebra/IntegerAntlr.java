@@ -1,12 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class IntegerAntlr implements Assertion{
+public class IntegerAntlr extends AntlrValue{
 
 	Integer value;
 	
-	public IntegerAntlr() {
-		
-	}
+	public IntegerAntlr() {	}
 	
 	public IntegerAntlr(Integer value) {
 		this.value = value;

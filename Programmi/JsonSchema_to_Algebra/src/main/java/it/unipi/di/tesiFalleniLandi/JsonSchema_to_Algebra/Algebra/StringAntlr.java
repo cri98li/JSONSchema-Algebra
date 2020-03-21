@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class StringAntlr implements Assertion{
+public class StringAntlr extends AntlrValue{
 	
 	String value;
 	
