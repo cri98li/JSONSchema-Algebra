@@ -119,6 +119,30 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	}
 	
 	@Override 
+	public Or_Assertion visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx) { 
+
+		return (Or_Assertion) visit(ctx.any_of_assertion()); 
+	}
+	
+	@Override 
+	public Or_Assertion visitParseAnyOf(GrammaticaParser.ParseAnyOfContext ctx) {
+		
+		return (Or_Assertion) visit(ctx.assertion_list()); 
+	}
+	
+	@Override 
+	public Xor_Assertion visitNewOneOf(GrammaticaParser.NewOneOfContext ctx) { 
+
+		return (Xor_Assertion) visit(ctx.one_of_assertion()); 
+	}
+	
+	@Override 
+	public Xor_Assertion visitParseOneOf(GrammaticaParser.ParseOneOfContext ctx) {
+		
+		return (Xor_Assertion) visit(ctx.assertion_list()); 
+	}
+	
+	@Override 
 	public Required_Assertion visitNewRequired(GrammaticaParser.NewRequiredContext ctx) { 
 		
 		return (Required_Assertion) visit(ctx.required_assertion());

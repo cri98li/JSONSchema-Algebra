@@ -61,6 +61,20 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewAllOf(GrammaticaParser.NewAllOfContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewAnyOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewOneOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewOneOf(GrammaticaParser.NewOneOfContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NewRequired}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
@@ -109,6 +123,20 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseAllOf(GrammaticaParser.ParseAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseOneOf}
+	 * labeled alternative in {@link GrammaticaParser#one_of_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseOneOf(GrammaticaParser.ParseOneOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAnyOf}
+	 * labeled alternative in {@link GrammaticaParser#any_of_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAnyOf(GrammaticaParser.ParseAnyOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseRequired}
 	 * labeled alternative in {@link GrammaticaParser#required_assertion}.

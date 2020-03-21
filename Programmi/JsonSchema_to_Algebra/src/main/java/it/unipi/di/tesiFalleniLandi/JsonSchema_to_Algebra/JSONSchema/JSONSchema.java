@@ -312,9 +312,11 @@ public class JSONSchema implements JSONSchemaElement{
 				continue;
 			}
 			
-			
-			//$schema e %defs non vanno dentro allOf
-			if(entry.getKey().equals("$schema") || entry.getKey().equals("$defs")) {
+			//$schema, id e %defs non vanno dentro allOf
+			if(entry.getKey().equals("$schema") 
+					|| entry.getKey().equals("$defs")
+					|| entry.getKey().equals("id")
+					|| entry.getKey().equals("$id")) {
 				schema.jsonSchema.put(entry.getKey(), entry.getValue());
 				continue;
 			}

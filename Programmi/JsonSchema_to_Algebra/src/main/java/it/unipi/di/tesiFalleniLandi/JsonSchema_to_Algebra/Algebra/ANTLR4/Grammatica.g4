@@ -11,7 +11,12 @@ assertion : 		type_assertion								#NewTypeAssertion
    				|	between_assertion	         				#NewBetweenAssertion			
    				|	not_assertion								#NewNot
    				| 	xbetween_assertion							#NewXBetweenAssertion
+   				|	bet_items_assertion							#NweBetweenItems
+   				|	length_assertion							#NewLength
+   				|	between_properties_assertion				#NewBetweenProperties
    				|	all_of_assertion							#NewAllOf
+   				|	any_of_assertion							#NewAnyOf
+   				|	one_of_assertion							#NewOneOf
    				|	required_assertion							#NewRequired
    				|	if_then_else_assertion			   			#NewIfThenElse
    				/* 
@@ -34,20 +39,30 @@ assertion : 		type_assertion								#NewTypeAssertion
 	;
 
 	
-type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool')	#ParseTypeAssertion;	
+type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool')						#ParseTypeAssertion;	
 
-between_assertion : 'bet<' numeric_value ',' numeric_value '>'	#ParseBetweenAssertion;		
+between_assertion : 'bet<' numeric_value ',' numeric_value '>'									#ParseBetweenAssertion;		
 
-xbetween_assertion : 'xbet<' numeric_value ',' numeric_value '>'	#ParseXBetweenAssertion;	
+xbetween_assertion : 'xbet<' numeric_value ',' numeric_value '>'								#ParseXBetweenAssertion;
 
-not_assertion : '_NOT(' assertion_list ')'		#ParseNot;
+length_assertion : 'length<'numeric_value','numeric_value'>'									#ParseLengthAssertion;
 
-all_of_assertion : '_AND(' assertion_list ')'		#ParseAllOf;	
+bet_items_assertion : 'betitems<'numeric_value','numeric_value'>'								#ParseBetItemsAssertion;
 
-required_assertion : 'req([' ID (',' ID)* '])'	#ParseRequired;
+between_properties_assertion : 'pro<'numeric_value','numeric_value'>'							#ParseBetProAssertion;
 
-if_then_else_assertion : '(' assertion_list '=>' assertion_list '|' assertion_list ')'		#ParseIfThenElse
-						|	'(' assertion_list '=>' assertion_list ')'				#ParseIfThen
+not_assertion : '_NOT(' assertion_list ')'														#ParseNot;
+
+all_of_assertion : '_AND(' assertion_list ')'													#ParseAllOf;	
+
+one_of_assertion : '_XOR(' assertion_list ')'													#ParseOneOf;
+
+any_of_assertion : '_OR(' assertion_list ')'													#ParseAnyOf;
+
+required_assertion : 'req([' ID (',' ID)* '])'													#ParseRequired;
+
+if_then_else_assertion : '(' assertion_list '=>' assertion_list '|' assertion_list ')'			#ParseIfThenElse
+						|	'(' assertion_list '=>' assertion_list ')'							#ParseIfThen
 						;
 
 numeric_value :  	NULL		#NullValue
@@ -55,18 +70,7 @@ numeric_value :  	NULL		#NullValue
 
 /* 
 
-
-length_assertion : 'length<'numeric_value','numeric_value'>';
-
-bet_items_assertion : 'betitems<'numeric_value','numeric_value'>';
-
-between_properties_assertion : 'pro<'numeric_value','numeric_value'>';
-
 multiple_of_assertion : 'mof<'numeric_value'>';
-
-one_of_assertion : '_XOR(' assertion_list ')';
-
-any_of_assertion : '_OR(' assertion_list ')';
 
 unique_items_assertion : 'uniqueItems';
 
@@ -78,8 +82,6 @@ items_assertion :   'items(;' assertion_list ')'
 contains_assertion : 'contains<' numeric_value ',' numeric_value '> ' assertion_list;
 
 enum_assertion_assertion : 'enum(' ID (',' ID)* ')';
-
-
 
 const_assertion : 'const(' JSON_VALUE ')';
 

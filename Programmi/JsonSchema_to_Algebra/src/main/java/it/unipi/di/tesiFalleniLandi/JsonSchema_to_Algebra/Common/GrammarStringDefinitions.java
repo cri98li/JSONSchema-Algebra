@@ -20,7 +20,7 @@ public class GrammarStringDefinitions {
 	public static final String MULTIPLEOF = "mof<%s>";
 	
 	//TYPE
-	public static final String TYPE = "%s";
+	public static final String TYPE = "type(%s)";
 		public static final String TYPE_BOOLEAN = "Bool";
 		public static final String TYPE_STRING = "Str";
 		public static final String TYPE_NULL = "Null";

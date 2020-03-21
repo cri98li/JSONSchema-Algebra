@@ -20,18 +20,18 @@ public class GrammaticaParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
-		T__17=18, T__18=19, T__19=20, T__20=21, NULL=22, INT=23, ID=24, WS=25, 
-		STRING=26;
+		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, NULL=24, INT=25, 
+		ID=26, WS=27, STRING=28;
 	public static final int
 		RULE_assertion_list = 0, RULE_assertion = 1, RULE_type_assertion = 2, 
 		RULE_between_assertion = 3, RULE_xbetween_assertion = 4, RULE_not_assertion = 5, 
-		RULE_all_of_assertion = 6, RULE_required_assertion = 7, RULE_if_then_else_assertion = 8, 
-		RULE_numeric_value = 9;
+		RULE_all_of_assertion = 6, RULE_one_of_assertion = 7, RULE_any_of_assertion = 8, 
+		RULE_required_assertion = 9, RULE_if_then_else_assertion = 10, RULE_numeric_value = 11;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"assertion_list", "assertion", "type_assertion", "between_assertion", 
-			"xbetween_assertion", "not_assertion", "all_of_assertion", "required_assertion", 
-			"if_then_else_assertion", "numeric_value"
+			"xbetween_assertion", "not_assertion", "all_of_assertion", "one_of_assertion", 
+			"any_of_assertion", "required_assertion", "if_then_else_assertion", "numeric_value"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -40,15 +40,15 @@ public class GrammaticaParser extends Parser {
 		return new String[] {
 			null, "'{'", "','", "'}'", "'Obj'", "'Null'", "'Str'", "'Num'", "'Int'", 
 			"'Arr'", "'Bool'", "'bet<'", "'>'", "'xbet<'", "'_NOT('", "')'", "'_AND('", 
-			"'req(['", "'])'", "'('", "'=>'", "'|'", "'null'"
+			"'_XOR('", "'_OR('", "'req(['", "'])'", "'('", "'=>'", "'|'", "'null'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, "NULL", "INT", 
-			"ID", "WS", "STRING"
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			"NULL", "INT", "ID", "WS", "STRING"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -135,27 +135,27 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ListContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(20);
+			setState(24);
 			match(T__0);
-			setState(21);
+			setState(25);
 			assertion();
-			setState(26);
+			setState(30);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__1) {
 				{
 				{
-				setState(22);
+				setState(26);
 				match(T__1);
-				setState(23);
+				setState(27);
 				assertion();
 				}
 				}
-				setState(28);
+				setState(32);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(29);
+			setState(33);
 			match(T__2);
 			}
 		}
@@ -214,6 +214,17 @@ public class GrammaticaParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class NewOneOfContext extends AssertionContext {
+		public One_of_assertionContext one_of_assertion() {
+			return getRuleContext(One_of_assertionContext.class,0);
+		}
+		public NewOneOfContext(AssertionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewOneOf(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class NewIfThenElseContext extends AssertionContext {
 		public If_then_else_assertionContext if_then_else_assertion() {
 			return getRuleContext(If_then_else_assertionContext.class,0);
@@ -233,6 +244,17 @@ public class GrammaticaParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewTypeAssertion(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NewAnyOfContext extends AssertionContext {
+		public Any_of_assertionContext any_of_assertion() {
+			return getRuleContext(Any_of_assertionContext.class,0);
+		}
+		public NewAnyOfContext(AssertionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewAnyOf(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -274,7 +296,7 @@ public class GrammaticaParser extends Parser {
 		AssertionContext _localctx = new AssertionContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_assertion);
 		try {
-			setState(39);
+			setState(45);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__3:
@@ -287,7 +309,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewTypeAssertionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(31);
+				setState(35);
 				type_assertion();
 				}
 				break;
@@ -295,7 +317,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewListContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(32);
+				setState(36);
 				assertion_list();
 				}
 				break;
@@ -303,7 +325,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewBetweenAssertionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(33);
+				setState(37);
 				between_assertion();
 				}
 				break;
@@ -311,7 +333,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewNotContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(34);
+				setState(38);
 				not_assertion();
 				}
 				break;
@@ -319,7 +341,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewXBetweenAssertionContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(35);
+				setState(39);
 				xbetween_assertion();
 				}
 				break;
@@ -327,23 +349,39 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NewAllOfContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(36);
+				setState(40);
 				all_of_assertion();
 				}
 				break;
-			case T__16:
-				_localctx = new NewRequiredContext(_localctx);
+			case T__17:
+				_localctx = new NewAnyOfContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(37);
-				required_assertion();
+				setState(41);
+				any_of_assertion();
+				}
+				break;
+			case T__16:
+				_localctx = new NewOneOfContext(_localctx);
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(42);
+				one_of_assertion();
 				}
 				break;
 			case T__18:
-				_localctx = new NewIfThenElseContext(_localctx);
-				enterOuterAlt(_localctx, 8);
+				_localctx = new NewRequiredContext(_localctx);
+				enterOuterAlt(_localctx, 9);
 				{
-				setState(38);
+				setState(43);
+				required_assertion();
+				}
+				break;
+			case T__20:
+				_localctx = new NewIfThenElseContext(_localctx);
+				enterOuterAlt(_localctx, 10);
+				{
+				setState(44);
 				if_then_else_assertion();
 				}
 				break;
@@ -390,7 +428,7 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ParseTypeAssertionContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(41);
+			setState(47);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -446,15 +484,15 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ParseBetweenAssertionContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(43);
+			setState(49);
 			match(T__10);
-			setState(44);
+			setState(50);
 			numeric_value();
-			setState(45);
+			setState(51);
 			match(T__1);
-			setState(46);
+			setState(52);
 			numeric_value();
-			setState(47);
+			setState(53);
 			match(T__11);
 			}
 		}
@@ -502,15 +540,15 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ParseXBetweenAssertionContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(49);
+			setState(55);
 			match(T__12);
-			setState(50);
+			setState(56);
 			numeric_value();
-			setState(51);
+			setState(57);
 			match(T__1);
-			setState(52);
+			setState(58);
 			numeric_value();
-			setState(53);
+			setState(59);
 			match(T__11);
 			}
 		}
@@ -555,11 +593,11 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ParseNotContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(55);
+			setState(61);
 			match(T__13);
-			setState(56);
+			setState(62);
 			assertion_list();
-			setState(57);
+			setState(63);
 			match(T__14);
 			}
 		}
@@ -604,11 +642,109 @@ public class GrammaticaParser extends Parser {
 			_localctx = new ParseAllOfContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(59);
+			setState(65);
 			match(T__15);
-			setState(60);
+			setState(66);
 			assertion_list();
-			setState(61);
+			setState(67);
+			match(T__14);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class One_of_assertionContext extends ParserRuleContext {
+		public One_of_assertionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_one_of_assertion; }
+	 
+		public One_of_assertionContext() { }
+		public void copyFrom(One_of_assertionContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ParseOneOfContext extends One_of_assertionContext {
+		public Assertion_listContext assertion_list() {
+			return getRuleContext(Assertion_listContext.class,0);
+		}
+		public ParseOneOfContext(One_of_assertionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseOneOf(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final One_of_assertionContext one_of_assertion() throws RecognitionException {
+		One_of_assertionContext _localctx = new One_of_assertionContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_one_of_assertion);
+		try {
+			_localctx = new ParseOneOfContext(_localctx);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(69);
+			match(T__16);
+			setState(70);
+			assertion_list();
+			setState(71);
+			match(T__14);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Any_of_assertionContext extends ParserRuleContext {
+		public Any_of_assertionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_any_of_assertion; }
+	 
+		public Any_of_assertionContext() { }
+		public void copyFrom(Any_of_assertionContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ParseAnyOfContext extends Any_of_assertionContext {
+		public Assertion_listContext assertion_list() {
+			return getRuleContext(Assertion_listContext.class,0);
+		}
+		public ParseAnyOfContext(Any_of_assertionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAnyOf(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Any_of_assertionContext any_of_assertion() throws RecognitionException {
+		Any_of_assertionContext _localctx = new Any_of_assertionContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_any_of_assertion);
+		try {
+			_localctx = new ParseAnyOfContext(_localctx);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(73);
+			match(T__17);
+			setState(74);
+			assertion_list();
+			setState(75);
 			match(T__14);
 			}
 		}
@@ -649,34 +785,34 @@ public class GrammaticaParser extends Parser {
 
 	public final Required_assertionContext required_assertion() throws RecognitionException {
 		Required_assertionContext _localctx = new Required_assertionContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_required_assertion);
+		enterRule(_localctx, 18, RULE_required_assertion);
 		int _la;
 		try {
 			_localctx = new ParseRequiredContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(63);
-			match(T__16);
-			setState(64);
+			setState(77);
+			match(T__18);
+			setState(78);
 			match(ID);
-			setState(69);
+			setState(83);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__1) {
 				{
 				{
-				setState(65);
+				setState(79);
 				match(T__1);
-				setState(66);
+				setState(80);
 				match(ID);
 				}
 				}
-				setState(71);
+				setState(85);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(72);
-			match(T__17);
+			setState(86);
+			match(T__19);
 			}
 		}
 		catch (RecognitionException re) {
@@ -732,28 +868,28 @@ public class GrammaticaParser extends Parser {
 
 	public final If_then_else_assertionContext if_then_else_assertion() throws RecognitionException {
 		If_then_else_assertionContext _localctx = new If_then_else_assertionContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_if_then_else_assertion);
+		enterRule(_localctx, 20, RULE_if_then_else_assertion);
 		try {
-			setState(88);
+			setState(102);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new ParseIfThenElseContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(74);
-				match(T__18);
-				setState(75);
-				assertion_list();
-				setState(76);
-				match(T__19);
-				setState(77);
-				assertion_list();
-				setState(78);
+				setState(88);
 				match(T__20);
-				setState(79);
+				setState(89);
 				assertion_list();
-				setState(80);
+				setState(90);
+				match(T__21);
+				setState(91);
+				assertion_list();
+				setState(92);
+				match(T__22);
+				setState(93);
+				assertion_list();
+				setState(94);
 				match(T__14);
 				}
 				break;
@@ -761,15 +897,15 @@ public class GrammaticaParser extends Parser {
 				_localctx = new ParseIfThenContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(82);
-				match(T__18);
-				setState(83);
+				setState(96);
+				match(T__20);
+				setState(97);
 				assertion_list();
-				setState(84);
-				match(T__19);
-				setState(85);
+				setState(98);
+				match(T__21);
+				setState(99);
 				assertion_list();
-				setState(86);
+				setState(100);
 				match(T__14);
 				}
 				break;
@@ -818,16 +954,16 @@ public class GrammaticaParser extends Parser {
 
 	public final Numeric_valueContext numeric_value() throws RecognitionException {
 		Numeric_valueContext _localctx = new Numeric_valueContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_numeric_value);
+		enterRule(_localctx, 22, RULE_numeric_value);
 		try {
-			setState(92);
+			setState(106);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NULL:
 				_localctx = new NullValueContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(90);
+				setState(104);
 				match(NULL);
 				}
 				break;
@@ -835,7 +971,7 @@ public class GrammaticaParser extends Parser {
 				_localctx = new NumericValueContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(91);
+				setState(105);
 				match(INT);
 				}
 				break;
@@ -855,30 +991,33 @@ public class GrammaticaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34a\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\3"+
-		"\2\3\2\3\2\3\2\7\2\33\n\2\f\2\16\2\36\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\3\3\5\3*\n\3\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6"+
-		"\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\7\tF\n\t\f\t"+
-		"\16\tI\13\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3"+
-		"\n\3\n\5\n[\n\n\3\13\3\13\5\13_\n\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24"+
-		"\2\3\3\2\6\f\2a\2\26\3\2\2\2\4)\3\2\2\2\6+\3\2\2\2\b-\3\2\2\2\n\63\3\2"+
-		"\2\2\f9\3\2\2\2\16=\3\2\2\2\20A\3\2\2\2\22Z\3\2\2\2\24^\3\2\2\2\26\27"+
-		"\7\3\2\2\27\34\5\4\3\2\30\31\7\4\2\2\31\33\5\4\3\2\32\30\3\2\2\2\33\36"+
-		"\3\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\37\3\2\2\2\36\34\3\2\2\2\37 \7"+
-		"\5\2\2 \3\3\2\2\2!*\5\6\4\2\"*\5\2\2\2#*\5\b\5\2$*\5\f\7\2%*\5\n\6\2&"+
-		"*\5\16\b\2\'*\5\20\t\2(*\5\22\n\2)!\3\2\2\2)\"\3\2\2\2)#\3\2\2\2)$\3\2"+
-		"\2\2)%\3\2\2\2)&\3\2\2\2)\'\3\2\2\2)(\3\2\2\2*\5\3\2\2\2+,\t\2\2\2,\7"+
-		"\3\2\2\2-.\7\r\2\2./\5\24\13\2/\60\7\4\2\2\60\61\5\24\13\2\61\62\7\16"+
-		"\2\2\62\t\3\2\2\2\63\64\7\17\2\2\64\65\5\24\13\2\65\66\7\4\2\2\66\67\5"+
-		"\24\13\2\678\7\16\2\28\13\3\2\2\29:\7\20\2\2:;\5\2\2\2;<\7\21\2\2<\r\3"+
-		"\2\2\2=>\7\22\2\2>?\5\2\2\2?@\7\21\2\2@\17\3\2\2\2AB\7\23\2\2BG\7\32\2"+
-		"\2CD\7\4\2\2DF\7\32\2\2EC\3\2\2\2FI\3\2\2\2GE\3\2\2\2GH\3\2\2\2HJ\3\2"+
-		"\2\2IG\3\2\2\2JK\7\24\2\2K\21\3\2\2\2LM\7\25\2\2MN\5\2\2\2NO\7\26\2\2"+
-		"OP\5\2\2\2PQ\7\27\2\2QR\5\2\2\2RS\7\21\2\2S[\3\2\2\2TU\7\25\2\2UV\5\2"+
-		"\2\2VW\7\26\2\2WX\5\2\2\2XY\7\21\2\2Y[\3\2\2\2ZL\3\2\2\2ZT\3\2\2\2[\23"+
-		"\3\2\2\2\\_\7\30\2\2]_\7\31\2\2^\\\3\2\2\2^]\3\2\2\2_\25\3\2\2\2\7\34"+
-		")GZ^";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\36o\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
+		"\f\t\f\4\r\t\r\3\2\3\2\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\3\2\3\2\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\60\n\3\3\4\3\4\3\5\3\5\3\5\3"+
+		"\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\t"+
+		"\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\7\13T\n\13\f\13\16\13"+
+		"W\13\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f"+
+		"\3\f\5\fi\n\f\3\r\3\r\5\rm\n\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30"+
+		"\2\3\3\2\6\f\2o\2\32\3\2\2\2\4/\3\2\2\2\6\61\3\2\2\2\b\63\3\2\2\2\n9\3"+
+		"\2\2\2\f?\3\2\2\2\16C\3\2\2\2\20G\3\2\2\2\22K\3\2\2\2\24O\3\2\2\2\26h"+
+		"\3\2\2\2\30l\3\2\2\2\32\33\7\3\2\2\33 \5\4\3\2\34\35\7\4\2\2\35\37\5\4"+
+		"\3\2\36\34\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2"+
+		"\2\2#$\7\5\2\2$\3\3\2\2\2%\60\5\6\4\2&\60\5\2\2\2\'\60\5\b\5\2(\60\5\f"+
+		"\7\2)\60\5\n\6\2*\60\5\16\b\2+\60\5\22\n\2,\60\5\20\t\2-\60\5\24\13\2"+
+		".\60\5\26\f\2/%\3\2\2\2/&\3\2\2\2/\'\3\2\2\2/(\3\2\2\2/)\3\2\2\2/*\3\2"+
+		"\2\2/+\3\2\2\2/,\3\2\2\2/-\3\2\2\2/.\3\2\2\2\60\5\3\2\2\2\61\62\t\2\2"+
+		"\2\62\7\3\2\2\2\63\64\7\r\2\2\64\65\5\30\r\2\65\66\7\4\2\2\66\67\5\30"+
+		"\r\2\678\7\16\2\28\t\3\2\2\29:\7\17\2\2:;\5\30\r\2;<\7\4\2\2<=\5\30\r"+
+		"\2=>\7\16\2\2>\13\3\2\2\2?@\7\20\2\2@A\5\2\2\2AB\7\21\2\2B\r\3\2\2\2C"+
+		"D\7\22\2\2DE\5\2\2\2EF\7\21\2\2F\17\3\2\2\2GH\7\23\2\2HI\5\2\2\2IJ\7\21"+
+		"\2\2J\21\3\2\2\2KL\7\24\2\2LM\5\2\2\2MN\7\21\2\2N\23\3\2\2\2OP\7\25\2"+
+		"\2PU\7\34\2\2QR\7\4\2\2RT\7\34\2\2SQ\3\2\2\2TW\3\2\2\2US\3\2\2\2UV\3\2"+
+		"\2\2VX\3\2\2\2WU\3\2\2\2XY\7\26\2\2Y\25\3\2\2\2Z[\7\27\2\2[\\\5\2\2\2"+
+		"\\]\7\30\2\2]^\5\2\2\2^_\7\31\2\2_`\5\2\2\2`a\7\21\2\2ai\3\2\2\2bc\7\27"+
+		"\2\2cd\5\2\2\2de\7\30\2\2ef\5\2\2\2fg\7\21\2\2gi\3\2\2\2hZ\3\2\2\2hb\3"+
+		"\2\2\2i\27\3\2\2\2jm\7\32\2\2km\7\33\2\2lj\3\2\2\2lk\3\2\2\2m\31\3\2\2"+
+		"\2\7 /Uhl";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
