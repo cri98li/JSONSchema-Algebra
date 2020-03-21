@@ -2,7 +2,7 @@ function sendRequest(){
     var action = $("#SelectAction").val();
     var inputTextarea = $("#inputTextarea").val();
 
-    $.post("http://aow75q8kv6.execute-api.eu-west-1.amazonaws.com/JSONSchema_To_Algebra?action=normalize",
+    $.post("https://aow75q8kv6.execute-api.eu-west-1.amazonaws.com/JSONSchema_To_Algebra?action=normalize",
         JSON.stringify(inputTextarea),
     ).done(function(data){
             console.log("Data: " + data );
@@ -20,7 +20,7 @@ function sendRequest(){
     }
     });
 
-    xhr.open("POST", "http://aow75q8kv6.execute-api.eu-west-1.amazonaws.com/JSONSchema_To_Algebra?action=normalize");
+    xhr.open("POST", "https://aow75q8kv6.execute-api.eu-west-1.amazonaws.com/JSONSchema_To_Algebra?action=normalize");
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.send(data);
