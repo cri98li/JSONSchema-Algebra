@@ -7,20 +7,23 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaBaseVisitor;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Numeric_valueContext;
 
 public class Parser extends GrammaticaBaseVisitor<Assertion>{
 
 
 	@Override 
-	public And_Assertion visitNewList(GrammaticaParser.NewListContext ctx) { 
-		 
-		return (And_Assertion) visit(ctx.assertion_list());
+	public AntrlList visitNewList(GrammaticaParser.NewListContext ctx) { 
+		AntrlList list = new AntrlList();
+		list.add(visit(ctx.assertion(0)));
+		list.add(visit(ctx.assertion(1)));
+		return list;
 	}
 	
-	@Override 
-	public And_Assertion visitList(GrammaticaParser.ListContext ctx) {
-		And_Assertion list = new And_Assertion();
+	/*@Override 
+	public AntrlList visitList(GrammaticaParser.ListContext ctx) {
+		AntrlList list = new AntrlList();
 		
 		List<AssertionContext> keywords = ctx.assertion();
 		
@@ -30,7 +33,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		}
 		
 		return list; 
-	}
+	}*/
 	
 	@Override
 	public Bet_Assertion visitNewBetweenAssertion(GrammaticaParser.NewBetweenAssertionContext ctx) {
@@ -83,16 +86,16 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 
 	@Override
 	public Type_Assertion visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx) {  
-		StringAntlr type = (StringAntlr) visit(ctx.type_assertion());
+		AntlrString type = (AntlrString) visit(ctx.type_assertion());
 		
 		return new Type_Assertion(type.getValue()); 
 	}
 	
 	@Override
-	public StringAntlr visitParseTypeAssertion(GrammaticaParser.ParseTypeAssertionContext ctx) { 
-		String type = ctx.getText();
+	public AntlrString visitParseTypeAssertion(GrammaticaParser.ParseTypeAssertionContext ctx) { 
+		String type = ctx.TYPE().getText();
 		
-		return new StringAntlr(type); 
+		return new AntlrString(type); 
 	}
 	
 	@Override
@@ -104,7 +107,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override
 	public Not_Assertion visitParseNot(GrammaticaParser.ParseNotContext ctx) {
 		
-		return new Not_Assertion(visit(ctx.assertion_list()));
+		return new Not_Assertion(visit(ctx.assertion()));
 	}
 	
 	@Override 
@@ -116,7 +119,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public And_Assertion visitParseAllOf(GrammaticaParser.ParseAllOfContext ctx) {
 		
-		return (And_Assertion) visit(ctx.assertion_list()); 
+		return new And_Assertion((AntrlList) visit(ctx.assertion())); 
 	}
 	
 	@Override 
@@ -128,7 +131,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public Or_Assertion visitParseAnyOf(GrammaticaParser.ParseAnyOfContext ctx) {
 		
-		return (Or_Assertion) visit(ctx.assertion_list()); 
+		return new Or_Assertion((AntrlList) visit(ctx.assertion())); 
 	}
 	
 	@Override 
@@ -140,7 +143,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public Xor_Assertion visitParseOneOf(GrammaticaParser.ParseOneOfContext ctx) {
 		
-		return (Xor_Assertion) visit(ctx.assertion_list()); 
+		return new Xor_Assertion((AntrlList) visit(ctx.assertion())); 
 	}
 	
 	@Override 
@@ -170,19 +173,19 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override 
 	public IfThenElse_Assertion visitParseIfThenElse(GrammaticaParser.ParseIfThenElseContext ctx) { 
-		And_Assertion ifStat = (And_Assertion) visit(ctx.assertion_list(0));
-		And_Assertion thenStat = (And_Assertion) visit(ctx.assertion_list(1));
-		And_Assertion elseStat = (And_Assertion) visit(ctx.assertion_list(2));
+		Assertion ifStat = visit(ctx.assertion(0));
+		Assertion thenStat = visit(ctx.assertion(1));
+		Assertion elseStat = visit(ctx.assertion(2));
 		
 		return  new IfThenElse_Assertion(ifStat, thenStat, elseStat);
 	}
 	
 	@Override 
 	public IfThenElse_Assertion visitParseIfThen(GrammaticaParser.ParseIfThenContext ctx) { 
-		And_Assertion ifStat = (And_Assertion) visit(ctx.assertion_list(0));
-		And_Assertion thenStat = (And_Assertion) visit(ctx.assertion_list(1));
+		Assertion ifStat = visit(ctx.assertion(0));
+		Assertion thenStat = visit(ctx.assertion(1));
 		
-		return  new IfThenElse_Assertion(ifStat, thenStat, null); 
+		return new IfThenElse_Assertion(ifStat, thenStat, null); 
 	}
 	
 	@Override
@@ -197,6 +200,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		
 		List<Numeric_valueContext> valueList = ctx.numeric_value();
 		
+		//trattare null con classe NullAntlr ?
 		for(Numeric_valueContext value : valueList) {
 			AntlrValue tmp = (AntlrValue) visit(value);
 			_enum.add(tmp.getValue().toString());
@@ -220,9 +224,94 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	}
 	
 	@Override 
-	public StringAntlr visitStringValue(GrammaticaParser.StringValueContext ctx) { 
+	public AntlrString visitStringValue(GrammaticaParser.StringValueContext ctx) { 
 		
-		return new StringAntlr(ctx.STRING().getText()); 
+		return new AntlrString(ctx.STRING().getText()); 
 	}
 	
+	@Override 
+	public UniqueItems_Assertion visitNewUniqueItems(GrammaticaParser.NewUniqueItemsContext ctx) {
+		
+		return (UniqueItems_Assertion) visit(ctx.unique_items_assertion()); 
+	}
+		
+	@Override 
+	public UniqueItems_Assertion visitParseUniqueItems(GrammaticaParser.ParseUniqueItemsContext ctx) {
+		
+		return new UniqueItems_Assertion(); 
+	}
+	
+	@Override 
+	public Pattern_Assertion visitNewPattern(GrammaticaParser.NewPatternContext ctx) {
+		
+		return (Pattern_Assertion) visit(ctx.pattern_assertion()); 
+	}
+
+	@Override 
+	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
+		
+		return new Pattern_Assertion(ctx.STRING().getText()); 
+	}
+	
+	@Override 
+	public Exist_Assertion visitNewContains(GrammaticaParser.NewContainsContext ctx) { 
+		return (Exist_Assertion) visit(ctx.contains_assertion()); 
+	}
+	
+	@Override 
+	public Exist_Assertion visitParseContains(GrammaticaParser.ParseContainsContext ctx) { 
+		
+		IntegerAntlr min = (IntegerAntlr) visit(ctx.numeric_value(0));
+		IntegerAntlr max = (IntegerAntlr) visit(ctx.numeric_value(1));
+		Assertion schema = visit(ctx.assertion());
+		
+		return new Exist_Assertion(min.getValue(), max.getValue(), schema); 
+	}
+	
+	@Override 
+	public Const_Assertion visitNewConst(GrammaticaParser.NewConstContext ctx) { 
+		return (Const_Assertion) visit(ctx.const_assertion()); 
+	}
+	
+	@Override 
+	public Const_Assertion visitParseConst(GrammaticaParser.ParseConstContext ctx) { 
+		AntlrValue value = (AntlrValue) visit(ctx.numeric_value());
+		
+		return new Const_Assertion(value.getValue().toString()); 
+	}
+	
+	@Override 
+	public Items_Assertion visitNewItems(GrammaticaParser.NewItemsContext ctx) {
+		
+		return (Items_Assertion) visit(ctx.items_assertion()); 
+	}
+	
+	@Override 
+	public Items_Assertion visitParseItems(GrammaticaParser.ParseItemsContext ctx) { 
+		Assertion schema = visit(ctx.assertion());
+		Items_Assertion items= new Items_Assertion();
+		items.setAdditionalItems(schema);
+		
+		return items; 
+	}
+
+	@Override 
+	public Items_Assertion visitParseItemsArray(GrammaticaParser.ParseItemsArrayContext ctx) {
+		Items_Assertion items = new Items_Assertion();
+		List<AssertionContext> list = ctx.assertion();
+		int count = 0;
+
+		for(AssertionContext item : list) {
+			Assertion schema = visit(item);
+			if(count == list.size() - 1)
+				items.setAdditionalItems(schema);
+			else
+				items.add(schema);
+			
+			count++;
+		}
+		
+		return items; 
+	}
+
 }

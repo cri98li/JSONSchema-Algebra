@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,8 +18,21 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
 public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, GatewayResponse> {
 
 	public GatewayResponse handleRequest(LinkedHashMap<String, ?> input, Context context) {
+		if(input.toString().contains("Access-Control") || input.toString().contains("access-control")) {
+			HashMap<String, String> headers = new HashMap<>();
+			headers.put("Access-Control-Allow-Origin", "*");
+			headers.put("Access-Control-Allow-Methods", "GET, POST, PUT");
+			
+			return new GatewayResponse("", 
+					200,
+					headers,
+					false);
+		}
+		
+		
 		try {
-
+			System.out.println(input.toString());
+			
 			System.out.println("\tQUERY: "+input.get("rawQueryString"));
 			System.out.println("\tHEADERS: "+input.get("headers"));
 			

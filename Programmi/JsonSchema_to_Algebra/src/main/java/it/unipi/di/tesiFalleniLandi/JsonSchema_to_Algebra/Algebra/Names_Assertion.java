@@ -6,4 +6,11 @@ public class Names_Assertion implements Assertion{
 	public Names_Assertion(Assertion s) {
 		this.s = s;
 	}
+
+	@Override
+	public String toString() {
+		return "Names_Assertion [s=" + s + "]";
+	}
+	
+	
 }

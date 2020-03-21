@@ -5,4 +5,11 @@ public class UniqueItems_Assertion implements Assertion{
 	public UniqueItems_Assertion() {
 		
 	}
+
+	@Override
+	public String toString() {
+		return "UniqueItems_Assertion []";
+	}
+	
+	
 }

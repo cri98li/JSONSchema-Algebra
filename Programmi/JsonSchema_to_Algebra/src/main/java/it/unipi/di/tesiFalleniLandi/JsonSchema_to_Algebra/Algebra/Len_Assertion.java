@@ -19,4 +19,11 @@ public class Len_Assertion {
 		
 		return intersectedLen;
 	}
+
+	@Override
+	public String toString() {
+		return "Len_Assertion [min=" + min + ", max=" + max + "]";
+	}
+	
+	
 }

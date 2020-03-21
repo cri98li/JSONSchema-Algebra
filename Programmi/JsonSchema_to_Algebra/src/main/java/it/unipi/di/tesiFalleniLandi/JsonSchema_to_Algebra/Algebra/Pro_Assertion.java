@@ -25,4 +25,10 @@ public class Pro_Assertion implements Assertion{
 		return intersectedPro;
 	}
 
+	@Override
+	public String toString() {
+		return "Pro_Assertion [minProperties=" + minProperties + ", maxProperties=" + maxProperties + "]";
+	}
+
+	
 }

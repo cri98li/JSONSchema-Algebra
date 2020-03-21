@@ -1,14 +1,14 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class StringAntlr extends AntlrValue{
+public class AntlrString extends AntlrValue{
 	
 	String value;
 	
-	public StringAntlr() {
+	public AntlrString() {
 		
 	}
 	
-	public StringAntlr(String str) {
+	public AntlrString(String str) {
 		value = str;
 	}
 
@@ -18,6 +18,11 @@ public class StringAntlr extends AntlrValue{
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return "AntlrString [value=" + value + "]";
 	}
 	
 	

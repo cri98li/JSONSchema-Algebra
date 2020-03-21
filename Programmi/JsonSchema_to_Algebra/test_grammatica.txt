@@ -1,18 +1,12 @@
-{	bet<1,2>,
-	_AND({Obj,
-		bet<1,2>}),
-	req(["a", "c", "a", "12"]),
-	({Obj} => {Str} | {Bool}),
-	({Obj} => {Str}),
-	mof<100>,
-	enum(123, "abc", null),
- 	_NOT(
- 		{
- 			bet<1,null>
- 		}),
- 	 {
- 	 	Str, Obj
- 	 },
- 	 Null,
- 	 Arr
-}
+	
+	_XOR( xbet<1,2>,type(Arr) ),
+	_AND( bet<1,2>,type(Obj) ),
+	(type(Obj) => type(Str) | type(Bool)),
+    (type(Obj) => type(Str)),
+    contains<1,null>pattern("abc"),
+    const("costante"),
+    items(type(Obj);type(Obj)),
+    items(;type(Obj)),
+    mof<100>,
+    enum(123, "abc"),
+

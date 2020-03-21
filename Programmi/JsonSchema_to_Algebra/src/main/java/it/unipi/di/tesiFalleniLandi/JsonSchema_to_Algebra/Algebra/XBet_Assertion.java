@@ -19,4 +19,11 @@ public class XBet_Assertion implements Assertion{
 		
 		return intersectedXBet;
 	}
+
+	@Override
+	public String toString() {
+		return "XBet_Assertion [min=" + min + ", max=" + max + "]";
+	}
+	
+	
 }

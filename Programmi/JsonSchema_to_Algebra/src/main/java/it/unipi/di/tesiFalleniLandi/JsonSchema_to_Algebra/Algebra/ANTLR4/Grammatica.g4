@@ -2,12 +2,13 @@ grammar Grammatica;
 
 @header {package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 }
-
-assertion_list : '{' assertion (',' assertion)* '}'		#list							
+/* 
+assertion_list : '{' assertion (',' assertion)* '}'					#list							
 	;
+*/
 
 assertion : 		type_assertion								#NewTypeAssertion 						
-				|	assertion_list 				         		#NewList
+				|	assertion ',' assertion 					#NewList
    				|	between_assertion	         				#NewBetweenAssertion			
    				|	not_assertion								#NewNot
    				| 	xbetween_assertion							#NewXBetweenAssertion
@@ -19,27 +20,17 @@ assertion : 		type_assertion								#NewTypeAssertion
    				|	one_of_assertion							#NewOneOf
    				|	required_assertion							#NewRequired
    				|	if_then_else_assertion			   			#NewIfThenElse
-   				/* 
-   				|	bet_items_assertion					#betweenItems
-   				|	length_assertion						#Length
-   				|	between_properties_assertion		#BetweenProperties
-   				|	multiple_of_assertion				#multipleOf
-   				|	any_of_assertion						#anyOf
-   				|	one_of_assertion						#oneOf
-   				
-   				|	unique_items_assertion				#UniqueItems
-				|	pattern_assertion					   	#Pattern
-				|	items_assertion					   	#Items
-				|	contains_assertion				   	#Contains
-				|	enum_assertion_assertion				#Enum
-				
-				|	const_assertion			         	#Const
-				
-				*/
+   				|	multiple_of_assertion						#NewMultipleOf
+   				|	enum_assertion_assertion					#NewEnum
+   				|	unique_items_assertion						#NewUniqueItems
+				|	pattern_assertion							#NewPattern
+				|	contains_assertion				   			#NewContains
+				|	const_assertion			         			#NewConst
+				|	items_assertion					   			#NewItems
 	;
 
 	
-type_assertion : ('Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool')						#ParseTypeAssertion;	
+type_assertion : 'type(' TYPE ')'																#ParseTypeAssertion;	
 
 between_assertion : 'bet<' numeric_value ',' numeric_value '>'									#ParseBetweenAssertion;		
 
@@ -51,63 +42,51 @@ bet_items_assertion : 'betitems<'numeric_value','numeric_value'>'								#ParseB
 
 between_properties_assertion : 'pro<'numeric_value','numeric_value'>'							#ParseBetProAssertion;
 
-not_assertion : '_NOT(' assertion_list ')'														#ParseNot;
+multiple_of_assertion : 'mof<'numeric_value'>'													#ParseMultipleOf;													
 
-all_of_assertion : '_AND(' assertion_list ')'													#ParseAllOf;	
+not_assertion : '_NOT(' assertion ')'															#ParseNot;
 
-one_of_assertion : '_XOR(' assertion_list ')'													#ParseOneOf;
+all_of_assertion : '_AND(' assertion ')'														#ParseAllOf;	
 
-any_of_assertion : '_OR(' assertion_list ')'													#ParseAnyOf;
+one_of_assertion : '_XOR(' assertion ')'														#ParseOneOf;
 
-required_assertion : 'req([' ID (',' ID)* '])'													#ParseRequired;
+any_of_assertion : '_OR(' assertion ')'															#ParseAnyOf;
 
-if_then_else_assertion : '(' assertion_list '=>' assertion_list '|' assertion_list ')'			#ParseIfThenElse
-						|	'(' assertion_list '=>' assertion_list ')'							#ParseIfThen
+required_assertion : 'req([' STRING (',' STRING)* '])'											#ParseRequired;
+
+enum_assertion_assertion : 'enum(' numeric_value (',' numeric_value)* ')'						#ParseEnum;											
+
+if_then_else_assertion : '(' assertion '=>' assertion '|' assertion ')'							#ParseIfThenElse
+						|	'(' assertion '=>' assertion ')'									#ParseIfThen
 						;
+						
+unique_items_assertion : 'uniqueItems'															#ParseUniqueItems;
 
-numeric_value :  	NULL		#NullValue
-				|		INT 	#NumericValue;
+pattern_assertion : 'pattern(' STRING ')'														#ParsePattern;
 
-/* 
+items_assertion :   'items(;' assertion ')' 													#ParseItems
+                  | 'items(' assertion ('*' assertion)* ';' assertion ')'						#ParseItemsArray
+                  ;
 
-multiple_of_assertion : 'mof<'numeric_value'>';
+contains_assertion : 'contains<' numeric_value ',' numeric_value '>' assertion					#ParseContains;
 
-unique_items_assertion : 'uniqueItems';
+const_assertion : 'const(' numeric_value ')'													#ParseConst;
 
-pattern_assertion : 'pattern(' ID ')';
+numeric_value :  		NULL																	#NullValue
+				|		INT 																	#NumericValue
+				|		STRING																	#StringValue
+				;
 
-items_assertion :   'items(;' assertion_list ')' 
-                  | 'items(' assertion_list ('*' assertion_list)* ';' assertion_list ')';
-
-contains_assertion : 'contains<' numeric_value ',' numeric_value '> ' assertion_list;
-
-enum_assertion_assertion : 'enum(' ID (',' ID)* ')';
-
-const_assertion : 'const(' JSON_VALUE ')';
-
-*/
-
-//JSON_VALUE : INT | ID;
-
+TYPE : 'Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool';
 NULL : 'null';
 INT : [0-9]+ ; // Define token INT as one or more digits
-ID : [a-zA-Z0-9_]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
-
-
-
-
-
-
-STRING
-   : '"' (ESC | SAFECODEPOINT)* '"'
-   ;
-
+STRING : '"' (ESC | ~["\\])* '"';
+//ID : [a-zA-Z0-9_]+;
 
 fragment ESC
    : '\\' (["\\/bfnrt] | UNICODE)
    ;
-
 
 fragment UNICODE
    : 'u' HEX HEX HEX HEX

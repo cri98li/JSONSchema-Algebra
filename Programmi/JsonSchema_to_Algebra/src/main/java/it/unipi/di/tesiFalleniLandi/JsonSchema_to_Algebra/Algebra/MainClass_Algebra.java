@@ -32,9 +32,9 @@ public class MainClass_Algebra {
 	        
 	        //parser.addParseListener(new GrammaticaBaseListener_impl());
 	        
-	        ParseTree tree =  parser.assertion_list();
+	        ParseTree tree =  parser.assertion();
 	        Parser p = new Parser();
-	        And_Assertion schema = (And_Assertion) p.visit(tree);
+	        Assertion schema = (Assertion) p.visit(tree);
 	        
 			System.out.println("Tempo di esecuzione [ms]: "+ (System.currentTimeMillis()-start));
 			

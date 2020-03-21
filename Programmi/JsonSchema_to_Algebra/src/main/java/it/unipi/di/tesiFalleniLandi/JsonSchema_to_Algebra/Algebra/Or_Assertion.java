@@ -5,8 +5,8 @@ import java.util.List;
 public class Or_Assertion implements Assertion{
 	private List<Assertion> orList;
 	
-	public Or_Assertion(Or_Assertion orAssertion) {
-		orList = orAssertion.orList;
+	public Or_Assertion(AntrlList orList) {
+		this.orList = orList.getValue();
 	}
 
 	@Override

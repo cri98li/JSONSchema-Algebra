@@ -8,4 +8,11 @@ public class Properties_Assertion implements Assertion{
 	public Properties_Assertion() {
 		
 	}
+
+	@Override
+	public String toString() {
+		return "Properties_Assertion [key=" + key + ", value=" + value + "]";
+	}
+	
+	
 }
