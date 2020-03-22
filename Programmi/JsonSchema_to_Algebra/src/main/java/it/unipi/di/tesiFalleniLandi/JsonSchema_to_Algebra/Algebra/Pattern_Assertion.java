@@ -12,7 +12,7 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Pattern_Assertion [value=" + value + "]";
+		return "Pattern_Assertion [" + value + "]";
 	}
 	
 	

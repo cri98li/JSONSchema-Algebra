@@ -26,7 +26,7 @@ public class AntrlList extends AntlrValue {
 
 	@Override
 	public String toString() {
-		return "AntrlList [list=" + list + "]";
+		return "AntrlList [" + list + "]";
 	}
 
 	

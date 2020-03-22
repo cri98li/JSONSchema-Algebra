@@ -10,7 +10,7 @@ public class Const_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Const_Assertion [value=" + value + "]";
+		return "Const_Assertion [" + value + "]";
 	}
 	
 	

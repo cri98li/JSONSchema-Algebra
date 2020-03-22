@@ -22,7 +22,7 @@ public class Enum_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Enum_Assertion [_enum=" + _enum + "]";
+		return "Enum_Assertion [" + _enum + "]";
 	}
 	
 	

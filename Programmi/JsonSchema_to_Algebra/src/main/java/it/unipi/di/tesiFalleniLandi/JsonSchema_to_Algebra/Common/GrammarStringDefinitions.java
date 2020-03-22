@@ -4,7 +4,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
 public class GrammarStringDefinitions {
 	//JSON SCHEMA
-	public static final String JSONSCHEMA = "{%s}";
+	public static final String JSONSCHEMA = "%s";
 	
 	//LOGIC OP
 	public static final String OR = " V ";
@@ -39,7 +39,7 @@ public class GrammarStringDefinitions {
 	public static final String NOT = "_NOT(%s)";
 		
 	//required
-	public static final String REQUIRED = "req([%s])";
+	public static final String REQUIRED = "req(%s)";
 		
 	//pattern
 	public static final String PATTERN = "pattern(%s)";

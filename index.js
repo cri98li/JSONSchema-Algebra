@@ -110,24 +110,6 @@ function sendRequest(){
           },
           "text"
     );
-
-    /*$.ajax({
-        type: 'POST',
-        // make sure you respect the same origin policy with this url:
-        // http://en.wikipedia.org/wiki/Same_origin_policy
-        url: "https://mqmukc9q5h.execute-api.eu-west-1.amazonaws.com/pubblico/jsonschema-to-algebra?action="+action,
-        data: inputTextarea,
-        dataType: "text",
-        async: false,
-        success: function(data){
-            console.log("Data: " + data );
-            console.log(data);
-            $("#outputTextarea").val(JSON.stringify(data));
-        },
-        error: function (textStatus, errorThrown) {
-            Success = false;
-        }
-    });*/
 }
 
 $('textarea').autoResize();

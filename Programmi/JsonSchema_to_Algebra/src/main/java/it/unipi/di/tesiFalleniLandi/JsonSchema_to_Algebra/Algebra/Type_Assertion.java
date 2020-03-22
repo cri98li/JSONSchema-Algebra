@@ -9,7 +9,7 @@ public class Type_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Type_Assertion [type=" + type + "]";
+		return "Type_Assertion [" + type + "]";
 	}
 	
 	

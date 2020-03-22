@@ -20,6 +20,6 @@ public class Required_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Required_Assertion [reqList=" + reqList + "]";
+		return "Required_Assertion [" + reqList + "]";
 	}
 }

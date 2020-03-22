@@ -9,7 +9,7 @@ public class Mof_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Mof_Assertion [mof=" + mof + "]";
+		return "Mof_Assertion [" + mof + "]";
 	}
 	
 	

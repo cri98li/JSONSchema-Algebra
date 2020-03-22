@@ -22,7 +22,7 @@ public class AntlrString extends AntlrValue{
 
 	@Override
 	public String toString() {
-		return "AntlrString [value=" + value + "]";
+		return "AntlrString [" + value + "]";
 	}
 	
 	

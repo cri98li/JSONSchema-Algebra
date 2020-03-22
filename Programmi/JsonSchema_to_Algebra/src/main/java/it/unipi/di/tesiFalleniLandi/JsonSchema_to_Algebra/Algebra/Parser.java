@@ -21,20 +21,6 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		return list;
 	}
 	
-	/*@Override 
-	public AntrlList visitList(GrammaticaParser.ListContext ctx) {
-		AntrlList list = new AntrlList();
-		
-		List<AssertionContext> keywords = ctx.assertion();
-		
-		for(AssertionContext key : keywords) {
-			Assertion schema = visit(key);
-			list.add(schema);
-		}
-		
-		return list; 
-	}*/
-	
 	@Override
 	public Bet_Assertion visitNewBetweenAssertion(GrammaticaParser.NewBetweenAssertionContext ctx) {
 		

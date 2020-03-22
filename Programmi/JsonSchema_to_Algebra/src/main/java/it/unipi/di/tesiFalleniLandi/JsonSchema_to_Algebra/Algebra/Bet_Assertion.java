@@ -30,7 +30,7 @@ public class Bet_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Bet_Assertion [min=" + min + ", max=" + max + "]";
+		return "Bet_Assertion [" + min + ", max=" + max + "]";
 	}
 	
 	

@@ -11,6 +11,6 @@ public class Or_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Or_Assertion [orList=" + orList + "]";
+		return "Or_Assertion [" + orList + "]";
 	}
 }

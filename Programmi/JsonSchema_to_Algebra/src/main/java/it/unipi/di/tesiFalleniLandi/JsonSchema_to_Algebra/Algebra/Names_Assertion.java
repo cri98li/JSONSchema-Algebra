@@ -9,7 +9,7 @@ public class Names_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Names_Assertion [s=" + s + "]";
+		return "Names_Assertion [" + s + "]";
 	}
 	
 	

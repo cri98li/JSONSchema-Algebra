@@ -11,6 +11,6 @@ public class Xor_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Xor_Assertion [xorList=" + xorList + "]";
+		return "Xor_Assertion [" + xorList + "]";
 	}
 }
