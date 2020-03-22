@@ -1,9 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
+
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,31 +18,21 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
 
-public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, GatewayResponse> {
+public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Object> {
 
-	public GatewayResponse handleRequest(LinkedHashMap<String, ?> input, Context context) {
-		if(input.toString().contains("Access-Control") || input.toString().contains("access-control")) {
-			HashMap<String, String> headers = new HashMap<>();
-			headers.put("Access-Control-Allow-Origin", "*");
-			headers.put("Access-Control-Allow-Methods", "GET, POST, PUT");
-			
-			return new GatewayResponse("", 
-					200,
-					headers,
-					false);
-		}
-		
+	public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		
 		try {
-			System.out.println(input.toString());
 			
-			System.out.println("\tQUERY: "+input.get("rawQueryString"));
+			
+			System.out.println("\tQUERY: "+input.get("queryStringParameters"));
 			System.out.println("\tHEADERS: "+input.get("headers"));
 			
 			
-			String action = (String) input.get("rawQueryString");
-			switch(action.split("=")[1]) {
+			LinkedHashMap<String, String> action = (LinkedHashMap<String, String>) input.get("queryStringParameters");
+			switch(action.get("action")) {
 			case "toJSON":
+				System.out.println(toJSON((String) input.get("body")));
 				return toJSON((String) input.get("body"));
 			
 			case "normalize":
@@ -58,13 +51,14 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			
 			return new GatewayResponse("unsupported "+action, 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -76,13 +70,16 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 	private GatewayResponse toJSON(String body) {
 		JSONObject object;
 		try {
-			object = (JSONObject) new JSONParser().parse(body);
+			System.out.println("VALORE: "+body.getClass());
+			System.out.println(body);
+			
+			object = (JSONObject) new JSONParser().parse(body.replace('\n', ' '));
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(schema.toJSON(), 
+			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(), 
 					200,
-					Collections.singletonMap("type", "application/schema+json"),
+					"type", "application/schema+json",
 					false);
 			
 			
@@ -90,7 +87,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -105,9 +102,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(Utils.normalize(schema).toJSON(), 
+			GatewayResponse response = new GatewayResponse(Utils.normalize(schema).toJSON().toString(), 
 					200,
-					Collections.singletonMap("type", "application/schema+json"),
+					"type", "application/schema+json",
 					false);
 			
 			
@@ -115,7 +112,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -130,9 +127,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(schema.assertionSeparation().toJSON(), 
+			GatewayResponse response = new GatewayResponse(schema.assertionSeparation().toJSON().toString(), 
 					200,
-					Collections.singletonMap("type", "application/schema+json"),
+					"type", "application/schema+json",
 					false);
 			
 			
@@ -140,7 +137,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -155,9 +152,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		
 			JSONSchema schema = new JSONSchema(object);
 			Utils.referenceNormalization(schema);
-			GatewayResponse response = new GatewayResponse(schema.toJSON(), 
+			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(), 
 					200,
-					Collections.singletonMap("type", "application/schema+json"),
+					"type", "application/schema+json",
 					false);
 			
 			
@@ -165,7 +162,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -182,7 +179,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 			
 			GatewayResponse response = new GatewayResponse(Utils.normalize(schema).toGrammarString(), 
 					200,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			
@@ -190,7 +187,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 		} catch (ParseException e) {
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
-					Collections.singletonMap("type", "text"),
+					"type", "text",
 					false);
 			
 			return response;
@@ -204,68 +201,144 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Gate
 
 
 
+class GatewayResponse {
+    private Boolean isBase64Encoded;
+    private Integer statusCode;
+    private Map<String, String> headers;
+    private Map<String, List<String>> multiValueHeaders;
+    private String body;
 
+    public GatewayResponse() {
+    }
+    
+    public GatewayResponse(
+    		final String body,
+            final Integer statusCode,
+            final String key,
+            final String value,
+            final Boolean isBase64Encoded
+        ) {
+            this.isBase64Encoded = isBase64Encoded;
+            this.statusCode = statusCode;
+            this.headers = new HashMap<>();
+            
+            headers.put("Access-Control-Allow-Origin", "*");
+            headers.put(key, value);
+            
+            this.body = body;
+        }
 
-class GatewayResponse{
-	private String body;
-	private Integer statusCode;
-	private Map<String, String> headers;
-	private boolean isBase64Encoded;
-	private String[] cookies = {};
-	
-	public GatewayResponse(Object body, Integer statusCode, Map<String, String> headers, boolean isBase64Encoded) {
-		this.body = body.toString();
-		this.statusCode = statusCode;
-		this.headers = headers;
-		this.isBase64Encoded = isBase64Encoded;
-	}
-	
-	public GatewayResponse(String body, Integer statusCode, Map<String, String> headers, boolean isBase64Encoded) {
-		this.body = body;
-		this.statusCode = statusCode;
-		this.headers = headers;
-		this.isBase64Encoded = isBase64Encoded;
-	}
+    public GatewayResponse(
+        final Boolean isBase64Encoded,
+        final Integer statusCode,
+        final Map<String, String> headers,
+        final Map<String, List<String>> multiValueHeaders,
+        final String body
+    ) {
+        this.isBase64Encoded = isBase64Encoded;
+        this.statusCode = statusCode;
+        this.headers = headers;
+        this.multiValueHeaders = multiValueHeaders;
+        this.body = body;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    public GatewayResponse(
+        final Integer statusCode,
+        final Map<String, String> headers,
+        final Map<String, List<String>> multiValueHeaders,
+        final String body
+    ) {
+        this(false, statusCode, headers, multiValueHeaders, body);
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public GatewayResponse(
+        final Integer statusCode,
+        final Map<String, String> headers,
+        final String body
+    ) {
+        this(false, statusCode, headers, null, body);
+    }
 
-	public Integer getStatusCode() {
-		return statusCode;
-	}
+    public GatewayResponse(
+        final Integer statusCode,
+        final Map<String, String> headers,
+        final Map<String, List<String>> multiValueHeaders
+    ) {
+        this(false, statusCode, headers, multiValueHeaders, null);
+    }
 
-	public void setStatusCode(Integer statusCode) {
-		this.statusCode = statusCode;
-	}
+    public GatewayResponse(
+        final Integer statusCode,
+        final Map<String, String> headers
+    ) {
+        this(false, statusCode, headers, null, null);
+    }
 
-	public Map<String, String> getHeaders() {
-		return headers;
-	}
+    public Boolean getBase64Encoded() {
+        return isBase64Encoded;
+    }
 
-	public void setHeaders(Map<String, String> headers) {
-		this.headers = headers;
-	}
+    public void setBase64Encoded(final Boolean base64Encoded) {
+        isBase64Encoded = base64Encoded;
+    }
 
-	public boolean isBase64Encoded() {
-		return isBase64Encoded;
-	}
+    public Integer getStatusCode() {
+        return statusCode;
+    }
 
-	public void setBase64Encoded(boolean isBase64Encoded) {
-		this.isBase64Encoded = isBase64Encoded;
-	}
+    public void setStatusCode(final Integer statusCode) {
+        this.statusCode = statusCode;
+    }
 
-	public String[] getCookies() {
-		return cookies;
-	}
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
 
-	public void setCookies(String[] cookies) {
-		this.cookies = cookies;
-	}
-	
-	
+    public void setHeaders(final Map<String, String> headers) {
+        this.headers = headers;
+    }
+
+    public Map<String, List<String>> getMultiValueHeaders() {
+        return multiValueHeaders;
+    }
+
+    public void setMultiValueHeaders(Map<String, List<String>> multiValueHeaders) {
+        this.multiValueHeaders = multiValueHeaders;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(final String body) {
+        this.body = body;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GatewayResponse that = (GatewayResponse) o;
+        return Objects.equals(isBase64Encoded, that.isBase64Encoded) &&
+               Objects.equals(statusCode, that.statusCode) &&
+               Objects.equals(headers, that.headers) &&
+               Objects.equals(multiValueHeaders, that.multiValueHeaders) &&
+               Objects.equals(body, that.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isBase64Encoded, statusCode, headers, multiValueHeaders, body);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", GatewayResponse.class.getSimpleName() + "[", "]")
+            .add("isBase64Encoded=" + isBase64Encoded)
+            .add("statusCode=" + statusCode)
+            .add("headers=" + headers)
+            .add("multiValueHeaders=" + multiValueHeaders)
+            .add("body='" + body + "'")
+            .toString();
+    }
 }
