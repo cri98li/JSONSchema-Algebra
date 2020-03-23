@@ -65,7 +65,7 @@ public class GrammarStringDefinitions {
 	public static final String DEFS = "def %s = %s";
 	
 	//if-then-else
-	public static final String IF_THEN_ELSE = "if: %s, then: %s, else: %s";
+	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
 	/*public static final String THEN = "then %s";
 	public static final String ELSE = "else %s";*/
 	
