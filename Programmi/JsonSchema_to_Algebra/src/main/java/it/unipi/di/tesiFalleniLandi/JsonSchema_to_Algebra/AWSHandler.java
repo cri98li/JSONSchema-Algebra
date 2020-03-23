@@ -70,8 +70,6 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	private GatewayResponse toJSON(String body) {
 		JSONObject object;
 		try {
-			System.out.println("VALORE: "+body.getClass());
-			System.out.println(body);
 			
 			object = (JSONObject) new JSONParser().parse(body.replace('\n', ' '));
 		
@@ -177,7 +175,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(Utils.normalize(schema).toGrammarString(), 
+			GatewayResponse response = new GatewayResponse(Utils.toGrammarString(Utils.normalize(schema)), 
 					200,
 					"type", "text",
 					false);

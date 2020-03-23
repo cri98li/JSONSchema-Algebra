@@ -39,6 +39,11 @@ public class Pattern implements JSONSchemaElement{
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.PATTERN, pattern);
 	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 
 
 

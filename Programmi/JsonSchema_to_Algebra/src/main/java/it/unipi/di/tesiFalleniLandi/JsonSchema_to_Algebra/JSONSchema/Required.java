@@ -45,10 +45,15 @@ public class Required implements JSONSchemaElement{
 			str += it.next();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.AND + it.next();
+			str += GrammarStringDefinitions.COMMA + it.next();
 		}
 		
 		return String.format(GrammarStringDefinitions.REQUIRED, str);
+	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
 	}
 
 	@Override

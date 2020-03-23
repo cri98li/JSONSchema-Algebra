@@ -22,6 +22,11 @@ public class UnknowElement implements JSONSchemaElement {
 		System.out.println("UNKNOWN ELEMENT: "+obj.toString());
 		return "";
 	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 0;
+	}
 
 	@Override
 	public JSONSchemaElement assertionSeparation() {

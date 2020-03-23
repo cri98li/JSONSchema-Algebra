@@ -59,11 +59,17 @@ public class AnyOf implements JSONSchemaElement{
 			String returnedValue = it.next().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.AND + returnedValue;
+			str += GrammarStringDefinitions.COMMA + returnedValue;
 		}
 		
 		if(str.isEmpty()) return "";
-		return String.format(GrammarStringDefinitions.ANYOF, str.substring(GrammarStringDefinitions.AND.length()));
+		if(anyOf.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.ANYOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return anyOf.size();
 	}
 
 	@Override

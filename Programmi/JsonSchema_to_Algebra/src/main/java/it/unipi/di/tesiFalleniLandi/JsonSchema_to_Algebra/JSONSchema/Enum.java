@@ -232,4 +232,9 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
 	}
+
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 }

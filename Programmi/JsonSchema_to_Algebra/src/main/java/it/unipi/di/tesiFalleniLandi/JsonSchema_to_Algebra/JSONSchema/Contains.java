@@ -97,6 +97,11 @@ public class Contains implements JSONSchemaElement{
 		
 		return returnList;
 	}
+
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 	
 	
 }

@@ -90,10 +90,15 @@ public class Defs implements JSONSchemaElement{
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
 		for(Entry<String, JSONSchema> entry : entrySet)
-			defs+= GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+			defs+= GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
 		
 		if(defs.isEmpty()) return ""; //definizione non ancora supportata
-		return defs.substring(GrammarStringDefinitions.AND.length());
+		return defs.substring(GrammarStringDefinitions.COMMA.length());
+	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
 	}
 
 	@Override

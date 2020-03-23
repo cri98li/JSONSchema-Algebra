@@ -114,7 +114,7 @@ public class BetweenNumber implements JSONSchemaElement{
 		if(str2 == "" && str1 != null)
 			return str1;
 		
-		return str1 + GrammarStringDefinitions.AND + str2;
+		return str1 + GrammarStringDefinitions.COMMA + str2;
 	}
 
 	@Override
@@ -147,5 +147,10 @@ public class BetweenNumber implements JSONSchemaElement{
 	public List<Entry<String,Defs>> collectDef() {
 		
 		return new LinkedList<>();
+	}
+
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
 	}
 }

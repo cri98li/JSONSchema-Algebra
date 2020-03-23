@@ -82,4 +82,9 @@ public class BetweenItems implements JSONSchemaElement{
 		return new LinkedList<>();
 	}
 
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
+
 }

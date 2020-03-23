@@ -25,11 +25,11 @@
 
         <div class="container-fluid">
             <div class="row mt-5">
-                <div class="col-md-5 col-12">
+                <div class="col-xl-5 col-12">
                     <label for="inputTextarea">Input textarea</label>
                     <textarea class="form-control" id="inputTextarea" rows="10"></textarea>
                 </div>
-                <div class="col-2 text-center mt-4">
+                <div class="col-xl-2 col-12 text-center mt-4">
                     <label for="SelectAction">Select an action</label>
                         <select class="form-control" id="SelectAction">
                           <option value="toJSON">[DEBUG] toJSON</option>
@@ -38,9 +38,14 @@
                           <option value="normalize" selected>Normalize</option>
                           <option value="toGrammarString">Convert to grammar</option>
                         </select>
-                    <button type="button" class="btn btn-primary mt-2" onclick="sendRequest()">Translate</button>
+                    <button type="button" id="translate" class="btn btn-primary mt-3" onclick="sendRequest()">Translate</button>
+                    <br>
+                    <div class="spinner-border text-primary mt-3" style="display: none;" id="loadingGif">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    
                 </div>
-                <div class="col-md-5 col-12">
+                <div class="col-xl-5 col-12">
                     <label for="outputTextarea">Output textarea</label>
                     <textarea class="form-control" id="outputTextarea" rows="10"></textarea>
                 </div>

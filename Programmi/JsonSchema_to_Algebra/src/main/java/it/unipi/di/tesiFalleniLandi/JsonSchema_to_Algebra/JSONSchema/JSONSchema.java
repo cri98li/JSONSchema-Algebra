@@ -341,6 +341,7 @@ public class JSONSchema implements JSONSchemaElement{
 	@Override
 	public String toGrammarString() {
 		String str = "";
+		int nElement = 0;
 		
 		if(booleanAsJSONSchema != null) return booleanAsJSONSchema+"";
 		
@@ -350,16 +351,23 @@ public class JSONSchema implements JSONSchemaElement{
 			String returnedValue = entry.getValue().toGrammarString();
 			if(returnedValue == null || returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.AND + returnedValue;
-		}
-		
-		/*
-		private Properties properties; -------------------- aspettiamo
-		 */
-		
+			str += GrammarStringDefinitions.COMMA + returnedValue;
+			nElement += entry.getValue().numberOfGeneratedAssertions();
+		}		
 		
 		if(str.isEmpty()) return "";
-		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.AND.length()));
+		if(nElement == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
+	
+	public int numberOfGeneratedAssertions() {
+		int c = 0;
+		
+		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
+		for(Entry<String, JSONSchemaElement> entry : entries)
+			c += entry.getValue().numberOfGeneratedAssertions();
+		
+		return c;
 	}
 
 

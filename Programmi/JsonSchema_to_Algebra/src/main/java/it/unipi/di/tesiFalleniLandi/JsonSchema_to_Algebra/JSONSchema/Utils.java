@@ -67,6 +67,9 @@ public class Utils {
 		root.addJSONSchemaElement("$defs", finalDefs);
 	}
 	
+	
+	
+	
 	private static JSONSchema compareDefsRefs(Entry<String, Defs> entry, URI_JS ref) {
 		String[] defUriSplitted = entry.getKey().split("/");
 		String[] refUriSplitted = ref.toString().split("/");
@@ -91,5 +94,60 @@ public class Utils {
 			newList.add(new AbstractMap.SimpleEntry<>(key+"/"+entry.getKey(), entry.getValue()));
 		
 		return newList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static String toGrammarString(JSONSchema root) {
+		return beauty(root.toGrammarString());
+	}
+	
+	
+	
+	
+	private static String beauty(String input) {
+		String output = "";
+		int tab = 0;
+		
+		for(int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			Character c1 = (i+1 == input.length()) ? null : input.charAt(i+1);
+			
+			switch(c) {
+			case '\n':
+				output += (c1 != null && (c1 == '}' || c1 == ']')) ? c+tabs(tab-1) : c+tabs(tab);
+				continue;
+				
+			case '[': case '{':
+				tab++;
+				break;
+				
+			case ']': case '}':
+				tab--;
+				break;
+				
+			default:
+				break;
+			}
+			
+			output += c;
+		}
+		
+		return output;
+	}
+	
+	
+	private static String tabs(int n) {
+		String output = "";
+		
+		for(int i = 0; i < n; i++) output += "\t";
+		
+		return output;
 	}
 }

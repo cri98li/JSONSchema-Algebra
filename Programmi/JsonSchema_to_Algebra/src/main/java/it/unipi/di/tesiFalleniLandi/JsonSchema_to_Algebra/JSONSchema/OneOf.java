@@ -23,13 +23,7 @@ public class OneOf implements JSONSchemaElement{
 		}
 	}
 	
-	
-	
-	public OneOf() {
-		// TODO Auto-generated constructor stub
-	}
-
-
+	public OneOf() {}
 
 	@Override
 	public String toString() {
@@ -59,14 +53,20 @@ public class OneOf implements JSONSchemaElement{
 			String returnedValue = it.next().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.AND + returnedValue;
+			str += GrammarStringDefinitions.COMMA + returnedValue;
 		}
 		
 		if(str.isEmpty()) return "";
-		
-		return str;
+		if(oneOf.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.ONEOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+		//return str;
 	}
 
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return oneOf.size();
+	}
 
 
 	@Override

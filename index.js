@@ -22,7 +22,7 @@
         this.filter('textarea').each(function(){
             
                 // Get rid of scrollbars and disable WebKit resizing:
-            var textarea = $(this).css({resize:'none','overflow-y':'hidden'}),
+            var textarea = $(this).css({/*resize:'none','overflow-y':'hidden'*/}),
             
                 // Cache original height, for use later:
                 origHeight = textarea.height(),
@@ -96,6 +96,10 @@ function sendRequest(){
     var action = $("#SelectAction").val();
     var inputTextarea = $("#inputTextarea").val();
 
+    $("#translate").prop('disabled', true);
+    $("#translate").html('Loading...');
+    $('#loadingGif').show();
+
     $.post("https://mqmukc9q5h.execute-api.eu-west-1.amazonaws.com/pubblico/jsonschema-to-algebra?action="+action,
         inputTextarea,
         function(data){
@@ -105,11 +109,19 @@ function sendRequest(){
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
                 $("#outputTextarea").val(data);
+                //document.getElementById("outputTextarea").innerHTML = data;
+
+                $("#translate").prop('disabled', false);
+                $("#translate").html('Translate');
+                $('#loadingGif').hide();
 
                 $("#outputTextarea").trigger('change.dynSiz');
+                $("#inputTextarea").trigger('change.dynSiz');
           },
           "text"
     );
 }
 
 $('textarea').autoResize();
+$("#outputTextarea").trigger('change.dynSiz');
+$("#inputTextarea").trigger('change.dynSiz');

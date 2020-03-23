@@ -61,4 +61,9 @@ public class Not implements JSONSchemaElement {
 		return Utils.addPathElement("not", value.collectDef());
 	}
 
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return value.numberOfGeneratedAssertions();
+	}
+
 }

@@ -58,11 +58,12 @@ public class AllOf implements JSONSchemaElement{
 			String returnedValue = it.next().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.AND + returnedValue;
+			str += GrammarStringDefinitions.COMMA + returnedValue;
 		}
 		
 		if(str.isEmpty()) return "";
-		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.AND.length()));
+		if(allOf.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 
 	@Override
@@ -75,6 +76,11 @@ public class AllOf implements JSONSchemaElement{
 			
 		
 		return obj;
+	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return allOf.size();
 	}
 
 	@Override

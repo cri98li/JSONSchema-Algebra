@@ -98,7 +98,7 @@ public class Properties implements JSONSchemaElement{
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
-				str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
+				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
 				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
 			}
 		}
@@ -106,15 +106,15 @@ public class Properties implements JSONSchemaElement{
 		if(patternProperties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
-				str += GrammarStringDefinitions.AND + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
+				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
 				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
 			}
 				
 		}
 		
 		if(!str.isEmpty()) {
-			str = str.substring(GrammarStringDefinitions.AND.length());
-			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.AND.length());
+			str = str.substring(GrammarStringDefinitions.COMMA.length());
+			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.COMMA.length());
 		}
 		
 		if(additionalProperties != null) 
@@ -236,5 +236,18 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		return null;
+	}
+
+	@Override
+	public int numberOfGeneratedAssertions() {
+		int size = 0;
+		if(properties != null)
+			size = properties.size();
+		if(patternProperties != null)
+			size =+ patternProperties.size();
+		if(additionalProperties != null)
+			size++;
+		
+		return size;
 	}
 }

@@ -50,4 +50,9 @@ public class MultipleOf implements JSONSchemaElement{
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
 	}
+
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 }

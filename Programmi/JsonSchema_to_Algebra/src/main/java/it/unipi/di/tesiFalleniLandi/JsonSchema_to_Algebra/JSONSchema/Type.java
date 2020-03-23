@@ -65,6 +65,11 @@ public class Type implements JSONSchemaElement {
 		return ""; //non ci dovrei mai arrivare
 	}
 	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
+	
 	private String jsonTypeToGrammar(String type) {
 		switch(type) {
 		case "array": return GrammarStringDefinitions.TYPE_ARRAY;

@@ -30,6 +30,11 @@ public class Ref implements JSONSchemaElement{
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.REF, uri.toString());
 	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 
 	@Override
 	public Object toJSON() {

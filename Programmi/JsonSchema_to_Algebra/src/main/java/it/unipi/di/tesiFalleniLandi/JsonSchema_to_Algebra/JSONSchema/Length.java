@@ -49,6 +49,11 @@ public class Length implements JSONSchemaElement{
 		
 		return String.format(GrammarStringDefinitions.LENGTH, min, max);
 	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 
 	@Override
 	public Length assertionSeparation() {

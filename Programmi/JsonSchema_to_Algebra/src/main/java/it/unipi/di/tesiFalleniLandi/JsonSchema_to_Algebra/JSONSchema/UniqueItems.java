@@ -33,6 +33,11 @@ public class UniqueItems implements JSONSchemaElement{
 		
 		return null; //non ci dovrei mai cadere
 	}
+	
+	@Override
+	public int numberOfGeneratedAssertions() {
+		return 1;
+	}
 
 	@Override
 	public UniqueItems assertionSeparation() {

@@ -23,6 +23,9 @@ interface JSONSchemaElement {
 	 */
 	public String toGrammarString();
 	
+	
+	public int numberOfGeneratedAssertions();
+	
 	/**
 	 * Colleziona ed elimina tutte le definizioni sparse nel documento
 	 * @return una lista contenente tutte le definizioni trovate
