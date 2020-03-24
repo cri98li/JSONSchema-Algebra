@@ -1,13 +1,21 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Len_Assertion {
+public class Len_Assertion implements Assertion{
 	private Integer min, max;
 	
-	public void setMin(int min) {
+	public Len_Assertion() {
+	}
+	
+	public Len_Assertion(Integer min, Integer max) {
+		this.min = min;
+		this.max = max;
+	}
+
+	public void setMin(Integer min) {
 		this.min = min;
 	}
 	
-	public void setMax(int max) {
+	public void setMax(Integer max) {
 		this.max = max;
 	}
 	

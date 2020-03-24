@@ -7,7 +7,7 @@ public class GrammarStringDefinitions {
 	public static final String JSONSCHEMA = "{\r\n%s\r\n}";
 	
 	//LOGIC OP
-	public static final String OR = " V ";
+	public static final String OR = "\r\n|\t";
 	public static final String COMMA = ",\r\n";
 	
 	//RANGE

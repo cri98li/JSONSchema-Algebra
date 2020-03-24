@@ -1,12 +1,4 @@
-	
-	_XOR( xbet<1,2>,type(Arr) ),
-	_AND( bet<1,2>,type(Obj) ),
-	(type(Obj) => type(Str) | type(Bool)),
-    (type(Obj) => type(Str)),
-    contains<1,null>pattern("abc"),
-    const("costante"),
-    items(type(Obj);type(Obj)),
-    items(;type(Obj)),
-    mof<100>,
-    enum(123, "abc"),
-
+{
+	properties["pippo"::type(str),
+	not["http://www.google.it/intex.html#prova"]::type(obj)]
+}

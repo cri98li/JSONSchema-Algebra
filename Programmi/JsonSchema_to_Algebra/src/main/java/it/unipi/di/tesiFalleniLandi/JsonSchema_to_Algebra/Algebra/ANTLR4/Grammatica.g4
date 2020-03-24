@@ -2,17 +2,16 @@ grammar Grammatica;
 
 @header {package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 }
-/* 
-assertion_list : '{' assertion (',' assertion)* '}'					#list							
+
+assertion_list : '{' assertion (',' assertion)* '}'				#ParseAssertionList							
 	;
-*/
 
 assertion : 		type_assertion								#NewTypeAssertion 						
-				|	assertion ',' assertion 					#NewList
+				/*|	assertion ',' assertion 					#NewList*/
    				|	between_assertion	         				#NewBetweenAssertion			
    				|	not_assertion								#NewNot
    				| 	xbetween_assertion							#NewXBetweenAssertion
-   				|	bet_items_assertion							#NweBetweenItems
+   				|	bet_items_assertion							#NewBetweenItems
    				|	length_assertion							#NewLength
    				|	between_properties_assertion				#NewBetweenProperties
    				|	all_of_assertion							#NewAllOf
@@ -27,57 +26,63 @@ assertion : 		type_assertion								#NewTypeAssertion
 				|	contains_assertion				   			#NewContains
 				|	const_assertion			         			#NewConst
 				|	items_assertion					   			#NewItems
+				|	assertion_list								#NewAssertionList
+				|   properties									#NewProperties
 	;
 
 	
-type_assertion : 'type(' TYPE ')'																#ParseTypeAssertion;	
+type_assertion : 'type''(' TYPE ')'																#ParseTypeAssertion;	
 
-between_assertion : 'bet<' numeric_value ',' numeric_value '>'									#ParseBetweenAssertion;		
+between_assertion : 'bet''(' json_value ',' json_value ')'									#ParseBetweenAssertion;		
 
-xbetween_assertion : 'xbet<' numeric_value ',' numeric_value '>'								#ParseXBetweenAssertion;
+xbetween_assertion : 'xbet''(' json_value ',' json_value ')'								#ParseXBetweenAssertion;
 
-length_assertion : 'length<'numeric_value','numeric_value'>'									#ParseLengthAssertion;
+length_assertion : 'length''('json_value','json_value')'									#ParseLengthAssertion;
 
-bet_items_assertion : 'betitems<'numeric_value','numeric_value'>'								#ParseBetItemsAssertion;
+bet_items_assertion : 'betitems''('json_value','json_value')'								#ParseBetItemsAssertion;
 
-between_properties_assertion : 'pro<'numeric_value','numeric_value'>'							#ParseBetProAssertion;
+between_properties_assertion : 'pro''('json_value','json_value')'							#ParseBetProAssertion;
 
-multiple_of_assertion : 'mof<'numeric_value'>'													#ParseMultipleOf;													
+multiple_of_assertion : 'mof''('json_value')'													#ParseMultipleOf;													
 
-not_assertion : '_NOT(' assertion ')'															#ParseNot;
+not_assertion : 'not''(' assertion ')'															#ParseNot;
 
-all_of_assertion : '_AND(' assertion ')'														#ParseAllOf;	
+all_of_assertion : 'and''(' assertion (',' assertion)* ')'															#ParseAllOf;	
 
-one_of_assertion : '_XOR(' assertion ')'														#ParseOneOf;
+one_of_assertion : 'xor''(' assertion (',' assertion)* ')'															#ParseOneOf;
 
-any_of_assertion : '_OR(' assertion ')'															#ParseAnyOf;
+any_of_assertion : 'or''(' assertion (',' assertion)* ')'															#ParseAnyOf;
 
-required_assertion : 'req([' STRING (',' STRING)* '])'											#ParseRequired;
+required_assertion : 'req''[' STRING (',' STRING)* ']'											#ParseRequired;
 
-enum_assertion_assertion : 'enum(' numeric_value (',' numeric_value)* ')'						#ParseEnum;											
+enum_assertion_assertion : 'enum[' json_value (',' json_value)* ']'						#ParseEnum;											
 
-if_then_else_assertion : '(' assertion '=>' assertion '|' assertion ')'							#ParseIfThenElse
-						|	'(' assertion '=>' assertion ')'									#ParseIfThen
+if_then_else_assertion : 'if'':' assertion ',''then'':' assertion ',''else'':' assertion				#ParseIfThenElse
+						|	'if'':' assertion ',''then'':' assertion ')'								#ParseIfThen
 						;
 						
 unique_items_assertion : 'uniqueItems'															#ParseUniqueItems;
 
-pattern_assertion : 'pattern(' STRING ')'														#ParsePattern;
+pattern_assertion : 'pattern''(' STRING ')'														#ParsePattern;
 
-items_assertion :   'items(;' assertion ')' 													#ParseItems
-                  | 'items(' assertion ('*' assertion)* ';' assertion ')'						#ParseItemsArray
+items_assertion :   'items''(;' assertion ')' 													#ParseItems
+                  | 'items''(' assertion (',' assertion)* ';' assertion ')'						#ParseItemsArray
                   ;
 
-contains_assertion : 'contains<' numeric_value ',' numeric_value '>' assertion					#ParseContains;
+contains_assertion : 'contains''(' json_value ',' json_value ')' assertion						#ParseContains;
 
-const_assertion : 'const(' numeric_value ')'													#ParseConst;
+properties : 'properties''[' STRING '::' assertion (','STRING '::' assertion)* (','additionalProperties)* ']'						#ParseProperties;
 
-numeric_value :  		NULL																	#NullValue
+additionalProperties: 'not''[' STRING ('|' STRING)* ']''::' assertion									#ParseAdditionalProperties;
+
+const_assertion : 'const''(' json_value ')'														#ParseConst;
+
+json_value :  		NULL																		#NullValue
 				|		INT 																	#NumericValue
 				|		STRING																	#StringValue
 				;
 
-TYPE : 'Obj' | 'Null' | 'Str' | 'Num' | 'Int' | 'Arr' | 'Bool';
+TYPE : 'obj' | NULL | 'str' | 'num' | 'int' | 'arr' | 'bool';
 NULL : 'null';
 INT : [0-9]+ ; // Define token INT as one or more digits
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
