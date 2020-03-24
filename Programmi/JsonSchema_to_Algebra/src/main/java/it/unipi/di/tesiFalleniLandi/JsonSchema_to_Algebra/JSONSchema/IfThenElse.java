@@ -12,8 +12,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 public class IfThenElse implements JSONSchemaElement {
 	private JSONSchema ifStatement, thenStatement, elseStatement;
 	
-	private boolean inizialized = false;
-	
 	public IfThenElse(){ }
 	
 	/*public If_Then_Else(JSONObject obj){
@@ -21,22 +19,15 @@ public class IfThenElse implements JSONSchemaElement {
 	}*/
 	
 	public void setIf(Object obj) {
-		inizialized = true;
 		ifStatement = new JSONSchema(obj);
 	}
 	
 	public void setThen(Object obj) {
-		inizialized = true;
 		thenStatement = new JSONSchema(obj);
 	}
 	
 	public void setElse(Object obj) {
-		inizialized = true;
 		elseStatement = new JSONSchema(obj);
-	}
-	
-	public boolean isInitialized() {
-		return inizialized;
 	}
 
 	@Override
@@ -125,7 +116,17 @@ public class IfThenElse implements JSONSchemaElement {
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public IfThenElse clone() {
+		IfThenElse clone = new IfThenElse();
+		
+		if(ifStatement != null) clone.ifStatement = ifStatement.clone();
+		if(thenStatement != null) clone.thenStatement = thenStatement.clone();
+		if(elseStatement != null) clone.elseStatement = elseStatement.clone();
+		
+		return clone;
 	}
 }

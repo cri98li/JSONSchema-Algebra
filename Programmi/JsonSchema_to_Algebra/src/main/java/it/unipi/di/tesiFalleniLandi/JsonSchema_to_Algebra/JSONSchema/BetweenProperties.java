@@ -77,7 +77,16 @@ public class BetweenProperties implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public BetweenProperties clone() {
+		BetweenProperties clone = new BetweenProperties();
+		
+		clone.minProperties = minProperties;
+		clone.maxProperties = maxProperties;
+		
+		return clone;
 	}
 }

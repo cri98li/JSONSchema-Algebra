@@ -24,7 +24,7 @@ public class UnknowElement implements JSONSchemaElement {
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 0;
 	}
 
@@ -46,6 +46,11 @@ public class UnknowElement implements JSONSchemaElement {
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	@Override
+	public UnknowElement clone() {
+		return new UnknowElement(obj);
 	}
 	
 }

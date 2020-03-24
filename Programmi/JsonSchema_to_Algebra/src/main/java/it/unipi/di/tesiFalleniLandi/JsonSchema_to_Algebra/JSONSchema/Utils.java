@@ -36,7 +36,8 @@ public class Utils {
 		Defs finalDefs = new Defs();
 		
 		for(URI_JS ref : refList) {
-			if(ref.toString().equals("#")) continue;
+			if(ref.toString().equals("#"))
+				continue;
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
 				JSONSchema s = compareDefsRefs(entry, ref);
@@ -63,8 +64,13 @@ public class Utils {
 		for(Entry<String, Defs> entry : defsList)
 			finalDefs.addDef(entry.getValue());
 		
+		//caso schema con sole definizioni
+		if(root.numberOfAssertions() != 0)
+			finalDefs.addDef("rootdef", root.clone());
+		
 		//Aggiungo allo schema la defs normalizzata
 		root.addJSONSchemaElement("$defs", finalDefs);
+		
 	}
 	
 	

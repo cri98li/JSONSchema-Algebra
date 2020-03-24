@@ -47,11 +47,11 @@ multiple_of_assertion : 'mof''('json_value')'													#ParseMultipleOf;
 
 not_assertion : 'not''(' assertion ')'															#ParseNot;
 
-all_of_assertion : 'and''(' assertion (',' assertion)* ')'															#ParseAllOf;	
+all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'															#ParseAllOf;	
 
-one_of_assertion : 'xor''(' assertion (',' assertion)* ')'															#ParseOneOf;
+one_of_assertion : 'oneOf''[' assertion (',' assertion)* ']'															#ParseOneOf;
 
-any_of_assertion : 'or''(' assertion (',' assertion)* ')'															#ParseAnyOf;
+any_of_assertion : 'anyOf''[' assertion (',' assertion)* ']'															#ParseAnyOf;
 
 required_assertion : 'req''[' STRING (',' STRING)* ']'											#ParseRequired;
 
@@ -73,7 +73,7 @@ contains_assertion : 'contains''(' json_value ',' json_value ')' assertion						
 
 properties : 'properties''[' STRING '::' assertion (','STRING '::' assertion)* (','additionalProperties)* ']'						#ParseProperties;
 
-additionalProperties: 'not''[' STRING ('|' STRING)* ']''::' assertion									#ParseAdditionalProperties;
+additionalProperties: 'addp''[' STRING ('|' STRING)* ']''::' assertion									#ParseAdditionalProperties;
 
 const_assertion : 'const''(' json_value ')'														#ParseConst;
 

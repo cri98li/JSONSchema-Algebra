@@ -4,12 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-interface JSONSchemaElement {	
+interface JSONSchemaElement extends Cloneable{	
 	/**
 	 * Restituisce una rappresentazione JSON (json simple) del json schema rappresentata dall'oggetto.
 	 * @return un oggetto che rappresenta lo schema, vedi le implementazioni per maggiori informazioni
 	 */
-	public Object toJSON(); //ritorna una rappresentazione JSON dell'oggetto
+	public Object toJSON();
 	
 	/**
 	 * Applica lo step di separazione delle asserzioni.
@@ -23,8 +23,11 @@ interface JSONSchemaElement {
 	 */
 	public String toGrammarString();
 	
-	
-	public int numberOfGeneratedAssertions();
+	/**
+	 * Conta il numero di asserzioni rilevanti allo scopo della validazione
+	 * @return ritorna il numero di asserzioni
+	 */
+	public int numberOfAssertions();
 	
 	/**
 	 * Colleziona ed elimina tutte le definizioni sparse nel documento
@@ -44,4 +47,10 @@ interface JSONSchemaElement {
 	 * @return ritorna un'istanza di defs collezionando, oltre che alla def indicata dall'uri, tutte le altre istanze di defs trovate
 	 */
 	public JSONSchema searchDef(Iterator<String> URIIterator);
+	
+	/**
+	 * Clona l'oggetto
+	 * @return ritorna il clone dell'oggetto
+	 */
+	public JSONSchemaElement clone();
 }

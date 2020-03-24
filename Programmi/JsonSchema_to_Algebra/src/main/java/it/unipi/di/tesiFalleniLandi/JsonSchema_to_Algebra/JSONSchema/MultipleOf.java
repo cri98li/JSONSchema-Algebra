@@ -52,7 +52,13 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	@Override
+	public MultipleOf clone(){
+		
+		return new MultipleOf(value);
 	}
 }

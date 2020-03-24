@@ -35,7 +35,7 @@ public class UniqueItems implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -66,4 +66,8 @@ public class UniqueItems implements JSONSchemaElement{
 		return new LinkedList<>();
 	}
 
+	@Override
+	public UniqueItems clone() {
+		return new UniqueItems(uniqueItems);
+	}
 }

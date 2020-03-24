@@ -24,7 +24,12 @@ public class OneOf implements JSONSchemaElement{
 	}
 	
 	public OneOf() {}
-
+	
+	public void addElement(JSONSchema schema) {
+		if(oneOf == null) oneOf = new LinkedList<>();
+		oneOf.add(schema);
+	}
+	
 	@Override
 	public String toString() {
 		return "OneOf [oneOf=" + oneOf + "]";
@@ -64,7 +69,7 @@ public class OneOf implements JSONSchemaElement{
 
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return oneOf.size();
 	}
 
@@ -102,5 +107,16 @@ public class OneOf implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	
+	@Override
+	public OneOf clone(){
+		OneOf clone = new OneOf();
+		
+		for(JSONSchema el : oneOf)
+			clone.addElement(el.clone());
+		
+		return clone;
 	}
 }

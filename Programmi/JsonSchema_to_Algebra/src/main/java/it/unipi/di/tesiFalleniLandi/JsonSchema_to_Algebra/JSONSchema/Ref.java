@@ -32,7 +32,7 @@ public class Ref implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -58,6 +58,15 @@ public class Ref implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	@Override
+	public Ref clone() {
+		Ref clone = new Ref();
+		
+		clone.uri = uri.clone();
+		
+		return clone;
 	}
 	
 }

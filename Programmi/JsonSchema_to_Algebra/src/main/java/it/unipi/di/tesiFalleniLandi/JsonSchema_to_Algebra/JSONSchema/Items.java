@@ -17,12 +17,12 @@ public class Items implements JSONSchemaElement{
 	private JSONSchema additionalItems_array;
 	private JSONSchema unevaluatedItems_array;
 	
-	private boolean initialized;
 	
 	public Items() {	}
 	
 	public void setItems(Object obj) {
 		JSONArray array = null;
+		
 		try{
 			array = (JSONArray) obj;
 		}catch(ClassCastException e) {
@@ -30,7 +30,6 @@ public class Items implements JSONSchemaElement{
 			return;
 		}
 		
-		initialized = true;
 		
 		items_array = new LinkedList<>();
 		
@@ -42,19 +41,13 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(Object obj) {
-		initialized = true;
 
 		items = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(Object obj) {
-		initialized = true;
-
+		
 		items = new JSONSchema(obj);
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
 	}
 	
 	@Override
@@ -174,8 +167,26 @@ public class Items implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	} 
+	
+	@Override
+	public Items clone(){
+		Items newItems = new Items();
+		
+		if(items != null) {
+			newItems.items = items.clone();
+		}else {
+			for(JSONSchema item : items_array) {
+				newItems.items_array.add(item.clone());
+			}
+		}
+		
+		if(additionalItems_array != null) newItems.additionalItems_array = additionalItems_array.clone();
+		if(unevaluatedItems_array != null) newItems.unevaluatedItems_array = unevaluatedItems_array.clone();
+		
+		return newItems;
 	}
 }
 

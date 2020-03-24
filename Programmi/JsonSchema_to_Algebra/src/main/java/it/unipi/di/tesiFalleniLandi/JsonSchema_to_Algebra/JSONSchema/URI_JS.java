@@ -12,6 +12,9 @@ public class URI_JS {
 		this.uri = uri;
 	}
 	
+	public URI_JS() {
+	}
+
 	public void found() {
 		normalizeURI();
 	}
@@ -23,6 +26,7 @@ public class URI_JS {
 	}
 	
 	public String getNormalizedName() {
+		normalizeURI();
 		return normalizedName;
 	}
 
@@ -37,6 +41,7 @@ public class URI_JS {
 		
 		//caso #
 		if(uri.equals("#")) {
+			normalizedURI = "";
 			normalizedName = "#";
 			return;
 		}
@@ -63,6 +68,16 @@ public class URI_JS {
 			
 		
 		// expected: a_b_foo
+	}
+	
+	public URI_JS clone() {
+		URI_JS clone = new URI_JS();
+		
+		clone.uri = uri;
+		clone.normalizedURI = normalizedURI;
+		clone.normalizedName = normalizedName;
+		
+		return clone;
 	}
 	
 	

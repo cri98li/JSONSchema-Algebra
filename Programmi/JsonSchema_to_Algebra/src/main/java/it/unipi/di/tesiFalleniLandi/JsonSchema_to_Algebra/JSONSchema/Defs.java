@@ -97,7 +97,7 @@ public class Defs implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -130,5 +130,14 @@ public class Defs implements JSONSchemaElement{
 		return "Defs [schemaDefs=" + schemaDefs + "]";
 	}
 
-	
+	public Defs clone() {
+		Defs clone = new Defs();
+		
+		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
+		
+		for(Entry<String, JSONSchema> entry : entrySet)
+			clone.schemaDefs.put(entry.getKey(), entry.getValue().clone());
+		
+		return clone;
+	}
 }

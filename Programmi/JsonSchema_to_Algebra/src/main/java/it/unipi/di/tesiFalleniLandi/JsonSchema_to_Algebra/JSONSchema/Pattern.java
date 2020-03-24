@@ -15,13 +15,8 @@ public class Pattern implements JSONSchemaElement{
 		pattern = (String)str;
 	}
 	
-	
-	
 	public Pattern() {
-		// TODO Auto-generated constructor stub
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -41,7 +36,7 @@ public class Pattern implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -75,6 +70,12 @@ public class Pattern implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	@Override
+	public Pattern clone(){
+		
+		return new Pattern(new String(pattern));
 	}
 
 }

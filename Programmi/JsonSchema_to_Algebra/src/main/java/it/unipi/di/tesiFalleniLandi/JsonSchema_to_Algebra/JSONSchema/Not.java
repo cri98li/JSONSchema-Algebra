@@ -62,8 +62,17 @@ public class Not implements JSONSchemaElement {
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
-		return value.numberOfGeneratedAssertions();
+	public int numberOfAssertions() {
+		return value.numberOfAssertions();
+	}
+	
+	@Override
+	public Not clone(){
+		Not clone = new Not();
+		
+		clone.value = value.clone();
+		
+		return clone;
 	}
 
 }

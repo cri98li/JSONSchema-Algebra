@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
@@ -234,7 +235,36 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public Enum clone() {
+		Enum clone = new Enum();
+		
+		Iterator <?> it = enumArray_str.iterator();
+		while(it.hasNext()) clone.enumArray_str.add((String) it.next());
+		
+		it = enumArray_bool.iterator();
+		while(it.hasNext()) clone.enumArray_bool.add((Boolean) it.next());
+		
+		it = enumArray_num.iterator();
+		while(it.hasNext()) clone.enumArray_num.add((Long) it.next());
+		
+		
+		
+		Iterator<JSONSchema> it_JS = enumArray_obj.iterator();
+		while(it_JS.hasNext()) clone.enumArray_obj.add(it_JS.next().clone());
+		
+		Iterator<Enum> it_JSA = enumArray_array.iterator();
+		while(it_JSA.hasNext()) clone.enumArray_array.add(it_JSA.next().clone());
+		
+		
+		
+		clone.thereIsNull = thereIsNull;
+		
+		clone.arrayOnly = arrayOnly;
+		
+		return clone;
 	}
 }

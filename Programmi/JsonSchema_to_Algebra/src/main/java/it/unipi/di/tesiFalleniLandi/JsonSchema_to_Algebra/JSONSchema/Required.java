@@ -22,7 +22,9 @@ public class Required implements JSONSchemaElement{
 			required.add((String) it.next());
 	}
 	
-	public Required() {	}
+	public Required() {
+		required = new LinkedList<>();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -52,7 +54,7 @@ public class Required implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -80,5 +82,10 @@ public class Required implements JSONSchemaElement{
 		return new LinkedList<>();
 	}
 	
-	
+	@Override
+	public Required clone() {
+		Required newReq = new Required();
+		newReq.required.addAll(required);
+		return newReq;
+	}
 }

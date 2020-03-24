@@ -239,7 +239,7 @@ public class Properties implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		int size = 0;
 		if(properties != null)
 			size = properties.size();
@@ -249,5 +249,36 @@ public class Properties implements JSONSchemaElement{
 			size++;
 		
 		return size;
+	}
+	
+	public void addPatternProperties(String key, JSONSchema value) {
+		patternProperties.put(key, value);
+	}
+
+	
+	@Override
+	public Properties clone() {
+		Properties newProperties = new Properties();
+		
+		if(properties != null) {
+			newProperties.properties = new HashMap<>();
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				newProperties.properties.put(entry.getKey(), entry.getValue().clone());
+			}
+		}
+		
+		if(patternProperties != null) {
+			newProperties.patternProperties = new HashMap<>();
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				newProperties.patternProperties.put(entry.getKey(), entry.getValue().clone());
+			}
+		}
+		
+		if(additionalProperties != null)
+			newProperties.additionalProperties = additionalProperties.clone();
+
+		return newProperties;
 	}
 }

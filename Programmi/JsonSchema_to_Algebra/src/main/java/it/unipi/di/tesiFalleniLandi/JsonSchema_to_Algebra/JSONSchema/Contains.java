@@ -14,31 +14,22 @@ public class Contains implements JSONSchemaElement{
 	private Long minContains;
 	private Long maxContains;
 	
-	private boolean initialized;
-	
 	public Contains() { }
 	
 	public void setContains(Object obj) {
-		initialized = true;
 		contains = new JSONSchema(obj);
 	}
 	
 	public void setMinContains(Object obj) {
 		Long value = (Long) obj;
 		
-		initialized = true;
 		minContains = value;
 	}
 	
 	public void setMaxContains(Object obj) {
 		Long value = (Long) obj;
 		
-		initialized = true;
 		maxContains = value;
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
 	}
 	
 	@Override
@@ -99,9 +90,17 @@ public class Contains implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 	
-	
+	public Contains clone() {
+		Contains clone = new Contains();
+		
+		clone.contains = contains.clone();
+		clone.minContains = minContains;
+		clone.maxContains = maxContains;
+		
+		return clone;
+	}
 }

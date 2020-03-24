@@ -79,7 +79,7 @@ public class AllOf implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return allOf.size();
 	}
 
@@ -102,5 +102,16 @@ public class AllOf implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	
+	@Override
+	public AllOf clone(){
+		AllOf clone = new AllOf();
+		
+		for(JSONSchema el : allOf)
+			clone.addElement(el.clone());
+		
+		return clone;
 	}
 }

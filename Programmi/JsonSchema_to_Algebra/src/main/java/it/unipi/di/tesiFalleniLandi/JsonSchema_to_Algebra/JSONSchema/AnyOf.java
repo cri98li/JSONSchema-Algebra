@@ -68,7 +68,7 @@ public class AnyOf implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return anyOf.size();
 	}
 
@@ -106,5 +106,13 @@ public class AnyOf implements JSONSchemaElement{
 		return new LinkedList<>();
 	}
 	
-	
+	@Override
+	public AnyOf clone(){
+		AnyOf clone = new AnyOf();
+		
+		for(JSONSchema el : anyOf)
+			clone.addElement(el.clone());
+		
+		return clone;
+	}
 }

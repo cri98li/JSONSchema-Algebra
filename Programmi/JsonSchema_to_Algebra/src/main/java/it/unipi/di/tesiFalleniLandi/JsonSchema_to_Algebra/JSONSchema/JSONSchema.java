@@ -18,7 +18,6 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	private HashMap<String, JSONSchemaElement> jsonSchema; //Dizionario di keywords presenti nello schema
 	
-
 	/**
 	 * Costruttore, prova a parsare un Object in boolean o in JSONObject.
 	 * Nel caso di JSONObject, si procede con la creazione delle parole chiave di JSONSchema presenti nel JSONObject.
@@ -224,7 +223,6 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	
 	public JSONSchema() {
-		jsonSchema = new HashMap<>();
 	}
 
 	public void addJSONSchemaElement(String key, JSONSchemaElement value) {
@@ -275,6 +273,7 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	public JSONSchema assertionSeparation() {
 		JSONSchema schema = new JSONSchema();
+		schema.jsonSchema = new HashMap<>();
 		if(booleanAsJSONSchema != null) {
 			schema.booleanAsJSONSchema = booleanAsJSONSchema;
 			return schema;
@@ -295,6 +294,7 @@ public class JSONSchema implements JSONSchemaElement{
 				if(type.type_array != null)
 					for(String str : type.type_array) {
 						JSONSchema tmp = new JSONSchema();
+						tmp.jsonSchema = new HashMap<>();
 						Type t = new Type();
 						t.type = str;
 						tmp.jsonSchema.put("type", t);
@@ -302,11 +302,13 @@ public class JSONSchema implements JSONSchemaElement{
 					}
 				else {
 					JSONSchema tmp = new JSONSchema();
+					tmp.jsonSchema = new HashMap<>();
 					tmp.jsonSchema.put("type", type);
 					anyOf.addElement(tmp);
 				}
 				
 				JSONSchema tmp = new JSONSchema();
+				tmp.jsonSchema = new HashMap<>();
 				tmp.jsonSchema.put("anyOf", anyOf);
 				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 				continue;
@@ -323,6 +325,7 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			
 			JSONSchema tmp = new JSONSchema();
+			tmp.jsonSchema = new HashMap<>();
 			tmp.jsonSchema.put(entry.getKey(), entry.getValue().assertionSeparation());
 			((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 		}
@@ -352,7 +355,7 @@ public class JSONSchema implements JSONSchemaElement{
 			if(returnedValue == null || returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.COMMA + returnedValue;
-			nElement += entry.getValue().numberOfGeneratedAssertions();
+			nElement += entry.getValue().numberOfAssertions();
 		}		
 		
 		if(str.isEmpty()) return "";
@@ -360,12 +363,12 @@ public class JSONSchema implements JSONSchemaElement{
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 	
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		int c = 0;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries)
-			c += entry.getValue().numberOfGeneratedAssertions();
+			c += entry.getValue().numberOfAssertions();
 		
 		return c;
 	}
@@ -414,4 +417,22 @@ public class JSONSchema implements JSONSchemaElement{
 		return returnList;
 	}
 
+	
+	@Override
+	public JSONSchema clone(){
+		JSONSchema clone = new JSONSchema();
+		
+		if(booleanAsJSONSchema != null)
+			clone.booleanAsJSONSchema = booleanAsJSONSchema;
+		
+		if(jsonSchema != null) {
+			Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
+			clone.jsonSchema = new HashMap<>();
+			
+			for(Entry<String, JSONSchemaElement> entry : entrySet)
+				clone.jsonSchema.put(entry.getKey(), entry.getValue().clone());
+		}
+		
+		return clone;
+	}
 }

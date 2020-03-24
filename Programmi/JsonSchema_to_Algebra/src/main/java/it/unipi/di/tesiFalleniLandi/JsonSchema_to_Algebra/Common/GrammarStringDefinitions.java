@@ -31,9 +31,9 @@ public class GrammarStringDefinitions {
 		
 	
 	//allOf, anyOf, oneOf
-	public static final String ALLOF = "and[\r\n%s\r\n]";
-	public static final String ANYOF = "or[\r\n%s\r\n]";
-	public static final String ONEOF = "xor[\r\n%s\r\n]";
+	public static final String ALLOF = "allOf[\r\n%s\r\n]";
+	public static final String ANYOF = "anyOf[\r\n%s\r\n]";
+	public static final String ONEOF = "oneOf[\r\n%s\r\n]";
 	
 	//not
 	public static final String NOT = "not: %s";
@@ -72,7 +72,7 @@ public class GrammarStringDefinitions {
 	//properties
 	public static final String PROPERTIES = "properties[\r\n%s\r\n]";
 	public static final String SINGLEPROPERTIES = "%s::%s";
-	public static final String ADDITIONALPROPERTIES = "not(%s)::%s";
+	public static final String ADDITIONALPROPERTIES = "addp(%s)::%s";
 	
 	//ref
 	public static final String REF = "ref(%s)";
