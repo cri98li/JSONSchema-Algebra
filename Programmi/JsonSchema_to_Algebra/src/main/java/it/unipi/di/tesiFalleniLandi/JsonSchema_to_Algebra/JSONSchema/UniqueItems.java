@@ -41,11 +41,7 @@ public class UniqueItems implements JSONSchemaElement{
 
 	@Override
 	public UniqueItems assertionSeparation() {
-		UniqueItems obj = new UniqueItems();
-		
-		obj.uniqueItems = this.uniqueItems;
-		
-		return obj;
+		return this.clone();
 	}
 
 

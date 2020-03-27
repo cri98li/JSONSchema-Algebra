@@ -178,6 +178,7 @@ public class Items implements JSONSchemaElement{
 		if(items != null) {
 			newItems.items = items.clone();
 		}else {
+			newItems.items_array = new LinkedList<>();
 			for(JSONSchema item : items_array) {
 				newItems.items_array.add(item.clone());
 			}

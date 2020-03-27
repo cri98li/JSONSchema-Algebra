@@ -213,6 +213,14 @@ public class JSONSchema implements JSONSchemaElement{
 			case "definitions":
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
+				
+			case "format":
+				jsonSchema.put("format", new Format(object.get(key)));
+				break;
+				
+			case "propertyNames":
+				jsonSchema.put("propertyNames", new PropertyNames(object.get(key)));
+				break;
 			
 			default:
 				jsonSchema.put(key, new UnknowElement(object.get(key)));
@@ -263,6 +271,7 @@ public class JSONSchema implements JSONSchemaElement{
 	 * @param schema
 	 * @param toPut
 	 */
+	@SuppressWarnings("unchecked")
 	private void putContent(JSONObject schema, JSONObject toPut) {
 		Set<?> keys = toPut.keySet();
 		for(Object key : keys) {

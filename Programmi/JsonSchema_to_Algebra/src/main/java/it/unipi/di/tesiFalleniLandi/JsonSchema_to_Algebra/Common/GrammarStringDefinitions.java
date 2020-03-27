@@ -74,6 +74,9 @@ public class GrammarStringDefinitions {
 	public static final String SINGLEPROPERTIES = "%s::%s";
 	public static final String ADDITIONALPROPERTIES = "addp(%s)::%s";
 	
+	//PropertyNames
+	public static final String PROPERTYNAMES = "names: %s";
+	
 	//ref
 	public static final String REF = "ref(%s)";
 	

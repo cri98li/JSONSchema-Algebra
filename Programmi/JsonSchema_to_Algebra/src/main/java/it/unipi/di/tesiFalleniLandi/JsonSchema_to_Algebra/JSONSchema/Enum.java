@@ -10,7 +10,7 @@ import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
-public class Enum implements JSONSchemaElement, Comparable<Object>{
+public class Enum implements JSONSchemaElement{
 	protected List<String> enumArray_str;
 	protected List<Long> enumArray_num;
 	protected List<Boolean> enumArray_bool;
@@ -62,7 +62,9 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 				Object currentObject = it.next();
 				parseArray(currentObject);
 			}
-		}catch(ClassCastException e) {}
+		}catch(ClassCastException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	protected void parseArray(Object currentObject) {
@@ -186,16 +188,14 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		if(thereIsNull) str += (separator + "null");
 		
 		if(arrayOnly)
-			return "["+ str.subSequence(separator.length(), str.length()) + "]";
+			if(str.isEmpty()) //caso array vuoto
+				return "[]";
+			else
+				return "["+ str.subSequence(separator.length(), str.length()) + "]";
 		
 		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 1;
-	}
 
 	@Override
 	public Enum assertionSeparation() {
