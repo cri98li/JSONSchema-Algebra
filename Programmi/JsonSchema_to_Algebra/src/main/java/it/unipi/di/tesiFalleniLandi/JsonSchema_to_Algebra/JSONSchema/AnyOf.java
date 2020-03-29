@@ -25,7 +25,6 @@ public class AnyOf implements JSONSchemaElement{
 	
 	
 	public AnyOf() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void addElement(JSONSchema schema) {
@@ -69,7 +68,7 @@ public class AnyOf implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return anyOf.size();
+		return 1;
 	}
 
 	@Override

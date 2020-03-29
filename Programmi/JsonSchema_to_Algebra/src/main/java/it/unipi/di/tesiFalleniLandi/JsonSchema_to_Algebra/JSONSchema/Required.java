@@ -41,13 +41,15 @@ public class Required implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		
+		if(required.isEmpty()) return "";
+		
 		Iterator<String> it = required.iterator();
 		
 		if(it.hasNext())
-			str += it.next();
+			str += "\""+it.next()+"\"";
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.COMMA + it.next();
+			str += GrammarStringDefinitions.COMMA +"\""+ it.next()+"\"";
 		}
 		
 		return String.format(GrammarStringDefinitions.REQUIRED, str);
@@ -55,7 +57,7 @@ public class Required implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		return (required.size() == 0)? 0: 1;
 	}
 
 	@Override

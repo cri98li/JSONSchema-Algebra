@@ -13,5 +13,13 @@ public class Not_Assertion implements Assertion{
 		return "Not_Assertion [" + value + "]";
 	}
 	
-	
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "not";
+	}
+
+	@Override
+	public Object toJSONSchema() {
+		return value.toJSONSchema();
+	}
 }

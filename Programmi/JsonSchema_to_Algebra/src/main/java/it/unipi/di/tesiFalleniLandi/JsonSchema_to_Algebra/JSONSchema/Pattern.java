@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Pattern implements JSONSchemaElement{
-
 	private String pattern;
 	
 	public Pattern(Object str) {

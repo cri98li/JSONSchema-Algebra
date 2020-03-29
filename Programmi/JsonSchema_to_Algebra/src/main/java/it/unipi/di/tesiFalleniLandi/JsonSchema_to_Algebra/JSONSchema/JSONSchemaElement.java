@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 interface JSONSchemaElement extends Cloneable{	
 	/**
-	 * Restituisce una rappresentazione JSON (json simple) del json schema rappresentata dall'oggetto.
+	 * Restituisce una rappresentazione JSON (json simple) del json schema rappresentato dall'oggetto.
 	 * @return un oggetto che rappresenta lo schema, vedi le implementazioni per maggiori informazioni
 	 */
 	public Object toJSON();

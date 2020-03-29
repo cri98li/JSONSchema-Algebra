@@ -64,7 +64,7 @@ public class Const extends Enum {
 	@Override
 	public String toGrammarString() {
 		if(!enumArray_str.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_str.toString());
+			return String.format(GrammarStringDefinitions.CONST, "\""+ enumArray_str.toString() +"\"");
 		
 		if(!enumArray_num.isEmpty())
 			return String.format(GrammarStringDefinitions.CONST, enumArray_num.toString());

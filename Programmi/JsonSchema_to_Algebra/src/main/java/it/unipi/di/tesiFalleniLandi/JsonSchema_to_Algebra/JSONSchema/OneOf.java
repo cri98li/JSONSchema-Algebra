@@ -70,9 +70,8 @@ public class OneOf implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return oneOf.size();
+		return 1;
 	}
-
 
 	@Override
 	public OneOf assertionSeparation() {

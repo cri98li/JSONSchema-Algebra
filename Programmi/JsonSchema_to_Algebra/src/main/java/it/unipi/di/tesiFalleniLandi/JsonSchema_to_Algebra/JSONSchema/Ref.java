@@ -22,13 +22,12 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public JSONSchemaElement assertionSeparation() {
-		Ref ref = new Ref(uri.toString());
-		return ref;
+		return this.clone();
 	}
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.REF, uri.getNormalizedName());
+		return String.format(GrammarStringDefinitions.REF, uri.toString());
 	}
 	
 	@Override

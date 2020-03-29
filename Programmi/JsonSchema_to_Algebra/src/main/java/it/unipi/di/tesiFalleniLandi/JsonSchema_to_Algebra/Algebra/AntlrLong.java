@@ -1,27 +1,21 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class AntlrString extends AntlrValue{
-	
-	String value;
-	
-	public AntlrString() {
-	}
-	
-	public AntlrString(String str) {
-		value = str;
-	}
+public class AntlrLong extends AntlrValue{
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
+	private Long value;
+	
+	public AntlrLong() {	}
+	
+	public AntlrLong(Long value) {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
+	public Long getValue() {
 		return value;
+	}
+
+	public void setValue(Long value) {
+		this.value = value;
 	}
 
 	@Override

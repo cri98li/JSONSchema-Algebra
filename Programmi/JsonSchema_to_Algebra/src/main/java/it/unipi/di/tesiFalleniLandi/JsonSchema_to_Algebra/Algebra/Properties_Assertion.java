@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.HashMap;
+import java.util.Set;
+
+import org.json.simple.JSONObject;
 
 public class Properties_Assertion implements Assertion{
 
@@ -23,6 +26,33 @@ public class Properties_Assertion implements Assertion{
 	public String toString() {
 		return "Properties_Assertion [" + properties + ";\\r\\n " + additionalProperties
 				+ "]";
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "properties";
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object toJSONSchema() {
+		JSONObject obj = new JSONObject();
+		
+		//Inserisco tutto in patternProperties perchè lavora anche come properties
+		if(properties != null && !properties.isEmpty()){
+			JSONObject tmp = new JSONObject();
+			Set<String> keys = properties.keySet();
+			
+			for(String key : keys)
+				tmp.put(key, properties.get(key).toJSONSchema());
+				
+			obj.put("patternProperties", tmp);
+		}
+		
+		if(additionalProperties != null)
+			obj.put("additionalProperties", additionalProperties.toJSONSchema());
+		
+		return obj;
 	}
 	
 	

@@ -5,8 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
@@ -45,11 +48,15 @@ public class Utils {
 					ref.found();
 					finalDefs.addDef(ref.getNormalizedName(), s);
 					found = true;
-					defsList.remove(entry);
+					//defsList.remove(entry);
 					break;
 				}
 			}
-			if(found) continue;
+			if(found) {
+				System.out.println("TROVATO: "+ref.toString());
+				continue;
+			}else
+				System.out.println("NON TROVATO: "+ref.toString());
 			
 			//Se sono arrivato qui, ho trovato un ref che non sono riuscito a risolvere. non è contenuto in nessun def?
 			JSONSchema newDef = root.searchDef(ref.iterator());
@@ -77,8 +84,10 @@ public class Utils {
 	
 	
 	private static JSONSchema compareDefsRefs(Entry<String, Defs> entry, URI_JS ref) {
+		System.out.println("CONFRONTO: "+entry.getKey()+"\r\n\t"+ref.toString().replace("definitions", "$defs"));
+		
 		String[] defUriSplitted = entry.getKey().split("/");
-		String[] refUriSplitted = ref.toString().split("/");
+		String[] refUriSplitted = ref.toString().replace("definitions", "$defs").split("/");
 		
 		if(defUriSplitted.length +1 != refUriSplitted.length)
 			return null; //lunghezza diversa, è impossibile che siano uguali
@@ -155,5 +164,38 @@ public class Utils {
 		for(int i = 0; i < n; i++) output += "\t";
 		
 		return output;
+	}
+	
+	
+	/**
+	 * Inserisce il contenuto di toPut in schema
+	 * @param schema
+	 * @param keyword
+	 * @param toPut
+	 */
+	@SuppressWarnings("unchecked")
+	public static void putContent(JSONObject schema, String keyword, Object toPut) {
+		List<String> putContentKeywords = Arrays.asList( new String[]{
+				"properties",
+				"ifThenElse",
+				"items",
+				"betweenItems",
+				"length",
+				"contains",
+				"betweenNumber",
+				"betweenProperties",
+				"unknow"
+		});
+		
+		if(!putContentKeywords.contains(keyword))
+		{
+			schema.put(keyword, toPut);
+			return;
+		}
+		
+		Set<?> keys = ((JSONObject) toPut).keySet();
+		for(Object key : keys) {
+			schema.put(key, ((JSONObject) toPut).get(key));
+		}
 	}
 }

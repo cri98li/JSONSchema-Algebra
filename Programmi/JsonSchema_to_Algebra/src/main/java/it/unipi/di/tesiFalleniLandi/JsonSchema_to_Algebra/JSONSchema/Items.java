@@ -121,10 +121,9 @@ public class Items implements JSONSchemaElement{
 	public List<URI_JS> getRef() {
 		List<URI_JS> returnList = new LinkedList<>();
 		
-		if(items_array != null) {
+		if(items_array != null)
 			for(JSONSchema s : items_array)
 				returnList.addAll(s.getRef());
-		}
 		
 		if(items != null) returnList.addAll(items.getRef());
 		if(additionalItems_array != null) returnList.addAll(additionalItems_array.getRef());

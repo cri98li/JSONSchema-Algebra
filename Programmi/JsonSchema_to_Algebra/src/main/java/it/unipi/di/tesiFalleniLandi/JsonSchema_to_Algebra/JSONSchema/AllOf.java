@@ -80,7 +80,7 @@ public class AllOf implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return allOf.size();
+		return 1;
 	}
 
 	@Override

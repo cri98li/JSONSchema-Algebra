@@ -39,10 +39,10 @@ public class GrammarStringDefinitions {
 	public static final String NOT = "not: %s";
 		
 	//required
-	public static final String REQUIRED = "req(%s)";
+	public static final String REQUIRED = "req[%s]";
 		
 	//pattern
-	public static final String PATTERN = "pattern(%s)";
+	public static final String PATTERN = "pattern(\"%s\")";
 		
 	//length
 	public static final String LENGTH = "length(%s,%s)";
@@ -62,24 +62,29 @@ public class GrammarStringDefinitions {
 	//unique items
 	public static final String UNIQUEITEMS = "uniqueItems";
 	
-	public static final String DEFS = "def %s = %s";
+	public static final String DEFS = "def \"%s\" = %s";
 	
 	//if-then-else
 	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
+	public static final String IF_THEN = "if: %s, \r\nthen: %s";
 	/*public static final String THEN = "then %s";
 	public static final String ELSE = "else %s";*/
 	
 	//properties
 	public static final String PROPERTIES = "properties[\r\n%s\r\n]";
-	public static final String SINGLEPROPERTIES = "%s::%s";
+	public static final String SINGLEPROPERTIES = "\"%s\"::%s";
 	public static final String ADDITIONALPROPERTIES = "addp(%s)::%s";
 	
 	//PropertyNames
 	public static final String PROPERTYNAMES = "names: %s";
 	
 	//ref
-	public static final String REF = "ref(%s)";
+	public static final String REF = "ref: \"%s\"";
 	
 	//null value
 	public static final String NULLVALUE = "null";
+		
+	//unknow keyword (annotations?)
+	public static final String UNKNOW = "annotations[%s]";
+	public static final String SINGLEUNKNOW = "\"%s\": \"%s\"";
 }

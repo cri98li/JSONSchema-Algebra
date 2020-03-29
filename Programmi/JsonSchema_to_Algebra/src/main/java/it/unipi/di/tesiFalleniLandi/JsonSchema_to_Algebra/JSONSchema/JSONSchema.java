@@ -41,6 +41,11 @@ public class JSONSchema implements JSONSchemaElement{
 		//inizio parsing
 		Iterator<?> it = object.keySet().iterator();
 		
+		if(object.keySet().size() == 0) { //caso schema vuoto
+			booleanAsJSONSchema = true;
+			return;			
+		}
+		
 		while(it.hasNext()) {
 			String key = (String) it.next();
 			switch(key) { 
@@ -206,6 +211,10 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("$ref", new Ref(object.get(key)));
 				break;
 				
+			case "ref":
+				jsonSchema.put("$ref", new Ref(object.get(key)));
+				break;
+				
 			case "$defs":
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
@@ -223,7 +232,8 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 			
 			default:
-				jsonSchema.put(key, new UnknowElement(object.get(key)));
+				jsonSchema.putIfAbsent("unknow", new UnknowElement());
+				((UnknowElement) jsonSchema.get("unknow")).add(key, object.get(key));;
 				break;
 			}
 		}
@@ -242,41 +252,14 @@ public class JSONSchema implements JSONSchemaElement{
 	public Object toJSON() {
 		JSONObject schema = new JSONObject();
 		
-		List<String> putContentKeywords = Arrays.asList( new String[]{
-				"properties",
-				"ifThenElse",
-				"items",
-				"betweenItems",
-				"length",
-				"contains",
-				"betweenNumber",
-				"betweenProperties"
-		});
-
 		//caso boolean as a Schema
 		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries)
-			if(putContentKeywords.contains(entry.getKey()))
-				putContent(schema, (JSONObject) entry.getValue().toJSON());
-			else schema.put(entry.getKey(), entry.getValue().toJSON());
+			Utils.putContent(schema, entry.getKey(), entry.getValue().toJSON());
 		
 		return schema;
-	}
-	
-	
-	/**
-	 * Inserisce il contenuto di toPut in schema
-	 * @param schema
-	 * @param toPut
-	 */
-	@SuppressWarnings("unchecked")
-	private void putContent(JSONObject schema, JSONObject toPut) {
-		Set<?> keys = toPut.keySet();
-		for(Object key : keys) {
-			schema.put(key, toPut.get(key));
-		}
 	}
 	
 	
@@ -359,27 +342,31 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
-		for(Entry<String, JSONSchemaElement> entry : entries) {
+		for(Entry<String, JSONSchemaElement> entry : entries) {			
 			String returnedValue = entry.getValue().toGrammarString();
 			if(returnedValue == null || returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.COMMA + returnedValue;
 			nElement += entry.getValue().numberOfAssertions();
-		}		
+		}
 		
-		if(str.isEmpty()) return "";
+		/*
+		 * if(entries.isEmpty()) return "true";
+		 * if(str.isEmpty()) return "";
+		 */
+		if(nElement == 0) return "true";
 		if(nElement == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 	
 	public int numberOfAssertions() {
-		int c = 0;
+		int count = 0;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries)
-			c += entry.getValue().numberOfAssertions();
+			count += entry.getValue().numberOfAssertions();
 		
-		return c;
+		return count;
 	}
 
 

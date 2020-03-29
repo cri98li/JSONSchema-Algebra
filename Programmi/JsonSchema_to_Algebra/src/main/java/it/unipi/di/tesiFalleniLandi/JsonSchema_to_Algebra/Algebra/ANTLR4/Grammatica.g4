@@ -4,7 +4,7 @@ grammar Grammatica;
 }
 
 assertion_list : '{' assertion (',' assertion)* '}'				#ParseAssertionList							
-	;
+				|    BOOLEAN                                   	 #ParseBooleanSchema;
 
 assertion : 		type_assertion								#NewTypeAssertion 						
 				/*|	assertion ',' assertion 					#NewList*/
@@ -28,6 +28,10 @@ assertion : 		type_assertion								#NewTypeAssertion
 				|	items_assertion					   			#NewItems
 				|	assertion_list								#NewAssertionList
 				|   properties									#NewProperties
+				|	def_assertion								#NewDef
+				|	ref_assertion								#NewRef
+				|	propertyNames								#NewPropertyNames
+				|	annotations									#NewAnnotations
 	;
 
 	
@@ -45,7 +49,7 @@ between_properties_assertion : 'pro''('json_value','json_value')'							#ParseBe
 
 multiple_of_assertion : 'mof''('json_value')'													#ParseMultipleOf;													
 
-not_assertion : 'not''(' assertion ')'															#ParseNot;
+not_assertion : 'not:' assertion 															#ParseNot;
 
 all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'															#ParseAllOf;	
 
@@ -58,7 +62,7 @@ required_assertion : 'req''[' STRING (',' STRING)* ']'											#ParseRequired;
 enum_assertion_assertion : 'enum[' json_value (',' json_value)* ']'						#ParseEnum;											
 
 if_then_else_assertion : 'if'':' assertion ',''then'':' assertion ',''else'':' assertion				#ParseIfThenElse
-						|	'if'':' assertion ',''then'':' assertion ')'								#ParseIfThen
+						|	'if'':' assertion ',''then'':' assertion								#ParseIfThen
 						;
 						
 unique_items_assertion : 'uniqueItems'															#ParseUniqueItems;
@@ -71,22 +75,37 @@ items_assertion :   'items''(;' assertion ')' 													#ParseItems
 
 contains_assertion : 'contains''(' json_value ',' json_value ')' assertion						#ParseContains;
 
-properties : 'properties''[' STRING '::' assertion (','STRING '::' assertion)* (','additionalProperties)* ']'						#ParseProperties;
+properties : 'properties''[' (STRING '::' assertion (','STRING '::' assertion)*)? (','?additionalProperties)* ']'						#ParseProperties;
 
-additionalProperties: 'addp''[' STRING ('|' STRING)* ']''::' assertion									#ParseAdditionalProperties;
+additionalProperties: 'addp''(' (STRING ('|' STRING)*)? ')''::' assertion								#ParseAdditionalProperties;
 
 const_assertion : 'const''(' json_value ')'														#ParseConst;
 
-json_value :  		NULL																		#NullValue
-				|		INT 																	#NumericValue
+def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*							#ParseDef;
+
+ref_assertion: 'ref'':' STRING																#ParseRef;
+
+propertyNames: 'names'':' assertion																#ParsePropertyNames;
+
+annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'							#ParseAnnotations; //non implementato in JSON_to_Grammatica
+
+json_value :  			NULL																	#NullValue
+				|		INT 																	#IntValue
 				|		STRING																	#StringValue
+				|		DOUBLE																	#DoubleValue
+				|		'['json_value(',' json_value)*']'										#ArrayValue
+				|		BOOLEAN																	#BooleanValue
 				;
 
-TYPE : 'obj' | NULL | 'str' | 'num' | 'int' | 'arr' | 'bool';
+
 NULL : 'null';
-INT : [0-9]+ ; // Define token INT as one or more digits
+TYPE : 'obj' | NULL | 'str' | 'num' | 'int' | 'arr' | 'bool';
+INT : [0-9]+ | '-'[0-9]+ ; // Define token INT as one or more digits
+DOUBLE: [0-9]+'.'[E0-9]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
+//STRING: '"' [\u0000-\uFFFE]+ '"';
 STRING : '"' (ESC | ~["\\])* '"';
+BOOLEAN : 'true' | 'false';
 //ID : [a-zA-Z0-9_]+;
 
 fragment ESC
@@ -95,6 +114,7 @@ fragment ESC
 
 fragment UNICODE
    : 'u' HEX HEX HEX HEX
+   | 'x' HEX HEX
    ;
 
 fragment HEX

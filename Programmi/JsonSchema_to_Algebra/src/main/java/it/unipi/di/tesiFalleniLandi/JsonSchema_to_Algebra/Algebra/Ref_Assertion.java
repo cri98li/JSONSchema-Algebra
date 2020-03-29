@@ -1,26 +1,28 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Mof_Assertion implements Assertion{
-	private Long mof;
+public class Ref_Assertion implements Assertion{
+	private String ref;
 	
-	public Mof_Assertion(Long mof) {
-		this.mof = mof;
+	public Ref_Assertion(String ref) {
+		this.ref = ref;
 	}
-
+	
+	
+	
 	@Override
 	public String toString() {
-		return "Mof_Assertion [" + mof + "]";
+		return "Ref_Assertion [" + ref + "]";
 	}
+
 
 	@Override
 	public String getJSONSchemaKeyword() {
-		return "multipleOf";
+		return "$ref";
 	}
 
 	@Override
 	public Object toJSONSchema() {
-		return mof;
+		return ref;
 	}
-	
-	
+
 }

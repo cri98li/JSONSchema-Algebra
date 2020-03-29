@@ -19,6 +19,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseBooleanSchema}
+	 * labeled alternative in {@link GrammaticaParser#assertion_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NewTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
@@ -165,6 +172,34 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNewProperties(GrammaticaParser.NewPropertiesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewDef}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewDef(GrammaticaParser.NewDefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewRef}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewRef(GrammaticaParser.NewRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewPropertyNames}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAnnotations}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#type_assertion}.
@@ -327,6 +362,34 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseConst(GrammaticaParser.ParseConstContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseDef}
+	 * labeled alternative in {@link GrammaticaParser#def_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseDef(GrammaticaParser.ParseDefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseRef}
+	 * labeled alternative in {@link GrammaticaParser#ref_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseRef(GrammaticaParser.ParseRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePropertyNames}
+	 * labeled alternative in {@link GrammaticaParser#propertyNames}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePropertyNames(GrammaticaParser.ParsePropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAnnotations}
+	 * labeled alternative in {@link GrammaticaParser#annotations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NullValue}
 	 * labeled alternative in {@link GrammaticaParser#json_value}.
 	 * @param ctx the parse tree
@@ -334,12 +397,12 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNullValue(GrammaticaParser.NullValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NumericValue}
+	 * Visit a parse tree produced by the {@code IntValue}
 	 * labeled alternative in {@link GrammaticaParser#json_value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumericValue(GrammaticaParser.NumericValueContext ctx);
+	T visitIntValue(GrammaticaParser.IntValueContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code StringValue}
 	 * labeled alternative in {@link GrammaticaParser#json_value}.
@@ -347,4 +410,25 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStringValue(GrammaticaParser.StringValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DoubleValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoubleValue(GrammaticaParser.DoubleValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrayValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayValue(GrammaticaParser.ArrayValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BooleanValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanValue(GrammaticaParser.BooleanValueContext ctx);
 }

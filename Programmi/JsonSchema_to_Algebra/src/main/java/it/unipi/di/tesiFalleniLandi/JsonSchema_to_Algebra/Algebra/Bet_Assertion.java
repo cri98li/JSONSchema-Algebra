@@ -1,36 +1,44 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import org.json.simple.JSONObject;
+
 public class Bet_Assertion implements Assertion{
 	
-	private Integer min, max;
+	private Object min, max;
 	
 	public Bet_Assertion() {	}
 	
-	public Bet_Assertion(Integer min, Integer max) {
+	public Bet_Assertion(Object min, Object max) {
 		this.min = min;
 		this.max = max;
 	}
 	
-	public void setMin(int min) {
+	public void setMin(Object min) {
 		this.min = min;
 	}
 	
-	public void setMax(int max) {
+	public void setMax(Object max) {
 		this.max = max;
-	}
-	
-	public Bet_Assertion intersect(Bet_Assertion bet) {
-		Bet_Assertion intersectedBet = new Bet_Assertion();
-		
-		intersectedBet.setMin((min > bet.min)? min:bet.min);
-		intersectedBet.setMax((max < bet.max)? max:bet.max);
-		
-		return intersectedBet;
 	}
 
 	@Override
 	public String toString() {
-		return "Bet_Assertion [" + min + ", max=" + max + "]";
+		return "Bet_Assertion [" + min + ", " + max + "]";
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "betweenNumber";
+	}
+
+	@Override
+	public Object toJSONSchema() {
+		JSONObject obj = new JSONObject();
+		
+		if(max != null) obj.put("maximum", max);
+		if(min != null) obj.put("minimum", min);
+		
+		return obj;
 	}
 	
 	

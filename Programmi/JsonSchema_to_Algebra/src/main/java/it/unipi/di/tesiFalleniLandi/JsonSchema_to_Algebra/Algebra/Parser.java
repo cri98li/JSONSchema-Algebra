@@ -7,19 +7,16 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaBaseVisitor;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AdditionalPropertiesContext;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.ArrayValueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 
 public class Parser extends GrammaticaBaseVisitor<Assertion>{
 
-
-	/*@Override 
-	public AntrlList visitNewList(GrammaticaParser.NewListContext ctx) { 
-		AntrlList list = new AntrlList();
-		list.add(visit(ctx.assertion(0)));
-		list.add(visit(ctx.assertion(1)));
-		return list;
-	}*/
+	@Override
+	public AntlrBoolean visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx) {
+		return new AntlrBoolean(Boolean.parseBoolean(ctx.BOOLEAN().getText()));
+	}
 	
 	public AntrlList visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
 		AntrlList list = new AntrlList();
@@ -36,17 +33,15 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override
 	public Bet_Assertion visitNewBetweenAssertion(GrammaticaParser.NewBetweenAssertionContext ctx) {
-		
-		Bet_Assertion bet = (Bet_Assertion) visit(ctx.between_assertion());
 
-		return bet;
+		return (Bet_Assertion) visit(ctx.between_assertion());
 	}
 	
 	@Override
 	public Bet_Assertion visitParseBetweenAssertion(GrammaticaParser.ParseBetweenAssertionContext ctx) {
 		
-		IntegerAntlr min = (IntegerAntlr) visit(ctx.json_value(0));
-		IntegerAntlr max = (IntegerAntlr) visit(ctx.json_value(1));
+		AntlrValue min = (AntlrValue) visit(ctx.json_value(0));
+		AntlrValue max = (AntlrValue) visit(ctx.json_value(1));
 		
 		return new Bet_Assertion(min.getValue(), max.getValue());
 	}
@@ -62,32 +57,48 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override
 	public Bet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
 		
-		IntegerAntlr min = (IntegerAntlr) visit(ctx.json_value(0));
-		IntegerAntlr max = (IntegerAntlr) visit(ctx.json_value(1));
+		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 		
 		return new Bet_Assertion(min.getValue(), max.getValue());
 	}
 	
 
 	@Override 
-	public IntegerAntlr visitNumericValue(GrammaticaParser.NumericValueContext ctx) { 
-		
-		return new IntegerAntlr(Integer.valueOf(ctx.INT().getText()));
+	public AntlrLong visitIntValue(GrammaticaParser.IntValueContext ctx) { 
+		return new AntlrLong(Long.valueOf(ctx.INT().getText()));
 	}
 	
+	@Override 
+	public AntlrDouble visitDoubleValue(GrammaticaParser.DoubleValueContext ctx) { 
+		return new AntlrDouble(Double.valueOf(ctx.DOUBLE().getText()));
+	}
 	
 	@Override
-	public IntegerAntlr visitNullValue(GrammaticaParser.NullValueContext ctx) {
-		IntegerAntlr value = new IntegerAntlr(null);
+	public AntlrLong visitNullValue(GrammaticaParser.NullValueContext ctx) {
+		AntlrLong value = new AntlrLong(null);
 
 		return value;
+	}
+	
+	@Override 
+	public AntlrArray visitArrayValue(GrammaticaParser.ArrayValueContext ctx) {
+		AntlrArray array = new AntlrArray();
+		List<Json_valueContext> list = ctx.json_value();
+		
+		for(Json_valueContext el : list)
+			array.add((AntlrValue) visit(el));
+		
+		return array;
 	}
 
 	@Override
 	public Type_Assertion visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx) {  
-		AntlrString type = (AntlrString) visit(ctx.type_assertion());
+		Type_Assertion type = new Type_Assertion();
+		type.add(((AntlrString) visit(ctx.type_assertion())).getValue());
 		
-		return new Type_Assertion(type.getValue()); 
+		
+		return type; 
 	}
 	
 	@Override
@@ -173,7 +184,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		List<TerminalNode> strList = ctx.STRING();
 		
 		for(TerminalNode str : strList) {
-			req.add(str.getText());
+			req.add(str.getText().subSequence(1, str.getText().length()-1).toString());
 		}
 		
 		return req;
@@ -217,7 +228,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		//trattare null con classe NullAntlr ?
 		for(Json_valueContext value : valueList) {
 			AntlrValue tmp = (AntlrValue) visit(value);
-			_enum.add(tmp.getValue().toString());
+			_enum.add(tmp.getValue());
 		}
 		
 		return _enum;
@@ -232,15 +243,21 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public Mof_Assertion visitParseMultipleOf(GrammaticaParser.ParseMultipleOfContext ctx) { 
 		
-		IntegerAntlr value = (IntegerAntlr) visit(ctx.json_value());
+		AntlrLong value = (AntlrLong) visit(ctx.json_value());
 		
 		return new Mof_Assertion(value.getValue()); 
 	}
 	
 	@Override 
 	public AntlrString visitStringValue(GrammaticaParser.StringValueContext ctx) { 
+		String str = ctx.STRING().getText();
+		return new AntlrString(str.substring(1, str.length()-1)); 
+	}
+	
+	@Override 
+	public AntlrBoolean visitBooleanValue(GrammaticaParser.BooleanValueContext ctx) { 
 		
-		return new AntlrString(ctx.STRING().getText()); 
+		return new AntlrBoolean(Boolean.valueOf(ctx.BOOLEAN().getText())); 
 	}
 	
 	@Override 
@@ -263,8 +280,8 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 
 	@Override 
 	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
-		
-		return new Pattern_Assertion(ctx.STRING().getText()); 
+		String str = ctx.STRING().getText();
+		return new Pattern_Assertion(str.substring(1, str.length()-1)); 
 	}
 	
 	@Override 
@@ -275,8 +292,8 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	@Override 
 	public Exist_Assertion visitParseContains(GrammaticaParser.ParseContainsContext ctx) { 
 		
-		IntegerAntlr min = (IntegerAntlr) visit(ctx.json_value(0));
-		IntegerAntlr max = (IntegerAntlr) visit(ctx.json_value(1));
+		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 		Assertion schema = visit(ctx.assertion());
 		
 		return new Exist_Assertion(min.getValue(), max.getValue(), schema); 
@@ -291,7 +308,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	public Const_Assertion visitParseConst(GrammaticaParser.ParseConstContext ctx) { 
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 		
-		return new Const_Assertion(value.getValue().toString()); 
+		return new Const_Assertion(value.getValue()); 
 	}
 	
 	@Override 
@@ -338,7 +355,7 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 		List<AdditionalPropertiesContext> additionalPro = ctx.additionalProperties();
 		
 		for(int i = 0; i < list.size(); i++) {
-			p.add(idList.get(i).getText(),  visit(list.get(i)));
+			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  visit(list.get(i)));
 		}
 		
 		if(!additionalPro.isEmpty())
@@ -364,9 +381,91 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override
 	public Len_Assertion visitParseLengthAssertion(GrammaticaParser.ParseLengthAssertionContext ctx) { 
-		IntegerAntlr min = (IntegerAntlr) visit(ctx.json_value(0));
-		IntegerAntlr max = (IntegerAntlr) visit(ctx.json_value(1));
+		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 		
 		return new Len_Assertion(min.getValue(), max.getValue()); 
+	}
+	
+	@Override 
+	public Pro_Assertion visitNewBetweenProperties(GrammaticaParser.NewBetweenPropertiesContext ctx) { 
+		return (Pro_Assertion) visit(ctx.between_properties_assertion()); 
+	}
+	
+	@Override 
+	public Pro_Assertion visitParseBetProAssertion(GrammaticaParser.ParseBetProAssertionContext ctx) { 
+		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		
+		return new Pro_Assertion(min.getValue(), max.getValue());
+	}
+	
+	@Override 
+	public BetItems_Assertion visitNewBetweenItems(GrammaticaParser.NewBetweenItemsContext ctx) { 
+		return (BetItems_Assertion) visit(ctx.bet_items_assertion()); 
+	}
+	
+	@Override 
+	public BetItems_Assertion visitParseBetItemsAssertion(GrammaticaParser.ParseBetItemsAssertionContext ctx) { 
+		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		
+		return new BetItems_Assertion(min.getValue(), max.getValue());
+	}
+	
+	@Override
+	public Defs_Assertion visitNewDef(GrammaticaParser.NewDefContext ctx) { 
+		return (Defs_Assertion) visit(ctx.def_assertion()); 
+	}
+	
+	@Override
+	public Defs_Assertion visitParseDef(GrammaticaParser.ParseDefContext ctx) { 
+		Defs_Assertion defs = new Defs_Assertion();
+		
+		List<AssertionContext> list = ctx.assertion();
+		List<TerminalNode> idList = ctx.STRING();
+		
+		for(int i = 0; i < list.size(); i++) {
+			defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  visit(list.get(i)));
+		}
+		
+		return defs;
+	}
+
+	@Override
+	public Ref_Assertion visitNewRef(GrammaticaParser.NewRefContext ctx) { 
+		return (Ref_Assertion) visit(ctx.ref_assertion());
+	}
+	
+	@Override
+	public Ref_Assertion visitParseRef(GrammaticaParser.ParseRefContext ctx) { 
+		String str = ctx.STRING().getText();
+		return new Ref_Assertion(str.substring(1, str.length()-1));
+	}
+	
+	@Override 
+	public Names_Assertion visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx) { 
+		return (Names_Assertion) visit(ctx.propertyNames()); 
+	}
+	
+	@Override 
+	public Names_Assertion visitParsePropertyNames(GrammaticaParser.ParsePropertyNamesContext ctx) {
+		return new Names_Assertion(visit(ctx.assertion()));
+	}
+	
+	
+	public Annotation_Assertion visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx) { 
+		return (Annotation_Assertion) visitChildren(ctx); 
+	}
+	
+	public Annotation_Assertion visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx) { 
+		List<TerminalNode> stringList = ctx.STRING();
+		Annotation_Assertion annotations = new Annotation_Assertion();
+		
+		for(int i = 0; i < stringList.size(); i += 2)
+			annotations.add(stringList.get(i).getText().subSequence(1, stringList.get(i).getText().length()-1).toString(), 
+					stringList.get(i+1).getText().subSequence(1, stringList.get(i+1).getText().length()-1).toString());
+		
+		return annotations;
 	}
 }

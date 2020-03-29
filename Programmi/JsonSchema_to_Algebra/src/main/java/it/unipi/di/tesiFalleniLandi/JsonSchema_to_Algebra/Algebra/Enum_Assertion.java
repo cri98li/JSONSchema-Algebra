@@ -3,11 +3,13 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+
 public class Enum_Assertion implements Assertion{
 
-	private List<String> _enum;
+	private List<Object> _enum;
 	
-	public Enum_Assertion(List<String> _enum) {
+	public Enum_Assertion(List<Object> _enum) {
 		super();
 		this._enum = _enum;
 	}
@@ -16,13 +18,29 @@ public class Enum_Assertion implements Assertion{
 		_enum = new LinkedList<>();
 	}
 	
-	public void add(String str) {
-		_enum.add(str);
+	public void add(Object obj) {
+		_enum.add(obj);
 	}
 
 	@Override
 	public String toString() {
 		return "Enum_Assertion [" + _enum + "]";
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "enum";
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object toJSONSchema() {
+		JSONArray array = new JSONArray();
+		
+		for(Object element : _enum)
+			array.add(element);
+		
+		return array;
 	}
 	
 	

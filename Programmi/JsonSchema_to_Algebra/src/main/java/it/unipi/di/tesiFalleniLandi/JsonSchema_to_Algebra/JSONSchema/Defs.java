@@ -26,6 +26,7 @@ public class Defs implements JSONSchemaElement{
 		}
 		
 		schemaDefs = new HashMap<>();
+		@SuppressWarnings("unchecked")
 		Set<Map.Entry<?,?>> entrySet = jsonObject.entrySet();
 		
 		for(Entry<?, ?> entry : entrySet) {
@@ -56,6 +57,7 @@ public class Defs implements JSONSchemaElement{
 		schemaDefs = new HashMap<>();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
@@ -98,7 +100,14 @@ public class Defs implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		int count = 0;
+		
+		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
+		
+		for(Entry<String, JSONSchema> entry : entrySet)
+			count += entry.getValue().numberOfAssertions();
+		
+		return (count == 0) ? 0 : 1;
 	}
 
 	@Override

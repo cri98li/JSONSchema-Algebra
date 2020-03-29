@@ -1,21 +1,23 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import org.json.simple.JSONObject;
+
 public class Len_Assertion implements Assertion{
-	private Integer min, max;
+	private Long min, max;
 	
 	public Len_Assertion() {
 	}
 	
-	public Len_Assertion(Integer min, Integer max) {
+	public Len_Assertion(Long min, Long max) {
 		this.min = min;
 		this.max = max;
 	}
 
-	public void setMin(Integer min) {
+	public void setMin(Long min) {
 		this.min = min;
 	}
 	
-	public void setMax(Integer max) {
+	public void setMax(Long max) {
 		this.max = max;
 	}
 	
@@ -31,6 +33,21 @@ public class Len_Assertion implements Assertion{
 	@Override
 	public String toString() {
 		return "Len_Assertion [min=" + min + ", max=" + max + "]";
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "length";
+	}
+
+	@Override
+	public Object toJSONSchema() {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("minLength", min);
+		obj.put("maxLength", max);
+		
+		return obj;
 	}
 	
 	

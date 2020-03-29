@@ -164,10 +164,10 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String str = ""; String separator = "; ";
+		String str = ""; String separator = ", ";
 		
 		Iterator <?> it = enumArray_str.iterator();
-		while(it.hasNext()) str += (separator + it.next());
+		while(it.hasNext()) str += (separator + "\""+it.next()+"\"");
 		
 		it = enumArray_bool.iterator();
 		while(it.hasNext()) str += (separator + it.next());
@@ -221,6 +221,14 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public List<URI_JS> getRef() {
+		List<URI_JS> list = new LinkedList<>();
+		
+		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
+		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
+		
+		it_JSE = enumArray_array.iterator();
+		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
+		
 		return new LinkedList<>();
 	}
 

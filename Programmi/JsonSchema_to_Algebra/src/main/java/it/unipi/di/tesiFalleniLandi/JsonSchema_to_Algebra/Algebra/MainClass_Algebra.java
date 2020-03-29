@@ -24,7 +24,7 @@ public class MainClass_Algebra {
 		
         try (Reader reader = new FileReader(path)){
         
-			long start = System.currentTimeMillis();
+			//long start = System.currentTimeMillis();
 			
 	        GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));        
 	        CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -34,13 +34,16 @@ public class MainClass_Algebra {
 	        
 	        ParseTree tree =  parser.assertion();
 	        Parser p = new Parser();
+	        System.out.println(tree.toStringTree(parser));
 	        Assertion schema = (Assertion) p.visit(tree);
 	        
-			System.out.println("Tempo di esecuzione [ms]: "+ (System.currentTimeMillis()-start));
+			//System.out.println("Tempo di esecuzione [ms]: "+ (System.currentTimeMillis()-start));
 			
-			System.out.println(tree.toStringTree(parser));
 			
 			System.out.println(schema.toString());
+			
+			JSONObject JSON = (JSONObject)schema.toJSONSchema();
+			System.out.println(JSON.toJSONString());
         }
 	}
 }
