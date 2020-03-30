@@ -90,10 +90,10 @@ public class Items implements JSONSchemaElement{
 			str += it.next().toGrammarString();
 		
 		while(it.hasNext()) {
-			str += "*" + it.next().toGrammarString();
+			str += "," + it.next().toGrammarString();
 		}
 		
-		String str2 = "null";
+		String str2 = "";
 		if(additionalItems_array != null)
 			str2 = additionalItems_array.toGrammarString();
 		
@@ -158,9 +158,9 @@ public class Items implements JSONSchemaElement{
 			//qui non lo posso trovare: come lo indicherei altrimenti?
 		}
 		
-		if(items != null) returnList.addAll(Utils.addPathElement("items",items.collectDef()));
-		if(additionalItems_array != null) returnList.addAll(Utils.addPathElement("additionalItems", additionalItems_array.collectDef()));
-		if(unevaluatedItems_array != null) returnList.addAll(Utils.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
+		if(items != null) returnList.addAll(Utils_JSONSchema.addPathElement("items",items.collectDef()));
+		if(additionalItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("additionalItems", additionalItems_array.collectDef()));
+		if(unevaluatedItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
 		
 		return returnList;
 	}

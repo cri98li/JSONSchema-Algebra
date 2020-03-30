@@ -54,14 +54,7 @@ public class URI_JS {
 		
 		if(splittedURI[i].equals("#")) i++;
 		if(splittedURI[i].equals("definitions") || splittedURI[i].equals("$defs")) i++;
-		
-		
-		
-		/*normalizedName = splittedURI[splittedURI.length - 1];				// name = foo
-		for(; i < splittedURI.length -1; i++)
-			normalizedName += "_"+splittedURI[i];
-		// expected: normalizedName --> foo_a_b
-		*/
+
 		normalizedName = splittedURI[i++];
 		for(; i < splittedURI.length; i++)
 			normalizedName += "_"+splittedURI[i];

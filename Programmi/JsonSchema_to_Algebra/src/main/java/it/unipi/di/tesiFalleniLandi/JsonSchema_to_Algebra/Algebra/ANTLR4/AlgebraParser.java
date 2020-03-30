@@ -1,25 +1,47 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaBaseVisitor;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.And_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Annotation_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AssertionList;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.BetItems_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Bet_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Const_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Defs_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Enum_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Exist_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.IfThenElse_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Items_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Len_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Mof_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Names_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Not_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Or_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pattern_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pro_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Properties_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Ref_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Required_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.UniqueItems_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Xor_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AdditionalPropertiesContext;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.ArrayValueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 
-public class Parser extends GrammaticaBaseVisitor<Assertion>{
+public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 
 	@Override
 	public AntlrBoolean visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx) {
 		return new AntlrBoolean(Boolean.parseBoolean(ctx.BOOLEAN().getText()));
 	}
 	
-	public AntrlList visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
-		AntrlList list = new AntrlList();
+	public AssertionList visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
+		AssertionList list = new AssertionList();
 		
 		List<AssertionContext> keywords = ctx.assertion();
 		
@@ -103,7 +125,11 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override
 	public AntlrString visitParseTypeAssertion(GrammaticaParser.ParseTypeAssertionContext ctx) { 
-		String type = ctx.TYPE().getText();
+		String type;
+		if(ctx.TYPE() != null)
+			type = ctx.TYPE().getText();
+		else
+			type = ctx.NULL().getText();
 		
 		return new AntlrString(type); 
 	}
@@ -318,29 +344,25 @@ public class Parser extends GrammaticaBaseVisitor<Assertion>{
 	}
 	
 	@Override 
-	public Items_Assertion visitParseItems(GrammaticaParser.ParseItemsContext ctx) { 
-		Assertion schema = visit(ctx.assertion());
+	public Items_Assertion visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx) { 
+		List<AssertionContext> list = ctx.assertion();
 		Items_Assertion items= new Items_Assertion();
-		items.setAdditionalItems(schema);
+		
+		for(AssertionContext item : list)
+			items.add(visit(item));
 		
 		return items; 
 	}
 
 	@Override 
-	public Items_Assertion visitParseItemsArray(GrammaticaParser.ParseItemsArrayContext ctx) {
-		Items_Assertion items = new Items_Assertion();
+	public Items_Assertion visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
-		int count = 0;
-
-		for(AssertionContext item : list) {
-			Assertion schema = visit(item);
-			if(count == list.size() - 1)
-				items.setAdditionalItems(schema);
-			else
-				items.add(schema);
-			
-			count++;
-		}
+		Items_Assertion items= new Items_Assertion();
+		
+		for(int i = 0; i < list.size()-1; i++)
+			items.add(visit(list.get(i)));
+		
+		items.setAdditionalItems(visit(list.get(list.size()-1)));
 		
 		return items; 
 	}

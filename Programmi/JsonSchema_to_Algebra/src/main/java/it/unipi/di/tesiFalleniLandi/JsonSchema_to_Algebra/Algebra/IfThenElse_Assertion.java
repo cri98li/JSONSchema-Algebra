@@ -6,7 +6,6 @@ public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
 
 	public IfThenElse_Assertion(Assertion ifStatement, Assertion thenStatement, Assertion elseStatement) {
-		super();
 		this.ifStatement = ifStatement;
 		this.thenStatement = thenStatement;
 		this.elseStatement = elseStatement;
@@ -25,7 +24,7 @@ public class IfThenElse_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 			
 		if(ifStatement != null) obj.put("if", ifStatement.toJSONSchema());

@@ -8,7 +8,6 @@ public class Ref_Assertion implements Assertion{
 	}
 	
 	
-	
 	@Override
 	public String toString() {
 		return "Ref_Assertion [" + ref + "]";
@@ -21,7 +20,7 @@ public class Ref_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public String toJSONSchema() {
 		return ref;
 	}
 

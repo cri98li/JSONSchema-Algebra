@@ -3,7 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import org.json.simple.JSONObject;
 
 public class BetItems_Assertion implements Assertion{
-	
 	private Long min, max;
 	
 	public BetItems_Assertion() {	}
@@ -41,8 +40,9 @@ public class BetItems_Assertion implements Assertion{
 		return "betweenItems";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		if(max != null) obj.put("maxItems", max);

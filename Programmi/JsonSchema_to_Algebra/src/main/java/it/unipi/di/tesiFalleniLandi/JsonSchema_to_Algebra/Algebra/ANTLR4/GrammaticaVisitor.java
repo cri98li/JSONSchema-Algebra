@@ -320,19 +320,19 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParsePattern(GrammaticaParser.ParsePatternContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseItems}
+	 * Visit a parse tree produced by the {@code ParseOnlyItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParseItems(GrammaticaParser.ParseItemsContext ctx);
+	T visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseItemsArray}
+	 * Visit a parse tree produced by the {@code ParseAdditionalItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParseItemsArray(GrammaticaParser.ParseItemsArrayContext ctx);
+	T visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseContains}
 	 * labeled alternative in {@link GrammaticaParser#contains_assertion}.

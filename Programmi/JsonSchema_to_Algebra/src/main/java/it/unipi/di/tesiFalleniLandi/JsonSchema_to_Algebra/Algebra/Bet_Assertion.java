@@ -31,8 +31,9 @@ public class Bet_Assertion implements Assertion{
 		return "betweenNumber";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		if(max != null) obj.put("maximum", max);

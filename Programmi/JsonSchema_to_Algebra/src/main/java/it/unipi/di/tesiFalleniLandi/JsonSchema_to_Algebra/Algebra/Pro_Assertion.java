@@ -35,7 +35,7 @@ public class Pro_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		obj.put("minProperties", minProperties);

@@ -16,9 +16,7 @@ public class UniqueItems_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public Boolean toJSONSchema() {
 		return true;
 	}
-	
-	
 }

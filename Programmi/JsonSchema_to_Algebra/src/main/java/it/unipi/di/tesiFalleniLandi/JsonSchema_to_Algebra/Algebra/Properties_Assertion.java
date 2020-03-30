@@ -6,7 +6,6 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 
 public class Properties_Assertion implements Assertion{
-
 	private HashMap<String, Assertion> properties;
 	private Assertion additionalProperties;
 	
@@ -35,7 +34,7 @@ public class Properties_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		//Inserisco tutto in patternProperties perchè lavora anche come properties

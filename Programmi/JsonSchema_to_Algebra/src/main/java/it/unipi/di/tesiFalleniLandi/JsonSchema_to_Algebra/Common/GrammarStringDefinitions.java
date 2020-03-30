@@ -1,7 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
-//Per avere un output leggibile: https://www.prettifier.net/perl/
-
 public class GrammarStringDefinitions {
 	//JSON SCHEMA
 	public static final String JSONSCHEMA = "{\r\n%s\r\n}";
@@ -51,7 +49,7 @@ public class GrammarStringDefinitions {
 	public static final String ITEMS = "items(%s;%s)";
 	
 	//contains
-	public static final String CONTAINS = "contains(%s,%s)(%s)";
+	public static final String CONTAINS = "contains(%s,%s)%s";
 		
 	//enum
 	public static final String ENUM = "enum[%s]";
@@ -67,8 +65,6 @@ public class GrammarStringDefinitions {
 	//if-then-else
 	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
 	public static final String IF_THEN = "if: %s, \r\nthen: %s";
-	/*public static final String THEN = "then %s";
-	public static final String ELSE = "else %s";*/
 	
 	//properties
 	public static final String PROPERTIES = "properties[\r\n%s\r\n]";

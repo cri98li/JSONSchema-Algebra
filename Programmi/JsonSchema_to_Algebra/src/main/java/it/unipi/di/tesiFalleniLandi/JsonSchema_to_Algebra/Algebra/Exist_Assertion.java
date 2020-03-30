@@ -6,9 +6,7 @@ public class Exist_Assertion implements Assertion{
 	private Long min, max;
 	private Assertion contains;
 	
-	public Exist_Assertion() {
-		
-	}
+	public Exist_Assertion() {	}
 	
 	public Exist_Assertion(Long min, Long max, Assertion schema) {
 		this.min = min;
@@ -24,7 +22,7 @@ public class Exist_Assertion implements Assertion{
 		this.max = max;
 	}
 	
-	public void setS(Assertion schema) {
+	public void setContains(Assertion schema) {
 		this.contains = schema;
 	}
 	
@@ -47,8 +45,9 @@ public class Exist_Assertion implements Assertion{
 		return "contains";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		if(contains != null) obj.put("contains", contains.toJSONSchema());

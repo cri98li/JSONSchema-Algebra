@@ -3,23 +3,14 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import org.json.simple.JSONObject;
 
 public class XBet_Assertion implements Assertion{
-	private Integer min, max;
+	private Object min, max;
 	
-	public void setMin(int min) {
+	public void setMin(Object min) {
 		this.min = min;
 	}
 	
-	public void setMax(int max) {
+	public void setMax(Object max) {
 		this.max = max;
-	}
-	
-	public XBet_Assertion intersect(XBet_Assertion xbet) {
-		XBet_Assertion intersectedXBet = new XBet_Assertion();
-		
-		intersectedXBet.setMin((min > xbet.min)? min:xbet.min);
-		intersectedXBet.setMax((max < xbet.max)? max:xbet.max);
-		
-		return intersectedXBet;
 	}
 
 	@Override
@@ -32,8 +23,9 @@ public class XBet_Assertion implements Assertion{
 		return "betweenNumber";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		if(max != null) obj.put("exclusiveMaximum", max);

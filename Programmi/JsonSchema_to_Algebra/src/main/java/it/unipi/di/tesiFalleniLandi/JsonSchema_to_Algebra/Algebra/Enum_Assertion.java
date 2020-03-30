@@ -34,7 +34,7 @@ public class Enum_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONArray toJSONSchema() {
 		JSONArray array = new JSONArray();
 		
 		for(Object element : _enum)

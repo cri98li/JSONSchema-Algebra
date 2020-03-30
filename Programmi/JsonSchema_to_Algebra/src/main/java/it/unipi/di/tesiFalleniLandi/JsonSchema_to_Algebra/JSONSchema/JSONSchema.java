@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +10,7 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class JSONSchema implements JSONSchemaElement{
 	
@@ -247,7 +247,6 @@ public class JSONSchema implements JSONSchemaElement{
 		jsonSchema.put(key, value);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
 		JSONObject schema = new JSONObject();
@@ -310,7 +309,8 @@ public class JSONSchema implements JSONSchemaElement{
 			if(entry.getKey().equals("$schema") 
 					|| entry.getKey().equals("$defs")
 					|| entry.getKey().equals("id")
-					|| entry.getKey().equals("$id")) {
+					|| entry.getKey().equals("$id")
+					|| entry.getKey().equals("unknow")) {
 				schema.jsonSchema.put(entry.getKey(), entry.getValue());
 				continue;
 			}
@@ -406,7 +406,7 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entrySet)
-			returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+			returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		
 		jsonSchema.remove("$defs");
 		

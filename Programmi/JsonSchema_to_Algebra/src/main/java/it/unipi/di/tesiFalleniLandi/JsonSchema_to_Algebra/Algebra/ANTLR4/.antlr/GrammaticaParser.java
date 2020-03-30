@@ -1,4 +1,4 @@
-// Generated from Grammatica.g4 by ANTLR 4.7.2
+// Generated from c:\Users\Cristiano Landi\Desktop\Tesi\Programmi\JsonSchema_to_Algebra\src\main\java\it\u005Cunipi\di\tesiFalleniLandi\JsonSchema_to_Algebra\Algebra\ANTLR4\Grammatica.g4 by ANTLR 4.7.1
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import org.antlr.v4.runtime.atn.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GrammaticaParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -35,41 +35,32 @@ public class GrammaticaParser extends Parser {
 		RULE_additionalProperties = 21, RULE_const_assertion = 22, RULE_def_assertion = 23, 
 		RULE_ref_assertion = 24, RULE_propertyNames = 25, RULE_annotations = 26, 
 		RULE_json_value = 27;
-	private static String[] makeRuleNames() {
-		return new String[] {
-			"assertion_list", "assertion", "type_assertion", "between_assertion", 
-			"xbetween_assertion", "length_assertion", "bet_items_assertion", "between_properties_assertion", 
-			"multiple_of_assertion", "not_assertion", "all_of_assertion", "one_of_assertion", 
-			"any_of_assertion", "required_assertion", "enum_assertion_assertion", 
-			"if_then_else_assertion", "unique_items_assertion", "pattern_assertion", 
-			"items_assertion", "contains_assertion", "properties", "additionalProperties", 
-			"const_assertion", "def_assertion", "ref_assertion", "propertyNames", 
-			"annotations", "json_value"
-		};
-	}
-	public static final String[] ruleNames = makeRuleNames();
+	public static final String[] ruleNames = {
+		"assertion_list", "assertion", "type_assertion", "between_assertion", 
+		"xbetween_assertion", "length_assertion", "bet_items_assertion", "between_properties_assertion", 
+		"multiple_of_assertion", "not_assertion", "all_of_assertion", "one_of_assertion", 
+		"any_of_assertion", "required_assertion", "enum_assertion_assertion", 
+		"if_then_else_assertion", "unique_items_assertion", "pattern_assertion", 
+		"items_assertion", "contains_assertion", "properties", "additionalProperties", 
+		"const_assertion", "def_assertion", "ref_assertion", "propertyNames", 
+		"annotations", "json_value"
+	};
 
-	private static String[] makeLiteralNames() {
-		return new String[] {
-			null, "'{'", "','", "'}'", "'type'", "'('", "')'", "'bet'", "'xbet'", 
-			"'length'", "'betitems'", "'pro'", "'mof'", "'not:'", "'allOf'", "'['", 
-			"']'", "'oneOf'", "'anyOf'", "'req'", "'enum['", "'if'", "':'", "'then'", 
-			"'else'", "'uniqueItems'", "'pattern'", "'items'", "';'", "'contains'", 
-			"'properties'", "'::'", "'addp'", "'|'", "'const'", "'def'", "'='", "'ref'", 
-			"'names'", "'annotations'", "'null'"
-		};
-	}
-	private static final String[] _LITERAL_NAMES = makeLiteralNames();
-	private static String[] makeSymbolicNames() {
-		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, "NULL", "TYPE", "INT", "DOUBLE", "WS", "STRING", 
-			"BOOLEAN"
-		};
-	}
-	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
+	private static final String[] _LITERAL_NAMES = {
+		null, "'{'", "','", "'}'", "'type'", "'('", "')'", "'bet'", "'xbet'", 
+		"'length'", "'betitems'", "'pro'", "'mof'", "'not:'", "'allOf'", "'['", 
+		"']'", "'oneOf'", "'anyOf'", "'req'", "'enum['", "'if'", "':'", "'then'", 
+		"'else'", "'uniqueItems'", "'pattern'", "'items'", "';'", "'contains'", 
+		"'properties'", "'::'", "'addp'", "'|'", "'const'", "'def'", "'='", "'ref'", 
+		"'names'", "'annotations'", "'null'"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, "NULL", "TYPE", "INT", "DOUBLE", "WS", "STRING", 
+		"BOOLEAN"
+	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -138,20 +129,10 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseAssertionListContext(Assertion_listContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAssertionList(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class ParseBooleanSchemaContext extends Assertion_listContext {
 		public TerminalNode BOOLEAN() { return getToken(GrammaticaParser.BOOLEAN, 0); }
 		public ParseBooleanSchemaContext(Assertion_listContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseBooleanSchema(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Assertion_listContext assertion_list() throws RecognitionException {
@@ -229,275 +210,150 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Contains_assertionContext.class,0);
 		}
 		public NewContainsContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewContains(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewBetweenItemsContext extends AssertionContext {
 		public Bet_items_assertionContext bet_items_assertion() {
 			return getRuleContext(Bet_items_assertionContext.class,0);
 		}
 		public NewBetweenItemsContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewBetweenItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewDefContext extends AssertionContext {
 		public Def_assertionContext def_assertion() {
 			return getRuleContext(Def_assertionContext.class,0);
 		}
 		public NewDefContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewDef(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewAnyOfContext extends AssertionContext {
 		public Any_of_assertionContext any_of_assertion() {
 			return getRuleContext(Any_of_assertionContext.class,0);
 		}
 		public NewAnyOfContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewAnyOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewEnumContext extends AssertionContext {
 		public Enum_assertion_assertionContext enum_assertion_assertion() {
 			return getRuleContext(Enum_assertion_assertionContext.class,0);
 		}
 		public NewEnumContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewEnum(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewAssertionListContext extends AssertionContext {
 		public Assertion_listContext assertion_list() {
 			return getRuleContext(Assertion_listContext.class,0);
 		}
 		public NewAssertionListContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewAssertionList(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewBetweenAssertionContext extends AssertionContext {
 		public Between_assertionContext between_assertion() {
 			return getRuleContext(Between_assertionContext.class,0);
 		}
 		public NewBetweenAssertionContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewBetweenAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewNotContext extends AssertionContext {
 		public Not_assertionContext not_assertion() {
 			return getRuleContext(Not_assertionContext.class,0);
 		}
 		public NewNotContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewNot(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewRefContext extends AssertionContext {
 		public Ref_assertionContext ref_assertion() {
 			return getRuleContext(Ref_assertionContext.class,0);
 		}
 		public NewRefContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewRef(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewUniqueItemsContext extends AssertionContext {
 		public Unique_items_assertionContext unique_items_assertion() {
 			return getRuleContext(Unique_items_assertionContext.class,0);
 		}
 		public NewUniqueItemsContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewUniqueItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewBetweenPropertiesContext extends AssertionContext {
 		public Between_properties_assertionContext between_properties_assertion() {
 			return getRuleContext(Between_properties_assertionContext.class,0);
 		}
 		public NewBetweenPropertiesContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewBetweenProperties(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewRequiredContext extends AssertionContext {
 		public Required_assertionContext required_assertion() {
 			return getRuleContext(Required_assertionContext.class,0);
 		}
 		public NewRequiredContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewRequired(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewItemsContext extends AssertionContext {
 		public Items_assertionContext items_assertion() {
 			return getRuleContext(Items_assertionContext.class,0);
 		}
 		public NewItemsContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewPropertiesContext extends AssertionContext {
 		public PropertiesContext properties() {
 			return getRuleContext(PropertiesContext.class,0);
 		}
 		public NewPropertiesContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewProperties(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewConstContext extends AssertionContext {
 		public Const_assertionContext const_assertion() {
 			return getRuleContext(Const_assertionContext.class,0);
 		}
 		public NewConstContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewConst(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewIfThenElseContext extends AssertionContext {
 		public If_then_else_assertionContext if_then_else_assertion() {
 			return getRuleContext(If_then_else_assertionContext.class,0);
 		}
 		public NewIfThenElseContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewIfThenElse(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewTypeAssertionContext extends AssertionContext {
 		public Type_assertionContext type_assertion() {
 			return getRuleContext(Type_assertionContext.class,0);
 		}
 		public NewTypeAssertionContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewTypeAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewXBetweenAssertionContext extends AssertionContext {
 		public Xbetween_assertionContext xbetween_assertion() {
 			return getRuleContext(Xbetween_assertionContext.class,0);
 		}
 		public NewXBetweenAssertionContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewXBetweenAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewPropertyNamesContext extends AssertionContext {
 		public PropertyNamesContext propertyNames() {
 			return getRuleContext(PropertyNamesContext.class,0);
 		}
 		public NewPropertyNamesContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewPropertyNames(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewMultipleOfContext extends AssertionContext {
 		public Multiple_of_assertionContext multiple_of_assertion() {
 			return getRuleContext(Multiple_of_assertionContext.class,0);
 		}
 		public NewMultipleOfContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewMultipleOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewPatternContext extends AssertionContext {
 		public Pattern_assertionContext pattern_assertion() {
 			return getRuleContext(Pattern_assertionContext.class,0);
 		}
 		public NewPatternContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewPattern(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewLengthContext extends AssertionContext {
 		public Length_assertionContext length_assertion() {
 			return getRuleContext(Length_assertionContext.class,0);
 		}
 		public NewLengthContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewLength(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewAllOfContext extends AssertionContext {
 		public All_of_assertionContext all_of_assertion() {
 			return getRuleContext(All_of_assertionContext.class,0);
 		}
 		public NewAllOfContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewAllOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewOneOfContext extends AssertionContext {
 		public One_of_assertionContext one_of_assertion() {
 			return getRuleContext(One_of_assertionContext.class,0);
 		}
 		public NewOneOfContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewOneOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class NewAnnotationsContext extends AssertionContext {
 		public AnnotationsContext annotations() {
 			return getRuleContext(AnnotationsContext.class,0);
 		}
 		public NewAnnotationsContext(AssertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNewAnnotations(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AssertionContext assertion() throws RecognitionException {
@@ -738,11 +594,6 @@ public class GrammaticaParser extends Parser {
 		public TerminalNode TYPE() { return getToken(GrammaticaParser.TYPE, 0); }
 		public TerminalNode NULL() { return getToken(GrammaticaParser.NULL, 0); }
 		public ParseTypeAssertionContext(Type_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseTypeAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Type_assertionContext type_assertion() throws RecognitionException {
@@ -801,11 +652,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseBetweenAssertionContext(Between_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseBetweenAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Between_assertionContext between_assertion() throws RecognitionException {
@@ -859,11 +705,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseXBetweenAssertionContext(Xbetween_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseXBetweenAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Xbetween_assertionContext xbetween_assertion() throws RecognitionException {
@@ -917,11 +758,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseLengthAssertionContext(Length_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseLengthAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Length_assertionContext length_assertion() throws RecognitionException {
@@ -975,11 +811,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseBetItemsAssertionContext(Bet_items_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseBetItemsAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Bet_items_assertionContext bet_items_assertion() throws RecognitionException {
@@ -1033,11 +864,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseBetProAssertionContext(Between_properties_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseBetProAssertion(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Between_properties_assertionContext between_properties_assertion() throws RecognitionException {
@@ -1088,11 +914,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,0);
 		}
 		public ParseMultipleOfContext(Multiple_of_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseMultipleOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Multiple_of_assertionContext multiple_of_assertion() throws RecognitionException {
@@ -1139,11 +960,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,0);
 		}
 		public ParseNotContext(Not_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseNot(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Not_assertionContext not_assertion() throws RecognitionException {
@@ -1189,11 +1005,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseAllOfContext(All_of_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAllOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final All_of_assertionContext all_of_assertion() throws RecognitionException {
@@ -1260,11 +1071,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseOneOfContext(One_of_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseOneOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final One_of_assertionContext one_of_assertion() throws RecognitionException {
@@ -1331,11 +1137,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseAnyOfContext(Any_of_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAnyOf(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Any_of_assertionContext any_of_assertion() throws RecognitionException {
@@ -1400,11 +1201,6 @@ public class GrammaticaParser extends Parser {
 			return getToken(GrammaticaParser.STRING, i);
 		}
 		public ParseRequiredContext(Required_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseRequired(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Required_assertionContext required_assertion() throws RecognitionException {
@@ -1471,11 +1267,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ParseEnumContext(Enum_assertion_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseEnum(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Enum_assertion_assertionContext enum_assertion_assertion() throws RecognitionException {
@@ -1540,11 +1331,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseIfThenElseContext(If_then_else_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseIfThenElse(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class ParseIfThenContext extends If_then_else_assertionContext {
 		public List<AssertionContext> assertion() {
@@ -1554,11 +1340,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseIfThenContext(If_then_else_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseIfThen(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final If_then_else_assertionContext if_then_else_assertion() throws RecognitionException {
@@ -1642,11 +1423,6 @@ public class GrammaticaParser extends Parser {
 	}
 	public static class ParseUniqueItemsContext extends Unique_items_assertionContext {
 		public ParseUniqueItemsContext(Unique_items_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseUniqueItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Unique_items_assertionContext unique_items_assertion() throws RecognitionException {
@@ -1685,11 +1461,6 @@ public class GrammaticaParser extends Parser {
 	public static class ParsePatternContext extends Pattern_assertionContext {
 		public TerminalNode STRING() { return getToken(GrammaticaParser.STRING, 0); }
 		public ParsePatternContext(Pattern_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParsePattern(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Pattern_assertionContext pattern_assertion() throws RecognitionException {
@@ -1739,11 +1510,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseOnlyItemsContext(Items_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseOnlyItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class ParseAdditionalItemsContext extends Items_assertionContext {
 		public List<AssertionContext> assertion() {
@@ -1753,11 +1519,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseAdditionalItemsContext(Items_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAdditionalItems(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Items_assertionContext items_assertion() throws RecognitionException {
@@ -1877,11 +1638,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,0);
 		}
 		public ParseContainsContext(Contains_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseContains(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Contains_assertionContext contains_assertion() throws RecognitionException {
@@ -1947,11 +1703,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AdditionalPropertiesContext.class,i);
 		}
 		public ParsePropertiesContext(PropertiesContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseProperties(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final PropertiesContext properties() throws RecognitionException {
@@ -2062,11 +1813,6 @@ public class GrammaticaParser extends Parser {
 			return getToken(GrammaticaParser.STRING, i);
 		}
 		public ParseAdditionalPropertiesContext(AdditionalPropertiesContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAdditionalProperties(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AdditionalPropertiesContext additionalProperties() throws RecognitionException {
@@ -2142,11 +1888,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,0);
 		}
 		public ParseConstContext(Const_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseConst(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Const_assertionContext const_assertion() throws RecognitionException {
@@ -2200,11 +1941,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,i);
 		}
 		public ParseDefContext(Def_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseDef(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Def_assertionContext def_assertion() throws RecognitionException {
@@ -2274,11 +2010,6 @@ public class GrammaticaParser extends Parser {
 	public static class ParseRefContext extends Ref_assertionContext {
 		public TerminalNode STRING() { return getToken(GrammaticaParser.STRING, 0); }
 		public ParseRefContext(Ref_assertionContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseRef(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Ref_assertionContext ref_assertion() throws RecognitionException {
@@ -2323,11 +2054,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(AssertionContext.class,0);
 		}
 		public ParsePropertyNamesContext(PropertyNamesContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParsePropertyNames(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final PropertyNamesContext propertyNames() throws RecognitionException {
@@ -2373,11 +2099,6 @@ public class GrammaticaParser extends Parser {
 			return getToken(GrammaticaParser.STRING, i);
 		}
 		public ParseAnnotationsContext(AnnotationsContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitParseAnnotations(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final AnnotationsContext annotations() throws RecognitionException {
@@ -2447,47 +2168,22 @@ public class GrammaticaParser extends Parser {
 	public static class NullValueContext extends Json_valueContext {
 		public TerminalNode NULL() { return getToken(GrammaticaParser.NULL, 0); }
 		public NullValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitNullValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class DoubleValueContext extends Json_valueContext {
 		public TerminalNode DOUBLE() { return getToken(GrammaticaParser.DOUBLE, 0); }
 		public DoubleValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitDoubleValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class BooleanValueContext extends Json_valueContext {
 		public TerminalNode BOOLEAN() { return getToken(GrammaticaParser.BOOLEAN, 0); }
 		public BooleanValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitBooleanValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class StringValueContext extends Json_valueContext {
 		public TerminalNode STRING() { return getToken(GrammaticaParser.STRING, 0); }
 		public StringValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitStringValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class IntValueContext extends Json_valueContext {
 		public TerminalNode INT() { return getToken(GrammaticaParser.INT, 0); }
 		public IntValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitIntValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 	public static class ArrayValueContext extends Json_valueContext {
 		public List<Json_valueContext> json_value() {
@@ -2497,11 +2193,6 @@ public class GrammaticaParser extends Parser {
 			return getRuleContext(Json_valueContext.class,i);
 		}
 		public ArrayValueContext(Json_valueContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof GrammaticaVisitor ) return ((GrammaticaVisitor<? extends T>)visitor).visitArrayValue(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Json_valueContext json_value() throws RecognitionException {

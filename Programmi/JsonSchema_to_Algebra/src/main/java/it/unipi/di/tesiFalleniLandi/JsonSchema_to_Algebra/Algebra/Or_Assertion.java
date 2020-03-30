@@ -6,7 +6,8 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Or_Assertion implements Assertion{
 	private List<Assertion> orList;
@@ -29,8 +30,9 @@ public class Or_Assertion implements Assertion{
 		return "anyOf";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONArray toJSONSchema() {
 		JSONArray array = new JSONArray();
 		
 		for(Assertion assertion : orList) {

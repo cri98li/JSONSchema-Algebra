@@ -1,4 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 public class AntlrString extends AntlrValue{
 	

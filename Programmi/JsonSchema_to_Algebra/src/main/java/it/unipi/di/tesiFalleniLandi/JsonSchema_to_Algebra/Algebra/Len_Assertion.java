@@ -5,8 +5,7 @@ import org.json.simple.JSONObject;
 public class Len_Assertion implements Assertion{
 	private Long min, max;
 	
-	public Len_Assertion() {
-	}
+	public Len_Assertion() { }
 	
 	public Len_Assertion(Long min, Long max) {
 		this.min = min;
@@ -40,8 +39,9 @@ public class Len_Assertion implements Assertion{
 		return "length";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		obj.put("minLength", min);

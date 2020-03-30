@@ -84,7 +84,7 @@ public class Contains implements JSONSchemaElement{
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
 		
-		returnList.addAll(Utils.addPathElement("contains",contains.collectDef()));
+		returnList.addAll(Utils_JSONSchema.addPathElement("contains",contains.collectDef()));
 		
 		return returnList;
 	}

@@ -27,10 +27,9 @@
 					"controls"::allOf[
 						type(obj),
 						properties[
-							"trace"::allOf[
-								type(bool)
-							],
+							"trace"::type(bool),
 							"archiveTimestamp"::allOf[
+								true,
 								type(str)
 							],
 							"logLevel"::allOf[
@@ -41,18 +40,15 @@
 								const("[Controls]"),
 								type(str)
 							],
-							"archiveId"::allOf[
-								anyOf[
-									type(num),
-									type(str)
-								]
+							"archiveId"::anyOf[
+								type(num),
+								type(str)
 							],
-							addp(
-							|	trace
-							|	archiveTimestamp
-							|	logLevel
-							|	class
-							|	archiveId)::false
+							addp("trace"
+							|	"archiveTimestamp"
+							|	"logLevel"
+							|	"class"
+							|	"archiveId")::false
 						]
 					],
 					"updateMode"::allOf[
@@ -60,15 +56,16 @@
 						enum["complete", "selective"]
 					],
 					"remark"::allOf[
+						true,
 						type(str)
 					],
-					"scratch"::allOf[
-						type(str)
-					],
+					"scratch"::type(str),
 					"id"::allOf[
+						true,
 						type(str)
 					],
 					"label"::allOf[
+						true,
 						type(str)
 					],
 					"constants"::allOf[
@@ -82,19 +79,17 @@
 								const("[Constants]"),
 								type(str)
 							],
-							"version"::allOf[
-								anyOf[
-									type(num),
-									type(str)
-								]
-							],
-							"timestamp"::allOf[
+							"version"::anyOf[
+								type(num),
 								type(str)
 							],
-							addp(
-							|	class
-							|	version
-							|	timestamp)::allOf[
+							"timestamp"::allOf[
+								true,
+								type(str)
+							],
+							addp("class"
+							|	"version"
+							|	"timestamp")::allOf[
 								if: allOf[
 									type(obj),
 									req["protected",
@@ -104,11 +99,8 @@
 									if: true, 
 									then: ref: "#/$defs/JWE",
 									properties[
-										"allowReuse"::allOf[
-											type(bool)
-										],
-										addp(
-										|	allowReuse)::false
+										"allowReuse"::type(bool),
+										addp("allowReuse")::false
 									]
 								],
 								anyOf[
@@ -129,15 +121,12 @@
 					"target"::allOf[
 						type(obj),
 						properties[
-							"hostname"::allOf[
-								type(str)
-							],
+							"hostname"::type(str),
 							"address"::allOf[
+								true,
 								type(str)
 							],
-							"ssgName"::allOf[
-								type(str)
-							]
+							"ssgName"::type(str)
 						],
 						pro(null,1)
 					],
@@ -157,32 +146,28 @@
 								const("[Tenant]"),
 								type(str)
 							],
-							"verifiers"::allOf[
-								type(obj)
-							],
-							addp(
-							|	controls
-							|	enable
-							|	remark
-							|	label
-							|	constants
-							|	Shared
-							|	class
-							|	verifiers)::false
+							"verifiers"::type(obj),
+							addp("controls"
+							|	"enable"
+							|	"remark"
+							|	"label"
+							|	"constants"
+							|	"Shared"
+							|	"class"
+							|	"verifiers")::false
 						]
 					],
-					addp(
-					|	schemaVersion
-					|	controls
-					|	updateMode
-					|	remark
-					|	scratch
-					|	id
-					|	label
-					|	constants
-					|	class
-					|	target
-					|	Common)::ref: "#/$defs/Tenant"
+					addp("schemaVersion"
+					|	"controls"
+					|	"updateMode"
+					|	"remark"
+					|	"scratch"
+					|	"id"
+					|	"label"
+					|	"constants"
+					|	"class"
+					|	"target"
+					|	"Common")::ref: "#/$defs/Tenant"
 				],
 				req["class",
 					"schemaVersion",
@@ -227,9 +212,8 @@
 							properties[
 								"name"::type(str),
 								"value"::type(str),
-								addp(
-								|	name
-								|	value)::false
+								addp("name"
+								|	"value")::false
 							],
 							req["name",
 								"value"]
@@ -244,9 +228,8 @@
 							properties[
 								"name"::type(str),
 								"value"::type(str),
-								addp(
-								|	name
-								|	value)::false
+								addp("name"
+								|	"value")::false
 							],
 							req["name",
 								"value"]
@@ -260,8 +243,7 @@
 							type(obj),
 							properties[
 								"name"::type(str),
-								addp(
-								|	name)::false
+								addp("name")::false
 							],
 							req["name"]
 						}
@@ -289,15 +271,14 @@
 				type(str)
 			},
 			"target"::type(str),
-			addp(
-			|	chunkSize
-			|	parentProfile
-			|	chunkingEnabled
-			|	remark
-			|	label
-			|	source
-			|	class
-			|	target)::false
+			addp("chunkSize"
+			|	"parentProfile"
+			|	"chunkingEnabled"
+			|	"remark"
+			|	"label"
+			|	"source"
+			|	"class"
+			|	"target")::false
 		],
 		req["class"]
 	},
@@ -328,9 +309,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
@@ -343,7 +323,7 @@
 				uniqueItems,
 				type(arr),
 				items(;if: type(str), 
-				then: , 
+				then: true, 
 				else: if: type(arr), 
 				then: {
 					betitems(2,2),
@@ -394,25 +374,23 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				]
 			},
 			"translateServerPort"::type(bool),
 			"allowVlans"::{
 				type(arr),
-				items(;)
+				items(;true)
 			},
 			"translateClientPort"::type(bool),
 			"pool"::if: type(str), 
-			then: , 
+			then: true, 
 			else: {
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -425,8 +403,7 @@
 					type(obj),
 					properties[
 						"bigip"::type(str),
-						addp(
-						|	bigip)::false
+						addp("bigip")::false
 					],
 					req["bigip"]
 				})
@@ -435,7 +412,7 @@
 			"clonePools"::ref: "#/definitions/Clone_Pools",
 			"rejectVlans"::{
 				type(arr),
-				items(;)
+				items(;true)
 			},
 			"profileIPOther"::ref: "#/definitions/Pointer_IP_Other_Profile",
 			"securityLogProfiles"::{
@@ -448,9 +425,8 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
@@ -470,9 +446,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				]
 			},
 			"profileClassification"::ref: "#/definitions/Pointer_Classification_Profile"
@@ -493,11 +468,10 @@
 				const("[Enforcement_Interception_Endpoint]"),
 				type(str)
 			},
-			addp(
-			|	pool
-			|	persistence
-			|	label
-			|	class)::false
+			addp("pool"
+			|	"persistence"
+			|	"label"
+			|	"class")::false
 		],
 		req["class",
 			"pool"]
@@ -534,8 +508,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -546,8 +519,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -571,9 +543,8 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	matchToSNI
-						|	certificate)::false
+						addp("matchToSNI"
+						|	"certificate")::false
 					],
 					req["certificate"]
 				})
@@ -593,25 +564,24 @@
 				type(str),
 				enum["drop", "ignore"]
 			},
-			addp(
-			|	renegotiationEnabled
-			|	ldapStartTLS
-			|	authenticationTrustCA
-			|	staplerOCSPEnabled
-			|	authenticationInviteCA
-			|	allowExpiredCRL
-			|	remark
-			|	label
-			|	c3dEnabled
-			|	authenticationFrequency
-			|	c3dOCSP
-			|	certificates
-			|	ciphers
-			|	class
-			|	requireSNI
-			|	authenticationMode
-			|	crlFile
-			|	c3dOCSPUnknownStatusAction)::false
+			addp("renegotiationEnabled"
+			|	"ldapStartTLS"
+			|	"authenticationTrustCA"
+			|	"staplerOCSPEnabled"
+			|	"authenticationInviteCA"
+			|	"allowExpiredCRL"
+			|	"remark"
+			|	"label"
+			|	"c3dEnabled"
+			|	"authenticationFrequency"
+			|	"c3dOCSP"
+			|	"certificates"
+			|	"ciphers"
+			|	"class"
+			|	"requireSNI"
+			|	"authenticationMode"
+			|	"crlFile"
+			|	"c3dOCSPUnknownStatusAction")::false
 		],
 		req["class",
 			"certificates"]
@@ -684,7 +654,7 @@
 		req["class",
 			"monitorType"]
 	},
-	def "Enforcement_Rule_Forwarding_Route_To_Network" = ,
+	def "Enforcement_Rule_Forwarding_Route_To_Network" = true,
 	def "Remark" = type(str),
 	def "Enforcement_Profile" = {
 		type(obj),
@@ -710,16 +680,15 @@
 				const("[Enforcement_Profile]"),
 				type(str)
 			},
-			addp(
-			|	policiesGlobalLowPrecedence
-			|	connectionOptimizationEnabled
-			|	connectionOptimizationService
-			|	policiesGlobalHighPrecedence
-			|	parentProfile
-			|	policiesUnknownSubscribers
-			|	remark
-			|	label
-			|	class)::false
+			addp("policiesGlobalLowPrecedence"
+			|	"connectionOptimizationEnabled"
+			|	"connectionOptimizationService"
+			|	"policiesGlobalHighPrecedence"
+			|	"parentProfile"
+			|	"policiesUnknownSubscribers"
+			|	"remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -740,16 +709,14 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
 			},
-			addp(
-			|	addressLists
-			|	portLists)::false
+			addp("addressLists"
+			|	"portLists")::false
 		]
 	},
 	def "DNS_TSIG_Key" = {
@@ -772,12 +739,11 @@
 				type(str),
 				enum["hmacmd5", "hmacsha1", "hmacsha256"]
 			},
-			addp(
-			|	remark
-			|	label
-			|	secret
-			|	class
-			|	algorithm)::false
+			addp("remark"
+			|	"label"
+			|	"secret"
+			|	"class"
+			|	"algorithm")::false
 		],
 		req["class",
 			"secret"]
@@ -791,16 +757,15 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	publisher)::false
+		addp("publisher")::false
 	],
 	def "Pointer_Enforcement_Diameter_Endpoint_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -808,13 +773,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Rewrite_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -822,9 +787,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -919,9 +883,8 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
@@ -933,20 +896,18 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	localPublisher
-		|	remotePublisher)::false
+		addp("localPublisher"
+		|	"remotePublisher")::false
 	],
 	def "Pool" = {
 		if: req["monitors"], 
 		then: properties[
-			"minimumMonitors"::
+			"minimumMonitors"::true
 		],
 		type(obj),
 		properties[
@@ -994,18 +955,17 @@
 				bet(0,900),
 				type(int)
 			},
-			addp(
-			|	reselectTries
-			|	loadBalancingMode
-			|	minimumMonitors
-			|	members
-			|	remark
-			|	label
-			|	minimumMembersActive
-			|	class
-			|	monitors
-			|	serviceDownAction
-			|	slowRampTime)::false
+			addp("reselectTries"
+			|	"loadBalancingMode"
+			|	"minimumMonitors"
+			|	"members"
+			|	"remark"
+			|	"label"
+			|	"minimumMembersActive"
+			|	"class"
+			|	"monitors"
+			|	"serviceDownAction"
+			|	"slowRampTime")::false
 		],
 		req["class"]
 	},
@@ -1025,11 +985,10 @@
 				type(arr),
 				items(;ref: "#/definitions/Pointer_Bot_Signature_Category")
 			},
-			addp(
-			|	checkingEnabled
-			|	disabledSignatures
-			|	reportedCategories
-			|	blockedCategories)::false
+			addp("checkingEnabled"
+			|	"disabledSignatures"
+			|	"reportedCategories"
+			|	"blockedCategories")::false
 		]
 	},
 	def "Enforcement_Rule_Forwarding" = {
@@ -1089,18 +1048,18 @@
 				length(3,null),
 				type(str)
 			},
-			addp(
-			|	file
-			|	ignoreChanges
-			|	remark
-			|	label
-			|	enforcementMode
-			|	class
-			|	url)::false
+			addp("file"
+			|	"ignoreChanges"
+			|	"remark"
+			|	"label"
+			|	"enforcementMode"
+			|	"class"
+			|	"url")::false
 		],
 		req["class"]
 	},
 	def "Pointer_GSLB_Domain_A" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -1108,9 +1067,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -1144,16 +1102,15 @@
 				type(str),
 				enum["rate-limit", "block-all"]
 			},
-			addp(
-			|	minimumTps
-			|	maximumTps
-			|	minimumAutoTps
-			|	clientSideDefenseEnabled
-			|	tpsIncreaseRate
-			|	captchaChallengeEnabled
-			|	rateLimitingEnabled
-			|	maximumAutoTps
-			|	rateLimitingMode)::false
+			addp("minimumTps"
+			|	"maximumTps"
+			|	"minimumAutoTps"
+			|	"clientSideDefenseEnabled"
+			|	"tpsIncreaseRate"
+			|	"captchaChallengeEnabled"
+			|	"rateLimitingEnabled"
+			|	"maximumAutoTps"
+			|	"rateLimitingMode")::false
 		]
 	},
 	def "Policy_Compare_Number" = {
@@ -1168,9 +1125,8 @@
 				type(str),
 				enum["equals", "less", "greater", "less-or-equal", "greater-or-equal"]
 			},
-			addp(
-			|	values
-			|	operand)::false
+			addp("values"
+			|	"operand")::false
 		],
 		req["values"]
 	},
@@ -1192,12 +1148,11 @@
 			},
 			"scrubbingCategory"::ref: "#/definitions/Pointer_Blacklist_Category",
 			"scrubbingEnabled"::type(bool),
-			addp(
-			|	detectionMode
-			|	mitigationMode
-			|	scrubbingDuration
-			|	scrubbingCategory
-			|	scrubbingEnabled)::false
+			addp("detectionMode"
+			|	"mitigationMode"
+			|	"scrubbingDuration"
+			|	"scrubbingCategory"
+			|	"scrubbingEnabled")::false
 		]
 	},
 	def "Enum_Country_Analytics" = {
@@ -1274,6 +1229,7 @@
 		req["destination"]
 	},
 	def "Pointer_Firewall_Rule_List" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -1281,9 +1237,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -1301,21 +1256,20 @@
 				type(arr),
 				items(;ref: "#/definitions/Policy_Action")
 			},
-			addp(
-			|	name
-			|	remark
-			|	label
-			|	conditions
-			|	actions)::false
+			addp("name"
+			|	"remark"
+			|	"label"
+			|	"conditions"
+			|	"actions")::false
 		],
 		req["name"]
 	},
 	def "Pointer_SIP_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -1349,15 +1303,14 @@
 				type(str),
 				enum["rate-limit", "block-all"]
 			},
-			addp(
-			|	minimumAutoTps
-			|	clientSideDefenseEnabled
-			|	captchaChallengeEnabled
-			|	shareIncreaseRate
-			|	rateLimitingEnabled
-			|	minimumShare
-			|	maximumAutoTps
-			|	rateLimitingMode)::false
+			addp("minimumAutoTps"
+			|	"clientSideDefenseEnabled"
+			|	"captchaChallengeEnabled"
+			|	"shareIncreaseRate"
+			|	"rateLimitingEnabled"
+			|	"minimumShare"
+			|	"maximumAutoTps"
+			|	"rateLimitingMode")::false
 		]
 	},
 	def "Enforcement_Rule_Forwarding_ICAP" = {
@@ -1373,7 +1326,7 @@
 	},
 	def "DNS_Cache_Transparent" = properties[
 		"localZones"::{
-			names: ,
+			names: true,
 			type(obj),
 			properties[
 				addp()::ref: "#/definitions/DNS_Zone_Local"
@@ -1402,19 +1355,23 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	publisher)::false
+		addp("publisher")::false
 	],
 	def "AS3" = {
 		type(obj),
 		properties[
-			"targetHost"::type(str),
+			"targetHost"::{
+				anyOf[
+					true,
+					true
+				],
+				type(str)
+			},
 			"targetUsername"::{
 				pattern("^[^:]*$"),
 				length(null,254),
@@ -1470,8 +1427,7 @@
 						length(null,8192),
 						type(str)
 					},
-					addp(
-					|	"^[^\x00-\x20:\x7f-\xff]{1,254}$")::false
+					addp("^[^\x00-\x20:\x7f-\xff]{1,254}$")::false
 				]
 			},
 			"persist"::type(bool),
@@ -1500,9 +1456,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		]
 	},
 	def "Policy_Action_HTTP" = {
@@ -1535,9 +1490,8 @@
 							enum["action", "attack-type", "context-name", "date-time", "dest-ip", "dest-port", "dns-query-name", "dns-query-type", "src-ip", "src-port", "vlan", "route-domain"]
 						})
 					},
-					addp(
-					|	delimiter
-					|	fields)::false
+					addp("delimiter"
+					|	"fields")::false
 				],
 				req["fields"]
 			}
@@ -1550,29 +1504,27 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
 		"logMaliciousRequests"::type(bool),
 		"logFilteredDroppedRequests"::type(bool),
-		addp(
-		|	logDroppedRequests
-		|	logMalformedRequests
-		|	logRejectedRequests
-		|	storageFormat
-		|	publisher
-		|	logMaliciousRequests
-		|	logFilteredDroppedRequests)::false
+		addp("logDroppedRequests"
+		|	"logMalformedRequests"
+		|	"logRejectedRequests"
+		|	"storageFormat"
+		|	"publisher"
+		|	"logMaliciousRequests"
+		|	"logFilteredDroppedRequests")::false
 	],
 	def "Pointer_Classification_Preset" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -1612,20 +1564,19 @@
 				type(str)
 			},
 			"destinationHost"::type(str),
-			addp(
-			|	originHost
-			|	label
-			|	fatalGraceTime
-			|	messageRetransmitDelay
-			|	productName
-			|	messageMaxRetransmits
-			|	parentProfile
-			|	originRealm
-			|	protocolProfileGx
-			|	destinationRealm
-			|	supportedApps
-			|	class
-			|	destinationHost)::false
+			addp("originHost"
+			|	"label"
+			|	"fatalGraceTime"
+			|	"messageRetransmitDelay"
+			|	"productName"
+			|	"messageMaxRetransmits"
+			|	"parentProfile"
+			|	"originRealm"
+			|	"protocolProfileGx"
+			|	"destinationRealm"
+			|	"supportedApps"
+			|	"class"
+			|	"destinationHost")::false
 		],
 		req["class",
 			"supportedApps"]
@@ -1638,9 +1589,8 @@
 				properties[
 					"persist"::type(bool),
 					"value"::type(str),
-					addp(
-					|	persist
-					|	value)::false
+					addp("persist"
+					|	"value")::false
 				],
 				req["value"]
 			}
@@ -1662,9 +1612,8 @@
 							properties[
 								"name"::type(str),
 								"value"::type(str),
-								addp(
-								|	name
-								|	value)::false
+								addp("name"
+								|	"value")::false
 							],
 							req["name",
 								"value"]
@@ -1678,8 +1627,7 @@
 							type(obj),
 							properties[
 								"name"::type(str),
-								addp(
-								|	name)::false
+								addp("name")::false
 							],
 							req["name"]
 						}
@@ -1716,22 +1664,21 @@
 				],
 				req["bigip"]
 			},
-			addp(
-			|	remark
-			|	rules
-			|	label
-			|	strategy
-			|	class
-			|	customStrategy)::false
+			addp("remark"
+			|	"rules"
+			|	"label"
+			|	"strategy"
+			|	"class"
+			|	"customStrategy")::false
 		],
 		req["class"]
 	},
 	def "Pointer_ILX_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -1797,34 +1744,33 @@
 			"interceptionEndpoint"::ref: "#/definitions/Pointer_Enforcement_Interception_Endpoint",
 			"qosBandwidthControllerDownlink"::ref: "#/definitions/Enforcement_Rule_QOS",
 			"ranCongestion"::ref: "#/definitions/Enforcement_Rule_Ran_Congestion",
-			addp(
-			|	dscpMarkingDownlink
-			|	l2MarkingUplink
-			|	tcpOptimizationUplink
-			|	classificationFilters
-			|	flowInfoFilters
-			|	modifyHttpHeader
-			|	forwarding
-			|	gateStatusEnabled
-			|	precedence
-			|	tclFilter
-			|	qoeReporting
-			|	quota
-			|	qosBandwidthControllerUplink
-			|	usageReporting
-			|	l2MarkingDownlink
-			|	DTOSTethering
-			|	serviceChain
-			|	iRule
-			|	dscpMarkingUplink
-			|	tcpAnalyticsEnabled
-			|	urlCategorizationFilters
-			|	name
-			|	insertContent
-			|	tcpOptimizationDownlink
-			|	interceptionEndpoint
-			|	qosBandwidthControllerDownlink
-			|	ranCongestion)::false
+			addp("dscpMarkingDownlink"
+			|	"l2MarkingUplink"
+			|	"tcpOptimizationUplink"
+			|	"classificationFilters"
+			|	"flowInfoFilters"
+			|	"modifyHttpHeader"
+			|	"forwarding"
+			|	"gateStatusEnabled"
+			|	"precedence"
+			|	"tclFilter"
+			|	"qoeReporting"
+			|	"quota"
+			|	"qosBandwidthControllerUplink"
+			|	"usageReporting"
+			|	"l2MarkingDownlink"
+			|	"DTOSTethering"
+			|	"serviceChain"
+			|	"iRule"
+			|	"dscpMarkingUplink"
+			|	"tcpAnalyticsEnabled"
+			|	"urlCategorizationFilters"
+			|	"name"
+			|	"insertContent"
+			|	"tcpOptimizationDownlink"
+			|	"interceptionEndpoint"
+			|	"qosBandwidthControllerDownlink"
+			|	"ranCongestion")::false
 		],
 		req["name",
 			"precedence"]
@@ -1843,8 +1789,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -1855,8 +1800,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -1892,9 +1836,8 @@
 								length(1,null),
 								type(str)
 							},
-							addp(
-							|	bigip
-							|	use)::false
+							addp("bigip"
+							|	"use")::false
 						],
 						pro(1,1)
 					},
@@ -1915,17 +1858,15 @@
 								length(1,null),
 								type(str)
 							},
-							addp(
-							|	bigip
-							|	use)::false
+							addp("bigip"
+							|	"use")::false
 						],
 						pro(1,1)
 					},
-					addp(
-					|	bigip
-					|	ingress
-					|	use
-					|	egress)::false
+					addp("bigip"
+					|	"ingress"
+					|	"use"
+					|	"egress")::false
 				]
 			}
 		]
@@ -1947,23 +1888,21 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
 			"remark"::ref: "#/definitions/Remark",
 			"label"::ref: "#/definitions/Label",
 			"source"::ref: "#/definitions/NAT_Rule_Source",
-			addp(
-			|	protocol
-			|	name
-			|	destination
-			|	sourceTranslation
-			|	remark
-			|	label
-			|	source)::false
+			addp("protocol"
+			|	"name"
+			|	"destination"
+			|	"sourceTranslation"
+			|	"remark"
+			|	"label"
+			|	"source")::false
 		],
 		req["name"]
 	},
@@ -1989,9 +1928,8 @@
 							enum["acl-policy-name", "acl-policy-type", "acl-rule-name", "action", "bigip-hostname", "context-name", "context-type", "date-time", "dest-ip", "dest-port", "drop-reason", "management-ip-address", "protocol", "route-domain", "sa-translation-pool", "sa-translation-type", "src-ip", "src-port", "translated-dest-ip", "translated-dest-port", "translated-ip-protocol", "translated-route-domain", "translated-src-ip", "translated-src-port", "translated-vlan", "vlan"]
 						})
 					},
-					addp(
-					|	delimiter
-					|	fields)::false
+					addp("delimiter"
+					|	"fields")::false
 				],
 				req["fields"]
 			}
@@ -2014,30 +1952,28 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	logTcpEvents
-		|	logTranslationFields
-		|	logRuleMatchRejects
-		|	rateLimitTcpEvents
-		|	rateLimitIpErrors
-		|	storageFormat
-		|	rateLimitAggregate
-		|	logTcpErrors
-		|	alwaysLogRegion
-		|	rateLimitRuleMatchAccepts
-		|	rateLimitRuleMatchRejects
-		|	logIpErrors
-		|	logRuleMatchAccepts
-		|	rateLimitRuleMatchDrops
-		|	logRuleMatchDrops
-		|	rateLimitTcpErrors
-		|	publisher)::false
+		addp("logTcpEvents"
+		|	"logTranslationFields"
+		|	"logRuleMatchRejects"
+		|	"rateLimitTcpEvents"
+		|	"rateLimitIpErrors"
+		|	"storageFormat"
+		|	"rateLimitAggregate"
+		|	"logTcpErrors"
+		|	"alwaysLogRegion"
+		|	"rateLimitRuleMatchAccepts"
+		|	"rateLimitRuleMatchRejects"
+		|	"logIpErrors"
+		|	"logRuleMatchAccepts"
+		|	"rateLimitRuleMatchDrops"
+		|	"logRuleMatchDrops"
+		|	"rateLimitTcpErrors"
+		|	"publisher")::false
 	],
 	def "GSLB_Pool_Member_AAAA" = {
 		type(obj),
@@ -2050,12 +1986,11 @@
 				bet(0,65535),
 				type(int)
 			},
-			addp(
-			|	server
-			|	remark
-			|	label
-			|	virtualServer
-			|	ratio)::false
+			addp("server"
+			|	"remark"
+			|	"label"
+			|	"virtualServer"
+			|	"ratio")::false
 		],
 		req["server",
 			"virtualServer"]
@@ -2064,6 +1999,17 @@
 		"transparent"::type(bool)
 	],
 	def "Pointer_Log_Destination" = {
+		allOf[
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2071,9 +2017,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2118,10 +2063,9 @@
 				type(str),
 				enum["equals", "starts-with", "ends-with", "contains"]
 			},
-			addp(
-			|	caseSensitive
-			|	values
-			|	operand)::false
+			addp("caseSensitive"
+			|	"values"
+			|	"operand")::false
 		],
 		req["values"]
 	},
@@ -2170,15 +2114,19 @@
 		req["bigip"]
 	},
 	def "Pointer_Bot_Signature" = {
+		allOf[
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_SSL_Certificate" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2186,9 +2134,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2213,10 +2160,9 @@
 			"name"::type(str),
 			"category"::ref: "#/definitions/Pointer_Classification_Category",
 			"invertMatch"::type(bool),
-			addp(
-			|	name
-			|	category
-			|	invertMatch)::false
+			addp("name"
+			|	"category"
+			|	"invertMatch")::false
 		],
 		req["name",
 			"category"]
@@ -2249,9 +2195,8 @@
 		properties[
 			"service"::ref: "#/definitions/Pointer_Service",
 			"enabled"::type(bool),
-			addp(
-			|	service
-			|	enabled)::false
+			addp("service"
+			|	"enabled")::false
 		],
 		req["service"]
 	},
@@ -2272,16 +2217,14 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
 			},
-			addp(
-			|	addressLists
-			|	portLists)::false
+			addp("addressLists"
+			|	"portLists")::false
 		]
 	},
 	def "Traffic_Log_Profile_Response_Settings" = {
@@ -2302,16 +2245,15 @@
 				enum["mds-tcp", "mds-udp"]
 			},
 			"responseEnabled"::type(bool),
-			addp(
-			|	responseErrorLoggingEnabled
-			|	byDefaultEnabled
-			|	responseProtocol
-			|	responseTemplate
-			|	responseErrorTemplate
-			|	responseErrorPool
-			|	responsePool
-			|	responseErrorProtocol
-			|	responseEnabled)::false
+			addp("responseErrorLoggingEnabled"
+			|	"byDefaultEnabled"
+			|	"responseProtocol"
+			|	"responseTemplate"
+			|	"responseErrorTemplate"
+			|	"responseErrorPool"
+			|	"responsePool"
+			|	"responseErrorProtocol"
+			|	"responseEnabled")::false
 		]
 	},
 	def "Service_UDP_Core" = {
@@ -2328,8 +2270,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -2339,8 +2280,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -2365,9 +2305,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			}
@@ -2378,7 +2317,7 @@
 		properties[
 			"op"::type(str),
 			"path"::type(str),
-			"value"::,
+			"value"::true,
 			"target"::{
 				type(obj),
 				properties[
@@ -2399,6 +2338,7 @@
 		req["redirectUrl"]
 	},
 	def "Pointer_FIX_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2406,9 +2346,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2423,6 +2362,7 @@
 		req["class"]
 	},
 	def "Pointer_DNS_Nameserver" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2430,9 +2370,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2455,13 +2394,12 @@
 			type(str),
 			enum["always", "once", "once-every"]
 		},
-		addp(
-		|	duration
-		|	valueType
-		|	valueContent
-		|	position
-		|	tagName
-		|	frequency)::false
+		addp("duration"
+		|	"valueType"
+		|	"valueContent"
+		|	"position"
+		|	"tagName"
+		|	"frequency")::false
 	],
 	def "Label" = type(str),
 	def "Service_UDP" = {
@@ -2482,6 +2420,7 @@
 			"virtualPort"]
 	},
 	def "Pointer_GSLB_Pool_AAAA" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2489,13 +2428,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_GSLB_Domain_AAAA" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2503,9 +2442,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2520,14 +2458,15 @@
 		}
 	],
 	def "Data_Group_Records_Integer" = allOf[
-		ref: "#/definitions/Data_Group_Records_Base"
+		ref: "#/definitions/Data_Group_Records_Base",
+		true
 	],
 	def "Pool_Member" = {
 		allOf[
 			if: req["bigip"], 
 			then: if: req["monitors"], 
 			then: properties[
-				"minimumMonitors"::
+				"minimumMonitors"::true
 			],
 			if: {
 				properties[
@@ -2552,7 +2491,7 @@
 				{
 					if: req["monitors"], 
 					then: properties[
-						"minimumMonitors"::
+						"minimumMonitors"::true
 					],
 					properties[
 						""::not: type(str),
@@ -2574,7 +2513,7 @@
 			then: {
 				if: req["monitors"], 
 				then: properties[
-					"minimumMonitors"::
+					"minimumMonitors"::true
 				],
 				properties[
 					"hostname"::type(str),
@@ -2673,6 +2612,7 @@
 		req["servicePort"]
 	},
 	def "Pointer_Traffic_Log_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2680,9 +2620,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2692,19 +2631,19 @@
 				"serverType"::const("[generic-host]")
 			], 
 			then: properties[
-				"cpuUsageLimitEnabled"::,
-				"memoryLimitEnabled"::,
+				"cpuUsageLimitEnabled"::true,
+				"memoryLimitEnabled"::true,
 				"devices"::betitems(null,1),
-				"cpuUsageLimit"::,
-				"memoryLimit"::
+				"cpuUsageLimit"::true,
+				"memoryLimit"::true
 			],
 			if: properties[
 				"serverType"::const("[bigip]")
 			], 
 			then: properties[
-				"pathProbeEnabled"::,
-				"snmpProbeEnabled"::,
-				"serviceCheckProbeEnabled"::
+				"pathProbeEnabled"::true,
+				"snmpProbeEnabled"::true,
+				"serviceCheckProbeEnabled"::true
 			]
 		],
 		type(obj),
@@ -2776,34 +2715,33 @@
 				type(arr),
 				items(;ref: "#/definitions/Pointer_GSLB_Monitor")
 			},
-			addp(
-			|	cpuUsageLimitEnabled
-			|	pathProbeEnabled
-			|	remark
-			|	proberPreferred
-			|	ppsLimitEnabled
-			|	enabled
-			|	ppsLimit
-			|	connectionsLimit
-			|	cpuUsageLimit
-			|	virtualServerDiscoveryMode
-			|	proberPool
-			|	snmpProbeEnabled
-			|	bpsLimit
-			|	class
-			|	bpsLimitEnabled
-			|	serviceCheckProbeEnabled
-			|	connectionsLimitEnabled
-			|	memoryLimitEnabled
-			|	proberFallback
-			|	dataCenter
-			|	devices
-			|	virtualServers
-			|	label
-			|	exposeRouteDomainsEnabled
-			|	serverType
-			|	memoryLimit
-			|	monitors)::false
+			addp("cpuUsageLimitEnabled"
+			|	"pathProbeEnabled"
+			|	"remark"
+			|	"proberPreferred"
+			|	"ppsLimitEnabled"
+			|	"enabled"
+			|	"ppsLimit"
+			|	"connectionsLimit"
+			|	"cpuUsageLimit"
+			|	"virtualServerDiscoveryMode"
+			|	"proberPool"
+			|	"snmpProbeEnabled"
+			|	"bpsLimit"
+			|	"class"
+			|	"bpsLimitEnabled"
+			|	"serviceCheckProbeEnabled"
+			|	"connectionsLimitEnabled"
+			|	"memoryLimitEnabled"
+			|	"proberFallback"
+			|	"dataCenter"
+			|	"devices"
+			|	"virtualServers"
+			|	"label"
+			|	"exposeRouteDomainsEnabled"
+			|	"serverType"
+			|	"memoryLimit"
+			|	"monitors")::false
 		],
 		req["class",
 			"dataCenter",
@@ -2822,11 +2760,10 @@
 				const("[Firewall_Rule_List]"),
 				type(str)
 			},
-			addp(
-			|	remark
-			|	rules
-			|	label
-			|	class)::false
+			addp("remark"
+			|	"rules"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -2855,6 +2792,11 @@
 		]
 	},
 	def "Pointer_GSLB_Monitor" = {
+		allOf[
+			true,
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2862,9 +2804,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2943,28 +2884,28 @@
 				bet(0,7),
 				type(int)
 			},
-			addp(
-			|	loggingEnabled
-			|	logPublisher
-			|	remark
-			|	label
-			|	logPeriod
-			|	maxBandwidth
-			|	maxUserBandwidthUnit
-			|	maxUserPPSUnit
-			|	dynamicControlEnabled
-			|	maxUserPPS
-			|	markIP
-			|	maxUserBandwidth
-			|	categories
-			|	class
-			|	maxBandwidthUnit
-			|	markL2)::false
+			addp("loggingEnabled"
+			|	"logPublisher"
+			|	"remark"
+			|	"label"
+			|	"logPeriod"
+			|	"maxBandwidth"
+			|	"maxUserBandwidthUnit"
+			|	"maxUserPPSUnit"
+			|	"dynamicControlEnabled"
+			|	"maxUserPPS"
+			|	"markIP"
+			|	"maxUserBandwidth"
+			|	"categories"
+			|	"class"
+			|	"maxBandwidthUnit"
+			|	"markL2")::false
 		],
 		req["class",
 			"maxBandwidth"]
 	},
 	def "Pointer_L4_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2972,9 +2913,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -2986,12 +2926,12 @@
 				items(;ref: "#/definitions/DOS_Network_Vector")
 			},
 			"dynamicSignatures"::ref: "#/definitions/DOS_Profile_Network_Dynamic_Signatures",
-			addp(
-			|	vectors
-			|	dynamicSignatures)::false
+			addp("vectors"
+			|	"dynamicSignatures")::false
 		]
 	},
 	def "Pointer_Enforcement_Policy" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -2999,13 +2939,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Service" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3013,9 +2953,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3034,6 +2973,7 @@
 		]
 	},
 	def "Pointer_GSLB_Server_Device" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3041,9 +2981,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3111,13 +3050,12 @@
 				type(str)
 			},
 			"dhcpLeaseQuery"::ref: "#/definitions/Enforcement_Subscriber_Management_Profile_DHCP",
-			addp(
-			|	serverSideSessionsEnabled
-			|	parentProfile
-			|	remark
-			|	label
-			|	class
-			|	dhcpLeaseQuery)::false
+			addp("serverSideSessionsEnabled"
+			|	"parentProfile"
+			|	"remark"
+			|	"label"
+			|	"class"
+			|	"dhcpLeaseQuery")::false
 		],
 		req["class"]
 	},
@@ -3127,11 +3065,11 @@
 			type(str),
 			enum["rating-group", "service-id"]
 		},
-		addp(
-		|	ratingGroup
-		|	reportingLevel)::false
+		addp("ratingGroup"
+		|	"reportingLevel")::false
 	],
 	def "Pointer_DNS_TSIG_Key" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3139,9 +3077,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3168,12 +3105,12 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	use)::false
+			addp("use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Enforcement_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3181,14 +3118,14 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "GSLB_Pool_MX" = ref: "#/definitions/GSLB_Pool",
 	def "Pointer_Certificate_Validator_OCSP" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3196,9 +3133,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3230,6 +3166,7 @@
 	},
 	def "GSLB_Pool_AAAA" = ref: "#/definitions/GSLB_Pool",
 	def "Pointer_DOS_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3237,9 +3174,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3251,6 +3187,7 @@
 		req["monitoringKey"]
 	},
 	def "Pointer_GSLB_Pool_A" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3258,9 +3195,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3273,16 +3209,15 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	publisher)::false
+		addp("publisher")::false
 	],
 	def "Pointer_HTTP_Acceleration_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3290,27 +3225,26 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Data_Group_File" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_VLAN" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -3352,18 +3286,17 @@
 				type(str)
 			},
 			"looseInitialization"::type(bool),
-			addp(
-			|	maxSegmentSize
-			|	idleTimeout
-			|	resetOnTimeout
-			|	tcpCloseTimeout
-			|	looseClose
-			|	remark
-			|	clientTimeout
-			|	label
-			|	tcpHandshakeTimeout
-			|	class
-			|	looseInitialization)::false
+			addp("maxSegmentSize"
+			|	"idleTimeout"
+			|	"resetOnTimeout"
+			|	"tcpCloseTimeout"
+			|	"looseClose"
+			|	"remark"
+			|	"clientTimeout"
+			|	"label"
+			|	"tcpHandshakeTimeout"
+			|	"class"
+			|	"looseInitialization")::false
 		],
 		req["class"]
 	},
@@ -3381,9 +3314,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	path
-					|	domain)::false
+					addp("path"
+					|	"domain")::false
 				],
 				req["domain",
 					"path"]
@@ -3399,16 +3331,14 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	path
-					|	domain)::false
+					addp("path"
+					|	"domain")::false
 				],
 				req["domain",
 					"path"]
 			},
-			addp(
-			|	server
-			|	client)::false
+			addp("server"
+			|	"client")::false
 		],
 		req["client",
 			"server"]
@@ -3444,21 +3374,21 @@
 				bet(0,null),
 				type(int)
 			},
-			addp(
-			|	maxConnectionAge
-			|	idleTimeoutOverride
-			|	sharePools
-			|	connectionLimitEnforcement
-			|	remark
-			|	sourceMask
-			|	label
-			|	maxConnectionReuse
-			|	class
-			|	maxConnections)::false
+			addp("maxConnectionAge"
+			|	"idleTimeoutOverride"
+			|	"sharePools"
+			|	"connectionLimitEnforcement"
+			|	"remark"
+			|	"sourceMask"
+			|	"label"
+			|	"maxConnectionReuse"
+			|	"class"
+			|	"maxConnections")::false
 		],
 		req["class"]
 	},
 	def "Pointer_HTTP2_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3466,9 +3396,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3517,7 +3446,7 @@
 				type(int)
 			}
 		], 
-		else: ,
+		else: true,
 		properties[
 			"duration"::{
 				bet(0,604800),
@@ -3537,11 +3466,11 @@
 	def "Enforcement_Rule_Report_Destination_HSL" = properties[
 		"highSpeedLogPublisher"::ref: "#/definitions/Pointer_Log_Publisher",
 		"formatScript"::ref: "#/definitions/Pointer_Enforcement_Format_Script",
-		addp(
-		|	highSpeedLogPublisher
-		|	formatScript)::false
+		addp("highSpeedLogPublisher"
+		|	"formatScript")::false
 	],
 	def "Pointer_GSLB_Data_Center" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -3549,9 +3478,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -3576,22 +3504,21 @@
 				type(str)
 			},
 			"enabled"::type(bool),
-			addp(
-			|	proberFallback
-			|	contact
-			|	proberPool
-			|	remark
-			|	location
-			|	label
-			|	proberPreferred
-			|	class
-			|	enabled)::false
+			addp("proberFallback"
+			|	"contact"
+			|	"proberPool"
+			|	"remark"
+			|	"location"
+			|	"label"
+			|	"proberPreferred"
+			|	"class"
+			|	"enabled")::false
 		],
 		req["class"]
 	},
 	def "Certificate" = {
 		if: req["pkcs12"], 
-		then: , 
+		then: true, 
 		else: {
 			not: req["pkcs12"],
 			req["certificate"]
@@ -3608,7 +3535,7 @@
 				properties[
 					"internalOnly"::{
 						type(arr),
-						items(;)
+						items(;true)
 					},
 					"ignoreChanges"::type(bool),
 					"keyImportFormat"::{
@@ -3639,18 +3566,17 @@
 			},
 			"pkcs12"::if: true, 
 			then: ref: "#/definitions/F5string",
-			addp(
-			|	privateKey
-			|	staplerOCSP
-			|	chainCA
-			|	pkcs12Options
-			|	certificate
-			|	issuerCertificate
-			|	remark
-			|	passphrase
-			|	label
-			|	class
-			|	pkcs12)::false
+			addp("privateKey"
+			|	"staplerOCSP"
+			|	"chainCA"
+			|	"pkcs12Options"
+			|	"certificate"
+			|	"issuerCertificate"
+			|	"remark"
+			|	"passphrase"
+			|	"label"
+			|	"class"
+			|	"pkcs12")::false
 		],
 		req["class"]
 	},
@@ -3716,23 +3642,22 @@
 				bet(65535,16777215),
 				type(int)
 			},
-			addp(
-			|	bufferMaxPackets
-			|	ttlIPv4
-			|	remark
-			|	ttlIPv6
-			|	label
-			|	ipDfMode
-			|	ipTosToClient
-			|	useChecksum
-			|	ttlMode
-			|	idleTimeout
-			|	linkQosToClient
-			|	proxyMSS
-			|	datagramLoadBalancing
-			|	allowNoPayload
-			|	class
-			|	bufferMaxBytes)::false
+			addp("bufferMaxPackets"
+			|	"ttlIPv4"
+			|	"remark"
+			|	"ttlIPv6"
+			|	"label"
+			|	"ipDfMode"
+			|	"ipTosToClient"
+			|	"useChecksum"
+			|	"ttlMode"
+			|	"idleTimeout"
+			|	"linkQosToClient"
+			|	"proxyMSS"
+			|	"datagramLoadBalancing"
+			|	"allowNoPayload"
+			|	"class"
+			|	"bufferMaxBytes")::false
 		],
 		req["class"]
 	},
@@ -3746,13 +3671,12 @@
 		"signatureDetectionEnabled"::type(bool),
 		"acceleratedSignaturesEnabled"::type(bool),
 		"tlsSignaturesEnabled"::type(bool),
-		addp(
-		|	mitigationMode
-		|	useApprovedSignaturesOnly
-		|	detectionEnabled
-		|	signatureDetectionEnabled
-		|	acceleratedSignaturesEnabled
-		|	tlsSignaturesEnabled)::false
+		addp("mitigationMode"
+		|	"useApprovedSignaturesOnly"
+		|	"detectionEnabled"
+		|	"signatureDetectionEnabled"
+		|	"acceleratedSignaturesEnabled"
+		|	"tlsSignaturesEnabled")::false
 	],
 	def "Pointer_GSLB_Pool_Member_AAAA" = {
 		type(obj),
@@ -3761,8 +3685,7 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	use)::false
+			addp("use")::false
 		],
 		pro(1,1)
 	},
@@ -3799,9 +3722,8 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	netmask
-								|	timeout)::false
+								addp("netmask"
+								|	"timeout")::false
 							],
 							req["netmask",
 								"timeout"]
@@ -3819,9 +3741,8 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	netmask
-								|	timeout)::false
+								addp("netmask"
+								|	"timeout")::false
 							],
 							req["netmask",
 								"timeout"]
@@ -3836,9 +3757,8 @@
 							properties[
 								"name"::type(str),
 								"expiry"::type(str),
-								addp(
-								|	name
-								|	expiry)::false
+								addp("name"
+								|	"expiry")::false
 							],
 							req["name",
 								"expiry"]
@@ -3853,9 +3773,8 @@
 							properties[
 								"name"::type(str),
 								"expiry"::type(str),
-								addp(
-								|	name
-								|	expiry)::false
+								addp("name"
+								|	"expiry")::false
 							],
 							req["name",
 								"expiry"]
@@ -3869,8 +3788,7 @@
 							type(obj),
 							properties[
 								"name"::type(str),
-								addp(
-								|	name)::false
+								addp("name")::false
 							],
 							req["name"]
 						}
@@ -3895,11 +3813,10 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	offset
-								|	name
-								|	length
-								|	timeout)::false
+								addp("offset"
+								|	"name"
+								|	"length"
+								|	"timeout")::false
 							],
 							req["name",
 								"offset",
@@ -3919,9 +3836,8 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	key
-								|	timeout)::false
+								addp("key"
+								|	"timeout")::false
 							],
 							req["key",
 								"timeout"]
@@ -3939,9 +3855,8 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	key
-								|	timeout)::false
+								addp("key"
+								|	"timeout")::false
 							],
 							req["key",
 								"timeout"]
@@ -3959,9 +3874,8 @@
 									bet(0,65535),
 									type(int)
 								},
-								addp(
-								|	key
-								|	timeout)::false
+								addp("key"
+								|	"timeout")::false
 							],
 							req["key",
 								"timeout"]
@@ -3989,14 +3903,13 @@
 			},
 			"sourceVLAN"::ref: "#/definitions/Pointer_VLAN",
 			"steeringPolicy"::ref: "#/definitions/Pointer_Enforcement_Policy",
-			addp(
-			|	serviceOption
-			|	forwardingEndpoint
-			|	internalService
-			|	name
-			|	internalServiceICAPType
-			|	sourceVLAN
-			|	steeringPolicy)::false
+			addp("serviceOption"
+			|	"forwardingEndpoint"
+			|	"internalService"
+			|	"name"
+			|	"internalServiceICAPType"
+			|	"sourceVLAN"
+			|	"steeringPolicy")::false
 		],
 		req["sourceVLAN"]
 	},
@@ -4016,13 +3929,12 @@
 				const("[Enforcement_Listener]"),
 				type(str)
 			},
-			addp(
-			|	subscriberManagementProfile
-			|	remark
-			|	enforcementProfile
-			|	label
-			|	services
-			|	class)::false
+			addp("subscriberManagementProfile"
+			|	"remark"
+			|	"enforcementProfile"
+			|	"label"
+			|	"services"
+			|	"class")::false
 		],
 		req["class",
 			"enforcementProfile",
@@ -4039,11 +3951,11 @@
 		req["address"]
 	},
 	def "Pointer_Enforcement_Rating_Group" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -4080,17 +3992,16 @@
 				type(str),
 				enum["any", "ipv4", "ipv6"]
 			},
-			addp(
-			|	destinationPort
-			|	sourcePort
-			|	protocol
-			|	destinationAddress
-			|	sourceAddress
-			|	dscpMarking
-			|	name
-			|	invertMatch
-			|	sourceVlan
-			|	ipAddressType)::false
+			addp("destinationPort"
+			|	"sourcePort"
+			|	"protocol"
+			|	"destinationAddress"
+			|	"sourceAddress"
+			|	"dscpMarking"
+			|	"name"
+			|	"invertMatch"
+			|	"sourceVlan"
+			|	"ipAddressType")::false
 		],
 		req["name"]
 	},
@@ -4099,11 +4010,29 @@
 		enum["--", "AF", "AN", "AS", "EU", "NA", "OC", "SA"]
 	},
 	def "Pointer_Tunnel" = {
+		allOf[
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -4116,10 +4045,9 @@
 				const("[SIP_Profile]"),
 				type(str)
 			},
-			addp(
-			|	remark
-			|	label
-			|	class)::false
+			addp("remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -4151,17 +4079,16 @@
 				const("[FTP_Profile]"),
 				type(str)
 			},
-			addp(
-			|	inheritParentProfileEnabled
-			|	enforceTlsSessionReuseEnabled
-			|	port
-			|	ftpsMode
-			|	translateExtendedEnabled
-			|	activeModeEnabled
-			|	remark
-			|	label
-			|	securityEnabled
-			|	class)::false
+			addp("inheritParentProfileEnabled"
+			|	"enforceTlsSessionReuseEnabled"
+			|	"port"
+			|	"ftpsMode"
+			|	"translateExtendedEnabled"
+			|	"activeModeEnabled"
+			|	"remark"
+			|	"label"
+			|	"securityEnabled"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -4224,22 +4151,21 @@
 				const("[NAT_Source_Translation]"),
 				type(str)
 			},
-			addp(
-			|	patMode
-			|	addresses
-			|	mapping
-			|	clientConnectionLimit
-			|	remark
-			|	hairpinModeEnabled
-			|	label
-			|	ports
-			|	type
-			|	allowEgressInterfaces
-			|	routeAdvertisement
-			|	portBlockAllocation
-			|	disallowEgressInterfaces
-			|	inboundMode
-			|	class)::false
+			addp("patMode"
+			|	"addresses"
+			|	"mapping"
+			|	"clientConnectionLimit"
+			|	"remark"
+			|	"hairpinModeEnabled"
+			|	"label"
+			|	"ports"
+			|	"type"
+			|	"allowEgressInterfaces"
+			|	"routeAdvertisement"
+			|	"portBlockAllocation"
+			|	"disallowEgressInterfaces"
+			|	"inboundMode"
+			|	"class")::false
 		],
 		req["type"]
 	},
@@ -4256,11 +4182,10 @@
 				const("[Controls]"),
 				type(str)
 			},
-			addp(
-			|	trace
-			|	fortune
-			|	logLevel
-			|	class)::false
+			addp("trace"
+			|	"fortune"
+			|	"logLevel"
+			|	"class")::false
 		]
 	},
 	def "Service_HTTPS" = {
@@ -4291,10 +4216,9 @@
 			bet(0,65535),
 			type(int)
 		},
-		addp(
-		|	hostname
-		|	userAgent
-		|	uri)::false
+		addp("hostname"
+		|	"userAgent"
+		|	"uri")::false
 	],
 	def "Monitor_ICMP" = {
 		if: true, 
@@ -4310,8 +4234,7 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	use)::false
+			addp("use")::false
 		],
 		pro(1,1)
 	},
@@ -4332,12 +4255,11 @@
 				bet(0,65535),
 				type(int)
 			},
-			addp(
-			|	domainName
-			|	remark
-			|	label
-			|	priority
-			|	ratio)::false
+			addp("domainName"
+			|	"remark"
+			|	"label"
+			|	"priority"
+			|	"ratio")::false
 		],
 		req["domainName",
 			"priority",
@@ -4363,18 +4285,17 @@
 				enum["mds-tcp", "mds-udp"]
 			},
 			"requestEnabled"::type(bool),
-			addp(
-			|	requestPool
-			|	proxyRespondOnLoggingErrorEnabled
-			|	proxyResponse
-			|	requestErrorLoggingEnabled
-			|	requestTemplate
-			|	requestErrorPool
-			|	requestErrorProtocol
-			|	proxyCloseOnErrorEnabled
-			|	requestErrorTemplate
-			|	requestProtocol
-			|	requestEnabled)::false
+			addp("requestPool"
+			|	"proxyRespondOnLoggingErrorEnabled"
+			|	"proxyResponse"
+			|	"requestErrorLoggingEnabled"
+			|	"requestTemplate"
+			|	"requestErrorPool"
+			|	"requestErrorProtocol"
+			|	"proxyCloseOnErrorEnabled"
+			|	"requestErrorTemplate"
+			|	"requestProtocol"
+			|	"requestEnabled")::false
 		]
 	},
 	def "DOS_Auto_Blacklist_Settings" = {
@@ -4391,12 +4312,11 @@
 			"category"::ref: "#/definitions/Pointer_Blacklist_Category",
 			"enabled"::type(bool),
 			"externalAdvertisementEnabled"::type(bool),
-			addp(
-			|	categoryDuration
-			|	attackDetectionTime
-			|	category
-			|	enabled
-			|	externalAdvertisementEnabled)::false
+			addp("categoryDuration"
+			|	"attackDetectionTime"
+			|	"category"
+			|	"enabled"
+			|	"externalAdvertisementEnabled")::false
 		]
 	},
 	def "GSLB_Pool_Member_A" = {
@@ -4410,12 +4330,11 @@
 				bet(0,65535),
 				type(int)
 			},
-			addp(
-			|	server
-			|	remark
-			|	label
-			|	virtualServer
-			|	ratio)::false
+			addp("server"
+			|	"remark"
+			|	"label"
+			|	"virtualServer"
+			|	"ratio")::false
 		],
 		req["server",
 			"virtualServer"]
@@ -4450,16 +4369,14 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
 			},
-			addp(
-			|	addressLists
-			|	portLists)::false
+			addp("addressLists"
+			|	"portLists")::false
 		]
 	},
 	def "DOS_Profile_Application_Detection_URL" = {
@@ -4489,16 +4406,15 @@
 				type(int)
 			},
 			"heavyURLProtectionEnabled"::type(bool),
-			addp(
-			|	minimumTps
-			|	maximumTps
-			|	minimumAutoTps
-			|	clientSideDefenseEnabled
-			|	tpsIncreaseRate
-			|	captchaChallengeEnabled
-			|	rateLimitingEnabled
-			|	maximumAutoTps
-			|	heavyURLProtectionEnabled)::false
+			addp("minimumTps"
+			|	"maximumTps"
+			|	"minimumAutoTps"
+			|	"clientSideDefenseEnabled"
+			|	"tpsIncreaseRate"
+			|	"captchaChallengeEnabled"
+			|	"rateLimitingEnabled"
+			|	"maximumAutoTps"
+			|	"heavyURLProtectionEnabled")::false
 		]
 	},
 	def "Clone_Pools" = {
@@ -4510,9 +4426,8 @@
 		properties[
 			"ingress"::ref: "#/definitions/Pointer_Pool",
 			"egress"::ref: "#/definitions/Pointer_Pool",
-			addp(
-			|	ingress
-			|	egress)::false
+			addp("ingress"
+			|	"egress")::false
 		]
 	},
 	def "GSLB_Topology_Records" = {
@@ -4534,6 +4449,7 @@
 			"records"]
 	},
 	def "Pointer_DNS_Zone" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -4541,9 +4457,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -4572,9 +4487,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
@@ -4611,9 +4525,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
@@ -4621,8 +4534,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			}
@@ -4639,9 +4551,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		]
 	},
 	def "iRule" = {
@@ -4656,12 +4567,11 @@
 				const("[iRule]"),
 				type(str)
 			},
-			addp(
-			|	expand
-			|	remark
-			|	label
-			|	iRule
-			|	class)::false
+			addp("expand"
+			|	"remark"
+			|	"label"
+			|	"iRule"
+			|	"class")::false
 		],
 		req["class",
 			"iRule"]
@@ -4700,6 +4610,7 @@
 		items(;ref: "#/definitions/ADC")
 	},
 	def "Pointer_TCP_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -4707,9 +4618,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -4722,16 +4632,14 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
 		"logAllMatches"::type(bool),
-		addp(
-		|	publisher
-		|	logAllMatches)::false
+		addp("publisher"
+		|	"logAllMatches")::false
 	],
 	def "Enforcement_Service_Chain_Endpoint" = {
 		type(obj),
@@ -4746,11 +4654,10 @@
 				type(arr),
 				items(;ref: "#/definitions/Enforcement_Service_Chain_Endpoint_Service_Endpoint")
 			},
-			addp(
-			|	remark
-			|	label
-			|	class
-			|	serviceEndpoints)::false
+			addp("remark"
+			|	"label"
+			|	"class"
+			|	"serviceEndpoints")::false
 		],
 		req["class"]
 	},
@@ -4773,16 +4680,16 @@
 			"name"::type(str),
 			"remark"::ref: "#/definitions/Remark",
 			"sshProfileRuleActions"::ref: "#/definitions/SSH_Proxy_Profile_Rule_Action_Collection",
-			addp(
-			|	sshProfileIdUsers
-			|	sshProfileIdGroups
-			|	name
-			|	remark
-			|	sshProfileRuleActions)::false
+			addp("sshProfileIdUsers"
+			|	"sshProfileIdGroups"
+			|	"name"
+			|	"remark"
+			|	"sshProfileRuleActions")::false
 		],
 		req["name"]
 	},
 	def "Pointer_GSLB_Topology_Region" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -4790,18 +4697,17 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Enforcement_iRule" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -4825,6 +4731,7 @@
 		]
 	},
 	def "Pointer_GSLB_Prober_Pool" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -4832,9 +4739,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -4850,9 +4756,8 @@
 				length(null,65520),
 				type(str)
 			},
-			addp(
-			|	failure
-			|	first)::false
+			addp("failure"
+			|	"first")::false
 		]
 	},
 	def "Policy_Action_Drop" = {
@@ -4909,32 +4814,31 @@
 				bet(0,4294967295),
 				type(int)
 			},
-			addp(
-			|	rapidResponseLastAction
-			|	dnssecEnabled
-			|	dns64AdditionalSectionRewrite
-			|	zoneTransferEnabled
-			|	dns64Prefix
-			|	globalServerLoadBalancingEnabled
-			|	remark
-			|	loggingProfile
-			|	hardwareQueryValidationEnabled
-			|	securityProfile
-			|	class
-			|	localBindServerEnabled
-			|	cache
-			|	loggingEnabled
-			|	hardwareResponseCacheEnabled
-			|	unhandledQueryAction
-			|	label
-			|	rapidResponseEnabled
-			|	recursionDesiredEnabled
-			|	cacheEnabled
-			|	parentProfile
-			|	dns64Mode
-			|	dnsExpressEnabled
-			|	securityEnabled
-			|	statisticsSampleRate)::false
+			addp("rapidResponseLastAction"
+			|	"dnssecEnabled"
+			|	"dns64AdditionalSectionRewrite"
+			|	"zoneTransferEnabled"
+			|	"dns64Prefix"
+			|	"globalServerLoadBalancingEnabled"
+			|	"remark"
+			|	"loggingProfile"
+			|	"hardwareQueryValidationEnabled"
+			|	"securityProfile"
+			|	"class"
+			|	"localBindServerEnabled"
+			|	"cache"
+			|	"loggingEnabled"
+			|	"hardwareResponseCacheEnabled"
+			|	"unhandledQueryAction"
+			|	"label"
+			|	"rapidResponseEnabled"
+			|	"recursionDesiredEnabled"
+			|	"cacheEnabled"
+			|	"parentProfile"
+			|	"dns64Mode"
+			|	"dnsExpressEnabled"
+			|	"securityEnabled"
+			|	"statisticsSampleRate")::false
 		],
 		req["class"]
 	},
@@ -4952,13 +4856,12 @@
 				const("[DNS_Nameserver]"),
 				type(str)
 			},
-			addp(
-			|	routeDomain
-			|	address
-			|	port
-			|	tsigKey
-			|	label
-			|	class)::false
+			addp("routeDomain"
+			|	"address"
+			|	"port"
+			|	"tsigKey"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -4991,16 +4894,16 @@
 				const("[Firewall_Policy]"),
 				type(str)
 			},
-			addp(
-			|	remark
-			|	rules
-			|	label
-			|	class)::false
+			addp("remark"
+			|	"rules"
+			|	"label"
+			|	"class")::false
 		],
 		req["class",
 			"rules"]
 	},
 	def "Pointer_GSLB_Pool_MX" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5008,9 +4911,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -5026,10 +4928,9 @@
 				type(int)
 			},
 			"tclScript"::type(str),
-			addp(
-			|	offset
-			|	length
-			|	tclScript)::false
+			addp("offset"
+			|	"length"
+			|	"tclScript")::false
 		]
 	},
 	def "Traffic_Log_Profile" = {
@@ -5044,13 +4945,12 @@
 				const("[Traffic_Log_Profile]"),
 				type(str)
 			},
-			addp(
-			|	responseSettings
-			|	parentProfile
-			|	requestSettings
-			|	remark
-			|	label
-			|	class)::false
+			addp("responseSettings"
+			|	"parentProfile"
+			|	"requestSettings"
+			|	"remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -5072,6 +4972,10 @@
 			"trustXFF"::type(bool),
 			"fallbackRedirect"::{
 				length(1,null),
+				anyOf[
+					true,
+					true
+				],
 				type(str)
 			},
 			"unknownMethodAction"::{
@@ -5103,6 +5007,10 @@
 			"hstsPreload"::type(bool),
 			"viaHost"::{
 				length(1,null),
+				anyOf[
+					true,
+					true
+				],
 				type(str)
 			},
 			"responseChunking"::{
@@ -5183,9 +5091,8 @@
 						pattern("^[^\x00-\x1f\x7f-\xff]*$"),
 						type(str)
 					},
-					addp(
-					|	name
-					|	value)::false
+					addp("name"
+					|	"value")::false
 				]
 			},
 			"multiplexTransformations"::type(bool),
@@ -5391,7 +5298,7 @@
 				type(str),
 				enum["continent", "country", "datacenter", "geoip-isp", "isp", "pool", "region", "state", "subnet"]
 			},
-			"matchValue"::,
+			"matchValue"::true,
 			"matchOperator"::{
 				type(str),
 				enum["equals", "not-equals"]
@@ -5401,11 +5308,11 @@
 			"matchValue"]
 	},
 	def "Pointer_Route_Domain" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -5417,17 +5324,16 @@
 				type(str),
 				enum["allow", "disallow", "terminate", "unspecified"]
 			},
-			addp(
-			|	log
-			|	control)::false
+			addp("log"
+			|	"control")::false
 		]
 	},
 	def "Pointer_Classification_Application" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -5436,6 +5342,7 @@
 		"monitoringKey"::type(str)
 	],
 	def "Pointer_Enforcement_Radius_AAA_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5443,27 +5350,26 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_FTP_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Blacklist_Category" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -5536,14 +5442,13 @@
 				const("[Firewall_Address_List]"),
 				type(str)
 			},
-			addp(
-			|	geo
-			|	addressLists
-			|	addresses
-			|	remark
-			|	label
-			|	fqdns
-			|	class)::false
+			addp("geo"
+			|	"addressLists"
+			|	"addresses"
+			|	"remark"
+			|	"label"
+			|	"fqdns"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -5581,7 +5486,7 @@
 				"acceptRCODE"::const("[no-error]")
 			], 
 			then: properties[
-				"receive"::
+				"receive"::true
 			]
 		],
 		properties[
@@ -5637,19 +5542,19 @@
 				type(str),
 				enum["rate-limit", "block-all"]
 			},
-			addp(
-			|	minimumTps
-			|	maximumTps
-			|	minimumAutoTps
-			|	clientSideDefenseEnabled
-			|	tpsIncreaseRate
-			|	captchaChallengeEnabled
-			|	rateLimitingEnabled
-			|	maximumAutoTps
-			|	rateLimitingMode)::false
+			addp("minimumTps"
+			|	"maximumTps"
+			|	"minimumAutoTps"
+			|	"clientSideDefenseEnabled"
+			|	"tpsIncreaseRate"
+			|	"captchaChallengeEnabled"
+			|	"rateLimitingEnabled"
+			|	"maximumAutoTps"
+			|	"rateLimitingMode")::false
 		]
 	},
 	def "Pointer_Multiplex_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5657,13 +5562,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_GSLB_Prober_Pool_Member" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5671,9 +5576,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -5693,17 +5597,15 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
 		"rateLimitAggregate"::type(int),
-		addp(
-		|	logTranslationFields
-		|	publisher
-		|	rateLimitAggregate)::false
+		addp("logTranslationFields"
+		|	"publisher"
+		|	"rateLimitAggregate")::false
 	],
 	def "Enforcement_Rule_Modify_HTTP_Header" = {
 		if: properties[
@@ -5721,11 +5623,10 @@
 				type(str),
 				enum["insert", "remove"]
 			},
-			addp(
-			|	headerName
-			|	valueType
-			|	valueContent
-			|	operation)::false
+			addp("headerName"
+			|	"valueType"
+			|	"valueContent"
+			|	"operation")::false
 		],
 		req["headerName",
 			"operation"]
@@ -5744,11 +5645,14 @@
 		req["class"]
 	},
 	def "Pointer_Bot_Signature_Category" = {
+		allOf[
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -5768,20 +5672,19 @@
 			"name"::type(str),
 			"sftpDownAction"::ref: "#/definitions/SSH_Proxy_Profile_Rule_Action",
 			"subSystemAction"::ref: "#/definitions/SSH_Proxy_Profile_Rule_Action",
-			addp(
-			|	rexecAction
-			|	scpDownAction
-			|	shellAction
-			|	x11ForwardAction
-			|	agentAction
-			|	otherAction
-			|	localForwardAction
-			|	remoteForwardAction
-			|	scpUpAction
-			|	sftpUpAction
-			|	name
-			|	sftpDownAction
-			|	subSystemAction)::false
+			addp("rexecAction"
+			|	"scpDownAction"
+			|	"shellAction"
+			|	"x11ForwardAction"
+			|	"agentAction"
+			|	"otherAction"
+			|	"localForwardAction"
+			|	"remoteForwardAction"
+			|	"scpUpAction"
+			|	"sftpUpAction"
+			|	"name"
+			|	"sftpDownAction"
+			|	"subSystemAction")::false
 		]
 	},
 	def "HTTP2_Profile" = {
@@ -5829,6 +5732,7 @@
 		req["class"]
 	},
 	def "Pointer_Log_Publisher" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5836,9 +5740,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -5858,11 +5761,10 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	path
-					|	scheme
-					|	port
-					|	host)::false
+					addp("path"
+					|	"scheme"
+					|	"port"
+					|	"host")::false
 				],
 				req["path"]
 			},
@@ -5879,11 +5781,10 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	path
-					|	scheme
-					|	port
-					|	host)::false
+					addp("path"
+					|	"scheme"
+					|	"port"
+					|	"host")::false
 				],
 				req["path"]
 			},
@@ -5891,18 +5792,17 @@
 				type(str),
 				enum["both", "request", "response"]
 			},
-			addp(
-			|	server
-			|	client
-			|	type)::false
+			addp("server"
+			|	"client"
+			|	"type")::false
 		]
 	},
 	def "Pointer_DNS_Logging_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -5970,22 +5870,21 @@
 							type(int)
 						},
 						"url"::type(str),
-						addp(
-						|	threshold
-						|	url)::false
+						addp("threshold"
+						|	"url")::false
 					],
 					req["url",
 						"threshold"]
 				})
 			},
-			addp(
-			|	detectionThreshold
-			|	excludeList
-			|	automaticDetectionEnabled
-			|	protectList)::false
+			addp("detectionThreshold"
+			|	"excludeList"
+			|	"automaticDetectionEnabled"
+			|	"protectList")::false
 		]
 	},
 	def "Pointer_Enforcement_Subscriber_Management_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -5993,13 +5892,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Enforcement_Interception_Endpoint" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6007,9 +5906,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6024,9 +5922,8 @@
 				bet(0,2147483647),
 				type(int)
 			},
-			addp(
-			|	mode
-			|	timeout)::false
+			addp("mode"
+			|	"timeout")::false
 		]
 	},
 	def "DOS_Bad_Actor_Detection_Settings" = {
@@ -6041,13 +5938,13 @@
 				type(int)
 			},
 			"enabled"::type(bool),
-			addp(
-			|	sourceMitigationThreshold
-			|	sourceDetectionThreshold
-			|	enabled)::false
+			addp("sourceMitigationThreshold"
+			|	"sourceDetectionThreshold"
+			|	"enabled")::false
 		]
 	},
 	def "Pointer_IP_Other_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6055,14 +5952,14 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Data_Group_Records_String" = allOf[
-		ref: "#/definitions/Data_Group_Records_Base"
+		ref: "#/definitions/Data_Group_Records_Base",
+		true
 	],
 	def "SSH_Proxy_Profile_Rule_Action" = {
 		type(obj),
@@ -6072,9 +5969,8 @@
 				type(str),
 				enum["allow", "disallow", "terminate", "unspecified"]
 			},
-			addp(
-			|	log
-			|	control)::false
+			addp("log"
+			|	"control")::false
 		]
 	},
 	def "SSH_Proxy_Profile" = {
@@ -6096,14 +5992,13 @@
 				type(str)
 			},
 			"timeout"::type(int),
-			addp(
-			|	sshProfileDefaultActions
-			|	sshProfileAuthInfo
-			|	sshProfileRuleSet
-			|	remark
-			|	label
-			|	class
-			|	timeout)::false
+			addp("sshProfileDefaultActions"
+			|	"sshProfileAuthInfo"
+			|	"sshProfileRuleSet"
+			|	"remark"
+			|	"label"
+			|	"class"
+			|	"timeout")::false
 		],
 		req["class"]
 	},
@@ -6123,12 +6018,11 @@
 				const("[IP_Other_Profile]"),
 				type(str)
 			},
-			addp(
-			|	parentProfile
-			|	idleTimeout
-			|	remark
-			|	label
-			|	class)::false
+			addp("parentProfile"
+			|	"idleTimeout"
+			|	"remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -6165,16 +6059,16 @@
 			},
 			"enabled"::type(bool),
 			"verifyNotifyTsig"::type(bool),
-			addp(
-			|	allowNotifyFrom
-			|	nameserver
-			|	notifyAction
-			|	enabled
-			|	verifyNotifyTsig)::false
+			addp("allowNotifyFrom"
+			|	"nameserver"
+			|	"notifyAction"
+			|	"enabled"
+			|	"verifyNotifyTsig")::false
 		],
 		req["nameserver"]
 	},
 	def "Pointer_WAF_Policy" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6182,9 +6076,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6222,7 +6115,7 @@
 		type(obj),
 		properties[
 			"template"::type(str),
-			"serviceMain"::,
+			"serviceMain"::true,
 			"enable"::type(bool),
 			"remark"::ref: "#/definitions/Remark",
 			"label"::ref: "#/definitions/Label",
@@ -6232,15 +6125,14 @@
 				const("[Application]"),
 				type(str)
 			},
-			addp(
-			|	template
-			|	serviceMain
-			|	enable
-			|	remark
-			|	label
-			|	constants
-			|	schemaOverlay
-			|	class)::{
+			addp("template"
+			|	"serviceMain"
+			|	"enable"
+			|	"remark"
+			|	"label"
+			|	"constants"
+			|	"schemaOverlay"
+			|	"class")::{
 				allOf[
 					if: properties[
 						"class"::const("[Service_HTTP]")
@@ -6551,6 +6443,7 @@
 			"template"]
 	},
 	def "Pointer_Enforcement_Forwarding_Endpoint" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6558,9 +6451,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6656,18 +6548,17 @@
 				type(str)
 			},
 			"addressTranslationEnabled"::type(bool),
-			addp(
-			|	fallbackPersistenceType
-			|	SNATPool
-			|	portTranslationEnabled
-			|	defaultPersistenceType
-			|	pool
-			|	remark
-			|	persistenceHashSettings
-			|	label
-			|	sourcePortAction
-			|	class
-			|	addressTranslationEnabled)::false
+			addp("fallbackPersistenceType"
+			|	"SNATPool"
+			|	"portTranslationEnabled"
+			|	"defaultPersistenceType"
+			|	"pool"
+			|	"remark"
+			|	"persistenceHashSettings"
+			|	"label"
+			|	"sourcePortAction"
+			|	"class"
+			|	"addressTranslationEnabled")::false
 		],
 		req["class",
 			"pool"]
@@ -6679,8 +6570,7 @@
 				type(arr),
 				items(;ref: "#/definitions/DOS_SIP_Vector")
 			},
-			addp(
-			|	vectors)::false
+			addp("vectors")::false
 		]
 	},
 	def "Policy_Action_HTTP_URI" = {
@@ -6691,24 +6581,21 @@
 					{
 						properties[
 							"value"::type(str),
-							addp(
-							|	value)::false
+							addp("value")::false
 						],
 						req["value"]
 					},
 					{
 						properties[
 							"path"::type(str),
-							addp(
-							|	path)::false
+							addp("path")::false
 						],
 						req["path"]
 					},
 					{
 						properties[
 							"queryString"::type(str),
-							addp(
-							|	queryString)::false
+							addp("queryString")::false
 						],
 						req["queryString"]
 					}
@@ -6723,6 +6610,7 @@
 		req["replace"]
 	},
 	def "Pointer_Enforcement_Service_Chain_Endpoint" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6730,13 +6618,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_SNAT_Pool" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6744,9 +6632,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6772,24 +6659,23 @@
 				bet(1,300),
 				type(int)
 			},
-			addp(
-			|	responderUrl
-			|	signingCertificate
-			|	signingHashAlgorithm
-			|	remark
-			|	label
-			|	dnsResolver
-			|	class
-			|	timeout)::false
+			addp("responderUrl"
+			|	"signingCertificate"
+			|	"signingHashAlgorithm"
+			|	"remark"
+			|	"label"
+			|	"dnsResolver"
+			|	"class"
+			|	"timeout")::false
 		],
 		req["class"]
 	},
 	def "Pointer_SSL_CRL_File" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -6833,6 +6719,7 @@
 		type(obj)
 	},
 	def "Pointer_DNS_Listener" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6840,9 +6727,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6864,23 +6750,23 @@
 			},
 			"statisticsCollectionEnabled"::type(bool),
 			"logUnclassifiedDomain"::type(bool),
-			addp(
-			|	appDetectionEnabled
-			|	iRuleEventEnabled
-			|	parentProfile
-			|	statisticsPublisher
-			|	urlCategorizationEnabled
-			|	logPublisher
-			|	remark
-			|	label
-			|	preset
-			|	class
-			|	statisticsCollectionEnabled
-			|	logUnclassifiedDomain)::false
+			addp("appDetectionEnabled"
+			|	"iRuleEventEnabled"
+			|	"parentProfile"
+			|	"statisticsPublisher"
+			|	"urlCategorizationEnabled"
+			|	"logPublisher"
+			|	"remark"
+			|	"label"
+			|	"preset"
+			|	"class"
+			|	"statisticsCollectionEnabled"
+			|	"logUnclassifiedDomain")::false
 		],
 		req["class"]
 	},
 	def "Pointer_Stream_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -6888,9 +6774,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -6907,9 +6792,8 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
@@ -6919,18 +6803,17 @@
 		"logSshTimeout"::type(bool),
 		"logNonSshTraffic"::type(bool),
 		"logDisallowedChannelAction"::type(bool),
-		addp(
-		|	logClientAuthSuccess
-		|	logAllowedChannelAction
-		|	logServerAuthSuccess
-		|	logClientAuthFail
-		|	publisher
-		|	logServerAuthFail
-		|	logServerAuthPartial
-		|	logClientAuthPartial
-		|	logSshTimeout
-		|	logNonSshTraffic
-		|	logDisallowedChannelAction)::false
+		addp("logClientAuthSuccess"
+		|	"logAllowedChannelAction"
+		|	"logServerAuthSuccess"
+		|	"logClientAuthFail"
+		|	"publisher"
+		|	"logServerAuthFail"
+		|	"logServerAuthPartial"
+		|	"logClientAuthPartial"
+		|	"logSshTimeout"
+		|	"logNonSshTraffic"
+		|	"logDisallowedChannelAction")::false
 	],
 	def "Pointer_GSLB_Virtual_Server" = {
 		type(obj),
@@ -6939,8 +6822,7 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	use)::false
+			addp("use")::false
 		],
 		pro(1,1)
 	},
@@ -6973,15 +6855,14 @@
 				type(arr),
 				items(;type(str))
 			},
-			addp(
-			|	mode
-			|	gracePeriod
-			|	blockSuspiscousBrowsers
-			|	crossDomainRequests
-			|	urlWhitelist
-			|	externalDomains
-			|	issueCaptchaChallenge
-			|	siteDomains)::false
+			addp("mode"
+			|	"gracePeriod"
+			|	"blockSuspiscousBrowsers"
+			|	"crossDomainRequests"
+			|	"urlWhitelist"
+			|	"externalDomains"
+			|	"issueCaptchaChallenge"
+			|	"siteDomains")::false
 		]
 	},
 	def "Service_L4" = {
@@ -7023,16 +6904,15 @@
 				type(str),
 				enum["enable", "disable", "selective", "always", "any", "all"]
 			},
-			addp(
-			|	trafficGroup
-			|	spanningEnabled
-			|	remark
-			|	virtualAddress
-			|	label
-			|	arpEnabled
-			|	class
-			|	icmpEcho
-			|	routeAdvertisement)::false
+			addp("trafficGroup"
+			|	"spanningEnabled"
+			|	"remark"
+			|	"virtualAddress"
+			|	"label"
+			|	"arpEnabled"
+			|	"class"
+			|	"icmpEcho"
+			|	"routeAdvertisement")::false
 		],
 		req["virtualAddress"]
 	},
@@ -7142,9 +7022,8 @@
 		properties[
 			"rewriteHeadersEnabled"::type(bool),
 			"rewriteContentEnabled"::type(bool),
-			addp(
-			|	rewriteHeadersEnabled
-			|	rewriteContentEnabled)::false
+			addp("rewriteHeadersEnabled"
+			|	"rewriteContentEnabled")::false
 		]
 	},
 	def "Firewall_Port_List" = {
@@ -7165,9 +7044,8 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
@@ -7177,18 +7055,17 @@
 			"ports"::{
 				betitems(1,null),
 				type(arr),
-				items(;)
+				items(;true)
 			},
 			"class"::{
 				const("[Firewall_Port_List]"),
 				type(str)
 			},
-			addp(
-			|	portLists
-			|	remark
-			|	label
-			|	ports
-			|	class)::false
+			addp("portLists"
+			|	"remark"
+			|	"label"
+			|	"ports"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -7219,19 +7096,18 @@
 				type(str)
 			},
 			"quickParsingEnabled"::type(bool),
-			addp(
-			|	reportLogPublisher
-			|	messageLogPublisher
-			|	parentProfile
-			|	statisticsSampleInterval
-			|	senderTagMappingList
-			|	remark
-			|	label
-			|	errorAction
-			|	fullLogonParsingEnabled
-			|	responseParsingEnabled
-			|	class
-			|	quickParsingEnabled)::false
+			addp("reportLogPublisher"
+			|	"messageLogPublisher"
+			|	"parentProfile"
+			|	"statisticsSampleInterval"
+			|	"senderTagMappingList"
+			|	"remark"
+			|	"label"
+			|	"errorAction"
+			|	"fullLogonParsingEnabled"
+			|	"responseParsingEnabled"
+			|	"class"
+			|	"quickParsingEnabled")::false
 		],
 		req["class"]
 	},
@@ -7263,8 +7139,7 @@
 				const("[Constants]"),
 				type(str)
 			},
-			addp(
-			|	class)::if: {
+			addp("class")::if: {
 				type(obj),
 				req["protected",
 					"ciphertext"]
@@ -7287,8 +7162,8 @@
 				if: properties[
 					"isExternal"::const([true])
 				], 
-				then: , 
-				else: ,
+				then: true, 
+				else: true,
 				type(obj),
 				properties[
 					"bigip"::type(str),
@@ -7299,9 +7174,8 @@
 				],
 				pro(1,2)
 			},
-			addp(
-			|	senderId
-			|	tagDataGroup)::false
+			addp("senderId"
+			|	"tagDataGroup")::false
 		],
 		req["senderId",
 			"tagDataGroup"]
@@ -7338,8 +7212,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			}
@@ -7350,7 +7223,7 @@
 		ref: "#/definitions/Service_Discovery_Polling_Core_Tagged",
 		if: req["monitors"], 
 		then: properties[
-			"minimumMonitors"::
+			"minimumMonitors"::true
 		],
 		properties[
 			"region"::type(str),
@@ -7378,11 +7251,10 @@
 			},
 			"bundle"::if: true, 
 			then: ref: "#/definitions/F5string",
-			addp(
-			|	remark
-			|	label
-			|	class
-			|	bundle)::false
+			addp("remark"
+			|	"label"
+			|	"class"
+			|	"bundle")::false
 		],
 		req["class",
 			"bundle"]
@@ -7411,16 +7283,16 @@
 				bet(0,7),
 				type(int)
 			},
-			addp(
-			|	maxBandwidth
-			|	markIP
-			|	remark
-			|	maxBandwidthUnit
-			|	markL2)::false
+			addp("maxBandwidth"
+			|	"markIP"
+			|	"remark"
+			|	"maxBandwidthUnit"
+			|	"markL2")::false
 		],
 		req["maxBandwidth"]
 	},
 	def "Pointer_Enforcement_Format_Script" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -7428,9 +7300,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -7480,12 +7351,11 @@
 				bet(0,2147483647),
 				type(int)
 			},
-			addp(
-			|	clientBlockLimit
-			|	blockIdleTimeout
-			|	blockLifetime
-			|	blockSize
-			|	zombieTimeout)::false
+			addp("clientBlockLimit"
+			|	"blockIdleTimeout"
+			|	"blockLifetime"
+			|	"blockSize"
+			|	"zombieTimeout")::false
 		]
 	},
 	def "Log_Destination" = {
@@ -7532,13 +7402,12 @@
 				const("[Enforcement_Policy]"),
 				type(str)
 			},
-			addp(
-			|	enable
-			|	allTransactions
-			|	remark
-			|	rules
-			|	label
-			|	class)::false
+			addp("enable"
+			|	"allTransactions"
+			|	"remark"
+			|	"rules"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -7574,20 +7443,19 @@
 		"logLegalRequests"::type(bool),
 		"localPublisher"::ref: "#/definitions/Pointer_Log_Publisher",
 		"remotePublisher"::ref: "#/definitions/Pointer_Log_Publisher",
-		addp(
-		|	logBotSignatureMatchedRequests
-		|	logIllegalRequests
-		|	logChallengedRequests
-		|	logCaptchaChallengedRequests
-		|	logLegalRequests
-		|	localPublisher
-		|	remotePublisher)::false
+		addp("logBotSignatureMatchedRequests"
+		|	"logIllegalRequests"
+		|	"logChallengedRequests"
+		|	"logCaptchaChallengedRequests"
+		|	"logLegalRequests"
+		|	"localPublisher"
+		|	"remotePublisher")::false
 	],
 	def "Radius_Profile" = {
-		if: , 
+		if: true, 
 		then: properties[
-			"protocolProfile"::,
-			"subscriberDiscoveryEnabled"::
+			"protocolProfile"::true,
+			"subscriberDiscoveryEnabled"::true
 		],
 		type(obj),
 		properties[
@@ -7610,14 +7478,13 @@
 				const("[Radius_Profile]"),
 				type(str)
 			},
-			addp(
-			|	protocolProfile
-			|	subscriberDiscoveryEnabled
-			|	persistAttribute
-			|	parentProfile
-			|	remark
-			|	label
-			|	class)::false
+			addp("protocolProfile"
+			|	"subscriberDiscoveryEnabled"
+			|	"persistAttribute"
+			|	"parentProfile"
+			|	"remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -7686,12 +7553,12 @@
 			bet(0,null),
 			type(int)
 		},
-		addp(
-		|	total
-		|	downlink
-		|	uplink)::false
+		addp("total"
+		|	"downlink"
+		|	"uplink")::false
 	],
 	def "Pointer_Classification_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -7699,9 +7566,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -7709,7 +7575,7 @@
 		ref: "#/definitions/Service_Discovery_Polling_Core_Tagged",
 		if: req["monitors"], 
 		then: properties[
-			"minimumMonitors"::
+			"minimumMonitors"::true
 		],
 		properties[
 			"accessKeyId"::{
@@ -7761,19 +7627,19 @@
 		"deviceID"::ref: "#/definitions/DOS_Profile_Application_Detection_Device",
 		"url"::ref: "#/definitions/DOS_Profile_Application_Detection_URL",
 		"geolocation"::ref: "#/definitions/DOS_Profile_Application_Detection_Geolocation",
-		addp(
-		|	deEscalationPeriod
-		|	operationMode
-		|	site
-		|	escalationPeriod
-		|	sourceIP
-		|	badActor
-		|	thresholdsMode
-		|	deviceID
-		|	url
-		|	geolocation)::false
+		addp("deEscalationPeriod"
+		|	"operationMode"
+		|	"site"
+		|	"escalationPeriod"
+		|	"sourceIP"
+		|	"badActor"
+		|	"thresholdsMode"
+		|	"deviceID"
+		|	"url"
+		|	"geolocation")::false
 	],
 	def "Pointer_DNS_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -7781,9 +7647,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -7813,9 +7678,8 @@
 							enum["attack_type", "avr_id", "blocking_exception_reason", "captcha_result", "client_type", "date_time", "dest_ip", "dest_port", "device_id", "fragment", "geo_location", "headers", "http_class_name", "ip_address_intelligence", "ip_client", "ip_with_route_domain", "is_truncated", "logic_result", "management_ip_address", "management_ip_address_2", "method", "mobile_application_name", "mobile_application_version", "password", "policy_apply_date", "policy_name", "protocol", "query_string", "request", "request_status", "response", "response_code", "route_domain", "salt", "session_id", "severity", "sig_ids", "sig_names", "sig_set_names", "slot_number", "src_port", "staged_sig_names", "staged_sig_set_names", "staged_threat_campaign_names", "sub_violations", "support_id", "threat_campaign_names", "unit_hostname", "uri", "username", "violation_details", "violation_rating", "violations", "virus_name", "websocket_direction", "websocket_message_type", "x_forwarded_for_header_value"]
 						})
 					},
-					addp(
-					|	delimiter
-					|	fields)::false
+					addp("delimiter"
+					|	"fields")::false
 				],
 				req["fields"]
 			}
@@ -7846,9 +7710,8 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	searchIn
-						|	value)::false
+						addp("searchIn"
+						|	"value")::false
 					],
 					req["searchIn",
 						"value"]
@@ -7889,14 +7752,13 @@
 						enum["http", "https", "ws", "wss"]
 					})
 				},
-				addp(
-				|	requestContains
-				|	responseCodes
-				|	loginResults
-				|	requestType
-				|	logicalOperation
-				|	httpMethods
-				|	protocols)::false
+				addp("requestContains"
+				|	"responseCodes"
+				|	"loginResults"
+				|	"requestType"
+				|	"logicalOperation"
+				|	"httpMethods"
+				|	"protocols")::false
 			]
 		},
 		"guaranteeLoggingEnabled"::type(bool),
@@ -7915,9 +7777,8 @@
 				properties[
 					"address"::type(str),
 					"port"::type(str),
-					addp(
-					|	address
-					|	port)::false
+					addp("address"
+					|	"port")::false
 				],
 				req["address",
 					"port"]
@@ -7932,22 +7793,21 @@
 			type(str),
 			enum["local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7"]
 		},
-		addp(
-		|	guaranteeResponseLoggingEnabled
-		|	maxRequestSize
-		|	localStorage
-		|	storageFormat
-		|	responseLogging
-		|	maxEntryLength
-		|	maxHeaderSize
-		|	storageFilter
-		|	guaranteeLoggingEnabled
-		|	maxQuerySize
-		|	protocol
-		|	servers
-		|	reportAnomaliesEnabled
-		|	remoteStorage
-		|	facility)::false
+		addp("guaranteeResponseLoggingEnabled"
+		|	"maxRequestSize"
+		|	"localStorage"
+		|	"storageFormat"
+		|	"responseLogging"
+		|	"maxEntryLength"
+		|	"maxHeaderSize"
+		|	"storageFilter"
+		|	"guaranteeLoggingEnabled"
+		|	"maxQuerySize"
+		|	"protocol"
+		|	"servers"
+		|	"reportAnomaliesEnabled"
+		|	"remoteStorage"
+		|	"facility")::false
 	],
 	def "DOS_Profile_Application_Rate_Based_Detection" = properties[
 		"deEscalationPeriod"::{
@@ -7971,16 +7831,15 @@
 		"deviceID"::ref: "#/definitions/DOS_Profile_Application_Detection_Device",
 		"url"::ref: "#/definitions/DOS_Profile_Application_Detection_URL",
 		"geolocation"::ref: "#/definitions/DOS_Profile_Application_Detection_Geolocation",
-		addp(
-		|	deEscalationPeriod
-		|	operationMode
-		|	site
-		|	escalationPeriod
-		|	sourceIP
-		|	thresholdsMode
-		|	deviceID
-		|	url
-		|	geolocation)::false
+		addp("deEscalationPeriod"
+		|	"operationMode"
+		|	"site"
+		|	"escalationPeriod"
+		|	"sourceIP"
+		|	"thresholdsMode"
+		|	"deviceID"
+		|	"url"
+		|	"geolocation")::false
 	],
 	def "Rewrite_Profile" = {
 		type(obj),
@@ -8035,23 +7894,22 @@
 				const("[Rewrite_Profile]"),
 				type(str)
 			},
-			addp(
-			|	setCookieRules
-			|	responseSettings
-			|	requestSettings
-			|	certificate
-			|	remark
-			|	splitTunnelingEnabled
-			|	label
-			|	bypassList
-			|	javaSignKeyPassphrase
-			|	rewriteList
-			|	locationSpecificEnabled
-			|	rewriteMode
-			|	clientCachingType
-			|	javaCaFile
-			|	uriRules
-			|	class)::false
+			addp("setCookieRules"
+			|	"responseSettings"
+			|	"requestSettings"
+			|	"certificate"
+			|	"remark"
+			|	"splitTunnelingEnabled"
+			|	"label"
+			|	"bypassList"
+			|	"javaSignKeyPassphrase"
+			|	"rewriteList"
+			|	"locationSpecificEnabled"
+			|	"rewriteMode"
+			|	"clientCachingType"
+			|	"javaCaFile"
+			|	"uriRules"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -8072,16 +7930,14 @@
 							length(1,null),
 							type(str)
 						},
-						addp(
-						|	bigip
-						|	use)::false
+						addp("bigip"
+						|	"use")::false
 					],
 					pro(1,1)
 				})
 			},
-			addp(
-			|	addressLists
-			|	portLists)::false
+			addp("addressLists"
+			|	"portLists")::false
 		]
 	},
 	def "DOS_Profile" = {
@@ -8099,23 +7955,22 @@
 				type(str)
 			},
 			"network"::ref: "#/definitions/DOS_Profile_Network",
-			addp(
-			|	application
-			|	applicationWhitelist
-			|	protocolDNS
-			|	remark
-			|	label
-			|	protocolSIP
-			|	whitelist
-			|	class
-			|	network)::false
+			addp("application"
+			|	"applicationWhitelist"
+			|	"protocolDNS"
+			|	"remark"
+			|	"label"
+			|	"protocolSIP"
+			|	"whitelist"
+			|	"class"
+			|	"network")::false
 		]
 	},
 	def "Service_Discovery_Azure" = {
 		ref: "#/definitions/Service_Discovery_Polling_Core_Tagged",
 		if: req["monitors"], 
 		then: properties[
-			"minimumMonitors"::
+			"minimumMonitors"::true
 		],
 		properties[
 			"resourceGroup"::type(str),
@@ -8209,38 +8064,37 @@
 			},
 			"captureFilter"::ref: "#/definitions/Capture_Filter",
 			"notificationByEmail"::type(bool),
-			addp(
-			|	collectResponseCode
-			|	collectMaxTpsAndThroughput
-			|	collectUserAgent
-			|	remark
-			|	collectOsAndBrowser
-			|	collectUrl
-			|	collectMethod
-			|	collectUserSession
-			|	collectClientSideStatistics
-			|	capturedTrafficInternalLogging
-			|	externalLoggingPublisher
-			|	collectedStatsExternalLogging
-			|	class
-			|	sessionCookieSecurity
-			|	capturedTrafficExternalLogging
-			|	notificationEmailAddresses
-			|	subnetsForStatCollection
-			|	countriesForStatCollection
-			|	collectedStatsInternalLogging
-			|	label
-			|	collectPageLoadTime
-			|	publishIruleStatistics
-			|	collectGeo
-			|	collectIp
-			|	collectSubnet
-			|	sessionTimeoutMinutes
-			|	notificationBySyslog
-			|	notificationBySnmp
-			|	urlsForStatCollection
-			|	captureFilter
-			|	notificationByEmail)::false
+			addp("collectResponseCode"
+			|	"collectMaxTpsAndThroughput"
+			|	"collectUserAgent"
+			|	"remark"
+			|	"collectOsAndBrowser"
+			|	"collectUrl"
+			|	"collectMethod"
+			|	"collectUserSession"
+			|	"collectClientSideStatistics"
+			|	"capturedTrafficInternalLogging"
+			|	"externalLoggingPublisher"
+			|	"collectedStatsExternalLogging"
+			|	"class"
+			|	"sessionCookieSecurity"
+			|	"capturedTrafficExternalLogging"
+			|	"notificationEmailAddresses"
+			|	"subnetsForStatCollection"
+			|	"countriesForStatCollection"
+			|	"collectedStatsInternalLogging"
+			|	"label"
+			|	"collectPageLoadTime"
+			|	"publishIruleStatistics"
+			|	"collectGeo"
+			|	"collectIp"
+			|	"collectSubnet"
+			|	"sessionTimeoutMinutes"
+			|	"notificationBySyslog"
+			|	"notificationBySnmp"
+			|	"urlsForStatCollection"
+			|	"captureFilter"
+			|	"notificationByEmail")::false
 		],
 		req["class"]
 	},
@@ -8263,11 +8117,10 @@
 			"name"::type(str),
 			"category"::ref: "#/definitions/Pointer_Classification_Category",
 			"invertMatch"::type(bool),
-			addp(
-			|	application
-			|	name
-			|	category
-			|	invertMatch)::false
+			addp("application"
+			|	"name"
+			|	"category"
+			|	"invertMatch")::false
 		],
 		req["name"]
 	},
@@ -8278,8 +8131,7 @@
 				type(arr),
 				items(;ref: "#/definitions/DOS_DNS_Vector")
 			},
-			addp(
-			|	vectors)::false
+			addp("vectors")::false
 		]
 	},
 	def "Enforcement_Rule_QOS" = {
@@ -8287,9 +8139,8 @@
 		properties[
 			"category"::type(str),
 			"policy"::ref: "#/definitions/Pointer_Bandwidth_Control_Policy",
-			addp(
-			|	category
-			|	policy)::false
+			addp("category"
+			|	"policy")::false
 		],
 		req["policy"]
 	},
@@ -8300,8 +8151,7 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	use)::false
+			addp("use")::false
 		],
 		pro(1,1)
 	},
@@ -8343,18 +8193,17 @@
 				type(int)
 			},
 			"autoBlacklistSettings"::ref: "#/definitions/DOS_Auto_Blacklist_Settings",
-			addp(
-			|	rateIncreaseThreshold
-			|	rateLimit
-			|	thresholdMode
-			|	autoAttackCeiling
-			|	badActorSettings
-			|	simulateAutoThresholdEnabled
-			|	autoAttackFloor
-			|	state
-			|	type
-			|	rateThreshold
-			|	autoBlacklistSettings)::false
+			addp("rateIncreaseThreshold"
+			|	"rateLimit"
+			|	"thresholdMode"
+			|	"autoAttackCeiling"
+			|	"badActorSettings"
+			|	"simulateAutoThresholdEnabled"
+			|	"autoAttackFloor"
+			|	"state"
+			|	"type"
+			|	"rateThreshold"
+			|	"autoBlacklistSettings")::false
 		],
 		req["type"]
 	},
@@ -8379,14 +8228,14 @@
 			type(str)
 		},
 		"copyFrom"::type(str),
-		addp(
-		|	bigip
-		|	base64
-		|	text
-		|	url
-		|	copyFrom)::false
+		addp("bigip"
+		|	"base64"
+		|	"text"
+		|	"url"
+		|	"copyFrom")::false
 	],
 	def "Pointer_GSLB_Domain_CNAME" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -8394,22 +8243,22 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_DNS_Security_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_GSLB_Pool_CNAME" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -8417,18 +8266,17 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_DNS_Resolver" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -8454,9 +8302,8 @@
 							enum["action", "context-name", "date-time", "dest-ip", "dest-port", "sip-method-type", "sip-caller", "sip-callee", "src-ip", "src-port", "vlan", "route-domain"]
 						})
 					},
-					addp(
-					|	delimiter
-					|	fields)::false
+					addp("delimiter"
+					|	"fields")::false
 				],
 				req["fields"]
 			}
@@ -8469,22 +8316,20 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
 		"logServerErrors"::type(bool),
-		addp(
-		|	logRedirectedResponses
-		|	logDroppedRequests
-		|	logGlobalFailures
-		|	logMalformedRequests
-		|	logRequestFailures
-		|	storageFormat
-		|	publisher
-		|	logServerErrors)::false
+		addp("logRedirectedResponses"
+		|	"logDroppedRequests"
+		|	"logGlobalFailures"
+		|	"logMalformedRequests"
+		|	"logRequestFailures"
+		|	"storageFormat"
+		|	"publisher"
+		|	"logServerErrors")::false
 	],
 	def "TLS_Client" = {
 		type(obj),
@@ -8529,9 +8374,8 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			"sessionTickets"::type(bool),
 			"ignoreUntrusted"::type(bool),
@@ -8541,31 +8385,35 @@
 				type(str)
 			},
 			"crlFile"::ref: "#/definitions/Pointer_SSL_CRL_File",
-			addp(
-			|	ignoreExpired
-			|	clientCertificate
-			|	ldapStartTLS
-			|	sendSNI
-			|	serverName
-			|	allowExpiredCRL
-			|	c3dCertificateAuthority
-			|	remark
-			|	label
-			|	validateCertificate
-			|	c3dCertificateLifespan
-			|	c3dEnabled
-			|	authenticationFrequency
-			|	c3dCertificateExtensions
-			|	trustCA
-			|	sessionTickets
-			|	ignoreUntrusted
-			|	ciphers
-			|	class
-			|	crlFile)::false
+			addp("ignoreExpired"
+			|	"clientCertificate"
+			|	"ldapStartTLS"
+			|	"sendSNI"
+			|	"serverName"
+			|	"allowExpiredCRL"
+			|	"c3dCertificateAuthority"
+			|	"remark"
+			|	"label"
+			|	"validateCertificate"
+			|	"c3dCertificateLifespan"
+			|	"c3dEnabled"
+			|	"authenticationFrequency"
+			|	"c3dCertificateExtensions"
+			|	"trustCA"
+			|	"sessionTickets"
+			|	"ignoreUntrusted"
+			|	"ciphers"
+			|	"class"
+			|	"crlFile")::false
 		],
 		req["class"]
 	},
 	def "Pointer_DNS_Cache" = {
+		allOf[
+			true,
+			true,
+			true
+		],
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -8573,9 +8421,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -8600,8 +8447,7 @@
 			type(obj),
 			properties[
 				"bigip"::type(str),
-				addp(
-				|	bigip)::false
+				addp("bigip")::false
 			],
 			req["bigip"]
 		},
@@ -8723,13 +8569,12 @@
 								enum["Controls"],
 								type(str)
 							},
-							"archiveId"::,
-							addp(
-							|	trace
-							|	archiveTimestamp
-							|	logLevel
-							|	class
-							|	archiveId)::false
+							"archiveId"::true,
+							addp("trace"
+							|	"archiveTimestamp"
+							|	"logLevel"
+							|	"class"
+							|	"archiveId")::false
 						]
 					},
 					"updateMode"::{
@@ -8751,12 +8596,11 @@
 								enum["Constants"],
 								type(str)
 							},
-							"version"::,
+							"version"::true,
 							"timestamp"::type(str),
-							addp(
-							|	class
-							|	version
-							|	timestamp)::if: {
+							addp("class"
+							|	"version"
+							|	"timestamp")::if: {
 								type(obj),
 								req["protected",
 									"ciphertext"]
@@ -8766,8 +8610,7 @@
 								then: ref: "#/$defs/JWE",
 								properties[
 									"allowReuse"::type(bool),
-									addp(
-									|	allowReuse)::false
+									addp("allowReuse")::false
 								]
 							}
 						]
@@ -8802,29 +8645,27 @@
 								type(str)
 							},
 							"verifiers"::type(obj),
-							addp(
-							|	controls
-							|	enable
-							|	remark
-							|	label
-							|	constants
-							|	Shared
-							|	class
-							|	verifiers)::false
+							addp("controls"
+							|	"enable"
+							|	"remark"
+							|	"label"
+							|	"constants"
+							|	"Shared"
+							|	"class"
+							|	"verifiers")::false
 						]
 					},
-					addp(
-					|	schemaVersion
-					|	controls
-					|	updateMode
-					|	remark
-					|	scratch
-					|	id
-					|	label
-					|	constants
-					|	class
-					|	target
-					|	Common)::ref: "#/$defs/Tenant"
+					addp("schemaVersion"
+					|	"controls"
+					|	"updateMode"
+					|	"remark"
+					|	"scratch"
+					|	"id"
+					|	"label"
+					|	"constants"
+					|	"class"
+					|	"target"
+					|	"Common")::ref: "#/$defs/Tenant"
 				],
 				req["class",
 					"schemaVersion",
@@ -8880,18 +8721,18 @@
 				bet(0,4294967295),
 				type(int)
 			},
-			addp(
-			|	minimumTps
-			|	maximumTps
-			|	minimumAutoTps
-			|	clientSideDefenseEnabled
-			|	tpsIncreaseRate
-			|	captchaChallengeEnabled
-			|	rateLimitingEnabled
-			|	maximumAutoTps)::false
+			addp("minimumTps"
+			|	"maximumTps"
+			|	"minimumAutoTps"
+			|	"clientSideDefenseEnabled"
+			|	"tpsIncreaseRate"
+			|	"captchaChallengeEnabled"
+			|	"rateLimitingEnabled"
+			|	"maximumAutoTps")::false
 		]
 	},
 	def "Pointer_Persist" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -8899,9 +8740,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -8930,24 +8770,22 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
 			"iRuleSampleRate"::type(int),
-			addp(
-			|	protocol
-			|	loggingEnabled
-			|	name
-			|	destination
-			|	action
-			|	remark
-			|	label
-			|	source
-			|	iRule
-			|	iRuleSampleRate)::false
+			addp("protocol"
+			|	"loggingEnabled"
+			|	"name"
+			|	"destination"
+			|	"action"
+			|	"remark"
+			|	"label"
+			|	"source"
+			|	"iRule"
+			|	"iRuleSampleRate")::false
 		],
 		req["name",
 			"action"]
@@ -8972,6 +8810,7 @@
 		type(obj)
 	},
 	def "Pointer_SSH_Proxy_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -8979,9 +8818,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9015,22 +8853,21 @@
 				items(;type(str))
 			},
 			"stressBasedDetection"::ref: "#/definitions/DOS_Profile_Application_Stress_Based_Detection",
-			addp(
-			|	captchaResponse
-			|	mobileDefense
-			|	remoteTriggeredBlackHoleDuration
-			|	singlePageApplicationEnabled
-			|	botDefense
-			|	triggerIRule
-			|	profileAcceleration
-			|	recordTraffic
-			|	rateBasedDetection
-			|	whitelistedGeolocations
-			|	scrubbingDuration
-			|	botSignatures
-			|	heavyURLProtection
-			|	blacklistedGeolocations
-			|	stressBasedDetection)::false
+			addp("captchaResponse"
+			|	"mobileDefense"
+			|	"remoteTriggeredBlackHoleDuration"
+			|	"singlePageApplicationEnabled"
+			|	"botDefense"
+			|	"triggerIRule"
+			|	"profileAcceleration"
+			|	"recordTraffic"
+			|	"rateBasedDetection"
+			|	"whitelistedGeolocations"
+			|	"scrubbingDuration"
+			|	"botSignatures"
+			|	"heavyURLProtection"
+			|	"blacklistedGeolocations"
+			|	"stressBasedDetection")::false
 		]
 	},
 	def "GSLB_Pool" = {
@@ -9218,11 +9055,11 @@
 		]
 	},
 	def "Pointer_Enforcement_Protocol_Profile_Radius" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -9233,11 +9070,10 @@
 			"proxyServerAuth"::ref: "#/definitions/SSH_Proxy_Profile_Proxy_Auth_Info",
 			"realServerAuth"::ref: "#/definitions/SSH_Proxy_Profile_Real_Server_Auth_Info",
 			"proxyClientAuth"::ref: "#/definitions/SSH_Proxy_Profile_Proxy_Auth_Info",
-			addp(
-			|	name
-			|	proxyServerAuth
-			|	realServerAuth
-			|	proxyClientAuth)::false
+			addp("name"
+			|	"proxyServerAuth"
+			|	"realServerAuth"
+			|	"proxyClientAuth")::false
 		]
 	},
 	def "NAT_Policy" = {
@@ -9253,21 +9089,20 @@
 				const("[NAT_Policy]"),
 				type(str)
 			},
-			addp(
-			|	remark
-			|	rules
-			|	label
-			|	class)::false
+			addp("remark"
+			|	"rules"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
 	def "GSLB_Domain_A" = ref: "#/definitions/GSLB_Domain",
 	def "Pointer_Enforcement_Profile_Gx" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
@@ -9281,11 +9116,10 @@
 				const("[Enforcement_Format_Script]"),
 				type(str)
 			},
-			addp(
-			|	remark
-			|	definition
-			|	label
-			|	class)::false
+			addp("remark"
+			|	"definition"
+			|	"label"
+			|	"class")::false
 		],
 		req["class"]
 	},
@@ -9298,14 +9132,12 @@
 					length(1,null),
 					type(str)
 				},
-				addp(
-				|	bigip
-				|	use)::false
+				addp("bigip"
+				|	"use")::false
 			],
 			pro(1,1)
 		},
-		addp(
-		|	publisher)::false
+		addp("publisher")::false
 	],
 	def "DNS_Zone" = {
 		properties[
@@ -9322,14 +9154,13 @@
 				type(arr),
 				items(;ref: "#/definitions/Pointer_DNS_Nameserver")
 			},
-			addp(
-			|	responsePolicyEnabled
-			|	dnsExpress
-			|	serverTsigKey
-			|	remark
-			|	label
-			|	class
-			|	transferClients)::false
+			addp("responsePolicyEnabled"
+			|	"dnsExpress"
+			|	"serverTsigKey"
+			|	"remark"
+			|	"label"
+			|	"class"
+			|	"transferClients")::false
 		],
 		req["class"]
 	},
@@ -9357,6 +9188,7 @@
 		"credentialUpdate"::type(bool)
 	],
 	def "Pointer_GSLB_Server" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9364,9 +9196,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9419,8 +9250,7 @@
 				type(obj),
 				properties[
 					"bigip"::type(str),
-					addp(
-					|	bigip)::false
+					addp("bigip")::false
 				],
 				req["bigip"]
 			},
@@ -9451,7 +9281,13 @@
 			"doNotProxyHosts"::{
 				uniqueItems,
 				type(arr),
-				items(;type(str))
+				items(;{
+					anyOf[
+						true,
+						true
+					],
+					type(str)
+				})
 			},
 			"ipv6"::type(bool),
 			"defaultConnectAction"::{
@@ -9506,18 +9342,17 @@
 				type(int)
 			},
 			"autoBlacklistSettings"::ref: "#/definitions/DOS_Auto_Blacklist_Settings",
-			addp(
-			|	rateIncreaseThreshold
-			|	rateLimit
-			|	thresholdMode
-			|	autoAttackCeiling
-			|	badActorSettings
-			|	simulateAutoThresholdEnabled
-			|	autoAttackFloor
-			|	state
-			|	type
-			|	rateThreshold
-			|	autoBlacklistSettings)::false
+			addp("rateIncreaseThreshold"
+			|	"rateLimit"
+			|	"thresholdMode"
+			|	"autoAttackCeiling"
+			|	"badActorSettings"
+			|	"simulateAutoThresholdEnabled"
+			|	"autoAttackFloor"
+			|	"state"
+			|	"type"
+			|	"rateThreshold"
+			|	"autoBlacklistSettings")::false
 		],
 		req["type"]
 	},
@@ -9525,12 +9360,12 @@
 		"reportDestinationHsl"::ref: "#/definitions/Enforcement_Rule_Report_Destination_HSL",
 		"detectTethering"::type(bool),
 		"detectDtos"::type(bool),
-		addp(
-		|	reportDestinationHsl
-		|	detectTethering
-		|	detectDtos)::false
+		addp("reportDestinationHsl"
+		|	"detectTethering"
+		|	"detectDtos")::false
 	],
 	def "Pointer_Bandwidth_Control_Policy" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9538,9 +9373,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9548,7 +9382,7 @@
 		ref: "#/definitions/Service_Discovery_Polling_Core",
 		if: req["monitors"], 
 		then: properties[
-			"minimumMonitors"::
+			"minimumMonitors"::true
 		],
 		properties[
 			"rejectUnauthorized"::type(bool),
@@ -9596,21 +9430,21 @@
 				type(str)
 			},
 			"verifiers"::type(obj),
-			addp(
-			|	controls
-			|	optimisticLockKey
-			|	enable
-			|	defaultRouteDomain
-			|	remark
-			|	label
-			|	constants
-			|	Shared
-			|	class
-			|	verifiers)::ref: "#/definitions/Application"
+			addp("controls"
+			|	"optimisticLockKey"
+			|	"enable"
+			|	"defaultRouteDomain"
+			|	"remark"
+			|	"label"
+			|	"constants"
+			|	"Shared"
+			|	"class"
+			|	"verifiers")::ref: "#/definitions/Application"
 		],
 		req["class"]
 	},
 	def "Pointer_GSLB_Pool" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9618,9 +9452,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9693,9 +9526,7 @@
 				"monitorType"::const("[ftp]")
 			], 
 			then: ref: "#/definitions/Monitor_FTP", 
-			else: {
-				not: true
-			},
+			else: true,
 			properties[
 				"targetPort"::{
 					bet(0,65535),
@@ -9737,6 +9568,7 @@
 			"monitorType"]
 	},
 	def "Pointer_GSLB_Domain_MX" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9744,9 +9576,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9766,9 +9597,8 @@
 						enum["context-name", "duration", "route-domain", "sub-id", "translated-dest-port", "translated-src-port", "dest-ip", "event-name", "src-ip", "timestamp", "translated-route-domain", "dest-port", "protocol", "src-port", "translated-dest-ip", "translated-src-ip"]
 					})
 				},
-				addp(
-				|	delimiter
-				|	fields)::false
+				addp("delimiter"
+				|	"fields")::false
 			],
 			req["fields"]
 		}
@@ -9807,22 +9637,22 @@
 			bet(0,4294967295),
 			type(int)
 		},
-		addp(
-		|	recordTrafficEnabled
-		|	maximumDuration
-		|	repetitionInterval
-		|	maximumSize)::false
+		addp("recordTrafficEnabled"
+		|	"maximumDuration"
+		|	"repetitionInterval"
+		|	"maximumSize")::false
 	],
 	def "Pointer_Classification_Category" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
-			addp(
-			|	bigip)::false
+			addp("bigip")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Firewall_Policy" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9830,9 +9660,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9855,14 +9684,13 @@
 			"allowAndroidRootedDevice"::type(bool),
 			"enabled"::type(bool),
 			"allowJailbrokenDevices"::type(bool),
-			addp(
-			|	clientSideChallengeMode
-			|	allowEmulators
-			|	allowAndroidPublishers
-			|	allowIosPackageNames
-			|	allowAndroidRootedDevice
-			|	enabled
-			|	allowJailbrokenDevices)::false
+			addp("clientSideChallengeMode"
+			|	"allowEmulators"
+			|	"allowAndroidPublishers"
+			|	"allowIosPackageNames"
+			|	"allowAndroidRootedDevice"
+			|	"enabled"
+			|	"allowJailbrokenDevices")::false
 		]
 	},
 	def "Persist_SIP" = {
@@ -9884,6 +9712,7 @@
 		items(;ref: "#/definitions/AS3_Patch_Item")
 	},
 	def "Pointer_Radius_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9891,13 +9720,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_Pool" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9905,13 +9734,13 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
 	def "Pointer_TLS_Client" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -9919,9 +9748,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -9942,12 +9770,11 @@
 				const("[Endpoint_Strategy]"),
 				type(str)
 			},
-			addp(
-			|	operands
-			|	remark
-			|	label
-			|	matchMethod
-			|	class)::false
+			addp("operands"
+			|	"remark"
+			|	"label"
+			|	"matchMethod"
+			|	"class")::false
 		],
 		req["class",
 			"matchMethod"]
@@ -9997,26 +9824,27 @@
 			"name"::type(str),
 			"sftpDownAction"::ref: "#/definitions/SSH_Proxy_Profile_Default_Action",
 			"subSystemAction"::ref: "#/definitions/SSH_Proxy_Profile_Default_Action",
-			addp(
-			|	rexecAction
-			|	scpDownAction
-			|	shellAction
-			|	x11ForwardAction
-			|	agentAction
-			|	otherAction
-			|	localForwardAction
-			|	remoteForwardAction
-			|	scpUpAction
-			|	sftpUpAction
-			|	name
-			|	sftpDownAction
-			|	subSystemAction)::false
+			addp("rexecAction"
+			|	"scpDownAction"
+			|	"shellAction"
+			|	"x11ForwardAction"
+			|	"agentAction"
+			|	"otherAction"
+			|	"localForwardAction"
+			|	"remoteForwardAction"
+			|	"scpUpAction"
+			|	"sftpUpAction"
+			|	"name"
+			|	"sftpDownAction"
+			|	"subSystemAction")::false
 		]
 	},
 	def "Data_Group_Records_IP" = allOf[
-		ref: "#/definitions/Data_Group_Records_Base"
+		ref: "#/definitions/Data_Group_Records_Base",
+		true
 	],
 	def "Pointer_Firewall_Address_List" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -10024,9 +9852,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -10061,12 +9888,11 @@
 				bet(0,65535),
 				type(int)
 			},
-			addp(
-			|	isDomainNameStatic
-			|	domainName
-			|	remark
-			|	label
-			|	ratio)::false
+			addp("isDomainNameStatic"
+			|	"domainName"
+			|	"remark"
+			|	"label"
+			|	"ratio")::false
 		],
 		req["domainName",
 			"ratio"]
@@ -10077,9 +9903,8 @@
 			bet(0,2147483647),
 			type(int)
 		},
-		addp(
-		|	reportDestinationHsl
-		|	threshold)::false
+		addp("reportDestinationHsl"
+		|	"threshold")::false
 	],
 	def "HTTP_Compress" = {
 		type(obj),
@@ -10159,27 +9984,26 @@
 				bet(256,32768),
 				type(int)
 			},
-			addp(
-			|	preferMethod
-			|	selective
-			|	uriExcludes
-			|	gzipWindowSize
-			|	varyHeader
-			|	contentTypeIncludes
-			|	gzipLevel
-			|	remark
-			|	label
-			|	keepAcceptEncoding
-			|	uriIncludes
-			|	cpuSaverLow
-			|	minimumSize
-			|	cpuSaver
-			|	cpuSaverHigh
-			|	contentTypeExcludes
-			|	class
-			|	gzipMemory
-			|	allowHTTP10
-			|	bufferSize)::false
+			addp("preferMethod"
+			|	"selective"
+			|	"uriExcludes"
+			|	"gzipWindowSize"
+			|	"varyHeader"
+			|	"contentTypeIncludes"
+			|	"gzipLevel"
+			|	"remark"
+			|	"label"
+			|	"keepAcceptEncoding"
+			|	"uriIncludes"
+			|	"cpuSaverLow"
+			|	"minimumSize"
+			|	"cpuSaver"
+			|	"cpuSaverHigh"
+			|	"contentTypeExcludes"
+			|	"class"
+			|	"gzipMemory"
+			|	"allowHTTP10"
+			|	"bufferSize")::false
 		],
 		req["class"]
 	},
@@ -10217,15 +10041,14 @@
 				bet(0,60),
 				type(int)
 			},
-			addp(
-			|	password
-			|	parentProfile
-			|	transactionTimeout
-			|	remark
-			|	label
-			|	sharedSecret
-			|	class
-			|	retransmissionTimeout)::false
+			addp("password"
+			|	"parentProfile"
+			|	"transactionTimeout"
+			|	"remark"
+			|	"label"
+			|	"sharedSecret"
+			|	"class"
+			|	"retransmissionTimeout")::false
 		],
 		req["class"]
 	},
@@ -10236,11 +10059,10 @@
 			"rewriteHeadersEnabled"::type(bool),
 			"insertXforwardedProtoEnabled"::type(bool),
 			"insertXforwardedHostEnabled"::type(bool),
-			addp(
-			|	insertXforwardedForEnabled
-			|	rewriteHeadersEnabled
-			|	insertXforwardedProtoEnabled
-			|	insertXforwardedHostEnabled)::false
+			addp("insertXforwardedForEnabled"
+			|	"rewriteHeadersEnabled"
+			|	"insertXforwardedProtoEnabled"
+			|	"insertXforwardedHostEnabled")::false
 		]
 	},
 	def "Security_Log_Profile_Nat" = {
@@ -10270,37 +10092,35 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			},
 			"rateLimitEndOutboundSession"::type(int),
 			"logQuotaExceeded"::type(bool),
 			"logStartOutboundSession"::type(bool),
-			addp(
-			|	rateLimitErrors
-			|	formatQuotaExceeded
-			|	rateLimitQuotaExceeded
-			|	logEndInboundSession
-			|	logStartInboundSession
-			|	formatEndInboundSession
-			|	rateLimitAggregate
-			|	formatErrors
-			|	rateLimitStartInboundSession
-			|	formatStartOutboundSession
-			|	logSubscriberId
-			|	formatEndOutboundSession
-			|	logEndOutboundSession
-			|	logErrors
-			|	rateLimitEndInboundSession
-			|	formatStartInboundSession
-			|	rateLimitStartOutboundSession
-			|	publisher
-			|	rateLimitEndOutboundSession
-			|	logQuotaExceeded
-			|	logStartOutboundSession)::false
+			addp("rateLimitErrors"
+			|	"formatQuotaExceeded"
+			|	"rateLimitQuotaExceeded"
+			|	"logEndInboundSession"
+			|	"logStartInboundSession"
+			|	"formatEndInboundSession"
+			|	"rateLimitAggregate"
+			|	"formatErrors"
+			|	"rateLimitStartInboundSession"
+			|	"formatStartOutboundSession"
+			|	"logSubscriberId"
+			|	"formatEndOutboundSession"
+			|	"logEndOutboundSession"
+			|	"logErrors"
+			|	"rateLimitEndInboundSession"
+			|	"formatStartInboundSession"
+			|	"rateLimitStartOutboundSession"
+			|	"publisher"
+			|	"rateLimitEndOutboundSession"
+			|	"logQuotaExceeded"
+			|	"logStartOutboundSession")::false
 		],
 		req["publisher"]
 	},
@@ -10319,11 +10139,10 @@
 				const("[SNAT_Pool]"),
 				type(str)
 			},
-			addp(
-			|	snatAddresses
-			|	remark
-			|	label
-			|	class)::false
+			addp("snatAddresses"
+			|	"remark"
+			|	"label"
+			|	"class")::false
 		],
 		req["class",
 			"snatAddresses"]
@@ -10351,9 +10170,8 @@
 						length(1,null),
 						type(str)
 					},
-					addp(
-					|	bigip
-					|	use)::false
+					addp("bigip"
+					|	"use")::false
 				],
 				pro(1,1)
 			}
@@ -10371,6 +10189,7 @@
 		]
 	},
 	def "Pointer_CA_Bundle" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -10378,9 +10197,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -10630,95 +10448,93 @@
 							bet(0,255),
 							type(int)
 						},
-						addp(
-						|	when
-						|	option)::false
+						addp("when"
+						|	"option")::false
 					]
 				})
 			},
 			"fastOpen"::type(bool),
 			"timeWaitRecycle"::type(bool),
-			addp(
-			|	autoReceiveWindowSize
-			|	ratePaceMaxRate
-			|	slowStart
-			|	ttlIPv4
-			|	fastOpenCookieExpiration
-			|	congestionMetricsCacheTimeout
-			|	ttlIPv6
-			|	verifiedAccept
-			|	deferredAccept
-			|	ecn
-			|	initRwnd
-			|	synCookieWhitelist
-			|	synCookieEnable
-			|	mptcpCsumVerify
-			|	maxRetrans
-			|	initCwnd
-			|	autoProxyBufferSize
-			|	congestionControl
-			|	maxSegmentSize
-			|	mptcpFastJoin
-			|	delayWindowControl
-			|	dsack
-			|	enhancedLossRecovery
-			|	ipDfMode
-			|	md5SignaturePassphrase
-			|	mptcpSubflowMax
-			|	mptcpIdleTimeout
-			|	closeWaitTimeout
-			|	congestionMetricsCache
-			|	ipTosToClient
-			|	selectiveNack
-			|	mptcpMakeAfterBreak
-			|	mptcpCsum
-			|	nagle
-			|	linkQosToClient
-			|	ratePace
-			|	mptcpNoJoinDssAck
-			|	pktLossIgnoreRate
-			|	ackOnPush
-			|	autoSendBufferSize
-			|	timestamps
-			|	delayedAcks
-			|	md5Signature
-			|	proxyBufferLow
-			|	remark
-			|	proxyBufferHigh
-			|	timeWaitTimeout
-			|	limitedTransmit
-			|	finWait2Timeout
-			|	mptcpFallback
-			|	minimumRto
-			|	mptcpRetransmitMin
-			|	selectiveAcks
-			|	pktLossIgnoreBurst
-			|	class
-			|	finWaitTimeout
-			|	mptcpRtoMax
-			|	abc
-			|	synMaxRetrans
-			|	sendBufferSize
-			|	receiveWindowSize
-			|	mptcp
-			|	label
-			|	tailLossProbe
-			|	keepAliveInterval
-			|	zeroWindowTimeout
-			|	synRtoBase
-			|	pushFlag
-			|	ttlMode
-			|	idleTimeout
-			|	mptcpTimeout
-			|	proxyMSS
-			|	resetOnTimeout
-			|	mptcpJoinMax
-			|	proxyOptions
-			|	earlyRetransmit
-			|	retransmitThreshold
-			|	tcpOptions
-			|	fastOpen
-			|	timeWaitRecycle)::false
+			addp("autoReceiveWindowSize"
+			|	"ratePaceMaxRate"
+			|	"slowStart"
+			|	"ttlIPv4"
+			|	"fastOpenCookieExpiration"
+			|	"congestionMetricsCacheTimeout"
+			|	"ttlIPv6"
+			|	"verifiedAccept"
+			|	"deferredAccept"
+			|	"ecn"
+			|	"initRwnd"
+			|	"synCookieWhitelist"
+			|	"synCookieEnable"
+			|	"mptcpCsumVerify"
+			|	"maxRetrans"
+			|	"initCwnd"
+			|	"autoProxyBufferSize"
+			|	"congestionControl"
+			|	"maxSegmentSize"
+			|	"mptcpFastJoin"
+			|	"delayWindowControl"
+			|	"dsack"
+			|	"enhancedLossRecovery"
+			|	"ipDfMode"
+			|	"md5SignaturePassphrase"
+			|	"mptcpSubflowMax"
+			|	"mptcpIdleTimeout"
+			|	"closeWaitTimeout"
+			|	"congestionMetricsCache"
+			|	"ipTosToClient"
+			|	"selectiveNack"
+			|	"mptcpMakeAfterBreak"
+			|	"mptcpCsum"
+			|	"nagle"
+			|	"linkQosToClient"
+			|	"ratePace"
+			|	"mptcpNoJoinDssAck"
+			|	"pktLossIgnoreRate"
+			|	"ackOnPush"
+			|	"autoSendBufferSize"
+			|	"timestamps"
+			|	"delayedAcks"
+			|	"md5Signature"
+			|	"proxyBufferLow"
+			|	"remark"
+			|	"proxyBufferHigh"
+			|	"timeWaitTimeout"
+			|	"limitedTransmit"
+			|	"finWait2Timeout"
+			|	"mptcpFallback"
+			|	"minimumRto"
+			|	"mptcpRetransmitMin"
+			|	"selectiveAcks"
+			|	"pktLossIgnoreBurst"
+			|	"class"
+			|	"finWaitTimeout"
+			|	"mptcpRtoMax"
+			|	"abc"
+			|	"synMaxRetrans"
+			|	"sendBufferSize"
+			|	"receiveWindowSize"
+			|	"mptcp"
+			|	"label"
+			|	"tailLossProbe"
+			|	"keepAliveInterval"
+			|	"zeroWindowTimeout"
+			|	"synRtoBase"
+			|	"pushFlag"
+			|	"ttlMode"
+			|	"idleTimeout"
+			|	"mptcpTimeout"
+			|	"proxyMSS"
+			|	"resetOnTimeout"
+			|	"mptcpJoinMax"
+			|	"proxyOptions"
+			|	"earlyRetransmit"
+			|	"retransmitThreshold"
+			|	"tcpOptions"
+			|	"fastOpen"
+			|	"timeWaitRecycle")::false
 		],
 		req["class"]
 	},
@@ -10760,21 +10576,21 @@
 				type(int)
 			},
 			"autoBlacklistSettings"::ref: "#/definitions/DOS_Auto_Blacklist_Settings",
-			addp(
-			|	rateIncreaseThreshold
-			|	rateLimit
-			|	thresholdMode
-			|	autoAttackCeiling
-			|	badActorSettings
-			|	simulateAutoThresholdEnabled
-			|	autoAttackFloor
-			|	state
-			|	type
-			|	rateThreshold
-			|	autoBlacklistSettings)::false
+			addp("rateIncreaseThreshold"
+			|	"rateLimit"
+			|	"thresholdMode"
+			|	"autoAttackCeiling"
+			|	"badActorSettings"
+			|	"simulateAutoThresholdEnabled"
+			|	"autoAttackFloor"
+			|	"state"
+			|	"type"
+			|	"rateThreshold"
+			|	"autoBlacklistSettings")::false
 		]
 	},
 	def "Pointer_Analytics_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -10782,9 +10598,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -10818,6 +10633,7 @@
 		type(obj)
 	},
 	def "Pointer_UDP_Profile" = {
+		true,
 		type(obj),
 		properties[
 			"bigip"::type(str),
@@ -10825,9 +10641,8 @@
 				length(1,null),
 				type(str)
 			},
-			addp(
-			|	bigip
-			|	use)::false
+			addp("bigip"
+			|	"use")::false
 		],
 		pro(1,1)
 	},
@@ -10901,23 +10716,22 @@
 					type(str)
 				})
 			},
-			addp(
-			|	agingRate
-			|	cacheSize
-			|	uriIncludeList
-			|	minimumObjectSize
-			|	uriExcludeList
-			|	label
-			|	maximumObjectSize
-			|	maximumAge
-			|	ignoreHeaders
-			|	parentProfile
-			|	uriIncludeOverrideList
-			|	metadataMaxSize
-			|	insertAgeHeaderEnabled
-			|	class
-			|	maximumEntries
-			|	uriPinnedList)::false
+			addp("agingRate"
+			|	"cacheSize"
+			|	"uriIncludeList"
+			|	"minimumObjectSize"
+			|	"uriExcludeList"
+			|	"label"
+			|	"maximumObjectSize"
+			|	"maximumAge"
+			|	"ignoreHeaders"
+			|	"parentProfile"
+			|	"uriIncludeOverrideList"
+			|	"metadataMaxSize"
+			|	"insertAgeHeaderEnabled"
+			|	"class"
+			|	"maximumEntries"
+			|	"uriPinnedList")::false
 		],
 		req["class"]
 	},

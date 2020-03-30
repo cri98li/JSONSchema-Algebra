@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Defs_Assertion implements Assertion{
 
@@ -26,7 +26,7 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
 		Set<Entry<String, Assertion>> entrySet = defs.entrySet();

@@ -6,7 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Items_Assertion implements Assertion{
 
@@ -22,7 +22,7 @@ public class Items_Assertion implements Assertion{
 	}
 
 	public void add(Assertion assertion) {
-		if(itemsArray != null) itemsArray = new LinkedList<>();
+		if(itemsArray == null) itemsArray = new LinkedList<>();
 		itemsArray.add(assertion);
 	}
 
@@ -42,7 +42,7 @@ public class Items_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		if(itemsArray != null)
 			if(itemsArray.size() == 1)

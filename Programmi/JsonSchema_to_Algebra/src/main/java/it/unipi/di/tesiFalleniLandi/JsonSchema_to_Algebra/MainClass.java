@@ -15,12 +15,12 @@ import org.json.simple.parser.ParseException;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.MainClass_Algebra;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Parser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.MainClass_JSONSchema;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
 
 /**
  * Hello world!
@@ -50,13 +50,13 @@ public class MainClass
 			    	JSONObject object = (JSONObject) new JSONParser().parse(reader);
 			    	root = new JSONSchema(object);
 			    	
-			    	Utils.toGrammarString(root.assertionSeparation());
+			    	Utils_JSONSchema.toGrammarString(root.assertionSeparation());
 			    	
-			    	GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(Utils.toGrammarString(root.assertionSeparation())));        
+			    	GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(Utils_JSONSchema.toGrammarString(root.assertionSeparation())));        
 			        CommonTokenStream tokens = new CommonTokenStream(lexer);
 			        GrammaticaParser parser = new GrammaticaParser(tokens);
 			        ParseTree tree =  parser.assertion();
-			        Parser p = new Parser();
+			        AlgebraParser p = new AlgebraParser();
 			        Assertion schema = (Assertion) p.visit(tree);
 			        System.out.println(schema.toString());
 			    }

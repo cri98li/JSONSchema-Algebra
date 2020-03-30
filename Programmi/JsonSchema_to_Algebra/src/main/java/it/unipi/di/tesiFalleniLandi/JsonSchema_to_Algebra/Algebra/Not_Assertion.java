@@ -2,15 +2,15 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 public class Not_Assertion implements Assertion{
 	
-	private Assertion value;
+	private Assertion not;
 	
-	public Not_Assertion(Assertion a) {
-		value = a;
+	public Not_Assertion(Assertion not) {
+		this.not = not;
 	}
 
 	@Override
 	public String toString() {
-		return "Not_Assertion [" + value + "]";
+		return "Not_Assertion [" + not + "]";
 	}
 	
 	@Override
@@ -20,6 +20,6 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		return value.toJSONSchema();
+		return not.toJSONSchema();
 	}
 }

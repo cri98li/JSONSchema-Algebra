@@ -5,18 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Utils {
+public class Utils_JSONSchema {
 	public static JSONSchema parse(String path) throws FileNotFoundException, IOException, ParseException {
 		
 		try (Reader reader = new FileReader(path)){
@@ -39,7 +36,7 @@ public class Utils {
 		Defs finalDefs = new Defs();
 		
 		for(URI_JS ref : refList) {
-			if(ref.toString().equals("#"))
+			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#')
 				continue;
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
@@ -164,38 +161,5 @@ public class Utils {
 		for(int i = 0; i < n; i++) output += "\t";
 		
 		return output;
-	}
-	
-	
-	/**
-	 * Inserisce il contenuto di toPut in schema
-	 * @param schema
-	 * @param keyword
-	 * @param toPut
-	 */
-	@SuppressWarnings("unchecked")
-	public static void putContent(JSONObject schema, String keyword, Object toPut) {
-		List<String> putContentKeywords = Arrays.asList( new String[]{
-				"properties",
-				"ifThenElse",
-				"items",
-				"betweenItems",
-				"length",
-				"contains",
-				"betweenNumber",
-				"betweenProperties",
-				"unknow"
-		});
-		
-		if(!putContentKeywords.contains(keyword))
-		{
-			schema.put(keyword, toPut);
-			return;
-		}
-		
-		Set<?> keys = ((JSONObject) toPut).keySet();
-		for(Object key : keys) {
-			schema.put(key, ((JSONObject) toPut).get(key));
-		}
 	}
 }

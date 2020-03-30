@@ -98,7 +98,7 @@ public class Properties implements JSONSchemaElement{
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
 				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
-				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
+				strAdditionalProp += GrammarStringDefinitions.OR + "\"" + entry.getKey() + "\"";
 			}
 		}
 		
@@ -112,10 +112,8 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		//Se non sono vuoti, sottraggo la virgola iniziale
-		/*if(!str.isEmpty()) {
-			str = str.substring(GrammarStringDefinitions.COMMA.length());
-			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.COMMA.length());
-		}*/
+		if(!str.isEmpty()) 
+			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.OR.length());
 		
 		if(additionalProperties != null) 
 			str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ADDITIONALPROPERTIES, strAdditionalProp, additionalProperties.toGrammarString());
@@ -189,13 +187,13 @@ public class Properties implements JSONSchemaElement{
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		}
 		
 		if(patternProperties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		}
 		
 		if(additionalProperties != null)

@@ -3,7 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
@@ -207,7 +206,10 @@ public class Enum implements JSONSchemaElement{
 		
 		if(enumArray_bool != null) _enum.enumArray_bool = new LinkedList<>(enumArray_bool);
 		
-		if(enumArray_array != null) _enum.enumArray_array = new LinkedList<>(enumArray_array);
+		if(enumArray_array != null) {
+			for(Enum s : enumArray_array)
+				_enum.enumArray_array.add(s.assertionSeparation());
+		}
 		
 		_enum.thereIsNull = this.thereIsNull;
 		
@@ -215,6 +217,8 @@ public class Enum implements JSONSchemaElement{
 			for(JSONSchema s : enumArray_obj)
 				_enum.enumArray_obj.add(s.assertionSeparation());
 		}
+		
+		_enum.arrayOnly = arrayOnly;
 		
 		return _enum;
 	}

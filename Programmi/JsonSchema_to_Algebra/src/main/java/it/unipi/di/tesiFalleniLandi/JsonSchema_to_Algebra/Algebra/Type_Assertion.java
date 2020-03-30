@@ -6,19 +6,19 @@ import java.util.List;
 import org.json.simple.JSONArray;
 
 public class Type_Assertion implements Assertion{
-	private List<String> type;
+	private List<String> types;
 	
 	public Type_Assertion() {
-		type = new LinkedList<>();
+		types = new LinkedList<>();
 	}
 	
 	public void add(String toAdd) {
-		type.add(toAdd);
+		types.add(toAdd);
 	}
 
 	@Override
 	public String toString() {
-		return "Type_Assertion [" + type + "]";
+		return "Type_Assertion [" + types + "]";
 	}
 
 	@Override
@@ -29,11 +29,11 @@ public class Type_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
-		if(type.size() == 1)
-			return type.get(0);
+		if(types.size() == 1)
+			return types.get(0);
 		
 		JSONArray array = new JSONArray();
-		for(String s : type)
+		for(String s : types)
 			array.add(s);
 			
 		return array;

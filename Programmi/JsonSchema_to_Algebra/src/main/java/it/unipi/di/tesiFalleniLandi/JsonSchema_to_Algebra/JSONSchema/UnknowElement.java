@@ -5,11 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class UnknowElement implements JSONSchemaElement {
 	private HashMap<String, Object> obj;

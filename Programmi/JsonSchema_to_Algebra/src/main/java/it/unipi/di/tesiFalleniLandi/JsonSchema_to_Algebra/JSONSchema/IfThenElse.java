@@ -108,9 +108,9 @@ public class IfThenElse implements JSONSchemaElement {
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
 		
-		if(ifStatement != null) returnList.addAll(Utils.addPathElement("if", ifStatement.collectDef()));
-		if(thenStatement != null) returnList.addAll(Utils.addPathElement("then", thenStatement.collectDef()));
-		if(elseStatement != null) returnList.addAll(Utils.addPathElement("else", elseStatement.collectDef()));
+		if(ifStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("if", ifStatement.collectDef()));
+		if(thenStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("then", thenStatement.collectDef()));
+		if(elseStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("else", elseStatement.collectDef()));
 		
 		return returnList;
 	}
