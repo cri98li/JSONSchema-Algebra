@@ -19,11 +19,37 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary ">
             <a class="navbar-brand" href="#">JSON Algebra</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-right d-flex justify-content-center" id="navbarNav">
+                <div class="input-group w-50">
+                    <select class="custom-select bg-light" id="SelectAction">
+                        <option selected disabled>Select an action</option>
+                        <option value="toJSON">[DEBUG] toJSON</option>
+                        <option value="assertionSeparation">Assertion separation</option>
+                        <option value="referenceNormalization">Reference normalization</option>
+                        <option value="normalize">Normalize</option>
+                        <option value="toGrammarString">Convert to grammar</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" id="translate" class="btn btn-light mr-5" onclick="sendRequest()">Translate</button>
+                    </div>
+                </div>
+            </div>
+              <form class="form-inline">
+                <button class="btn btn-outline-light mr-2" type="button" id="inputFileButton">Upload file</button>
+                <input type="file" class="form-control-file btn btn-primary" style="display: none;" id="inputFile">
+                <button class="btn btn-success" type="button" id="downloadFileButton">Save</button>
+              </form>
         </nav>
 
         <div class="container-fluid">
+
+            <!--ALERT BOX-->
             <div class="alert alert-danger mt-4" role="alert" id="alert" style="display: none;">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -31,30 +57,19 @@
                 <h4 class="alert-heading" id="alert-title">Title</h4>
                 <p id="alert-body">Body</p>
             </div>
+
+
+
             <div class="row mt-5">
-                <div class="col-xl-5 col-12">
-                    <label for="inputTextarea">Input textarea</label>
-                    <textarea class="form-control" id="inputTextarea" rows="10"></textarea>
+
+                <!--LEFT-->
+                <div class="col-xl-6 col-12 text-center">
+                    <textarea class="form-control" id="inputTextarea" rows="10" placeholder="Input textarea"></textarea>
                 </div>
-                <div class="col-xl-2 col-12 text-center mt-4">
-                    <label for="SelectAction">Select an action</label>
-                        <select class="form-control" id="SelectAction">
-                          <option value="toJSON">[DEBUG] toJSON</option>
-                          <option value="assertionSeparation">Assertion separation</option>
-                          <option value="referenceNormalization">Reference normalization</option>
-                          <option value="normalize" selected>Normalize</option>
-                          <option value="toGrammarString">Convert to grammar</option>
-                        </select>
-                    <button type="button" id="translate" class="btn btn-primary mt-3" onclick="sendRequest()">Translate</button>
-                    <br>
-                    <div class="spinner-border text-primary mt-3" style="display: none;" id="loadingGif">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                    
-                </div>
-                <div class="col-xl-5 col-12">
-                    <label for="outputTextarea">Output textarea</label>
-                    <textarea class="form-control" id="outputTextarea" rows="10"></textarea>
+
+                <!--RIGHT-->
+                <div class="col-xl-6 col-12 text-center">
+                    <textarea class="form-control" id="outputTextarea" rows="10" placeholder="Output textarea"></textarea>
                 </div>
             </div>
         </div>
