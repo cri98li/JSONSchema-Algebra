@@ -95,10 +95,21 @@
 function sendRequest(){
     var action = $("#SelectAction").val();
     var inputTextarea = $("#inputTextarea").val();
+    $('#alert').hide();
+
+    if(action == null){
+        showAlert('Error', "You must select an action!");
+        return;
+    }
+    
+    if(inputTextarea == ""){
+        showAlert('Error', "You must enter some input!");
+        return;
+    }
 
     $("#translate").prop('disabled', true);
     $("#translate").html('Loading...');
-    $('#loadingGif').show();
+    //$('#loadingGif').show();
 
     $.post("https://mqmukc9q5h.execute-api.eu-west-1.amazonaws.com/pubblico/jsonschema-to-algebra?action="+action,
         inputTextarea,
@@ -109,18 +120,56 @@ function sendRequest(){
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
                 $("#outputTextarea").val(data);
-                //document.getElementById("outputTextarea").innerHTML = data;
 
                 $("#translate").prop('disabled', false);
                 $("#translate").html('Translate');
-                $('#loadingGif').hide();
+                //$('#loadingGif').hide();
 
                 $("#outputTextarea").trigger('change.dynSiz');
                 $("#inputTextarea").trigger('change.dynSiz');
           },
           "text"
-    );
+    )  .fail(function(xhr, status, error) {  
+        showAlert('Error: '+xhr.status, xhr.responseText);
+        
+        $("#translate").prop('disabled', false);
+        $("#translate").html('Translate');
+        //$('#loadingGif').hide();
+      });
 }
+
+function showAlert(title, body){
+    $("#alert-title").html(title);
+    $("#alert-body").html(body);
+    $('#alert').show();
+}
+
+
+//LISTENER
+$('#inputFileButton').click( function(){
+    $('#inputFile').click();
+});
+
+$('#inputFile').change(function(event){
+    var file = event.target;
+    var fr = new FileReader();
+    fr.onload = function(event){
+        $("#inputTextarea").val(event.target.result);
+        $("#inputTextarea").trigger('change.dynSiz');
+    };
+    fr.readAsText(file.files[0]);
+});
+
+$('#downloadFileButton').click(function() {
+    var content = $("#outputTextarea").val();
+    var fileName = "output.txt";
+    var contentType = 'text/plain';
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+});
 
 $('textarea').autoResize();
 $("#outputTextarea").trigger('change.dynSiz');
