@@ -119,7 +119,15 @@ function sendRequest(){
                 $("#inputTextarea").trigger('change.dynSiz');
           },
           "text"
-    );
+    )  .fail(function(xhr, status, error) {        
+        $("#alert-title").html('Error: '+xhr.status);
+        $("#alert-body").html(xhr.responseText);
+        $('#alert').show();
+        
+        $("#translate").prop('disabled', false);
+        $("#translate").html('Translate');
+        $('#loadingGif').hide();
+      });
 }
 
 $('textarea').autoResize();
