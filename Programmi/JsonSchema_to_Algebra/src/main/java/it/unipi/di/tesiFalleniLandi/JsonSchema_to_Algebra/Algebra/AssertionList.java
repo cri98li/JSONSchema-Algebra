@@ -26,7 +26,7 @@ public class AssertionList implements Assertion {
 
 	@Override
 	public String toString() {
-		return "AntrlList [" + list + "]";
+		return "AssertionList [" + list + "]";
 	}
 
 	@Override

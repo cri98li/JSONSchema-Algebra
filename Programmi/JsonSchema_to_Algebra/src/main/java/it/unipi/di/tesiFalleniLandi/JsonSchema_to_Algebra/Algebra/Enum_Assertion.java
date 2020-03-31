@@ -10,7 +10,6 @@ public class Enum_Assertion implements Assertion{
 	private List<Object> _enum;
 	
 	public Enum_Assertion(List<Object> _enum) {
-		super();
 		this._enum = _enum;
 	}
 
@@ -37,8 +36,9 @@ public class Enum_Assertion implements Assertion{
 	public JSONArray toJSONSchema() {
 		JSONArray array = new JSONArray();
 		
-		for(Object element : _enum)
+		for(Object element : _enum) {
 			array.add(element);
+		}
 		
 		return array;
 	}

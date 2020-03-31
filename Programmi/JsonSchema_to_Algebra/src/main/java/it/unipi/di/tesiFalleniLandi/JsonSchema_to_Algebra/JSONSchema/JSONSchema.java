@@ -244,6 +244,7 @@ public class JSONSchema implements JSONSchemaElement{
 	}
 
 	public void addJSONSchemaElement(String key, JSONSchemaElement value) {
+		if(jsonSchema == null)	jsonSchema = new HashMap<>();
 		jsonSchema.put(key, value);
 	}
 	

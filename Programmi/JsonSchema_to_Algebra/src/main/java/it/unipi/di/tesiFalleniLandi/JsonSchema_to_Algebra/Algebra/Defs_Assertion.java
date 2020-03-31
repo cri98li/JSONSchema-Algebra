@@ -37,4 +37,10 @@ public class Defs_Assertion implements Assertion{
 		return obj;
 	}
 
+	@Override
+	public String toString() {
+		return "Defs_Assertion [defs=" + defs + "]";
+	}
+
+	
 }

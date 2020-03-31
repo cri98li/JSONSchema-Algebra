@@ -28,7 +28,8 @@ public class Utils_JSONSchema {
 		return root.assertionSeparation();
 	}
 	
-	public static void referenceNormalization(JSONSchema root) {
+	public static JSONSchema referenceNormalization(JSONSchema root) {
+		JSONSchema newRoot = new JSONSchema();
 		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef());
 		
 		List<URI_JS> refList = root.getRef();
@@ -73,8 +74,9 @@ public class Utils_JSONSchema {
 			finalDefs.addDef("rootdef", root.clone());
 		
 		//Aggiungo allo schema la defs normalizzata
-		root.addJSONSchemaElement("$defs", finalDefs);
+		newRoot.addJSONSchemaElement("$defs", finalDefs);
 		
+		return newRoot;
 	}
 	
 	

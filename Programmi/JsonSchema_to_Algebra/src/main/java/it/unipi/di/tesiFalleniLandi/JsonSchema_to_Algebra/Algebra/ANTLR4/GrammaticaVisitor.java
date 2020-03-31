@@ -431,4 +431,11 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBooleanValue(GrammaticaParser.BooleanValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code JsonObjectValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJsonObjectValue(GrammaticaParser.JsonObjectValueContext ctx);
 }

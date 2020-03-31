@@ -88,12 +88,13 @@ propertyNames: 'names'':' assertion																					#ParsePropertyNames;
 
 annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implementato in JSON_to_Grammatica
 
-json_value :  	NULL																								#NullValue
+json_value :  			NULL																						#NullValue
 				|		INT 																						#IntValue
 				|		STRING																						#StringValue
 				|		DOUBLE																						#DoubleValue
 				|		'['(json_value(',' json_value)*)?']'														#ArrayValue
 				|		BOOLEAN																						#BooleanValue
+				|		'{' (STRING ':' json_value (',' STRING ':' json_value)*)? '}'								#JsonObjectValue
 				;
 
 

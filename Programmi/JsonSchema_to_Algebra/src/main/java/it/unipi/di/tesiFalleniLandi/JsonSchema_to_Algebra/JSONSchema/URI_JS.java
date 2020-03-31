@@ -22,7 +22,7 @@ public class URI_JS {
 	public String toString() {
 		if(normalizedURI == null)
 			return uri;
-		return normalizedURI+normalizedName;
+		return normalizedName;
 	}
 	
 	public String getNormalizedName() {

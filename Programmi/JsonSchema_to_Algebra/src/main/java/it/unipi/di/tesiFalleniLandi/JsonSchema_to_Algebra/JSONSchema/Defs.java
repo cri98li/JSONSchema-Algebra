@@ -100,14 +100,14 @@ public class Defs implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		int count = 0;
-		
+		/*
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
 			count += entry.getValue().numberOfAssertions();
+		*/
 		
-		return (count == 0) ? 0 : 1;
+		return schemaDefs.size();
 	}
 
 	@Override

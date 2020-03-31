@@ -113,6 +113,20 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		
 		return array;
 	}
+	
+	@Override 
+	public AntlrJsonObject visitJsonObjectValue(GrammaticaParser.JsonObjectValueContext ctx) {
+		AntlrJsonObject jsonObject = new AntlrJsonObject();
+		
+		List<Json_valueContext> list = ctx.json_value();
+		List<TerminalNode> idList = ctx.STRING();
+		
+		for(int i = 0; i < list.size(); i++) {
+			jsonObject.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  visit(list.get(i)));
+		}
+		
+		return jsonObject;
+	}
 
 	@Override
 	public Type_Assertion visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx) {  

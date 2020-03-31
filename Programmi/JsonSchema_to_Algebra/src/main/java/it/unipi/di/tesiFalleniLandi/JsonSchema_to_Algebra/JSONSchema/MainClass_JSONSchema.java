@@ -27,7 +27,7 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     	System.out.println(entry.getKey()+ " >> " + entry.getValue().toJSON());
     }*/
     
-    Utils_JSONSchema.referenceNormalization(root);
+    root = Utils_JSONSchema.referenceNormalization(root);
     
     System.out.println(root.toJSON().toString().replace("\\", ""));
     
