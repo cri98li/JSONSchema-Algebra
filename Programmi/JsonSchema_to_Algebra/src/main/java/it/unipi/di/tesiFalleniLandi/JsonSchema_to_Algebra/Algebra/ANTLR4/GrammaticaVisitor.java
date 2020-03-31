@@ -12,26 +12,19 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code NewContains}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * Visit a parse tree produced by the {@code ParseAssertionList}
+	 * labeled alternative in {@link GrammaticaParser#assertion_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNewContains(GrammaticaParser.NewContainsContext ctx);
+	T visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NewConst}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * Visit a parse tree produced by the {@code ParseBooleanSchema}
+	 * labeled alternative in {@link GrammaticaParser#assertion_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNewConst(GrammaticaParser.NewConstContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewIfThenElse}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewIfThenElse(GrammaticaParser.NewIfThenElseContext ctx);
+	T visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NewTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
@@ -39,69 +32,6 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NweBetweenItems}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNweBetweenItems(GrammaticaParser.NweBetweenItemsContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewAnyOf}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewXBetweenAssertion}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewEnum}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewEnum(GrammaticaParser.NewEnumContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewMultipleOf}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewMultipleOf(GrammaticaParser.NewMultipleOfContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewPattern}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewPattern(GrammaticaParser.NewPatternContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewList}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewList(GrammaticaParser.NewListContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewLength}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewLength(GrammaticaParser.NewLengthContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code NewAllOf}
-	 * labeled alternative in {@link GrammaticaParser#assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNewAllOf(GrammaticaParser.NewAllOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NewBetweenAssertion}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
@@ -117,19 +47,26 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewNot(GrammaticaParser.NewNotContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NewOneOf}
+	 * Visit a parse tree produced by the {@code NewXBetweenAssertion}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNewOneOf(GrammaticaParser.NewOneOfContext ctx);
+	T visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NewUniqueItems}
+	 * Visit a parse tree produced by the {@code NewBetweenItems}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNewUniqueItems(GrammaticaParser.NewUniqueItemsContext ctx);
+	T visitNewBetweenItems(GrammaticaParser.NewBetweenItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewLength}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewLength(GrammaticaParser.NewLengthContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NewBetweenProperties}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
@@ -138,6 +75,27 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewBetweenProperties(GrammaticaParser.NewBetweenPropertiesContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewAllOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAllOf(GrammaticaParser.NewAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAnyOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewOneOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewOneOf(GrammaticaParser.NewOneOfContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NewRequired}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
@@ -145,12 +103,103 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewRequired(GrammaticaParser.NewRequiredContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewIfThenElse}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewIfThenElse(GrammaticaParser.NewIfThenElseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewMultipleOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewMultipleOf(GrammaticaParser.NewMultipleOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewEnum}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewEnum(GrammaticaParser.NewEnumContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewUniqueItems}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewUniqueItems(GrammaticaParser.NewUniqueItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewPattern}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewPattern(GrammaticaParser.NewPatternContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewContains}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewContains(GrammaticaParser.NewContainsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewConst}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewConst(GrammaticaParser.NewConstContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NewItems}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNewItems(GrammaticaParser.NewItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAssertionList}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAssertionList(GrammaticaParser.NewAssertionListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewProperties}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewProperties(GrammaticaParser.NewPropertiesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewDef}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewDef(GrammaticaParser.NewDefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewRef}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewRef(GrammaticaParser.NewRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewPropertyNames}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAnnotations}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#type_assertion}.
@@ -271,19 +320,19 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParsePattern(GrammaticaParser.ParsePatternContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseItems}
+	 * Visit a parse tree produced by the {@code ParseOnlyItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParseItems(GrammaticaParser.ParseItemsContext ctx);
+	T visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseItemsArray}
+	 * Visit a parse tree produced by the {@code ParseAdditionalItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParseItemsArray(GrammaticaParser.ParseItemsArrayContext ctx);
+	T visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseContains}
 	 * labeled alternative in {@link GrammaticaParser#contains_assertion}.
@@ -292,6 +341,20 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseContains(GrammaticaParser.ParseContainsContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseProperties}
+	 * labeled alternative in {@link GrammaticaParser#properties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseProperties(GrammaticaParser.ParsePropertiesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAdditionalProperties}
+	 * labeled alternative in {@link GrammaticaParser#additionalProperties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseConst}
 	 * labeled alternative in {@link GrammaticaParser#const_assertion}.
 	 * @param ctx the parse tree
@@ -299,24 +362,80 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseConst(GrammaticaParser.ParseConstContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseDef}
+	 * labeled alternative in {@link GrammaticaParser#def_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseDef(GrammaticaParser.ParseDefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseRef}
+	 * labeled alternative in {@link GrammaticaParser#ref_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseRef(GrammaticaParser.ParseRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePropertyNames}
+	 * labeled alternative in {@link GrammaticaParser#propertyNames}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePropertyNames(GrammaticaParser.ParsePropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAnnotations}
+	 * labeled alternative in {@link GrammaticaParser#annotations}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NullValue}
-	 * labeled alternative in {@link GrammaticaParser#numeric_value}.
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNullValue(GrammaticaParser.NullValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NumericValue}
-	 * labeled alternative in {@link GrammaticaParser#numeric_value}.
+	 * Visit a parse tree produced by the {@code IntValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumericValue(GrammaticaParser.NumericValueContext ctx);
+	T visitIntValue(GrammaticaParser.IntValueContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code StringValue}
-	 * labeled alternative in {@link GrammaticaParser#numeric_value}.
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStringValue(GrammaticaParser.StringValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DoubleValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoubleValue(GrammaticaParser.DoubleValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ArrayValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayValue(GrammaticaParser.ArrayValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BooleanValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanValue(GrammaticaParser.BooleanValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code JsonObjectValue}
+	 * labeled alternative in {@link GrammaticaParser#json_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJsonObjectValue(GrammaticaParser.JsonObjectValueContext ctx);
 }

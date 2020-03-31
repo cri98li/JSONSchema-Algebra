@@ -12,6 +12,9 @@ public class URI_JS {
 		this.uri = uri;
 	}
 	
+	public URI_JS() {
+	}
+
 	public void found() {
 		normalizeURI();
 	}
@@ -19,10 +22,11 @@ public class URI_JS {
 	public String toString() {
 		if(normalizedURI == null)
 			return uri;
-		return normalizedURI+normalizedName;
+		return normalizedName;
 	}
 	
 	public String getNormalizedName() {
+		normalizeURI();
 		return normalizedName;
 	}
 
@@ -37,6 +41,7 @@ public class URI_JS {
 		
 		//caso #
 		if(uri.equals("#")) {
+			normalizedURI = "";
 			normalizedName = "#";
 			return;
 		}
@@ -49,20 +54,23 @@ public class URI_JS {
 		
 		if(splittedURI[i].equals("#")) i++;
 		if(splittedURI[i].equals("definitions") || splittedURI[i].equals("$defs")) i++;
-		
-		
-		
-		/*normalizedName = splittedURI[splittedURI.length - 1];				// name = foo
-		for(; i < splittedURI.length -1; i++)
-			normalizedName += "_"+splittedURI[i];
-		// expected: normalizedName --> foo_a_b
-		*/
+
 		normalizedName = splittedURI[i++];
 		for(; i < splittedURI.length; i++)
 			normalizedName += "_"+splittedURI[i];
 			
 		
 		// expected: a_b_foo
+	}
+	
+	public URI_JS clone() {
+		URI_JS clone = new URI_JS();
+		
+		clone.uri = uri;
+		clone.normalizedURI = normalizedURI;
+		clone.normalizedName = normalizedName;
+		
+		return clone;
 	}
 	
 	

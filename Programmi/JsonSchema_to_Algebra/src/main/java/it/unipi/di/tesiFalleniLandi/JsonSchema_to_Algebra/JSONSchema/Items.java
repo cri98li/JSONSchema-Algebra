@@ -17,12 +17,12 @@ public class Items implements JSONSchemaElement{
 	private JSONSchema additionalItems_array;
 	private JSONSchema unevaluatedItems_array;
 	
-	private boolean initialized;
 	
 	public Items() {	}
 	
 	public void setItems(Object obj) {
 		JSONArray array = null;
+		
 		try{
 			array = (JSONArray) obj;
 		}catch(ClassCastException e) {
@@ -30,7 +30,6 @@ public class Items implements JSONSchemaElement{
 			return;
 		}
 		
-		initialized = true;
 		
 		items_array = new LinkedList<>();
 		
@@ -42,19 +41,13 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(Object obj) {
-		initialized = true;
 
 		items = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(Object obj) {
-		initialized = true;
-
+		
 		items = new JSONSchema(obj);
-	}
-	
-	public boolean isInitialized() {
-		return initialized;
 	}
 	
 	@Override
@@ -97,10 +90,10 @@ public class Items implements JSONSchemaElement{
 			str += it.next().toGrammarString();
 		
 		while(it.hasNext()) {
-			str += "*" + it.next().toGrammarString();
+			str += "," + it.next().toGrammarString();
 		}
 		
-		String str2 = "null";
+		String str2 = "";
 		if(additionalItems_array != null)
 			str2 = additionalItems_array.toGrammarString();
 		
@@ -128,10 +121,9 @@ public class Items implements JSONSchemaElement{
 	public List<URI_JS> getRef() {
 		List<URI_JS> returnList = new LinkedList<>();
 		
-		if(items_array != null) {
+		if(items_array != null)
 			for(JSONSchema s : items_array)
 				returnList.addAll(s.getRef());
-		}
 		
 		if(items != null) returnList.addAll(items.getRef());
 		if(additionalItems_array != null) returnList.addAll(additionalItems_array.getRef());
@@ -166,16 +158,35 @@ public class Items implements JSONSchemaElement{
 			//qui non lo posso trovare: come lo indicherei altrimenti?
 		}
 		
-		if(items != null) returnList.addAll(Utils.addPathElement("items",items.collectDef()));
-		if(additionalItems_array != null) returnList.addAll(Utils.addPathElement("additionalItems", additionalItems_array.collectDef()));
-		if(unevaluatedItems_array != null) returnList.addAll(Utils.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
+		if(items != null) returnList.addAll(Utils_JSONSchema.addPathElement("items",items.collectDef()));
+		if(additionalItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("additionalItems", additionalItems_array.collectDef()));
+		if(unevaluatedItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
 		
 		return returnList;
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	} 
+	
+	@Override
+	public Items clone(){
+		Items newItems = new Items();
+		
+		if(items != null) {
+			newItems.items = items.clone();
+		}else {
+			newItems.items_array = new LinkedList<>();
+			for(JSONSchema item : items_array) {
+				newItems.items_array.add(item.clone());
+			}
+		}
+		
+		if(additionalItems_array != null) newItems.additionalItems_array = additionalItems_array.clone();
+		if(unevaluatedItems_array != null) newItems.unevaluatedItems_array = unevaluatedItems_array.clone();
+		
+		return newItems;
 	}
 }
 

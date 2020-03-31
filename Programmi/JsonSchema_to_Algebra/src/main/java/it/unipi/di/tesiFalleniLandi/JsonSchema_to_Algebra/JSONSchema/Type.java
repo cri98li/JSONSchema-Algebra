@@ -30,6 +30,7 @@ public class Type implements JSONSchemaElement {
 	}
 	
 	public Type() {
+		
 	}
 	
 	@Override
@@ -66,7 +67,7 @@ public class Type implements JSONSchemaElement {
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 	
@@ -109,6 +110,18 @@ public class Type implements JSONSchemaElement {
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	@Override
+	public Type clone() {
+		if(type != null) {
+			return new Type(new String(type));
+		}else {
+			Type newType = new Type();
+			newType.type_array = new LinkedList<>();
+			newType.type_array.addAll(type_array);
+			return newType;
+		}
 	}
 	
 }

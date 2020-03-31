@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -30,7 +29,8 @@ public class Const extends Enum {
 	public Object toJSON() {
 		if(super.thereIsNull) return null;
 		if(!enumArray_array.isEmpty()) return enumArray_array.get(0).toJSON();
-		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0).toJSON();
+		//if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0).toJSON();
+		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0);
 		if(!enumArray_bool.isEmpty()) return enumArray_bool.get(0);
 		if(!enumArray_num.isEmpty()) return enumArray_num.get(0);
 		if(!enumArray_str.isEmpty()) return enumArray_str.get(0);
@@ -53,10 +53,12 @@ public class Const extends Enum {
 		
 		_const.thereIsNull = this.thereIsNull;
 		
+		/*
 		if(enumArray_obj != null) {
 			for(JSONSchema s : enumArray_obj)
 				_const.enumArray_obj.add(s.assertionSeparation());
 		}
+		*/
 		
 		return _const;
 	}
@@ -64,7 +66,7 @@ public class Const extends Enum {
 	@Override
 	public String toGrammarString() {
 		if(!enumArray_str.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_str.toString());
+			return String.format(GrammarStringDefinitions.CONST, "\""+ enumArray_str.toString() +"\"");
 		
 		if(!enumArray_num.isEmpty())
 			return String.format(GrammarStringDefinitions.CONST, enumArray_num.toString());

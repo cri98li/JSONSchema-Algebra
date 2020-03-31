@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
-public class Enum implements JSONSchemaElement, Comparable<Object>{
+public class Enum implements JSONSchemaElement{
 	protected List<String> enumArray_str;
 	protected List<Long> enumArray_num;
 	protected List<Boolean> enumArray_bool;
-	protected List<JSONSchema> enumArray_obj;
+	protected List<JSONObject> enumArray_obj;
 	protected List<Enum> enumArray_array;
 	protected boolean thereIsNull;
 	protected boolean arrayOnly;
@@ -61,7 +62,9 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 				Object currentObject = it.next();
 				parseArray(currentObject);
 			}
-		}catch(ClassCastException e) {}
+		}catch(ClassCastException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	protected void parseArray(Object currentObject) {
@@ -102,7 +105,8 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 	
 	private boolean putObjectValue(Object obj) {
 		try {
-			enumArray_obj.add(new JSONSchema(obj));
+			//enumArray_obj.add(new JSONSchema(obj));
+			enumArray_obj.add((JSONObject) obj);
 			return true;
 		}catch(ClassCastException e) {
 			return false;
@@ -148,10 +152,14 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		it = enumArray_bool.iterator();
 		while(it.hasNext()) array.add(it.next());
 		
+		/*
 		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
 		while(it_JSE.hasNext()) array.add(it_JSE.next().toJSON());
+		*/
+		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
+		while(it_JSO.hasNext()) array.add(it_JSO.next());
 		
-		it_JSE = enumArray_array.iterator();
+		Iterator<? extends JSONSchemaElement>it_JSE = enumArray_array.iterator();
 		while(it_JSE.hasNext()) array.add(it_JSE.next().toJSON());
 		
 		if(thereIsNull) array.add(null);
@@ -161,10 +169,10 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 
 	@Override
 	public String toGrammarString() {
-		String str = ""; String separator = "; ";
+		String str = ""; String separator = ", ";
 		
 		Iterator <?> it = enumArray_str.iterator();
-		while(it.hasNext()) str += (separator + it.next());
+		while(it.hasNext()) str += (separator + "\""+it.next()+"\"");
 		
 		it = enumArray_bool.iterator();
 		while(it.hasNext()) str += (separator + it.next());
@@ -172,12 +180,15 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		it = enumArray_num.iterator();
 		while(it.hasNext()) str += (separator + it.next());
 		
-		
-		
+		/*
 		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
 		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
+		*/
 		
-		it_JSE = enumArray_array.iterator();
+		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
+		while(it_JSO.hasNext()) str += (separator + it_JSO.next().toJSONString());
+		
+		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
 		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
 		
 		
@@ -185,16 +196,14 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		if(thereIsNull) str += (separator + "null");
 		
 		if(arrayOnly)
-			return "["+ str.subSequence(separator.length(), str.length()) + "]";
+			if(str.isEmpty()) //caso array vuoto
+				return "[]";
+			else
+				return "["+ str.subSequence(separator.length(), str.length()) + "]";
 		
 		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 1;
-	}
 
 	@Override
 	public Enum assertionSeparation() {
@@ -206,20 +215,43 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 		
 		if(enumArray_bool != null) _enum.enumArray_bool = new LinkedList<>(enumArray_bool);
 		
-		if(enumArray_array != null) _enum.enumArray_array = new LinkedList<>(enumArray_array);
+		if(enumArray_array != null) {
+			for(Enum s : enumArray_array)
+				_enum.enumArray_array.add(s.assertionSeparation());
+		}
 		
 		_enum.thereIsNull = this.thereIsNull;
 		
+		/*
 		if(enumArray_obj != null) {
 			for(JSONSchema s : enumArray_obj)
 				_enum.enumArray_obj.add(s.assertionSeparation());
 		}
+		*/
+		
+		//No assertion separation dentro enum ???
+		if(enumArray_obj != null) {
+			for(JSONObject obj : enumArray_obj)
+				_enum.enumArray_obj.add(obj);
+		}
+		
+		_enum.arrayOnly = arrayOnly;
 		
 		return _enum;
 	}
 
 	@Override
 	public List<URI_JS> getRef() {
+		List<URI_JS> list = new LinkedList<>();
+		
+		/*
+		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
+		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
+		*/
+		
+		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
+		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
+		
 		return new LinkedList<>();
 	}
 
@@ -234,7 +266,40 @@ public class Enum implements JSONSchemaElement, Comparable<Object>{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public Enum clone() {
+		Enum clone = new Enum();
+		
+		Iterator <?> it = enumArray_str.iterator();
+		while(it.hasNext()) clone.enumArray_str.add((String) it.next());
+		
+		it = enumArray_bool.iterator();
+		while(it.hasNext()) clone.enumArray_bool.add((Boolean) it.next());
+		
+		it = enumArray_num.iterator();
+		while(it.hasNext()) clone.enumArray_num.add((Long) it.next());
+		
+		
+		/*
+		Iterator<JSONSchema> it_JS = enumArray_obj.iterator();
+		while(it_JS.hasNext()) clone.enumArray_obj.add(it_JS.next().clone());
+		*/
+		
+		Iterator<JSONObject> it_JS = enumArray_obj.iterator();
+		while(it_JS.hasNext()) clone.enumArray_obj.add((JSONObject) it_JS.next().clone());
+		
+		Iterator<Enum> it_JSA = enumArray_array.iterator();
+		while(it_JSA.hasNext()) clone.enumArray_array.add(it_JSA.next().clone());
+		
+		
+		
+		clone.thereIsNull = thereIsNull;
+		
+		clone.arrayOnly = arrayOnly;
+		
+		return clone;
 	}
 }

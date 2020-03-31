@@ -27,12 +27,12 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     	System.out.println(entry.getKey()+ " >> " + entry.getValue().toJSON());
     }*/
     
-    Utils.referenceNormalization(root);
+    root = Utils_JSONSchema.referenceNormalization(root);
     
     System.out.println(root.toJSON().toString().replace("\\", ""));
     
     //System.out.println(root.assertionSeparation().toJSON());
     
-    System.out.println(Utils.toGrammarString(root.assertionSeparation()));
+    System.out.println(Utils_JSONSchema.toGrammarString(root.assertionSeparation()));
 	}
 }

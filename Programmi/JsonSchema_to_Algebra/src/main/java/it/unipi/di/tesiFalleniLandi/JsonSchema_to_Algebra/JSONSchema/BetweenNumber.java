@@ -150,7 +150,20 @@ public class BetweenNumber implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public BetweenNumber clone() {
+		BetweenNumber clone = new BetweenNumber();
+		
+		clone.maximum = maximum;
+		clone.minimum = minimum;
+		clone.exclusiveMaximum = exclusiveMaximum;
+		clone.exclusiveMinimum = exclusiveMinimum;
+		clone.booleanExclusiveMaximum = booleanExclusiveMaximum;
+		clone.booleanExclusiveMinimum = booleanExclusiveMinimum;
+		
+		return clone;
 	}
 }
