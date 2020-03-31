@@ -23,9 +23,7 @@ public class Utils_JSONSchema {
 	}
 	
 	public static JSONSchema normalize(JSONSchema root) {
-		referenceNormalization(root);
-		
-		return root.assertionSeparation();
+		return referenceNormalization(root.assertionSeparation());
 	}
 	
 	public static JSONSchema referenceNormalization(JSONSchema root) {
