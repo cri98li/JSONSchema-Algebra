@@ -83,8 +83,16 @@ public class BetweenItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
+	public BetweenItems clone() {
+		BetweenItems clone = new BetweenItems();
+		
+		clone.minItems = minItems;
+		clone.maxItems = maxItems;
+		
+		return clone;
+	}
 }

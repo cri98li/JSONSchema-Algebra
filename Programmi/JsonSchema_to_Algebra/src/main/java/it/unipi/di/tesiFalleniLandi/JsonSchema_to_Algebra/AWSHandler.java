@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,8 +17,12 @@ import org.json.simple.parser.ParseException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 
 public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Object> {
 
@@ -29,6 +35,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			System.out.println("\tHEADERS: "+input.get("headers"));
 			
 			
+			@SuppressWarnings("unchecked")
 			LinkedHashMap<String, String> action = (LinkedHashMap<String, String>) input.get("queryStringParameters");
 			switch(action.get("action")) {
 			case "toJSON":
@@ -46,6 +53,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			case "toGrammarString":
 				return toGrammarString((String) input.get("body"));
+				
+			case "grammarToJSON":
+				return grammarToJSON((String) input.get("body"));
 			}
 			
 			
@@ -83,6 +93,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			return response;
 		} catch (ParseException e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
 					"type", "text",
@@ -100,7 +111,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(Utils.normalize(schema).toJSON().toString(), 
+			GatewayResponse response = new GatewayResponse(Utils_JSONSchema.normalize(schema).toJSON().toString(), 
 					200,
 					"type", "application/schema+json",
 					false);
@@ -108,6 +119,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			return response;
 		} catch (ParseException e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
 					"type", "text",
@@ -133,6 +145,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			return response;
 		} catch (ParseException e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
 					"type", "text",
@@ -149,7 +162,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			object = (JSONObject) new JSONParser().parse(body);
 		
 			JSONSchema schema = new JSONSchema(object);
-			Utils.referenceNormalization(schema);
+			Utils_JSONSchema.referenceNormalization(schema);
 			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(), 
 					200,
 					"type", "application/schema+json",
@@ -158,6 +171,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			return response;
 		} catch (ParseException e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
 					"type", "text",
@@ -175,7 +189,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		
 			JSONSchema schema = new JSONSchema(object);
 			
-			GatewayResponse response = new GatewayResponse(Utils.toGrammarString(Utils.normalize(schema)), 
+			GatewayResponse response = new GatewayResponse(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(schema)), 
 					200,
 					"type", "text",
 					false);
@@ -183,6 +197,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			
 			return response;
 		} catch (ParseException e) {
+			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
 					500,
 					"type", "text",
@@ -191,6 +206,37 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			return response;
 		}
 	
+	}
+	
+	private GatewayResponse grammarToJSON(String body) {
+		try{
+			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));   
+	        CommonTokenStream tokens = new CommonTokenStream(lexer);
+	        GrammaticaParser parser = new GrammaticaParser(tokens);
+	        
+	        //parser.addParseListener(new GrammaticaBaseListener_impl());
+	        
+	        ParseTree tree =  parser.assertion();
+	        AlgebraParser p = new AlgebraParser();
+	        Assertion schema = (Assertion) p.visit(tree);
+		
+	        JSONObject JSON = (JSONObject)schema.toJSONSchema();
+	        
+	        GatewayResponse response = new GatewayResponse(JSON.toJSONString(),
+	        		200,
+	        		"type", "application/json+schema",
+	        		false);
+	        
+	        return response;
+		}catch(Exception e) {
+			e.printStackTrace();
+			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
+					500,
+					"type", "text",
+					false);
+			
+			return response;
+		}
 	}
 }
 

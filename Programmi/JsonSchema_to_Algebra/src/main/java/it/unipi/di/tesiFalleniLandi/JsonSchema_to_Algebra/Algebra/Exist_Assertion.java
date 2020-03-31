@@ -1,29 +1,29 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import org.json.simple.JSONObject;
+
 public class Exist_Assertion implements Assertion{
-	private Integer min, max;
-	private Assertion schema;
+	private Long min, max;
+	private Assertion contains;
 	
-	public Exist_Assertion() {
-		
-	}
+	public Exist_Assertion() {	}
 	
-	public Exist_Assertion(Integer min, Integer max, Assertion schema) {
+	public Exist_Assertion(Long min, Long max, Assertion schema) {
 		this.min = min;
 		this.max = max;
-		this.schema = schema;
+		this.contains = schema;
 	}
 
-	public void setMin(int min) {
+	public void setMin(Long min) {
 		this.min = min;
 	}
 	
-	public void setMax(int max) {
+	public void setMax(Long max) {
 		this.max = max;
 	}
 	
-	public void setS(Assertion schema) {
-		this.schema = schema;
+	public void setContains(Assertion schema) {
+		this.contains = schema;
 	}
 	
 	public Exist_Assertion intersect(Exist_Assertion exist) {
@@ -37,7 +37,24 @@ public class Exist_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Exist_Assertion [min=" + min + ", max=" + max + ", schema=" + schema + "]";
+		return "Exist_Assertion [min=" + min + ", max=" + max + ", contains=" + contains + "]";
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		return "contains";
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
+		
+		if(contains != null) obj.put("contains", contains.toJSONSchema());
+		if(min != null) obj.put("minContains", min);
+		if(max != null) obj.put("maxContains", max);
+		
+		return obj;
 	}
 	
 	

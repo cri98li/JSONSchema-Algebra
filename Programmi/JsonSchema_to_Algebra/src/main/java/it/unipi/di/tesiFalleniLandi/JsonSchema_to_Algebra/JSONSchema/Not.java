@@ -58,12 +58,21 @@ public class Not implements JSONSchemaElement {
 
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
-		return Utils.addPathElement("not", value.collectDef());
+		return Utils_JSONSchema.addPathElement("not", value.collectDef());
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
-		return value.numberOfGeneratedAssertions();
+	public int numberOfAssertions() {
+		return value.numberOfAssertions();
+	}
+	
+	@Override
+	public Not clone(){
+		Not clone = new Not();
+		
+		clone.value = value.clone();
+		
+		return clone;
 	}
 
 }

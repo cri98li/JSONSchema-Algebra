@@ -22,7 +22,9 @@ public class Required implements JSONSchemaElement{
 			required.add((String) it.next());
 	}
 	
-	public Required() {	}
+	public Required() {
+		required = new LinkedList<>();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -39,21 +41,23 @@ public class Required implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		
+		if(required.isEmpty()) return "";
+		
 		Iterator<String> it = required.iterator();
 		
 		if(it.hasNext())
-			str += it.next();
+			str += "\""+it.next()+"\"";
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.COMMA + it.next();
+			str += GrammarStringDefinitions.COMMA +"\""+ it.next()+"\"";
 		}
 		
 		return String.format(GrammarStringDefinitions.REQUIRED, str);
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
-		return 1;
+	public int numberOfAssertions() {
+		return (required.size() == 0)? 0: 1;
 	}
 
 	@Override
@@ -80,5 +84,10 @@ public class Required implements JSONSchemaElement{
 		return new LinkedList<>();
 	}
 	
-	
+	@Override
+	public Required clone() {
+		Required newReq = new Required();
+		newReq.required.addAll(required);
+		return newReq;
+	}
 }

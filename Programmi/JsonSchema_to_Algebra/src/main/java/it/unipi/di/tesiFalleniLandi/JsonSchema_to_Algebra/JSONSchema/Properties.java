@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -99,7 +98,7 @@ public class Properties implements JSONSchemaElement{
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
 				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
-				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
+				strAdditionalProp += GrammarStringDefinitions.OR + "\"" + entry.getKey() + "\"";
 			}
 		}
 		
@@ -107,20 +106,20 @@ public class Properties implements JSONSchemaElement{
 			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
 				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
-				strAdditionalProp += GrammarStringDefinitions.OR + entry.getKey();
+				strAdditionalProp += GrammarStringDefinitions.OR + "\"" +entry.getKey()+"\"";
 			}
 				
 		}
 		
-		if(!str.isEmpty()) {
-			str = str.substring(GrammarStringDefinitions.COMMA.length());
-			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.COMMA.length());
-		}
+		//Se non sono vuoti, sottraggo la virgola iniziale
+		if(!str.isEmpty()) 
+			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.OR.length());
 		
 		if(additionalProperties != null) 
-			strAdditionalProp = String.format(GrammarStringDefinitions.ADDITIONALPROPERTIES, strAdditionalProp, additionalProperties.toGrammarString());
+			str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ADDITIONALPROPERTIES, strAdditionalProp, additionalProperties.toGrammarString());
 		
-		return String.format(GrammarStringDefinitions.PROPERTIES, str, strAdditionalProp);
+		if(str.isEmpty() && additionalProperties == null) return "";
+		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 
 	@Override
@@ -188,13 +187,13 @@ public class Properties implements JSONSchemaElement{
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		}
 		
 		if(patternProperties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 		}
 		
 		if(additionalProperties != null)
@@ -221,33 +220,53 @@ public class Properties implements JSONSchemaElement{
 		case "patternProperties":
 			URIIterator.remove();
 			next = URIIterator.next();
-			if(properties.containsKey(next)) {
+			if(patternProperties.containsKey(next)) {
 				URIIterator.remove();
-				return properties.get(next).searchDef(URIIterator);
+				return patternProperties.get(next).searchDef(URIIterator);
 			}
 			
 		case "additionalProperties":
 			URIIterator.remove();
 			next = URIIterator.next();
-			if(properties.containsKey(next)) {
-				URIIterator.remove();
-				return properties.get(next).searchDef(URIIterator);
-			}
+			return additionalProperties.searchDef(URIIterator);
 		}
 		
 		return null;
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
-		int size = 0;
-		if(properties != null)
-			size = properties.size();
-		if(patternProperties != null)
-			size =+ patternProperties.size();
-		if(additionalProperties != null)
-			size++;
+	public int numberOfAssertions() {
+		return 1;
+	}
+	
+	public void addPatternProperties(String key, JSONSchema value) {
+		patternProperties.put(key, value);
+	}
+
+	
+	@Override
+	public Properties clone() {
+		Properties newProperties = new Properties();
 		
-		return size;
+		if(properties != null) {
+			newProperties.properties = new HashMap<>();
+			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				newProperties.properties.put(entry.getKey(), entry.getValue().clone());
+			}
+		}
+		
+		if(patternProperties != null) {
+			newProperties.patternProperties = new HashMap<>();
+			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				newProperties.patternProperties.put(entry.getKey(), entry.getValue().clone());
+			}
+		}
+		
+		if(additionalProperties != null)
+			newProperties.additionalProperties = additionalProperties.clone();
+
+		return newProperties;
 	}
 }

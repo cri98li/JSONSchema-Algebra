@@ -1,11 +1,10 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 public class AntlrString extends AntlrValue{
 	
 	String value;
 	
 	public AntlrString() {
-		
 	}
 	
 	public AntlrString(String str) {
@@ -22,7 +21,17 @@ public class AntlrString extends AntlrValue{
 
 	@Override
 	public String toString() {
-		return "AntlrString [" + value + "]";
+		return value;
+	}
+
+	@Override
+	public String getJSONSchemaKeyword() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Object toJSONSchema() {
+		throw new UnsupportedOperationException();
 	}
 	
 	

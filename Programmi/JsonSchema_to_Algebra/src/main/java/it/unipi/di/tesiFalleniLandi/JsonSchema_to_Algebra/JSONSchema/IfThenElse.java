@@ -12,8 +12,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 public class IfThenElse implements JSONSchemaElement {
 	private JSONSchema ifStatement, thenStatement, elseStatement;
 	
-	private boolean inizialized = false;
-	
 	public IfThenElse(){ }
 	
 	/*public If_Then_Else(JSONObject obj){
@@ -21,22 +19,15 @@ public class IfThenElse implements JSONSchemaElement {
 	}*/
 	
 	public void setIf(Object obj) {
-		inizialized = true;
 		ifStatement = new JSONSchema(obj);
 	}
 	
 	public void setThen(Object obj) {
-		inizialized = true;
 		thenStatement = new JSONSchema(obj);
 	}
 	
 	public void setElse(Object obj) {
-		inizialized = true;
 		elseStatement = new JSONSchema(obj);
-	}
-	
-	public boolean isInitialized() {
-		return inizialized;
 	}
 
 	@Override
@@ -51,9 +42,7 @@ public class IfThenElse implements JSONSchemaElement {
 		JSONObject obj = new JSONObject();
 		
 		if(ifStatement != null) obj.put("if", ifStatement.toJSON());
-		
 		if(thenStatement != null) obj.put("then", thenStatement.toJSON());
-		
 		if(elseStatement != null) obj.put("else", elseStatement.toJSON());
 		
 		return obj;
@@ -62,12 +51,14 @@ public class IfThenElse implements JSONSchemaElement {
 	@Override
 	public String toGrammarString() {
 		String if_str = "", then_str = "", else_str = "";
-		if(ifStatement != null) 
+		if(ifStatement != null) { 
 			if_str = ifStatement.toGrammarString();
-		if(thenStatement != null)
 			then_str = thenStatement.toGrammarString();
+		}
 		if(elseStatement != null)
 			else_str = elseStatement.toGrammarString();
+		else
+			return String.format(GrammarStringDefinitions.IF_THEN, if_str, then_str);
 		
 		return String.format(GrammarStringDefinitions.IF_THEN_ELSE, if_str, then_str, else_str);
 	}
@@ -117,15 +108,25 @@ public class IfThenElse implements JSONSchemaElement {
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
 		
-		if(ifStatement != null) returnList.addAll(Utils.addPathElement("if", ifStatement.collectDef()));
-		if(thenStatement != null) returnList.addAll(Utils.addPathElement("then", thenStatement.collectDef()));
-		if(elseStatement != null) returnList.addAll(Utils.addPathElement("else", elseStatement.collectDef()));
+		if(ifStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("if", ifStatement.collectDef()));
+		if(thenStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("then", thenStatement.collectDef()));
+		if(elseStatement != null) returnList.addAll(Utils_JSONSchema.addPathElement("else", elseStatement.collectDef()));
 		
 		return returnList;
 	}
 
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
+	}
+	
+	public IfThenElse clone() {
+		IfThenElse clone = new IfThenElse();
+		
+		if(ifStatement != null) clone.ifStatement = ifStatement.clone();
+		if(thenStatement != null) clone.thenStatement = thenStatement.clone();
+		if(elseStatement != null) clone.elseStatement = elseStatement.clone();
+		
+		return clone;
 	}
 }

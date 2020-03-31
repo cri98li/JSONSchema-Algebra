@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Utils {
+public class Utils_JSONSchema {
 	public static JSONSchema parse(String path) throws FileNotFoundException, IOException, ParseException {
 		
 		try (Reader reader = new FileReader(path)){
@@ -28,7 +28,8 @@ public class Utils {
 		return root.assertionSeparation();
 	}
 	
-	public static void referenceNormalization(JSONSchema root) {
+	public static JSONSchema referenceNormalization(JSONSchema root) {
+		JSONSchema newRoot = new JSONSchema();
 		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef());
 		
 		List<URI_JS> refList = root.getRef();
@@ -36,7 +37,8 @@ public class Utils {
 		Defs finalDefs = new Defs();
 		
 		for(URI_JS ref : refList) {
-			if(ref.toString().equals("#")) continue;
+			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#')
+				continue;
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
 				JSONSchema s = compareDefsRefs(entry, ref);
@@ -44,11 +46,15 @@ public class Utils {
 					ref.found();
 					finalDefs.addDef(ref.getNormalizedName(), s);
 					found = true;
-					defsList.remove(entry);
+					//defsList.remove(entry);
 					break;
 				}
 			}
-			if(found) continue;
+			if(found) {
+				System.out.println("TROVATO: "+ref.toString());
+				continue;
+			}else
+				System.out.println("NON TROVATO: "+ref.toString());
 			
 			//Se sono arrivato qui, ho trovato un ref che non sono riuscito a risolvere. non è contenuto in nessun def?
 			JSONSchema newDef = root.searchDef(ref.iterator());
@@ -63,16 +69,24 @@ public class Utils {
 		for(Entry<String, Defs> entry : defsList)
 			finalDefs.addDef(entry.getValue());
 		
+		//caso schema con sole definizioni
+		if(root.numberOfAssertions() != 0)
+			finalDefs.addDef("rootdef", root.clone());
+		
 		//Aggiungo allo schema la defs normalizzata
-		root.addJSONSchemaElement("$defs", finalDefs);
+		newRoot.addJSONSchemaElement("$defs", finalDefs);
+		
+		return newRoot;
 	}
 	
 	
 	
 	
 	private static JSONSchema compareDefsRefs(Entry<String, Defs> entry, URI_JS ref) {
+		System.out.println("CONFRONTO: "+entry.getKey()+"\r\n\t"+ref.toString().replace("definitions", "$defs"));
+		
 		String[] defUriSplitted = entry.getKey().split("/");
-		String[] refUriSplitted = ref.toString().split("/");
+		String[] refUriSplitted = ref.toString().replace("definitions", "$defs").split("/");
 		
 		if(defUriSplitted.length +1 != refUriSplitted.length)
 			return null; //lunghezza diversa, è impossibile che siano uguali

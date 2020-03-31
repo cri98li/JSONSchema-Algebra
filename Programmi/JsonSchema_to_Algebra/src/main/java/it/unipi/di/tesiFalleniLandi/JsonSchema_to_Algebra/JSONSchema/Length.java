@@ -51,7 +51,7 @@ public class Length implements JSONSchemaElement{
 	}
 	
 	@Override
-	public int numberOfGeneratedAssertions() {
+	public int numberOfAssertions() {
 		return 1;
 	}
 
@@ -78,6 +78,18 @@ public class Length implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		return new LinkedList<>();
+	}
+	
+	@Override
+	public Length clone(){
+		Length newLen = new Length();
+		
+		if(minLength != null)
+			newLen.setMinLength(minLength);
+		if(maxLength != null)
+			newLen.setMaxLength(maxLength);
+		
+		return newLen;
 	}
 
 }
