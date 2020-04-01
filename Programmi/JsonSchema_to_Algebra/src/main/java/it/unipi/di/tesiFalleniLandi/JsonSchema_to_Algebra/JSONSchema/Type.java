@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
+import com.google.gson.JsonArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -19,7 +19,7 @@ public class Type implements JSONSchemaElement {
 			return;
 		}catch(ClassCastException e) {}
 		
-		JSONArray array = (JSONArray) obj;
+		JsonArray array = (JsonArray) obj;
 		
 		type_array = new LinkedList<>();
 		
@@ -38,12 +38,11 @@ public class Type implements JSONSchemaElement {
 		return "Type [type=" + type + ", type_array=" + type_array + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
 		if(type != null) return type;
 		
-		JSONArray array = new JSONArray();
+		JsonArray array = new JsonArray();
 		for(String s : type_array)
 			array.add(s);
 		return array;

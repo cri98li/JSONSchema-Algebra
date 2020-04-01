@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
+import com.google.gson.JsonArray;
 
 public class Type_Assertion implements Assertion{
 	private List<String> types;
@@ -26,13 +26,12 @@ public class Type_Assertion implements Assertion{
 		return "type";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
 		if(types.size() == 1)
 			return types.get(0);
 		
-		JSONArray array = new JSONArray();
+		JsonArray array = new JsonArray();
 		for(String s : types)
 			array.add(s);
 			

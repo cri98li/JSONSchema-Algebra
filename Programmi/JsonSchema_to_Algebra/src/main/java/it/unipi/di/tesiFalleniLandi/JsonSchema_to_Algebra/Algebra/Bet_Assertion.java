@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Bet_Assertion implements Assertion{
 	
@@ -31,10 +31,9 @@ public class Bet_Assertion implements Assertion{
 		return "betweenNumber";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		if(max != null) obj.put("maximum", max);
 		if(min != null) obj.put("minimum", min);

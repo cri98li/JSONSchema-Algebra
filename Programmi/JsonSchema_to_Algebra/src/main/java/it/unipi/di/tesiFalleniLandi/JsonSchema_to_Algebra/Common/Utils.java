@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Utils {
 	/**
@@ -13,8 +13,7 @@ public class Utils {
 	 * @param keyword parola chiave associata a toPut
 	 * @param toPut Oggetto da inserire in schema
 	 */
-	@SuppressWarnings("unchecked")
-	public static void putContent(JSONObject schema, String keyword, Object toPut) {
+	public static void putContent(JsonObject schema, String keyword, Object toPut) {
 		List<String> putContentKeywords = Arrays.asList( new String[]{
 				"properties",
 				"ifThenElse",
@@ -34,9 +33,9 @@ public class Utils {
 			return;
 		}
 		
-		Set<?> keys = ((JSONObject) toPut).keySet();
+		Set<?> keys = ((JsonObject) toPut).keySet();
 		for(Object key : keys) {
-			schema.put(key, ((JSONObject) toPut).get(key));
+			schema.put(key, ((JsonObject) toPut).get(key));
 		}
 	}
 }

@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -13,7 +14,7 @@ public class OneOf implements JSONSchemaElement{
 	private List<JSONSchema> oneOf;
 	
 	public OneOf(Object obj) {
-		JSONArray array = (JSONArray) obj;
+		JsonArray array = (JsonArray) obj;
 		oneOf = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
@@ -37,13 +38,18 @@ public class OneOf implements JSONSchemaElement{
 
 
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
-		JSONArray array = new JSONArray();
+	public JsonArray toJSON() {
+		JsonArray array = new JsonArray();
 		
-		for(JSONSchema js : oneOf)
-			array.add(js.toJSON());
+		for(JSONSchema js : oneOf){
+			Object obj = js.toJSON();
+			try {
+				array.add((JsonObject) obj);
+			}catch(ClassCastException e) {
+				array.add((Boolean) obj);
+			}
+		}
 		
 		return array;
 	}

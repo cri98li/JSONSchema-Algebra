@@ -3,8 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
@@ -30,13 +30,12 @@ public class Xor_Assertion implements Assertion{
 		return "oneOf";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
-		JSONArray array = new JSONArray();
+	public JsonArray toJSONSchema() {
+		JsonArray array = new JsonArray();
 		
 		for(Assertion assertion : xorList) {
-			JSONObject obj = new JSONObject();
+			JsonObject obj = new JsonObject();
 			if(assertion.getClass() == AntlrBoolean.class) {
 				array.add(assertion.toJSONSchema());
 				continue;

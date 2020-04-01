@@ -1,18 +1,17 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class AntlrJsonObject extends AntlrValue{
 
-	private JSONObject object;
+	private JsonObject object;
 	
 	public AntlrJsonObject() {
-		object = new JSONObject();
+		object = new JsonObject();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void add(String key, Object value){
-		if(value == null)	value = new JSONObject();
+		if(value == null)	value = new JsonObject();
 		AntlrValue tmp = (AntlrValue) value;
 		this.object.put(key, tmp.getValue());
 	}

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
+import com.google.gson.JsonArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -13,7 +13,7 @@ public class Required implements JSONSchemaElement{
 	private List<String> required;
 
 	public Required(Object obj) {
-		JSONArray array = (JSONArray) obj;
+		JsonArray array = (JsonArray) obj;
 		required = new LinkedList<>();;
 		
 		Iterator<?> it = array.iterator();
@@ -26,10 +26,9 @@ public class Required implements JSONSchemaElement{
 		required = new LinkedList<>();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
-		JSONArray array = new JSONArray();
+	public JsonArray toJSON() {
+		JsonArray array = new JsonArray();
 		
 		for(String s : required)
 			array.add(s);

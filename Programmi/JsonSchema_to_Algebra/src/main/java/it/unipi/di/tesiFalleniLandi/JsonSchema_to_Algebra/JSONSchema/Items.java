@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -21,10 +21,10 @@ public class Items implements JSONSchemaElement{
 	public Items() {	}
 	
 	public void setItems(Object obj) {
-		JSONArray array = null;
+		JsonArray array = null;
 		
 		try{
-			array = (JSONArray) obj;
+			array = (JsonArray) obj;
 		}catch(ClassCastException e) {
 			items = new JSONSchema(obj);
 			return;
@@ -56,13 +56,12 @@ public class Items implements JSONSchemaElement{
 				+ additionalItems_array + ", unevaluatedItems_array=" + unevaluatedItems_array + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(items_array != null) {
-			JSONArray array = new JSONArray();
+			JsonArray array = new JsonArray();
 			for(JSONSchema js : items_array)
 				array.add(js.toJSON());
 			obj.put("items", array);

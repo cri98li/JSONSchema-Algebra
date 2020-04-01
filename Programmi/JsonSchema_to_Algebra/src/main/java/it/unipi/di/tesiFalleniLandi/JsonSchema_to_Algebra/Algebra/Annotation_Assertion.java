@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.HashMap;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Annotation_Assertion implements Assertion{
 	private HashMap<String, String> annotations;
@@ -22,8 +22,8 @@ public class Annotation_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		obj.putAll(annotations);
 		

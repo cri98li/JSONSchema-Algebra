@@ -5,7 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
 
 public class UnknowElement implements JSONSchemaElement {
 	private HashMap<String, Object> obj;
@@ -18,7 +19,7 @@ public class UnknowElement implements JSONSchemaElement {
 		/*try {
 			obj.put(key, (String)value);
 		}catch(ClassCastException e) {
-			JSONObject obj = (JSONObject) value;
+			JsonObject obj = (JsonObject) value;
 			Set<Entry<?, ?>> entrySet = obj.entrySet();
 		}*/
 		
@@ -29,7 +30,7 @@ public class UnknowElement implements JSONSchemaElement {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
-		JSONObject obj = new JSONObject();
+		JsonObject obj = new JsonObject();
 		
 		obj.putAll(obj);
 		

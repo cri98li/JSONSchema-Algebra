@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Exist_Assertion implements Assertion{
 	private Long min, max;
@@ -45,10 +45,9 @@ public class Exist_Assertion implements Assertion{
 		return "contains";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		if(contains != null) obj.put("contains", contains.toJSONSchema());
 		if(min != null) obj.put("minContains", min);

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -28,10 +28,9 @@ public class BetweenItems implements JSONSchemaElement{
 		return "BetweenItems [minItems=" + minItems + ", maxItems=" + maxItems + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(minItems != null) obj.put("minItems", minItems);
 		if(maxItems != null) obj.put("maxItems", maxItems);

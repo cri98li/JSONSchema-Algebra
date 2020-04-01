@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -37,11 +37,9 @@ public class Contains implements JSONSchemaElement{
 		return "Contains [contains=" + contains + ", minContains=" + minContains + ", maxContains=" + maxContains + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		if(contains != null) obj.put("contains", contains.toJSON());
 		if(minContains != null) obj.put("minContains", minContains);
 		if(maxContains != null) obj.put("maxContains", maxContains);

@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
@@ -22,10 +22,9 @@ public class IfThenElse_Assertion implements Assertion{
 		return "ifThenElse";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 			
 		if(ifStatement != null) obj.put("if", ifStatement.toJSONSchema());
 		if(thenStatement != null) obj.put("then", thenStatement.toJSONSchema());

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
@@ -26,8 +26,8 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 		for(Entry<String,Assertion> entry : entrySet)

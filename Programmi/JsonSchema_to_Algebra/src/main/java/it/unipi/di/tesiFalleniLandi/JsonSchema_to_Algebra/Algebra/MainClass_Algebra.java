@@ -7,7 +7,9 @@ import java.io.Reader;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.json.simple.JSONObject;
+
+import com.google.gson.JsonObject;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AlgebraParser;
@@ -28,8 +30,8 @@ public class MainClass_Algebra {
 			
 			System.out.println(schema.toString());
 			
-			JSONObject JSON = (JSONObject)schema.toJSONSchema();
-			System.out.println(JSON.toJSONString());
+			JsonObject JSON = (JsonObject)schema.toJSONSchema();
+			System.out.println(JSON.toString());
         }
 	}
 }

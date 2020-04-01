@@ -2,8 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
 
 public class Const_Assertion implements Assertion{
 	
@@ -32,14 +31,14 @@ public class Const_Assertion implements Assertion{
 				|| value.getClass() == Integer.class)
 			return value;
 		
-		JSONArray JSONArray = new JSONArray();
+		JsonArray JsonArray = new JsonArray();
 		List<Object> array = null;
 		
 		//caso array
 		try {
 			array = (List<Object>) value;
 			for(Object obj : array)
-				JSONArray.add(obj);
+				JsonArray.add(obj);
 			return array;
 		}catch(ClassCastException e){	}
 		

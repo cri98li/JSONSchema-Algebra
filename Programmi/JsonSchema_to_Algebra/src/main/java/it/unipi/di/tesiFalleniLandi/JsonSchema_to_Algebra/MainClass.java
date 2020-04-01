@@ -9,9 +9,8 @@ import java.util.Scanner;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.MainClass_Algebra;
@@ -28,7 +27,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.MainClass_J
  */
 public class MainClass 
 {
-    public static void main( String[] args ) throws FileNotFoundException, IOException, ParseException
+    public static void main( String[] args ) throws FileNotFoundException, IOException
     {
     	System.out.println("[1] MainClass_JSONSchema");
     	System.out.println("[2] MainClass_Algebra");
@@ -47,7 +46,7 @@ public class MainClass
 				JSONSchema root;
 				
 			    try (Reader reader = new FileReader(path)){
-			    	JSONObject object = (JSONObject) new JSONParser().parse(reader);
+			    	JsonObject object = JsonObject.parse(reader.toString());
 			    	root = new JSONSchema(object);
 			    	
 			    	Utils_JSONSchema.toGrammarString(root.assertionSeparation());

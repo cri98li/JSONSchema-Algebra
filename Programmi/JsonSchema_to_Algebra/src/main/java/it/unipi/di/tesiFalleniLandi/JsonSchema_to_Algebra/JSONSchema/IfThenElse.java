@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -14,7 +14,7 @@ public class IfThenElse implements JSONSchemaElement {
 	
 	public IfThenElse(){ }
 	
-	/*public If_Then_Else(JSONObject obj){
+	/*public If_Then_Else(JsonObject obj){
 		ifStatement = new JSONSchema(obj);
 	}*/
 	
@@ -36,10 +36,9 @@ public class IfThenElse implements JSONSchemaElement {
 				+ elseStatement + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(ifStatement != null) obj.put("if", ifStatement.toJSON());
 		if(thenStatement != null) obj.put("then", thenStatement.toJSON());

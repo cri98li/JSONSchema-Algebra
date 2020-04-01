@@ -3,8 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
@@ -40,17 +40,16 @@ public class Items_Assertion implements Assertion{
 		return "items";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		if(itemsArray != null)
 			if(itemsArray.size() == 1)
 				Utils.putContent(obj, itemsArray.get(0).getJSONSchemaKeyword(), itemsArray.get(0).toJSONSchema());
 			else {
-				JSONArray array = new JSONArray();
+				JsonArray array = new JsonArray();
 				for(Assertion assertion : itemsArray) {
-					JSONObject tmp = new JSONObject();
+					JsonObject tmp = new JsonObject();
 					Utils.putContent(tmp, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
 					array.add(tmp);
 				}

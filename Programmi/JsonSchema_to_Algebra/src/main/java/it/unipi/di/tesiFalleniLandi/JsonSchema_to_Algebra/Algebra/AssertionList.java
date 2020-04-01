@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
@@ -35,8 +35,8 @@ public class AssertionList implements Assertion {
 	}
 
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject schema = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject schema = new JsonObject();
 		
 		for(Assertion assertion : list)
 			if(assertion.getClass() == AntlrBoolean.class) {

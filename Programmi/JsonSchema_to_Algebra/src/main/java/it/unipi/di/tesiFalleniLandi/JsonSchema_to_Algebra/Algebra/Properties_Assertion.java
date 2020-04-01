@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Properties_Assertion implements Assertion{
 	private HashMap<String, Assertion> properties;
@@ -32,14 +32,13 @@ public class Properties_Assertion implements Assertion{
 		return "properties";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		//Inserisco tutto in patternProperties perchè lavora anche come properties
 		if(properties != null && !properties.isEmpty()){
-			JSONObject tmp = new JSONObject();
+			JsonObject tmp = new JsonObject();
 			Set<String> keys = properties.keySet();
 			
 			for(String key : keys)

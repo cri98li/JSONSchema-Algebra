@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -14,12 +14,12 @@ public class Enum implements JSONSchemaElement{
 	protected List<String> enumArray_str;
 	protected List<Long> enumArray_num;
 	protected List<Boolean> enumArray_bool;
-	protected List<JSONObject> enumArray_obj;
+	protected List<JsonObject> enumArray_obj;
 	protected List<Enum> enumArray_array;
 	protected boolean thereIsNull;
 	protected boolean arrayOnly;
 	
-	private Enum(JSONArray array) {
+	private Enum(JsonArray array) {
 		arrayOnly = true;
 		enumArray_str = new LinkedList<>();
 		enumArray_num = new LinkedList<>();
@@ -55,7 +55,7 @@ public class Enum implements JSONSchemaElement{
 		thereIsNull = false;
 		
 		try {
-			JSONArray array = (JSONArray) obj;
+			JsonArray array = (JsonArray) obj;
 			Iterator<?> it = array.iterator();
 			
 			while(it.hasNext()){
@@ -106,7 +106,7 @@ public class Enum implements JSONSchemaElement{
 	private boolean putObjectValue(Object obj) {
 		try {
 			//enumArray_obj.add(new JSONSchema(obj));
-			enumArray_obj.add((JSONObject) obj);
+			enumArray_obj.add((JsonObject) obj);
 			return true;
 		}catch(ClassCastException e) {
 			return false;
@@ -115,7 +115,7 @@ public class Enum implements JSONSchemaElement{
 	
 	private boolean putArrayValue(Object obj) {
 		try {
-			enumArray_array.add(new Enum((JSONArray) obj));
+			enumArray_array.add(new Enum((JsonArray) obj));
 			return true;
 		}catch(ClassCastException e) {
 			return false; 
@@ -138,10 +138,9 @@ public class Enum implements JSONSchemaElement{
 		+ ", thereIsNull=" + thereIsNull + "]";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
-		JSONArray array = new JSONArray();
+		JsonArray array = new JsonArray();
 		
 		Iterator<?> it = enumArray_str.iterator();
 		while(it.hasNext()) array.add(it.next());
@@ -156,7 +155,7 @@ public class Enum implements JSONSchemaElement{
 		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_obj.iterator();
 		while(it_JSE.hasNext()) array.add(it_JSE.next().toJSON());
 		*/
-		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
+		Iterator<? extends JsonObject> it_JSO = enumArray_obj.iterator();
 		while(it_JSO.hasNext()) array.add(it_JSO.next());
 		
 		Iterator<? extends JSONSchemaElement>it_JSE = enumArray_array.iterator();
@@ -185,8 +184,8 @@ public class Enum implements JSONSchemaElement{
 		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
 		*/
 		
-		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
-		while(it_JSO.hasNext()) str += (separator + it_JSO.next().toJSONString());
+		Iterator<? extends JsonObject> it_JSO = enumArray_obj.iterator();
+		while(it_JSO.hasNext()) str += (separator + it_JSO.next().toString());
 		
 		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
 		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
@@ -231,7 +230,7 @@ public class Enum implements JSONSchemaElement{
 		
 		//No assertion separation dentro enum ???
 		if(enumArray_obj != null) {
-			for(JSONObject obj : enumArray_obj)
+			for(JsonObject obj : enumArray_obj)
 				_enum.enumArray_obj.add(obj);
 		}
 		
@@ -288,8 +287,8 @@ public class Enum implements JSONSchemaElement{
 		while(it_JS.hasNext()) clone.enumArray_obj.add(it_JS.next().clone());
 		*/
 		
-		Iterator<JSONObject> it_JS = enumArray_obj.iterator();
-		while(it_JS.hasNext()) clone.enumArray_obj.add((JSONObject) it_JS.next().clone());
+		Iterator<JsonObject> it_JS = enumArray_obj.iterator();
+		while(it_JS.hasNext()) clone.enumArray_obj.add((JsonObject) it_JS.next().clone());
 		
 		Iterator<Enum> it_JSA = enumArray_array.iterator();
 		while(it_JSA.hasNext()) clone.enumArray_array.add(it_JSA.next().clone());

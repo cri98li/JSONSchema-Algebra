@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -18,9 +18,9 @@ public class Defs implements JSONSchemaElement{
 	private HashMap<String, JSONSchema> schemaDefs;
 	
 	public Defs(Object obj) {
-		JSONObject jsonObject = null;
+		JsonObject jsonObject = null;
 		try {
-			jsonObject = (JSONObject) obj;
+			jsonObject = (JsonObject) obj;
 		}catch(ClassCastException ex) {
 			System.out.println("Error: $defs must be valid JSON Object!");
 		}
@@ -57,10 +57,9 @@ public class Defs implements JSONSchemaElement{
 		schemaDefs = new HashMap<>();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		

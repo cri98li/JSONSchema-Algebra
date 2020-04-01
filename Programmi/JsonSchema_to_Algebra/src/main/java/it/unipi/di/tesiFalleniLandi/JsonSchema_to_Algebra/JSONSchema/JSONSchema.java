@@ -1,13 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
@@ -16,7 +16,7 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	private Boolean booleanAsJSONSchema; //Per gestire il caso di schema booleano
 	
-	private HashMap<String, JSONSchemaElement> jsonSchema; //Dizionario di keywords presenti nello schema
+	private LinkedHashMap<String, JSONSchemaElement> jsonSchema; //Dizionario di keywords presenti nello schema
 	
 	/**
 	 * Costruttore, prova a parsare un Object in boolean o in JSONObject.
@@ -24,15 +24,15 @@ public class JSONSchema implements JSONSchemaElement{
 	 * @param obj
 	 */
 	public JSONSchema(Object obj) {
-		jsonSchema = new HashMap<>();
+		jsonSchema = new LinkedHashMap<>();
 		
-		JSONObject object = null;
+		JsonObject object = null;
 		try {
 			booleanAsJSONSchema = (Boolean) obj;
 			return;
 		}catch(ClassCastException e) {
 			try {
-			object = (JSONObject) obj;
+			object = (JsonObject) obj;
 			}catch(ClassCastException ex) {
 				System.out.println("Error: schema must be boolean or object!");
 			}
@@ -244,13 +244,13 @@ public class JSONSchema implements JSONSchemaElement{
 	}
 
 	public void addJSONSchemaElement(String key, JSONSchemaElement value) {
-		if(jsonSchema == null)	jsonSchema = new HashMap<>();
+		if(jsonSchema == null)	jsonSchema = new LinkedHashMap<>();
 		jsonSchema.put(key, value);
 	}
 	
 	@Override
 	public Object toJSON() {
-		JSONObject schema = new JSONObject();
+		JsonObject schema = new JsonObject();
 		
 		//caso boolean as a Schema
 		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
@@ -265,7 +265,7 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	public JSONSchema assertionSeparation() {
 		JSONSchema schema = new JSONSchema();
-		schema.jsonSchema = new HashMap<>();
+		schema.jsonSchema = new LinkedHashMap<>();
 		if(booleanAsJSONSchema != null) {
 			schema.booleanAsJSONSchema = booleanAsJSONSchema;
 			return schema;
@@ -286,7 +286,7 @@ public class JSONSchema implements JSONSchemaElement{
 				if(type.type_array != null)
 					for(String str : type.type_array) {
 						JSONSchema tmp = new JSONSchema();
-						tmp.jsonSchema = new HashMap<>();
+						tmp.jsonSchema = new LinkedHashMap<>();
 						Type t = new Type();
 						t.type = str;
 						tmp.jsonSchema.put("type", t);
@@ -294,13 +294,13 @@ public class JSONSchema implements JSONSchemaElement{
 					}
 				else {
 					JSONSchema tmp = new JSONSchema();
-					tmp.jsonSchema = new HashMap<>();
+					tmp.jsonSchema = new LinkedHashMap<>();
 					tmp.jsonSchema.put("type", type);
 					anyOf.addElement(tmp);
 				}
 				
 				JSONSchema tmp = new JSONSchema();
-				tmp.jsonSchema = new HashMap<>();
+				tmp.jsonSchema = new LinkedHashMap<>();
 				tmp.jsonSchema.put("anyOf", anyOf);
 				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 				continue;
@@ -318,7 +318,7 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			
 			JSONSchema tmp = new JSONSchema();
-			tmp.jsonSchema = new HashMap<>();
+			tmp.jsonSchema = new LinkedHashMap<>();
 			tmp.jsonSchema.put(entry.getKey(), entry.getValue().assertionSeparation());
 			((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 		}
@@ -424,7 +424,7 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		if(jsonSchema != null) {
 			Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
-			clone.jsonSchema = new HashMap<>();
+			clone.jsonSchema = new LinkedHashMap<>();
 			
 			for(Entry<String, JSONSchemaElement> entry : entrySet)
 				clone.jsonSchema.put(entry.getKey(), entry.getValue().clone());

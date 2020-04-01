@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Len_Assertion implements Assertion{
 	private Long min, max;
@@ -39,10 +39,9 @@ public class Len_Assertion implements Assertion{
 		return "length";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		obj.put("minLength", min);
 		obj.put("maxLength", max);

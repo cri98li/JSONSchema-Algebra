@@ -5,17 +5,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class MainClass_JSONSchema {
-public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
+public static void main(String[] args) throws FileNotFoundException, IOException {
 	String path = "test.json";
 	JSONSchema root;
+	JsonParser parser = new JsonParser();
+	JsonElement jsonTree = parser.parse(path);
 	
     try (Reader reader = new FileReader(path)){
-    	JSONObject object = (JSONObject) new JSONParser().parse(reader);
+    	JsonObject object = jsonTree.getAsJsonObject();;
     	root = new JSONSchema(object);
     }
     

@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Pro_Assertion implements Assertion{
 	
@@ -33,10 +33,9 @@ public class Pro_Assertion implements Assertion{
 		return "betweenProperties";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
 		obj.put("minProperties", minProperties);
 		obj.put("maxProperties", maxProperties);

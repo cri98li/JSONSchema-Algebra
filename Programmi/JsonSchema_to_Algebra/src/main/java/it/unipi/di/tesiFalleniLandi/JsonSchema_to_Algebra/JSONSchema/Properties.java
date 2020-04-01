@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
@@ -24,7 +24,7 @@ public class Properties implements JSONSchemaElement{
 	
 	public void setProperties(Object obj) {
 		
-		JSONObject object = (JSONObject) obj;
+		JsonObject object = (JsonObject) obj;
 		
 		properties = new HashMap<String, JSONSchema>();
 		
@@ -40,7 +40,7 @@ public class Properties implements JSONSchemaElement{
 	
 	public void setPatternProperties(Object obj) {
 		
-		JSONObject object = (JSONObject) obj;
+		JsonObject object = (JsonObject) obj;
 		
 		patternProperties = new HashMap<String, JSONSchema>();
 		
@@ -58,13 +58,12 @@ public class Properties implements JSONSchemaElement{
 		additionalProperties = new JSONSchema(obj);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(properties != null && !properties.isEmpty()){
-			JSONObject tmp = new JSONObject();
+			JsonObject tmp = new JsonObject();
 			Set<String> keys = properties.keySet();
 				
 			for(String key : keys)
@@ -74,7 +73,7 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		if(patternProperties != null && !patternProperties.isEmpty()){
-			JSONObject tmp = new JSONObject();
+			JsonObject tmp = new JsonObject();
 			Set<String> keys = patternProperties.keySet();
 				
 			for(String key : keys)

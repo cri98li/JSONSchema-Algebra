@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
+import com.google.gson.JsonArray;
 
 public class Enum_Assertion implements Assertion{
 
@@ -31,10 +31,9 @@ public class Enum_Assertion implements Assertion{
 		return "enum";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
-		JSONArray array = new JSONArray();
+	public JsonArray toJSONSchema() {
+		JsonArray array = new JsonArray();
 		
 		for(Object element : _enum) {
 			array.add(element);

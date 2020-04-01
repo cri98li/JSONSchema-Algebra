@@ -10,13 +10,8 @@ import java.util.StringJoiner;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
@@ -26,7 +21,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONS
 
 public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Object> {
 
+	@Override
 	public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		
 		try {
 			
@@ -194,7 +195,6 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 					"type", "text",
 					false);
 			
-			
 			return response;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -222,7 +222,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		
 	        JSONObject JSON = (JSONObject)schema.toJSONSchema();
 	        
-	        GatewayResponse response = new GatewayResponse(JSON.toJSONString(),
+	        GatewayResponse response = new GatewayResponse(JSON.toString(),
 	        		200,
 	        		"type", "application/json+schema",
 	        		false);
@@ -384,5 +384,5 @@ class GatewayResponse {
             .add("multiValueHeaders=" + multiValueHeaders)
             .add("body='" + body + "'")
             .toString();
-    }
+    }*/
 }
