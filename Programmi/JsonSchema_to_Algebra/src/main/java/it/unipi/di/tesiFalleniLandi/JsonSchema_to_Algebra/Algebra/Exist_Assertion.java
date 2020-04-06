@@ -57,5 +57,27 @@ public class Exist_Assertion implements Assertion{
 		return obj;
 	}
 	
-	
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add("arr");
+		and.add(type);
+		
+		if(min != null && max != null) {
+			Or_Assertion or = new Or_Assertion();
+			or.add(new Exist_Assertion(0L, min - 1, contains));
+			or.add(new Exist_Assertion(max + 1, null, contains));
+			and.add(or);
+			return and;
+		}
+		
+		if(min != null) {
+			and.add(new Exist_Assertion(0L, min - 1, contains));
+			return and;
+		}
+		
+		and.add(new Exist_Assertion(max + 1, null, contains));
+		return and;
+	}
 }

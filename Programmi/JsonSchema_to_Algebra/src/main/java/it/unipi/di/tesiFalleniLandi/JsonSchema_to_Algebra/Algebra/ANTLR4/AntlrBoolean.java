@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
-public class AntlrBoolean extends AntlrValue{
+public class AntlrBoolean implements AntlrValue{
 
 	private boolean value;
 	
@@ -11,16 +11,6 @@ public class AntlrBoolean extends AntlrValue{
 	@Override
 	public String toString() {
 		return "AntlrBoolean [" + value + "]";
-	}
-
-	@Override
-	public String getJSONSchemaKeyword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object toJSONSchema() {
-		return value;
 	}
 
 	@Override

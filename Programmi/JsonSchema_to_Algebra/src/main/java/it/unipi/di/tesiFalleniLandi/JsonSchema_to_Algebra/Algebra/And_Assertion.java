@@ -16,8 +16,21 @@ public class And_Assertion implements Assertion{
 		this.andList = new LinkedList<>();
 	}
 
+	public And_Assertion(boolean b) {
+		// TODO Auto-generated constructor stub
+		throw new UnsupportedOperationException();
+	}
+
+	public void addAll(List<Assertion> list) {
+		andList.addAll(list);
+	}
+	
 	public void add(Assertion assertion) {
 		andList.add(assertion);
+	}
+	
+	public void add(And_Assertion assertion) {
+		addAll(assertion.andList);
 	}
 	
 	@Override
@@ -47,6 +60,19 @@ public class And_Assertion implements Assertion{
 		
 		
 		return array;
+	}
+
+	@Override
+	public Assertion not() {
+		Or_Assertion or = new Or_Assertion();
+		
+		for(Assertion assertion : andList) {
+			Assertion notAssertion = assertion.not();
+			if(notAssertion != null)
+				or.add(notAssertion);
+		}
+		
+		return or;
 	}
 	
 	

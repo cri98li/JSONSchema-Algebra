@@ -1,15 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Mof_Assertion implements Assertion{
-	private Long mof;
+public class NotMof_Assertion implements Assertion {
+	private Long notMof;
 	
-	public Mof_Assertion(Long mof) {
-		this.mof = mof;
+	public NotMof_Assertion(Long notMof) {
+		this.notMof = notMof;
 	}
 
 	@Override
 	public String toString() {
-		return "Mof_Assertion [" + mof + "]";
+		return "Mof_Assertion [" + notMof + "]";
 	}
 
 	@Override
@@ -19,18 +19,16 @@ public class Mof_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		return mof;
+		return notMof;
 	}
 
 	@Override
 	public Assertion not() {
-		And_Assertion notMof = new And_Assertion();
+		And_Assertion mof = new And_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add("num");
-		notMof.add(type);
-		notMof.add(new NotMof_Assertion(mof));
-		return notMof;
+		mof.add(type);
+		mof.add(new Mof_Assertion(notMof));
+		return mof;
 	}
-	
-	
 }

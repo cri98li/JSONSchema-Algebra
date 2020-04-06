@@ -1,8 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 public class UniqueItems_Assertion implements Assertion{
+	private boolean uniqueItems;
 	
 	public UniqueItems_Assertion() {
+		uniqueItems = true;
 	}
 
 	@Override
@@ -17,6 +19,13 @@ public class UniqueItems_Assertion implements Assertion{
 
 	@Override
 	public Boolean toJSONSchema() {
-		return true;
+		return uniqueItems;
+	}
+
+	@Override
+	public Assertion not() {
+		UniqueItems_Assertion ui = new UniqueItems_Assertion();
+		ui.uniqueItems = !uniqueItems;
+		return ui;
 	}
 }

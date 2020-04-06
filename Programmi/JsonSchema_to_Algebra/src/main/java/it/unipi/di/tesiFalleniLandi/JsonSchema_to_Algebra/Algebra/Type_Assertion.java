@@ -38,6 +38,23 @@ public class Type_Assertion implements Assertion{
 			
 		return array;
 	}
+
+	@Override
+	public Assertion not() {
+		Type_Assertion notType = new Type_Assertion();
+		notType.add("str");
+		notType.add("obj");
+		notType.add("num");
+		notType.add("int");
+		notType.add("arr");
+		notType.add("bool");
+		notType.add("null");
+		
+		for(String type : types)
+			notType.types.remove(type);
+		
+		return notType;
+	}
 	
 	
 }

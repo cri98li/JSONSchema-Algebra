@@ -19,6 +19,14 @@ public class Or_Assertion implements Assertion{
 	public void add(Assertion assertion) {
 		orList.add(assertion);
 	}
+	
+	public void add(Or_Assertion assertion) {
+		addAll(assertion.orList);
+	}
+	
+	public void addAll(List<Assertion> list) {
+		orList.addAll(list);
+	}
 
 	@Override
 	public String toString() {
@@ -47,5 +55,15 @@ public class Or_Assertion implements Assertion{
 		
 		
 		return array;
+	}
+
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		
+		for(Assertion assertion : orList)
+			and.add(assertion.not());
+		
+		return and;
 	}
 }

@@ -21,4 +21,15 @@ public class Names_Assertion implements Assertion{
 	public Object toJSONSchema() {
 		return names.toJSONSchema();
 	}
+	
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add("obj");
+		and.add(type);
+		and.add(names.not());
+		
+		return and;
+	}
 }

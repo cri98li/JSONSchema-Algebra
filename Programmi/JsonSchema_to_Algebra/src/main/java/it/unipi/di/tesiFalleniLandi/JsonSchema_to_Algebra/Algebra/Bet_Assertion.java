@@ -41,6 +41,29 @@ public class Bet_Assertion implements Assertion{
 		
 		return obj;
 	}
-	
-	
+
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add("num");
+		and.add(type);
+		
+		if(min != null && max != null) {
+			Or_Assertion or = new Or_Assertion();
+			or.add(new XBet_Assertion(null, min));
+			or.add(new XBet_Assertion(max, null));
+			and.add(or);
+			return and;
+		}
+		
+		if(min != null) {
+			and.add(new XBet_Assertion(null, min));
+			return and;
+		}
+		
+		
+		and.add(new XBet_Assertion(max, null));
+		return and;
+	}
 }

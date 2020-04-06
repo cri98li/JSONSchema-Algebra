@@ -53,6 +53,12 @@ public class Properties_Assertion implements Assertion{
 		
 		return obj;
 	}
+
+	@Override
+	public Assertion not() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

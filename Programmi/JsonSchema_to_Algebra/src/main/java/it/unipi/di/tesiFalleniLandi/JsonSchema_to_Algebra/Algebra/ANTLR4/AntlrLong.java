@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
-public class AntlrLong extends AntlrValue{
+public class AntlrLong implements AntlrValue{
 
 	private Long value;
 	
@@ -16,17 +16,5 @@ public class AntlrLong extends AntlrValue{
 
 	public void setValue(Long value) {
 		this.value = value;
-	}
-
-	@Override
-	public String getJSONSchemaKeyword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object toJSONSchema() {
-		throw new UnsupportedOperationException();
-	}
-	
-	
+	}	
 }

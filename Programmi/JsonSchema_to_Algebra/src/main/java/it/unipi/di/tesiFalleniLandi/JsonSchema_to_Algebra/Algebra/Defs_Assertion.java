@@ -42,5 +42,19 @@ public class Defs_Assertion implements Assertion{
 		return "Defs_Assertion [defs=" + defs + "]";
 	}
 
+	@Override
+	public Assertion not() {
+		Defs_Assertion notDef = new Defs_Assertion();
+		
+		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
+		
+		for(Entry<String, Assertion> entry: entrySet) {
+			notDef.add(entry.getKey(), entry.getValue());
+			notDef.add("not_"+entry.getKey(), entry.getValue().not());
+		}
+		
+		return notDef;
+	}
+
 	
 }

@@ -50,5 +50,30 @@ public class BetItems_Assertion implements Assertion{
 		
 		return obj;
 	}
+	
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add("obj");
+		and.add(type);
+		
+		if(min != null && max != null) {
+			Or_Assertion or = new Or_Assertion();
+			or.add(new BetItems_Assertion(0L, min - 1));
+			or.add(new BetItems_Assertion(max + 1, null));
+			and.add(or);
+			return and;
+		}
+		
+		if(min != null) {
+			and.add(new BetItems_Assertion(0L, min - 1));
+			return and;
+		}
+		
+		and.add(new BetItems_Assertion(max + 1, null));
+		return and;
+	}
+
 
 }

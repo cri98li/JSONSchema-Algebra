@@ -19,6 +19,14 @@ public class Xor_Assertion implements Assertion{
 	public void add(Assertion assertion) {
 		xorList.add(assertion);
 	}
+	
+	public void add(Xor_Assertion assertion) {
+		addAll(assertion.xorList);
+	}
+	
+	public void addAll(List<Assertion> list) {
+		xorList.addAll(list);
+	}
 
 	@Override
 	public String toString() {
@@ -47,5 +55,24 @@ public class Xor_Assertion implements Assertion{
 		
 		
 		return array;
+	}
+
+	// A xor B = (A or B) and not(A and B)
+	// not(A xor B) = (not(A) and not(b)) or (A and B)
+	@Override
+	public Assertion not() {
+		And_Assertion andList = new And_Assertion();
+		And_Assertion notAndList = new And_Assertion();
+		Or_Assertion orList = new Or_Assertion();
+		
+		for(Assertion assertion : xorList) {
+			andList.add(assertion);
+			notAndList.add(assertion.not());
+		}
+		
+		orList.add(notAndList);
+		orList.add(andList);
+		
+		return orList;
 	}
 }

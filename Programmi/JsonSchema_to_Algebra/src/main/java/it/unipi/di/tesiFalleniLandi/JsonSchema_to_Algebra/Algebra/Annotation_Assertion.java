@@ -1,7 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.HashMap;
-
 import org.json.simple.JSONObject;
 
 public class Annotation_Assertion implements Assertion{
@@ -28,6 +27,11 @@ public class Annotation_Assertion implements Assertion{
 		obj.putAll(annotations);
 		
 		return obj;
+	}
+
+	@Override
+	public Assertion not() {
+		return new Not_Assertion(this);
 	}
 
 }

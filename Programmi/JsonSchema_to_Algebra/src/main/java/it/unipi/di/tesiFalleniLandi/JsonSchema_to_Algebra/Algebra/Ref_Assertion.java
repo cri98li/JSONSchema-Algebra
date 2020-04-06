@@ -24,4 +24,11 @@ public class Ref_Assertion implements Assertion{
 		return ref;
 	}
 
+
+	@Override
+	public Assertion not() {
+		// TODO Auto-generated method stub
+		return new Ref_Assertion("not_"+ref);
+	}
+
 }

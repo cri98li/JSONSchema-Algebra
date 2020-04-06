@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AlgebraParserElement;
 
-public abstract class AntlrValue implements Assertion{
+public interface AntlrValue extends AlgebraParserElement{
 	
-	public abstract Object getValue();
+	public Object getValue();
 	
 }

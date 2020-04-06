@@ -42,4 +42,9 @@ public class Required_Assertion implements Assertion{
 			
 		return array;
 	}
+
+	@Override
+	public Assertion not() {
+		return null;
+	}
 }

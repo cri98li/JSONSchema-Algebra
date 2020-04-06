@@ -44,5 +44,19 @@ public class Pro_Assertion implements Assertion{
 		return obj;
 	}
 
-	
+	@Override
+	public Assertion not() {
+		if(minProperties != null && maxProperties != null) {
+			And_Assertion and = new And_Assertion();
+			and.add(new Pro_Assertion(null, minProperties-1));
+			and.add(new Pro_Assertion(maxProperties+1, null));
+			return and;
+		}
+		
+		if(minProperties != null)
+			return new Len_Assertion(null, minProperties-1);
+		
+		
+		return new Len_Assertion(maxProperties+1, null);
+	}
 }

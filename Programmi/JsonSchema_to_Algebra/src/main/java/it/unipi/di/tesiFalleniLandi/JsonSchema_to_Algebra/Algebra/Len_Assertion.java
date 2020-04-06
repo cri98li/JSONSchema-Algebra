@@ -50,5 +50,19 @@ public class Len_Assertion implements Assertion{
 		return obj;
 	}
 	
-	
+	@Override
+	public Assertion not() {
+		if(min != null && max != null) {
+			And_Assertion and = new And_Assertion();
+			and.add(new Len_Assertion(null, min-1));
+			and.add(new Len_Assertion(max+1, null));
+			return and;
+		}
+		
+		if(min != null)
+			return new Len_Assertion(null, min-1);
+		
+		
+		return new Len_Assertion(max+1, null);
+	}
 }

@@ -22,4 +22,9 @@ public class Not_Assertion implements Assertion{
 	public Object toJSONSchema() {
 		return not.toJSONSchema();
 	}
+
+	@Override
+	public Assertion not() {
+		return not;
+	}
 }

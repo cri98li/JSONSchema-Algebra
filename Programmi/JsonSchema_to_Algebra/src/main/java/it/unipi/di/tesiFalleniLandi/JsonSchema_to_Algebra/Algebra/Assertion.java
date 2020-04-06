@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public interface Assertion {
+public interface Assertion extends AlgebraParserElement{
+	
 	/**
 	 * Restituisce la keyword associata all'oggetto
 	 * @return String contenente la keyword
@@ -12,4 +13,10 @@ public interface Assertion {
 	 * @return restituisce un oggetto JSON Simple che rappresenta lo schema, vedi le implementazioni per maggiori informazioni
 	 */
 	public Object toJSONSchema();
+	
+	/**
+	 * Ritorna l'asserzione negata
+	 * @return
+	 */
+	public Assertion not();
 }

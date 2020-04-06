@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AlgebraParserElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.And_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Annotation_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AssertionList;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.BetItems_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Bet_Assertion;
@@ -33,20 +33,20 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.Grammat
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 
-public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
+public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public AntlrBoolean visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx) {
 		return new AntlrBoolean(Boolean.parseBoolean(ctx.BOOLEAN().getText()));
 	}
 	
-	public AssertionList visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
-		AssertionList list = new AssertionList();
+	public And_Assertion visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
+		And_Assertion list = new And_Assertion();
 		
 		List<AssertionContext> keywords = ctx.assertion();
 		
 		for(AssertionContext key : keywords) {
-			Assertion schema = visit(key);
+			Assertion schema = (Assertion) visit(key);
 			list.add(schema);
 		}
 		
@@ -157,7 +157,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 	@Override
 	public Not_Assertion visitParseNot(GrammaticaParser.ParseNotContext ctx) {
 		
-		return new Not_Assertion(visit(ctx.assertion()));
+		return new Not_Assertion((Assertion) visit(ctx.assertion()));
 	}
 	
 	@Override 
@@ -172,7 +172,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		And_Assertion and = new And_Assertion();
 		
 		for(AssertionContext el : list)
-			and.add(visit(el));
+			and.add((Assertion) visit(el));
 		
 		return and; 
 	}
@@ -189,7 +189,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		Or_Assertion or = new Or_Assertion();
 		
 		for(AssertionContext el : list)
-			or.add(visit(el));
+			or.add((Assertion) visit(el));
 		
 		return or; 
 	}
@@ -206,7 +206,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		Xor_Assertion xor = new Xor_Assertion();
 		
 		for(AssertionContext el : list)
-			xor.add(visit(el));
+			xor.add((Assertion) visit(el));
 		
 		return xor; 
 	}
@@ -238,17 +238,17 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override 
 	public IfThenElse_Assertion visitParseIfThenElse(GrammaticaParser.ParseIfThenElseContext ctx) { 
-		Assertion ifStat = visit(ctx.assertion(0));
-		Assertion thenStat = visit(ctx.assertion(1));
-		Assertion elseStat = visit(ctx.assertion(2));
+		Assertion ifStat = (Assertion) visit(ctx.assertion(0));
+		Assertion thenStat = (Assertion) visit(ctx.assertion(1));
+		Assertion elseStat = (Assertion) visit(ctx.assertion(2));
 		
 		return  new IfThenElse_Assertion(ifStat, thenStat, elseStat);
 	}
 	
 	@Override 
 	public IfThenElse_Assertion visitParseIfThen(GrammaticaParser.ParseIfThenContext ctx) { 
-		Assertion ifStat = visit(ctx.assertion(0));
-		Assertion thenStat = visit(ctx.assertion(1));
+		Assertion ifStat = (Assertion) visit(ctx.assertion(0));
+		Assertion thenStat = (Assertion) visit(ctx.assertion(1));
 		
 		return new IfThenElse_Assertion(ifStat, thenStat, null); 
 	}
@@ -334,7 +334,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		
 		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
 		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
-		Assertion schema = visit(ctx.assertion());
+		Assertion schema = (Assertion) visit(ctx.assertion());
 		
 		return new Exist_Assertion(min.getValue(), max.getValue(), schema); 
 	}
@@ -363,7 +363,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		Items_Assertion items= new Items_Assertion();
 		
 		for(AssertionContext item : list)
-			items.add(visit(item));
+			items.add((Assertion) visit(item));
 		
 		return items; 
 	}
@@ -374,9 +374,9 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		Items_Assertion items= new Items_Assertion();
 		
 		for(int i = 0; i < list.size()-1; i++)
-			items.add(visit(list.get(i)));
+			items.add((Assertion) visit(list.get(i)));
 		
-		items.setAdditionalItems(visit(list.get(list.size()-1)));
+		items.setAdditionalItems((Assertion) visit(list.get(list.size()-1)));
 		
 		return items; 
 	}
@@ -391,18 +391,18 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		List<AdditionalPropertiesContext> additionalPro = ctx.additionalProperties();
 		
 		for(int i = 0; i < list.size(); i++) {
-			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  visit(list.get(i)));
+			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
 		
 		if(!additionalPro.isEmpty())
-			p.setAdditionalProperties(visit(additionalPro.get(0)));
+			p.setAdditionalProperties((Assertion) visit(additionalPro.get(0)));
 		
 		return p;
 	}
 	
 	@Override
 	public Assertion visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx) {
-		return visit(ctx.assertion());
+		return (Assertion) visit(ctx.assertion());
 	}
 	
 	@Override
@@ -462,7 +462,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 		List<TerminalNode> idList = ctx.STRING();
 		
 		for(int i = 0; i < list.size(); i++) {
-			defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  visit(list.get(i)));
+			defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
 		
 		return defs;
@@ -486,7 +486,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<Assertion>{
 	
 	@Override 
 	public Names_Assertion visitParsePropertyNames(GrammaticaParser.ParsePropertyNamesContext ctx) {
-		return new Names_Assertion(visit(ctx.assertion()));
+		return new Names_Assertion((Assertion) visit(ctx.assertion()));
 	}
 	
 	
