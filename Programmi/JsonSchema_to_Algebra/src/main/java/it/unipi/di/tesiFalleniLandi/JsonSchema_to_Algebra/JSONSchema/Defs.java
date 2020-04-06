@@ -14,8 +14,8 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Defs implements JSONSchemaElement{
-
 	private HashMap<String, JSONSchema> schemaDefs;
+	private JSONSchema rootDef;
 	
 	public Defs(Object obj) {
 		JSONObject jsonObject = null;
@@ -44,6 +44,10 @@ public class Defs implements JSONSchemaElement{
 	
 	public void addDef(String key, JSONSchema element) {
 		schemaDefs.put(key, element);
+	}
+	
+	public void setRootDef(JSONSchema root) {
+		rootDef = root;
 	}
 	
 	/*
@@ -80,6 +84,8 @@ public class Defs implements JSONSchemaElement{
 		for(Entry<String, JSONSchema> entry : entrySet)
 			obj.schemaDefs.put(entry.getKey(), entry.getValue().assertionSeparation());
 		
+		obj.setRootDef(this.rootDef.assertionSeparation());
+		
 		return obj;
 	}
 
@@ -87,7 +93,7 @@ public class Defs implements JSONSchemaElement{
 	public String toGrammarString() {
 		//da pensare a defs del documento corrente #
 		
-		String defs = "";
+		String defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
@@ -107,7 +113,7 @@ public class Defs implements JSONSchemaElement{
 			count += entry.getValue().numberOfAssertions();
 		*/
 		
-		return schemaDefs.size();
+		return schemaDefs.size() + ((rootDef == null) ? 0 : 1);
 	}
 
 	@Override
@@ -118,6 +124,8 @@ public class Defs implements JSONSchemaElement{
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
 			returnList.addAll(entry.getValue().getRef());
+		
+		returnList.addAll(rootDef.getRef());
 		
 		return returnList;
 	}
@@ -131,6 +139,7 @@ public class Defs implements JSONSchemaElement{
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
 		returnList.add(new AbstractMap.SimpleEntry<>("",this));
+		//ci va aggiunto rootDef????
 		return returnList;
 	}
 
@@ -146,6 +155,8 @@ public class Defs implements JSONSchemaElement{
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
 			clone.schemaDefs.put(entry.getKey(), entry.getValue().clone());
+		
+		clone.rootDef = rootDef;
 		
 		return clone;
 	}

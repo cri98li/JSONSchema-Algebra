@@ -11,9 +11,11 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class And_Assertion implements Assertion{
 	private List<Assertion> andList;
+	private boolean duplicates;
 	
 	public And_Assertion() {
 		this.andList = new LinkedList<>();
+		duplicates = false;
 	}
 
 	public And_Assertion(boolean b) {
@@ -22,10 +24,13 @@ public class And_Assertion implements Assertion{
 	}
 
 	public void addAll(List<Assertion> list) {
+		for(Assertion assertion : list) 
+			duplicates |= andList.contains(assertion);
 		andList.addAll(list);
 	}
 	
 	public void add(Assertion assertion) {
+		duplicates |= andList.contains(assertion);
 		andList.add(assertion);
 	}
 	
@@ -40,26 +45,38 @@ public class And_Assertion implements Assertion{
 
 	@Override
 	public String getJSONSchemaKeyword() {
+		if(!duplicates)
+			return "AllOf_Schema";
 		return "allOf";
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
-		JSONArray array = new JSONArray();
-		
-		for(Assertion assertion : andList) {
-			JSONObject obj = new JSONObject();
-			if(assertion.getClass() == AntlrBoolean.class) { //caso boolean as a schema
-				array.add(assertion.toJSONSchema());
-				continue;
+	public Object toJSONSchema() {
+		if(duplicates) {
+			JSONArray array = new JSONArray();
+			
+			for(Assertion assertion : andList) {
+				JSONObject obj = new JSONObject();
+				try {
+					array.add((AntlrBoolean)assertion.toJSONSchema());
+					continue;
+				}catch(ClassCastException e) {}
+				Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
+				array.add(obj);
 			}
-			Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-			array.add(obj);
+			
+			
+			return array;
 		}
 		
 		
-		return array;
+		JSONObject obj = new JSONObject();
+		
+		for(Assertion assertion : andList)
+			Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
+		
+		return obj;
 	}
 
 	@Override

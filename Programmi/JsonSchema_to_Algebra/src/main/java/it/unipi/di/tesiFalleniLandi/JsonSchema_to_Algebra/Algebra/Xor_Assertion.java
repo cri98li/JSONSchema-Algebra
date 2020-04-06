@@ -45,10 +45,10 @@ public class Xor_Assertion implements Assertion{
 		
 		for(Assertion assertion : xorList) {
 			JSONObject obj = new JSONObject();
-			if(assertion.getClass() == AntlrBoolean.class) {
-				array.add(assertion.toJSONSchema());
+			try {
+				array.add((AntlrBoolean)assertion.toJSONSchema());
 				continue;
-			}
+			}catch(ClassCastException e) {}
 			Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
 			array.add(obj);
 		}

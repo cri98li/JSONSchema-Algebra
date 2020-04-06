@@ -33,5 +33,26 @@ public class IfThenElse_Assertion implements Assertion{
 			
 		return obj;
 	}
+
+	//if A then B else C --> (A and B) or (not(a) and C) 
+	//NEGATO: (not(A) or not(B)) and (A or not(C)) --? if A then not(C) else not(B) ???
+	@Override
+	public Assertion not() {	
+		And_Assertion and = new And_Assertion();
+		Or_Assertion orThen = new Or_Assertion();
+		orThen.add(ifStatement.not());
+		orThen.add(thenStatement.not());
+		and.add(orThen);
+		
+		//caso if-then-else
+		if(elseStatement != null) {
+			Or_Assertion orElse = new Or_Assertion();
+			orElse.add(ifStatement);
+			orElse.add(elseStatement.not());
+			and.add(orElse);
+		}
+		
+		return and;
+	}
 	
 }

@@ -467,6 +467,22 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		
 		return defs;
 	}
+	
+	@Override
+	public Defs_Assertion visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx) { 
+		Defs_Assertion defs = new Defs_Assertion();
+		
+		List<AssertionContext> list = ctx.assertion();
+		List<TerminalNode> idList = ctx.STRING();
+		
+		defs.setRootDef((Assertion) visit(list.get(0)));
+		
+		for(int i = 1; i < list.size(); i++) {
+			defs.add(idList.get(i-1).getText().subSequence(1, idList.get(i-1).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
+		}
+		
+		return defs;
+	}
 
 	@Override
 	public Ref_Assertion visitNewRef(GrammaticaParser.NewRefContext ctx) { 

@@ -369,6 +369,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseDef(GrammaticaParser.ParseDefContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseDefRoot}
+	 * labeled alternative in {@link GrammaticaParser#def_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseRef}
 	 * labeled alternative in {@link GrammaticaParser#ref_assertion}.
 	 * @param ctx the parse tree

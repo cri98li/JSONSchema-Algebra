@@ -11,7 +11,7 @@ public class Pro_Assertion implements Assertion{
 		maxProperties = max;
 	}
 	
-	private Pro_Assertion() {
+	public Pro_Assertion() {
 	}
 
 	public Pro_Assertion intersect(Pro_Assertion pro) {

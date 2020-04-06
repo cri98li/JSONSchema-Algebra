@@ -188,7 +188,6 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			object = (JSONObject) new JSONParser().parse(body);
 		
 			JSONSchema schema = new JSONSchema(object);
-			
 			GatewayResponse response = new GatewayResponse(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(schema)), 
 					200,
 					"type", "text",

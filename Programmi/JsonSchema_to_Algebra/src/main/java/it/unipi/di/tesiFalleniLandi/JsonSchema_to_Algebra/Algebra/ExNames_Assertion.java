@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class Names_Assertion implements Assertion{
+public class ExNames_Assertion implements Assertion{
 	private Assertion names;
 	
-	public Names_Assertion(Assertion names) {
+	public ExNames_Assertion(Assertion names) {
 		this.names = names;
 	}
 
@@ -28,7 +28,7 @@ public class Names_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		and.add(type);
-		and.add(new ExNames_Assertion(names.not()));
+		and.add(new Names_Assertion(names.not()));
 		
 		return and;
 	}

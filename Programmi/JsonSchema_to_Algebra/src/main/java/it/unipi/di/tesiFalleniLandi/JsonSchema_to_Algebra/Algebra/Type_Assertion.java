@@ -49,6 +49,7 @@ public class Type_Assertion implements Assertion{
 		notType.add("arr");
 		notType.add("bool");
 		notType.add("null");
+		notType.add("numnotint");
 		
 		for(String type : types)
 			notType.types.remove(type);

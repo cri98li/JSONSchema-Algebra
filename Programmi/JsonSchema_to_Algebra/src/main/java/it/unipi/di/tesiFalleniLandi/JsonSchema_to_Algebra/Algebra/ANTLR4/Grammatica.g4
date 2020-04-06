@@ -80,7 +80,8 @@ additionalProperties: 'addp''(' (STRING ('|' STRING)*)? ')''::' assertion							
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 
-def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*												#ParseDef;
+def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*												#ParseDef
+					| 'rootdef''=' assertion (',' 'def'STRING'=' assertion)*										#ParseDefRoot;
 
 ref_assertion: 'ref'':' STRING																						#ParseRef;
 

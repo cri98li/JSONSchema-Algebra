@@ -42,6 +42,16 @@ public class Enum_Assertion implements Assertion{
 		
 		return array;
 	}
+
+	@Override
+	public Assertion not() {
+		And_Assertion notEnum = new And_Assertion();
+		
+		for(Object obj : _enum)
+			notEnum.add((new Const_Assertion(obj)).not());
+		
+		return notEnum;
+	}
 	
 	
 }

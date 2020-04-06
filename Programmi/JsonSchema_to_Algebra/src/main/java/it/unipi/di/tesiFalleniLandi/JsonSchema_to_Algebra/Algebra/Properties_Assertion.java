@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.json.simple.JSONObject;
@@ -56,10 +57,23 @@ public class Properties_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		// TODO Auto-generated method stub
-		return null;
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		RequiredPattern_Assertion required = new RequiredPattern_Assertion();
+		Properties_Assertion prop = new Properties_Assertion();
+		type.add("obj");
+		and.add(type);
+		and.add(required);
+		and.add(prop);
+		
+		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
+		for(Entry<String, Assertion> entry : entrySet) {
+			required.add(entry.getKey());
+			prop.add(entry.getKey(), entry.getValue().not());
+		}
+		
+		//TODO: additionalProperties
+		
+		return and;
 	}
-	
-	
-	
 }

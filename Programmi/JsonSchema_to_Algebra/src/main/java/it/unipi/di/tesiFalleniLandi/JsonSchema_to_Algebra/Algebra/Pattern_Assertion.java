@@ -23,4 +23,9 @@ public class Pattern_Assertion implements Assertion{
 	public Object toJSONSchema() {
 		return pattern;
 	}
+
+	@Override
+	public Assertion not() {
+		return new NotPattern_Assertion(pattern);
+	}
 }

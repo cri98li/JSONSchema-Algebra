@@ -25,7 +25,9 @@ public class Utils {
 				"betweenNumber",
 				"betweenProperties",
 				"unknow",
-				"assertionList"
+				"assertionList",
+				"rootDef",
+				"AllOf_Schema"
 		});
 		
 		if(!putContentKeywords.contains(keyword))

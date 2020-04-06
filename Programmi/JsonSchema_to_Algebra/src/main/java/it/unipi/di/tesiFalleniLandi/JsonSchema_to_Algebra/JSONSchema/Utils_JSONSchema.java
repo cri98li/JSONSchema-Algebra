@@ -69,7 +69,7 @@ public class Utils_JSONSchema {
 		
 		//caso schema con sole definizioni
 		if(root.numberOfAssertions() != 0)
-			finalDefs.addDef("rootdef", root.clone());
+			finalDefs.setRootDef(root.clone());
 		
 		//Aggiungo allo schema la defs normalizzata
 		newRoot.addJSONSchemaElement("$defs", finalDefs);

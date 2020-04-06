@@ -66,7 +66,15 @@ public class Items_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() { //TODO: caso == null
-		//genera binarie
+		
+		//only additionaItems
+		if(additionalItems != null && itemsArray == null) {
+			add(additionalItems);
+			additionalItems = null;
+		}
+		
+		
+		
 		And_Assertion rootAnd = new And_Assertion();
 		Or_Assertion rootOr = new Or_Assertion();
 		Type_Assertion typeArray = new Type_Assertion();
@@ -88,6 +96,8 @@ public class Items_Assertion implements Assertion{
 				itemAssertion.add((i == j) ? itemsArray.get(i).not() : new And_Assertion(true));
 		}
 		
+		
+		if(additionalItems == null) return rootAnd;
 		
 		//ADDITIONAL ITEMS
 		Boolean[] bm = new Boolean[itemsArray.size()];

@@ -61,6 +61,7 @@ public class GrammarStringDefinitions {
 	public static final String UNIQUEITEMS = "uniqueItems";
 	
 	public static final String DEFS = "def \"%s\" = %s";
+	public static final String ROOTDEF = "rootdef = %s";
 	
 	//if-then-else
 	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
