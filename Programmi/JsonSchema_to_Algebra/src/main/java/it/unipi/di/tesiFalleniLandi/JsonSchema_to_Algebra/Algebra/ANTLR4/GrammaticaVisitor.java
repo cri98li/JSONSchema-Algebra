@@ -341,19 +341,19 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseContains(GrammaticaParser.ParseContainsContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseAdditionalProperties}
+	 * labeled alternative in {@link GrammaticaParser#properties}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseProperties}
 	 * labeled alternative in {@link GrammaticaParser#properties}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParseProperties(GrammaticaParser.ParsePropertiesContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ParseAdditionalProperties}
-	 * labeled alternative in {@link GrammaticaParser#additionalProperties}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseConst}
 	 * labeled alternative in {@link GrammaticaParser#const_assertion}.

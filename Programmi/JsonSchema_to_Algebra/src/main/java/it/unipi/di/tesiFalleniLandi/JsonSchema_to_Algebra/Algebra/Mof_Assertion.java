@@ -1,5 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.MultipleOf;
+
 public class Mof_Assertion implements Assertion{
 	private Long mof;
 	
@@ -30,6 +33,16 @@ public class Mof_Assertion implements Assertion{
 		notMof.add(type);
 		notMof.add(new NotMof_Assertion(mof));
 		return notMof;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Mof_Assertion(mof);
+	}
+
+	@Override
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.MULTIPLEOF, mof);
 	}
 	
 	

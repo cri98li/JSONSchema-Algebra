@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
 
@@ -53,6 +55,31 @@ public class IfThenElse_Assertion implements Assertion{
 		}
 		
 		return and;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		Assertion ifStat = ifStatement.notElimination();
+		Assertion thenStat = thenStatement.notElimination();
+		Assertion elseStat = null;
+		if(elseStatement != null) elseStat = elseStatement.notElimination();
+		
+		return new IfThenElse_Assertion(ifStat, thenStat, elseStat);
+	}
+
+	@Override
+	public String toGrammarString() {
+		String if_str = "", then_str = "", else_str = "";
+		if(ifStatement != null) { 
+			if_str = ifStatement.toGrammarString();
+			then_str = thenStatement.toGrammarString();
+		}
+		if(elseStatement != null)
+			else_str = elseStatement.toGrammarString();
+		else
+			return String.format(GrammarStringDefinitions.IF_THEN, if_str, then_str);
+		
+		return String.format(GrammarStringDefinitions.IF_THEN_ELSE, if_str, then_str, else_str);
 	}
 	
 }

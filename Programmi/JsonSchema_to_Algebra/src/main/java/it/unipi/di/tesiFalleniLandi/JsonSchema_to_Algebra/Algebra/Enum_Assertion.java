@@ -52,6 +52,18 @@ public class Enum_Assertion implements Assertion{
 		
 		return notEnum;
 	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Enum_Assertion(_enum);
+	}
+
+	//TODO: 
+	@Override
+	public String toGrammarString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

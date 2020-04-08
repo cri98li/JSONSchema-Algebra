@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Not_Assertion implements Assertion{
 	
 	private Assertion not;
@@ -25,6 +27,16 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return not;
+		return not.not();
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return this.not().notElimination();
+	}
+
+	@Override
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.NOT, not.toGrammarString());
 	}
 }

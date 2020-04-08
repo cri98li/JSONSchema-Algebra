@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
+
 public class Properties_Assertion implements Assertion{
 	private HashMap<String, Assertion> properties;
 	private Assertion additionalProperties;
@@ -59,21 +62,59 @@ public class Properties_Assertion implements Assertion{
 	public Assertion not() {
 		And_Assertion and = new And_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		RequiredPattern_Assertion required = new RequiredPattern_Assertion();
-		Properties_Assertion prop = new Properties_Assertion();
+		AddPatternRequired_Assertion addPattRequired = new AddPatternRequired_Assertion();
+		Or_Assertion or = new Or_Assertion();
 		type.add("obj");
 		and.add(type);
-		and.add(required);
-		and.add(prop);
+		and.add(or);
 		
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
+		
 		for(Entry<String, Assertion> entry : entrySet) {
-			required.add(entry.getKey());
-			prop.add(entry.getKey(), entry.getValue().not());
+			or.add(new PatternRequired_Assertion(entry.getKey(), entry.getValue().not()));
+			addPattRequired.addName(entry.getKey());
 		}
 		
-		//TODO: additionalProperties
+		if(additionalProperties != null) {
+			addPattRequired.setAdditionalProperties(additionalProperties.not());
+			or.add(addPattRequired);
+		}
 		
 		return and;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		Properties_Assertion prop = new Properties_Assertion();
+		
+		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
+		
+		for(Entry<String, Assertion> entry : entrySet)
+			prop.add(entry.getKey(), entry.getValue().notElimination());
+		
+		if(additionalProperties != null)
+			prop.setAdditionalProperties(additionalProperties.notElimination());
+		
+		return prop;
+	}
+	
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		if(properties != null) {
+			Set<Entry<String, Assertion>> entrySet = properties.entrySet();
+			for(Entry<String, Assertion> entry : entrySet) {
+				String returnedValue = entry.getValue().toGrammarString();
+				if(!returnedValue.isEmpty())
+					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
+			}
+		}
+		
+		if(additionalProperties != null) 
+			return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+		
+		if(str.isEmpty() && additionalProperties == null) return "";
+		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");
 	}
 }

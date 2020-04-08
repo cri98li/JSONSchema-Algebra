@@ -58,7 +58,6 @@ public class MultipleOf implements JSONSchemaElement{
 	
 	@Override
 	public MultipleOf clone(){
-		
 		return new MultipleOf(value);
 	}
 }

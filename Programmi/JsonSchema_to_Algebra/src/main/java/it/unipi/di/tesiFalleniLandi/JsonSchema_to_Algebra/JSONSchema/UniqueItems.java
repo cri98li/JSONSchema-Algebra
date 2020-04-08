@@ -31,7 +31,7 @@ public class UniqueItems implements JSONSchemaElement{
 	public String toGrammarString() {
 		if(uniqueItems) return GrammarStringDefinitions.UNIQUEITEMS;
 		
-		return null; //non ci dovrei mai cadere
+		return null;
 	}
 	
 	@Override

@@ -48,7 +48,7 @@ between_properties_assertion : 'pro''('json_value','json_value')'													#P
 
 multiple_of_assertion : 'mof''('json_value')'																		#ParseMultipleOf;													
 
-not_assertion : 'not:' assertion 																					#ParseNot;
+not_assertion : 'not'':' assertion 																					#ParseNot;
 
 all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'														#ParseAllOf;	
 
@@ -74,9 +74,8 @@ items_assertion : 'items''(' assertion (',' assertion)*';'')'														#Pars
 
 contains_assertion : 'contains''(' json_value ',' json_value ')' assertion											#ParseContains;
 
-properties : 'properties''[' (STRING '::' assertion (','STRING '::' assertion)*)? (','?additionalProperties)* ']'	#ParseProperties;
-
-additionalProperties: 'addp''(' (STRING ('|' STRING)*)? ')''::' assertion											#ParseAdditionalProperties;
+properties : 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';' assertion ']'					#ParseAdditionalProperties
+				| 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';'']'							#ParseProperties;
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 

@@ -1,9 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Required_Assertion implements Assertion{
 	private List<String> reqList;
@@ -33,9 +36,6 @@ public class Required_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
-		if(reqList.size() == 1)
-			return reqList.get(0);
-		
 		JSONArray array = new JSONArray();
 		for(String s : reqList)
 			array.add(s);
@@ -46,5 +46,28 @@ public class Required_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		return null;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Required_Assertion();
+	}
+	
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		if(reqList.isEmpty()) return "";
+		
+		Iterator<String> it = reqList.iterator();
+		
+		if(it.hasNext())
+			str += "\""+it.next()+"\"";
+		
+		while(it.hasNext()) {
+			str += GrammarStringDefinitions.COMMA +"\""+ it.next()+"\"";
+		}
+		
+		return String.format(GrammarStringDefinitions.REQUIRED, str);
 	}
 }

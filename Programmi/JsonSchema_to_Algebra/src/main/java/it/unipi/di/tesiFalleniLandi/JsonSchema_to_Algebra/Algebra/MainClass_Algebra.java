@@ -30,6 +30,8 @@ public class MainClass_Algebra {
 			
 			JSONObject JSON = (JSONObject)schema.toJSONSchema();
 			System.out.println(JSON.toJSONString());
+			
+			System.out.println(schema.notElimination());
         }
 	}
 }

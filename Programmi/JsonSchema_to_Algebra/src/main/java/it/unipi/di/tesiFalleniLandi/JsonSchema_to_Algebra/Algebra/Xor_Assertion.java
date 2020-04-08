@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Xor_Assertion implements Assertion{
@@ -74,5 +76,32 @@ public class Xor_Assertion implements Assertion{
 		orList.add(andList);
 		
 		return orList;
+	}
+
+	public Assertion notElimination() {
+		Xor_Assertion xor = new Xor_Assertion();
+		
+		for(Assertion assertion : xorList)
+			xor.add(assertion.notElimination());
+		
+		return xor;
+	}
+	
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		Iterator<Assertion> it = xorList.iterator();
+			
+		while(it.hasNext()) {
+			String returnedValue = it.next().toGrammarString();
+			if(returnedValue.isEmpty())
+				continue;
+			str += GrammarStringDefinitions.COMMA + returnedValue;
+		}
+		
+		if(str.isEmpty()) return "";
+		if(xorList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.ONEOF, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 }

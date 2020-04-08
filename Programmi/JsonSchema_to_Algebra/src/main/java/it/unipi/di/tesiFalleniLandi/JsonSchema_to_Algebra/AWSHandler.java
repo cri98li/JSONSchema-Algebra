@@ -56,6 +56,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				
 			case "grammarToJSON":
 				return grammarToJSON((String) input.get("body"));
+				
+			case "notElimination":
+				return notElimination((String) input.get("body"));
 			}
 			
 			
@@ -222,6 +225,35 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	        JSONObject JSON = (JSONObject)schema.toJSONSchema();
 	        
 	        GatewayResponse response = new GatewayResponse(JSON.toJSONString(),
+	        		200,
+	        		"type", "application/json+schema",
+	        		false);
+	        
+	        return response;
+		}catch(Exception e) {
+			e.printStackTrace();
+			GatewayResponse response = new GatewayResponse(e.getLocalizedMessage(), 
+					500,
+					"type", "text",
+					false);
+			
+			return response;
+		}
+	}
+	
+	private GatewayResponse notElimination(String body) {
+		try{
+			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));   
+	        CommonTokenStream tokens = new CommonTokenStream(lexer);
+	        GrammaticaParser parser = new GrammaticaParser(tokens);
+	        
+	        //parser.addParseListener(new GrammaticaBaseListener_impl());
+	        
+	        ParseTree tree =  parser.assertion();
+	        AlgebraParser p = new AlgebraParser();
+	        Assertion schema = (Assertion) p.visit(tree);
+	        
+	        GatewayResponse response = new GatewayResponse(schema.notElimination().toString(),
 	        		200,
 	        		"type", "application/json+schema",
 	        		false);

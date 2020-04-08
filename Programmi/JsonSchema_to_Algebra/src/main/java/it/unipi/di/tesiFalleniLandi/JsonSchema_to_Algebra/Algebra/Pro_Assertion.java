@@ -2,13 +2,15 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Pro_Assertion implements Assertion{
 	
-	private Long minProperties, maxProperties;
+	private Long min, max;
 	
 	public Pro_Assertion(Long min, Long max) {
-		minProperties = min;
-		maxProperties = max;
+		this.min = min;
+		this.max = max;
 	}
 	
 	public Pro_Assertion() {
@@ -17,15 +19,15 @@ public class Pro_Assertion implements Assertion{
 	public Pro_Assertion intersect(Pro_Assertion pro) {
 		Pro_Assertion intersectedPro = new Pro_Assertion();
 		
-		intersectedPro.minProperties = (minProperties > pro.minProperties)? minProperties:pro.minProperties;
-		intersectedPro.maxProperties = (maxProperties < pro.maxProperties)? maxProperties:pro.maxProperties;
+		intersectedPro.min = (min > pro.min)? min:pro.min;
+		intersectedPro.max = (max < pro.max)? max:pro.max;
 		
 		return intersectedPro;
 	}
 
 	@Override
 	public String toString() {
-		return "Pro_Assertion [minProperties=" + minProperties + ", maxProperties=" + maxProperties + "]";
+		return "Pro_Assertion [minProperties=" + min + ", maxProperties=" + max + "]";
 	}
 
 	@Override
@@ -38,25 +40,36 @@ public class Pro_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
-		obj.put("minProperties", minProperties);
-		obj.put("maxProperties", maxProperties);
+		obj.put("minProperties", min);
+		obj.put("maxProperties", max);
 		
 		return obj;
 	}
 
 	@Override
 	public Assertion not() {
-		if(minProperties != null && maxProperties != null) {
+		if(min != null && max != null) {
 			And_Assertion and = new And_Assertion();
-			and.add(new Pro_Assertion(null, minProperties-1));
-			and.add(new Pro_Assertion(maxProperties+1, null));
+			and.add(new Pro_Assertion(null, min-1));
+			and.add(new Pro_Assertion(max+1, null));
 			return and;
 		}
 		
-		if(minProperties != null)
-			return new Len_Assertion(null, minProperties-1);
+		if(min != null)
+			return new Len_Assertion(null, min-1);
 		
 		
-		return new Len_Assertion(maxProperties+1, null);
+		return new Len_Assertion(max+1, null);
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Pro_Assertion(min, max);
+	}
+
+	@Override
+	public String toGrammarString() {
+		// TODO Auto-generated method stub
+		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
 	}
 }

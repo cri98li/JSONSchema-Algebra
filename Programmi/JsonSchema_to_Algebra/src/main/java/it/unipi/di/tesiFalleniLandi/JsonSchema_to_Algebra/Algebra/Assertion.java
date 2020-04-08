@@ -19,4 +19,10 @@ public interface Assertion extends AlgebraParserElement{
 	 * @return
 	 */
 	public Assertion not();
+	
+	
+	public Assertion notElimination(); //not pushing?
+	
+	
+	public String toGrammarString();
 }

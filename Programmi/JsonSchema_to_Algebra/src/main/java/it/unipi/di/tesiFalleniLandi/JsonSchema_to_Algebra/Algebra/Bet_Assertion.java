@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Bet_Assertion implements Assertion{
 	
 	private Object min, max;
@@ -65,5 +67,14 @@ public class Bet_Assertion implements Assertion{
 		
 		and.add(new XBet_Assertion(max, null));
 		return and;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Bet_Assertion(min, max);
+	}
+	
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
 	}
 }

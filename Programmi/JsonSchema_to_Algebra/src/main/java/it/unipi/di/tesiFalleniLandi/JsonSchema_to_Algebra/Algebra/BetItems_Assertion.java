@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class BetItems_Assertion implements Assertion{
 	private Long min, max;
 	
@@ -75,5 +77,24 @@ public class BetItems_Assertion implements Assertion{
 		return and;
 	}
 
+	@Override
+	public Assertion notElimination() {
+		return new BetItems_Assertion(min, max);
+	}
+
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		if(min != null && max != null) {
+			str = String.format(GrammarStringDefinitions.BETWEENITEMS, min, max);
+		} else if (min != null && max == null) {
+			str = String.format(GrammarStringDefinitions.BETWEENITEMS, min, GrammarStringDefinitions.NULLVALUE);
+		}else if(min == null && max != null) {
+			str = String.format(GrammarStringDefinitions.BETWEENITEMS, GrammarStringDefinitions.NULLVALUE, max);
+		}
+			
+		return str;
+	}
 
 }

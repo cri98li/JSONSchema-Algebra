@@ -1,10 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Const_Assertion implements Assertion{
 	
@@ -49,6 +52,7 @@ public class Const_Assertion implements Assertion{
 		
 	}
 
+	//TODO: not di boolean, isboolvalue?
 	@Override
 	public Assertion not() {
 		Type_Assertion type = new Type_Assertion();
@@ -124,6 +128,32 @@ public class Const_Assertion implements Assertion{
 		or.add(pro.not());
 		
 		return or;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		return new Const_Assertion(value);
+	}
+
+	
+	//TODO: va fatto il metodo ricorsivo (posso avere antlrArray contenente una lista di AntlrArray)
+	@Override
+	public String toGrammarString() {
+		if(value.getClass() == String.class) {
+			return String.format(GrammarStringDefinitions.CONST, "\""+value+"\"");
+		}
+		
+		try {
+			@SuppressWarnings("unchecked")
+			List<Object> array = (List<Object>) value;
+			String str = "";
+			for(Object obj : array) {
+				if(obj.getClass() == String.class)
+					str += GrammarStringDefinitions.COMMA + "\"" + obj + "\"";
+			}
+		}catch(ClassCastException ex) {}
+		
+		return "";
 	}
 	
 }

@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class UniqueItems_Assertion implements Assertion{	
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
+public class UniqueItems_Assertion implements Assertion{
+	
 	public UniqueItems_Assertion() {
 	}
 
@@ -23,4 +26,16 @@ public class UniqueItems_Assertion implements Assertion{
 	public Assertion not() {
 		return new RepeatedItems_Assertion();
 	}
+
+	@Override
+	public Assertion notElimination() {
+		// TODO Auto-generated method stub
+		return new UniqueItems_Assertion();
+	}
+
+	@Override
+	public String toGrammarString() {
+		return GrammarStringDefinitions.UNIQUEITEMS;
+	}
+	
 }

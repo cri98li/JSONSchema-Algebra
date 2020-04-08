@@ -10,6 +10,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Annotation_Ass
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.BetItems_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Bet_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Const_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Defs_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Enum_Assertion;
@@ -29,15 +30,14 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Required_Asser
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.UniqueItems_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Xor_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AdditionalPropertiesContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 
 public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
-	public AntlrBoolean visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx) {
-		return new AntlrBoolean(Boolean.parseBoolean(ctx.BOOLEAN().getText()));
+	public Boolean_Assertion visitParseBooleanSchema(GrammaticaParser.ParseBooleanSchemaContext ctx) {
+		return new Boolean_Assertion(Boolean.parseBoolean(ctx.BOOLEAN().getText()));
 	}
 	
 	public And_Assertion visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
@@ -50,7 +50,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 			list.add(schema);
 		}
 		
-		return list; 
+		return list;
 	}
 	
 	@Override
@@ -388,21 +388,28 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		
 		List<AssertionContext> list = ctx.assertion();
 		List<TerminalNode> idList = ctx.STRING();
-		List<AdditionalPropertiesContext> additionalPro = ctx.additionalProperties();
 		
 		for(int i = 0; i < list.size(); i++) {
 			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
-		
-		if(!additionalPro.isEmpty())
-			p.setAdditionalProperties((Assertion) visit(additionalPro.get(0)));
 		
 		return p;
 	}
 	
 	@Override
 	public Assertion visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx) {
-		return (Assertion) visit(ctx.assertion());
+Properties_Assertion p = new Properties_Assertion();
+		
+		List<AssertionContext> list = ctx.assertion();
+		List<TerminalNode> idList = ctx.STRING();
+		
+		for(int i = 0; i < list.size()-1; i++) {
+			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
+		}
+		
+		p.setAdditionalProperties((Assertion) visit(list.get(list.size()-1))); 
+		
+		return p;
 	}
 	
 	@Override

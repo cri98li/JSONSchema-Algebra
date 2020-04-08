@@ -1,2 +1,11 @@
-rootdef = {type(bool), mof(4)},
-def "pippo" = type(bool)
+rootdef =
+	not : 
+		allOf[
+			type(obj),
+			props[
+				"$data": allOf[
+					type(str)
+				]
+				;false],
+			req["$data"]
+		]

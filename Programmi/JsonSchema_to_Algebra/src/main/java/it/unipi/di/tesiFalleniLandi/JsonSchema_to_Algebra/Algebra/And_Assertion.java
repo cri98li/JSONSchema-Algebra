@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 
 public class And_Assertion implements Assertion{
 	private List<Assertion> andList;
@@ -91,6 +94,32 @@ public class And_Assertion implements Assertion{
 		
 		return or;
 	}
-	
-	
+
+	@Override
+	public Assertion notElimination() {
+		And_Assertion and = new And_Assertion();
+		
+		for(Assertion assertion : andList)
+			and.add(assertion.notElimination());
+		
+		return and;
+	}
+
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		Iterator<Assertion> it = andList.iterator();
+			
+		while(it.hasNext()) {
+			String returnedValue = it.next().toGrammarString();
+			if(returnedValue.isEmpty())
+				continue;
+			str += GrammarStringDefinitions.COMMA + returnedValue;
+		}
+		
+		if(str.isEmpty()) return "";
+		if(andList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
 }

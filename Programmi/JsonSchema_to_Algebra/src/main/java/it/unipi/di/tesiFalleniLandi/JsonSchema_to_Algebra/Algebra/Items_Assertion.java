@@ -1,14 +1,18 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 
+//TODO: pensare ad items di jsonObject
 public class Items_Assertion implements Assertion{
 
 	private List<Assertion> itemsArray;
@@ -141,5 +145,39 @@ public class Items_Assertion implements Assertion{
 	    	if(bm[i]) count++;
 		
 		return count;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		Items_Assertion items = new Items_Assertion();
+		
+		for(Assertion item : itemsArray)
+			items.add(item.notElimination());
+		
+		items.setAdditionalItems(additionalItems.notElimination());
+		
+		return items;
+	}
+
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		if(itemsArray.size() == 1) {
+			return String.format(GrammarStringDefinitions.ITEMS, "", itemsArray.get(0).toGrammarString());
+		}
+		
+		Iterator<Assertion> it = itemsArray.iterator();
+		if(it.hasNext())
+			str += it.next().toGrammarString();
+		
+		while(it.hasNext()) {
+			str += "," + it.next().toGrammarString();
+		}
+		
+		String str2 = "";
+		if(additionalItems != null)
+			str2 = additionalItems.toGrammarString();
+		
+		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
 	}
 }

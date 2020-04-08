@@ -6,11 +6,12 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 
 //TODO: AGGIORNARE I METODI PER ROOTDEF
 public class Defs_Assertion implements Assertion{
-
 	private HashMap<String, Assertion> defs;
 	private Assertion rootDef;
 	
@@ -89,5 +90,25 @@ public class Defs_Assertion implements Assertion{
 		return notDef;
 	}
 
-	
+	@Override
+	public Assertion notElimination() {
+		Defs_Assertion def = new Defs_Assertion();
+		
+		def.defs.putAll(defs); //va fatto solo al rootDef?
+		def.rootDef = rootDef.notElimination();
+		
+		return def;
+	}
+
+	@Override
+	public String toGrammarString() {
+		String def = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
+		
+		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
+
+		for(Entry<String, Assertion> entry : entrySet)
+			def+= GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+		
+		return def.substring(GrammarStringDefinitions.COMMA.length());
+	}
 }

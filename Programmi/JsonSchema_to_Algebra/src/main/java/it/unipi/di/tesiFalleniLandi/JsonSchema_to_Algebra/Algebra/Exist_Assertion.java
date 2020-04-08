@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Exist_Assertion implements Assertion{
 	private Long min, max;
 	private Assertion contains;
@@ -79,5 +81,16 @@ public class Exist_Assertion implements Assertion{
 		
 		and.add(new Exist_Assertion(max + 1, null, contains));
 		return and;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		Assertion tmp = contains.notElimination();
+		return new Exist_Assertion(min, max, tmp);
+	}
+
+	@Override
+	public String toGrammarString() {		
+		return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
 	}
 }

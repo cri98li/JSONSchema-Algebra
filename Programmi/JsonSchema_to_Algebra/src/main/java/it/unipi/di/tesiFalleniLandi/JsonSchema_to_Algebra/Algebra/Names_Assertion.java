@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Names_Assertion implements Assertion{
 	private Assertion names;
 	
@@ -28,8 +30,21 @@ public class Names_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		and.add(type);
-		and.add(new ExNames_Assertion(names.not()));
+		and.add(new ExName_Assertion(names.not()));
 		
 		return and;
 	}
+
+	@Override
+	public Assertion notElimination() {
+		Assertion tmp = names.notElimination();
+		
+		return new Names_Assertion(tmp);
+	}
+
+	@Override
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.PROPERTYNAMES, names.toGrammarString());
+	}
+
 }

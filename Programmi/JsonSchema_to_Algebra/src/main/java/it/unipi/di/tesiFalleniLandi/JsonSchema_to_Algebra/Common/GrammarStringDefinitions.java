@@ -16,6 +16,7 @@ public class GrammarStringDefinitions {
 	
 	//MULTIPLE OF
 	public static final String MULTIPLEOF = "mof(%s)";
+	public static final String NOTMULTIPLEOF = "notMof(%s)";
 	
 	//TYPE
 	public static final String TYPE = "type(%s)";
@@ -26,6 +27,7 @@ public class GrammarStringDefinitions {
 		public static final String TYPE_INTEGER = "int";
 		public static final String TYPE_ARRAY = "arr";
 		public static final String TYPE_OBJECT = "obj";
+		public static final String TYPE_NUMNOTINT = "numnotint";
 		
 	
 	//allOf, anyOf, oneOf
@@ -41,6 +43,7 @@ public class GrammarStringDefinitions {
 		
 	//pattern
 	public static final String PATTERN = "pattern(\"%s\")";
+	public static final String NOTPATTERN = "notPattern(\"%s\")";
 		
 	//length
 	public static final String LENGTH = "length(%s,%s)";
@@ -60,6 +63,9 @@ public class GrammarStringDefinitions {
 	//unique items
 	public static final String UNIQUEITEMS = "uniqueItems";
 	
+	//repeated items
+	public static final String REPEATEDITEMS = "repeatedItems";
+	
 	public static final String DEFS = "def \"%s\" = %s";
 	public static final String ROOTDEF = "rootdef = %s";
 	
@@ -68,9 +74,14 @@ public class GrammarStringDefinitions {
 	public static final String IF_THEN = "if: %s, \r\nthen: %s";
 	
 	//properties
-	public static final String PROPERTIES = "properties[\r\n%s\r\n]";
-	public static final String SINGLEPROPERTIES = "\"%s\"::%s";
-	public static final String ADDITIONALPROPERTIES = "addp(%s)::%s";
+	public static final String PROPERTIES = "props[\r\n%s\r\n;%s]";
+	public static final String SINGLEPROPERTIES = "\"%s\": %s";
+	
+	//pattReq
+	public static final String PATTERNREQUIRED = "pattReq[\r\n%s\r\n]";
+	
+	//addPattReq
+	public static final String ADDPATTERNREQUIRED = "addPattReq((%s) : %s)";
 	
 	//PropertyNames
 	public static final String PROPERTYNAMES = "names: %s";
@@ -84,4 +95,7 @@ public class GrammarStringDefinitions {
 	//unknow keyword (annotations?)
 	public static final String UNKNOW = "annotations[%s]";
 	public static final String SINGLEUNKNOW = "\"%s\": \"%s\"";
+	
+	//ExName
+	public static final String EXNAME = "exName(\r\n%s\r\n)";
 }

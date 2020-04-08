@@ -91,8 +91,6 @@ public class Defs implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		//da pensare a defs del documento corrente #
-		
 		String defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();

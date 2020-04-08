@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-public class ExNames_Assertion implements Assertion{
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
+public class ExName_Assertion implements Assertion{
 	private Assertion names;
 	
-	public ExNames_Assertion(Assertion names) {
+	public ExName_Assertion(Assertion names) {
 		this.names = names;
 	}
 
@@ -31,5 +33,16 @@ public class ExNames_Assertion implements Assertion{
 		and.add(new Names_Assertion(names.not()));
 		
 		return and;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		// TODO Auto-generated method stub
+		return new ExName_Assertion(names.notElimination());
+	}
+
+	@Override
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.EXNAME, names.toGrammarString());
 	}
 }

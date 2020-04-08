@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Len_Assertion implements Assertion{
 	private Long min, max;
 	
@@ -64,5 +66,16 @@ public class Len_Assertion implements Assertion{
 		
 		
 		return new Len_Assertion(max+1, null);
+	}
+
+	@Override
+	public Assertion notElimination() {
+		// TODO Auto-generated method stub
+		return new Len_Assertion(min, max);
+	}
+
+	@Override
+	public String toGrammarString() {
+		return String.format(GrammarStringDefinitions.LENGTH, min, max);
 	}
 }

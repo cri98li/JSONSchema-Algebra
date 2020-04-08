@@ -34,4 +34,14 @@ public class Annotation_Assertion implements Assertion{
 		return new Not_Assertion(this);
 	}
 
+	@Override
+	public Assertion notElimination() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String toGrammarString() {
+		throw new UnsupportedOperationException();
+	}
+
 }

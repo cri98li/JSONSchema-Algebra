@@ -84,7 +84,7 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		if(additionalProperties != null)
-			obj.put("additionalProperties", additionalProperties.toJSON());
+			obj.put("additionalProperties", additionalProperties.toJSON()); 
 		
 		return obj;
 	}
@@ -92,34 +92,31 @@ public class Properties implements JSONSchemaElement{
 	@Override
 	public String toGrammarString() {
 		String str = "";
-		String strAdditionalProp ="";
 		
 		if(properties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
-				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
-				strAdditionalProp += GrammarStringDefinitions.OR + "\"" + entry.getKey() + "\"";
+				String returnedValue = entry.getValue().toGrammarString();
+				if(!returnedValue.isEmpty())
+					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
 			}
 		}
 		
 		if(patternProperties != null) {
 			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
-				str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), entry.getValue().toGrammarString());
-				strAdditionalProp += GrammarStringDefinitions.OR + "\"" +entry.getKey()+"\"";
+				String returnedValue = entry.getValue().toGrammarString();
+				if(!returnedValue.isEmpty())
+					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
 			}
 				
 		}
 		
-		//Se non sono vuoti, sottraggo la virgola iniziale
-		if(!str.isEmpty()) 
-			strAdditionalProp = strAdditionalProp.substring(GrammarStringDefinitions.OR.length());
-		
 		if(additionalProperties != null) 
-			str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ADDITIONALPROPERTIES, strAdditionalProp, additionalProperties.toGrammarString());
+			return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
 		
 		if(str.isEmpty() && additionalProperties == null) return "";
-		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()));
+		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");
 	}
 
 	@Override

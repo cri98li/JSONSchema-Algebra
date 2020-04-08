@@ -345,7 +345,7 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {			
 			String returnedValue = entry.getValue().toGrammarString();
-			if(returnedValue == null || returnedValue.isEmpty())
+			if(returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.COMMA + returnedValue;
 			nElement += entry.getValue().numberOfAssertions();
@@ -355,7 +355,7 @@ public class JSONSchema implements JSONSchemaElement{
 		 * if(entries.isEmpty()) return "true";
 		 * if(str.isEmpty()) return "";
 		 */
-		if(nElement == 0) return "true";
+		if(nElement == 0) return "";
 		if(nElement == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}

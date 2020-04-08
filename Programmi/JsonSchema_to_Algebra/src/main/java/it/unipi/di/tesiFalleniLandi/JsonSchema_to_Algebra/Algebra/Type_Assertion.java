@@ -1,9 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Type_Assertion implements Assertion{
 	private List<String> types;
@@ -34,7 +37,43 @@ public class Type_Assertion implements Assertion{
 		
 		JSONArray array = new JSONArray();
 		for(String s : types)
-			array.add(s);
+			switch(s) {
+			case "str":
+				array.add("String");
+				break;
+				
+			case "obj":
+				array.add("Object");
+				break;
+				
+			case "num":
+				array.add("Number");
+				break;
+				
+			case "int":
+				array.add("Integer");
+				break;
+				
+			case "arr":
+				array.add("Array");
+				break;
+				
+			case "bool":
+				array.add("Boolean");
+				break;
+				
+			case "null":
+				array.add("Null");
+				break;
+				
+			case "numnotint":
+				//DA PENSARE
+				/*Type_Assertion type = new Type_Assertion();
+				type.add("int");
+				Not_Assertion not = new Not_Assertion(type);
+				array.add(not.toJSONSchema());*/
+				break;
+			}
 			
 		return array;
 	}
@@ -55,6 +94,44 @@ public class Type_Assertion implements Assertion{
 			notType.types.remove(type);
 		
 		return notType;
+	}
+
+	@Override
+	public Assertion notElimination() {
+		Type_Assertion t = new Type_Assertion();
+		
+		t.types.addAll(types);
+		
+		return t;
+	}
+
+	@Override
+	public String toGrammarString() {
+		String str = "";
+		
+		Iterator <String> it = types.iterator();
+		if(it.hasNext())
+			str += String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+		
+		while(it.hasNext()) {
+			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+		}
+		
+		return str;
+	}
+	
+	private String jsonTypeToGrammar(String type) {
+		switch(type) {
+		case "array": return GrammarStringDefinitions.TYPE_ARRAY;
+		case "integer": return GrammarStringDefinitions.TYPE_INTEGER;
+		case "number": return GrammarStringDefinitions.TYPE_NUMBER;
+		case "string": return GrammarStringDefinitions.TYPE_STRING;
+		case "object": return GrammarStringDefinitions.TYPE_OBJECT;
+		case "boolean": return GrammarStringDefinitions.TYPE_BOOLEAN;
+		case "null": return GrammarStringDefinitions.TYPE_NULL;
+		case "numnotint": return GrammarStringDefinitions.TYPE_NUMNOTINT;
+		}
+		return null;
 	}
 	
 	
