@@ -45,7 +45,7 @@ public class Required_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return null;
+		return new Required_Assertion();
 	}
 
 	@Override

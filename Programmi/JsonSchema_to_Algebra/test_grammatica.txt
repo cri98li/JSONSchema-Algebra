@@ -1,11 +1,14 @@
-rootdef =
-	not : 
-		allOf[
-			type(obj),
-			props[
-				"$data": allOf[
-					type(str)
-				]
-				;false],
-			req["$data"]
-		]
+rootdef = 
+	not:
+	props[
+		"a":{
+			type(int),
+			bet(0,15)
+			},
+		"b":{
+			type(str),
+			length(3,15)
+			}
+		;true
+	]
+

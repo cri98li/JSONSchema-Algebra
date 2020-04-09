@@ -122,12 +122,12 @@ public class Type_Assertion implements Assertion{
 	
 	private String jsonTypeToGrammar(String type) {
 		switch(type) {
-		case "array": return GrammarStringDefinitions.TYPE_ARRAY;
-		case "integer": return GrammarStringDefinitions.TYPE_INTEGER;
-		case "number": return GrammarStringDefinitions.TYPE_NUMBER;
-		case "string": return GrammarStringDefinitions.TYPE_STRING;
-		case "object": return GrammarStringDefinitions.TYPE_OBJECT;
-		case "boolean": return GrammarStringDefinitions.TYPE_BOOLEAN;
+		case "arr": return GrammarStringDefinitions.TYPE_ARRAY;
+		case "int": return GrammarStringDefinitions.TYPE_INTEGER;
+		case "num": return GrammarStringDefinitions.TYPE_NUMBER;
+		case "str": return GrammarStringDefinitions.TYPE_STRING;
+		case "obj": return GrammarStringDefinitions.TYPE_OBJECT;
+		case "bool": return GrammarStringDefinitions.TYPE_BOOLEAN;
 		case "null": return GrammarStringDefinitions.TYPE_NULL;
 		case "numnotint": return GrammarStringDefinitions.TYPE_NUMNOTINT;
 		}

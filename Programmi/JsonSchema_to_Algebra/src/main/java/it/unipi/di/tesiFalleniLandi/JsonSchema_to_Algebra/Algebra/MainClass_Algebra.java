@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AlgebraParser;
 
 public class MainClass_Algebra {
@@ -31,7 +32,7 @@ public class MainClass_Algebra {
 			JSONObject JSON = (JSONObject)schema.toJSONSchema();
 			System.out.println(JSON.toJSONString());
 			
-			System.out.println(schema.notElimination());
+			System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));
         }
 	}
 }
