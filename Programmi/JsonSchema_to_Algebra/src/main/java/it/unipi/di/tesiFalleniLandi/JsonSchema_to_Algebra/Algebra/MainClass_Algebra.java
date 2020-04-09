@@ -32,7 +32,7 @@ public class MainClass_Algebra {
 			JSONObject JSON = (JSONObject)schema.toJSONSchema();
 			System.out.println(JSON.toJSONString());
 			
-			System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));
+			//System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));
         }
 	}
 }

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
@@ -29,9 +30,21 @@ public class IfThenElse_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 			
-		if(ifStatement != null) obj.put("if", ifStatement.toJSONSchema());
-		if(thenStatement != null) obj.put("then", thenStatement.toJSONSchema());
-		if(elseStatement != null) obj.put("else", elseStatement.toJSONSchema());
+		if(ifStatement != null) {
+			JSONObject tmp = new JSONObject();
+			Utils.putContent(tmp, ifStatement.getJSONSchemaKeyword(), ifStatement.toJSONSchema());
+			obj.put("if", tmp);
+		}
+		if(thenStatement != null) {
+			JSONObject tmp = new JSONObject();
+			Utils.putContent(tmp, thenStatement.getJSONSchemaKeyword(), thenStatement.toJSONSchema());
+			obj.put("then", tmp);
+		}
+		if(elseStatement != null) {
+			JSONObject tmp = new JSONObject();
+			Utils.putContent(tmp, elseStatement.getJSONSchemaKeyword(), elseStatement.toJSONSchema());
+			obj.put("else", tmp);
+		}
 			
 		return obj;
 	}

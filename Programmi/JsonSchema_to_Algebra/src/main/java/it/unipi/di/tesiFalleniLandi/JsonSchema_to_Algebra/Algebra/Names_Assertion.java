@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import org.json.simple.JSONObject;
+
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Names_Assertion implements Assertion{
 	private Assertion names;
@@ -21,7 +24,9 @@ public class Names_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		return names.toJSONSchema();
+		JSONObject tmp = new JSONObject();
+		Utils.putContent(tmp, names.getJSONSchemaKeyword(), names.toJSONSchema());
+		return tmp;
 	}
 	
 	@Override

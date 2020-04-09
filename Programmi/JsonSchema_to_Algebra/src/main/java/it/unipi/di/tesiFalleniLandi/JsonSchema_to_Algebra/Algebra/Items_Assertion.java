@@ -62,8 +62,11 @@ public class Items_Assertion implements Assertion{
 				obj.put("items", array);
 			}
 		
-		if(additionalItems != null)
-			Utils.putContent(obj, "additionalItems", additionalItems.toJSONSchema());
+		if(additionalItems != null) {
+			JSONObject tmp = new JSONObject();
+			Utils.putContent(tmp, additionalItems.getJSONSchemaKeyword(), additionalItems.toJSONSchema());
+			obj.put("additionalItems", tmp);
+		}
 	
 		return obj;
 	}

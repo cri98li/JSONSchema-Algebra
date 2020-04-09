@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Exist_Assertion implements Assertion{
 	private Long min, max;
@@ -51,8 +52,13 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
+
+		if(contains != null) {
+			JSONObject tmp = new JSONObject();
+			Utils.putContent(tmp, contains.getJSONSchemaKeyword(), contains.toJSONSchema());
+			obj.put("contains", tmp);
+		}
 		
-		if(contains != null) obj.put("contains", contains.toJSONSchema());
 		if(min != null) obj.put("minContains", min);
 		if(max != null) obj.put("maxContains", max);
 		

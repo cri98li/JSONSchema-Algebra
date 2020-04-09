@@ -1,14 +1,12 @@
-rootdef = 
-	not:
+rootdef = {
+	type(obj),
+	req["body"],
 	props[
-		"a":{
-			type(int),
-			bet(0,15)
-			},
-		"b":{
-			type(str),
-			length(3,15)
-			}
-		;true
-	]
-
+		"body": anyOf[
+			ref: "bodyTarget.json#/definitions/textualBodyFound",
+			not: items(;not: ref: "bodyTarget.json#/definitions/textualBodyFound"),
+			ref: "bodyTarget.json#/definitions/itemETBDetected",
+			not: items(;not: ref: "bodyTarget.json#/definitions/itemETBDetected")
+		]
+		;]
+}

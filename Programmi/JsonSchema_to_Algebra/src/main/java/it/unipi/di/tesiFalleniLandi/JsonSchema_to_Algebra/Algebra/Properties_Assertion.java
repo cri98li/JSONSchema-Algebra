@@ -7,6 +7,7 @@ import java.util.Set;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 
 public class Properties_Assertion implements Assertion{
@@ -46,8 +47,11 @@ public class Properties_Assertion implements Assertion{
 			JSONObject tmp = new JSONObject();
 			Set<String> keys = properties.keySet();
 			
-			for(String key : keys)
-				tmp.put(key, properties.get(key).toJSONSchema());
+			for(String key : keys) {
+				JSONObject tmp2 = new JSONObject();
+				Utils.putContent(tmp2, properties.get(key).getJSONSchemaKeyword(), properties.get(key).toJSONSchema());
+				tmp.put(key, tmp2);
+			}
 				
 			obj.put("patternProperties", tmp);
 		}

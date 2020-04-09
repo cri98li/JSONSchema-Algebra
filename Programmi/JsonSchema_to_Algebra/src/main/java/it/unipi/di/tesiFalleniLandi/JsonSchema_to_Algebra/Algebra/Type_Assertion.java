@@ -33,48 +33,12 @@ public class Type_Assertion implements Assertion{
 	@Override
 	public Object toJSONSchema() {
 		if(types.size() == 1)
-			return types.get(0);
+			return this.toJsonTypeName(types.get(0));
 		
 		JSONArray array = new JSONArray();
 		for(String s : types)
-			switch(s) {
-			case "str":
-				array.add("String");
-				break;
+			array.add(this.toJsonTypeName(s));
 				
-			case "obj":
-				array.add("Object");
-				break;
-				
-			case "num":
-				array.add("Number");
-				break;
-				
-			case "int":
-				array.add("Integer");
-				break;
-				
-			case "arr":
-				array.add("Array");
-				break;
-				
-			case "bool":
-				array.add("Boolean");
-				break;
-				
-			case "null":
-				array.add("Null");
-				break;
-				
-			case "numnotint":
-				//DA PENSARE
-				/*Type_Assertion type = new Type_Assertion();
-				type.add("int");
-				Not_Assertion not = new Not_Assertion(type);
-				array.add(not.toJSONSchema());*/
-				break;
-			}
-			
 		return array;
 	}
 
@@ -134,6 +98,18 @@ public class Type_Assertion implements Assertion{
 		return null;
 	}
 	
-	
+	private String toJsonTypeName(String type) {
+		switch(type) {
+		case "arr": return "array";
+		case "int": return "integer";
+		case "num": return "number";
+		case "str": return "string";
+		case "obj": return "object";
+		case "bool": return "boolean";
+		case "null": return "null";
+		//case "numnotint": return GrammarStringDefinitions.TYPE_NUMNOTINT; //bisogna modificare putContent o la keyword ritornata
+		}
+		return null;
+	}
 }
   
