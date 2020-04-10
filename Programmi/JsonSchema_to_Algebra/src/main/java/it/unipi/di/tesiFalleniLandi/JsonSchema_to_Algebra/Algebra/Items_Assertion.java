@@ -80,8 +80,6 @@ public class Items_Assertion implements Assertion{
 			additionalItems = null;
 		}
 		
-		
-		
 		And_Assertion rootAnd = new And_Assertion();
 		Or_Assertion rootOr = new Or_Assertion();
 		Type_Assertion typeArray = new Type_Assertion();
@@ -96,11 +94,11 @@ public class Items_Assertion implements Assertion{
 			rootOr.add(itemAndAssertion);
 			itemAndAssertion.add(itemAssertion);
 			
-			itemAndAssertion.add(new Exist_Assertion((long) (i+1), null, new And_Assertion(true)));
-			itemAssertion.setAdditionalItems(new And_Assertion(true));
+			itemAndAssertion.add(new Exist_Assertion((long) (i+1), null, new Boolean_Assertion(true)));
+			itemAssertion.setAdditionalItems(new Boolean_Assertion(true));
 			
 			for(int j = 0; j < itemsArray.size(); j++)
-				itemAssertion.add((i == j) ? itemsArray.get(i).not() : new And_Assertion(true));
+				itemAssertion.add((i == j) ? itemsArray.get(i).not() : new Boolean_Assertion(true));
 		}
 		
 		
@@ -115,7 +113,7 @@ public class Items_Assertion implements Assertion{
 		do {
 			And_Assertion andAdditionalItems = new And_Assertion();
 			rootOr.add(andAdditionalItems);
-			andAdditionalItems.add(new Exist_Assertion((long) sumbit(bm), null, new And_Assertion(true)));
+			andAdditionalItems.add(new Exist_Assertion((long) sumbit(bm), null, new Boolean_Assertion(true)));
 			Items_Assertion itemsAdditionalItems = new Items_Assertion();
 			andAdditionalItems.add(itemsAdditionalItems);
 			

@@ -21,11 +21,6 @@ public class And_Assertion implements Assertion{
 		duplicates = false;
 	}
 
-	public And_Assertion(boolean b) {
-		// TODO Auto-generated constructor stub
-		throw new UnsupportedOperationException();
-	}
-
 	public void addAll(List<Assertion> list) {
 		for(Assertion assertion : list) 
 			duplicates |= andList.contains(assertion);
@@ -62,7 +57,7 @@ public class And_Assertion implements Assertion{
 			for(Assertion assertion : andList) {
 				JSONObject obj = new JSONObject();
 				try {
-					array.add((AntlrBoolean)assertion.toJSONSchema());
+					array.add((AntlrBoolean)assertion.toJSONSchema()); //Forse non va bene AntlrBoolean (Boolean_Assertion)
 					continue;
 				}catch(ClassCastException e) {}
 				Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
