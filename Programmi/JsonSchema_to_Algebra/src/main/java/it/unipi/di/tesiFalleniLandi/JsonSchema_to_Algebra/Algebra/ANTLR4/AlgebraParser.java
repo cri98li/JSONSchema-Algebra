@@ -70,9 +70,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		
 		try{
 			min = (AntlrLong) visit(ctx.json_value(0));
-			max = (AntlrLong) visit(ctx.json_value(1));
 		}catch(ClassCastException ex) {
 			min = (AntlrDouble) visit(ctx.json_value(0));
+		}
+		
+		try{
+			max = (AntlrLong) visit(ctx.json_value(1));
+		}catch(ClassCastException ex) {
 			max = (AntlrDouble) visit(ctx.json_value(1));
 		}
 		
@@ -91,9 +95,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		
 		try{
 			min = (AntlrLong) visit(ctx.json_value(0));
-			max = (AntlrLong) visit(ctx.json_value(1));
 		}catch(ClassCastException ex) {
 			min = (AntlrDouble) visit(ctx.json_value(0));
+		}
+		
+		try{
+			max = (AntlrLong) visit(ctx.json_value(1));
+		}catch(ClassCastException ex) {
 			max = (AntlrDouble) visit(ctx.json_value(1));
 		}
 		
