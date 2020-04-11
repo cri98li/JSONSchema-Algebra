@@ -72,7 +72,7 @@ public class MainClass
 	    		
     		}catch(Exception ex) {
     			ex.printStackTrace();
-    			System.exit(0);
+    			System.exit(-1);
     		}
     		
     	}else {
