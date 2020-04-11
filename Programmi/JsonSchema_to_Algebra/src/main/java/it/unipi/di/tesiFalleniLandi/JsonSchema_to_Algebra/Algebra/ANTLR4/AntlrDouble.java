@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 public class AntlrDouble implements AntlrValue{
-	private Object value;
+	private Double value;
 	
-	public AntlrDouble(Object value) {
+	public AntlrDouble(Double value) {
 		this.value = value;
 	}
 

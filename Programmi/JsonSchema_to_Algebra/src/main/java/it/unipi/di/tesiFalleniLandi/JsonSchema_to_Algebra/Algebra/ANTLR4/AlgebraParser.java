@@ -75,17 +75,21 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	
 	@Override
 	public Bet_Assertion visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx) {
-		
-		Bet_Assertion bet = (Bet_Assertion) visit(ctx.xbetween_assertion());
 
-		return bet;
+		return (Bet_Assertion) visit(ctx.xbetween_assertion());
 	}
 	
 	@Override
 	public Bet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
+		AntlrValue min, max;
 		
-		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
-		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		try{
+			min = (AntlrLong) visit(ctx.json_value(0));
+			max = (AntlrLong) visit(ctx.json_value(1));
+		}catch(ClassCastException ex) {
+			min = (AntlrDouble) visit(ctx.json_value(0));
+			max = (AntlrDouble) visit(ctx.json_value(1));
+		}
 		
 		return new Bet_Assertion(min.getValue(), max.getValue());
 	}

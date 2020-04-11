@@ -1,8 +1,1 @@
-rootdef = {
-	repeatedItems,
-	notMof(10),
-	notPattern("aaaaa"),
-	pattReq["a":type(str),
-			"b":{type(obj)}],
-	addPattReq[("a", "b") : {type(num), notMof(12341)}]
-}
+rootdef = anyOf[{pro(null, 446), ref: "STR_r", pro(null, 7)}, notPattern("PAT_9"), {ref: "STR_O", ref: "STR_hm"}], def "STR_W" = {notPattern("PAT_|"), notMof(679), not: type(int)}, def "STR_N" = {notMof(677), xbet(7, 4891)}, def "STR_x" = props["STR_t":ref: "STR_wpYJ";]
