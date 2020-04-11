@@ -11,7 +11,7 @@ public class NotMof_Assertion implements Assertion {
 
 	@Override
 	public String toString() {
-		return "Mof_Assertion [" + notMof + "]";
+		return "NotMof_Assertion [" + notMof + "]";
 	}
 
 	@Override
@@ -31,6 +31,7 @@ public class NotMof_Assertion implements Assertion {
 		type.add("num");
 		mof.add(type);
 		mof.add(new Mof_Assertion(notMof));
+		
 		return mof;
 	}
 

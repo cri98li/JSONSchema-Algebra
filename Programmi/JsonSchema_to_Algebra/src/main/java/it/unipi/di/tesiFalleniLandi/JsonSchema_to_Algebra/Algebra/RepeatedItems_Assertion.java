@@ -8,7 +8,7 @@ public class RepeatedItems_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "UniqueItems_Assertion";
+		return "RepeatedItems_Assertion";
 	}
 
 	@Override

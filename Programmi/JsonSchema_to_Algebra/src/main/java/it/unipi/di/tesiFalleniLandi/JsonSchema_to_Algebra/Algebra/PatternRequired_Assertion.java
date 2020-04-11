@@ -28,23 +28,39 @@ public class PatternRequired_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "RequiredPattern_Assertion [" + pattReq + "]";
+		return "PatternRequired_Assertion [" + pattReq + "]";
 	}
 
 	@Override
 	public String getJSONSchemaKeyword() {
 		return "requiredPattern";
 	}
-
-	@Override
-	public Assertion not() {
-		return null;
-	}
-
+	
 	@Override
 	public Object toJSONSchema() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Or_Assertion or = new Or_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add("obj");
+		
+		Set<Entry<String, Assertion>> entrySet = pattReq.entrySet();
+		
+		for(Entry<String, Assertion> entry : entrySet) {
+			Properties_Assertion properties = new Properties_Assertion();
+			properties.add(entry.getKey(), entry.getValue().not());
+			or.add(properties);
+		}
+		
+		and.add(type);
+		and.add(or);
+		
+		return and;
 	}
 
 	@Override

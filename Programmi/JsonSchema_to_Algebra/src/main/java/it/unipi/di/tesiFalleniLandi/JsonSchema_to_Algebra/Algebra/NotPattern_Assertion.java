@@ -13,7 +13,7 @@ public class NotPattern_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Pattern_Assertion [" + notPattern + "]";
+		return "NotPattern_Assertion [" + notPattern + "]";
 	}
 
 	@Override

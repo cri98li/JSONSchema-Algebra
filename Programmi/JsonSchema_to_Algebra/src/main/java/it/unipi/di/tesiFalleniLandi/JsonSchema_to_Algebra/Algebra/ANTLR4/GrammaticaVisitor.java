@@ -1,4 +1,4 @@
-// Generated from Grammatica.g4 by ANTLR 4.7.2
+// Generated from Grammatica.g4 by ANTLR 4.7.1
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -201,6 +201,41 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewNotMultipleOf}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewNotMultipleOf(GrammaticaParser.NewNotMultipleOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewNotPattern}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewNotPattern(GrammaticaParser.NewNotPatternContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewRepeatedItems}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewRepeatedItems(GrammaticaParser.NewRepeatedItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewAdditionalPatternRequired}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewAdditionalPatternRequired(GrammaticaParser.NewAdditionalPatternRequiredContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewPatternRequired}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewPatternRequired(GrammaticaParser.NewPatternRequiredContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#type_assertion}.
 	 * @param ctx the parse tree
@@ -249,6 +284,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseMultipleOf(GrammaticaParser.ParseMultipleOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseNotMultipleOf}
+	 * labeled alternative in {@link GrammaticaParser#not_multiple_of_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseNotMultipleOf(GrammaticaParser.ParseNotMultipleOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseNot}
 	 * labeled alternative in {@link GrammaticaParser#not_assertion}.
@@ -313,12 +355,26 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseUniqueItems(GrammaticaParser.ParseUniqueItemsContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ParseRepeatedItems}
+	 * labeled alternative in {@link GrammaticaParser#repeated_items_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseRepeatedItems(GrammaticaParser.ParseRepeatedItemsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParsePattern}
 	 * labeled alternative in {@link GrammaticaParser#pattern_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParsePattern(GrammaticaParser.ParsePatternContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseNotPattern}
+	 * labeled alternative in {@link GrammaticaParser#not_pattern_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseOnlyItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
@@ -396,6 +452,20 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePatternRequired}
+	 * labeled alternative in {@link GrammaticaParser#pattern_required}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePatternRequired(GrammaticaParser.ParsePatternRequiredContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseAdditionalPatternRequired}
+	 * labeled alternative in {@link GrammaticaParser#additional_pattern_required}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseAdditionalPatternRequired(GrammaticaParser.ParseAdditionalPatternRequiredContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NullValue}
 	 * labeled alternative in {@link GrammaticaParser#json_value}.

@@ -40,8 +40,8 @@ public class Pro_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
-		obj.put("minProperties", min);
-		obj.put("maxProperties", max);
+		if(min != null)	obj.put("minProperties", min);
+		if(max != null)	obj.put("maxProperties", max);
 		
 		return obj;
 	}

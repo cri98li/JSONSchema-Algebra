@@ -46,8 +46,8 @@ public class Len_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
-		obj.put("minLength", min);
-		obj.put("maxLength", max);
+		if(min != null)	obj.put("minLength", min);
+		if(max != null)	obj.put("maxLength", max);
 		
 		return obj;
 	}

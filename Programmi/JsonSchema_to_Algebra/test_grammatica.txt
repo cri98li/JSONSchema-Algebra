@@ -1,12 +1,8 @@
 rootdef = {
-	type(obj),
-	req["body"],
-	props[
-		"body": anyOf[
-			ref: "bodyTarget.json#/definitions/textualBodyFound",
-			not: items(;not: ref: "bodyTarget.json#/definitions/textualBodyFound"),
-			ref: "bodyTarget.json#/definitions/itemETBDetected",
-			not: items(;not: ref: "bodyTarget.json#/definitions/itemETBDetected")
-		]
-		;]
+	repeatedItems,
+	notMof(10),
+	notPattern("aaaaa"),
+	pattReq["a":type(str),
+			"b":{type(obj)}],
+	addPattReq[("a", "b") : {type(num), notMof(12341)}]
 }

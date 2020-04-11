@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 

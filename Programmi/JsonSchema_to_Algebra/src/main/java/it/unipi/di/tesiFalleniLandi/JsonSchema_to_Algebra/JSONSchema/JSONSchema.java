@@ -31,11 +31,7 @@ public class JSONSchema implements JSONSchemaElement{
 			booleanAsJSONSchema = (Boolean) obj;
 			return;
 		}catch(ClassCastException e) {
-			try {
 			object = (JSONObject) obj;
-			}catch(ClassCastException ex) {
-				System.out.println("Error: schema must be boolean or object!");
-			}
 		}
 		
 		//inizio parsing
@@ -64,6 +60,22 @@ public class JSONSchema implements JSONSchemaElement{
 			case "additionalProperties":
 				jsonSchema.putIfAbsent("properties", new Properties());
 				((Properties) jsonSchema.get("properties")).setAdditionalProperties(object.get(key));
+				break;
+				
+			//I valori di dependencies, dependentSchemas e dependentRequired vengono memorizzati nella stessa classe (Dependencies).
+			case "dependencies":
+				jsonSchema.putIfAbsent("dependencies", new Dependencies());
+				((Dependencies) jsonSchema.get("dependencies")).setDependencies(object.get(key));
+				break;
+			
+			case "dependentSchemas":
+				jsonSchema.putIfAbsent("dependencies", new Dependencies());
+				((Dependencies) jsonSchema.get("dependencies")).setDependentSchemas(object.get(key));
+				break;
+				
+			case "dependentRequired":
+				jsonSchema.putIfAbsent("dependencies", new Dependencies());
+				((Dependencies) jsonSchema.get("dependencies")).setDependentRequired(object.get(key));
 				break;
 				
 			//I valori di items, additionalItems vengono memorizzati nella stessa classe (Items).	

@@ -38,8 +38,8 @@ public class Bet_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		
-		if(max != null) obj.put("maximum", max);
 		if(min != null) obj.put("minimum", min);
+		if(max != null) obj.put("maximum", max);
 		
 		return obj;
 	}

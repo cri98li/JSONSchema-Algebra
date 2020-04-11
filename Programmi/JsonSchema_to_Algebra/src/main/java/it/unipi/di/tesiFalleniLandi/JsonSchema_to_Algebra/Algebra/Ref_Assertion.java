@@ -9,7 +9,6 @@ public class Ref_Assertion implements Assertion{
 		this.ref = ref;
 	}
 	
-	
 	@Override
 	public String toString() {
 		return "Ref_Assertion [" + ref + "]";
@@ -23,13 +22,16 @@ public class Ref_Assertion implements Assertion{
 
 	@Override
 	public String toJSONSchema() {
-		return ref;
+		if(ref.equals("rootdef")) {
+			return "#";
+		}else {
+			return "#/$defs/"+ref;
+		}
 	}
 
 
 	@Override
 	public Assertion not() {
-		// TODO Auto-generated method stub
 		return new Ref_Assertion("not_"+ref);
 	}
 

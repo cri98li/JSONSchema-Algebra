@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AddPatternRequired_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AlgebraParserElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.And_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Annotation_Assertion;
@@ -20,12 +21,16 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Items_Assertio
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Len_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Mof_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Names_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.NotMof_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.NotPattern_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Not_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Or_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.PatternRequired_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pattern_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pro_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Properties_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Ref_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.RepeatedItems_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Required_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.UniqueItems_Assertion;
@@ -289,6 +294,20 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 	
 	@Override 
+	public NotMof_Assertion visitNewNotMultipleOf(GrammaticaParser.NewNotMultipleOfContext ctx) { 
+		
+		return (NotMof_Assertion) visit(ctx.not_multiple_of_assertion()); 
+	}
+	
+	@Override 
+	public NotMof_Assertion visitParseNotMultipleOf(GrammaticaParser.ParseNotMultipleOfContext ctx) { 
+		
+		AntlrLong value = (AntlrLong) visit(ctx.json_value());
+		
+		return new NotMof_Assertion(value.getValue()); 
+	}
+	
+	@Override 
 	public AntlrString visitStringValue(GrammaticaParser.StringValueContext ctx) { 
 		String str = ctx.STRING().getText();
 		return new AntlrString(str.substring(1, str.length()-1)); 
@@ -313,6 +332,18 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 	
 	@Override 
+	public RepeatedItems_Assertion visitNewRepeatedItems(GrammaticaParser.NewRepeatedItemsContext ctx) {
+		
+		return (RepeatedItems_Assertion) visit(ctx.repeated_items_assertion()); 
+	}
+		
+	@Override 
+	public RepeatedItems_Assertion visitParseRepeatedItems(GrammaticaParser.ParseRepeatedItemsContext ctx) {
+		
+		return new RepeatedItems_Assertion(); 
+	}
+	
+	@Override 
 	public Pattern_Assertion visitNewPattern(GrammaticaParser.NewPatternContext ctx) {
 		
 		return (Pattern_Assertion) visit(ctx.pattern_assertion()); 
@@ -322,6 +353,18 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
 		String str = ctx.STRING().getText();
 		return new Pattern_Assertion(str.substring(1, str.length()-1)); 
+	}
+	
+	@Override 
+	public NotPattern_Assertion visitNewNotPattern(GrammaticaParser.NewNotPatternContext ctx) {
+		
+		return (NotPattern_Assertion) visit(ctx.not_pattern_assertion()); 
+	}
+
+	@Override 
+	public NotPattern_Assertion visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx) {
+		String str = ctx.STRING().getText();
+		return new NotPattern_Assertion(str.substring(1, str.length()-1)); 
 	}
 	
 	@Override 
@@ -396,9 +439,47 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return p;
 	}
 	
+	public PatternRequired_Assertion visitNewPatternRequired(GrammaticaParser.NewPatternRequiredContext ctx) { 
+		return (PatternRequired_Assertion) visit(ctx.pattern_required()); 
+	}
+	
+	public PatternRequired_Assertion visitParsePatternRequired(GrammaticaParser.ParsePatternRequiredContext ctx) { 
+		PatternRequired_Assertion p = new PatternRequired_Assertion();
+		
+		List<AssertionContext> list = ctx.assertion();
+		List<TerminalNode> idList = ctx.STRING();
+		
+		for(int i = 0; i < list.size(); i++) {
+			p.add(idList.get(i).getText(), (Assertion) visit(list.get(i)));
+		}
+		
+		return p;
+	}
+	
+	@Override
+	public AddPatternRequired_Assertion visitNewAdditionalPatternRequired(GrammaticaParser.NewAdditionalPatternRequiredContext ctx) {
+		return (AddPatternRequired_Assertion) visit(ctx.additional_pattern_required());
+	}
+	
+	@Override 
+	public AddPatternRequired_Assertion visitParseAdditionalPatternRequired(GrammaticaParser.ParseAdditionalPatternRequiredContext ctx) {
+		AddPatternRequired_Assertion addPattReq = new AddPatternRequired_Assertion();
+		
+		Assertion assertion = (Assertion) visit(ctx.assertion());
+		List<TerminalNode> idList = ctx.STRING();
+		
+		for(int i = 0; i < idList.size(); i++) {
+			addPattReq.addName(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString());
+		}
+		
+		addPattReq.setAdditionalProperties(assertion);
+		
+		return addPattReq;
+	}
+	
 	@Override
 	public Assertion visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx) {
-Properties_Assertion p = new Properties_Assertion();
+		Properties_Assertion p = new Properties_Assertion();
 		
 		List<AssertionContext> list = ctx.assertion();
 		List<TerminalNode> idList = ctx.STRING();
