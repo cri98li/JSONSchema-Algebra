@@ -13,6 +13,7 @@ public class Utils {
 	 * @param keyword parola chiave associata a toPut
 	 * @param toPut Oggetto da inserire in schema
 	 */
+	public static final String PUTCONTENT = "putContent";
 	@SuppressWarnings("unchecked")
 	public static void putContent(JSONObject schema, String keyword, Object toPut) {
 		List<String> putContentKeywords = Arrays.asList( new String[]{
@@ -27,7 +28,8 @@ public class Utils {
 				"unknow",
 				"assertionList",
 				"rootDef",
-				"AllOf_Schema"
+				"AllOf_Schema",
+				PUTCONTENT
 		});
 		
 		if(!putContentKeywords.contains(keyword))

@@ -47,11 +47,12 @@ public class Or_Assertion implements Assertion{
 		
 		for(Assertion assertion : orList) {
 			JSONObject obj = new JSONObject();
-			try {
-				array.add((AntlrBoolean)assertion.toJSONSchema());
-				continue;
-			}catch(ClassCastException e) {}
-			Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
+			
+			if(assertion.getClass() == Boolean_Assertion.class)
+				array.add(assertion.toJSONSchema());
+			else
+				Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
+	
 			array.add(obj);
 		}
 		

@@ -1,4 +1,4 @@
-// Generated from Grammatica.g4 by ANTLR 4.7.1
+// Generated from Grammatica.g4 by ANTLR 4.7.2
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;

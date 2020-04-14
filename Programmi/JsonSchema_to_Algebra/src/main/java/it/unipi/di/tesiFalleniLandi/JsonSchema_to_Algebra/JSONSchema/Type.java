@@ -54,16 +54,14 @@ public class Type implements JSONSchemaElement {
 		
 		if(type != null) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type));
 		
-		/*Iterator <String> it = type_array.iterator();
-		if(it.hasNext())
-			str +=String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+		String str = "";
+		Iterator <String> it = type_array.iterator();
 		
 		while(it.hasNext()) {
 			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
 		}
 		
-		return str;*/
-		return ""; //non ci dovrei mai arrivare
+		return str.substring(GrammarStringDefinitions.COMMA.length()); //ci arrivo eccome
 	}
 	
 	@Override

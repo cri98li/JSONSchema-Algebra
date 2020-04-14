@@ -1,8 +1,19 @@
 {
-"dependencies":{
-    "a": {
-        "type":"string"
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "config_schema_v3.0.json",
+    "type": "object",
+    "required": [
+        "version"
+    ],
+    "properties": {
+        "version": {
+            "type": "string"
+        }
     },
-    "required":["a"]
-}
+    "patternProperties": {
+        "^[a-zA-Z0-9._-]+$": {
+            "$ref": "#/definitions/service"
+        }
+    },
+    "additionalProperties": false,
 }

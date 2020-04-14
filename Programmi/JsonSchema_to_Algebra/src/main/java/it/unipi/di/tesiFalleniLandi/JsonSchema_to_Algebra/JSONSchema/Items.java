@@ -17,7 +17,6 @@ public class Items implements JSONSchemaElement{
 	private JSONSchema additionalItems_array;
 	private JSONSchema unevaluatedItems_array;
 	
-	
 	public Items() {}
 	
 	public void setItems(Object obj) {
@@ -81,6 +80,7 @@ public class Items implements JSONSchemaElement{
 	@Override
 	public String toGrammarString() {
 		String str = "";
+		
 		if(items != null) {
 			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
 		}
@@ -94,9 +94,11 @@ public class Items implements JSONSchemaElement{
 		}
 		
 		String str2 = "";
-		if(additionalItems_array != null)
+		if(additionalItems_array != null) {
 			str2 = additionalItems_array.toGrammarString();
-		
+			if(str.isEmpty())
+				return String.format(GrammarStringDefinitions.ITEMS, str2, "");
+		}
 		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
 	}
 

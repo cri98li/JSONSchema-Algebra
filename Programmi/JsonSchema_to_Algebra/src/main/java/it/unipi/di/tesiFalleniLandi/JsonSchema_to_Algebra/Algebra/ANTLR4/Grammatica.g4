@@ -67,8 +67,8 @@ required_assertion : 'req''[' STRING (',' STRING)* ']'																#ParseRequ
 
 enum_assertion_assertion : 'enum[' json_value (',' json_value)* ']'													#ParseEnum;											
 
-if_then_else_assertion : 'if'':' assertion ',''then'':' assertion ',''else'':' assertion							#ParseIfThenElse
-						|	'if'':' assertion ',''then'':' assertion												#ParseIfThen
+if_then_else_assertion : 'ifThenElse''(' assertion ';' assertion ';' assertion ')'									#ParseIfThenElse
+						|	'ifThen''(' assertion ';' assertion')'													#ParseIfThen
 						;
 						
 unique_items_assertion : 'uniqueItems'																				#ParseUniqueItems;

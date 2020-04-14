@@ -11,14 +11,20 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 public class Properties_Assertion implements Assertion{
 	private HashMap<String, Assertion> properties;
+	private HashMap<String, Assertion> patternProperties;
 	private Assertion additionalProperties;
 	
 	public Properties_Assertion() {
 		properties = new HashMap<>();
+		patternProperties = new HashMap<>();
 	}
 	
-	public void add(String key, Assertion value) {
+	public void addProperties(String key, Assertion value) {
 		properties.put(key, value);
+	}
+	
+	public void addPatternProperties(String key, Assertion value) {
+		patternProperties.put(key, value);
 	}
 	
 	public void setAdditionalProperties(Assertion additionalProperties) {
@@ -27,8 +33,8 @@ public class Properties_Assertion implements Assertion{
 
 	@Override
 	public String toString() {
-		return "Properties_Assertion [" + properties + ";\\r\\n " + additionalProperties
-				+ "]";
+		return "Properties_Assertion [properties=" + properties + ", patternProperties=" + patternProperties
+				+ ", additionalProperties=" + additionalProperties + "]";
 	}
 
 	@Override
@@ -48,7 +54,30 @@ public class Properties_Assertion implements Assertion{
 			
 			for(String key : keys) {
 				JSONObject tmp2 = new JSONObject();
-				Utils.putContent(tmp2, properties.get(key).getJSONSchemaKeyword(), properties.get(key).toJSONSchema());
+				
+				if(properties.get(key).getClass() == Boolean_Assertion.class)
+					tmp.put(key, properties.get(key).toJSONSchema());
+				else
+					Utils.putContent(tmp2, properties.get(key).getJSONSchemaKeyword(), properties.get(key).toJSONSchema());
+				
+				tmp.put(key, tmp2);
+			}
+				
+			obj.put("properties", tmp);
+		}
+		
+		if(patternProperties != null && !patternProperties.isEmpty()){
+			JSONObject tmp = new JSONObject();
+			Set<String> keys = patternProperties.keySet();
+			
+			for(String key : keys) {
+				JSONObject tmp2 = new JSONObject();
+				
+				if(patternProperties.get(key).getClass() == Boolean_Assertion.class)
+					tmp.put(key, patternProperties.get(key).toJSONSchema());
+				else
+					Utils.putContent(tmp2, patternProperties.get(key).getJSONSchemaKeyword(), patternProperties.get(key).toJSONSchema());
+				
 				tmp.put(key, tmp2);
 			}
 				
@@ -93,7 +122,7 @@ public class Properties_Assertion implements Assertion{
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 		
 		for(Entry<String, Assertion> entry : entrySet)
-			prop.add(entry.getKey(), entry.getValue().notElimination());
+			prop.addProperties(entry.getKey(), entry.getValue().notElimination());
 		
 		if(additionalProperties != null)
 			prop.setAdditionalProperties(additionalProperties.notElimination());

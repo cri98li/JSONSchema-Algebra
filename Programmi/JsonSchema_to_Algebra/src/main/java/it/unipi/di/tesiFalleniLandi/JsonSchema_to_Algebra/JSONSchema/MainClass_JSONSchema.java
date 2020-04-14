@@ -26,13 +26,11 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     for(Entry<String, Defs> entry : entryList) {
     	System.out.println(entry.getKey()+ " >> " + entry.getValue().toJSON());
     }*/
-    
-    root = Utils_JSONSchema.referenceNormalization(root);
-    
+        
     System.out.println(root.toJSON().toString().replace("\\", ""));
     
-    //System.out.println(root.assertionSeparation().toJSON());
+    //System.out.println((Utils_JSONSchema.normalize(root).toJSON()));
     
-    System.out.println(Utils_JSONSchema.toGrammarString(root.assertionSeparation()));
+    System.out.println(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
 	}
 }

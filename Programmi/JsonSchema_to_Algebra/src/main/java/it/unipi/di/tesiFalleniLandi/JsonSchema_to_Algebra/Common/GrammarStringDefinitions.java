@@ -68,10 +68,14 @@ public class GrammarStringDefinitions {
 	
 	public static final String DEFS = "def \"%s\" = %s";
 	public static final String ROOTDEF = "rootdef = %s";
-	
-	//if-then-else
+
+	/*
 	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
 	public static final String IF_THEN = "if: %s, \r\nthen: %s";
+	*/
+	//if-then-else
+	public static final String IF_THEN_ELSE = "ifThenElse(%s; \r\n\t%s; \r\n\t%s)";
+	public static final String IF_THEN = "ifThen(%s; \r\n\t%s)";
 	
 	//properties
 	public static final String PROPERTIES = "props[\r\n%s\r\n;%s]";

@@ -84,19 +84,23 @@ public class Defs implements JSONSchemaElement{
 		for(Entry<String, JSONSchema> entry : entrySet)
 			obj.schemaDefs.put(entry.getKey(), entry.getValue().assertionSeparation());
 		
-		obj.setRootDef(this.rootDef.assertionSeparation());
+		if(rootDef != null)
+			obj.setRootDef(this.rootDef.assertionSeparation());
 		
 		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
-		String defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
+		String defs = "";
+		
+		if(rootDef != null)
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
 		for(Entry<String, JSONSchema> entry : entrySet)
-			defs+= GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+			defs += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
 		
 		if(defs.isEmpty()) return ""; //definizione non ancora supportata
 		return defs.substring(GrammarStringDefinitions.COMMA.length());
@@ -123,7 +127,8 @@ public class Defs implements JSONSchemaElement{
 		for(Entry<String, JSONSchema> entry : entrySet)
 			returnList.addAll(entry.getValue().getRef());
 		
-		returnList.addAll(rootDef.getRef());
+		if(rootDef != null)
+			returnList.addAll(rootDef.getRef());
 		
 		return returnList;
 	}

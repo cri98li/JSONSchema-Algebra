@@ -113,7 +113,10 @@ public class Properties implements JSONSchemaElement{
 		}
 		
 		if(additionalProperties != null) 
-			return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+			if(str.isEmpty())
+				return String.format(GrammarStringDefinitions.PROPERTIES, "", additionalProperties.toGrammarString());
+			else
+				return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
 		
 		if(str.isEmpty() && additionalProperties == null) return "";
 		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");

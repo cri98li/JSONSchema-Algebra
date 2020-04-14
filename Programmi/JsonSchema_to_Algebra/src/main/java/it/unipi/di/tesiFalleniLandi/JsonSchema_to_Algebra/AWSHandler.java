@@ -165,7 +165,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			object = (JSONObject) new JSONParser().parse(body);
 		
 			JSONSchema schema = new JSONSchema(object);
-			Utils_JSONSchema.referenceNormalization(schema);
+			schema = Utils_JSONSchema.referenceNormalization(schema);
 			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(), 
 					200,
 					"type", "application/schema+json",

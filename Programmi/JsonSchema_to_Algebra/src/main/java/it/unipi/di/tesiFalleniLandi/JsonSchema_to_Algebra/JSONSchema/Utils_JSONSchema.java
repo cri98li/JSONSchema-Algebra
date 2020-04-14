@@ -25,7 +25,7 @@ public class Utils_JSONSchema {
 	}
 	
 	public static JSONSchema normalize(JSONSchema root) {
-		return referenceNormalization(root.assertionSeparation());
+		return referenceNormalization(root).assertionSeparation();
 	}
 	
 	public static JSONSchema referenceNormalization(JSONSchema root) {
@@ -69,7 +69,7 @@ public class Utils_JSONSchema {
 		for(Entry<String, Defs> entry : defsList)
 			finalDefs.addDef(entry.getValue());
 		
-		//caso schema con sole definizioni
+		//caso schema con non sole definizioni
 		if(root.numberOfAssertions() != 0)
 			finalDefs.setRootDef(root.clone());
 		

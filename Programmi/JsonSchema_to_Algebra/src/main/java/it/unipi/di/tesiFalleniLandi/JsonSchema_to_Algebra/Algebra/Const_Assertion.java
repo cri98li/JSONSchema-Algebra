@@ -116,7 +116,7 @@ public class Const_Assertion implements Assertion{
 		@SuppressWarnings("unchecked")
 		Set<String> keys = object.entrySet();
 		for(String key : keys) {
-			properties.add(key, new Const_Assertion(object.get(key)));
+			properties.addProperties(key, new Const_Assertion(object.get(key)));
 			req.add(key);
 		}
 		

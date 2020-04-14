@@ -231,7 +231,7 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 				
-			case "definitions":
+			case "definitions": 
 				jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 				
@@ -320,7 +320,6 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			//$schema, id e %defs non vanno dentro allOf
 			if(entry.getKey().equals("$schema") 
-					|| entry.getKey().equals("$defs")
 					|| entry.getKey().equals("id")
 					|| entry.getKey().equals("$id")
 					|| entry.getKey().equals("unknow")) {
@@ -351,7 +350,7 @@ public class JSONSchema implements JSONSchemaElement{
 		String str = "";
 		int nElement = 0;
 		
-		if(booleanAsJSONSchema != null) return booleanAsJSONSchema+"";
+		if(booleanAsJSONSchema != null) return booleanAsJSONSchema + "";
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		

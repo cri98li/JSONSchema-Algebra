@@ -53,7 +53,7 @@ public class PatternRequired_Assertion implements Assertion{
 		
 		for(Entry<String, Assertion> entry : entrySet) {
 			Properties_Assertion properties = new Properties_Assertion();
-			properties.add(entry.getKey(), entry.getValue().not());
+			properties.addProperties(entry.getKey(), entry.getValue().not());
 			or.add(properties);
 		}
 		

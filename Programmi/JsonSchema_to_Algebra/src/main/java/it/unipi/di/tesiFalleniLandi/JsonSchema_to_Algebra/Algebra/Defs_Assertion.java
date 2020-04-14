@@ -45,7 +45,7 @@ public class Defs_Assertion implements Assertion{
 			
 			for(Entry<String,Assertion> entry : entrySet) {
 				JSONObject tmp = new JSONObject();
-				tmp.put(entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
+				Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
 				def.put(entry.getKey(), tmp);
 			}
 			
@@ -58,10 +58,9 @@ public class Defs_Assertion implements Assertion{
 		
 		for(Entry<String,Assertion> entry : entrySet) {
 			JSONObject tmp = new JSONObject();
-			tmp.put(entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
+			Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
 			obj.put(entry.getKey(), tmp);
 		}
-		
 		
 		return obj;
 	}

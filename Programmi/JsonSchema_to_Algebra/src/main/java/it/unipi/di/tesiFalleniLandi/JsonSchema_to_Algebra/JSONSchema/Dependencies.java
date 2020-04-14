@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 public class Dependencies implements JSONSchemaElement{
 	
 	private HashMap<String, List<String>> dependentRequired;
@@ -118,8 +120,48 @@ public class Dependencies implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return "";
+		String ds = "";
+		String dr = "";
+		
+		if(dependentSchemas != null) {
+			String str = "";
+			Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
+			for(Entry<String, JSONSchema> entry : entrySet) {
+				String req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + entry.getKey() + "\"");
+				str += String.format(GrammarStringDefinitions.IF_THEN, req, entry.getValue().toGrammarString());
+				str += GrammarStringDefinitions.COMMA;
+				str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
+			}
+			
+			ds = String.format(GrammarStringDefinitions.ALLOF, str);
+		}
+		
+		if(dependentRequired != null) {
+			String str = "";
+
+			Set<String> keys = dependentRequired.keySet();
+			
+			for(String key : keys) {
+				String reqList = "";
+				String req = "";
+				List<String> list = dependentRequired.get(key);
+				for(String tmp : list) {
+					reqList += "\"" + tmp + "\"" + ",";
+				}
+				
+			reqList = reqList.substring(0, reqList.length() - 1);
+			reqList = String.format(GrammarStringDefinitions.REQUIRED, reqList);
+			req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + key + "\"");
+			str += String.format(GrammarStringDefinitions.IF_THEN, req, reqList);
+			str += GrammarStringDefinitions.COMMA;
+			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
+			}
+			
+			dr = String.format(GrammarStringDefinitions.ALLOF, str);
+			
+		}
+		
+		return ds + GrammarStringDefinitions.COMMA + dr;
 	}
 
 	@Override
@@ -130,6 +172,8 @@ public class Dependencies implements JSONSchemaElement{
 	@Override
 	public List<Entry<String, Defs>> collectDef() {
 		List<Entry<String, Defs>> list = new LinkedList<>();
+		
+		if(dependentSchemas == null) return list;
 		
 		Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
 		
@@ -142,6 +186,8 @@ public class Dependencies implements JSONSchemaElement{
 	@Override
 	public List<URI_JS> getRef() {
 		List<URI_JS> list = new LinkedList<>();
+		
+		if(dependentSchemas == null) return list;
 		
 		Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
 		
@@ -157,7 +203,7 @@ public class Dependencies implements JSONSchemaElement{
 			return null;
 		
 		URIIterator.remove();
-		if(dependentSchemas.containsKey(URIIterator.next())) {
+		if(dependentSchemas != null && dependentSchemas.containsKey(URIIterator.next())) {
 			JSONSchema tmp = dependentSchemas.get(URIIterator.next());
 			URIIterator.remove();
 			return tmp.searchDef(URIIterator);
