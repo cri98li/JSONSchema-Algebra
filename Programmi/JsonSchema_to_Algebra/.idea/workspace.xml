@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4704262e-f238-4575-9644-d67184255259" name="Default Changelist" comment="" />
+    <list default="true" id="4704262e-f238-4575-9644-d67184255259" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/di/tesiFalleniLandi/JsonSchema_to_Algebra/MainClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/di/tesiFalleniLandi/JsonSchema_to_Algebra/MainClass.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,16 +17,22 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Maven.JsonSchema_to_Algebra [install]">
     <configuration name="MainClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.MainClass" />
       <module name="JsonSchema_to_Algebra" />
@@ -37,6 +46,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="JsonSchema_to_Algebra [install]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="install" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.MainClass" />
+      <item itemvalue="Maven.JsonSchema_to_Algebra [install]" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.MainClass" />
@@ -54,28 +92,41 @@
       <option name="presentableId" value="Default" />
       <updated>1584627319270</updated>
       <workItem from="1584627325537" duration="1386000" />
+      <workItem from="1586963962368" duration="1740000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2517" height="400" key="GridCell.Tab.0.bottom" timestamp="1584629584178">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="486" y="205" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586964310781">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="486" y="205" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586964310781" />
+    <state x="689" y="310" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1586963981200">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="689" y="310" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586963981200" />
+    <state width="1877" height="187" key="GridCell.Tab.0.bottom" timestamp="1586966990951">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="187" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586966990951" />
     <state width="2517" height="400" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1584629584178" />
-    <state width="2517" height="400" key="GridCell.Tab.0.center" timestamp="1584629584178">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1877" height="187" key="GridCell.Tab.0.center" timestamp="1586966990951">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1877" height="187" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586966990951" />
     <state width="2517" height="400" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1584629584178" />
-    <state width="2517" height="400" key="GridCell.Tab.0.left" timestamp="1584629584178">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1877" height="187" key="GridCell.Tab.0.left" timestamp="1586966990951">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1877" height="187" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586966990951" />
     <state width="2517" height="400" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1584629584178" />
-    <state width="2517" height="400" key="GridCell.Tab.0.right" timestamp="1584629584178">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1877" height="187" key="GridCell.Tab.0.right" timestamp="1586966990951">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1877" height="187" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586966990951" />
     <state width="2517" height="400" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1584629584178" />
     <state x="976" y="524" key="com.intellij.ide.util.TipDialog" timestamp="1584627327720">
       <screen x="0" y="0" width="2560" height="1400" />
