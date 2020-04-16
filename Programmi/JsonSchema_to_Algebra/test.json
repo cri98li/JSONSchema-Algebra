@@ -1,17 +1,1 @@
-{
-    "items" : [
-        {
-            "minLength" : 3,
-            "maxLength" : 15
-        },
-        {
-            "minimum" : 20,
-            "type" : "string"
-        }
-    ],
-    "additionalItems" : {
-        "minLength" : 3,
-        "maxLength" : 15
-    },
-    "uniqueItems" : false
-}
+{ "multipleOf": 18, "const": -69.8, "minimum": -8.4, "exclusiveMinimum": true }

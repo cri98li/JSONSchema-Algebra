@@ -81,13 +81,15 @@ public class Items implements JSONSchemaElement{
 		if(items != null) {
 			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
 		}
-		
-		Iterator<JSONSchema> it = items_array.iterator();
-		if(it.hasNext())
-			str += it.next().toGrammarString();
-		
-		while(it.hasNext()) {
-			str += "," + it.next().toGrammarString();
+
+		if(items_array != null) {
+			Iterator<JSONSchema> it = items_array.iterator();
+			if (it.hasNext())
+				str += it.next().toGrammarString();
+
+			while (it.hasNext()) {
+				str += "," + it.next().toGrammarString();
+			}
 		}
 		
 		String str2 = "";
@@ -173,15 +175,16 @@ public class Items implements JSONSchemaElement{
 	public Items clone(){
 		Items newItems = new Items();
 		
-		if(items != null) {
+		if(items != null)
 			newItems.items = items.clone();
-		}else {
+
+		if(items_array != null) {
 			newItems.items_array = new LinkedList<>();
-			for(JSONSchema item : items_array) {
+			for (JSONSchema item : items_array) {
 				newItems.items_array.add(item.clone());
 			}
 		}
-		
+
 		if(additionalItems_array != null) newItems.additionalItems_array = additionalItems_array.clone();
 		if(unevaluatedItems_array != null) newItems.unevaluatedItems_array = unevaluatedItems_array.clone();
 		

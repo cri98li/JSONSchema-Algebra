@@ -22,13 +22,11 @@ public class Contains implements JSONSchemaElement{
 	
 	public void setMinContains(Object obj) {
 		Long value = (Long) obj;
-		
 		minContains = value;
 	}
 	
 	public void setMaxContains(Object obj) {
 		Long value = (Long) obj;
-		
 		maxContains = value;
 	}
 	
@@ -52,11 +50,13 @@ public class Contains implements JSONSchemaElement{
 	@Override
 	public String toGrammarString() {
 		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
-		
+		String str_contains = "";
+
 		if(minContains != null) min = minContains+"";
 		if(maxContains != null) max = maxContains+"";
-		
-		return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
+		if(contains != null) str_contains = contains.toGrammarString();
+
+		return String.format(GrammarStringDefinitions.CONTAINS, min, max, str_contains);
 	}
 
 	@Override
@@ -72,7 +72,10 @@ public class Contains implements JSONSchemaElement{
 	
 	@Override
 	public List<URI_JS> getRef() {
-		return contains.getRef();
+		if(contains != null)
+			return contains.getRef();
+		else
+			return new LinkedList<>();
 	}
 
 	@Override
@@ -97,10 +100,13 @@ public class Contains implements JSONSchemaElement{
 	
 	public Contains clone() {
 		Contains clone = new Contains();
-		
-		clone.contains = contains.clone();
-		clone.minContains = minContains;
-		clone.maxContains = maxContains;
+
+		if(contains != null)
+			clone.contains = contains.clone();
+		if(minContains != null)
+			clone.minContains = minContains;
+		if(maxContains != null)
+			clone.maxContains = maxContains;
 		
 		return clone;
 	}
