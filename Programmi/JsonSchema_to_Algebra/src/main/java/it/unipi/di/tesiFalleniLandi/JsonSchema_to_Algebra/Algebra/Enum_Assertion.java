@@ -3,7 +3,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrArray;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class Enum_Assertion implements Assertion{
 
@@ -58,11 +61,48 @@ public class Enum_Assertion implements Assertion{
 		return new Enum_Assertion(_enum);
 	}
 
-	//TODO: 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
-		return null;
+		String str = "";
+
+		for(Object value : _enum) {
+			if (value.getClass() == String.class)
+				str += GrammarStringDefinitions.COMMA + "\"" +value + "\"";
+			if( value.getClass() == Long.class || value.getClass() == Double.class || value.getClass() == Boolean.class)
+				str += GrammarStringDefinitions.COMMA + value;
+
+			if (value.getClass() == JSONObject.class)
+				str += GrammarStringDefinitions.COMMA +((JSONObject) value).toJSONString();
+
+			if (value.getClass() == List.class)
+				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) value);
+
+		}
+
+		if(str.isEmpty()) return "";
+		return str;
+	}
+
+	private String toGrammarString(List<Object> list){
+		String str = "";
+
+		for(Object obj : list) {
+			if (obj.getClass() == String.class)
+				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
+			if(obj.getClass() == Long.class
+				|| obj.getClass() == Double.class
+				|| obj.getClass() == Boolean.class)
+				str += GrammarStringDefinitions.COMMA + obj;
+
+			if (obj.getClass() == JSONObject.class)
+				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
+
+			if (obj.getClass() == AntlrArray.class)
+				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
+		}
+
+
+		return str.substring(GrammarStringDefinitions.COMMA.length());
 	}
 	
 	

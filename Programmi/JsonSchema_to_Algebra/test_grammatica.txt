@@ -1,8 +1,1 @@
-rootdef = allOf[
-	type(obj),
-	props[
-		"version": type(str),
-		"^[a-zA-Z0-9._-]+$": ref: "#/definitions/service"
-		;false],
-	req["version"]
-]
+rootdef = enum[33, "trenitni", ["a", 30.3, "nto", ["pippo", "paolo", "paperino"]]]

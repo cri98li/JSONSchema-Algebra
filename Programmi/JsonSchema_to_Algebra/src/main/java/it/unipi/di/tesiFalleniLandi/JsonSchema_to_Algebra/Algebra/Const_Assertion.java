@@ -3,6 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrArray;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -135,24 +137,41 @@ public class Const_Assertion implements Assertion{
 	}
 
 	
-	//TODO: va fatto il metodo ricorsivo (posso avere antlrArray contenente una lista di AntlrArray)
 	@Override
 	public String toGrammarString() {
-		if(value.getClass() == String.class) {
-			return String.format(GrammarStringDefinitions.CONST, "\""+value+"\"");
+		if(value.getClass() == String.class
+				|| value.getClass() == Long.class
+				|| value.getClass() == Double.class
+				|| value.getClass() == Boolean.class)
+			return String.format(GrammarStringDefinitions.CONST, value);
+
+		if(value.getClass() == JSONObject.class)
+			return String.format(GrammarStringDefinitions.CONST, "\"" + ((JSONObject) value).toJSONString() + "\"");
+
+		return  toGrammarString((List<Object>) value);
+
+	}
+
+	private String toGrammarString(List<Object> list){
+		String str = "";
+
+		for(Object obj : list) {
+			if (obj.getClass() == String.class)
+				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
+			if(obj.getClass() == Long.class
+					|| obj.getClass() == Double.class
+					|| obj.getClass() == Boolean.class)
+				str += GrammarStringDefinitions.COMMA + obj;
+
+			if (obj.getClass() == JSONObject.class)
+				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
+
+			if (obj.getClass() == AntlrArray.class)
+				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
 		}
-		
-		try {
-			@SuppressWarnings("unchecked")
-			List<Object> array = (List<Object>) value;
-			String str = "";
-			for(Object obj : array) {
-				if(obj.getClass() == String.class)
-					str += GrammarStringDefinitions.COMMA + "\"" + obj + "\"";
-			}
-		}catch(ClassCastException ex) {}
-		
-		return "";
+
+
+		return str.substring(GrammarStringDefinitions.COMMA.length());
 	}
 	
 }

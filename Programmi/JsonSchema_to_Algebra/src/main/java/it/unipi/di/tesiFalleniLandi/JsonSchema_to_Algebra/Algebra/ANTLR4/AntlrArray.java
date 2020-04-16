@@ -15,7 +15,7 @@ public class AntlrArray implements AntlrValue{
 	}
 
 	@Override
-	public Object getValue() {
+	public List<Object> getValue() {
 		return list;
 	}
 }
