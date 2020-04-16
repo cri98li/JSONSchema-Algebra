@@ -162,11 +162,13 @@ public class Items_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		Items_Assertion items = new Items_Assertion();
-		
-		for(Assertion item : itemsArray)
-			items.add(item.notElimination());
-		
-		items.setAdditionalItems(additionalItems.notElimination());
+
+		if(itemsArray != null)
+			for(Assertion item : itemsArray)
+				items.add(item.notElimination());
+
+		if(additionalItems != null)
+			items.setAdditionalItems(additionalItems.notElimination());
 		
 		return items;
 	}

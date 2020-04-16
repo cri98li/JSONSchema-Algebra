@@ -29,7 +29,6 @@ public class Items implements JSONSchemaElement{
 			return;
 		}
 		
-		
 		items_array = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
@@ -40,13 +39,11 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(Object obj) {
-
-		items = new JSONSchema(obj);
+		additionalItems_array = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(Object obj) {
-		
-		items = new JSONSchema(obj);
+		unevaluatedItems_array = new JSONSchema(obj);
 	}
 	
 	@Override

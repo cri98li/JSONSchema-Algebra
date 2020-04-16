@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -129,11 +130,11 @@ public class Properties_Assertion implements Assertion{
 		
 		return prop;
 	}
-	
+
 	@Override
 	public String toGrammarString() {
 		String str = "";
-		
+
 		if(properties != null) {
 			Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 			for(Entry<String, Assertion> entry : entrySet) {
@@ -142,10 +143,23 @@ public class Properties_Assertion implements Assertion{
 					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
 			}
 		}
-		
-		if(additionalProperties != null) 
-			return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
-		
+
+		if(patternProperties != null) {
+			Set<Entry<String, Assertion>> entrySet = patternProperties.entrySet();
+			for(Entry<String, Assertion> entry : entrySet) {
+				String returnedValue = entry.getValue().toGrammarString();
+				if(!returnedValue.isEmpty())
+					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
+			}
+
+		}
+
+		if(additionalProperties != null)
+			if(str.isEmpty())
+				return String.format(GrammarStringDefinitions.PROPERTIES, "", additionalProperties.toGrammarString());
+			else
+				return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+
 		if(str.isEmpty() && additionalProperties == null) return "";
 		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");
 	}

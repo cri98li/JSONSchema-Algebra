@@ -99,9 +99,6 @@ public class Utils_JSONSchema {
 	}
 	
 	
-	
-	
-	
 	static List<Entry<String,Defs>> addPathElement(String key, List<Entry<String,Defs>> list){
 		List<Entry<String,Defs>> newList = new LinkedList<>();
 		for(Entry<String, Defs> entry : list)
@@ -109,14 +106,7 @@ public class Utils_JSONSchema {
 		
 		return newList;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	public static String toGrammarString(JSONSchema root) {
 		return Utils.beauty(root.toGrammarString());

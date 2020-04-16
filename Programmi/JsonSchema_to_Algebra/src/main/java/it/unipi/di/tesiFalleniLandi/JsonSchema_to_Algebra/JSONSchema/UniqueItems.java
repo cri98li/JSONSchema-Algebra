@@ -14,8 +14,7 @@ public class UniqueItems implements JSONSchemaElement{
 		uniqueItems = (boolean) obj;
 	}
 	
-	public UniqueItems() {
-	}
+	public UniqueItems() { }
 
 	@Override
 	public String toString() {
@@ -31,7 +30,7 @@ public class UniqueItems implements JSONSchemaElement{
 	public String toGrammarString() {
 		if(uniqueItems) return GrammarStringDefinitions.UNIQUEITEMS;
 		
-		return null;
+		return "";
 	}
 	
 	@Override

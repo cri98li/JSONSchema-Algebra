@@ -1,19 +1,17 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "config_schema_v3.0.json",
-    "type": "object",
-    "required": [
-        "version"
+    "items" : [
+        {
+            "minLength" : 3,
+            "maxLength" : 15
+        },
+        {
+            "minimum" : 20,
+            "type" : "string"
+        }
     ],
-    "properties": {
-        "version": {
-            "type": "string"
-        }
+    "additionalItems" : {
+        "minLength" : 3,
+        "maxLength" : 15
     },
-    "patternProperties": {
-        "^[a-zA-Z0-9._-]+$": {
-            "$ref": "#/definitions/service"
-        }
-    },
-    "additionalProperties": false,
+    "uniqueItems" : false
 }

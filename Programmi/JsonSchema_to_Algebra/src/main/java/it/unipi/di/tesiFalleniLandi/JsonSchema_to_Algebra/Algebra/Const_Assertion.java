@@ -63,10 +63,10 @@ public class Const_Assertion implements Assertion{
 		}
 
 		if(value.getClass() == Boolean.class) {
-			
+			//TODO
 		}
 		
-		if(value.getClass() == Long.class) {
+		if(value.getClass() == Long.class || value.getClass() == Double.class) {
 			Or_Assertion or = new Or_Assertion();
 			Bet_Assertion bet = new Bet_Assertion(value, value);
 			type.add("num");
