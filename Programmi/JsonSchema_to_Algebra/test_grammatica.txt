@@ -1,1 +1,1 @@
-rootdef = enum[33, "trenitni", ["a", 30.3, "nto", ["pippo", "paolo", "paperino"]]]
+rootdef = const(null)

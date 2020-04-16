@@ -32,6 +32,9 @@ public class Const_Assertion implements Assertion{
 	@Override
 	public Object toJSONSchema() {
 		//const di tipi primitivi
+
+		if(value == null) return null;
+
 		if(value.getClass() == String.class
 				|| value.getClass() == Boolean.class
 				|| value.getClass() == Long.class)
@@ -139,6 +142,8 @@ public class Const_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
+		if(value == null) return String.format(GrammarStringDefinitions.CONST, "null");
+
 		if(value.getClass() == String.class
 				|| value.getClass() == Long.class
 				|| value.getClass() == Double.class

@@ -66,6 +66,8 @@ public class Enum_Assertion implements Assertion{
 		String str = "";
 
 		for(Object value : _enum) {
+			if(value == null)
+				str += GrammarStringDefinitions.COMMA + "\"" +value + "\"";
 			if (value.getClass() == String.class)
 				str += GrammarStringDefinitions.COMMA + "\"" +value + "\"";
 			if( value.getClass() == Long.class || value.getClass() == Double.class || value.getClass() == Boolean.class)
