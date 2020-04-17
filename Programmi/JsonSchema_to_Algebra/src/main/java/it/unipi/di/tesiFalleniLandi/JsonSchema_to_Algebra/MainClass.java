@@ -77,7 +77,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(Utils.beauty(_schema.notElimination().toGrammarString()));
+						System.out.println(_schema.notElimination().toGrammarString());
 						break;
 
 					default:
