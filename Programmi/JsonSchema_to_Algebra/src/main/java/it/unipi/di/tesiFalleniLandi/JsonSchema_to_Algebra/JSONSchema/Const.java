@@ -40,27 +40,7 @@ public class Const extends Enum {
 
 	@Override
 	public Const assertionSeparation() {
-		Const _const = new Const();
-		_const.thereIsNull = thereIsNull;
-		
-		if(enumArray_str != null) _const.enumArray_str = new LinkedList<>(enumArray_str);
-		
-		if(enumArray_num != null) _const.enumArray_num = new LinkedList<>(enumArray_num);
-		
-		if(enumArray_bool != null) _const.enumArray_bool = new LinkedList<>(enumArray_bool);
-		
-		if(enumArray_array != null) _const.enumArray_array = new LinkedList<>(enumArray_array);
-		
-		_const.thereIsNull = this.thereIsNull;
-		
-		/*
-		if(enumArray_obj != null) {
-			for(JSONSchema s : enumArray_obj)
-				_const.enumArray_obj.add(s.assertionSeparation());
-		}
-		*/
-		
-		return _const;
+		return clone();
 	}
 
 	@Override
@@ -84,5 +64,22 @@ public class Const extends Enum {
 		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
 		
 		return ""; //non ci dovrei mai cadere
+	}
+
+	@Override
+	public Const clone() {
+		Const clone = new Const();
+
+		clone.thereIsNull = thereIsNull;
+
+		if(enumArray_str != null) clone.enumArray_str = new LinkedList<>(enumArray_str);
+
+		if(enumArray_num != null) clone.enumArray_num = new LinkedList<>(enumArray_num);
+
+		if(enumArray_bool != null) clone.enumArray_bool = new LinkedList<>(enumArray_bool);
+
+		if(enumArray_array != null) clone.enumArray_array = new LinkedList<>(enumArray_array);
+
+		return clone;
 	}
 }

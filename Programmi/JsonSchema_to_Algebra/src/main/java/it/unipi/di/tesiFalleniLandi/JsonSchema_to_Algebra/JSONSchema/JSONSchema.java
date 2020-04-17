@@ -377,7 +377,10 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries)
 			count += entry.getValue().numberOfAssertions();
-		
+
+		if(booleanAsJSONSchema != null)
+			count++;
+
 		return count;
 	}
 

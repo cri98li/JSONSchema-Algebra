@@ -27,7 +27,7 @@ public class GrammarStringDefinitions {
 		public static final String TYPE_INTEGER = "int";
 		public static final String TYPE_ARRAY = "arr";
 		public static final String TYPE_OBJECT = "obj";
-		public static final String TYPE_NUMNOTINT = "numnotint";
+		public static final String TYPE_NUMNOTINT = "numNotInt";
 		
 	
 	//allOf, anyOf, oneOf
@@ -36,7 +36,7 @@ public class GrammarStringDefinitions {
 	public static final String ONEOF = "oneOf[\r\n%s\r\n]";
 	
 	//not
-	public static final String NOT = "not: %s";
+	public static final String NOT = "not(%s)";
 		
 	//required
 	public static final String REQUIRED = "req[%s]";
@@ -49,10 +49,10 @@ public class GrammarStringDefinitions {
 	public static final String LENGTH = "length(%s,%s)";
 	
 	//items
-	public static final String ITEMS = "items(%s;%s)";
+	public static final String ITEMS = "items[%s;%s]";
 	
 	//contains
-	public static final String CONTAINS = "contains(%s,%s)%s";
+	public static final String CONTAINS = "contains(%s, %s; %s)";
 		
 	//enum
 	public static final String ENUM = "enum[%s]";
@@ -88,10 +88,10 @@ public class GrammarStringDefinitions {
 	public static final String ADDPATTERNREQUIRED = "addPattReq((%s) : %s)";
 	
 	//PropertyNames
-	public static final String PROPERTYNAMES = "names: %s";
+	public static final String PROPERTYNAMES = "names(%s)";
 	
 	//ref
-	public static final String REF = "ref: \"%s\"";
+	public static final String REF = "ref(\"%s\")";
 	
 	//null value
 	public static final String NULLVALUE = "null";

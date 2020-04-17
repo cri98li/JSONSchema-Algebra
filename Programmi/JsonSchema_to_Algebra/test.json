@@ -1,1 +1,82 @@
-{ "multipleOf": 18, "const": -69.8, "minimum": -8.4, "exclusiveMinimum": true }
+{
+  "allOf":[
+    {
+      "multipleOf":1
+    },
+    {
+      "type":"integer"
+    }
+  ],
+  "anyOf":[
+    {
+      "multipleOf":1
+    },
+    {
+      "type":"integer"
+    }
+  ],
+  "oneOf":[
+    {
+      "multipleOf":1
+    },
+    {
+      "type":"integer"
+    }
+  ],
+  "not":{
+    "const":"abc",
+    "enum":[12, true, null, [1, 2, 3], {"a" : 30, "b" : 100}]
+  },
+  "if":{
+    "type":[
+      "string",
+      "null"
+    ]
+  },
+  "then":{
+    "minLength":10,
+    "maxLength":100
+  },
+  "else":{
+    "minimum":10,
+    "maximum":100
+  },
+  "required":["a", "b", "c"],
+  "minProperties":1,
+  "maxProperties":3,
+  "properties":{
+    "a":{
+      "exclusiveMinimum":1,
+      "exclusiveMaximum":10
+    },
+    "b":{
+      "type":"array",
+      "minItems":1,
+      "maxitems":3,
+      "uniqueItems":true,
+      "items":[
+        {
+          "minContains" : 1,
+          "maxContains" : 5,
+          "contains":true
+        },
+        {
+          "propertyNames":true
+        }
+      ],
+      "additionalItems":false
+    },
+    "c":{
+      "type":"string",
+      "pattern":"^\\[0-9]{3}?[0-9]{3}-[0-9]{4}$"
+    }
+  },
+  "patternProperties":{
+    "^\\[0-9]{3}?[0-9]{3}-[0-9]{4}$":{
+      "ref":"#/definitions/e"
+    }
+  },
+  "additionalProperties":{
+    "ref":"#/definitions/f"
+  }
+}

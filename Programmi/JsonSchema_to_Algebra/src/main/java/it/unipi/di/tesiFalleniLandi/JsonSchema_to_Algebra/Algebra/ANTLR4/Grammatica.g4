@@ -47,7 +47,7 @@ xbetween_assertion : 'xbet''(' json_value ',' json_value ')'														#Parse
 
 length_assertion : 'length''('json_value','json_value')'															#ParseLengthAssertion;
 
-bet_items_assertion : 'betitems''('json_value','json_value')'														#ParseBetItemsAssertion;
+bet_items_assertion : 'betItems''('json_value','json_value')'														#ParseBetItemsAssertion;
 
 between_properties_assertion : 'pro''('json_value','json_value')'													#ParseBetProAssertion;
 
@@ -55,7 +55,7 @@ multiple_of_assertion : 'mof''('json_value')'																		#ParseMultipleOf;
 
 not_multiple_of_assertion : 'notMof''('json_value')'																#ParseNotMultipleOf;	
 
-not_assertion : 'not'':' assertion 																					#ParseNot;
+not_assertion : 'not''(' assertion ')'																				#ParseNot;
 
 all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'														#ParseAllOf;	
 
@@ -83,7 +83,7 @@ items_assertion : 'items''(' assertion (',' assertion)*';'')'														#Pars
 					| 'items''(' (assertion (',' assertion)*)?';'assertion')'										#ParseAdditionalItems
 					;
 
-contains_assertion : 'contains''(' json_value ',' json_value ')' assertion											#ParseContains;
+contains_assertion : 'contains''(' json_value ',' json_value ';' assertion	')'										#ParseContains;
 
 properties : 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';' assertion ']'						#ParseAdditionalProperties
 				| 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';'']'								#ParseProperties;
@@ -93,15 +93,15 @@ const_assertion : 'const''(' json_value ')'																			#ParseConst;
 def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*												#ParseDef
 					| 'rootdef''=' assertion (',' 'def'STRING'=' assertion)*										#ParseDefRoot;
 
-ref_assertion: 'ref'':' STRING																						#ParseRef;
+ref_assertion: 'ref''(' STRING ')'																						#ParseRef;
 
-propertyNames: 'names'':' assertion																					#ParsePropertyNames;
+propertyNames: 'names''(' assertion	')'																				#ParsePropertyNames;
 
 annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implementato in JSON_to_Grammatica
 
 pattern_required: 'pattReq''[' STRING ':' assertion (',' STRING ':' assertion)* ']'									#ParsePatternRequired;
 
-additional_pattern_required: 'addPattReq''[' '('(STRING (',' STRING))*')' ':' assertion ']'							#ParseAdditionalPatternRequired;
+additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING))*']' ':' assertion ')'							#ParseAdditionalPatternRequired;
 
 
 json_value :  			NULL																						#NullValue
@@ -115,7 +115,7 @@ json_value :  			NULL																						#NullValue
 
 
 NULL : 'null';
-TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool';
+TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool' | 'numNotInt';
 INT : '-'?[0-9]+; // Define token INT as one or more digits
 DOUBLE: '-'?[0-9]+'.'[E0-9]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
