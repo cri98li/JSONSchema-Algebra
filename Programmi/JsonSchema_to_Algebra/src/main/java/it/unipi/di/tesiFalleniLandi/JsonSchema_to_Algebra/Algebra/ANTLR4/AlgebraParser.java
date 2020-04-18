@@ -587,8 +587,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 	
 	@Override 
-	public Names_Assertion visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx) { 
-		return (Names_Assertion) visit(ctx.propertyNames()); 
+	public Names_Assertion visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx) {
+		return (Names_Assertion) visit(ctx.propertyNames_assertion());
 	}
 	
 	@Override 
