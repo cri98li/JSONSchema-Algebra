@@ -84,8 +84,11 @@ public class Exist_Assertion implements Assertion{
 			and.add(new Exist_Assertion(0L, min - 1, contains));
 			return and;
 		}
-		
-		and.add(new Exist_Assertion(max + 1, null, contains));
+
+		if(max != null) {
+			and.add(new Exist_Assertion(max + 1, null, contains));
+		}
+
 		return and;
 	}
 

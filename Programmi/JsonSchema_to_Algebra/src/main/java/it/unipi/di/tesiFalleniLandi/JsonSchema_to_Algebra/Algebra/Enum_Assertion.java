@@ -63,43 +63,24 @@ public class Enum_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
-
-		for(Object value : _enum) {
-			if(value == null)
-				str += GrammarStringDefinitions.COMMA + "\"" +value + "\"";
-			if (value.getClass() == String.class)
-				str += GrammarStringDefinitions.COMMA + "\"" +value + "\"";
-			if( value.getClass() == Long.class || value.getClass() == Double.class || value.getClass() == Boolean.class)
-				str += GrammarStringDefinitions.COMMA + value;
-
-			if (value.getClass() == JSONObject.class)
-				str += GrammarStringDefinitions.COMMA +((JSONObject) value).toJSONString();
-
-			if (value.getClass() == List.class)
-				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) value);
-
-		}
-
-		if(str.isEmpty()) return "";
-		return str;
+		return String.format(GrammarStringDefinitions.ENUM, toGrammarString(_enum));
 	}
 
 	private String toGrammarString(List<Object> list){
 		String str = "";
 
 		for(Object obj : list) {
-			if (obj.getClass() == String.class)
+			if(obj == null)
+				str += GrammarStringDefinitions.COMMA + "null";
+			else if (obj.getClass() == String.class)
 				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
-			if(obj.getClass() == Long.class
+			else if(obj.getClass() == Long.class
 				|| obj.getClass() == Double.class
 				|| obj.getClass() == Boolean.class)
 				str += GrammarStringDefinitions.COMMA + obj;
-
-			if (obj.getClass() == JSONObject.class)
+			else if (obj.getClass() == JSONObject.class)
 				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
-
-			if (obj.getClass() == AntlrArray.class)
+			else
 				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
 		}
 

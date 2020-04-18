@@ -176,16 +176,19 @@ public class Items_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		String str = "";
-		if(itemsArray.size() == 1) {
-			return String.format(GrammarStringDefinitions.ITEMS, "", itemsArray.get(0).toGrammarString());
-		}
-		
-		Iterator<Assertion> it = itemsArray.iterator();
-		if(it.hasNext())
-			str += it.next().toGrammarString();
-		
-		while(it.hasNext()) {
-			str += "," + it.next().toGrammarString();
+
+		if(itemsArray != null) {
+
+			if (itemsArray.size() == 1)
+				return String.format(GrammarStringDefinitions.ITEMS, "", itemsArray.get(0).toGrammarString());
+
+			Iterator<Assertion> it = itemsArray.iterator();
+			if (it.hasNext())
+				str += it.next().toGrammarString();
+
+			while (it.hasNext()) {
+				str += "," + it.next().toGrammarString();
+			}
 		}
 		
 		String str2 = "";

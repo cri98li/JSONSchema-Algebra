@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
@@ -53,7 +55,6 @@ public class Const_Assertion implements Assertion{
 		
 		//è un JsonObject
 		return value;
-		
 	}
 
 	//TODO: not di boolean, isboolvalue?
@@ -93,21 +94,21 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		//caso array
-		try {
+		if(value.getClass() == LinkedList.class) {
 			@SuppressWarnings("unchecked")
 			List<Object> array = (List<Object>) value;
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
 			Or_Assertion or = new Or_Assertion();
-			
-			for(Object obj : array)
+
+			for (Object obj : array)
 				items.add(new Const_Assertion(obj));
-			
+
 			or.add(type.not());
 			or.add(items.not());
-			
+
 			return or;
-		}catch(ClassCastException e){	}
+		}
 		
 		
 		//caso object
@@ -119,10 +120,10 @@ public class Const_Assertion implements Assertion{
 		Required_Assertion req = new Required_Assertion();
 		
 		@SuppressWarnings("unchecked")
-		Set<String> keys = object.entrySet();
-		for(String key : keys) {
-			properties.addProperties(key, new Const_Assertion(object.get(key)));
-			req.add(key);
+		Set<Map.Entry<String, ?>> keys = object.entrySet();
+		for(Map.Entry<String, ?> entry : keys) {
+			properties.addProperties(entry.getKey(), new Const_Assertion(entry.getValue()));
+			req.add(entry.getKey());
 		}
 		
 		type.add("obj");
@@ -161,21 +162,24 @@ public class Const_Assertion implements Assertion{
 		String str = "";
 
 		for(Object obj : list) {
-			if (obj.getClass() == String.class)
+
+			if(obj == null)
+				str += GrammarStringDefinitions.COMMA + "null";
+			else if (obj.getClass() == String.class)
 				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
-			if(obj.getClass() == Long.class
+			else if(obj.getClass() == Long.class
 					|| obj.getClass() == Double.class
 					|| obj.getClass() == Boolean.class)
 				str += GrammarStringDefinitions.COMMA + obj;
 
-			if (obj.getClass() == JSONObject.class)
+			else if (obj.getClass() == JSONObject.class)
 				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
 
-			if (obj.getClass() == AntlrArray.class)
+			else
 				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
 		}
 
-
+		if(str.isEmpty()) return "";
 		return str.substring(GrammarStringDefinitions.COMMA.length());
 	}
 	

@@ -87,7 +87,8 @@ public class PatternRequired_Assertion implements Assertion{
 					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
 			}
 		}
-		
+
+		if(str.isEmpty()) return "";
 		return String.format(GrammarStringDefinitions.PATTERNREQUIRED, str.substring(GrammarStringDefinitions.COMMA.length()), "");
 	}
 
