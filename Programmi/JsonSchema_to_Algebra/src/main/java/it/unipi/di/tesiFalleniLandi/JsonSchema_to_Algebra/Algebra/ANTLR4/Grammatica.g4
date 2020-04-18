@@ -29,7 +29,8 @@ assertion : 		type_assertion																					#NewTypeAssertion
 				|   properties																						#NewProperties
 				|	def_assertion																					#NewDef
 				|	ref_assertion																					#NewRef
-				|	propertyNames																					#NewPropertyNames
+				|	propertyNames_assertion																			#NewPropertyNames
+				|   propertyExNames_assertion                                                                       #NewPropertyExNames
 				|	annotations																						#NewAnnotations
 				|	not_multiple_of_assertion																		#NewNotMultipleOf
 				|	not_pattern_assertion																			#NewNotPattern
@@ -95,7 +96,9 @@ def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*									
 
 ref_assertion: 'ref''(' STRING ')'																						#ParseRef;
 
-propertyNames: 'names''(' assertion	')'																				#ParsePropertyNames;
+propertyNames_assertion: 'names''(' assertion ')'																				#ParsePropertyNames;
+
+propertyExNames_assertion: 'exNames''(' assertion ')'																				#ParsePropertyExNames;
 
 annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implementato in JSON_to_Grammatica
 

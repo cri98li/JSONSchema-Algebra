@@ -1,4 +1,4 @@
-// Generated from Grammatica.g4 by ANTLR 4.7.2
+// Generated from Grammatica.g4 by ANTLR 4.8
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -193,6 +193,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNewPropertyNames(GrammaticaParser.NewPropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewPropertyExNames}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewPropertyExNames(GrammaticaParser.NewPropertyExNamesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code NewAnnotations}
 	 * labeled alternative in {@link GrammaticaParser#assertion}.
@@ -440,11 +447,18 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	T visitParseRef(GrammaticaParser.ParseRefContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParsePropertyNames}
-	 * labeled alternative in {@link GrammaticaParser#propertyNames}.
+	 * labeled alternative in {@link GrammaticaParser#propertyNames_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParsePropertyNames(GrammaticaParser.ParsePropertyNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePropertyExNames}
+	 * labeled alternative in {@link GrammaticaParser#propertyExNames_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePropertyExNames(GrammaticaParser.ParsePropertyExNamesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseAnnotations}
 	 * labeled alternative in {@link GrammaticaParser#annotations}.

@@ -101,5 +101,5 @@ public class GrammarStringDefinitions {
 	public static final String SINGLEUNKNOW = "\"%s\": \"%s\"";
 	
 	//ExName
-	public static final String EXNAME = "exName(\r\n%s\r\n)";
+	public static final String EXNAME = "exNames(\r\n%s\r\n)";
 }
