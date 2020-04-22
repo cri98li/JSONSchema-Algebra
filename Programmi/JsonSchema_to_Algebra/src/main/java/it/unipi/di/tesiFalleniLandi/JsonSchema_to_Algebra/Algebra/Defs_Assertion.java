@@ -36,31 +36,45 @@ public class Defs_Assertion implements Assertion{
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
-		
+
+		//corpo del json schema
 		if(rootDef != null) {
-			Utils.putContent(obj, rootDef.getJSONSchemaKeyword(), rootDef.toJSONSchema());
+			if(rootDef.getClass() != Boolean_Assertion.class) // == è un caso particolare (può succedere solo se si parte dalla grammatica) "Caso rognoso" di un crucco
+				Utils.putContent(obj, rootDef.getJSONSchemaKeyword(), rootDef.toJSONSchema());
 			
 			JSONObject def = new JSONObject();
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 			
 			for(Entry<String,Assertion> entry : entrySet) {
 				JSONObject tmp = new JSONObject();
-				Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
-				def.put(entry.getKey(), tmp);
+				if(entry.getValue().getClass() == Boolean_Assertion.class)
+					def.put(entry.getKey(), entry.getValue().toJSONSchema());
+				else {
+					Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
+					def.put(entry.getKey(), tmp);
+				}
+
+				def.put(entry.getKey(), entry.getValue().toJSONSchema());
 			}
-			
+
 			obj.put("$defs", def);
-			
 			return obj;
 		}
-		
+
+		/*
+		//altre definizioni
 		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 		
 		for(Entry<String,Assertion> entry : entrySet) {
 			JSONObject tmp = new JSONObject();
-			Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
-			obj.put(entry.getKey(), tmp);
+			if(entry.getValue().getClass() == Boolean_Assertion.class)
+				obj.put(entry.getKey(), entry.getValue().toJSONSchema());
+			else {
+				Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
+				obj.put(entry.getKey(), tmp);
+			}
 		}
+		*/
 		
 		return obj;
 	}

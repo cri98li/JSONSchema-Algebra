@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.json.simple.JSONValue;
 
 //TODO: pensare ad items di jsonObject
 public class Items_Assertion implements Assertion{
@@ -49,13 +50,16 @@ public class Items_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		if(itemsArray != null)
-			if(itemsArray.size() == 1)
-				Utils.putContent(obj, itemsArray.get(0).getJSONSchemaKeyword(), itemsArray.get(0).toJSONSchema());
-			else {
+			if(itemsArray.size() == 1) {
+				if(itemsArray.get(0).getClass() != Boolean_Assertion.class)
+					Utils.putContent(obj, itemsArray.get(0).getJSONSchemaKeyword(), itemsArray.get(0).toJSONSchema());
+				else obj.put("items", itemsArray.get(0).toJSONSchema());
+			}else {
 				JSONArray array = new JSONArray();
 				for(Assertion assertion : itemsArray) {
 					JSONObject tmp = new JSONObject();
-					Utils.putContent(tmp, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
+					if(assertion.getClass() != Boolean_Assertion.class)
+						Utils.putContent(tmp, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
 					array.add(tmp);
 				}
 				obj.put("items", array);
@@ -66,17 +70,10 @@ public class Items_Assertion implements Assertion{
 			
 			if(additionalItems.getClass() == Boolean_Assertion.class)
 				obj.put("additionalItems", additionalItems.toJSONSchema());
-			else 
+			else {
 				Utils.putContent(tmp, additionalItems.getJSONSchemaKeyword(), additionalItems.toJSONSchema());
-			
-			/*
-			try {
-				Utils.putContent(tmp, additionalItems.getJSONSchemaKeyword(), additionalItems.toJSONSchema());
-			}catch(UnsupportedOperationException ex) {
-				obj.put("additionalItems", additionalItems.toJSONSchema());
-			}*/
-			
-			obj.put("additionalItems", tmp);
+				obj.put("additionalItems", tmp);
+			}
 		}
 	
 		return obj;

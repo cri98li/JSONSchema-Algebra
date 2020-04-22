@@ -85,8 +85,15 @@ public class Properties_Assertion implements Assertion{
 			obj.put("patternProperties", tmp);
 		}
 		
-		if(additionalProperties != null)
-			obj.put("additionalProperties", additionalProperties.toJSONSchema());
+		if(additionalProperties != null) {
+			JSONObject tmp = new JSONObject();
+			if(additionalProperties.getClass() == Boolean_Assertion.class)
+				obj.put("additionalProperties", additionalProperties.toJSONSchema());
+			else{
+				Utils.putContent(tmp, additionalProperties.getJSONSchemaKeyword(), additionalProperties.toJSONSchema());
+				obj.put("additionalProperties", tmp);
+			}
+		}
 		
 		return obj;
 	}

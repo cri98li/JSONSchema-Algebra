@@ -55,8 +55,13 @@ public class Exist_Assertion implements Assertion{
 
 		if(contains != null) {
 			JSONObject tmp = new JSONObject();
-			Utils.putContent(tmp, contains.getJSONSchemaKeyword(), contains.toJSONSchema());
-			obj.put("contains", tmp);
+
+			if(contains.getClass() == Boolean_Assertion.class)
+				obj.put("contains", contains.toJSONSchema());
+			else{
+				Utils.putContent(tmp, contains.getJSONSchemaKeyword(), contains.toJSONSchema());
+				obj.put("contains", tmp);
+			}
 		}
 		
 		if(min != null) obj.put("minContains", min);

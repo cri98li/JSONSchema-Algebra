@@ -1,15 +1,2 @@
-rootdef = allOf[
-	type(obj),
-	props[
-		"numberArray": allOf[
-			type(arr),
-			items[;type(num)]
-		],
-		"stringArray": allOf[
-			type(arr),
-			items[;type(str)]
-		]
-		;],
-	req["numberArray",
-		"stringArray"]
-]
+rootdef =  items(true;),
+def "x" = true

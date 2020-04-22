@@ -11,7 +11,7 @@ public class GrammarStringDefinitions {
 	//RANGE
 	public static final String BETWEENNUMBER = "bet(%s,%s)";
 	public static final String BETWEENNUMBER_EXCL = "xbet(%s,%s)";
-	public static final String BETWEENITEMS = "betitems(%s,%s)";
+	public static final String BETWEENITEMS = "betItems(%s,%s)";
 	public static final String BETWEENPROPERTIES = "pro(%s,%s)";
 	
 	//MULTIPLE OF

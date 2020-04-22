@@ -6,12 +6,6 @@ import java.util.List;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class AddPatternRequired_Assertion implements Assertion{
-	@Override
-	public String toString() {
-		return "AddPatternRequired_Assertion [nameList=" + nameList + ", additionalProperties=" + additionalProperties
-				+ "]";
-	}
-
 	private List<String> nameList; 
 	private Assertion additionalProperties;
 
@@ -22,6 +16,12 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public AddPatternRequired_Assertion(List<String> nameList, Assertion additionalProperties) {
 		this.nameList = nameList;
 		this.additionalProperties = additionalProperties;
+	}
+
+	@Override
+	public String toString() {
+		return "AddPatternRequired_Assertion [nameList=" + nameList + ", additionalProperties=" + additionalProperties
+				+ "]";
 	}
 
 	public void setNameList(List<String> nameList) {

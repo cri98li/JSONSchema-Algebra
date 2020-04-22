@@ -25,9 +25,14 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		JSONObject tmp = new JSONObject();
-		Utils.putContent(tmp, not.getJSONSchemaKeyword(), not.toJSONSchema());
-		return tmp;
+		JSONObject obj = new JSONObject();
+
+		if(not.getClass() == Boolean_Assertion.class)
+			return not.toJSONSchema();
+		else
+			Utils.putContent(obj, not.getJSONSchemaKeyword(), not.toJSONSchema());
+
+		return obj;
 	}
 
 	@Override

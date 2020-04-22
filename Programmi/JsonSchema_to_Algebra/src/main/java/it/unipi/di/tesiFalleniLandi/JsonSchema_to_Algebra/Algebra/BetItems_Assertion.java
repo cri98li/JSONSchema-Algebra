@@ -30,7 +30,6 @@ public class BetItems_Assertion implements Assertion{
 		
 		return intersectedBet;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -46,10 +45,10 @@ public class BetItems_Assertion implements Assertion{
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
-		
-		if(max != null) obj.put("maxItems", max);
+
 		if(min != null) obj.put("minItems", min);
-		
+		if(max != null) obj.put("maxItems", max);
+
 		return obj;
 	}
 	

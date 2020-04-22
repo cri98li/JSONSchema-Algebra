@@ -69,7 +69,9 @@ public class Const_Assertion implements Assertion{
 		}
 
 		if(value.getClass() == Boolean.class) {
-			//TODO
+			type.add("bool");
+
+			return type.not();
 		}
 		
 		if(value.getClass() == Long.class || value.getClass() == Double.class) {

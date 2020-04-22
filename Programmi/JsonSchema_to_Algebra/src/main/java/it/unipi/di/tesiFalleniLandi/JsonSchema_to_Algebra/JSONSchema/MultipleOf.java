@@ -8,10 +8,10 @@ import java.util.Map.Entry;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class MultipleOf implements JSONSchemaElement{
-	private Long value;
+	private Object value;
 	
 	public MultipleOf(Object obj) {
-		Long value = (Long) obj;
+		Object value = (Object) obj;
 		
 		this.value = value;
 	}
@@ -22,7 +22,7 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public Long toJSON() {
+	public Object toJSON() {
 		return value;
 	}
 

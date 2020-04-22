@@ -28,8 +28,8 @@ public class Const extends Enum {
 	@Override
 	public Object toJSON() {
 		if(super.thereIsNull) return null;
-		if(!enumArray_array.isEmpty()) return enumArray_array.get(0).toJSON();
-		//if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0).toJSON();
+		if(!enumArray_array.isEmpty()) return enumArray_array.get(0);
+		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0);
 		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0);
 		if(!enumArray_bool.isEmpty()) return enumArray_bool.get(0);
 		if(!enumArray_num.isEmpty()) return enumArray_num.get(0);
@@ -46,23 +46,22 @@ public class Const extends Enum {
 	@Override
 	public String toGrammarString() {
 		if(!enumArray_str.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, "\""+ enumArray_str.toString() +"\"");
+			return String.format(GrammarStringDefinitions.CONST, "\""+ enumArray_str.get(0) +"\"");
 		
 		if(!enumArray_num.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_num.toString());
-		
-		if(!enumArray_str.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_str.toString());
+			return String.format(GrammarStringDefinitions.CONST, enumArray_num.get(0).toString());
 		
 		if(!enumArray_bool.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_bool.toString());
+			return String.format(GrammarStringDefinitions.CONST, enumArray_bool.get(0).toString());
 		
 		if(!enumArray_array.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_array.toString());
-		
-		
+			return String.format(GrammarStringDefinitions.CONST, enumArray_array.get(0));
+
+		if(!enumArray_obj.isEmpty())
+			return String.format(GrammarStringDefinitions.CONST, enumArray_obj.get(0).toJSONString());
+
 		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
-		
+
 		return ""; //non ci dovrei mai cadere
 	}
 
@@ -79,6 +78,8 @@ public class Const extends Enum {
 		if(enumArray_bool != null) clone.enumArray_bool = new LinkedList<>(enumArray_bool);
 
 		if(enumArray_array != null) clone.enumArray_array = new LinkedList<>(enumArray_array);
+
+		if(enumArray_obj != null) clone.enumArray_obj = new LinkedList<>(enumArray_obj);
 
 		return clone;
 	}

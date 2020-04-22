@@ -25,8 +25,8 @@ public class JSONSchema implements JSONSchemaElement{
 	 */
 	public JSONSchema(Object obj) {
 		jsonSchema = new HashMap<>();
-		
 		JSONObject object = null;
+
 		try {
 			booleanAsJSONSchema = (Boolean) obj;
 			return;

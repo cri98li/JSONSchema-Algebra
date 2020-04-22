@@ -22,13 +22,21 @@ public class And_Assertion implements Assertion{
 
 	public void addAll(List<Assertion> list) {
 		for(Assertion assertion : list) 
-			duplicates |= andList.contains(assertion);
+			duplicates |= contains(assertion);
 		andList.addAll(list);
 	}
 	
 	public void add(Assertion assertion) {
-		duplicates |= andList.contains(assertion);
+		duplicates |= contains(assertion);
 		andList.add(assertion);
+	}
+
+	private boolean contains(Assertion assertion){
+		if(andList == null) return false;
+		for(Assertion a : andList)
+			if(a.getClass() == assertion.getClass()) return true; //qui potremmo chiamare il metodo per semplificare i bet
+
+		return false;
 	}
 	
 	public void add(And_Assertion assertion) {
@@ -43,8 +51,9 @@ public class And_Assertion implements Assertion{
 	@Override
 	public String getJSONSchemaKeyword() {
 		if(duplicates)
-			return Utils.PUTCONTENT;
-		return "allOf";
+			return "allOf";
+		return Utils.PUTCONTENT;
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,14 +74,19 @@ public class And_Assertion implements Assertion{
 			}
 			
 			return array;
+
+		} else {
+
+			JSONObject obj = new JSONObject();
+
+			for (Assertion assertion : andList)
+				if (assertion.getClass() != Boolean_Assertion.class)
+					Utils.putContent(obj,
+							assertion.getJSONSchemaKeyword(),
+							assertion.toJSONSchema());
+
+			return obj;
 		}
-		
-		JSONObject obj = new JSONObject();
-		
-		for(Assertion assertion : andList)
-			Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-		
-		return obj;
 	}
 
 	@Override

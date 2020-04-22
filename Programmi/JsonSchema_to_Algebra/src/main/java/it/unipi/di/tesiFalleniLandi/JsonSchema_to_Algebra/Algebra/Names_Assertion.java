@@ -25,7 +25,12 @@ public class Names_Assertion implements Assertion{
 	@Override
 	public Object toJSONSchema() {
 		JSONObject tmp = new JSONObject();
-		Utils.putContent(tmp, names.getJSONSchemaKeyword(), names.toJSONSchema());
+
+		if(names.getClass() == Boolean_Assertion.class)
+			return names.toJSONSchema();
+		else
+			Utils.putContent(tmp, names.getJSONSchemaKeyword(), names.toJSONSchema());
+
 		return tmp;
 	}
 	

@@ -27,13 +27,13 @@ public class Dependencies implements JSONSchemaElement{
 		
 		for(Entry<?,?> entry : entrySet) {
 			try {
+				if(dependentSchemas == null)  dependentSchemas = new HashMap<>();
 				JSONSchema js = new JSONSchema(entry.getValue());
-				dependentSchemas = new HashMap<>();
 				dependentSchemas.put((String)entry.getKey(), js);
 			}catch(ClassCastException ex) {
+				if(dependentRequired == null) dependentRequired = new HashMap<String, List<String>>();
 				LinkedList<String> list = new LinkedList<>();
 				JSONArray array = (JSONArray) entry.getValue();
-				dependentRequired = new HashMap<String, List<String>>();
 				
 				Iterator<?> it_array = array.iterator();
 				
@@ -120,23 +120,24 @@ public class Dependencies implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
+		String typeObj = String.format(GrammarStringDefinitions.TYPE, GrammarStringDefinitions.TYPE_OBJECT);
 		String ds = "";
 		String dr = "";
 		
-		if(dependentSchemas != null) {
+		if(dependentSchemas != null && !dependentSchemas.isEmpty()) {
 			String str = "";
 			Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
 				String req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + entry.getKey() + "\"");
 				str += String.format(GrammarStringDefinitions.IF_THEN, req, entry.getValue().toGrammarString());
 				str += GrammarStringDefinitions.COMMA;
-				str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
 			}
-			
-			ds = String.format(GrammarStringDefinitions.ALLOF, str);
+			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
+			String allOf = String.format(GrammarStringDefinitions.ALLOF, str);
+			ds = String.format(GrammarStringDefinitions.IF_THEN, typeObj, allOf);
 		}
 		
-		if(dependentRequired != null) {
+		if(dependentRequired != null && !dependentRequired.isEmpty()) {
 			String str = "";
 
 			Set<String> keys = dependentRequired.keySet();
@@ -149,15 +150,16 @@ public class Dependencies implements JSONSchemaElement{
 					reqList += "\"" + tmp + "\"" + ",";
 				}
 				
-			reqList = reqList.substring(0, reqList.length() - 1);
-			reqList = String.format(GrammarStringDefinitions.REQUIRED, reqList);
-			req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + key + "\"");
-			str += String.format(GrammarStringDefinitions.IF_THEN, req, reqList);
-			str += GrammarStringDefinitions.COMMA;
-			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
+				reqList = reqList.substring(0, reqList.length() - 1);
+				reqList = String.format(GrammarStringDefinitions.REQUIRED, reqList);
+				req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + key + "\"");
+				str += String.format(GrammarStringDefinitions.IF_THEN, req, reqList);
+				str += GrammarStringDefinitions.COMMA;
 			}
-			
-			dr = String.format(GrammarStringDefinitions.ALLOF, str);
+
+			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
+			String allOf = String.format(GrammarStringDefinitions.ALLOF, str);
+			dr = String.format(GrammarStringDefinitions.IF_THEN, typeObj, allOf);
 			
 		}
 		

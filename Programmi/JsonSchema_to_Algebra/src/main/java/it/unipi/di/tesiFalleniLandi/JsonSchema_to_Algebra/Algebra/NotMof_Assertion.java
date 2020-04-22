@@ -3,9 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class NotMof_Assertion implements Assertion {
-	private Long notMof;
+	private Object notMof;
 	
-	public NotMof_Assertion(Long notMof) {
+	public NotMof_Assertion(Object notMof) {
 		this.notMof = notMof;
 	}
 

@@ -2,39 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 
 import java.util.List;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AddPatternRequired_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.AlgebraParserElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.And_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Annotation_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.BetItems_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Bet_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Boolean_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Const_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Defs_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Enum_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Exist_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.IfThenElse_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Items_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Len_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Mof_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Names_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.NotMof_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.NotPattern_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Not_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Or_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.PatternRequired_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pattern_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Pro_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Properties_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Ref_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.RepeatedItems_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Required_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Type_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.UniqueItems_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Xor_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 
@@ -84,13 +54,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 	
 	@Override
-	public Bet_Assertion visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx) {
+	public XBet_Assertion visitNewXBetweenAssertion(GrammaticaParser.NewXBetweenAssertionContext ctx) {
 
-		return (Bet_Assertion) visit(ctx.xbetween_assertion());
+		return (XBet_Assertion) visit(ctx.xbetween_assertion());
 	}
 	
 	@Override
-	public Bet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
+	public XBet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
 		AntlrValue min, max;
 		
 		try{
@@ -105,7 +75,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 			max = (AntlrDouble) visit(ctx.json_value(1));
 		}
 		
-		return new Bet_Assertion(min.getValue(), max.getValue());
+		return new XBet_Assertion(min.getValue(), max.getValue());
 	}
 	
 
@@ -293,7 +263,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	
 	@Override 
 	public Mof_Assertion visitParseMultipleOf(GrammaticaParser.ParseMultipleOfContext ctx) { 
-		AntlrLong value = (AntlrLong) visit(ctx.json_value());
+		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 		
 		return new Mof_Assertion(value.getValue()); 
 	}
@@ -305,7 +275,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	
 	@Override 
 	public NotMof_Assertion visitParseNotMultipleOf(GrammaticaParser.ParseNotMultipleOfContext ctx) { 
-		AntlrLong value = (AntlrLong) visit(ctx.json_value());
+		AntlrValue value = (AntlrValue) visit(ctx.json_value());
+
 		
 		return new NotMof_Assertion(value.getValue()); 
 	}

@@ -34,15 +34,10 @@ public class XBet_Assertion implements Assertion{
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
-		
-		if(max != null) obj.put("exclusiveMaximum", max);
+
 		if(min != null) obj.put("exclusiveMinimum", min);
-		
-		/*
-		if(booleanExclusiveMaximum != null) obj.put("exclusiveMaximum", booleanExclusiveMaximum);
-		if(booleanExclusiveMinimum != null) obj.put("exclusiveMinimum", booleanExclusiveMinimum);
-		*/
-		
+		if(max != null) obj.put("exclusiveMaximum", max);
+
 		return obj;
 	}
 	

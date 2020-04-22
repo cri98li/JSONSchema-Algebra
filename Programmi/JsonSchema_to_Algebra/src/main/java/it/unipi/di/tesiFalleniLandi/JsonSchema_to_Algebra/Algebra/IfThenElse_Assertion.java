@@ -32,18 +32,33 @@ public class IfThenElse_Assertion implements Assertion{
 			
 		if(ifStatement != null) {
 			JSONObject tmp = new JSONObject();
-			Utils.putContent(tmp, ifStatement.getJSONSchemaKeyword(), ifStatement.toJSONSchema());
-			obj.put("if", tmp);
+
+			if(ifStatement.getClass() == Boolean_Assertion.class)
+				obj.put("if", ifStatement.toJSONSchema());
+			else {
+				Utils.putContent(tmp, ifStatement.getJSONSchemaKeyword(), ifStatement.toJSONSchema());
+				obj.put("if", tmp);
+			}
 		}
 		if(thenStatement != null) {
 			JSONObject tmp = new JSONObject();
-			Utils.putContent(tmp, thenStatement.getJSONSchemaKeyword(), thenStatement.toJSONSchema());
-			obj.put("then", tmp);
+
+			if(thenStatement.getClass() == Boolean_Assertion.class)
+				obj.put("then", thenStatement.toJSONSchema());
+			else {
+				Utils.putContent(tmp, thenStatement.getJSONSchemaKeyword(), thenStatement.toJSONSchema());
+				obj.put("then", tmp);
+			}
 		}
 		if(elseStatement != null) {
 			JSONObject tmp = new JSONObject();
-			Utils.putContent(tmp, elseStatement.getJSONSchemaKeyword(), elseStatement.toJSONSchema());
-			obj.put("else", tmp);
+
+			if(elseStatement.getClass() == Boolean_Assertion.class)
+				obj.put("else", elseStatement.toJSONSchema());
+			else {
+				Utils.putContent(tmp, elseStatement.getJSONSchemaKeyword(), elseStatement.toJSONSchema());
+				obj.put("else", tmp);
+			}
 		}
 			
 		return obj;

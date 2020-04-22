@@ -3,9 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Mof_Assertion implements Assertion{
-	private Long mof;
+	private Object mof;
 	
-	public Mof_Assertion(Long mof) {
+	public Mof_Assertion(Object mof) {
 		this.mof = mof;
 	}
 

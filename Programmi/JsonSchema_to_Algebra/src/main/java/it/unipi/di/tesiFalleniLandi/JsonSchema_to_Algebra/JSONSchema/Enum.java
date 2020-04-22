@@ -15,7 +15,7 @@ public class Enum implements JSONSchemaElement{
 	protected List<Object> enumArray_num;
 	protected List<Boolean> enumArray_bool;
 	protected List<JSONObject> enumArray_obj;
-	protected List<Enum> enumArray_array;
+	protected List<JSONArray> enumArray_array;
 	protected boolean thereIsNull;
 	protected boolean arrayOnly;
 	
@@ -86,12 +86,20 @@ public class Enum implements JSONSchemaElement{
 	}
 	
 	private boolean putNumericValue(Object obj) {
+		if(obj.getClass() == Double.class || obj.getClass() == Long.class || obj.getClass() == Integer.class){
+			enumArray_num.add((Object) obj);
+			return true;
+		}
+		return false;
+
+		/*
 		try {
 			enumArray_num.add((Object) obj);
 			return true;
 		}catch(ClassCastException e) {
 			return false;
 		}
+		*/
 	}
 	
 	private boolean putBooleanValue(Object obj) {
@@ -105,7 +113,6 @@ public class Enum implements JSONSchemaElement{
 	
 	private boolean putObjectValue(Object obj) {
 		try {
-			//enumArray_obj.add(new JSONSchema(obj));
 			enumArray_obj.add((JSONObject) obj);
 			return true;
 		}catch(ClassCastException e) {
@@ -115,7 +122,7 @@ public class Enum implements JSONSchemaElement{
 	
 	private boolean putArrayValue(Object obj) {
 		try {
-			enumArray_array.add(new Enum((JSONArray) obj));
+			enumArray_array.add((JSONArray) obj);
 			return true;
 		}catch(ClassCastException e) {
 			return false; 
@@ -155,8 +162,8 @@ public class Enum implements JSONSchemaElement{
 		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
 		while(it_JSO.hasNext()) array.add(it_JSO.next());
 		
-		Iterator<? extends JSONSchemaElement>it_JSE = enumArray_array.iterator();
-		while(it_JSE.hasNext()) array.add(it_JSE.next().toJSON());
+		Iterator<? extends JSONArray>it_JSE = enumArray_array.iterator();
+		while(it_JSE.hasNext()) array.add(it_JSE.next());
 		
 		if(thereIsNull) array.add(null);
 		
@@ -179,8 +186,8 @@ public class Enum implements JSONSchemaElement{
 		Iterator<? extends JSONObject> it_JSO = enumArray_obj.iterator();
 		while(it_JSO.hasNext()) str += (separator + it_JSO.next().toJSONString());
 		
-		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
-		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toGrammarString());
+		Iterator<? extends JSONArray> it_JSE = enumArray_array.iterator();
+		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toJSONString());
 		
 		if(thereIsNull) str += (separator + "null");
 		
@@ -189,7 +196,7 @@ public class Enum implements JSONSchemaElement{
 				return "[]";
 			else
 				return "["+ str.subSequence(separator.length(), str.length()) + "]";
-		
+
 		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
 
@@ -205,8 +212,9 @@ public class Enum implements JSONSchemaElement{
 		if(enumArray_bool != null) _enum.enumArray_bool = new LinkedList<>(enumArray_bool);
 		
 		if(enumArray_array != null) {
-			for(Enum s : enumArray_array)
-				_enum.enumArray_array.add(s.assertionSeparation());
+			for(JSONArray s : enumArray_array)
+				if(!s.isEmpty())
+					_enum.enumArray_array.add(s);
 		}
 		
 		_enum.thereIsNull = this.thereIsNull;
@@ -224,10 +232,12 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public List<URI_JS> getRef() {
+		/*
 		List<URI_JS> list = new LinkedList<>();
-		
+
 		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
 		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
+		 */
 		
 		return new LinkedList<>();
 	}
@@ -262,8 +272,8 @@ public class Enum implements JSONSchemaElement{
 		Iterator<JSONObject> it_JS = enumArray_obj.iterator();
 		while(it_JS.hasNext()) clone.enumArray_obj.add((JSONObject) it_JS.next().clone());
 		
-		Iterator<Enum> it_JSA = enumArray_array.iterator();
-		while(it_JSA.hasNext()) clone.enumArray_array.add(it_JSA.next().clone());
+		Iterator<JSONArray> it_JSA = enumArray_array.iterator();
+		while(it_JSA.hasNext()) clone.enumArray_array.add((JSONArray) it_JSA.next().clone());
 
 		clone.thereIsNull = thereIsNull;
 		
