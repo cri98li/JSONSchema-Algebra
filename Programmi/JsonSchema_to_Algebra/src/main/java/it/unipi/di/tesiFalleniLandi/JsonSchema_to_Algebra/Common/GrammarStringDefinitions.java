@@ -49,7 +49,7 @@ public class GrammarStringDefinitions {
 	public static final String LENGTH = "length(%s,%s)";
 	
 	//items
-	public static final String ITEMS = "items[%s;%s]";
+	public static final String ITEMS = "items(%s;%s)";
 	
 	//contains
 	public static final String CONTAINS = "contains(%s, %s; %s)";

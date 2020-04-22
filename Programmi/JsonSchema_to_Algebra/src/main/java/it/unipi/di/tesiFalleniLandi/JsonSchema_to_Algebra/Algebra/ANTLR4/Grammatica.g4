@@ -3,7 +3,7 @@ grammar Grammatica;
 @header {package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 }
 
-assertion_list : '{' assertion (',' assertion)* '}'																	#ParseAssertionList							
+assertion_list : '{' assertion (',' assertion)* '}'																	#ParseAssertionList
 				|    BOOLEAN																						#ParseBooleanSchema;
 
 assertion : 		type_assertion																					#NewTypeAssertion
@@ -94,11 +94,11 @@ const_assertion : 'const''(' json_value ')'																			#ParseConst;
 def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*												#ParseDef
 					| 'rootdef''=' assertion (',' 'def'STRING'=' assertion)*										#ParseDefRoot;
 
-ref_assertion: 'ref''(' STRING ')'																						#ParseRef;
+ref_assertion: 'ref''(' STRING ')'																					#ParseRef;
 
-propertyNames_assertion: 'names''(' assertion ')'																				#ParsePropertyNames;
+propertyNames_assertion: 'names''(' assertion ')'																	#ParsePropertyNames;
 
-propertyExNames_assertion: 'exNames''(' assertion ')'																				#ParsePropertyExNames;
+propertyExNames_assertion: 'exNames''(' assertion ')'																#ParsePropertyExNames;
 
 annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implementato in JSON_to_Grammatica
 
