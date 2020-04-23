@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -253,7 +254,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	        AlgebraParser p = new AlgebraParser();
 	        Assertion schema = (Assertion) p.visit(tree);
 	        
-	        GatewayResponse response = new GatewayResponse(schema.notElimination().toString(),
+	        GatewayResponse response = new GatewayResponse(Utils.beauty(schema.notElimination().toGrammarString()),
 	        		200,
 	        		"type", "application/json+schema",
 	        		false);
