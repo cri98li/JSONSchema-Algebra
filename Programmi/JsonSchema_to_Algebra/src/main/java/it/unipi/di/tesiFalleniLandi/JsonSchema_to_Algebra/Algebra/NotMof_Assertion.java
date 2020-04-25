@@ -15,13 +15,8 @@ public class NotMof_Assertion implements Assertion {
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "multipleOf";
-	}
-
-	@Override
 	public Object toJSONSchema() {
-		return notMof;
+		return new Not_Assertion(new Mof_Assertion(notMof)).toJSONSchema();
 	}
 
 	@Override

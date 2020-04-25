@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Ref_Assertion implements Assertion{
 	private String ref;
@@ -14,25 +15,23 @@ public class Ref_Assertion implements Assertion{
 		return "Ref_Assertion [" + ref + "]";
 	}
 
-
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "$ref";
-	}
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
 
-	@Override
-	public String toJSONSchema() {
 		if(ref.equals("rootdef")) {
-			return "#";
+			obj.put("ref", "#" + ref);
 		}else {
-			return "#/$defs/"+ref;
+			obj.put("ref", "#/$defs/" + ref);
 		}
+
+		return obj;
 	}
 
 
 	@Override
 	public Assertion not() {
-		return new Ref_Assertion("not_"+ref);
+		return new Ref_Assertion(GrammarStringDefinitions.NOT_DEFS+ref);
 	}
 
 

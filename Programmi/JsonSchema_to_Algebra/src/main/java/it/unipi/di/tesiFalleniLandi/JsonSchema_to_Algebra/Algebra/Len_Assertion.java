@@ -36,10 +36,6 @@ public class Len_Assertion implements Assertion{
 		return "Len_Assertion [min=" + min + ", max=" + max + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "length";
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -70,12 +66,16 @@ public class Len_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		// TODO Auto-generated method stub
 		return new Len_Assertion(min, max);
 	}
 
 	@Override
 	public String toGrammarString() {
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+
+		if(this.min != null) min = this.min+"";
+		if(this.max != null) max = this.max+"";
+
 		return String.format(GrammarStringDefinitions.LENGTH, min, max);
 	}
 }

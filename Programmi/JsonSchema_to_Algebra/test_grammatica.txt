@@ -1,2 +1,1 @@
-rootdef =  items(true;),
-def "x" = true
+rootdef = bet(505, 488), def "STR_qK" = {enum[[{"STR_vyOpGy": "3", "STR_H": -64.7, "STR_Q": {"STR_Ba": 5.41}, "STR_QF": {"STR_eE": null, "STR_f": "m"}, "STR_jN": null}]], repeatedItems}, def "STR_A" = pro(317, 408), def "STR_j" = {addPattReq([]:{names(uniqueItems), addPattReq([]:length(null, 1))}), notPattern("^PAT_\$")}

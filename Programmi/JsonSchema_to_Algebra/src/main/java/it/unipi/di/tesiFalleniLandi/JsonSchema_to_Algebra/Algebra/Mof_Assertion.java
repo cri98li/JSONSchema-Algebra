@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Mof_Assertion implements Assertion{
 	private Object mof;
@@ -15,13 +16,11 @@ public class Mof_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "multipleOf";
-	}
-
-	@Override
 	public Object toJSONSchema() {
-		return mof;
+		JSONObject obj = new JSONObject();
+		obj.put("multipleOf", mof);
+
+		return obj;
 	}
 
 	@Override

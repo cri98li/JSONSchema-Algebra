@@ -25,11 +25,6 @@ public class XBet_Assertion implements Assertion{
 		return "XBet_Assertion [min=" + min + ", max=" + max + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "betweenNumber";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
@@ -73,6 +68,11 @@ public class XBet_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+
+		if(this.min != null) min = this.min+"";
+		if(this.max != null) max = this.max+"";
+
 		return String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
 	}
 }

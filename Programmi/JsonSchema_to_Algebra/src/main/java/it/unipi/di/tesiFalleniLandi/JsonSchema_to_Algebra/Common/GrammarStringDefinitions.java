@@ -5,7 +5,6 @@ public class GrammarStringDefinitions {
 	public static final String JSONSCHEMA = "{\r\n%s\r\n}";
 	
 	//LOGIC OP
-	public static final String OR = "\r\n|\t";
 	public static final String COMMA = ",\r\n";
 	
 	//RANGE
@@ -13,13 +12,17 @@ public class GrammarStringDefinitions {
 	public static final String BETWEENNUMBER_EXCL = "xbet(%s,%s)";
 	public static final String BETWEENITEMS = "betItems(%s,%s)";
 	public static final String BETWEENPROPERTIES = "pro(%s,%s)";
-	
+
+	// +/- inf
+	public static final String POS_INF = "+inf";
+	public static final String NEG_INF = "-inf";
+
 	//MULTIPLE OF
 	public static final String MULTIPLEOF = "mof(%s)";
 	public static final String NOTMULTIPLEOF = "notMof(%s)";
 	
 	//TYPE
-	public static final String TYPE = "type(%s)";
+	public static final String TYPE = "type[%s]";
 		public static final String TYPE_BOOLEAN = "bool";
 		public static final String TYPE_STRING = "str";
 		public static final String TYPE_NULL = "null";
@@ -27,8 +30,7 @@ public class GrammarStringDefinitions {
 		public static final String TYPE_INTEGER = "int";
 		public static final String TYPE_ARRAY = "arr";
 		public static final String TYPE_OBJECT = "obj";
-		public static final String TYPE_NUMNOTINT = "numNotInt";
-		
+
 	
 	//allOf, anyOf, oneOf
 	public static final String ALLOF = "allOf[\r\n%s\r\n]";
@@ -65,14 +67,12 @@ public class GrammarStringDefinitions {
 	
 	//repeated items
 	public static final String REPEATEDITEMS = "repeatedItems";
-	
+
+	//defs e rootdef
 	public static final String DEFS = "def \"%s\" = %s";
 	public static final String ROOTDEF = "rootdef = %s";
+	public static final String NOT_DEFS = "not_";
 
-	/*
-	public static final String IF_THEN_ELSE = "if: %s, \r\nthen: %s, \r\nelse: %s";
-	public static final String IF_THEN = "if: %s, \r\nthen: %s";
-	*/
 	//if-then-else
 	public static final String IF_THEN_ELSE = "ifThenElse(%s; \r\n\t%s; \r\n\t%s)";
 	public static final String IF_THEN = "ifThen(%s; \r\n\t%s)";
@@ -102,4 +102,7 @@ public class GrammarStringDefinitions {
 	
 	//ExName
 	public static final String EXNAME = "exNames(\r\n%s\r\n)";
+
+	//IfBoolThen
+	public static final String IFBOOLTHEN = "ifBoolThen(%s)";
 }

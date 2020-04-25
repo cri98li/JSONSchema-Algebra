@@ -1,9 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
-
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.json.simple.JSONObject;
 
 public class Not_Assertion implements Assertion{
 	
@@ -17,32 +15,23 @@ public class Not_Assertion implements Assertion{
 	public String toString() {
 		return "Not_Assertion [" + not + "]";
 	}
-	
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "not";
-	}
 
 	@Override
 	public Object toJSONSchema() {
 		JSONObject obj = new JSONObject();
-
-		if(not.getClass() == Boolean_Assertion.class)
-			return not.toJSONSchema();
-		else
-			Utils.putContent(obj, not.getJSONSchemaKeyword(), not.toJSONSchema());
+		obj.put("not", not.toJSONSchema());
 
 		return obj;
 	}
 
 	@Override
 	public Assertion not() {
-		return not.not();
+		return not; //tolgo il not
 	}
 
 	@Override
 	public Assertion notElimination() {
-		return this.not().notElimination();
+		return this.not.not().notElimination(); //applico il not ai successivi
 	}
 
 	@Override

@@ -1,15 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class And_Assertion implements Assertion{
 	private List<Assertion> andList;
@@ -48,42 +45,27 @@ public class And_Assertion implements Assertion{
 		return "And_Assertion [" + andList + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		if(duplicates)
-			return "allOf";
-		return Utils.PUTCONTENT;
-
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
 		if(duplicates) {
 			JSONArray array = new JSONArray();
 			
-			for(Assertion assertion : andList) {
-				JSONObject obj = new JSONObject();
-				
-				if(assertion.getClass() == Boolean_Assertion.class)
-					array.add(assertion.toJSONSchema());
-				else
-					Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-				
-				array.add(obj);
-			}
-			
-			return array;
+			for(Assertion assertion : andList)
+				array.add(assertion.toJSONSchema());
+
+			JSONObject obj = new JSONObject();
+			obj.put("allOf", array);
+
+			return obj;
 
 		} else {
-
 			JSONObject obj = new JSONObject();
 
 			for (Assertion assertion : andList)
-				if (assertion.getClass() != Boolean_Assertion.class)
-					Utils.putContent(obj,
-							assertion.getJSONSchemaKeyword(),
-							assertion.toJSONSchema());
+				if (assertion.getClass() != Boolean_Assertion.class) {
+					obj.putAll((JSONObject) assertion.toJSONSchema());
+				}
 
 			return obj;
 		}
@@ -127,6 +109,7 @@ public class And_Assertion implements Assertion{
 		
 		if(str.isEmpty()) return "";
 		if(andList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
+		if(!duplicates) return "{\r\n" + str.substring(GrammarStringDefinitions.COMMA.length()) +"\r\n}";
 		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 }

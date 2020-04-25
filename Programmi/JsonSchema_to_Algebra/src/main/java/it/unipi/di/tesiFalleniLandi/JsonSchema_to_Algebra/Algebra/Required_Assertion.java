@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Required_Assertion implements Assertion{
 	private List<String> reqList;
@@ -28,19 +29,18 @@ public class Required_Assertion implements Assertion{
 		return "Required_Assertion [" + reqList + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "required";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
 		JSONArray array = new JSONArray();
-		for(String s : reqList)
-			array.add(s);
-			
-		return array;
+		JSONObject obj = new JSONObject();
+
+		for(String str : reqList)
+			array.add(str);
+
+		obj.put("required", array);
+
+		return obj;
 	}
 
 	@Override

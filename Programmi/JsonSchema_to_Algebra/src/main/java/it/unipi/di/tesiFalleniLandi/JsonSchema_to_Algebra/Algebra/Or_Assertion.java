@@ -1,15 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Or_Assertion implements Assertion{
 	private List<Assertion> orList;
@@ -34,30 +31,20 @@ public class Or_Assertion implements Assertion{
 	public String toString() {
 		return "Or_Assertion [" + orList + "]";
 	}
-	
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "anyOf";
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
-		
+
 		for(Assertion assertion : orList) {
-			JSONObject obj = new JSONObject();
-			
-			if(assertion.getClass() == Boolean_Assertion.class)
-				array.add(assertion.toJSONSchema());
-			else
-				Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-	
-			array.add(obj);
+			array.add(assertion.toJSONSchema());
 		}
-		
-		
-		return array;
+
+		obj.put("anyOf", array);
+
+		return obj;
 	}
 
 	@Override

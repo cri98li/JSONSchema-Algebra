@@ -46,7 +46,7 @@
 	    <artifactId>antlr4-runtime</artifactId>
 	    <version>4.8</version>
 	</dependency>
-	
+
 	<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-core -->
 	<dependency>
 	    <groupId>com.amazonaws</groupId>

@@ -1,9 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import org.json.simple.JSONObject;
-
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.json.simple.JSONObject;
 
 public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
@@ -20,51 +18,28 @@ public class IfThenElse_Assertion implements Assertion{
 				+ ", elseStatement=" + elseStatement + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "ifThenElse";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
-			
-		if(ifStatement != null) {
-			JSONObject tmp = new JSONObject();
 
-			if(ifStatement.getClass() == Boolean_Assertion.class)
-				obj.put("if", ifStatement.toJSONSchema());
-			else {
-				Utils.putContent(tmp, ifStatement.getJSONSchemaKeyword(), ifStatement.toJSONSchema());
-				obj.put("if", tmp);
-			}
-		}
-		if(thenStatement != null) {
-			JSONObject tmp = new JSONObject();
+		if(ifStatement != null)
+			obj.put("if", ifStatement.toJSONSchema());
 
-			if(thenStatement.getClass() == Boolean_Assertion.class)
-				obj.put("then", thenStatement.toJSONSchema());
-			else {
-				Utils.putContent(tmp, thenStatement.getJSONSchemaKeyword(), thenStatement.toJSONSchema());
-				obj.put("then", tmp);
-			}
-		}
-		if(elseStatement != null) {
-			JSONObject tmp = new JSONObject();
+		if(thenStatement != null)
+			obj.put("then", thenStatement.toJSONSchema());
 
-			if(elseStatement.getClass() == Boolean_Assertion.class)
-				obj.put("else", elseStatement.toJSONSchema());
-			else {
-				Utils.putContent(tmp, elseStatement.getJSONSchemaKeyword(), elseStatement.toJSONSchema());
-				obj.put("else", tmp);
-			}
-		}
+		if(elseStatement != null)
+			obj.put("else", elseStatement.toJSONSchema());
+
 			
 		return obj;
 	}
 
-	//if A then B else C --> (A and B) or (not(a) and C) 
+	//if A then B else C --> (A and B) or (not(a) and C)
+	//(S1 ∧ S2) ∨ ((¬S1) ∧ S3)
+	//(S1 ∧ S2) ∨ (¬S1)
+	//NEGATO: (¬S1 ∨ ¬S2) ∧ (S1)
 	//NEGATO: (not(A) or not(B)) and (A or not(C)) --? if A then not(C) else not(B) ???
 	@Override
 	public Assertion not() {	
@@ -80,7 +55,8 @@ public class IfThenElse_Assertion implements Assertion{
 			orElse.add(ifStatement);
 			orElse.add(elseStatement.not());
 			and.add(orElse);
-		}
+		}else
+			and.add(ifStatement);
 		
 		return and;
 	}

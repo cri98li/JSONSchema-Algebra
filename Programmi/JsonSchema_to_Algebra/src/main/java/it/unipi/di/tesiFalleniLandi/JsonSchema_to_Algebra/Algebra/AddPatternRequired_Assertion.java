@@ -1,31 +1,31 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 import java.util.LinkedList;
 import java.util.List;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-
 public class AddPatternRequired_Assertion implements Assertion{
-	private List<String> nameList; 
+	private List<String> pattList;
 	private Assertion additionalProperties;
 
 	public AddPatternRequired_Assertion() {
-		nameList = new LinkedList<>();
+		pattList = new LinkedList<>();
 	}
 	
-	public AddPatternRequired_Assertion(List<String> nameList, Assertion additionalProperties) {
-		this.nameList = nameList;
+	public AddPatternRequired_Assertion(List<String> pattList, Assertion additionalProperties) {
+		this.pattList = pattList;
 		this.additionalProperties = additionalProperties;
 	}
 
 	@Override
 	public String toString() {
-		return "AddPatternRequired_Assertion [nameList=" + nameList + ", additionalProperties=" + additionalProperties
+		return "AddPatternRequired_Assertion [nameList=" + pattList + ", additionalProperties=" + additionalProperties
 				+ "]";
 	}
 
-	public void setNameList(List<String> nameList) {
-		this.nameList = nameList;
+	public void setPattList(List<String> pattList) {
+		this.pattList = pattList;
 	}
 
 	public void setAdditionalProperties(Assertion additionalProperties) {
@@ -33,19 +33,24 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 	
 	public void addName(String name) {
-		nameList.add(name);
-	}
-
-	@Override
-	public String getJSONSchemaKeyword() {
-		// TODO Auto-generated method stub
-		return null;
+		pattList.add(name);
 	}
 
 	@Override
 	public Object toJSONSchema() {
-		// TODO Auto-generated method stub
-		return null;
+		And_Assertion andList = new And_Assertion();
+		Type_Assertion t = new Type_Assertion();
+		t.add(GrammarStringDefinitions.TYPE_OBJECT);
+		andList.add(t);
+		Properties_Assertion prop = new Properties_Assertion();
+		for(String s : pattList)
+			prop.addPatternProperties(s, new Boolean_Assertion(true));
+
+		prop.setAdditionalProperties(additionalProperties);
+		andList.add(prop);
+
+		return andList.toJSONSchema();
+
 	}
 
 	@Override
@@ -55,7 +60,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		for(String name : nameList) {
+		for(String name : pattList) {
 			properties.addProperties(name, new Boolean_Assertion(true));
 		}
 		
@@ -70,7 +75,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public Assertion notElimination() {
 		AddPatternRequired_Assertion apr = new AddPatternRequired_Assertion();
 		
-		apr.nameList.addAll(nameList);
+		apr.pattList.addAll(pattList);
 		apr.additionalProperties = additionalProperties.notElimination();
 		
 		return apr;
@@ -80,7 +85,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		for(String s : nameList)
+		for(String s : pattList)
 			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
 		
 		if(additionalProperties == null)

@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONArray;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.json.simple.JSONArray;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Type implements JSONSchemaElement {
 	protected String type;
@@ -58,10 +57,10 @@ public class Type implements JSONSchemaElement {
 		Iterator <String> it = type_array.iterator();
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+			str += GrammarStringDefinitions.COMMA + jsonTypeToGrammar(it.next());
 		}
 		
-		return str.substring(GrammarStringDefinitions.COMMA.length()); //ci arrivo eccome
+		return String.format(GrammarStringDefinitions.TYPE, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 	
 	@Override

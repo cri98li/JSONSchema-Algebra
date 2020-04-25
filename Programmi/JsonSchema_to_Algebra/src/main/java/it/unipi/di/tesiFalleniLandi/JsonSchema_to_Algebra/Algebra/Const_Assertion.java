@@ -1,16 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrArray;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Const_Assertion implements Assertion{
 	
@@ -25,36 +21,14 @@ public class Const_Assertion implements Assertion{
 		return "Const_Assertion [" + value + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "const";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
-		//const di tipi primitivi
+		JSONObject obj = new JSONObject();
 
-		if(value == null) return null;
+		obj.put("const", value);
 
-		if(value.getClass() == String.class
-				|| value.getClass() == Boolean.class
-				|| value.getClass() == Long.class)
-			return value;
-		
-		JSONArray JSONArray = new JSONArray();
-		List<Object> array = null;
-		
-		//caso array
-		try {
-			array = (List<Object>) value;
-			for(Object obj : array)
-				JSONArray.add(obj);
-			return array;
-		}catch(ClassCastException e){	}
-		
-		//è un JsonObject
-		return value;
+		return obj;
 	}
 
 	//TODO: not di boolean, isboolvalue?
@@ -69,9 +43,12 @@ public class Const_Assertion implements Assertion{
 		}
 
 		if(value.getClass() == Boolean.class) {
+			Or_Assertion or = new Or_Assertion();
 			type.add("bool");
+			or.add(type.not());
+			or.add(new IfBoolThen_Assertion((Boolean) value).not());
 
-			return type.not();
+			return or;
 		}
 		
 		if(value.getClass() == Long.class || value.getClass() == Double.class) {
@@ -102,12 +79,16 @@ public class Const_Assertion implements Assertion{
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
 			Or_Assertion or = new Or_Assertion();
+			BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
 
-			for (Object obj : array)
+			for (Object obj : array) {
 				items.add(new Const_Assertion(obj));
 
-			or.add(type.not());
+			}
+
+			or.add(betItems.not());
 			or.add(items.not());
+			or.add(type.not());
 
 			return or;
 		}
@@ -156,7 +137,7 @@ public class Const_Assertion implements Assertion{
 		if(value.getClass() == JSONObject.class)
 			return String.format(GrammarStringDefinitions.CONST, "\"" + ((JSONObject) value).toJSONString() + "\"");
 
-		return  toGrammarString((List<Object>) value);
+		return toGrammarString((List<Object>) value);
 
 	}
 

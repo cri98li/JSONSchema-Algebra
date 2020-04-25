@@ -36,11 +36,6 @@ public class BetItems_Assertion implements Assertion{
 		return "BetItems_Assertion [min=" + min + ", max=" + max + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "betweenItems";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
@@ -83,17 +78,12 @@ public class BetItems_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
-		
-		if(min != null && max != null) {
-			str = String.format(GrammarStringDefinitions.BETWEENITEMS, min, max);
-		} else if (min != null && max == null) {
-			str = String.format(GrammarStringDefinitions.BETWEENITEMS, min, GrammarStringDefinitions.NULLVALUE);
-		}else if(min == null && max != null) {
-			str = String.format(GrammarStringDefinitions.BETWEENITEMS, GrammarStringDefinitions.NULLVALUE, max);
-		}
-			
-		return str;
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+
+		if (this.min != null) min = this.min + "";
+		if (this.max != null) max = this.max + "";
+
+		return String.format(GrammarStringDefinitions.BETWEENITEMS, min, max);
 	}
 
 }

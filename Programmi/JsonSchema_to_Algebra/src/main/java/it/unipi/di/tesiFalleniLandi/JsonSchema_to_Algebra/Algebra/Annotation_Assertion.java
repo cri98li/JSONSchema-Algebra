@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.HashMap;
 import org.json.simple.JSONObject;
+
+import java.util.HashMap;
 
 public class Annotation_Assertion implements Assertion{
 	private HashMap<String, String> annotations;
@@ -12,11 +13,6 @@ public class Annotation_Assertion implements Assertion{
 	
 	public void add(String key, String value) {
 		annotations.put(key, value);
-	}
-	
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "unknow";
 	}
 
 	@SuppressWarnings("unchecked")

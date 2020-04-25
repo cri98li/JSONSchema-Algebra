@@ -1,10 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.IfThenElse;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class PatternRequired_Assertion implements Assertion{
 	private HashMap<String, Assertion> pattReq;
@@ -31,15 +32,22 @@ public class PatternRequired_Assertion implements Assertion{
 		return "PatternRequired_Assertion [" + pattReq + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "requiredPattern";
-	}
-	
+	//TODO: è giusta??
 	@Override
 	public Object toJSONSchema() {
-		// TODO Auto-generated method stub
-		return null;
+		Type_Assertion t = new Type_Assertion();
+		t.add(GrammarStringDefinitions.TYPE_OBJECT);
+
+		And_Assertion and = new And_Assertion();
+		for(Entry<String, Assertion> entry : pattReq.entrySet()) {
+			Properties_Assertion pro = new Properties_Assertion();
+			pro.addPatternProperties(entry.getKey(), entry.getValue().not());
+			and.add(pro.not());
+		}
+
+		return new IfThenElse_Assertion(t, and, null).toJSONSchema();
+
+		//throw new UnsupportedOperationException();
 	}
 	
 	@Override

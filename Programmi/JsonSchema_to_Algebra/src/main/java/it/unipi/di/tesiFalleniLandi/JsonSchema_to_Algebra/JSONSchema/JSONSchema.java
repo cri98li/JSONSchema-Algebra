@@ -1,16 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.json.simple.JSONObject;
-
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.json.simple.JSONObject;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class JSONSchema implements JSONSchemaElement{
 	
@@ -291,7 +286,7 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			
 			//TYPE SEPARATION
-			if(entry.getKey().equals("type")) {
+			/*if(entry.getKey().equals("type")) {
 				AnyOf anyOf = new AnyOf();
 				Type type = ((Type)entry.getValue());
 				
@@ -316,7 +311,7 @@ public class JSONSchema implements JSONSchemaElement{
 				tmp.jsonSchema.put("anyOf", anyOf);
 				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
 				continue;
-			}
+			}*/
 			
 			//$schema, id e %defs non vanno dentro allOf
 			if(entry.getKey().equals("$schema") 

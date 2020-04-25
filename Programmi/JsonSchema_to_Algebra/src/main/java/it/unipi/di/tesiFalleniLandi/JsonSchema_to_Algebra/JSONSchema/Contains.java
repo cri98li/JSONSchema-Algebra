@@ -49,7 +49,7 @@ public class Contains implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
 		String str_contains = "";
 
 		if(minContains != null) min = minContains+"";

@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenItems implements JSONSchemaElement{
 	private Object minItems;
@@ -41,19 +40,12 @@ public class BetweenItems implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
-		
-			if(minItems != null && maxItems != null) {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, maxItems);
-			} else if (minItems != null && maxItems == null) {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, minItems, GrammarStringDefinitions.NULLVALUE);
-			}else if(minItems == null && maxItems != null) {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, GrammarStringDefinitions.NULLVALUE, maxItems);
-			}/*else {
-				str = String.format(GrammarStringDefinitions.BETWEENITEMS, "", "");
-			}*/
-			
-		return str;
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+
+		if (minItems != null) min = minItems + "";
+		if (maxItems != null) max = maxItems + "";
+
+		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
 	}
 
 	@Override

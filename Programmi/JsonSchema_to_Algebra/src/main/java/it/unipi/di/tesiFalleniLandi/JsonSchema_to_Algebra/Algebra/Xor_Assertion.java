@@ -1,15 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrBoolean;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Xor_Assertion implements Assertion{
 	private List<Assertion> xorList;
@@ -35,44 +32,41 @@ public class Xor_Assertion implements Assertion{
 		return "Xor_Assertion [" + xorList + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "oneOf";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		for(Assertion assertion : xorList) {
-			JSONObject obj = new JSONObject();
-			if(assertion.getClass() == Boolean_Assertion.class)
-				array.add(assertion.toJSONSchema());
-			else
-				Utils.putContent(obj, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-			array.add(obj);
+			array.add(assertion.toJSONSchema());
 		}
-		
-		return array;
+
+		obj.put("oneOf", array);
+
+		return obj;
 	}
 
 	// A xor B = (A or B) and not(A and B)
 	// not(A xor B) = (not(A) and not(b)) or (A and B)
+	// A XOR B XOR C
+	// NEGATO: (A AND NOT(B) AND NOT(X)) OR (NOT(A) AND B AND NOT(X)) OR (NOT(A) AND NOT(B) AND X)
 	@Override
 	public Assertion not() {
-		And_Assertion andList = new And_Assertion();
-		And_Assertion notAndList = new And_Assertion();
+		List<Assertion> notXorList = new LinkedList<>();
+		for(Assertion a : xorList) notXorList.add(a.not());
+
 		Or_Assertion orList = new Or_Assertion();
-		
-		for(Assertion assertion : xorList) {
-			andList.add(assertion);
-			notAndList.add(assertion.not());
+
+		for(int i = 0; i < xorList.size(); i++) {
+			And_Assertion andList = new And_Assertion();
+			for (int j = 0; j < xorList.size(); j++) {
+				if (i == j) andList.add(xorList.get(j));
+				else andList.add(notXorList.get(j));
+			}
+			orList.add(andList);
 		}
-		
-		orList.add(notAndList);
-		orList.add(andList);
-		
+
 		return orList;
 	}
 

@@ -38,31 +38,17 @@ public class Properties_Assertion implements Assertion{
 				+ ", additionalProperties=" + additionalProperties + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "properties";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
-		
-		//Inserisco tutto in patternProperties perchè lavora anche come properties
+
 		if(properties != null && !properties.isEmpty()){
-			JSONObject tmp = new JSONObject();
 			Set<String> keys = properties.keySet();
-			
-			for(String key : keys) {
-				JSONObject tmp2 = new JSONObject();
-				
-				if(properties.get(key).getClass() == Boolean_Assertion.class)
-					tmp.put(key, properties.get(key).toJSONSchema());
-				else
-					Utils.putContent(tmp2, properties.get(key).getJSONSchemaKeyword(), properties.get(key).toJSONSchema());
-				
-				tmp.put(key, tmp2);
-			}
+			JSONObject tmp = new JSONObject();
+
+			for(String key : keys)
+				tmp.put(key, properties.get(key).toJSONSchema());
 				
 			obj.put("properties", tmp);
 		}
@@ -71,29 +57,14 @@ public class Properties_Assertion implements Assertion{
 			JSONObject tmp = new JSONObject();
 			Set<String> keys = patternProperties.keySet();
 			
-			for(String key : keys) {
-				JSONObject tmp2 = new JSONObject();
-				
-				if(patternProperties.get(key).getClass() == Boolean_Assertion.class)
-					tmp.put(key, patternProperties.get(key).toJSONSchema());
-				else
-					Utils.putContent(tmp2, patternProperties.get(key).getJSONSchemaKeyword(), patternProperties.get(key).toJSONSchema());
-				
-				tmp.put(key, tmp2);
-			}
+			for(String key : keys)
+				tmp.put(key, patternProperties.get(key).toJSONSchema());
 				
 			obj.put("patternProperties", tmp);
 		}
 		
-		if(additionalProperties != null) {
-			JSONObject tmp = new JSONObject();
-			if(additionalProperties.getClass() == Boolean_Assertion.class)
-				obj.put("additionalProperties", additionalProperties.toJSONSchema());
-			else{
-				Utils.putContent(tmp, additionalProperties.getJSONSchemaKeyword(), additionalProperties.toJSONSchema());
-				obj.put("additionalProperties", tmp);
-			}
-		}
+		if(additionalProperties != null)
+			obj.put("additionalProperties", additionalProperties.toJSONSchema());
 		
 		return obj;
 	}

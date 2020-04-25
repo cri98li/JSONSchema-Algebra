@@ -17,13 +17,11 @@ public class NotPattern_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "notPattern";
-	}
-
-	@Override
 	public Object toJSONSchema() {
-		return notPattern;
+		Type_Assertion t = new Type_Assertion();
+		t.add(GrammarStringDefinitions.TYPE_STRING);
+		return new IfThenElse_Assertion(t, new Not_Assertion(new Pattern_Assertion(notPattern)), null).toJSONSchema();
+
 	}
 
 	@Override

@@ -1,12 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AntlrArray;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Enum_Assertion implements Assertion{
 
@@ -29,21 +28,18 @@ public class Enum_Assertion implements Assertion{
 		return "Enum_Assertion [" + _enum + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "enum";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSONSchema() {
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
+		obj.put("enum", array);
 		
 		for(Object element : _enum) {
 			array.add(element);
 		}
-		
-		return array;
+
+		return obj;
 	}
 
 	@Override

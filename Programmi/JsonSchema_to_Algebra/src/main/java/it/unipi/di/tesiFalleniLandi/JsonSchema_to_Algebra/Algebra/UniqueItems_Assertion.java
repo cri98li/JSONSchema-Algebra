@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class UniqueItems_Assertion implements Assertion{
 	
@@ -13,13 +14,11 @@ public class UniqueItems_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "uniqueItems";
-	}
+	public JSONObject toJSONSchema() {
+		JSONObject obj = new JSONObject();
+		obj.put("uniqueItems", true);
 
-	@Override
-	public Boolean toJSONSchema() {
-		return true;
+		return obj;
 	}
 
 	@Override

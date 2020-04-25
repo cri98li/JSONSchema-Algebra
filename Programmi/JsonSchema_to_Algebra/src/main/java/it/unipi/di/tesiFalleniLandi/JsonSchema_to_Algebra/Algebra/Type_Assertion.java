@@ -1,12 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.json.simple.JSONArray;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Type_Assertion implements Assertion{
 	private List<String> types;
@@ -24,38 +24,40 @@ public class Type_Assertion implements Assertion{
 		return "Type_Assertion [" + types + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "type";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
-		if(types.size() == 1)
-			return this.toJsonTypeName(types.get(0));
-		
+		JSONObject obj = new JSONObject();
+
+		if(types.size() == 1){
+			obj.put("type", toJsonTypeName(types.get(0)));
+			return obj;
+		}
+
 		JSONArray array = new JSONArray();
-		for(String s : types)
-			array.add(this.toJsonTypeName(s));
-				
-		return array;
+		for(String str : types)
+			array.add(toJsonTypeName(str));
+
+		obj.put("type", array);
+
+		return obj;
 	}
 
 	@Override
 	public Assertion not() {
 		Type_Assertion notType = new Type_Assertion();
-		notType.add("str");
-		notType.add("obj");
-		notType.add("num");
-		notType.add("int");
-		notType.add("arr");
-		notType.add("bool");
-		notType.add("null");
-		notType.add("numnotint");
-		
-		for(String type : types)
+		notType.add(GrammarStringDefinitions.TYPE_STRING);
+		notType.add(GrammarStringDefinitions.TYPE_OBJECT);
+		notType.add(GrammarStringDefinitions.TYPE_NUMBER);
+		notType.add(GrammarStringDefinitions.TYPE_ARRAY);
+		notType.add(GrammarStringDefinitions.TYPE_BOOLEAN);
+		notType.add(GrammarStringDefinitions.TYPE_NULL);
+
+		for(String type : types) {
 			notType.types.remove(type);
+			if(type.equals(GrammarStringDefinitions.TYPE_INTEGER))
+				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+		}
 		
 		return notType;
 	}
@@ -74,28 +76,12 @@ public class Type_Assertion implements Assertion{
 		String str = "";
 		
 		Iterator <String> it = types.iterator();
-		if(it.hasNext())
-			str += String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.OR + String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(it.next()));
+			str += GrammarStringDefinitions.COMMA + it.next();
 		}
 		
-		return str;
-	}
-	
-	private String jsonTypeToGrammar(String type) {
-		switch(type) {
-		case "arr": return GrammarStringDefinitions.TYPE_ARRAY;
-		case "int": return GrammarStringDefinitions.TYPE_INTEGER;
-		case "num": return GrammarStringDefinitions.TYPE_NUMBER;
-		case "str": return GrammarStringDefinitions.TYPE_STRING;
-		case "obj": return GrammarStringDefinitions.TYPE_OBJECT;
-		case "bool": return GrammarStringDefinitions.TYPE_BOOLEAN;
-		case "null": return GrammarStringDefinitions.TYPE_NULL;
-		case "numnotint": return GrammarStringDefinitions.TYPE_NUMNOTINT;
-		}
-		return null;
+		return String.format(GrammarStringDefinitions.TYPE, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
 	
 	private String toJsonTypeName(String type) {
@@ -107,7 +93,6 @@ public class Type_Assertion implements Assertion{
 		case "obj": return "object";
 		case "bool": return "boolean";
 		case "null": return "null";
-		//case "numnotint": return GrammarStringDefinitions.TYPE_NUMNOTINT; //bisogna modificare putContent o la keyword ritornata
 		}
 		return null;
 	}

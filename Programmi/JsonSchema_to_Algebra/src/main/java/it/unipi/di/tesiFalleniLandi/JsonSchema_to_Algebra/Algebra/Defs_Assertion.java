@@ -1,13 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 
 //TODO: AGGIORNARE I METODI PER ROOTDEF
 public class Defs_Assertion implements Assertion{
@@ -25,12 +23,6 @@ public class Defs_Assertion implements Assertion{
 	public void setRootDef(Assertion rootDef) {
 		this.rootDef = rootDef;
 	}
-	
-	@Override
-	public String getJSONSchemaKeyword() {
-		if(rootDef != null) return "rootDef";
-		return "$defs";
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -38,48 +30,24 @@ public class Defs_Assertion implements Assertion{
 		JSONObject obj = new JSONObject();
 
 		//corpo del json schema
-		if(rootDef != null) {
-			if(rootDef.getClass() != Boolean_Assertion.class) // == è un caso particolare (può succedere solo se si parte dalla grammatica) "Caso rognoso" di un crucco
-				Utils.putContent(obj, rootDef.getJSONSchemaKeyword(), rootDef.toJSONSchema());
-			
+		if(rootDef != null)
+			if (rootDef.getClass() != Boolean_Assertion.class) // == è un caso particolare (può succedere solo se si parte dalla grammatica) "Caso rognoso" di un crucco maledetto
+				obj = (JSONObject) rootDef.toJSONSchema();
+
+		if(defs != null) {
 			JSONObject def = new JSONObject();
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
-			
-			for(Entry<String,Assertion> entry : entrySet) {
-				JSONObject tmp = new JSONObject();
-				if(entry.getValue().getClass() == Boolean_Assertion.class)
-					def.put(entry.getKey(), entry.getValue().toJSONSchema());
-				else {
-					Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
-					def.put(entry.getKey(), tmp);
-				}
 
+			for (Entry<String, Assertion> entry : entrySet) {
+				JSONObject tmp = new JSONObject();
 				def.put(entry.getKey(), entry.getValue().toJSONSchema());
 			}
 
 			obj.put("$defs", def);
-			return obj;
 		}
 
-		/*
-		//altre definizioni
-		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
-		
-		for(Entry<String,Assertion> entry : entrySet) {
-			JSONObject tmp = new JSONObject();
-			if(entry.getValue().getClass() == Boolean_Assertion.class)
-				obj.put(entry.getKey(), entry.getValue().toJSONSchema());
-			else {
-				Utils.putContent(tmp, entry.getValue().getJSONSchemaKeyword(), entry.getValue().toJSONSchema());
-				obj.put(entry.getKey(), tmp);
-			}
-		}
-		*/
-		
 		return obj;
 	}
-
-	
 
 	@Override
 	public String toString() {
@@ -105,22 +73,34 @@ public class Defs_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		Defs_Assertion def = new Defs_Assertion();
-		
-		def.defs.putAll(defs); //va fatto solo al rootDef?
-		def.rootDef = rootDef.notElimination();
+
+		if(defs != null){
+			def.defs.putAll(defs);
+
+			//inserisco le def complementari
+			for(Entry<String, Assertion> entry : defs.entrySet())
+				if(!entry.getKey().contains(GrammarStringDefinitions.NOT_DEFS+entry.getKey())) //controllo che non esista già
+					def.defs.put(GrammarStringDefinitions.NOT_DEFS + entry.getKey(), entry.getValue().not());
+		}
+
+		if(rootDef != null)		def.rootDef = rootDef.notElimination();
 		
 		return def;
 	}
 
 	@Override
 	public String toGrammarString() {
-		String def = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
-		
-		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
+		String def = "";
 
-		for(Entry<String, Assertion> entry : entrySet)
-			def+= GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
-		
+		if(rootDef != null ) def = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());;
+
+		if(def != null) {
+			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
+
+			for (Entry<String, Assertion> entry : entrySet)
+				def += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+		}
+		if(def.isEmpty()) return "";
 		return def.substring(GrammarStringDefinitions.COMMA.length());
 	}
 }

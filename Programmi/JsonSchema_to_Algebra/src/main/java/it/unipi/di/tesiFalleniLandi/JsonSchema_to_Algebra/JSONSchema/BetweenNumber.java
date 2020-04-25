@@ -93,9 +93,8 @@ public class BetweenNumber implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str1 = ""; //bet
 		String str2 = ""; //xbet
-		
-		
-		String min = GrammarStringDefinitions.NULLVALUE, max = GrammarStringDefinitions.NULLVALUE;
+
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
 		if(minimum != null) min = minimum+"";
 		if(maximum != null) max = maximum+"";
 		

@@ -15,13 +15,9 @@ public class ExName_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "propertyNames";
-	}
-
-	@Override
 	public Object toJSONSchema() {
-		return names.toJSONSchema();
+		//throw new UnsupportedOperationException();
+		return new Not_Assertion(new Names_Assertion(names));
 	}
 	
 	@Override

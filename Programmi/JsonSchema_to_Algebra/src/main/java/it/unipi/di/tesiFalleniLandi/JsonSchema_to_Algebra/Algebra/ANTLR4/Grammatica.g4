@@ -40,7 +40,7 @@ assertion : 		type_assertion																					#NewTypeAssertion
 	;
 
 	
-type_assertion : 'type''(' (TYPE | NULL) ')'																		#ParseTypeAssertion;	
+type_assertion : 'type''[' (TYPE | NULL) (',' (TYPE | NULL))*']'													#ParseTypeAssertion;
 
 between_assertion : 'bet''(' json_value ',' json_value ')'															#ParseBetweenAssertion;		
 
@@ -80,8 +80,8 @@ pattern_assertion : 'pattern''(' STRING ')'																			#ParsePattern;
 
 not_pattern_assertion : 'notPattern''(' STRING ')'																	#ParseNotPattern;
 
-items_assertion : 'items''(' assertion (',' assertion)*';'')'														#ParseOnlyItems
-					| 'items''(' (assertion (',' assertion)*)?';'assertion')'										#ParseAdditionalItems
+items_assertion : 'items''[' assertion (',' assertion)*';'']'														#ParseOnlyItems
+					| 'items''[' (assertion (',' assertion)*)?';'assertion']'										#ParseAdditionalItems
 					;
 
 contains_assertion : 'contains''(' json_value ',' json_value ';' assertion	')'										#ParseContains;
@@ -114,16 +114,17 @@ json_value :  			NULL																						#NullValue
 				|		'['(json_value(',' json_value)*)?']'														#ArrayValue
 				|		BOOLEAN																						#BooleanValue
 				|		'{' (STRING ':' json_value (',' STRING ':' json_value)*)? '}'								#JsonObjectValue
+				|       ('+'|'-')? 'inf'                                                                            #InfValue
 				;
 
 
 NULL : 'null';
-TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool' | 'numNotInt';
+TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool';
 INT : '-'?[0-9]+; // Define token INT as one or more digits
 DOUBLE: '-'?[0-9]+'.'[E0-9]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
 STRING : '"' .*? '"';
-BOOLEAN : 'true' | 'false';
+BOOLEAN :  't' | 'tt' | 'f' | 'ff' | 'true' | 'false' ;
 
 fragment ESC
    : '\\' (["\\/bfnrt] | UNICODE)

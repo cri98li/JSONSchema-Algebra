@@ -13,11 +13,6 @@ public class Boolean_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Object toJSONSchema() {
 		return value;
 	}

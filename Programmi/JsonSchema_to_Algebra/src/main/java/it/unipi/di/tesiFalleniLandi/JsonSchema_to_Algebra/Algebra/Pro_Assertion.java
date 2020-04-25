@@ -30,10 +30,6 @@ public class Pro_Assertion implements Assertion{
 		return "Pro_Assertion [minProperties=" + min + ", maxProperties=" + max + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "betweenProperties";
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -69,7 +65,11 @@ public class Pro_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		// TODO Auto-generated method stub
+		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+
+		if(this.min != null) min = this.min+"";
+		if(this.max != null) max = this.max+"";
+
 		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
 	}
 }

@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Pattern_Assertion implements Assertion{
 	private String pattern;
@@ -17,13 +18,11 @@ public class Pattern_Assertion implements Assertion{
 	}
 
 	@Override
-	public String getJSONSchemaKeyword() {
-		return "pattern";
-	}
-
-	@Override
 	public Object toJSONSchema() {
-		return pattern;
+		JSONObject obj = new JSONObject();
+		obj.put("pattern", pattern);
+
+		return obj;
 	}
 
 	@Override

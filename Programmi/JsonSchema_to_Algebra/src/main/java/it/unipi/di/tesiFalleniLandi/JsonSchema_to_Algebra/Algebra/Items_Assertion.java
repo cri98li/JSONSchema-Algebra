@@ -1,20 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
-import org.json.simple.JSONValue;
-
 //TODO: pensare ad items di jsonObject
 public class Items_Assertion implements Assertion{
-
 	private List<Assertion> itemsArray;
 	private Assertion additionalItems;
 	
@@ -40,41 +36,21 @@ public class Items_Assertion implements Assertion{
 		return "Items_Assertion [itemsArray=" + itemsArray + ", additionalItems=" + additionalItems + "]";
 	}
 
-	@Override
-	public String getJSONSchemaKeyword() {
-		return "items";
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
+		JSONArray array = new JSONArray();
 		JSONObject obj = new JSONObject();
-		if(itemsArray != null)
-			if(itemsArray.size() == 1) {
-				if(itemsArray.get(0).getClass() != Boolean_Assertion.class)
-					Utils.putContent(obj, itemsArray.get(0).getJSONSchemaKeyword(), itemsArray.get(0).toJSONSchema());
-				else obj.put("items", itemsArray.get(0).toJSONSchema());
-			}else {
-				JSONArray array = new JSONArray();
-				for(Assertion assertion : itemsArray) {
-					JSONObject tmp = new JSONObject();
-					if(assertion.getClass() != Boolean_Assertion.class)
-						Utils.putContent(tmp, assertion.getJSONSchemaKeyword(), assertion.toJSONSchema());
-					array.add(tmp);
-				}
-				obj.put("items", array);
-			}
-		
-		if(additionalItems != null) {
-			JSONObject tmp = new JSONObject();
-			
-			if(additionalItems.getClass() == Boolean_Assertion.class)
-				obj.put("additionalItems", additionalItems.toJSONSchema());
-			else {
-				Utils.putContent(tmp, additionalItems.getJSONSchemaKeyword(), additionalItems.toJSONSchema());
-				obj.put("additionalItems", tmp);
-			}
+
+		if(itemsArray != null) {
+			for (Assertion assertion : itemsArray)
+				array.add(assertion.toJSONSchema());
+
+			obj.put("items", array);
 		}
+
+		if(additionalItems != null)
+			obj.put("additionalItems", additionalItems.toJSONSchema());
 	
 		return obj;
 	}
@@ -103,13 +79,11 @@ public class Items_Assertion implements Assertion{
 			itemAndAssertion.add(itemAssertion);
 			
 			itemAndAssertion.add(new Exist_Assertion((long) (i+1), null, new Boolean_Assertion(true)));
-			itemAssertion.setAdditionalItems(new Boolean_Assertion(true));
 			
 			for(int j = 0; j < itemsArray.size(); j++)
 				itemAssertion.add((i == j) ? itemsArray.get(i).not() : new Boolean_Assertion(true));
 		}
-		
-		
+
 		if(additionalItems == null) return rootAnd;
 		
 		//ADDITIONAL ITEMS
@@ -121,14 +95,13 @@ public class Items_Assertion implements Assertion{
 		do {
 			And_Assertion andAdditionalItems = new And_Assertion();
 			rootOr.add(andAdditionalItems);
-			andAdditionalItems.add(new Exist_Assertion((long) sumbit(bm), null, new Boolean_Assertion(true)));
+			andAdditionalItems.add(new Exist_Assertion((long) sumbit(bm) + 1, null, notAdditionalItems));
 			Items_Assertion itemsAdditionalItems = new Items_Assertion();
 			andAdditionalItems.add(itemsAdditionalItems);
-			
+
 			for(int i = 0; i < bm.length; i++)
-				itemsAdditionalItems.add(bm[i] ? additionalItems : notAdditionalItems);
-				
-			
+				itemsAdditionalItems.add( (bm[i] == false) ? additionalItems : notAdditionalItems );
+
 		}while(addbit(bm, 0));
 		
 		
@@ -177,14 +150,14 @@ public class Items_Assertion implements Assertion{
 		if(itemsArray != null) {
 
 			if (itemsArray.size() == 1)
-				return String.format(GrammarStringDefinitions.ITEMS, "", itemsArray.get(0).toGrammarString());
+				return String.format(GrammarStringDefinitions.ITEMS, itemsArray.get(0).toGrammarString(), "");
 
 			Iterator<Assertion> it = itemsArray.iterator();
 			if (it.hasNext())
 				str += it.next().toGrammarString();
 
 			while (it.hasNext()) {
-				str += "," + it.next().toGrammarString();
+				str += GrammarStringDefinitions.COMMA + it.next().toGrammarString();
 			}
 		}
 		
