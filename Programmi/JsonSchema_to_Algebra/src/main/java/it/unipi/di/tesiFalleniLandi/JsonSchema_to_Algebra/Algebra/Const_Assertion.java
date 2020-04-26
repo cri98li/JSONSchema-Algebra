@@ -78,7 +78,8 @@ public class Const_Assertion implements Assertion{
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
 			Or_Assertion or = new Or_Assertion();
-			BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
+			//BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
+			Exist_Assertion betItems = new Exist_Assertion((long) array.size(), (long) array.size(), new Boolean_Assertion(true));
 
 			for (Object obj : array)
 				items.add(new Const_Assertion(obj));

@@ -81,7 +81,7 @@ public class Items_Assertion implements Assertion{
 			itemAndAssertion.add(new Exist_Assertion((long) (i+1), null, new Boolean_Assertion(true)));
 			
 			for(int j = 0; j < itemsArray.size(); j++)
-				itemAssertion.add((i == j) ? itemsArray.get(i).not() : new Boolean_Assertion(true));
+				itemAssertion.add((i == j && itemsArray.get(i).not() != null) ? itemsArray.get(i).not(): new Boolean_Assertion(true));
 		}
 
 		if(additionalItems == null) return rootAnd;

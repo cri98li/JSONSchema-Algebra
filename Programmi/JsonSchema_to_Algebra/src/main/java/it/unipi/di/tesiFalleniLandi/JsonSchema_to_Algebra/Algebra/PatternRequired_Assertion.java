@@ -61,7 +61,9 @@ public class PatternRequired_Assertion implements Assertion{
 		
 		for(Entry<String, Assertion> entry : entrySet) {
 			Properties_Assertion properties = new Properties_Assertion();
-			properties.addProperties(entry.getKey(), entry.getValue().not());
+			Assertion not = entry.getValue().not();
+			if(not != null)
+				properties.addProperties(entry.getKey(), not);
 			or.add(properties);
 		}
 		
@@ -77,7 +79,9 @@ public class PatternRequired_Assertion implements Assertion{
 		Set<Entry<String, Assertion>> entrySet = pattReq.entrySet();
 		
 		for(Entry<String, Assertion> entry : entrySet) {
-			pattReqAss.add(entry.getKey(), entry.getValue().notElimination());
+			Assertion not = entry.getValue().notElimination();
+			if(not != null)
+				pattReqAss.add(entry.getKey(), not);
 		}
 		
 		return pattReqAss;

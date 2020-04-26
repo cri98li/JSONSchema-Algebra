@@ -54,7 +54,11 @@ public class Xor_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		List<Assertion> notXorList = new LinkedList<>();
-		for(Assertion a : xorList) notXorList.add(a.not());
+		for(Assertion a : xorList) {
+			Assertion not = a.not();
+			if(not != null)
+				notXorList.add(not);
+		}
 
 		And_Assertion andList = new And_Assertion();
 
@@ -73,8 +77,11 @@ public class Xor_Assertion implements Assertion{
 	public Assertion notElimination() {
 		Xor_Assertion xor = new Xor_Assertion();
 		
-		for(Assertion assertion : xorList)
-			xor.add(assertion.notElimination());
+		for(Assertion assertion : xorList) {
+			Assertion not = assertion.notElimination();
+			if(not != null)
+				xor.add(not);
+		}
 		
 		return xor;
 	}

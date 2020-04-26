@@ -29,7 +29,8 @@ public class Names_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		and.add(type);
-		and.add(new ExName_Assertion(names.not()));
+		if(names.not() != null)
+			and.add(new ExName_Assertion(names.not()));
 		
 		return and;
 	}

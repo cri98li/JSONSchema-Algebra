@@ -76,9 +76,9 @@ public class And_Assertion implements Assertion{
 		Or_Assertion or = new Or_Assertion();
 		
 		for(Assertion assertion : andList) {
-			Assertion notAssertion = assertion.not();
-			if(notAssertion != null)
-				or.add(notAssertion);
+			Assertion not = assertion.not();
+			if(not != null)
+				or.add(not);
 		}
 		
 		return or;
@@ -88,8 +88,11 @@ public class And_Assertion implements Assertion{
 	public Assertion notElimination() {
 		And_Assertion and = new And_Assertion();
 		
-		for(Assertion assertion : andList)
-			and.add(assertion.notElimination());
+		for(Assertion assertion : andList) {
+			Assertion not = assertion.notElimination();
+			if(not != null)
+				and.add(not);
+		}
 		
 		return and;
 	}

@@ -82,13 +82,29 @@ public class Properties_Assertion implements Assertion{
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 		
 		for(Entry<String, Assertion> entry : entrySet) {
-			or.add(new PatternRequired_Assertion(entry.getKey(), entry.getValue().not()));
-			addPattRequired.addName(entry.getKey());
+			Assertion not = entry.getValue().not();
+			if(not != null) {
+				or.add(new PatternRequired_Assertion(entry.getKey(), not));
+				addPattRequired.addName(entry.getKey());
+			}
+		}
+
+		entrySet = patternProperties.entrySet();
+
+		for(Entry<String, Assertion> entry : entrySet) {
+			Assertion not = entry.getValue().not();
+			if(not != null) {
+				or.add(new PatternRequired_Assertion(entry.getKey(), not));
+				addPattRequired.addName(entry.getKey());
+			}
 		}
 		
 		if(additionalProperties != null) {
-			addPattRequired.setAdditionalProperties(additionalProperties.not());
-			or.add(addPattRequired);
+			Assertion not = additionalProperties.not();
+			if(not != null) {
+				addPattRequired.setAdditionalProperties(not);
+				or.add(addPattRequired);
+			}
 		}
 		
 		return and;
@@ -100,11 +116,25 @@ public class Properties_Assertion implements Assertion{
 		
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 		
-		for(Entry<String, Assertion> entry : entrySet)
-			prop.addProperties(entry.getKey(), entry.getValue().notElimination());
+		for(Entry<String, Assertion> entry : entrySet) {
+			Assertion not = entry.getValue().notElimination();
+			if(not != null)
+				prop.addProperties(entry.getKey(), not);
+		}
+
+		entrySet = patternProperties.entrySet();
+
+		for(Entry<String, Assertion> entry : entrySet) {
+			Assertion not = entry.getValue().notElimination();
+			if (not != null)
+				prop.addPatternProperties(entry.getKey(), not);
+		}
 		
-		if(additionalProperties != null)
-			prop.setAdditionalProperties(additionalProperties.notElimination());
+		if(additionalProperties != null) {
+			Assertion not = additionalProperties.notElimination();
+			if (not != null)
+				prop.setAdditionalProperties(additionalProperties.notElimination());
+		}
 		
 		return prop;
 	}
@@ -129,7 +159,6 @@ public class Properties_Assertion implements Assertion{
 				if(!returnedValue.isEmpty())
 					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
 			}
-
 		}
 
 		if(additionalProperties != null)

@@ -26,15 +26,6 @@ public class Exist_Assertion implements Assertion{
 	public void setContains(Assertion schema) {
 		this.contains = schema;
 	}
-	
-	public Exist_Assertion intersect(Exist_Assertion exist) {
-		Exist_Assertion intersectedExist = new Exist_Assertion();
-		
-		intersectedExist.setMin((min > exist.min)? min:exist.min);
-		intersectedExist.setMax((max < exist.max)? max:exist.max);
-		
-		return intersectedExist;
-	}
 
 	@Override
 	public String toString() {
@@ -45,6 +36,13 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
+		if(contains.getClass() == Boolean_Assertion.class && ((Boolean_Assertion) contains).getValue() == true){
+
+			if(min != null) obj.put("minItems", min);
+			if(max != null) obj.put("maxItems", max);
+
+			return obj;
+		}
 
 		if(contains != null)
 			obj.put("contains", contains.toJSONSchema());
@@ -91,10 +89,13 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		if (this.min != null) min = this.min + "";
+		if (this.max != null) max = this.max + "";
 
-		if(this.min != null) min = this.min+"";
-		if(this.max != null) max = this.max+"";
+		if(contains.getClass() == Boolean_Assertion.class && ((Boolean_Assertion) contains).getValue() == true)
+			return String.format(GrammarStringDefinitions.BETWEENITEMS, min, max);
+		else
+			return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
 
-		return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
 	}
 }

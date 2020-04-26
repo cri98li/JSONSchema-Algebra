@@ -514,16 +514,16 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 	@Override
-	public BetItems_Assertion visitNewBetweenItems(GrammaticaParser.NewBetweenItemsContext ctx) {
-		return (BetItems_Assertion) visit(ctx.bet_items_assertion());
+	public Exist_Assertion visitNewBetweenItems(GrammaticaParser.NewBetweenItemsContext ctx) {
+		return (Exist_Assertion) visit(ctx.bet_items_assertion());
 	}
 
 	@Override
-	public BetItems_Assertion visitParseBetItemsAssertion(GrammaticaParser.ParseBetItemsAssertionContext ctx) {
+	public Exist_Assertion visitParseBetItemsAssertion(GrammaticaParser.ParseBetItemsAssertionContext ctx) {
 		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
 		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 
-		return new BetItems_Assertion(min.getValue(), max.getValue());
+		return new Exist_Assertion(min.getValue(), max.getValue(), new Boolean_Assertion(true));
 	}
 
 	@Override

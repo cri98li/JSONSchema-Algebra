@@ -31,7 +31,11 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		return this.not.not().notElimination(); //applico il not ai successivi
+		Assertion not = this.not.not();
+		if(not != null)
+			return not.notElimination(); //applico il not ai successivi
+
+		return null;
 	}
 
 	@Override

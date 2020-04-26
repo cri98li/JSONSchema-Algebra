@@ -32,4 +32,8 @@ public class Boolean_Assertion implements Assertion{
 		return value+"";
 	}
 
+
+	public boolean getValue() {
+		return value;
+	}
 }

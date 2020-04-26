@@ -23,7 +23,6 @@ public class MainClass_Algebra {
         String path = "test_grammatica.txt";
 		
         try (Reader reader = new FileReader(path)){
-        	try {
 
 				GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
 				lexer.removeErrorListeners();
@@ -44,10 +43,6 @@ public class MainClass_Algebra {
 				System.out.println(JSON.toJSONString());
 
 				System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));
-
-			}catch(Exception e){
-        		System.out.println(e.getMessage());
-			}
         }
 	}
 }

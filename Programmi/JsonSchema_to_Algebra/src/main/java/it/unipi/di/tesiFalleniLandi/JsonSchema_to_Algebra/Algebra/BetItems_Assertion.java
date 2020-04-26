@@ -21,15 +21,6 @@ public class BetItems_Assertion implements Assertion{
 	public void setMax(Long max) {
 		this.max = max;
 	}
-	
-	public BetItems_Assertion intersect(BetItems_Assertion bet) {
-		BetItems_Assertion intersectedBet = new BetItems_Assertion();
-		
-		intersectedBet.setMin((min > bet.min)? min:bet.min);
-		intersectedBet.setMax((max < bet.max)? max:bet.max);
-		
-		return intersectedBet;
-	}
 
 	@Override
 	public String toString() {
@@ -39,6 +30,7 @@ public class BetItems_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject toJSONSchema() {
+
 		JSONObject obj = new JSONObject();
 
 		if(min != null) obj.put("minItems", min);

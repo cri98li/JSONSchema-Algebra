@@ -63,13 +63,36 @@ public class IfThenElse_Assertion implements Assertion{
 		return and;
 	}
 
+	/*
+	public Assertion notExplicitation(){
+		Or_Assertion orList = new Or_Assertion();
+
+		if(elseStatement != null){
+			And_Assertion andListThen = new And_Assertion();
+			And_Assertion andListElse = new And_Assertion();
+			andListThen.add(ifStatement);
+			andListThen.add(thenStatement);
+			orList.add(andListThen);
+			andListElse.add(new Not_Assertion(ifStatement));
+			andListElse.add(elseStatement);
+			orList.add(andListElse);
+		}else{
+			orList.add(ifStatement.not());
+			orList.add(thenStatement);
+		}
+
+		return orList;
+	}
+	*/
+
 	@Override
 	public Assertion notElimination() {
 		Assertion ifStat = ifStatement.notElimination();
 		Assertion thenStat = thenStatement.notElimination();
 		Assertion elseStat = null;
 		if(elseStatement != null) elseStat = elseStatement.notElimination();
-		
+
+		if(ifStat == null) return thenStat; //if null == true ??
 		return new IfThenElse_Assertion(ifStat, thenStat, elseStat);
 	}
 

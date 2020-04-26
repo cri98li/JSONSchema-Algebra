@@ -58,7 +58,9 @@ public class Type_Assertion implements Assertion{
 			if(type.equals(GrammarStringDefinitions.TYPE_INTEGER))
 				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
 		}
-		
+
+		if(notType.types.isEmpty())	return null;
+
 		return notType;
 	}
 

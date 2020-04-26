@@ -63,8 +63,8 @@ public class AddPatternRequired_Assertion implements Assertion{
 		for(String name : pattList) {
 			properties.addProperties(name, new Boolean_Assertion(true));
 		}
-		
-		properties.setAdditionalProperties(additionalProperties.not());
+		if(additionalProperties.not() != null)
+			properties.setAdditionalProperties(additionalProperties.not());
 		and.add(type);
 		and.add(properties);
 		
