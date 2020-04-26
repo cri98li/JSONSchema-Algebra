@@ -139,7 +139,7 @@ function sendRequest(){
 }
 
 function showAlert(title, body){
-    //$("#alert-title").html(title);
+    $("#alert-title").html("");
     if(body == null || body == "")
         $("#alert-body").html("Request Error");
     else

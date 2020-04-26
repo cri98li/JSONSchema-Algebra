@@ -65,14 +65,14 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			}
 			
 			
-			return new GatewayResponse("unsupported "+action, 
+			return new GatewayResponse("Unsupported "+action,
 					200,
 					"type", "application/json+schema",
 					false);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Error: "+ e,
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -100,7 +100,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			return response;
 		} catch (Exception e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Errore: "+e.getMessage(),
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -126,7 +126,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			return response;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Error: " +e,
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -153,7 +153,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		} catch (ParseException e) {
 			e.printStackTrace();
 			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					200,
+					400,
 					"type", "application/json+schema",
 					false);
 
@@ -178,7 +178,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			return response;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Error: " + e,
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -203,7 +203,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			return response;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Error: " + e.getMessage(),
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -235,16 +235,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	        		false);
 
 	        return response;
-		}catch (ParseCancellationException e){
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
 		}catch(Exception e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse("Error: " + e,
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
@@ -273,15 +266,8 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	        		false);
 
 	        return response;
-		}catch (ParseCancellationException e){
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
 		}catch(Exception e) {
-			GatewayResponse response = new GatewayResponse("Error: " + e,
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
