@@ -139,8 +139,11 @@ function sendRequest(){
 }
 
 function showAlert(title, body){
-    $("#alert-title").html(title);
-    $("#alert-body").html(body);
+    //$("#alert-title").html(title);
+    if(body == null || body == "")
+        $("#alert-body").html("Request Error");
+    else
+        $("#alert-body").html(body);
     $('#alert').show();
 }
 

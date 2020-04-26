@@ -31,7 +31,6 @@ public class Const_Assertion implements Assertion{
 		return obj;
 	}
 
-	//TODO: not di boolean, isboolvalue?
 	@Override
 	public Assertion not() {
 		Type_Assertion type = new Type_Assertion();
@@ -81,10 +80,8 @@ public class Const_Assertion implements Assertion{
 			Or_Assertion or = new Or_Assertion();
 			BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
 
-			for (Object obj : array) {
+			for (Object obj : array)
 				items.add(new Const_Assertion(obj));
-
-			}
 
 			or.add(betItems.not());
 			or.add(items.not());

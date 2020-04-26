@@ -56,18 +56,18 @@ public class Xor_Assertion implements Assertion{
 		List<Assertion> notXorList = new LinkedList<>();
 		for(Assertion a : xorList) notXorList.add(a.not());
 
-		Or_Assertion orList = new Or_Assertion();
+		And_Assertion andList = new And_Assertion();
 
 		for(int i = 0; i < xorList.size(); i++) {
-			And_Assertion andList = new And_Assertion();
+			Or_Assertion orList = new Or_Assertion();
 			for (int j = 0; j < xorList.size(); j++) {
-				if (i == j) andList.add(xorList.get(j));
-				else andList.add(notXorList.get(j));
+				if (i == j) orList.add(notXorList.get(j));
+				else orList.add(xorList.get(j));
 			}
-			orList.add(andList);
+			andList.add(orList);
 		}
 
-		return orList;
+		return andList;
 	}
 
 	public Assertion notElimination() {
