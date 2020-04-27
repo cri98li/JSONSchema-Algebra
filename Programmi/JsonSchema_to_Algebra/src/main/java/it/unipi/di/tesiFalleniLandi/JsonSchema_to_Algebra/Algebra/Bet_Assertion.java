@@ -43,7 +43,7 @@ public class Bet_Assertion implements Assertion{
 	public Assertion not() {
 		And_Assertion and = new And_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add("num");
+		type.add(GrammarStringDefinitions.TYPE_NUMBER);
 		and.add(type);
 		
 		if(min != null && max != null) {

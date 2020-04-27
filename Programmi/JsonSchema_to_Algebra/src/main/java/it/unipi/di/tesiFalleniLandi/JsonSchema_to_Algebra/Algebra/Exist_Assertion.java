@@ -62,13 +62,14 @@ public class Exist_Assertion implements Assertion{
 		
 		if(min != null && max != null) {
 			Or_Assertion or = new Or_Assertion();
-			or.add(new Exist_Assertion(0L, min - 1, contains));
+			if(min > 0)
+				or.add(new Exist_Assertion(0L, min - 1, contains));
 			or.add(new Exist_Assertion(max + 1, null, contains));
 			and.add(or);
 			return and;
 		}
 		
-		if(min != null) {
+		if(min != null && min > 0) {
 			and.add(new Exist_Assertion(0L, min - 1, contains));
 			return and;
 		}
@@ -88,7 +89,7 @@ public class Exist_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = GrammarStringDefinitions.POS_INF;
 		if (this.min != null) min = this.min + "";
 		if (this.max != null) max = this.max + "";
 

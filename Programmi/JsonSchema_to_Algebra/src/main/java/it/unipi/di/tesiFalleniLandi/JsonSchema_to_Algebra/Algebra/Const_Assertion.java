@@ -94,7 +94,7 @@ public class Const_Assertion implements Assertion{
 		
 		//caso object
 		JSONObject object = (JSONObject) value;
-		Or_Assertion or = new Or_Assertion();
+		And_Assertion and = new And_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Long size = (long) object.size();
 		Pro_Assertion pro = new Pro_Assertion(size, size);
@@ -108,12 +108,12 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		type.add("obj");
-		or.add(properties.not());
-		or.add(type.not());
-		or.add(req.not());
-		or.add(pro.not());
+		and.add(properties);
+		and.add(type);
+		and.add(req);
+		and.add(pro);
 		
-		return or;
+		return and.not();
 	}
 
 	@Override

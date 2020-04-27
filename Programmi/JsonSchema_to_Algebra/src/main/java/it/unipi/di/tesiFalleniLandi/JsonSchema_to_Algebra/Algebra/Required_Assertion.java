@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Type;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -45,7 +46,20 @@ public class Required_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return new Required_Assertion();
+		And_Assertion and = new And_Assertion();
+		Or_Assertion or = new Or_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		and.add(type);
+
+		for(String key : reqList){
+			Properties_Assertion props = new Properties_Assertion();
+			props.addPatternProperties(key, new Boolean_Assertion(false));
+			or.add(props);
+		}
+		and.add(or);
+
+		return and;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class ExName_Assertion implements Assertion{
 	@Override
 	public Object toJSONSchema() {
 		//throw new UnsupportedOperationException();
-		return new Not_Assertion(new Names_Assertion(names));
+		return new Not_Assertion(new Names_Assertion(names)).toJSONSchema();
 	}
 	
 	@Override

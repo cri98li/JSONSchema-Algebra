@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser.Json_valueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
@@ -41,19 +42,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Bet_Assertion visitParseBetweenAssertion(GrammaticaParser.ParseBetweenAssertionContext ctx) {
-		AntlrValue min, max;
-
-		try{
-			min = (AntlrLong) visit(ctx.json_value(0));
-		}catch(ClassCastException ex) {
-			min = (AntlrDouble) visit(ctx.json_value(0));
-		}
-
-		try{
-			max = (AntlrLong) visit(ctx.json_value(1));
-		}catch(ClassCastException ex) {
-			max = (AntlrDouble) visit(ctx.json_value(1));
-		}
+		AntlrValue min = (AntlrValue) visit(ctx.json_value(0))
+				, max = (AntlrValue) visit(ctx.json_value(1));
 
 		return new Bet_Assertion(min.getValue(), max.getValue());
 	}
@@ -66,19 +56,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public XBet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
-		AntlrValue min, max;
-
-		try{
-			min = (AntlrLong) visit(ctx.json_value(0));
-		}catch(ClassCastException ex) {
-			min = (AntlrDouble) visit(ctx.json_value(0));
-		}
-
-		try{
-			max = (AntlrLong) visit(ctx.json_value(1));
-		}catch(ClassCastException ex) {
-			max = (AntlrDouble) visit(ctx.json_value(1));
-		}
+		AntlrValue min = (AntlrValue) visit(ctx.json_value(0))
+				, max = (AntlrValue) visit(ctx.json_value(1));
 
 		return new XBet_Assertion(min.getValue(), max.getValue());
 	}
@@ -275,6 +254,14 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public Mof_Assertion visitParseMultipleOf(GrammaticaParser.ParseMultipleOfContext ctx) {
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 
+		try{
+			if((long)value.getValue() < 0)
+				throw new ParseCancellationException("Unexpected negative value in Mof assertion");
+		}catch(ClassCastException e){
+			if((double)value.getValue() < 0)
+				throw new ParseCancellationException("Unexpected negative value in Mof assertion");
+		}
+
 		return new Mof_Assertion(value.getValue());
 	}
 
@@ -287,6 +274,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public NotMof_Assertion visitParseNotMultipleOf(GrammaticaParser.ParseNotMultipleOfContext ctx) {
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 
+		try{
+			if((long)value.getValue() < 0)
+				throw new ParseCancellationException("Unexpected negative value in NotMof assertion");
+		}catch(ClassCastException e){
+			if((double)value.getValue() < 0)
+				throw new ParseCancellationException("Unexpected negative value in NotMof assertion");
+		}
 
 		return new NotMof_Assertion(value.getValue());
 	}
@@ -359,11 +353,22 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Exist_Assertion visitParseContains(GrammaticaParser.ParseContainsContext ctx) {
-		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
-		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
-		Assertion schema = (Assertion) visit(ctx.assertion());
+		try {
+			AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+			AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 
-		return new Exist_Assertion(min.getValue(), max.getValue(), schema);
+			if(min.getValue() == null)
+				throw new ParseCancellationException("Unexpected -inf/null value in contains Assertion");
+
+			if (min.getValue() < 0 || ( max.getValue() != null && max.getValue() < 0))
+				throw new ParseCancellationException("Unexpected negative value in Contains assertion");
+
+			Assertion schema = (Assertion) visit(ctx.assertion());
+
+			return new Exist_Assertion(min.getValue(), max.getValue(), schema);
+		}catch (ClassCastException e){
+			throw new ParseCancellationException("Unexpected Double value in contains assertion");
+		}
 	}
 
 	@Override
@@ -436,7 +441,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size(); i++) {
-			p.add(idList.get(i).getText(), (Assertion) visit(list.get(i)));
+			p.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(), (Assertion) visit(list.get(i)));
 		}
 
 		return p;
@@ -494,10 +499,22 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Len_Assertion visitParseLengthAssertion(GrammaticaParser.ParseLengthAssertionContext ctx) {
-		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
-		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		try {
+			AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+			AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 
-		return new Len_Assertion(min.getValue(), max.getValue());
+			if(min.getValue() == null)
+				throw new ParseCancellationException("Unexpected -inf/null value in length Assertion");
+
+			if ((long) min.getValue() < 0 || (max.getValue() != null && (long) max.getValue() < 0))
+				throw new ParseCancellationException("Unexpected negative value in length assertion");
+
+
+			return new Len_Assertion(min.getValue(), max.getValue());
+		}
+		catch (ClassCastException e){
+			throw new ParseCancellationException("Unexpected Double value in length assertion");
+		}
 	}
 
 	@Override
@@ -507,10 +524,20 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Pro_Assertion visitParseBetProAssertion(GrammaticaParser.ParseBetProAssertionContext ctx) {
-		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
-		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		try {
+			AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+			AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 
-		return new Pro_Assertion(min.getValue(), max.getValue());
+			if(min.getValue() == null)
+				throw new ParseCancellationException("Unexpected -inf/null value in pro Assertion");
+
+			if (min.getValue() < 0 || (max.getValue() != null && max.getValue() < 0))
+				throw new ParseCancellationException("Unexpected negative value in pro Assertion");
+
+			return new Pro_Assertion(min.getValue(), max.getValue());
+		}catch(ClassCastException e){
+			throw new ParseCancellationException("Unexpected Double value in pro assertion");
+		}
 	}
 
 	@Override
@@ -520,10 +547,20 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Exist_Assertion visitParseBetItemsAssertion(GrammaticaParser.ParseBetItemsAssertionContext ctx) {
-		AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
-		AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
+		try {
+			AntlrLong min = (AntlrLong) visit(ctx.json_value(0));
+			AntlrLong max = (AntlrLong) visit(ctx.json_value(1));
 
-		return new Exist_Assertion(min.getValue(), max.getValue(), new Boolean_Assertion(true));
+			if(min.getValue() == null)
+				throw new ParseCancellationException("Unexpected -inf/null value in betItems Assertion");
+
+			if (min.getValue() < 0 || (max.getValue() != null && max.getValue() < 0))
+				throw new ParseCancellationException("Unexpected negative value in betItems Assertion");
+
+			return new Exist_Assertion(min.getValue(), max.getValue(), new Boolean_Assertion(true));
+		}catch(ClassCastException e){
+			throw new ParseCancellationException("Unexpected Double value in betItems assertion");
+		}
 	}
 
 	@Override
@@ -583,13 +620,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 
-	public Annotation_Assertion visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx) {
-		return (Annotation_Assertion) visitChildren(ctx);
+	public _Annotation_Assertion visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx) {
+		return (_Annotation_Assertion) visitChildren(ctx);
 	}
 
-	public Annotation_Assertion visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx) {
+	public _Annotation_Assertion visitParseAnnotations(GrammaticaParser.ParseAnnotationsContext ctx) {
 		List<TerminalNode> stringList = ctx.STRING();
-		Annotation_Assertion annotations = new Annotation_Assertion();
+		_Annotation_Assertion annotations = new _Annotation_Assertion();
 
 		for(int i = 0; i < stringList.size(); i += 2)
 			annotations.add(stringList.get(i).getText().subSequence(1, stringList.get(i).getText().length()-1).toString(),
@@ -602,5 +639,16 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	@Override
 	public AlgebraParserElement visitInfValue(GrammaticaParser.InfValueContext ctx) {
 		return new AntlrLong(null);
+	}
+
+
+	@Override
+	public ExName_Assertion visitNewPropertyExNames(GrammaticaParser.NewPropertyExNamesContext ctx) {
+		return (ExName_Assertion) visit(ctx.propertyExNames_assertion());
+	}
+
+	@Override
+	public ExName_Assertion visitParsePropertyExNames(GrammaticaParser.ParsePropertyExNamesContext ctx) {
+		return new ExName_Assertion((Assertion) visit(ctx.assertion()));
 	}
 }

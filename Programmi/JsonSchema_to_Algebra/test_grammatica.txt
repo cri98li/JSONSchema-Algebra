@@ -1,1 +1,1 @@
-rootdef = allOf[oneOf[type[arr], type[int]]]
+not(not(type[int, str]))

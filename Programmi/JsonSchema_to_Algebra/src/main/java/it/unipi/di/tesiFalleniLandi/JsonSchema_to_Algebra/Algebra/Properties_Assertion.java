@@ -25,6 +25,9 @@ public class Properties_Assertion implements Assertion{
 	}
 	
 	public void addPatternProperties(String key, Assertion value) {
+		if(!(key.charAt(0) == '^' && key.charAt(key.length()-1) == '$'))
+			key = "^" + key + "$";
+
 		patternProperties.put(key, value);
 	}
 	

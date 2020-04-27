@@ -40,7 +40,7 @@ public class BetweenItems implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = GrammarStringDefinitions.POS_INF;
 
 		if (minItems != null) min = minItems + "";
 		if (maxItems != null) max = maxItems + "";

@@ -25,7 +25,13 @@ public class RepeatedItems_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return new UniqueItems_Assertion();
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_ARRAY);
+		and.add(type);
+		and.add(new UniqueItems_Assertion());
+
+		return and;
 	}
 
 	@Override

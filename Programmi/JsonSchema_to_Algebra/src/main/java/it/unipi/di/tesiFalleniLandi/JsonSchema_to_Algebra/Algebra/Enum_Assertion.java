@@ -33,12 +33,12 @@ public class Enum_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
-		obj.put("enum", array);
-		
+
 		for(Object element : _enum) {
 			array.add(element);
 		}
 
+		obj.put("enum", array);
 		return obj;
 	}
 

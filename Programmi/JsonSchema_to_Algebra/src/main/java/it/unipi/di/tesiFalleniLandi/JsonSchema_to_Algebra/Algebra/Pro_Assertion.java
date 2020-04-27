@@ -45,10 +45,10 @@ public class Pro_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		if(min != null && max != null) {
-			And_Assertion and = new And_Assertion();
-			and.add(new Pro_Assertion(null, min-1));
-			and.add(new Pro_Assertion(max+1, null));
-			return and;
+			Or_Assertion or = new Or_Assertion();
+			or.add(new Pro_Assertion(null, min-1));
+			or.add(new Pro_Assertion(max+1, null));
+			return or;
 		}
 		
 		if(min != null)
@@ -65,7 +65,7 @@ public class Pro_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = GrammarStringDefinitions.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";

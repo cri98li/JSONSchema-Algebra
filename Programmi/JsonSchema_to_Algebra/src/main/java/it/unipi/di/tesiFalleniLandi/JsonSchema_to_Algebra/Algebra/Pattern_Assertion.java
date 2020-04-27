@@ -27,7 +27,12 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return new NotPattern_Assertion(pattern);
+		And_Assertion and = new And_Assertion();
+		and.add(new NotPattern_Assertion(pattern));
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_STRING);
+		and.add(type);
+		return and;
 	}
 
 	@Override

@@ -50,18 +50,24 @@ public class Len_Assertion implements Assertion{
 	
 	@Override
 	public Assertion not() {
+		And_Assertion and = new And_Assertion();
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_STRING);
+		and.add(type);
+
 		if(min != null && max != null) {
-			And_Assertion and = new And_Assertion();
 			and.add(new Len_Assertion(null, min-1));
 			and.add(new Len_Assertion(max+1, null));
 			return and;
 		}
 		
-		if(min != null)
-			return new Len_Assertion(null, min-1);
+		if(min != null) {
+			and.add(new Len_Assertion(null, min-1));
+			return and;
+		}
 		
-		
-		return new Len_Assertion(max+1, null);
+		and.add(new Len_Assertion(max+1, null));
+		return and;
 	}
 
 	@Override
@@ -71,7 +77,7 @@ public class Len_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = GrammarStringDefinitions.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";

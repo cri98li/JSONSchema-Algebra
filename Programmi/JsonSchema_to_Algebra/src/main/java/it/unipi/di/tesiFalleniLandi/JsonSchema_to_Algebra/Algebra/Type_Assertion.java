@@ -29,6 +29,27 @@ public class Type_Assertion implements Assertion{
 	public Object toJSONSchema() {
 		JSONObject obj = new JSONObject();
 
+		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT)){
+			Or_Assertion or = new Or_Assertion();
+			if(types.size() == 1){
+				Type_Assertion type = new Type_Assertion();
+				type.add(GrammarStringDefinitions.TYPE_INTEGER);
+				return new Not_Assertion(type).toJSONSchema();
+			}
+
+			Type_Assertion type = new Type_Assertion();
+			Type_Assertion typeNumNot = new Type_Assertion();
+			typeNumNot.add(GrammarStringDefinitions.TYPE_INTEGER);
+			or.add(new Not_Assertion(typeNumNot));
+			or.add(type);
+			for(String str : types)
+				if(!str.equals(GrammarStringDefinitions.TYPE_NUMNOTINT))
+					type.add(str);
+
+			return or.toJSONSchema();
+		}
+
+
 		if(types.size() == 1){
 			obj.put("type", toJsonTypeName(types.get(0)));
 			return obj;
@@ -55,8 +76,15 @@ public class Type_Assertion implements Assertion{
 
 		for(String type : types) {
 			notType.types.remove(type);
-			if(type.equals(GrammarStringDefinitions.TYPE_INTEGER))
+			if(type.equals(GrammarStringDefinitions.TYPE_INTEGER)){
 				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+				notType.types.add(GrammarStringDefinitions.TYPE_NUMNOTINT);
+			}
+
+			if(type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)) {
+				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+				notType.types.add(GrammarStringDefinitions.TYPE_INTEGER);
+			}
 		}
 
 		if(notType.types.isEmpty())	return null;

@@ -32,22 +32,19 @@ public class PatternRequired_Assertion implements Assertion{
 		return "PatternRequired_Assertion [" + pattReq + "]";
 	}
 
-	//TODO: è giusta??
 	@Override
 	public Object toJSONSchema() {
 		Type_Assertion t = new Type_Assertion();
 		t.add(GrammarStringDefinitions.TYPE_OBJECT);
-
 		And_Assertion and = new And_Assertion();
+
 		for(Entry<String, Assertion> entry : pattReq.entrySet()) {
 			Properties_Assertion pro = new Properties_Assertion();
 			pro.addPatternProperties(entry.getKey(), entry.getValue().not());
-			and.add(pro.not());
+			and.add(new Not_Assertion(pro));
 		}
 
 		return new IfThenElse_Assertion(t, and, null).toJSONSchema();
-
-		//throw new UnsupportedOperationException();
 	}
 	
 	@Override

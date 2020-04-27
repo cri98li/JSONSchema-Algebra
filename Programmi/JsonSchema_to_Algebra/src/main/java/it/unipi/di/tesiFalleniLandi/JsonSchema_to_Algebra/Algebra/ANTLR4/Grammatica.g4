@@ -42,7 +42,7 @@ assertion : 		type_assertion																					#NewTypeAssertion
 	
 type_assertion : 'type''[' (TYPE | NULL) (',' (TYPE | NULL))*']'													#ParseTypeAssertion;
 
-between_assertion : 'bet''(' json_value ',' json_value ')'															#ParseBetweenAssertion;		
+between_assertion : 'bet''(' json_value ',' json_value ')'															#ParseBetweenAssertion;
 
 xbetween_assertion : 'xbet''(' json_value ',' json_value ')'														#ParseXBetweenAssertion;
 
@@ -52,13 +52,13 @@ bet_items_assertion : 'betItems''('json_value','json_value')'														#Pars
 
 between_properties_assertion : 'pro''('json_value','json_value')'													#ParseBetProAssertion;
 
-multiple_of_assertion : 'mof''('json_value')'																		#ParseMultipleOf;		
+multiple_of_assertion : 'mof''('json_value')'																		#ParseMultipleOf;
 
-not_multiple_of_assertion : 'notMof''('json_value')'																#ParseNotMultipleOf;	
+not_multiple_of_assertion : 'notMof''('json_value')'																#ParseNotMultipleOf;
 
 not_assertion : 'not''(' assertion ')'																				#ParseNot;
 
-all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'														#ParseAllOf;	
+all_of_assertion : 'allOf''[' assertion (',' assertion)* ']'														#ParseAllOf;
 
 one_of_assertion : 'oneOf''[' assertion (',' assertion)* ']'														#ParseOneOf;
 
@@ -66,12 +66,12 @@ any_of_assertion : 'anyOf''[' assertion (',' assertion)* ']'														#Parse
 
 required_assertion : 'req''[' STRING (',' STRING)* ']'																#ParseRequired;
 
-enum_assertion_assertion : 'enum[' json_value (',' json_value)* ']'													#ParseEnum;											
+enum_assertion_assertion : 'enum[' json_value (',' json_value)* ']'													#ParseEnum;
 
 if_then_else_assertion : 'ifThenElse''(' assertion ';' assertion ';' assertion ')'									#ParseIfThenElse
 						|	'ifThen''(' assertion ';' assertion')'													#ParseIfThen
 						;
-						
+
 unique_items_assertion : 'uniqueItems'																				#ParseUniqueItems;
 
 repeated_items_assertion : 'repeatedItems'																			#ParseRepeatedItems;
@@ -119,7 +119,7 @@ json_value :  			NULL																						#NullValue
 
 
 NULL : 'null';
-TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool';
+TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool' | 'numNotInt';
 INT : '-'?[0-9]+; // Define token INT as one or more digits
 DOUBLE: '-'?[0-9]+'.'[E0-9]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out

@@ -30,6 +30,7 @@ public class GrammarStringDefinitions {
 		public static final String TYPE_INTEGER = "int";
 		public static final String TYPE_ARRAY = "arr";
 		public static final String TYPE_OBJECT = "obj";
+		public static final String TYPE_NUMNOTINT = "numNotInt";
 
 	
 	//allOf, anyOf, oneOf

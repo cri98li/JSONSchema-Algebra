@@ -8,7 +8,7 @@ public class AntlrDouble implements AntlrValue{
 	}
 
 	@Override
-	public Object getValue() {
+	public Double getValue() {
 		return value;
 	}
 

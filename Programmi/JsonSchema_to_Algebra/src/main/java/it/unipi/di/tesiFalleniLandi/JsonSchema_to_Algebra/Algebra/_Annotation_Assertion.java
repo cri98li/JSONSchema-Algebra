@@ -4,10 +4,10 @@ import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 
-public class Annotation_Assertion implements Assertion{
+public class _Annotation_Assertion implements Assertion{
 	private HashMap<String, String> annotations;
 	
-	public Annotation_Assertion() {
+	public _Annotation_Assertion() {
 		annotations = new HashMap<>();
 	}
 	

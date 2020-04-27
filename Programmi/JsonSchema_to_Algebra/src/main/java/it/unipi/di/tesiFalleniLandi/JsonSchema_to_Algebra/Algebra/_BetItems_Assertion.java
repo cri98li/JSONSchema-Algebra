@@ -4,12 +4,12 @@ import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
-public class BetItems_Assertion implements Assertion{
+public class _BetItems_Assertion implements Assertion{
 	private Long min, max;
 	
-	public BetItems_Assertion() {	}
+	public _BetItems_Assertion() {	}
 	
-	public BetItems_Assertion(Long min, Long max) {
+	public _BetItems_Assertion(Long min, Long max) {
 		this.min = min;
 		this.max = max;
 	}
@@ -48,24 +48,24 @@ public class BetItems_Assertion implements Assertion{
 		
 		if(min != null && max != null) {
 			Or_Assertion or = new Or_Assertion();
-			or.add(new BetItems_Assertion(0L, min - 1));
-			or.add(new BetItems_Assertion(max + 1, null));
+			or.add(new _BetItems_Assertion(0L, min - 1));
+			or.add(new _BetItems_Assertion(max + 1, null));
 			and.add(or);
 			return and;
 		}
 		
 		if(min != null) {
-			and.add(new BetItems_Assertion(0L, min - 1));
+			and.add(new _BetItems_Assertion(0L, min - 1));
 			return and;
 		}
 		
-		and.add(new BetItems_Assertion(max + 1, null));
+		and.add(new _BetItems_Assertion(max + 1, null));
 		return and;
 	}
 
 	@Override
 	public Assertion notElimination() {
-		return new BetItems_Assertion(min, max);
+		return new _BetItems_Assertion(min, max);
 	}
 
 	@Override

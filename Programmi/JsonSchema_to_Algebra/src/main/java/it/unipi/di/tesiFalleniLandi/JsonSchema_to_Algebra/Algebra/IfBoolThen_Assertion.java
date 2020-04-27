@@ -13,7 +13,7 @@ public class IfBoolThen_Assertion implements Assertion {
     public Object toJSONSchema() {
         Type_Assertion t = new Type_Assertion();
         t.add("bool");
-        return new IfThenElse_Assertion(t, new Const_Assertion(value), null);
+        return new IfThenElse_Assertion(t, new Const_Assertion(value), null).toJSONSchema();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class IfBoolThen_Assertion implements Assertion {
 
     @Override
     public Assertion notElimination() {
-        return new IfBoolThen_Assertion(!value);
+        return new IfBoolThen_Assertion(value);
     }
 
     @Override

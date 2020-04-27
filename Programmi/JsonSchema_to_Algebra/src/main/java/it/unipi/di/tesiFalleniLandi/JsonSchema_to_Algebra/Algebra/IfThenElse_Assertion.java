@@ -32,7 +32,6 @@ public class IfThenElse_Assertion implements Assertion{
 		if(elseStatement != null)
 			obj.put("else", elseStatement.toJSONSchema());
 
-			
 		return obj;
 	}
 
