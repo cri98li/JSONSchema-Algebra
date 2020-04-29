@@ -1,13 +1,14 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 
 public class NotPattern_Assertion implements Assertion{
-	private String notPattern;
+	private MyPattern notPattern;
 	
 	public NotPattern_Assertion() {	}
 
-	public NotPattern_Assertion(String pattern) {
+	public NotPattern_Assertion(MyPattern pattern) {
 		this.notPattern = pattern;
 	}
 

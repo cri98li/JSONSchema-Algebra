@@ -31,7 +31,9 @@ public class Ref_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return new Ref_Assertion(GrammarStringDefinitions.NOT_DEFS+ref);
+		if(ref.startsWith(GrammarStringDefinitions.NOT_DEFS))
+			return new Ref_Assertion(ref.substring(GrammarStringDefinitions.NOT_DEFS.length()));
+		else  return new Ref_Assertion(GrammarStringDefinitions.NOT_DEFS+ref);
 	}
 
 

@@ -1,14 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import org.json.simple.JSONObject;
 
 public class Pattern_Assertion implements Assertion{
-	private String pattern;
+	private MyPattern pattern;
 	
 	public Pattern_Assertion() {	}
 
-	public Pattern_Assertion(String pattern) {
+	public Pattern_Assertion(MyPattern pattern) {
 		this.pattern = pattern;
 	}
 
@@ -20,7 +21,7 @@ public class Pattern_Assertion implements Assertion{
 	@Override
 	public Object toJSONSchema() {
 		JSONObject obj = new JSONObject();
-		obj.put("pattern", pattern);
+		obj.put("pattern", pattern.toString());
 
 		return obj;
 	}

@@ -75,7 +75,7 @@ public class Enum_Assertion implements Assertion{
 				|| obj.getClass() == Boolean.class)
 				str += GrammarStringDefinitions.COMMA + obj;
 			else if (obj.getClass() == JSONObject.class)
-				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
+				str += GrammarStringDefinitions.COMMA + ((JSONObject) obj).toJSONString();
 			else
 				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
 		}

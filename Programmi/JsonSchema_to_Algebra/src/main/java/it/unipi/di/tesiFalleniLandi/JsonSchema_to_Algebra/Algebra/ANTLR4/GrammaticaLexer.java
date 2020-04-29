@@ -18,12 +18,12 @@ public class GrammaticaLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9,
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17,
-		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24,
-		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31,
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38,
-		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45,
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
+		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
+		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
+		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
 		NULL=46, TYPE=47, INT=48, DOUBLE=49, WS=50, STRING=51, BOOLEAN=52;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -35,12 +35,12 @@ public class GrammaticaLexer extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8",
-			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16",
-			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24",
-			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32",
-			"T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40",
-			"T__41", "T__42", "T__43", "T__44", "NULL", "TYPE", "INT", "DOUBLE",
+			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
+			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
+			"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
+			"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
+			"T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40", 
+			"T__41", "T__42", "T__43", "T__44", "NULL", "TYPE", "INT", "DOUBLE", 
 			"WS", "STRING", "BOOLEAN", "ESC", "UNICODE", "HEX", "SAFECODEPOINT"
 		};
 	}
@@ -48,22 +48,22 @@ public class GrammaticaLexer extends Lexer {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'{'", "','", "'}'", "'type'", "'['", "']'", "'bet'", "'('", "')'",
-			"'xbet'", "'length'", "'betItems'", "'pro'", "'mof'", "'notMof'", "'not'",
-			"'allOf'", "'oneOf'", "'anyOf'", "'req'", "'enum['", "'ifThenElse'",
-			"';'", "'ifThen'", "'uniqueItems'", "'repeatedItems'", "'pattern'", "'notPattern'",
-			"'items'", "'contains'", "'props'", "':'", "'const'", "'def'", "'='",
-			"'rootdef'", "'ref'", "'names'", "'exNames'", "'annotations'", "'pattReq'",
+			null, "'{'", "','", "'}'", "'type'", "'['", "']'", "'bet'", "'('", "')'", 
+			"'xbet'", "'length'", "'betItems'", "'pro'", "'mof'", "'notMof'", "'not'", 
+			"'allOf'", "'oneOf'", "'anyOf'", "'req'", "'enum['", "'ifThenElse'", 
+			"';'", "'ifThen'", "'uniqueItems'", "'repeatedItems'", "'pattern'", "'notPattern'", 
+			"'items'", "'contains'", "'props'", "':'", "'const'", "'rootdef'", "'='", 
+			"'def'", "'ref'", "'names'", "'exNames'", "'annotations'", "'pattReq'", 
 			"'addPattReq'", "'+'", "'-'", "'inf'", "'null'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, null, null, null,
-			null, null, null, null, null, null, null, null, null, null, null, null,
-			null, null, null, null, null, null, null, null, null, null, null, null,
-			null, null, null, null, null, null, null, null, null, null, "NULL", "TYPE",
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, "NULL", "TYPE", 
 			"INT", "DOUBLE", "WS", "STRING", "BOOLEAN"
 		};
 	}
@@ -146,7 +146,7 @@ public class GrammaticaLexer extends Lexer {
 		"\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3\35\3\35"+
 		"\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\37\3\37\3\37\3\37"+
 		"\3\37\3\37\3\37\3\37\3\37\3 \3 \3 \3 \3 \3 \3!\3!\3\"\3\"\3\"\3\"\3\""+
-		"\3\"\3#\3#\3#\3#\3$\3$\3%\3%\3%\3%\3%\3%\3%\3%\3&\3&\3&\3&\3\'\3\'\3\'"+
+		"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3$\3$\3%\3%\3%\3%\3&\3&\3&\3&\3\'\3\'\3\'"+
 		"\3\'\3\'\3\'\3(\3(\3(\3(\3(\3(\3(\3(\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)\3)"+
 		"\3)\3*\3*\3*\3*\3*\3*\3*\3*\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3+\3,\3,\3-"+
 		"\3-\3.\3.\3.\3.\3/\3/\3/\3/\3/\3\60\3\60\3\60\3\60\3\60\3\60\3\60\3\60"+
@@ -179,7 +179,7 @@ public class GrammaticaLexer extends Lexer {
 		"+\u00c8\3\2\2\2-\u00ce\3\2\2\2/\u00d9\3\2\2\2\61\u00db\3\2\2\2\63\u00e2"+
 		"\3\2\2\2\65\u00ee\3\2\2\2\67\u00fc\3\2\2\29\u0104\3\2\2\2;\u010f\3\2\2"+
 		"\2=\u0115\3\2\2\2?\u011e\3\2\2\2A\u0124\3\2\2\2C\u0126\3\2\2\2E\u012c"+
-		"\3\2\2\2G\u0130\3\2\2\2I\u0132\3\2\2\2K\u013a\3\2\2\2M\u013e\3\2\2\2O"+
+		"\3\2\2\2G\u0134\3\2\2\2I\u0136\3\2\2\2K\u013a\3\2\2\2M\u013e\3\2\2\2O"+
 		"\u0144\3\2\2\2Q\u014c\3\2\2\2S\u0158\3\2\2\2U\u0160\3\2\2\2W\u016b\3\2"+
 		"\2\2Y\u016d\3\2\2\2[\u016f\3\2\2\2]\u0173\3\2\2\2_\u0194\3\2\2\2a\u0197"+
 		"\3\2\2\2c\u019f\3\2\2\2e\u01ad\3\2\2\2g\u01b3\3\2\2\2i\u01cb\3\2\2\2k"+
@@ -230,10 +230,10 @@ public class GrammaticaLexer extends Lexer {
 		"\u011f\7r\2\2\u011f\u0120\7t\2\2\u0120\u0121\7q\2\2\u0121\u0122\7r\2\2"+
 		"\u0122\u0123\7u\2\2\u0123@\3\2\2\2\u0124\u0125\7<\2\2\u0125B\3\2\2\2\u0126"+
 		"\u0127\7e\2\2\u0127\u0128\7q\2\2\u0128\u0129\7p\2\2\u0129\u012a\7u\2\2"+
-		"\u012a\u012b\7v\2\2\u012bD\3\2\2\2\u012c\u012d\7f\2\2\u012d\u012e\7g\2"+
-		"\2\u012e\u012f\7h\2\2\u012fF\3\2\2\2\u0130\u0131\7?\2\2\u0131H\3\2\2\2"+
-		"\u0132\u0133\7t\2\2\u0133\u0134\7q\2\2\u0134\u0135\7q\2\2\u0135\u0136"+
-		"\7v\2\2\u0136\u0137\7f\2\2\u0137\u0138\7g\2\2\u0138\u0139\7h\2\2\u0139"+
+		"\u012a\u012b\7v\2\2\u012bD\3\2\2\2\u012c\u012d\7t\2\2\u012d\u012e\7q\2"+
+		"\2\u012e\u012f\7q\2\2\u012f\u0130\7v\2\2\u0130\u0131\7f\2\2\u0131\u0132"+
+		"\7g\2\2\u0132\u0133\7h\2\2\u0133F\3\2\2\2\u0134\u0135\7?\2\2\u0135H\3"+
+		"\2\2\2\u0136\u0137\7f\2\2\u0137\u0138\7g\2\2\u0138\u0139\7h\2\2\u0139"+
 		"J\3\2\2\2\u013a\u013b\7t\2\2\u013b\u013c\7g\2\2\u013c\u013d\7h\2\2\u013d"+
 		"L\3\2\2\2\u013e\u013f\7p\2\2\u013f\u0140\7c\2\2\u0140\u0141\7o\2\2\u0141"+
 		"\u0142\7g\2\2\u0142\u0143\7u\2\2\u0143N\3\2\2\2\u0144\u0145\7g\2\2\u0145"+

@@ -95,7 +95,9 @@ public class Defs implements JSONSchemaElement{
 		String defs = "";
 		
 		if(rootDef != null)
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, rootDef.toGrammarString());
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, rootDef.toGrammarString());
+		else
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, "");
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 

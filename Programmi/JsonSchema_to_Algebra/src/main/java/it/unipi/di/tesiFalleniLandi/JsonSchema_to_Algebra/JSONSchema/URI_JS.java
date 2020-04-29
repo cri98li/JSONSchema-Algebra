@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+
 import java.util.Iterator;
 
 
@@ -42,7 +44,7 @@ public class URI_JS {
 		//caso #
 		if(uri.equals("#")) {
 			normalizedURI = "";
-			normalizedName = "#";
+			normalizedName = GrammarStringDefinitions.ROOTDEF_DEFAULTNAME;
 			return;
 		}
 		

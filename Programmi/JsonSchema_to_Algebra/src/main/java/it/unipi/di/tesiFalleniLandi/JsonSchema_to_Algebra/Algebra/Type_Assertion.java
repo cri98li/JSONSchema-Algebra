@@ -76,18 +76,34 @@ public class Type_Assertion implements Assertion{
 
 		for(String type : types) {
 			notType.types.remove(type);
-			if(type.equals(GrammarStringDefinitions.TYPE_INTEGER)){
-				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
-				notType.types.add(GrammarStringDefinitions.TYPE_NUMNOTINT);
-			}
-
-			if(type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)) {
-				notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
-				notType.types.add(GrammarStringDefinitions.TYPE_INTEGER);
-			}
 		}
 
-		if(notType.types.isEmpty())	return null;
+		if(types.contains(GrammarStringDefinitions.TYPE_INTEGER) && !types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT)){
+			notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+			notType.types.add(GrammarStringDefinitions.TYPE_NUMNOTINT);
+		}
+		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT) && !types.contains(GrammarStringDefinitions.TYPE_INTEGER)) {
+			notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+			notType.types.add(GrammarStringDefinitions.TYPE_INTEGER);
+		}
+
+		if(types.contains(GrammarStringDefinitions.TYPE_NUMBER)) {
+			notType.types.remove(GrammarStringDefinitions.TYPE_NUMNOTINT);
+			notType.types.remove(GrammarStringDefinitions.TYPE_INTEGER);
+		}
+
+		if(notType.types.contains(GrammarStringDefinitions.TYPE_NUMBER)) {
+			notType.types.remove(GrammarStringDefinitions.TYPE_INTEGER);
+		}
+
+		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT) && types.contains(GrammarStringDefinitions.TYPE_INTEGER))
+			notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
+
+		if(notType.types.isEmpty()) {
+			And_Assertion a =new And_Assertion();
+			a.add(new Boolean_Assertion(false));
+			return a;
+		}
 
 		return notType;
 	}

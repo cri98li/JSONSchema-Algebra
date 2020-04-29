@@ -5,10 +5,17 @@ public class MyPattern {
     private String pattern;
 
     public MyPattern(String pattern) {
-        this.pattern = pattern;
+        if(pattern.charAt(0) != '^' && pattern.charAt(pattern.length() -1) != '$')
+            this.pattern = "^"+pattern+"$";
+        else
+            this.pattern = pattern;
     }
 
     public String getPattern() {
+        return pattern;
+    }
+
+    public String toString(){
         return pattern;
     }
 

@@ -431,14 +431,14 @@ public class GrammaticaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParseDef(GrammaticaParser.ParseDefContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParseDef(GrammaticaParser.ParseDefContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

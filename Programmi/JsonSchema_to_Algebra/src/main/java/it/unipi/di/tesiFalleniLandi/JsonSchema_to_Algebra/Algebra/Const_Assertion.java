@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
@@ -62,7 +63,7 @@ public class Const_Assertion implements Assertion{
 		
 		if(value.getClass() == String.class) {
 			Or_Assertion or = new Or_Assertion();
-			Pattern_Assertion pattern = new Pattern_Assertion((String) value);
+			Pattern_Assertion pattern = new Pattern_Assertion(new MyPattern((String) value));
 			
 			type.add("str");
 			or.add(type.not());
@@ -126,14 +127,16 @@ public class Const_Assertion implements Assertion{
 	public String toGrammarString() {
 		if(value == null) return String.format(GrammarStringDefinitions.CONST, "null");
 
-		if(value.getClass() == String.class
-				|| value.getClass() == Long.class
+		if(value.getClass() == String.class)
+			return String.format(GrammarStringDefinitions.CONST, "\"" + value + "\"");
+
+		if(value.getClass() == Long.class
 				|| value.getClass() == Double.class
 				|| value.getClass() == Boolean.class)
 			return String.format(GrammarStringDefinitions.CONST, value);
 
 		if(value.getClass() == JSONObject.class)
-			return String.format(GrammarStringDefinitions.CONST, "\"" + ((JSONObject) value).toJSONString() + "\"");
+			return String.format(GrammarStringDefinitions.CONST, ((JSONObject) value).toJSONString());
 
 		return toGrammarString((List<Object>) value);
 

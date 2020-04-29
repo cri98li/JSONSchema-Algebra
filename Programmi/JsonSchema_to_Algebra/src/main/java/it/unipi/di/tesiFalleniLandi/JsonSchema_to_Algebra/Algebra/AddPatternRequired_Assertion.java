@@ -1,19 +1,20 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class AddPatternRequired_Assertion implements Assertion{
-	private List<String> pattList;
+	private List<MyPattern> pattList;
 	private Assertion additionalProperties;
 
 	public AddPatternRequired_Assertion() {
 		pattList = new LinkedList<>();
 	}
 	
-	public AddPatternRequired_Assertion(List<String> pattList, Assertion additionalProperties) {
+	public AddPatternRequired_Assertion(List<MyPattern> pattList, Assertion additionalProperties) {
 		this.pattList = pattList;
 		this.additionalProperties = additionalProperties;
 	}
@@ -24,7 +25,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 				+ "]";
 	}
 
-	public void setPattList(List<String> pattList) {
+	public void setPattList(List<MyPattern> pattList) {
 		this.pattList = pattList;
 	}
 
@@ -32,7 +33,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		this.additionalProperties = additionalProperties;
 	}
 	
-	public void addName(String name) {
+	public void addName(MyPattern name) {
 		pattList.add(name);
 	}
 
@@ -43,7 +44,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		t.add(GrammarStringDefinitions.TYPE_OBJECT);
 		andList.add(t);
 		Properties_Assertion prop = new Properties_Assertion();
-		for(String s : pattList)
+		for(MyPattern s : pattList)
 			prop.addPatternProperties(s, new Boolean_Assertion(true));
 
 		prop.setAdditionalProperties(additionalProperties);
@@ -60,8 +61,8 @@ public class AddPatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		for(String name : pattList) {
-			properties.addProperties(name, new Boolean_Assertion(true));
+		for(MyPattern name : pattList) {
+			properties.addPatternProperties(name, new Boolean_Assertion(true));
 		}
 		if(additionalProperties.not() != null)
 			properties.setAdditionalProperties(additionalProperties.not());
@@ -85,7 +86,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		for(String s : pattList)
+		for(MyPattern s : pattList)
 			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
 		
 		if(additionalProperties == null)

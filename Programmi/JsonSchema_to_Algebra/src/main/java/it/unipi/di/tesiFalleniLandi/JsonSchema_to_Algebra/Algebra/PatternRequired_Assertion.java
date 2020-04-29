@@ -1,29 +1,32 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.IfThenElse;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class PatternRequired_Assertion implements Assertion{
-	private HashMap<String, Assertion> pattReq;
+	private HashMap<MyPattern, Assertion> pattReq;
 
 	public PatternRequired_Assertion() {
 		pattReq = new HashMap<>();
 	}
 	
-	public PatternRequired_Assertion(HashMap<String, Assertion> pattReq) {
+	public PatternRequired_Assertion(HashMap<MyPattern, Assertion> pattReq) {
 		this.pattReq = pattReq;
 	}
 	
-	public PatternRequired_Assertion(String name, Assertion assertion) {
+	public PatternRequired_Assertion(MyPattern name, Assertion assertion) {
 		pattReq = new HashMap<>();
 		pattReq.put(name, assertion);
 	}
 
-	public void add(String key, Assertion value) {
+	public void add(MyPattern key, Assertion value) {
+		if(pattReq.containsKey(key)) throw new ParseCancellationException("Detected 2 patternRequired with the same name");
 		pattReq.put(key, value);
 	}
 
@@ -38,7 +41,7 @@ public class PatternRequired_Assertion implements Assertion{
 		t.add(GrammarStringDefinitions.TYPE_OBJECT);
 		And_Assertion and = new And_Assertion();
 
-		for(Entry<String, Assertion> entry : pattReq.entrySet()) {
+		for(Entry<MyPattern, Assertion> entry : pattReq.entrySet()) {
 			Properties_Assertion pro = new Properties_Assertion();
 			pro.addPatternProperties(entry.getKey(), entry.getValue().not());
 			and.add(new Not_Assertion(pro));
@@ -54,13 +57,13 @@ public class PatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		Set<Entry<String, Assertion>> entrySet = pattReq.entrySet();
+		Set<Entry<MyPattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Entry<String, Assertion> entry : entrySet) {
+		for(Entry<MyPattern, Assertion> entry : entrySet) {
 			Properties_Assertion properties = new Properties_Assertion();
 			Assertion not = entry.getValue().not();
 			if(not != null)
-				properties.addProperties(entry.getKey(), not);
+				properties.addPatternProperties(entry.getKey(), not);
 			or.add(properties);
 		}
 		
@@ -73,9 +76,9 @@ public class PatternRequired_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		PatternRequired_Assertion pattReqAss = new PatternRequired_Assertion();
-		Set<Entry<String, Assertion>> entrySet = pattReq.entrySet();
+		Set<Entry<MyPattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Entry<String, Assertion> entry : entrySet) {
+		for(Entry<MyPattern, Assertion> entry : entrySet) {
 			Assertion not = entry.getValue().notElimination();
 			if(not != null)
 				pattReqAss.add(entry.getKey(), not);
@@ -89,8 +92,8 @@ public class PatternRequired_Assertion implements Assertion{
 		String str = "";
 		
 		if(pattReq != null) {
-			Set<Entry<String, Assertion>> entrySet = pattReq.entrySet();
-			for(Entry<String, Assertion> entry : entrySet) {
+			Set<Entry<MyPattern, Assertion>> entrySet = pattReq.entrySet();
+			for(Entry<MyPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
 					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);

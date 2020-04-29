@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Type;
 import org.json.simple.JSONArray;
 
@@ -54,7 +55,7 @@ public class Required_Assertion implements Assertion{
 
 		for(String key : reqList){
 			Properties_Assertion props = new Properties_Assertion();
-			props.addPatternProperties(key, new Boolean_Assertion(false));
+			props.addPatternProperties(new MyPattern(key), new Boolean_Assertion(false));
 			or.add(props);
 		}
 		and.add(or);

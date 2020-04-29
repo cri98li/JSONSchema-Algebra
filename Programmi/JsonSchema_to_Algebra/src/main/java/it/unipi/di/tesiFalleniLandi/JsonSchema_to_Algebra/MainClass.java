@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.AlgebraParser;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.ErrorListener;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Algebra.Assertion;
@@ -50,8 +51,12 @@ public class MainClass
 						Assertion schema;
 						try (Reader reader = new FileReader(filename)){
 							GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
+							lexer.removeErrorListeners();
+							lexer.addErrorListener(new ErrorListener());
 							CommonTokenStream tokens = new CommonTokenStream(lexer);
 							GrammaticaParser parser = new GrammaticaParser(tokens);
+							parser.removeErrorListeners();
+							parser.addErrorListener(new ErrorListener());
 
 							ParseTree tree =  parser.assertion();
 							AlgebraParser p = new AlgebraParser();
@@ -67,8 +72,12 @@ public class MainClass
 						Assertion _schema;
 						try (Reader reader = new FileReader(filename)){
 							GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
+							lexer.removeErrorListeners();
+							lexer.addErrorListener(new ErrorListener());
 							CommonTokenStream tokens = new CommonTokenStream(lexer);
 							GrammaticaParser parser = new GrammaticaParser(tokens);
+							parser.removeErrorListeners();
+							parser.addErrorListener(new ErrorListener());
 
 							ParseTree tree =  parser.assertion();
 							AlgebraParser p = new AlgebraParser();

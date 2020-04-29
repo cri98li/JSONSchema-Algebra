@@ -91,8 +91,12 @@ properties : 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';' a
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 
-def_assertion: 'def'STRING'=' assertion	(',' 'def'STRING'=' assertion)*												#ParseDef
-					| 'rootdef''=' assertion (',' 'def'STRING'=' assertion)*										#ParseDefRoot;
+def_assertion: (
+                        ((defList_assertion ',')?	'rootdef' STRING '=' assertion (',' defList_assertion)? )
+                        | defList_assertion
+               )	#ParseDefRoot;
+
+defList_assertion: 'def'STRING'=' assertion (',' 'def'STRING'=' assertion)*                                         #ParseDef;
 
 ref_assertion: 'ref''(' STRING ')'																					#ParseRef;
 
@@ -104,7 +108,7 @@ annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'										
 
 pattern_required: 'pattReq''[' STRING ':' assertion (',' STRING ':' assertion)* ']'									#ParsePatternRequired;
 
-additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING))*']' ':' assertion ')'							#ParseAdditionalPatternRequired;
+additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING)*)*']' ':' assertion ')'							#ParseAdditionalPatternRequired;
 
 
 json_value :  			NULL																						#NullValue

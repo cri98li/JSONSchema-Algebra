@@ -56,6 +56,12 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		And_Assertion and = new And_Assertion();
+
+		if(min == 0 && max == null){
+			and.add(new Boolean_Assertion(false));
+			return and;
+		}
+
 		Type_Assertion type = new Type_Assertion();
 		type.add("arr");
 		and.add(type);

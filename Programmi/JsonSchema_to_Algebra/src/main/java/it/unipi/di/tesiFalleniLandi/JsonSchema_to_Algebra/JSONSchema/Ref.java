@@ -27,7 +27,7 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.REF, uri.toString());
+		return String.format(GrammarStringDefinitions.REF, uri.getNormalizedName());
 	}
 	
 	@Override

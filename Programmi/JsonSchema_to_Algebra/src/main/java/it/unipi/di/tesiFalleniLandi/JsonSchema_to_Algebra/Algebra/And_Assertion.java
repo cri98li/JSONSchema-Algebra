@@ -10,21 +10,25 @@ import java.util.List;
 
 public class And_Assertion implements Assertion{
 	private List<Assertion> andList;
-	private boolean duplicates;
+	private boolean duplicates, containsFalseBooleanAssertion;
 	
 	public And_Assertion() {
 		this.andList = new LinkedList<>();
 		duplicates = false;
+		containsFalseBooleanAssertion = false;
 	}
 
 	public void addAll(List<Assertion> list) {
-		for(Assertion assertion : list) 
+		for(Assertion assertion : list) {
 			duplicates |= contains(assertion);
+			containsFalseBooleanAssertion |= (Boolean_Assertion.class == assertion.getClass());
+		}
 		andList.addAll(list);
 	}
 	
 	public void add(Assertion assertion) {
 		duplicates |= contains(assertion);
+		containsFalseBooleanAssertion |= (Boolean_Assertion.class == assertion.getClass());
 		andList.add(assertion);
 	}
 
@@ -48,6 +52,14 @@ public class And_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
+		if(containsFalseBooleanAssertion){
+			JSONArray array = new JSONArray();
+			JSONObject obj = new JSONObject();
+			obj.put("allOf", array);
+			array.add(false);
+			return obj;
+		}
+
 		if(duplicates) {
 			JSONArray array = new JSONArray();
 			

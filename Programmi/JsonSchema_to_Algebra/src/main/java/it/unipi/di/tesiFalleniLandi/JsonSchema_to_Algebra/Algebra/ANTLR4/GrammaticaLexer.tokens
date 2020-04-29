@@ -83,9 +83,9 @@ BOOLEAN=52
 'props'=31
 ':'=32
 'const'=33
-'def'=34
+'rootdef'=34
 '='=35
-'rootdef'=36
+'def'=36
 'ref'=37
 'names'=38
 'exNames'=39
