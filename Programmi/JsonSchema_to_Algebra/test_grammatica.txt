@@ -1,12 +1,1 @@
-not(not(
-    def "not_x2" = {
-        type[num],
-        notMof(2)
-    },
-    def "not_x1" = {
-        type[num],
-        notMof(1)
-    },
-    def "x2" = mof(2),
-    rootdef "x1" = mof(1)
-)))
+not(contains(0, 40; true))

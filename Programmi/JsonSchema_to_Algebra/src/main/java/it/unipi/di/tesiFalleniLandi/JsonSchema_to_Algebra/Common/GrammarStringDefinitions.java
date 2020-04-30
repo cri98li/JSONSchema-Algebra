@@ -87,7 +87,7 @@ public class GrammarStringDefinitions {
 	public static final String PATTERNREQUIRED = "pattReq[\r\n%s\r\n]";
 	
 	//addPattReq
-	public static final String ADDPATTERNREQUIRED = "addPattReq((%s) : %s)";
+	public static final String ADDPATTERNREQUIRED = "addPattReq([%s] : %s)";
 	
 	//PropertyNames
 	public static final String PROPERTYNAMES = "names(%s)";
