@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
@@ -43,7 +45,7 @@ public class Const_Assertion implements Assertion{
 		}
 
 		if(value.getClass() == Boolean.class) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			type.add("bool");
 			or.add(type.not());
 			or.add(new IfBoolThen_Assertion((Boolean) value).not());
@@ -52,7 +54,7 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		if(value.getClass() == Long.class || value.getClass() == Double.class) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			Bet_Assertion bet = new Bet_Assertion(value, value);
 			type.add("num");
 			or.add(type.not());
@@ -62,7 +64,7 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		if(value.getClass() == String.class) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			Pattern_Assertion pattern = new Pattern_Assertion(new MyPattern((String) value));
 			
 			type.add("str");
@@ -78,7 +80,7 @@ public class Const_Assertion implements Assertion{
 			List<Object> array = (List<Object>) value;
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			//BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
 			Exist_Assertion betItems = new Exist_Assertion((long) array.size(), (long) array.size(), new Boolean_Assertion(true));
 
@@ -95,7 +97,7 @@ public class Const_Assertion implements Assertion{
 		
 		//caso object
 		JSONObject object = (JSONObject) value;
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Long size = (long) object.size();
 		Pro_Assertion pro = new Pro_Assertion(size, size);
@@ -166,5 +168,62 @@ public class Const_Assertion implements Assertion{
 		if(str.isEmpty()) return "";
 		return str.substring(GrammarStringDefinitions.COMMA.length());
 	}
-	
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		if(value == null) return new WitnessType(GrammarStringDefinitions.TYPE_NULL);
+
+		if(value.getClass() == String.class) {
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
+			and.add(new WitnessPattern(new MyPattern((String) value)));
+			return and;
+		}
+
+		if(value.getClass() == Boolean.class){
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN));
+			and.add(new WitnessIfBoolThen((Boolean) value));
+			return and;
+		}
+
+		if(value.getClass() == Long.class
+				|| value.getClass() == Double.class){
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
+			and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));
+			return and;
+		}
+
+		if(value.getClass() == JSONObject.class) {
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_OBJECT));
+			Set<Map.Entry<String, ?>> entrySet = ((JSONObject) value).entrySet();
+			Required_Assertion req = new Required_Assertion();
+			for(Map.Entry<String, ?> entry : entrySet){
+				req.add(entry.getKey());
+				and.add(new WitnessProperty(new MyPattern(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
+			}
+			and.add(req.toWitnessAlgebra());
+			and.add(new WitnessPro(Double.parseDouble(""+entrySet.size()), Double.parseDouble(""+entrySet.size())));
+			return and;
+		}
+
+		//Caso array
+		WitnessAnd and = new WitnessAnd();
+		and.add(new WitnessType(GrammarStringDefinitions.TYPE_ARRAY));
+		WitnessItems items = new WitnessItems();
+		LinkedList<Object> array = (LinkedList) value;
+		for(Object obj : array)
+			items.addItems(new Const_Assertion(obj).toWitnessAlgebra());
+
+		and.add(new WitnessContains(Long.parseLong(""+array.size()), Long.parseLong(""+array.size()), new WitnessBoolean(true)));
+		and.add(items);
+		return and;
+	}
+
+
+	public Object getValue(){
+		return value;
+	}
 }

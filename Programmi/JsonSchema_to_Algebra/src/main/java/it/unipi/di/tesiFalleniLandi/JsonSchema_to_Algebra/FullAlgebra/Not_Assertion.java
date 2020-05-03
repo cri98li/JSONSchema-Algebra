@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONObject;
 
 public class Not_Assertion implements Assertion{
@@ -24,6 +25,10 @@ public class Not_Assertion implements Assertion{
 		return obj;
 	}
 
+	public Assertion getValue() {
+		return not;
+	}
+
 	@Override
 	public Assertion not() {
 		return not; //tolgo il not
@@ -41,5 +46,10 @@ public class Not_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.NOT, not.toGrammarString());
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return not.notElimination().toWitnessAlgebra();
 	}
 }

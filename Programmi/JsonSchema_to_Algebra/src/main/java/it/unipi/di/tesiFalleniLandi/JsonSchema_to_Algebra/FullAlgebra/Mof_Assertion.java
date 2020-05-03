@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessMof;
 import org.json.simple.JSONObject;
 
 public class Mof_Assertion implements Assertion{
@@ -25,7 +27,7 @@ public class Mof_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion notMof = new And_Assertion();
+		AllOf_Assertion notMof = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add("num");
 		notMof.add(type);
@@ -42,6 +44,11 @@ public class Mof_Assertion implements Assertion{
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.MULTIPLEOF, mof);
 	}
-	
-	
+
+	@Override
+	public WitnessMof toWitnessAlgebra() {
+		return new WitnessMof(Double.parseDouble(mof.toString()));
+	}
+
+
 }

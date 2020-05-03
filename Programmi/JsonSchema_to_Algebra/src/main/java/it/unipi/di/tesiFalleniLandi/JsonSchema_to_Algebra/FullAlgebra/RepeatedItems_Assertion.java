@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessRepeateditems;
 import org.json.simple.JSONObject;
 
 public class RepeatedItems_Assertion implements Assertion{
@@ -25,7 +27,7 @@ public class RepeatedItems_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_ARRAY);
 		and.add(type);
@@ -42,5 +44,10 @@ public class RepeatedItems_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		return GrammarStringDefinitions.REPEATEDITEMS;
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessRepeateditems();
 	}
 }

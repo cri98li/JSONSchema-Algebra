@@ -1,1 +1,12 @@
-not(contains(0, 40; true))
+rootdef "x" = allOf[
+        props[
+            "a": type[str],
+            "b":type[int]
+            ;
+        ],
+         props[
+              "a": length(1,100);
+         ]
+
+]
+

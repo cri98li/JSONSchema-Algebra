@@ -2,13 +2,16 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
 
 public class NotPattern_Assertion implements Assertion{
-	private MyPattern notPattern;
+	private PosixPattern notPattern;
 	
 	public NotPattern_Assertion() {	}
 
-	public NotPattern_Assertion(MyPattern pattern) {
+	public NotPattern_Assertion(PosixPattern pattern) {
 		this.notPattern = pattern;
 	}
 
@@ -27,7 +30,7 @@ public class NotPattern_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_STRING);
 		and.add(type);
@@ -44,5 +47,10 @@ public class NotPattern_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.NOTPATTERN, notPattern);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessPattern(notPattern.complement());
 	}
 }

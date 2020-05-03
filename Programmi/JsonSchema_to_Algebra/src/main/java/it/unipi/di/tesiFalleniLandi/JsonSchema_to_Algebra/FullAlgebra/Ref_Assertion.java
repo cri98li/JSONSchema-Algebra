@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.json.simple.JSONObject;
 
 public class Ref_Assertion implements Assertion{
@@ -47,4 +49,12 @@ public class Ref_Assertion implements Assertion{
 		return String.format(GrammarStringDefinitions.REF, ref);
 	}
 
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessVar(ref);
+	}
+
+	public String getRef(){
+		return ref;
+	}
 }

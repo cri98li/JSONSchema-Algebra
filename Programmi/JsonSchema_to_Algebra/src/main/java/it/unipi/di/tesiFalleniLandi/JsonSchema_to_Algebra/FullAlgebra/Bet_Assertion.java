@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBet;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -41,13 +43,13 @@ public class Bet_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_NUMBER);
 		and.add(type);
 		
 		if(min != null && max != null) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			or.add(new XBet_Assertion(null, min));
 			or.add(new XBet_Assertion(max, null));
 			and.add(or);
@@ -76,5 +78,19 @@ public class Bet_Assertion implements Assertion{
 		if(this.max != null) max = this.max+"";
 
 		return String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
+	}
+
+	@Override
+	public WitnessBet toWitnessAlgebra() {
+		Double min = null, max = null;
+
+		if(this.min != null)
+			min = Double.parseDouble(this.min.toString());
+
+		if(this.max != null)
+			max = Double.parseDouble(this.max.toString());
+
+
+		return new WitnessBet(min, max);
 	}
 }

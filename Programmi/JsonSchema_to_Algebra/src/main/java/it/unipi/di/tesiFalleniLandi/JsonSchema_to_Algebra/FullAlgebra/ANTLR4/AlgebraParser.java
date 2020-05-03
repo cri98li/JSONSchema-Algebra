@@ -22,8 +22,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return new Boolean_Assertion(false);
 	}
 
-	public And_Assertion visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
-		And_Assertion list = new And_Assertion();
+	public AllOf_Assertion visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
+		AllOf_Assertion list = new AllOf_Assertion();
 
 		List<AssertionContext> keywords = ctx.assertion();
 
@@ -138,14 +138,14 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 	@Override
-	public And_Assertion visitNewAllOf(GrammaticaParser.NewAllOfContext ctx) {
-		return (And_Assertion) visit(ctx.all_of_assertion());
+	public AllOf_Assertion visitNewAllOf(GrammaticaParser.NewAllOfContext ctx) {
+		return (AllOf_Assertion) visit(ctx.all_of_assertion());
 	}
 
 	@Override
-	public And_Assertion visitParseAllOf(GrammaticaParser.ParseAllOfContext ctx) {
+	public AllOf_Assertion visitParseAllOf(GrammaticaParser.ParseAllOfContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 
 		for(AssertionContext el : list)
 			and.add((Assertion) visit(el));
@@ -154,14 +154,14 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 	@Override
-	public Or_Assertion visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx) {
-		return (Or_Assertion) visit(ctx.any_of_assertion());
+	public AnyOf_Assertion visitNewAnyOf(GrammaticaParser.NewAnyOfContext ctx) {
+		return (AnyOf_Assertion) visit(ctx.any_of_assertion());
 	}
 
 	@Override
-	public Or_Assertion visitParseAnyOf(GrammaticaParser.ParseAnyOfContext ctx) {
+	public AnyOf_Assertion visitParseAnyOf(GrammaticaParser.ParseAnyOfContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
-		Or_Assertion or = new Or_Assertion();
+		AnyOf_Assertion or = new AnyOf_Assertion();
 
 		for(AssertionContext el : list)
 			or.add((Assertion) visit(el));
@@ -170,14 +170,14 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 	@Override
-	public Xor_Assertion visitNewOneOf(GrammaticaParser.NewOneOfContext ctx) {
-		return (Xor_Assertion) visit(ctx.one_of_assertion());
+	public OneOf_Assertion visitNewOneOf(GrammaticaParser.NewOneOfContext ctx) {
+		return (OneOf_Assertion) visit(ctx.one_of_assertion());
 	}
 
 	@Override
-	public Xor_Assertion visitParseOneOf(GrammaticaParser.ParseOneOfContext ctx) {
+	public OneOf_Assertion visitParseOneOf(GrammaticaParser.ParseOneOfContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
-		Xor_Assertion xor = new Xor_Assertion();
+		OneOf_Assertion xor = new OneOf_Assertion();
 
 		for(AssertionContext el : list)
 			xor.add((Assertion) visit(el));

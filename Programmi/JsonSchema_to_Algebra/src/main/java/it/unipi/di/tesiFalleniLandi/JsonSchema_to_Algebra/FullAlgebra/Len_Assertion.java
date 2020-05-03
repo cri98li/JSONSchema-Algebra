@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -50,7 +54,7 @@ public class Len_Assertion implements Assertion{
 	
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_STRING);
 		and.add(type);
@@ -83,5 +87,10 @@ public class Len_Assertion implements Assertion{
 		if(this.max != null) max = this.max+"";
 
 		return String.format(GrammarStringDefinitions.LENGTH, min, max);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessPattern(new MyPattern("^.{"+ min +"," + max + "}$"));
 	}
 }

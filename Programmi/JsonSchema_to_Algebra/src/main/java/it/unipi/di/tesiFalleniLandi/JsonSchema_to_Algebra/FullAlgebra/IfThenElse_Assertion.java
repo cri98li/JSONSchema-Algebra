@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import org.json.simple.JSONObject;
 
 public class IfThenElse_Assertion implements Assertion{
@@ -42,12 +45,12 @@ public class IfThenElse_Assertion implements Assertion{
 	//NEGATO: (not(A) or not(B)) and (A or not(C)) --? if A then not(C) else not(B) ???
 	@Override
 	public Assertion not() {	
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 
 		//caso if-then-else
 		if(elseStatement != null) {
-			Or_Assertion orThen = new Or_Assertion();
-			Or_Assertion orElse = new Or_Assertion();
+			AnyOf_Assertion orThen = new AnyOf_Assertion();
+			AnyOf_Assertion orElse = new AnyOf_Assertion();
 			orThen.add(ifStatement.not());
 			orThen.add(thenStatement.not());
 			and.add(orThen);
@@ -109,5 +112,28 @@ public class IfThenElse_Assertion implements Assertion{
 		
 		return String.format(GrammarStringDefinitions.IF_THEN_ELSE, if_str, then_str, else_str);
 	}
-	
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		WitnessOr or = new WitnessOr();
+		if(elseStatement == null){
+			or.add(ifStatement.not().toWitnessAlgebra());
+			or.add(thenStatement.toWitnessAlgebra());
+			return or;
+		}
+
+		WitnessAnd and = new WitnessAnd();
+		and.add(ifStatement.toWitnessAlgebra());
+		and.add(thenStatement.toWitnessAlgebra());
+
+		WitnessAnd and2 = new WitnessAnd();
+		and.add(ifStatement.not().toWitnessAlgebra());
+		and.add(elseStatement.toWitnessAlgebra());
+
+		or.add(and);
+		or.add(and2);
+
+		return or;
+	}
+
 }

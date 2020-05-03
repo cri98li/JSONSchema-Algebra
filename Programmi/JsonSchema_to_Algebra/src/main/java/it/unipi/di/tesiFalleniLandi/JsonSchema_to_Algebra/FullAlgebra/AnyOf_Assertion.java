@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -8,10 +10,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Or_Assertion implements Assertion{
+public class AnyOf_Assertion implements Assertion{
 	private List<Assertion> orList;
 	
-	public Or_Assertion() {
+	public AnyOf_Assertion() {
 		this.orList = new LinkedList<>();
 	}
 	
@@ -19,7 +21,7 @@ public class Or_Assertion implements Assertion{
 		orList.add(assertion);
 	}
 	
-	public void add(Or_Assertion assertion) {
+	public void add(AnyOf_Assertion assertion) {
 		addAll(assertion.orList);
 	}
 	
@@ -49,7 +51,7 @@ public class Or_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		
 		for(Assertion assertion : orList) {
 			Assertion not = assertion.not();
@@ -61,7 +63,7 @@ public class Or_Assertion implements Assertion{
 	}
 	
 	public Assertion notElimination() {
-		Or_Assertion or = new Or_Assertion();
+		AnyOf_Assertion or = new AnyOf_Assertion();
 		
 		for(Assertion assertion : orList) {
 			Assertion not = assertion.notElimination();
@@ -89,5 +91,13 @@ public class Or_Assertion implements Assertion{
 		if(str.isEmpty()) return "";
 		if(orList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		return String.format(GrammarStringDefinitions.ANYOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
+
+	public WitnessOr toWitnessAlgebra() {
+		WitnessOr or = new WitnessOr();
+		for(Assertion a : orList)
+			or.add(a.toWitnessAlgebra());
+
+		return or;
 	}
 }

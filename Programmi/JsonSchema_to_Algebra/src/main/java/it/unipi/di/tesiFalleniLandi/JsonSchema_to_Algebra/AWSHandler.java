@@ -58,9 +58,12 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				
 			case "grammarToJSON":
 				return grammarToJSON((String) input.get("body"));
-				
+
 			case "notElimination":
 				return notElimination((String) input.get("body"));
+
+			case "andMerging":
+				return andMerging((String) input.get("body"));
 			}
 			
 			
@@ -250,27 +253,57 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));
 			lexer.removeErrorListeners();
 			lexer.addErrorListener(new ErrorListener());
-	        CommonTokenStream tokens = new CommonTokenStream(lexer);
-	        GrammaticaParser parser = new GrammaticaParser(tokens);
-	        parser.removeErrorListeners();
-	        parser.addErrorListener(new ErrorListener());
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			GrammaticaParser parser = new GrammaticaParser(tokens);
+			parser.removeErrorListeners();
+			parser.addErrorListener(new ErrorListener());
 
-	        ParseTree tree =  parser.assertion();
-	        AlgebraParser p = new AlgebraParser();
-	        Assertion schema = (Assertion) p.visit(tree);
+			ParseTree tree =  parser.assertion();
+			AlgebraParser p = new AlgebraParser();
+			Assertion schema = (Assertion) p.visit(tree);
 
-	        GatewayResponse response = new GatewayResponse(Utils.beauty(schema.notElimination().toGrammarString()),
-	        		200,
-	        		"type", "application/json+schema",
-	        		false);
+			GatewayResponse response = new GatewayResponse(Utils.beauty(schema.notElimination().toGrammarString()),
+					200,
+					"type", "application/json+schema",
+					false);
 
-	        return response;
+			return response;
 		}catch(Exception e) {
 			GatewayResponse response = new GatewayResponse(e.getMessage(),
 					400,
 					"type", "application/json+schema",
 					false);
-			
+
+			return response;
+		}
+	}
+
+	private GatewayResponse andMerging(String body) {
+		try{
+			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));
+			lexer.removeErrorListeners();
+			lexer.addErrorListener(new ErrorListener());
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			GrammaticaParser parser = new GrammaticaParser(tokens);
+			parser.removeErrorListeners();
+			parser.addErrorListener(new ErrorListener());
+
+			ParseTree tree =  parser.assertion();
+			AlgebraParser p = new AlgebraParser();
+			Assertion schema = (Assertion) p.visit(tree);
+
+			GatewayResponse response = new GatewayResponse(Utils.beauty(schema.toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString()),
+					200,
+					"type", "application/json+schema",
+					false);
+
+			return response;
+		}catch(Exception e) {
+			GatewayResponse response = new GatewayResponse(e.getMessage(),
+					400,
+					"type", "application/json+schema",
+					false);
+
 			return response;
 		}
 	}

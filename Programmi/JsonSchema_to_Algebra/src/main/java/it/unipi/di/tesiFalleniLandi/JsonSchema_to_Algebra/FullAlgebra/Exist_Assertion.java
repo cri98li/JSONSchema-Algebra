@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessContains;
 import org.json.simple.JSONObject;
 
 public class Exist_Assertion implements Assertion{
@@ -55,7 +58,7 @@ public class Exist_Assertion implements Assertion{
 	
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 
 		if(min == 0 && max == null){
 			and.add(new Boolean_Assertion(false));
@@ -67,7 +70,7 @@ public class Exist_Assertion implements Assertion{
 		and.add(type);
 		
 		if(min != null && max != null) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			if(min > 0)
 				or.add(new Exist_Assertion(0L, min - 1, contains));
 			or.add(new Exist_Assertion(max + 1, null, contains));
@@ -106,5 +109,10 @@ public class Exist_Assertion implements Assertion{
 		else
 			return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
 		 */
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessContains(min, max, contains.toWitnessAlgebra());
 	}
 }

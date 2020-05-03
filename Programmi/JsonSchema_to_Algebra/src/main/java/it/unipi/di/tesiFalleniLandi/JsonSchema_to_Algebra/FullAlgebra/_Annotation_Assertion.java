@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -38,6 +39,11 @@ public class _Annotation_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return null;
 	}
 
 }

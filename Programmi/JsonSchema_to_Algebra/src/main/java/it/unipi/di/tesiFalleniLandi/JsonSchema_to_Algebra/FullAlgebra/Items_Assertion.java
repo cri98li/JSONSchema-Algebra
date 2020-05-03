@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessIfBoolThen;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessItems;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -64,8 +67,8 @@ public class Items_Assertion implements Assertion{
 			additionalItems = null;
 		}
 		
-		And_Assertion rootAnd = new And_Assertion();
-		Or_Assertion rootOr = new Or_Assertion();
+		AllOf_Assertion rootAnd = new AllOf_Assertion();
+		AnyOf_Assertion rootOr = new AnyOf_Assertion();
 		Type_Assertion typeArray = new Type_Assertion();
 		typeArray.add("arr");
 		rootAnd.add(typeArray);
@@ -73,7 +76,7 @@ public class Items_Assertion implements Assertion{
 		
 		//ITEMS
 		for(int i = 0; i < itemsArray.size(); i++) {
-			And_Assertion itemAndAssertion = new And_Assertion();
+			AllOf_Assertion itemAndAssertion = new AllOf_Assertion();
 			Items_Assertion itemAssertion = new Items_Assertion();
 			rootOr.add(itemAndAssertion);
 			itemAndAssertion.add(itemAssertion);
@@ -93,7 +96,7 @@ public class Items_Assertion implements Assertion{
 		Assertion notAdditionalItems = additionalItems.not();
 		
 		do {
-			And_Assertion andAdditionalItems = new And_Assertion();
+			AllOf_Assertion andAdditionalItems = new AllOf_Assertion();
 			rootOr.add(andAdditionalItems);
 			andAdditionalItems.add(new Exist_Assertion((long) sumbit(bm) + 1, null, notAdditionalItems));
 			Items_Assertion itemsAdditionalItems = new Items_Assertion();
@@ -166,5 +169,17 @@ public class Items_Assertion implements Assertion{
 			str2 = additionalItems.toGrammarString();
 		
 		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		WitnessItems witIte = new WitnessItems();
+
+		if(additionalItems != null) witIte.setAdditionalItems(additionalItems.toWitnessAlgebra());
+
+		for(Assertion a : itemsArray)
+			witIte.addItems(a.toWitnessAlgebra());
+
+		return witIte;
 	}
 }

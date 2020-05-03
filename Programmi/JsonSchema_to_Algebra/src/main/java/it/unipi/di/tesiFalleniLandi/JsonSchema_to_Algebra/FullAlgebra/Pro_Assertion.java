@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPro;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -45,7 +47,7 @@ public class Pro_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		if(min != null && max != null) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			or.add(new Pro_Assertion(null, min-1));
 			or.add(new Pro_Assertion(max+1, null));
 			return or;
@@ -71,5 +73,10 @@ public class Pro_Assertion implements Assertion{
 		if(this.max != null) max = this.max+"";
 
 		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return new WitnessPro(Double.parseDouble(min.toString()), max == null ? null : Double.parseDouble(max.toString()));
 	}
 }

@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+
 public interface Assertion extends AlgebraParserElement{
 	/**
 	 * Restituisce una rappresentazione usando la sintassi di JSON Schema dell'oggetto corrente
@@ -18,4 +20,6 @@ public interface Assertion extends AlgebraParserElement{
 	
 	
 	public String toGrammarString();
+
+	public WitnessAssertion toWitnessAlgebra();
 }

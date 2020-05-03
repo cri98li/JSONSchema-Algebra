@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -41,13 +42,13 @@ public class _BetItems_Assertion implements Assertion{
 	
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		and.add(type);
 		
 		if(min != null && max != null) {
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			or.add(new _BetItems_Assertion(0L, min - 1));
 			or.add(new _BetItems_Assertion(max + 1, null));
 			and.add(or);
@@ -76,6 +77,11 @@ public class _BetItems_Assertion implements Assertion{
 		if (this.max != null) max = this.max + "";
 
 		return String.format(GrammarStringDefinitions.BETWEENITEMS, min, max);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return null;
 	}
 
 }

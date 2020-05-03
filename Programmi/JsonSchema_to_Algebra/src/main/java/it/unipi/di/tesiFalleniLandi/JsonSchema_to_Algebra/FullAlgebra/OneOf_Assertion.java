@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -8,10 +9,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Xor_Assertion implements Assertion{
+public class OneOf_Assertion implements Assertion{
 	private List<Assertion> xorList;
 	
-	public Xor_Assertion() {
+	public OneOf_Assertion() {
 		this.xorList = new LinkedList<>();
 	}
 	
@@ -19,7 +20,7 @@ public class Xor_Assertion implements Assertion{
 		xorList.add(assertion);
 	}
 	
-	public void add(Xor_Assertion assertion) {
+	public void add(OneOf_Assertion assertion) {
 		addAll(assertion.xorList);
 	}
 	
@@ -60,10 +61,10 @@ public class Xor_Assertion implements Assertion{
 				notXorList.add(not);
 		}
 
-		And_Assertion andList = new And_Assertion();
+		AllOf_Assertion andList = new AllOf_Assertion();
 
 		for(int i = 0; i < xorList.size(); i++) {
-			Or_Assertion orList = new Or_Assertion();
+			AnyOf_Assertion orList = new AnyOf_Assertion();
 			for (int j = 0; j < xorList.size(); j++) {
 				if (i == j) orList.add(notXorList.get(j));
 				else orList.add(xorList.get(j));
@@ -75,7 +76,7 @@ public class Xor_Assertion implements Assertion{
 	}
 
 	public Assertion notElimination() {
-		Xor_Assertion xor = new Xor_Assertion();
+		OneOf_Assertion xor = new OneOf_Assertion();
 		
 		for(Assertion assertion : xorList) {
 			Assertion not = assertion.notElimination();
@@ -102,5 +103,10 @@ public class Xor_Assertion implements Assertion{
 		if(str.isEmpty()) return "";
 		if(xorList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		return String.format(GrammarStringDefinitions.ONEOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		return this.not().not().toWitnessAlgebra();
 	}
 }

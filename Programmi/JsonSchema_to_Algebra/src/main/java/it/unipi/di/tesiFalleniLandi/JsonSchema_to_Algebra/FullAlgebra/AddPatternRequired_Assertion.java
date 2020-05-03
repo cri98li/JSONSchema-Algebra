@@ -2,19 +2,25 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AnyOf;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.IfThenElse;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Pattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class AddPatternRequired_Assertion implements Assertion{
-	private List<MyPattern> pattList;
+	private List<PosixPattern> pattList;
 	private Assertion additionalProperties;
 
 	public AddPatternRequired_Assertion() {
 		pattList = new LinkedList<>();
 	}
 	
-	public AddPatternRequired_Assertion(List<MyPattern> pattList, Assertion additionalProperties) {
+	public AddPatternRequired_Assertion(List<PosixPattern> pattList, Assertion additionalProperties) {
 		this.pattList = pattList;
 		this.additionalProperties = additionalProperties;
 	}
@@ -25,7 +31,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 				+ "]";
 	}
 
-	public void setPattList(List<MyPattern> pattList) {
+	public void setPattList(List<PosixPattern> pattList) {
 		this.pattList = pattList;
 	}
 
@@ -33,35 +39,24 @@ public class AddPatternRequired_Assertion implements Assertion{
 		this.additionalProperties = additionalProperties;
 	}
 	
-	public void addName(MyPattern name) {
+	public void addName(PosixPattern name) {
 		pattList.add(name);
 	}
 
 	@Override
 	public Object toJSONSchema() {
-		And_Assertion andList = new And_Assertion();
-		Type_Assertion t = new Type_Assertion();
-		t.add(GrammarStringDefinitions.TYPE_OBJECT);
-		andList.add(t);
-		Properties_Assertion prop = new Properties_Assertion();
-		for(MyPattern s : pattList)
-			prop.addPatternProperties(s, new Boolean_Assertion(true));
-
-		prop.setAdditionalProperties(additionalProperties);
-		andList.add(prop);
-
-		return andList.toJSONSchema();
+		throw new UnsupportedOperationException("Da chiedere");
 
 	}
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		for(MyPattern name : pattList) {
+		for(PosixPattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
 		}
 		if(additionalProperties.not() != null)
@@ -86,7 +81,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		for(MyPattern s : pattList)
+		for(PosixPattern s : pattList)
 			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
 		
 		if(additionalProperties == null)
@@ -96,5 +91,15 @@ public class AddPatternRequired_Assertion implements Assertion{
 			return String.format(GrammarStringDefinitions.ADDPATTERNREQUIRED, "", additionalProperties.toGrammarString());
 		else
 			return String.format(GrammarStringDefinitions.ADDPATTERNREQUIRED, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+	}
+
+	@Override
+	public WitnessPattReq toWitnessAlgebra() {
+		//throw new UnsupportedOperationException("Da chiedere");
+		PosixPattern p = new MyPattern("^$");
+		for(PosixPattern pattern : pattList)
+			p = p.join(pattern);
+
+		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());
 	}
 }

@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -30,7 +33,7 @@ public class Type_Assertion implements Assertion{
 		JSONObject obj = new JSONObject();
 
 		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT)){
-			Or_Assertion or = new Or_Assertion();
+			AnyOf_Assertion or = new AnyOf_Assertion();
 			if(types.size() == 1){
 				Type_Assertion type = new Type_Assertion();
 				type.add(GrammarStringDefinitions.TYPE_INTEGER);
@@ -100,7 +103,7 @@ public class Type_Assertion implements Assertion{
 			notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
 
 		if(notType.types.isEmpty()) {
-			And_Assertion a =new And_Assertion();
+			AllOf_Assertion a =new AllOf_Assertion();
 			a.add(new Boolean_Assertion(false));
 			return a;
 		}
@@ -129,7 +132,19 @@ public class Type_Assertion implements Assertion{
 		
 		return String.format(GrammarStringDefinitions.TYPE, str.substring(GrammarStringDefinitions.COMMA.length()));
 	}
-	
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		if(types.size() == 1) return new WitnessType(types.get(0));
+
+		WitnessOr or = new WitnessOr();
+
+		for(String str : types)
+			or.add(new WitnessType(str));
+
+		return or;
+	}
+
 	private String toJsonTypeName(String type) {
 		switch(type) {
 		case "arr": return "array";
@@ -141,6 +156,10 @@ public class Type_Assertion implements Assertion{
 		case "null": return "null";
 		}
 		return null;
+	}
+
+	public boolean contains(String type){
+		return types.contains(type);
 	}
 }
   

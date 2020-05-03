@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -46,8 +48,8 @@ public class Required_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
-		Or_Assertion or = new Or_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
+		AnyOf_Assertion or = new AnyOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		and.add(type);
@@ -83,5 +85,24 @@ public class Required_Assertion implements Assertion{
 		}
 		
 		return String.format(GrammarStringDefinitions.REQUIRED, str);
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		WitnessOr or = new WitnessOr();
+		WitnessAnd and = new WitnessAnd();
+		Type_Assertion tmp = new Type_Assertion();
+		tmp.add(GrammarStringDefinitions.TYPE_OBJECT);
+		WitnessType type = (WitnessType) tmp.not().toWitnessAlgebra();
+		or.add(type);
+		or.add(and);
+
+		for(String str : reqList) {
+			PosixPattern p = new MyPattern(str);
+			WitnessPattReq pattReq = new WitnessPattReq(p, new WitnessBoolean(true));
+			and.add(pattReq);
+		}
+
+		return or;
 	}
 }

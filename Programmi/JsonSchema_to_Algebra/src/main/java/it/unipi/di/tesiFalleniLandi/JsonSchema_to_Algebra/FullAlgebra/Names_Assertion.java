@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessProperty;
 import org.json.simple.JSONObject;
 
 public class Names_Assertion implements Assertion{
@@ -25,7 +27,7 @@ public class Names_Assertion implements Assertion{
 	
 	@Override
 	public Assertion not() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		and.add(type);
@@ -45,6 +47,13 @@ public class Names_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.PROPERTYNAMES, names.toGrammarString());
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		Properties_Assertion pro = new Properties_Assertion();
+		pro.addPatternProperties(Utils_PattOfS.pattOfS(names.not()), new Boolean_Assertion(false));
+		return pro.toWitnessAlgebra();
 	}
 
 }

@@ -1,0 +1,27 @@
+SI:
+
+type si
+length dipende
+pattern si per ora
+notPatter dipende dalla libreria regex
+props si
+bet, xbet, mof, notMof si
+props si, da tradurre nella versione CORE
+pattReq, addPattReq si, da tradurre nella versione CORE
+required si, da tradurre nella versione CORE (mantenere ^a$)
+names, exNames si, da tradurre nella versione CORE
+pro si
+items si, lo tengo uguale (non traduco in CORE perchè conviene)
+contains si
+uniqueItems, repeatedItems si
+rootdef, defs si
+or, and, true e false si
+
+
+
+NO:
+
+not no
+enum no
+const no
+oneOf, ifThenElse no

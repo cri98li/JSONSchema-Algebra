@@ -1,6 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Const;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -44,7 +48,7 @@ public class Enum_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		And_Assertion notEnum = new And_Assertion();
+		AllOf_Assertion notEnum = new AllOf_Assertion();
 		
 		for(Object obj : _enum)
 			notEnum.add((new Const_Assertion(obj)).not());
@@ -60,6 +64,15 @@ public class Enum_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		return String.format(GrammarStringDefinitions.ENUM, toGrammarString(_enum));
+	}
+
+	@Override
+	public WitnessAssertion toWitnessAlgebra() {
+		WitnessOr or = new WitnessOr();
+		for(Object obj : _enum)
+			or.add(new Const_Assertion(obj).toWitnessAlgebra());
+
+		return or;
 	}
 
 	private String toGrammarString(List<Object> list){

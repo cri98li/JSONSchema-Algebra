@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -8,11 +10,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class And_Assertion implements Assertion{
+public class AllOf_Assertion implements Assertion{
 	private List<Assertion> andList;
 	private boolean duplicates, containsFalseBooleanAssertion;
 	
-	public And_Assertion() {
+	public AllOf_Assertion() {
 		this.andList = new LinkedList<>();
 		duplicates = false;
 		containsFalseBooleanAssertion = false;
@@ -40,7 +42,7 @@ public class And_Assertion implements Assertion{
 		return false;
 	}
 	
-	public void add(And_Assertion assertion) {
+	public void add(AllOf_Assertion assertion) {
 		addAll(assertion.andList);
 	}
 	
@@ -85,7 +87,7 @@ public class And_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		Or_Assertion or = new Or_Assertion();
+		AnyOf_Assertion or = new AnyOf_Assertion();
 		
 		for(Assertion assertion : andList) {
 			Assertion not = assertion.not();
@@ -98,7 +100,7 @@ public class And_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		And_Assertion and = new And_Assertion();
+		AllOf_Assertion and = new AllOf_Assertion();
 		
 		for(Assertion assertion : andList) {
 			Assertion not = assertion.notElimination();
@@ -126,5 +128,18 @@ public class And_Assertion implements Assertion{
 		if(andList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		if(!duplicates) return "{\r\n" + str.substring(GrammarStringDefinitions.COMMA.length()) +"\r\n}";
 		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+	}
+
+	@Override
+	public WitnessAnd toWitnessAlgebra() {
+		WitnessAnd and = new WitnessAnd();
+		for(Assertion a : andList)
+			and.add(a.toWitnessAlgebra());
+
+		return and;
+	}
+
+	public List<Assertion> getAndList(){
+		return andList;
 	}
 }

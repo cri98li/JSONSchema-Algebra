@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessIfBoolThen;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessItems;
 
 public class IfBoolThen_Assertion implements Assertion {
     private boolean value;
@@ -29,5 +32,10 @@ public class IfBoolThen_Assertion implements Assertion {
     @Override
     public String toGrammarString() {
         return String.format(GrammarStringDefinitions.IFBOOLTHEN, value);
+    }
+
+    @Override
+    public WitnessIfBoolThen toWitnessAlgebra() {
+        return new WitnessIfBoolThen(value);
     }
 }
