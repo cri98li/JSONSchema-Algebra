@@ -1,3 +1,94 @@
+<<<<<<< HEAD
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
+
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class WitnessType implements WitnessAssertion{
+    private String type;
+
+    public WitnessType(String str){
+        type = str;
+    }
+
+    @Override
+    public String toString() {
+        return "WitnessType{" +
+                "type=" + type +
+                '}';
+    }
+
+    @Override
+    public WitnessAssertion merge(WitnessAssertion a) {
+        if(a == null) return this;
+
+        if(a.getClass() == this.getClass())
+            return this.merge((WitnessType) a);
+
+        return null;
+    }
+
+
+    public WitnessAssertion merge(WitnessType a) {
+        WitnessType tmp = (WitnessType) a;
+
+        //stesso tipo
+        if(a.equals(this))
+            return this;
+
+        // num, int
+        if((tmp.type.equals(GrammarStringDefinitions.TYPE_INTEGER) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)
+            || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_INTEGER)))
+            return new WitnessType(GrammarStringDefinitions.TYPE_INTEGER);
+
+        // numNotInt, num
+        if((tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)
+                || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)))
+            return new WitnessType(GrammarStringDefinitions.TYPE_NUMNOTINT);
+
+        //tipi diversi
+        if(!a.equals(this))
+            return new WitnessBoolean(false);
+
+        //TODO: type, S con type != ITE(S)
+        if(!a.getGroupType().equals(this.getGroupType()))
+            return null;
+
+        return null;
+    }
+
+    @Override
+    public WitnessType getGroupType() {
+        return this;
+    }
+
+    @Override
+    public Assertion getFullAlgebra() {
+        Type_Assertion t = new Type_Assertion();
+        t.add(type);
+        return t;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WitnessType that = (WitnessType) o;
+
+        return type != null ? type.equals(that.type) : that.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return type != null ? type.hashCode() : 0;
+    }
+}
+=======
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -92,3 +183,4 @@ public class WitnessType implements WitnessAssertion{
         return type != null ? type.hashCode() : 0;
     }
 }
+>>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

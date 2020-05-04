@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+rootdef "x" = anyOf[
+        anyOf[
+            type[int],
+            type[arr]
+        ],
+        props[
+            "a": type[str],
+            "b": type[int]
+            ;
+        ],
+         props[
+              "a": type[int];
+         ]
+]
+=======
 rootdef "x" = allOf[
         props[
             "a": type[str],
@@ -10,3 +26,4 @@ rootdef "x" = allOf[
 
 ]
 
+>>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

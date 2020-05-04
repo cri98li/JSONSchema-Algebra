@@ -37,7 +37,11 @@ public class MainWitness {
 
             System.out.println(schema.toString());
 
+<<<<<<< HEAD
+            WitnessEnv env = schema.notElimination().toWitnessAlgebra();
+=======
             WitnessEnv env = schema.toWitnessAlgebra();
+>>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb
 
             System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString() + "\r\n\r\n\n" + "AND MERGING:" +"\r\n"));
 

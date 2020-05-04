@@ -111,7 +111,11 @@ public class PatternRequired_Assertion implements Assertion{
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(GrammarStringDefinitions.TYPE_OBJECT);
+<<<<<<< HEAD
+		WitnessAssertion type = tmp.not().toWitnessAlgebra();
+=======
 		WitnessType type = (WitnessType) tmp.not().toWitnessAlgebra();
+>>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb
 		or.add(type);
 		or.add(and);
 

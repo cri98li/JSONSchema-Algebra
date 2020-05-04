@@ -87,6 +87,24 @@ public class MainClass
 						System.out.println(_schema.notElimination().toGrammarString());
 						break;
 
+					case 4:
+						try (Reader reader = new FileReader(filename)){
+							GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
+							lexer.removeErrorListeners();
+							lexer.addErrorListener(new ErrorListener());
+							CommonTokenStream tokens = new CommonTokenStream(lexer);
+							GrammaticaParser parser = new GrammaticaParser(tokens);
+							parser.removeErrorListeners();
+							parser.addErrorListener(new ErrorListener());
+
+							ParseTree tree =  parser.assertion();
+							AlgebraParser p = new AlgebraParser();
+							_schema = (Assertion) p.visit(tree);
+						}
+
+						System.out.println(_schema.notElimination().toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString());
+						break;
+
 					default:
 						System.out.println("Not supported");
 						break;
