@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.StringJoiner;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -31,13 +33,10 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		
 		try {
-			
-			
 			System.out.println("\tQUERY: "+input.get("queryStringParameters"));
 			System.out.println("\tHEADERS: "+input.get("headers"));
 			
 			
-			@SuppressWarnings("unchecked")
 			LinkedHashMap<String, String> action = (LinkedHashMap<String, String>) input.get("queryStringParameters");
 			switch(action.get("action")) {
 			case "toJSON":
@@ -59,11 +58,14 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 			case "grammarToJSON":
 				return grammarToJSON((String) input.get("body"));
 
-			case "notElimination":
-				return notElimination((String) input.get("body"));
+			case "notEliminationFull":
+				return notEliminationFull((String) input.get("body"));
 
 			case "andMerging":
 				return andMerging((String) input.get("body"));
+
+			case "notEliminationWitness":
+				return notEliminationWitness((String) input.get("body"));
 			}
 			
 			
@@ -74,238 +76,107 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
+			return new GatewayResponse(e.getMessage(),
 					400,
-					"type", "application/json+schema",
+					"type", "text/plain",
 					false);
-
-			return response;
 		}
 	}
 
 
 
-	private GatewayResponse toJSON(String body) {
+	private GatewayResponse toJSON(String body) throws ParseException {
 		JSONObject object;
-		try {
+		object = (JSONObject) new JSONParser().parse(body.replace('\n', ' '));
+		JSONSchema schema = new JSONSchema(object);
 
-			object = (JSONObject) new JSONParser().parse(body.replace('\n', ' '));
-
-			JSONSchema schema = new JSONSchema(object);
-
-			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(),
-					200,
-					"type", "application/schema+json",
-					false);
-
-
-			return response;
-		} catch (Exception e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
+		return new GatewayResponse(schema.toJSON().toString(),
+				200,
+				"type", "application/schema+json",
+				false);
 
 	}
 
-	private GatewayResponse normalize(String body) {
-		JSONObject object;
-		try {
-			object = (JSONObject) new JSONParser().parse(body);
+	private GatewayResponse normalize(String body) throws ParseException {
+		JSONObject object = (JSONObject) new JSONParser().parse(body);
+		JSONSchema schema = new JSONSchema(object);
 
-			JSONSchema schema = new JSONSchema(object);
-
-			GatewayResponse response = new GatewayResponse(Utils_JSONSchema.normalize(schema).toJSON().toString(),
-					200,
-					"type", "application/schema+json",
-					false);
-
-
-			return response;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
+		return new GatewayResponse(Utils_JSONSchema.normalize(schema).toJSON().toString(),
+				200,
+				"type", "application/schema+json",
+				false);
 
 	}
 
-	private GatewayResponse assertionSeparation(String body) {
+	private GatewayResponse assertionSeparation(String body) throws ParseException {
 		JSONObject object;
-		try {
-			object = (JSONObject) new JSONParser().parse(body);
+		object = (JSONObject) new JSONParser().parse(body);
 
-			JSONSchema schema = new JSONSchema(object);
+		JSONSchema schema = new JSONSchema(object);
 
-			GatewayResponse response = new GatewayResponse(schema.assertionSeparation().toJSON().toString(),
-					200,
-					"type", "application/schema+json",
+		return new GatewayResponse(schema.assertionSeparation().toJSON().toString(),
+				200,
+				"type", "application/schema+json",
 					false);
-
-
-			return response;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
-
 	}
 
-	private GatewayResponse referenceNormalization(String body) {
-		JSONObject object;
-		try {
-			object = (JSONObject) new JSONParser().parse(body);
+	private GatewayResponse referenceNormalization(String body) throws ParseException {
+		JSONObject object = (JSONObject) new JSONParser().parse(body);
+		JSONSchema schema = new JSONSchema(object);
+		schema = Utils_JSONSchema.referenceNormalization(schema);
 
-			JSONSchema schema = new JSONSchema(object);
-			schema = Utils_JSONSchema.referenceNormalization(schema);
-			GatewayResponse response = new GatewayResponse(schema.toJSON().toString(),
-					200,
-					"type", "application/schema+json",
-					false);
-
-
-			return response;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
-
+		return new GatewayResponse(schema.toJSON().toString(),
+				200,
+				"type", "application/schema+json",
+				false);
 	}
 
-	private GatewayResponse toGrammarString(String body) {
-		JSONObject object;
-		try {
-			object = (JSONObject) new JSONParser().parse(body);
+	private GatewayResponse toGrammarString(String body) throws ParseException {
+		JSONObject object = (JSONObject) new JSONParser().parse(body);
 
-			JSONSchema schema = new JSONSchema(object);
-			GatewayResponse response = new GatewayResponse(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(schema)),
-					200,
-					"type", "application/json+schema",
-					false);
-
-
-			return response;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
-
+		JSONSchema schema = new JSONSchema(object);
+		return new GatewayResponse(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(schema)),
+				200,
+				"type", "application/json+schema",
+				false);
 	}
 
 	private GatewayResponse grammarToJSON(String body) {
-		try{
-			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));
-			lexer.removeErrorListeners();
-			lexer.addErrorListener(new ErrorListener());
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			GrammaticaParser parser = new GrammaticaParser(tokens);
-			parser.removeErrorListeners();
-			parser.addErrorListener(new ErrorListener());
+		Assertion schema = Utils_FullAlgebra.parseString(body);
 
-	        ParseTree tree =  parser.assertion();
-	        AlgebraParser p = new AlgebraParser();
-	        Assertion schema = (Assertion) p.visit(tree);
+		JSONObject JSON = (JSONObject)schema.toJSONSchema();
 
-	        JSONObject JSON = (JSONObject)schema.toJSONSchema();
-
-	        GatewayResponse response = new GatewayResponse(JSON.toJSONString(),
-	        		200,
-	        		"type", "application/json+schema",
-	        		false);
-
-	        return response;
-		}catch(Exception e) {
-			e.printStackTrace();
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
+		return new GatewayResponse(JSON.toJSONString(),
+				200,
+				"type", "application/json+schema",
+				false);
 	}
 
-	private GatewayResponse notElimination(String body) {
-		try{
-			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));
-			lexer.removeErrorListeners();
-			lexer.addErrorListener(new ErrorListener());
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			GrammaticaParser parser = new GrammaticaParser(tokens);
-			parser.removeErrorListeners();
-			parser.addErrorListener(new ErrorListener());
+	private GatewayResponse notEliminationFull(String body) {
+		Assertion schema = Utils_FullAlgebra.parseString(body);
 
-			ParseTree tree =  parser.assertion();
-			AlgebraParser p = new AlgebraParser();
-			Assertion schema = (Assertion) p.visit(tree);
-
-			GatewayResponse response = new GatewayResponse(Utils.beauty(schema.notElimination().toGrammarString()),
-					200,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}catch(Exception e) {
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
+		return new GatewayResponse(Utils.beauty(schema.notElimination().toGrammarString()),
+				200,
+				"type", "application/json+schema",
+				false);
 	}
 
 	private GatewayResponse andMerging(String body) {
-		try{
-			GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(body));
-			lexer.removeErrorListeners();
-			lexer.addErrorListener(new ErrorListener());
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			GrammaticaParser parser = new GrammaticaParser(tokens);
-			parser.removeErrorListeners();
-			parser.addErrorListener(new ErrorListener());
+		Assertion schema = Utils_FullAlgebra.parseString(body);
 
-			ParseTree tree =  parser.assertion();
-			AlgebraParser p = new AlgebraParser();
-			Assertion schema = (Assertion) p.visit(tree);
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema.notElimination()).merge(null).getFullAlgebra().toGrammarString()),
+				200,
+				"type", "application/json+schema",
+				false);
+	}
 
-			GatewayResponse response = new GatewayResponse(Utils.beauty(schema.toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString()),
-					200,
-					"type", "application/json+schema",
-					false);
+	private GatewayResponse notEliminationWitness(String body) {
+		Assertion schema = Utils_FullAlgebra.parseString(body);
 
-			return response;
-		}catch(Exception e) {
-			GatewayResponse response = new GatewayResponse(e.getMessage(),
-					400,
-					"type", "application/json+schema",
-					false);
-
-			return response;
-		}
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).notElimination().getFullAlgebra().toGrammarString()),
+				200,
+				"type", "application/json+schema",
+				false);
 	}
 }
 

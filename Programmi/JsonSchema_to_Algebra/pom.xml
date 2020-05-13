@@ -10,7 +10,7 @@
 
   <name>JsonSchema_to_Algebra</name>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://cri98li.github.io/JSONSchema-Algebra/</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,7 +65,17 @@
 	    <artifactId>aws-java-sdk-api-gateway</artifactId>
 	    <version>1.11.744</version>
 	</dependency>
-
+      <!-- https://mvnrepository.com/artifact/dk.brics.automaton/automaton -->
+      <dependency>
+          <groupId>dk.brics.automaton</groupId>
+          <artifactId>automaton</artifactId>
+          <version>1.11-8</version>
+      </dependency>
+      <dependency>
+          <groupId>com.github.com-github-javabdd</groupId>
+          <artifactId>com.github.javabdd</artifactId>
+          <version>1.0.1</version>
+      </dependency>
 	    
   </dependencies>
 

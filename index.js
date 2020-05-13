@@ -116,7 +116,10 @@ function sendRequest(){
         function(data){
             console.log("Data: " + data );
             console.log(data);
-            if(action != "toGrammarString" && action != "notElimination" && action != "andMerging")
+            if(action != "toGrammarString" 
+                    && action != "notEliminationFull" 
+                    && action != "andMerging"
+                    && action != "notEliminationWitness" )
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
                 $("#outputTextarea").val(data);
