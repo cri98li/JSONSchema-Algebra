@@ -34,7 +34,6 @@ public class Length implements JSONSchemaElement{
 		JSONObject obj = new JSONObject();
 		
 		if(minLength != null) obj.put("minLength", minLength);
-		
 		if(maxLength != null) obj.put("maxLength", maxLength);		
 		
 		return obj;

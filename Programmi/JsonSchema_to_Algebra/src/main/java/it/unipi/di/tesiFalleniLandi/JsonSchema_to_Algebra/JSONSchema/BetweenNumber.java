@@ -10,18 +10,14 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenNumber implements JSONSchemaElement{
-	//Memorizzandoli come Object non devo fare magheggi per castare in Long o Double
 	private Object maximum;
 	private Object minimum;
-	
 	private Object exclusiveMaximum;
 	private Object exclusiveMinimum;
-	
 	private Boolean booleanExclusiveMaximum;
 	private Boolean booleanExclusiveMinimum;
 	
-	public BetweenNumber() {
-	}
+	public BetweenNumber() { }
 	
 	public void setMax(Object obj) {
 		if(booleanExclusiveMaximum != null && booleanExclusiveMaximum)
@@ -61,9 +57,6 @@ public class BetweenNumber implements JSONSchemaElement{
 			this.exclusiveMinimum = obj;
 		}
 	}
-	
-	
-	
 
 	@Override
 	public String toString() {

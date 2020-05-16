@@ -45,7 +45,7 @@ public class Dependencies implements JSONSchemaElement{
 			}
 		}
 	}
-	
+
 	public void setDependentRequired(Object obj) {
 		JSONObject object = (JSONObject) obj;
 		
@@ -80,6 +80,7 @@ public class Dependencies implements JSONSchemaElement{
 	}
 
 	@SuppressWarnings("unchecked")
+	//TODO: json schema version
 	@Override
 	public Object toJSON() {
 		JSONObject obj = new JSONObject();
@@ -201,7 +202,7 @@ public class Dependencies implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		if(!URIIterator.hasNext() && (URIIterator.next().equals("dependencies") || URIIterator.next().equals("dependentSchemass")))
+		if(!URIIterator.hasNext() && (URIIterator.next().equals("dependencies") || URIIterator.next().equals("dependentSchemas")))
 			return null;
 		
 		URIIterator.remove();

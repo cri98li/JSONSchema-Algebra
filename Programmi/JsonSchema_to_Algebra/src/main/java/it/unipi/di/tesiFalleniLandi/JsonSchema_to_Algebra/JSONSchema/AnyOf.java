@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class AnyOf implements JSONSchemaElement{
 	private List<JSONSchema> anyOf;
@@ -22,16 +23,13 @@ public class AnyOf implements JSONSchemaElement{
 			anyOf.add(new JSONSchema(it.next()));
 		}
 	}
-	
-	
-	public AnyOf() {
-	}
+
+	public AnyOf() { }
 	
 	public void addElement(JSONSchema schema) {
 		if(anyOf == null) anyOf = new LinkedList<>();
 		anyOf.add(schema);
 	}
-
 
 	@Override
 	public String toString() {
@@ -40,13 +38,15 @@ public class AnyOf implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		for(JSONSchema js : anyOf)
 			array.add(js.toJSON());
-		
-		return array;
+
+		obj.put("allOf", array);
+		return obj;
 	}
 
 	public String toGrammarString() {
@@ -78,7 +78,6 @@ public class AnyOf implements JSONSchemaElement{
 		obj.anyOf = new LinkedList<>();
 		for(JSONSchema s : anyOf)
 			obj.anyOf.add(s.assertionSeparation());
-			
 		
 		return obj;
 	}

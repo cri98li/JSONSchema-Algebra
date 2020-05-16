@@ -1,3 +1,14 @@
 {
-  "ref": "#/definitions/local"
+  "allOf": [
+    {
+      "properties": {
+        "bar": {"type": "integer"}
+      }
+    },
+    {
+      "properties": {
+        "foo": {"type": "string"}
+      }
+    }
+  ]
 }

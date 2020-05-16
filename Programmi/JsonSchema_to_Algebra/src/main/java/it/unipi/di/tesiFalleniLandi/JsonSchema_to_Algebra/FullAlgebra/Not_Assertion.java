@@ -31,14 +31,14 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		return not; //tolgo il not
+		return not; //remove the not
 	}
 
 	@Override
 	public Assertion notElimination() {
 		Assertion not = this.not.not();
 		if(not != null)
-			return not.notElimination(); //applico il not ai successivi
+			return not.notElimination(); //apply not to next assertion
 
 		return null;
 	}

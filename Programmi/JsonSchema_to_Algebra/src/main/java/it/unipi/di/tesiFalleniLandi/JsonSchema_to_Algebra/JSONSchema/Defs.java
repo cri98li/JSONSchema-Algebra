@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -49,10 +50,7 @@ public class Defs implements JSONSchemaElement{
 	public void setRootDef(JSONSchema root) {
 		rootDef = root;
 	}
-	
-	/*
-	 * Unisce due Defs
-	 */
+
 	public void addDef(Defs defs) {
 		schemaDefs.putAll(defs.schemaDefs);
 	}
@@ -65,12 +63,16 @@ public class Defs implements JSONSchemaElement{
 	@Override
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
+		JSONObject def = new JSONObject();
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
-			obj.put(entry.getKey(), entry.getValue().toJSON());
-		
+			def.put(entry.getKey(), entry.getValue().toJSON());
+		obj.put("$defs", def);
+		if(rootDef != null)
+				obj.put(Utils.PUTCONTENT, rootDef.toJSON());
+
 		return obj;
 	}
 
@@ -95,9 +97,9 @@ public class Defs implements JSONSchemaElement{
 		String defs = "";
 		
 		if(rootDef != null)
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, rootDef.toGrammarString());
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", rootDef.toGrammarString());
 		else
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, "");
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"" , "");
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
@@ -110,13 +112,6 @@ public class Defs implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		/*
-		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
-		
-		for(Entry<String, JSONSchema> entry : entrySet)
-			count += entry.getValue().numberOfAssertions();
-		*/
-		
 		return schemaDefs.size() + ((rootDef == null) ? 0 : 1);
 	}
 
@@ -150,7 +145,10 @@ public class Defs implements JSONSchemaElement{
 
 	@Override
 	public String toString() {
-		return "Defs [schemaDefs=" + schemaDefs + "]";
+		return "Defs{" +
+				"schemaDefs=" + schemaDefs +
+				", rootDef=" + rootDef +
+				'}';
 	}
 
 	public Defs clone() {

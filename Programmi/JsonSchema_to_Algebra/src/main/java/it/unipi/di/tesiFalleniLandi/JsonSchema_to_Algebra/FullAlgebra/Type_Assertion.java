@@ -114,7 +114,6 @@ public class Type_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		Type_Assertion t = new Type_Assertion();
-		
 		t.types.addAll(types);
 		
 		return t;
@@ -137,12 +136,9 @@ public class Type_Assertion implements Assertion{
 	public WitnessAssertion toWitnessAlgebra() {
 		if(types.size() == 1) return new WitnessType(types.get(0));
 
-		WitnessOr or = new WitnessOr();
+		WitnessType type = new WitnessType(types);
 
-		for(String str : types)
-			or.add(new WitnessType(str));
-
-		return or;
+		return type;
 	}
 
 	private String toJsonTypeName(String type) {

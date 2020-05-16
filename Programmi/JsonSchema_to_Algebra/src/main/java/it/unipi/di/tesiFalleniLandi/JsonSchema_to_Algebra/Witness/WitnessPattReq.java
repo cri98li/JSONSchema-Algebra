@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -7,7 +6,9 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class WitnessPattReq implements WitnessAssertion{
     private PosixPattern key;
@@ -17,6 +18,8 @@ public class WitnessPattReq implements WitnessAssertion{
         this.key = key;
         value = assertion;
     }
+
+    protected WitnessPattReq() { }
 
     public PosixPattern getKey() {
         return key;
@@ -66,8 +69,18 @@ public class WitnessPattReq implements WitnessAssertion{
     @Override
     public Assertion getFullAlgebra() {
         PatternRequired_Assertion pra = new PatternRequired_Assertion();
-        pra.add(key, value.getFullAlgebra());
+        pra.add(key, this.value.getFullAlgebra());
         return pra;
+    }
+
+    @Override
+    public WitnessPattReq clone() {
+        WitnessPattReq clone = new WitnessPattReq();
+
+        clone.key = new MyPattern((MyPattern) key);
+        clone.value = value.clone();
+
+        return clone;
     }
 
     @Override
@@ -87,74 +100,63 @@ public class WitnessPattReq implements WitnessAssertion{
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
-
-public class WitnessPattReq implements WitnessAssertion{
-    private PosixPattern key;
-    private WitnessAssertion value;
-
-    public WitnessPattReq(PosixPattern key, WitnessAssertion assertion){
-        this.key = key;
-        value = assertion;
-    }
-
-    public PosixPattern getKey() {
-        return key;
-    }
-
-    public void setKey(MyPattern key) {
-        this.key = key;
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public String toString() {
-        return "WitnessPattReq{" +
-                "key=" + key +
-                ", value=" + value +
-                '}';
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        return null;
+    public WitnessAssertion groupize() {
+        WitnessPattReq pattReq = new WitnessPattReq();
+
+        pattReq.key = key;
+        if(pattReq != null){
+            if(value.getClass() != WitnessAnd.class) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(value);
+                pattReq.value = and.groupize();
+            }
+            else pattReq.value = value.groupize();
+        }
+
+        return pattReq;
     }
 
     @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        HashSet set = new HashSet<>();
+
+        if(value != null) {
+            if(value.getClass() != WitnessBoolean.class) {
+                set.addAll(value.variableNormalization_separation());
+                set.add(value);
+                value = new WitnessVar(Utils_Witness.getName(value));
+            }else
+                set.add(value);
+        }
+
+        return set;
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        PatternRequired_Assertion pra = new PatternRequired_Assertion();
-        pra.add(key, value.getFullAlgebra());
-        return pra;
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        WitnessPattReq pattReq = clone();
+        if(value != null) pattReq.value = this.value.variableNormalization_expansion(env);
+
+        return pattReq;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public WitnessAssertion DNF() {
+        WitnessPattReq pattReq = clone();
+        if(value != null) pattReq.value = this.value.clone();
 
-        WitnessPattReq that = (WitnessPattReq) o;
-
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        return value != null ? value.equals(that.value) : that.value == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
+        return pattReq;
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

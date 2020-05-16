@@ -152,7 +152,7 @@ public class Items_Assertion implements Assertion{
 
 		if(itemsArray != null) {
 
-			if (itemsArray.size() == 1)
+			if (itemsArray.size() == 1 && additionalItems == null)
 				return String.format(GrammarStringDefinitions.ITEMS, itemsArray.get(0).toGrammarString(), "");
 
 			Iterator<Assertion> it = itemsArray.iterator();
@@ -177,8 +177,9 @@ public class Items_Assertion implements Assertion{
 
 		if(additionalItems != null) witIte.setAdditionalItems(additionalItems.toWitnessAlgebra());
 
-		for(Assertion a : itemsArray)
-			witIte.addItems(a.toWitnessAlgebra());
+		if(itemsArray != null)
+			for(Assertion a : itemsArray)
+				witIte.addItems(a.toWitnessAlgebra());
 
 		return witIte;
 	}

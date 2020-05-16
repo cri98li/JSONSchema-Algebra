@@ -1,5 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.amazonaws.http.apache.utils.ApacheUtils;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,8 +21,11 @@ public class Format implements JSONSchemaElement{
 
 
 	@Override
-	public Object toJSON() {
-		return format;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("format", format);
+
+		return obj;
 	}
 
 	@Override

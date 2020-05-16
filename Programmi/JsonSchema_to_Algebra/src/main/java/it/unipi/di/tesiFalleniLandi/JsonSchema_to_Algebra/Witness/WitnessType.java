@@ -1,18 +1,39 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class WitnessType implements WitnessAssertion{
-    private String type;
+    private List<String> type;
+
+    protected WitnessType(){
+        type = new LinkedList<>();
+    }
 
     public WitnessType(String str){
-        type = str;
+        type = new LinkedList<>();
+        type.add(str);
+    }
+
+    public WitnessType(List<String> list){
+        type = new LinkedList<>();
+        type.addAll(list);
+    }
+
+    public void add(String type){
+        this.type.add(type);
+    }
+
+    public List<WitnessType> separeTypes(){
+        List<WitnessType> returnList = new LinkedList<>();
+
+        for(String str : type)
+            returnList.add(new WitnessType(str));
+
+        return returnList;
     }
 
     @Override
@@ -26,6 +47,8 @@ public class WitnessType implements WitnessAssertion{
     public WitnessAssertion merge(WitnessAssertion a) {
         if(a == null) return this;
 
+        if(a.getClass() == WitnessOr.class || a.getClass() == WitnessAnd.class) return a.merge(this);
+
         if(a.getClass() == this.getClass())
             return this.merge((WitnessType) a);
 
@@ -34,31 +57,33 @@ public class WitnessType implements WitnessAssertion{
 
 
     public WitnessAssertion merge(WitnessType a) {
-        WitnessType tmp = (WitnessType) a;
 
-        //stesso tipo
+        WitnessType tmp = a;
+        WitnessType newType = new WitnessType();
+
+        //same type
         if(a.equals(this))
             return this;
 
-        // num, int
-        if((tmp.type.equals(GrammarStringDefinitions.TYPE_INTEGER) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)
-            || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_INTEGER)))
-            return new WitnessType(GrammarStringDefinitions.TYPE_INTEGER);
+        for(String str : type){//**
+            if(a.type.contains(str)) {
+                newType.add(str);
+                continue;
+            }
 
-        // numNotInt, num
-        if((tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)
-                || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)))
-            return new WitnessType(GrammarStringDefinitions.TYPE_NUMNOTINT);
+            if(a.type.contains(GrammarStringDefinitions.TYPE_INTEGER) && str.equals(GrammarStringDefinitions.TYPE_NUMBER)
+                || a.type.contains(GrammarStringDefinitions.TYPE_NUMBER) && str.equals(GrammarStringDefinitions.TYPE_INTEGER))
+                newType.add(GrammarStringDefinitions.TYPE_INTEGER);
 
-        //tipi diversi
-        if(!a.equals(this))
+            if(a.type.contains(GrammarStringDefinitions.TYPE_NUMBER) && str.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)
+                    || a.type.contains(GrammarStringDefinitions.TYPE_NUMNOTINT) && str.equals(GrammarStringDefinitions.TYPE_NUMBER))
+                newType.add(GrammarStringDefinitions.TYPE_NUMNOTINT);
+        }
+
+        if(newType.type.isEmpty())
             return new WitnessBoolean(false);
 
-        //TODO: type, S con type != ITE(S)
-        if(!a.getGroupType().equals(this.getGroupType()))
-            return null;
-
-        return null;
+        return newType;
     }
 
     @Override
@@ -69,118 +94,64 @@ public class WitnessType implements WitnessAssertion{
     @Override
     public Assertion getFullAlgebra() {
         Type_Assertion t = new Type_Assertion();
-        t.add(type);
+
+        for(String str : type)
+            t.add(str);
+
         return t;
+    }
+
+    @Override
+    public WitnessType clone() {
+        return new WitnessType(type);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        WitnessType type1 = (WitnessType) o;
 
-        WitnessType that = (WitnessType) o;
+        LinkedList<String> list = new LinkedList();
+        list.addAll(this.type);
+        list.removeAll(type1.type);
 
-        return type != null ? type.equals(that.type) : that.type == null;
+        return list.size() == 0;
+
     }
 
     @Override
     public int hashCode() {
-        return type != null ? type.hashCode() : 0;
-    }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-
-import java.util.LinkedList;
-import java.util.List;
-
-public class WitnessType implements WitnessAssertion{
-    private String type;
-
-    public WitnessType(String str){
-        type = str;
+        return Objects.hash(type);
     }
 
     @Override
-    public String toString() {
-        return "WitnessType{" +
-                "type=" + type +
-                '}';
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a.getClass() == this.getClass())
-            return this.merge((WitnessType) a);
-
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-        return and;
-    }
-
-
-    public WitnessAssertion merge(WitnessType a) {
-        WitnessType tmp = (WitnessType) a;
-
-        //stesso tipo
-        if(a.equals(this))
-            return this;
-
-        // num, int
-        if((tmp.type.equals(GrammarStringDefinitions.TYPE_INTEGER) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)
-            || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_INTEGER)))
-            return new WitnessType(GrammarStringDefinitions.TYPE_INTEGER);
-
-        // numNotInt, num
-        if((tmp.type.equals(GrammarStringDefinitions.TYPE_NUMBER) && type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT)
-                || tmp.type.equals(GrammarStringDefinitions.TYPE_NUMNOTINT) && type.equals(GrammarStringDefinitions.TYPE_NUMBER)))
-            return new WitnessType(GrammarStringDefinitions.TYPE_NUMNOTINT);
-
-        //tipi diversi
-        if(!a.equals(this))
-            return null;
-
-        //type, S con type != ITE(S)
-        if(!a.getGroupType().equals(this.getGroupType()))
-            return null;
-
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-
-        return and;
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessType getGroupType() {
+    public WitnessAssertion groupize() {
         return this;
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        Type_Assertion t = new Type_Assertion();
-        t.add(type);
-        return t;
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        return new HashSet<>();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WitnessType that = (WitnessType) o;
-
-        return type != null ? type.equals(that.type) : that.type == null;
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        return this.clone();
     }
 
     @Override
-    public int hashCode() {
-        return type != null ? type.hashCode() : 0;
+    public WitnessAssertion DNF() {
+        return this.clone();
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

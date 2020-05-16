@@ -15,7 +15,8 @@ public class Exist_Assertion implements Assertion{
 	public Exist_Assertion(Long min, Long max, Assertion schema) {
 		this.min = min;
 		this.max = max;
-		this.contains = schema;
+		if(schema == null) this.contains = new Boolean_Assertion(true);
+		else this.contains = schema;
 	}
 
 	public void setMin(Long min) {

@@ -5,6 +5,9 @@ import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 
+/**
+ * TODO: not implemented
+ */
 public class _Annotation_Assertion implements Assertion{
 	private HashMap<String, String> annotations;
 	

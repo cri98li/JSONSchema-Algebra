@@ -196,7 +196,7 @@ public class Properties_Assertion implements Assertion{
 			PosixPattern p = new MyPattern(entry.getKey());
 			WitnessProperty prop = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(prop);
-			addPatt.join(p);
+			addPatt.or(p);
 		}
 
 		Set<Entry<PosixPattern, Assertion>> entrySetPatt = patternProperties.entrySet();
@@ -205,7 +205,7 @@ public class Properties_Assertion implements Assertion{
 			PosixPattern p = new MyPattern(entry.getKey().getPattern());
 			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattProp);
-			addPatt.join(p);
+			addPatt.or(p);
 		}
 
 		if(additionalProperties != null) {

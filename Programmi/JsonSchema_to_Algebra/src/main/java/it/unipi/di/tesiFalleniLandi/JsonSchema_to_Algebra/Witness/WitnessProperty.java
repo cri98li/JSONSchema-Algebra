@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
@@ -7,12 +6,15 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class WitnessProperty implements WitnessAssertion{
     private PosixPattern key;
     private WitnessAssertion value;
+
+    protected WitnessProperty() { }
 
     public WitnessProperty(PosixPattern key, WitnessAssertion assertion){
         this.key = key;
@@ -34,7 +36,6 @@ public class WitnessProperty implements WitnessAssertion{
                 ", value=" + value +
                 '}';
     }
-
 
     @Override
     public WitnessAssertion merge(WitnessAssertion a) {
@@ -59,10 +60,13 @@ public class WitnessProperty implements WitnessAssertion{
             return new WitnessProperty(new MyPattern(a.key.getPattern()), and.merge(null));
         }
 
+        if(a.value.equals(this.value)){
+            return new WitnessProperty(new MyPattern(a.key.or(this.key).getPattern()), this.value);
+        }
+
         return null;
     }
 
-
     @Override
     public WitnessType getGroupType() {
         return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
@@ -71,10 +75,19 @@ public class WitnessProperty implements WitnessAssertion{
     @Override
     public Assertion getFullAlgebra() {
         Properties_Assertion p = new Properties_Assertion();
-
         p.addPatternProperties(key, value.getFullAlgebra());
 
         return p;
+    }
+
+    @Override
+    public WitnessProperty clone() {
+        WitnessProperty clone = new WitnessProperty();
+
+        clone.key = new MyPattern((MyPattern) key);
+        clone.value = value.clone();
+
+        return clone;
     }
 
     @Override
@@ -84,8 +97,8 @@ public class WitnessProperty implements WitnessAssertion{
 
         WitnessProperty that = (WitnessProperty) o;
 
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        return value != null ? value.equals(that.value) : that.value == null;
+        if (!Objects.equals(key, that.key)) return false;
+        return Objects.equals(value, that.value);
     }
 
     @Override
@@ -94,99 +107,64 @@ public class WitnessProperty implements WitnessAssertion{
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
-
-public class WitnessProperty implements WitnessAssertion{
-    private PosixPattern key;
-    private WitnessAssertion value;
-
-    public WitnessProperty(PosixPattern key, WitnessAssertion assertion){
-        this.key = key;
-        value = assertion;
-    }
-
-    public PosixPattern getKey() {
-        return key;
-    }
-
-    public void setKey(MyPattern key) {
-        this.key = key;
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public String toString() {
-        return "WitnessProperty{" +
-                "key=" + key +
-                ", value=" + value +
-                '}';
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
-
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a.getClass() == this.getClass())
-            return this.merge((WitnessProperty) a);
+    public WitnessAssertion groupize() {
+        WitnessProperty prop = new WitnessProperty();
 
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-        return and;
-    }
-
-    public WitnessAssertion merge(WitnessProperty a) {
-        if(a.key.getPattern().equals(this.key.getPattern())){
-            WitnessAnd and = new WitnessAnd();
-            and.add(a.value);
-            and.add(this.value);
-            return new WitnessProperty(new MyPattern(a.key.getPattern()), and.merge(null));
+        prop.key = key;
+        if(value != null ){
+            if(value.getClass() != WitnessAnd.class) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(value);
+                prop.value = and.groupize();
+            }else
+                prop.value = value.groupize();
         }
 
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-
-        return and;
-    }
-
-
-    @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
+        return prop;
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        Properties_Assertion p = new Properties_Assertion();
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        HashSet set = new HashSet<>();
 
-        p.addPatternProperties(key, value.getFullAlgebra());
+        if(value != null) {
+            //TODO: true <--> allOf[true] ?
+            if(value.getClass() != WitnessBoolean.class) {
+                set.addAll(value.variableNormalization_separation());
+                set.add(value);
+                value = new WitnessVar(Utils_Witness.getName(value));
+            }else
+                set.add(value);
+        }
 
-        return p;
+        return set;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        WitnessProperty prop = this.clone();
+        if(value != null)   prop.value = this.value.variableNormalization_expansion(env);
 
-        WitnessProperty that = (WitnessProperty) o;
-
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        return value != null ? value.equals(that.value) : that.value == null;
+        return prop;
     }
 
     @Override
-    public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        return result;
+    public WitnessAssertion DNF() {
+        WitnessProperty prop = this.clone();
+        if(value != null)   prop.value = this.value.DNF();
+
+        return prop;
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

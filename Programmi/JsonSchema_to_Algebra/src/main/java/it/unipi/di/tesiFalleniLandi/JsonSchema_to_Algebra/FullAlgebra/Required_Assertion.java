@@ -66,7 +66,7 @@ public class Required_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		return new Required_Assertion();
+		return new Required_Assertion(reqList);
 	}
 	
 	@Override
@@ -93,15 +93,16 @@ public class Required_Assertion implements Assertion{
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(GrammarStringDefinitions.TYPE_OBJECT);
-		WitnessType type = (WitnessType) tmp.not().toWitnessAlgebra();
+		WitnessAssertion type = tmp.not().toWitnessAlgebra();
 		or.add(type);
-		or.add(and);
 
 		for(String str : reqList) {
 			PosixPattern p = new MyPattern(str);
 			WitnessPattReq pattReq = new WitnessPattReq(p, new WitnessBoolean(true));
 			and.add(pattReq);
 		}
+
+		or.add(and);
 
 		return or;
 	}

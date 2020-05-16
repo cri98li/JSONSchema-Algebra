@@ -9,6 +9,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.List;
 
+/**
+ * Methods to parse the algebra. See ANTLR4 documentation
+ */
 public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
@@ -255,10 +258,10 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 
 		try{
-			if((long)value.getValue() < 0)
+			if((long)value.getValue() <= 0)
 				throw new ParseCancellationException("Unexpected negative value in Mof assertion");
 		}catch(ClassCastException e){
-			if((double)value.getValue() < 0)
+			if((double)value.getValue() <= 0)
 				throw new ParseCancellationException("Unexpected negative value in Mof assertion");
 		}
 
@@ -275,10 +278,10 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
 
 		try{
-			if((long)value.getValue() < 0)
+			if((long)value.getValue() <= 0)
 				throw new ParseCancellationException("Unexpected negative value in NotMof assertion");
 		}catch(ClassCastException e){
-			if((double)value.getValue() < 0)
+			if((double)value.getValue() <= 0)
 				throw new ParseCancellationException("Unexpected negative value in NotMof assertion");
 		}
 

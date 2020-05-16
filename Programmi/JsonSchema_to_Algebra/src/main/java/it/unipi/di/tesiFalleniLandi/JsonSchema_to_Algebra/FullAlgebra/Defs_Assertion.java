@@ -1,7 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -11,11 +10,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-//TODO: AGGIORNARE I METODI PER ROOTDEF
 public class Defs_Assertion implements Assertion{
 	private HashMap<String, Assertion> defs;
 	private String rootDef;
-	public static Defs_Assertion env = null;
+	protected static Defs_Assertion env = null; //used by pattOfS
 	
 	public Defs_Assertion() {
 		env = this;
@@ -54,24 +52,6 @@ public class Defs_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		//Defs_Assertion notDef = new Defs_Assertion();
-
-		/*if(rootDef != null){
-			String newRoot = GrammarStringDefinitions.NOT_DEFS + rootDef;
-			notDef.setRootDef(newRoot, defs.get(newRoot));
-			defs.remove(newRoot);
-		}
-
-		Set<Entry<String, Assertion>> entrySet = defs.entrySet();
-
-		for(Entry<String, Assertion> entry: entrySet) {
-			if(entry.getKey().startsWith(GrammarStringDefinitions.NOT_DEFS))
-				notDef.add(entry.getKey().substring(GrammarStringDefinitions.NOT_DEFS.length()), entry.getValue().notElimination().not());
-			else notDef.add(GrammarStringDefinitions.NOT_DEFS + entry.getKey(), entry.getValue().notElimination().not());
-		}
-
-		return notDef;*/
-
 		Defs_Assertion not = this.notElimination();
 		not.rootDef = GrammarStringDefinitions.NOT_DEFS + not.rootDef;
 
@@ -107,13 +87,13 @@ public class Defs_Assertion implements Assertion{
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 
 			for (Entry<String, Assertion> entry : entrySet)
-					if (!entry.getKey().equals(rootDef))
-						def += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+				if (!entry.getKey().equals(rootDef))
+					def += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+				else
+					if(rootDef != null)
+						def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, "\"" + rootDef + "\"", defs.get(rootDef).toGrammarString());
 					else
-						if(rootDef != null)
-							def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, rootDef, defs.get(rootDef).toGrammarString());
-						else
-							def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, "");
+						def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, "\""+GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", "");
 			}
 
 		if(def.isEmpty()) return "";
@@ -135,5 +115,9 @@ public class Defs_Assertion implements Assertion{
 
 	public Assertion getDef(String ref){
 		return defs.get(ref);
+	}
+
+	protected String getRootName(){
+		return rootDef;
 	}
 }

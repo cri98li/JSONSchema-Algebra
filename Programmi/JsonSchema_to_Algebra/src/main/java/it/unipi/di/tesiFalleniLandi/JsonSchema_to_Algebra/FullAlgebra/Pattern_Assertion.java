@@ -9,8 +9,6 @@ import org.json.simple.JSONObject;
 
 public class Pattern_Assertion implements Assertion{
 	private PosixPattern pattern;
-	
-	public Pattern_Assertion() {	}
 
 	public Pattern_Assertion(PosixPattern pattern) {
 		this.pattern = pattern;

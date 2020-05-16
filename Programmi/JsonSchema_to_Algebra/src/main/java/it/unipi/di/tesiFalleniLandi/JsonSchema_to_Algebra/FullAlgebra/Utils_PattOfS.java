@@ -38,6 +38,15 @@ public class Utils_PattOfS {
         return p;
     }
 
+    public static PosixPattern pattOfS(AnyOf_Assertion a){
+        List<Assertion> or = a.getOrList();
+        PosixPattern p = pattOfS(or.get(0));
+        for(int i = 0; i < or.size(); i++)
+            p = p.or(pattOfS(or.get(i)));
+
+        return p;
+    }
+
     public static PosixPattern pattOfS(Not_Assertion a){
         return pattOfS(a.getValue()).complement();
     }

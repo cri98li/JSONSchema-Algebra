@@ -6,51 +6,51 @@ import java.util.Map.Entry;
 
 interface JSONSchemaElement extends Cloneable{	
 	/**
-	 * Restituisce una rappresentazione JSON (json simple) del json schema rappresentato dall'oggetto.
-	 * @return un oggetto che rappresenta lo schema, vedi le implementazioni per maggiori informazioni
+	 * Exports the class as a json object (using json simple).
+	 * @return an object that represent the schema, see implementations for more details
 	 */
 	public Object toJSON();
 	
 	/**
-	 * Applica lo step di separazione delle asserzioni.
-	 * @return restituisce una nuova istanza dell'oggetto con applicata la regola di separazione delle asserzioni
+	 * Apply the assertion separation step.
+	 * @return a new instance with the assertion separation rule applied
 	 */
-	public JSONSchemaElement assertionSeparation();//ritorna una rappresentazione JSON dell'oggetto con asserzioni separate
+	public JSONSchemaElement assertionSeparation();
 	
 	/**
-	 * Converte la keyword del JSON Schema nella corrispondente rappresentazione nella nostra algebra.
-	 * @return una stringa contenente la rappresentazione
+	 * Convert the JSON Schema keyword to the corresponding representation in algebra.
+	 * @return a string containing the representation of the current object
 	 */
 	public String toGrammarString();
 	
 	/**
-	 * Conta il numero di asserzioni rilevanti allo scopo della validazione
-	 * @return ritorna il numero di asserzioni
+	 *
+	 * @return the number of assertions
 	 */
 	public int numberOfAssertions();
 	
 	/**
-	 * Colleziona ed elimina tutte le definizioni sparse nel documento
-	 * @return una lista contenente tutte le definizioni trovate
+	 * Collects and deletes all the definitions contained by the object
+	 * @return a list containing all the definitions found
 	 */
-	public List<Entry<String,Defs>> collectDef();
+	public List<Entry<String, Defs>> collectDef();
 	
 	/**
-	 * Restituisce una lista contenente tutti gli URI delle $ref trovate 
-	 * @return una lista contenente tutti gli uri dei vari $ref, vuota nel caso non ce ne fosse nessuno
+	 * Returns a list containing all the URIs of the $ref found in the schema
+	 * @return a list containing all the uri of the various $ref, empty in case there was none
 	 */
 	public List<URI_JS> getRef();
 	
 	/**
-	 * Cerca di trovare il JSONSchema associato ad un determinato URI
-	 * @param URIIterator iteratore sulle varie componenti del URI
-	 * @return ritorna un'istanza di defs collezionando, oltre che alla def indicata dall'uri, tutte le altre istanze di defs trovate
+	 * Try to find the JSONSchema associated with a particular URI
+	 * @param URIIterator iterator on the components of the URI
+	 * @return an instance of Defs that contains all the definitions found
 	 */
 	public JSONSchema searchDef(Iterator<String> URIIterator);
 	
 	/**
-	 * Clona l'oggetto
-	 * @return ritorna il clone dell'oggetto
+	 * Clone the object
+	 * @return a clone of the current object
 	 */
 	public JSONSchemaElement clone();
 }

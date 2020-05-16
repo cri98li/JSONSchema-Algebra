@@ -14,10 +14,6 @@ public class IfThenElse implements JSONSchemaElement {
 	
 	public IfThenElse(){ }
 	
-	/*public If_Then_Else(JSONObject obj){
-		ifStatement = new JSONSchema(obj);
-	}*/
-	
 	public void setIf(Object obj) {
 		ifStatement = new JSONSchema(obj);
 	}

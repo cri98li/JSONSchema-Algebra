@@ -1,18 +1,25 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Const_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import org.antlr.v4.runtime.tree.Tree;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class WitnessContains implements WitnessAssertion{
     private Double min, max;
     private WitnessAssertion contains;
+    private boolean isAnArray;
 
     protected WitnessContains(){
-
+        this.min = 0.0;
+        this.max = Double.POSITIVE_INFINITY;
+        isAnArray = false;
     }
 
     public WitnessContains(Long min, Long max, WitnessAssertion contains) {
@@ -25,7 +32,10 @@ public class WitnessContains implements WitnessAssertion{
             this.max = Double.POSITIVE_INFINITY;
         else
             this.max = Double.parseDouble(max.toString());
+
         this.contains = contains;
+
+        isAnArray = contains.getClass() == WitnessBoolean.class;
     }
 
     @Override
@@ -40,7 +50,7 @@ public class WitnessContains implements WitnessAssertion{
     @Override
     public WitnessAssertion merge(WitnessAssertion a) {
         if(a == null) return this;
-        if(this.contains.getClass() == WitnessBoolean.class) {
+        if(this.contains != null && this.contains.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.contains).getValue())
                 return new WitnessBoolean(false);
         }
@@ -50,7 +60,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     public WitnessAssertion merge(WitnessContains a) {
-        if(a.contains.getClass() == WitnessBoolean.class) {
+        if(a.contains.getClass() == WitnessBoolean.class || isAnArray) {
             if (!((WitnessBoolean)a.contains).getValue())
                 return new WitnessBoolean(false);
         }
@@ -77,12 +87,28 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
+        if(contains.getClass() == WitnessBoolean.class || isAnArray)
+            return new WitnessType(GrammarStringDefinitions.TYPE_ARRAY);
         return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
     }
 
     @Override
     public Assertion getFullAlgebra() {
-        return new Exist_Assertion(Long.parseLong(min.toString()), max == Double.POSITIVE_INFINITY ? null : Long.parseLong(max.toString()), contains.getFullAlgebra());
+        return new Exist_Assertion(min.longValue(),
+                max == Double.POSITIVE_INFINITY ? null : max.longValue(),
+                (contains != null) ? contains.getFullAlgebra() : null);
+    }
+
+    @Override
+    public WitnessContains clone() {
+        WitnessContains clone = new WitnessContains();
+        clone.max = max;
+        clone.min = min;
+        clone.isAnArray = isAnArray;
+        if(contains != null)
+            clone.contains = contains.clone();
+
+        return clone;
     }
 
     @Override
@@ -92,121 +118,73 @@ public class WitnessContains implements WitnessAssertion{
 
         WitnessContains that = (WitnessContains) o;
 
-        if (min != null ? !min.equals(that.min) : that.min != null) return false;
-        if (max != null ? !max.equals(that.max) : that.max != null) return false;
-        return contains != null ? contains.equals(that.contains) : that.contains == null;
+        if(that.isAnArray != this.isAnArray) return false;
+        if (!Objects.equals(min, that.min)) return false;
+        if (!Objects.equals(max, that.max)) return false;
+        return Objects.equals(contains, that.contains);
+    }
+
+
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public int hashCode() {
-        int result = min != null ? min.hashCode() : 0;
-        result = 31 * result + (max != null ? max.hashCode() : 0);
-        result = 31 * result + (contains != null ? contains.hashCode() : 0);
-        return result;
-    }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Const_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-
-public class WitnessContains implements WitnessAssertion{
-    private Double min, max;
-    private WitnessAssertion contains;
-
-    protected WitnessContains(){
-
-    }
-
-    public WitnessContains(Long min, Long max, WitnessAssertion contains) {
-        if(min == null)
-            this.min = 0.0;
-        else
-            this.min = Double.parseDouble(min.toString());
-
-        if(max == null)
-            this.max = Double.POSITIVE_INFINITY;
-        else
-            this.max = Double.parseDouble(max.toString());
-        this.contains = contains;
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
-    public String toString() {
-        return "WitnessContains{" +
-                "min=" + min +
-                ", max=" + max +
-                ", contains=" + contains +
-                '}';
-    }
-
-    @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a.getClass() == this.getClass()) return this.merge((WitnessContains) a);
-
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-        return and;
-    }
-
-    public WitnessAssertion merge(WitnessContains a) {
+    public WitnessAssertion groupize() {
         WitnessContains contains = new WitnessContains();
 
-        contains.contains = contains.merge(a.contains);
+        contains.min = min;
+        contains.max = max;
+        contains.isAnArray = isAnArray;
+        if(contains != null) {
+            if (this.contains.getClass() != WitnessAnd.class) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(this.contains);
+                contains.contains = and.groupize();
+            } else
+                contains.contains = this.contains.groupize();
+        }
 
-        contains.min = (min < a.min) ? a.min : min;
-
-        contains.max = (max > a.max) ? a.max : max;
-
-        if(contains.min > contains.max){
-            WitnessOr or = new WitnessOr();
-            Type_Assertion type = new Type_Assertion();
-            if(!contains.contains.equals(new WitnessBoolean(true)))
-                type.add(GrammarStringDefinitions.TYPE_OBJECT);
-            else
-                type.add(GrammarStringDefinitions.TYPE_ARRAY);
-
-            or.add(type.not().toWitnessAlgebra());
-            or.add(new WitnessBoolean(false));
-
-            return or;
-        }else
-            return contains;
+        return contains;
     }
 
     @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        Set<WitnessAssertion> set = new HashSet<>();
+
+        if(contains != null || !isAnArray) {
+            if(contains.getClass() != WitnessBoolean.class) {
+                set.addAll(contains.variableNormalization_separation());
+                set.add(contains);
+                contains = new WitnessVar(Utils_Witness.getName(contains));
+            }else
+                set.add(contains);
+        }
+
+        return set;
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        return new Exist_Assertion(Long.parseLong(min.toString()), max == Double.POSITIVE_INFINITY ? null : Long.parseLong(max.toString()), contains.getFullAlgebra());
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        WitnessContains contains = clone();
+
+        contains.contains = this.contains.variableNormalization_expansion(env);
+
+        return contains;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public WitnessAssertion DNF() {
+        WitnessContains contains = clone();
 
-        WitnessContains that = (WitnessContains) o;
+        contains.contains = this.contains.DNF();
 
-        if (min != null ? !min.equals(that.min) : that.min != null) return false;
-        if (max != null ? !max.equals(that.max) : that.max != null) return false;
-        return contains != null ? contains.equals(that.contains) : that.contains == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = min != null ? min.hashCode() : 0;
-        result = 31 * result + (max != null ? max.hashCode() : 0);
-        result = 31 * result + (contains != null ? contains.hashCode() : 0);
-        return result;
+        return contains;
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

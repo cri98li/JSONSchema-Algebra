@@ -1,9 +1,12 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class WitnessBoolean implements WitnessAssertion{
     private boolean value;
@@ -24,8 +27,8 @@ public class WitnessBoolean implements WitnessAssertion{
         if(a == null) return this;
         if(a.getClass() == this.getClass()) return this.merge((WitnessBoolean) a);
 
-        if(this.value) return a; //se vero lo posso ignorare
-        else return this; //se falso mi rende tutto falso
+        if(this.value) return a; // S AND true = S
+        else return this; // S AND false = false
     }
 
     public WitnessBoolean merge(WitnessBoolean a) {
@@ -34,12 +37,17 @@ public class WitnessBoolean implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN);
+        return null;
     }
 
     @Override
     public Assertion getFullAlgebra() {
         return new Boolean_Assertion(value);
+    }
+
+    @Override
+    public WitnessAssertion clone() {
+        return new WitnessBoolean(value);
     }
 
     @Override
@@ -60,63 +68,34 @@ public class WitnessBoolean implements WitnessAssertion{
     public boolean getValue() {
         return value;
     }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
-
-public class WitnessBoolean implements WitnessAssertion{
-    private boolean value;
-
-    public WitnessBoolean(boolean val){
-        this.value = val;
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public String toString() {
-        return "WitnessBoolean{" +
-                "value=" + value +
-                '}';
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a.getClass() == this.getClass()) return this.merge((WitnessBoolean) a);
-
-        if(this.value) return a; //se vero lo posso ignorare
-        else return this; //se falso mi rende tutto falso
-    }
-
-    public WitnessBoolean merge(WitnessBoolean a) {
-        return new WitnessBoolean(a.value && value);
+    public WitnessAssertion groupize() {
+        return this;
     }
 
     @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN);
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        return new HashSet<>();
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        return new Boolean_Assertion(value);
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        return clone();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WitnessBoolean that = (WitnessBoolean) o;
-
-        return value == that.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return (value ? 1 : 0);
+    public WitnessAssertion DNF() {
+        return this.clone();
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

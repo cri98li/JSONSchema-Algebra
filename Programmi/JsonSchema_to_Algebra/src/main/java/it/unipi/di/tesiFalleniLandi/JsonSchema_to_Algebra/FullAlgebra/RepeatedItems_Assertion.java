@@ -6,8 +6,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessRepeate
 import org.json.simple.JSONObject;
 
 public class RepeatedItems_Assertion implements Assertion{
-	public RepeatedItems_Assertion() {
-	}
+
+	public RepeatedItems_Assertion() { }
 
 	@Override
 	public String toString() {

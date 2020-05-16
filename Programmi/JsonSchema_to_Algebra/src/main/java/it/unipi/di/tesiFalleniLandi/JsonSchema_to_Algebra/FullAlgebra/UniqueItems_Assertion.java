@@ -7,8 +7,7 @@ import org.json.simple.JSONObject;
 
 public class UniqueItems_Assertion implements Assertion{
 	
-	public UniqueItems_Assertion() {
-	}
+	public UniqueItems_Assertion() { }
 
 	@Override
 	public String toString() {
@@ -36,7 +35,6 @@ public class UniqueItems_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		// TODO Auto-generated method stub
 		return new UniqueItems_Assertion();
 	}
 

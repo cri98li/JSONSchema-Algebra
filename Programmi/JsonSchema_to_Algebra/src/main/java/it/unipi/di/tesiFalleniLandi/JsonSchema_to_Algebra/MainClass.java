@@ -118,7 +118,7 @@ public class MainClass
 		}else {
 			System.out.println("[1] MainClass_JSONSchema");
 			System.out.println("[2] MainClass_Algebra");
-			System.out.println("[3] JSONSchema --> Algebra");
+			System.out.println("[3] JSONSchema to Full Algebra to JSONSchema");
 
 			try (Scanner s = new Scanner(System.in)) {
 				switch(s.nextInt()) {

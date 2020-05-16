@@ -8,13 +8,15 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import org.json.simple.JSONObject;
 
 public class Utils {
-	/**
-	 * Inserisce il contenuto di toPut in schema
-	 * @param schema dove inserire il contenuto di toPut
-	 * @param keyword parola chiave associata a toPut
-	 * @param toPut Oggetto da inserire in schema
-	 */
+
 	public static final String PUTCONTENT = "putContent";
+
+	/*
+	//Inserisce il contenuto di toPut in schema
+	//@param schema dove inserire il contenuto di toPut
+	//@param keyword parola chiave associata a toPut
+	//@param toPut Oggetto da inserire in schema
+
 	@SuppressWarnings("unchecked")
 	public static void putContent(JSONObject schema, String keyword, Object toPut) {
 		List<String> putContentKeywords = Arrays.asList( new String[]{
@@ -44,6 +46,7 @@ public class Utils {
 			schema.put(key, ((JSONObject) toPut).get(key));
 		}
 	}
+	 */
 	
 	public static String beauty(String input) {
 		String output = "";

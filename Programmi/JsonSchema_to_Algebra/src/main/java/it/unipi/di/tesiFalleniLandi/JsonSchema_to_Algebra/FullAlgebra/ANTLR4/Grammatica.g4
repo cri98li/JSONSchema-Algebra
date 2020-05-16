@@ -105,13 +105,13 @@ propertyNames_assertion: 'names''(' assertion ')'																	#ParseProperty
 
 propertyExNames_assertion: 'exNames''(' assertion ')'																#ParsePropertyExNames;
 
-annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implementato in JSON_to_Grammatica
+annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implemented in JSON_to_Grammar
 
 pattern_required: 'pattReq''[' STRING ':' assertion (',' STRING ':' assertion)* ']'									#ParsePatternRequired;
 
-additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING)*)*']' ':' assertion ')'							#ParseAdditionalPatternRequired;
+additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING)*)*']' ':' assertion ')'						#ParseAdditionalPatternRequired;
 
-ifBoolThen_assertion: 'ifBoolThen''('BOOLEAN')'                                                                               #ParseIfBoolThen;
+ifBoolThen_assertion: 'ifBoolThen''('BOOLEAN')'                                                                     #ParseIfBoolThen;
 
 
 json_value :  			NULL																						#NullValue

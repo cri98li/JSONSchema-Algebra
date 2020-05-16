@@ -11,22 +11,17 @@ import org.json.simple.JSONObject;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
-
 public class Properties implements JSONSchemaElement{
 
 	private HashMap<String, JSONSchema> properties;
 	private HashMap<String, JSONSchema> patternProperties;
 	private JSONSchema additionalProperties;
 	
-	//private Boolean booleanAsAdditionalProperties;
-	
 	public Properties() { }
 	
 	public void setProperties(Object obj) {
-		
 		JSONObject object = (JSONObject) obj;
-		
-		properties = new HashMap<String, JSONSchema>();
+		properties = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -39,10 +34,8 @@ public class Properties implements JSONSchemaElement{
 	}
 	
 	public void setPatternProperties(Object obj) {
-		
 		JSONObject object = (JSONObject) obj;
-		
-		patternProperties = new HashMap<String, JSONSchema>();
+		patternProperties = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -85,7 +78,8 @@ public class Properties implements JSONSchemaElement{
 		
 		if(additionalProperties != null)
 			obj.put("additionalProperties", additionalProperties.toJSON()); 
-		
+
+
 		return obj;
 	}
 
@@ -174,8 +168,7 @@ public class Properties implements JSONSchemaElement{
 		}
 		if(additionalProperties != null) 
 			returnList.addAll(additionalProperties.getRef());
-		
-		
+
 		return returnList;
 	}
 
@@ -243,7 +236,6 @@ public class Properties implements JSONSchemaElement{
 		patternProperties.put(key, value);
 	}
 
-	
 	@Override
 	public Properties clone() {
 		Properties newProperties = new Properties();

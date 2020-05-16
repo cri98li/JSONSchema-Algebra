@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Pro_Assertion implements Assertion{
-	
 	private Long min, max;
 	
 	public Pro_Assertion(Long min, Long max) {
@@ -16,15 +15,6 @@ public class Pro_Assertion implements Assertion{
 	}
 	
 	public Pro_Assertion() {
-	}
-
-	public Pro_Assertion intersect(Pro_Assertion pro) {
-		Pro_Assertion intersectedPro = new Pro_Assertion();
-		
-		intersectedPro.min = (min > pro.min)? min:pro.min;
-		intersectedPro.max = (max < pro.max)? max:pro.max;
-		
-		return intersectedPro;
 	}
 
 	@Override
@@ -46,18 +36,31 @@ public class Pro_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
+		AllOf_Assertion and = new AllOf_Assertion();
+		if(min != null && min != 0 && max == null) {
+			and.add(new Boolean_Assertion(false));
+			return and;
+		}
+
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		and.add(type);
+
 		if(min != null && max != null) {
 			AnyOf_Assertion or = new AnyOf_Assertion();
-			or.add(new Pro_Assertion(null, min-1));
+			if(min != 0)
+				or.add(new Pro_Assertion(null, min-1));
+
 			or.add(new Pro_Assertion(max+1, null));
-			return or;
+			and.add(or);
+			return and;
 		}
 		
 		if(min != null)
-			return new Len_Assertion(null, min-1);
+			return new Pro_Assertion(null, min-1);
 		
 		
-		return new Len_Assertion(max+1, null);
+		return new Pro_Assertion(max+1, null);
 	}
 
 	@Override
@@ -77,6 +80,6 @@ public class Pro_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		return new WitnessPro(Double.parseDouble(min.toString()), max == null ? null : Double.parseDouble(max.toString()));
+		return new WitnessPro(min == null ? null : Double.parseDouble(min.toString()), max == null ? null : Double.parseDouble(max.toString()));
 	}
 }

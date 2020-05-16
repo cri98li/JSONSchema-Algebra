@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONObject;
 
 public class AntlrJsonObject implements AntlrValue{
-
 	private JSONObject object;
 	
 	public AntlrJsonObject() {

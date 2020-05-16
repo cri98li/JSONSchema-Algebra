@@ -90,16 +90,8 @@ public class Enum implements JSONSchemaElement{
 			enumArray_num.add((Object) obj);
 			return true;
 		}
-		return false;
 
-		/*
-		try {
-			enumArray_num.add((Object) obj);
-			return true;
-		}catch(ClassCastException e) {
-			return false;
-		}
-		*/
+		return false;
 	}
 	
 	private boolean putBooleanValue(Object obj) {
@@ -148,6 +140,7 @@ public class Enum implements JSONSchemaElement{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSON() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		Iterator<?> it = enumArray_str.iterator();
@@ -166,8 +159,10 @@ public class Enum implements JSONSchemaElement{
 		while(it_JSE.hasNext()) array.add(it_JSE.next());
 		
 		if(thereIsNull) array.add(null);
-		
-		return array;
+
+		obj.put("enum", array);
+
+		return obj;
 	}
 
 	@Override
@@ -232,13 +227,6 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public List<URI_JS> getRef() {
-		/*
-		List<URI_JS> list = new LinkedList<>();
-
-		Iterator<? extends JSONSchemaElement> it_JSE = enumArray_array.iterator();
-		while(it_JSE.hasNext()) list.addAll(it_JSE.next().getRef());
-		 */
-		
 		return new LinkedList<>();
 	}
 

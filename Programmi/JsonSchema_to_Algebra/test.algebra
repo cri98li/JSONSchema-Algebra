@@ -1,0 +1,16 @@
+rootdef "x" = allOf[
+    type[num, bool],
+    anyOf[
+        allOf[
+        {
+            type[arr],
+            items[ref("x");]
+        },
+        {
+            type[arr],
+            items[ref("y");]
+        }
+        ],
+        type[bool]
+    ]
+]

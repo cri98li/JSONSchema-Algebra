@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,17 +10,17 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Type implements JSONSchemaElement {
-	protected String type;
 	protected List<String> type_array;
 	
 	public Type(Object obj){
 		try{
-			type = (String) obj;
+			String type_str = (String) obj;
+			type_array = new LinkedList<>();
+			type_array.add(type_str);
 			return;
 		}catch(ClassCastException e) {}
 		
 		JSONArray array = (JSONArray) obj;
-		
 		type_array = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
@@ -28,30 +29,36 @@ public class Type implements JSONSchemaElement {
 			type_array.add((String) it.next());
 	}
 	
-	public Type() {
-		
-	}
+	public Type() { }
 	
 	@Override
 	public String toString() {
-		return "Type [type=" + type + ", type_array=" + type_array + "]";
+		return "Type [type_array=" + type_array + "]";
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSON() {
-		if(type != null) return type;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+
+		if(type_array.size() == 1) {
+			obj.put("type", type_array.get(0));
+			return obj;
+		}
 		
 		JSONArray array = new JSONArray();
 		for(String s : type_array)
 			array.add(s);
-		return array;
+
+		obj.put("type", array);
+
+		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
 		
-		if(type != null) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type));
+		if(type_array.size() == 1) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type_array.get(0)));
 		
 		String str = "";
 		Iterator <String> it = type_array.iterator();
@@ -85,9 +92,7 @@ public class Type implements JSONSchemaElement {
 	@Override
 	public Type assertionSeparation() {
 		Type obj = new Type();
-		if(type != null)
-			obj.type = type;
-		
+
 		if(type_array != null)
 			obj.type_array = new LinkedList<>(type_array);
 
@@ -111,8 +116,8 @@ public class Type implements JSONSchemaElement {
 	
 	@Override
 	public Type clone() {
-		if(type != null) {
-			return new Type(new String(type));
+		if(type_array.size() == 1) {
+			return new Type(new String(type_array.get(0)));
 		}else {
 			Type newType = new Type();
 			newType.type_array = new LinkedList<>();

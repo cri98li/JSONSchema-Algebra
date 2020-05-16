@@ -3,10 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AnyOf;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.IfThenElse;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
 
 import java.util.LinkedList;
@@ -45,7 +41,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		throw new UnsupportedOperationException("Da chiedere");
+		throw new UnsupportedOperationException("Da trovare la libreria");
 
 	}
 
@@ -54,7 +50,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add("obj");
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		
 		for(PosixPattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
@@ -95,10 +91,9 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() {
-		//throw new UnsupportedOperationException("Da chiedere");
 		PosixPattern p = new MyPattern("^$");
 		for(PosixPattern pattern : pattList)
-			p = p.join(pattern);
+			p = p.or(pattern);
 
 		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());
 	}

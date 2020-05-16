@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class UniqueItems implements JSONSchemaElement{
 	private boolean uniqueItems;
@@ -22,8 +23,11 @@ public class UniqueItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public Boolean toJSON() {
-		return uniqueItems;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("uniqueItems", uniqueItems);
+
+		return obj;
 	}
 
 	@Override

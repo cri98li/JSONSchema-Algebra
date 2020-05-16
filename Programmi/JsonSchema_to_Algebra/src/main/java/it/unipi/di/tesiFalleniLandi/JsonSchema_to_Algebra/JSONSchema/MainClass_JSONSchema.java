@@ -21,16 +21,8 @@ public static void main(String[] args) throws FileNotFoundException, IOException
     
     System.out.println(root.toJSON().toString().replace("\\", ""));
     
-    /*List<Entry<String, Defs>> entryList = root.collectDef();
+    System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
     
-    for(Entry<String, Defs> entry : entryList) {
-    	System.out.println(entry.getKey()+ " >> " + entry.getValue().toJSON());
-    }*/
-        
-    System.out.println(root.toJSON().toString().replace("\\", ""));
-    
-    //System.out.println((Utils_JSONSchema.normalize(root).toJSON()));
-    
-    System.out.println(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
+    System.out.println("NORMALIZZATO algebra: "+Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
 	}
 }

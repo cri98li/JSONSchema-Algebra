@@ -41,13 +41,13 @@ public class IfThenElse_Assertion implements Assertion{
 	//if A then B else C --> (A and B) or (not(a) and C)
 	//(S1 ∧ S2) ∨ ((¬S1) ∧ S3)
 	//(¬S1) ∨ (S2)
-	//NEGATO: (S1 ∧ ¬S2)
-	//NEGATO: (not(A) or not(B)) and (A or not(C)) --? if A then not(C) else not(B) ???
+	//NOT: (S1 ∧ ¬S2)
+	//NOT: (not(A) or not(B)) and (A or not(C)) --? if A then not(C) else not(B) ???
 	@Override
 	public Assertion not() {	
 		AllOf_Assertion and = new AllOf_Assertion();
 
-		//caso if-then-else
+		//if-then-else
 		if(elseStatement != null) {
 			AnyOf_Assertion orThen = new AnyOf_Assertion();
 			AnyOf_Assertion orElse = new AnyOf_Assertion();
@@ -57,35 +57,13 @@ public class IfThenElse_Assertion implements Assertion{
 			orElse.add(ifStatement);
 			orElse.add(elseStatement.not());
 			and.add(orElse);
-		}else{
+		}else{ //if-then
 			and.add(ifStatement);
 			and.add(thenStatement.not());
 		}
 
 		return and;
 	}
-
-	/*
-	public Assertion notExplicitation(){
-		Or_Assertion orList = new Or_Assertion();
-
-		if(elseStatement != null){
-			And_Assertion andListThen = new And_Assertion();
-			And_Assertion andListElse = new And_Assertion();
-			andListThen.add(ifStatement);
-			andListThen.add(thenStatement);
-			orList.add(andListThen);
-			andListElse.add(new Not_Assertion(ifStatement));
-			andListElse.add(elseStatement);
-			orList.add(andListElse);
-		}else{
-			orList.add(ifStatement.not());
-			orList.add(thenStatement);
-		}
-
-		return orList;
-	}
-	*/
 
 	@Override
 	public Assertion notElimination() {
@@ -127,8 +105,8 @@ public class IfThenElse_Assertion implements Assertion{
 		and.add(thenStatement.toWitnessAlgebra());
 
 		WitnessAnd and2 = new WitnessAnd();
-		and.add(ifStatement.not().toWitnessAlgebra());
-		and.add(elseStatement.toWitnessAlgebra());
+		and2.add(ifStatement.not().toWitnessAlgebra());
+		and2.add(elseStatement.toWitnessAlgebra());
 
 		or.add(and);
 		or.add(and2);

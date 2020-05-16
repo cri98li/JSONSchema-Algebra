@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class PropertyNames implements JSONSchemaElement{
 	private JSONSchema propertyNames;
 	
-	public PropertyNames() {
-	}
+	public PropertyNames() { }
 	
 	public PropertyNames(Object obj) {
 		this.propertyNames = new JSONSchema(obj);
@@ -18,13 +18,15 @@ public class PropertyNames implements JSONSchemaElement{
 
 	@Override
 	public Object toJSON() {
-		return propertyNames.toJSON();
+		JSONObject obj = new JSONObject();
+		obj.put("propertyNames", propertyNames.toJSON());
+
+		return obj;
 	}
 
 	@Override
 	public JSONSchemaElement assertionSeparation() {
 		PropertyNames p = new PropertyNames();
-		
 		p.propertyNames = this.propertyNames.assertionSeparation();
 		
 		return p;
@@ -47,7 +49,6 @@ public class PropertyNames implements JSONSchemaElement{
 
 	@Override
 	public List<URI_JS> getRef() {
-		// TODO Auto-generated method stub
 		return propertyNames.getRef();
 	}
 
@@ -59,7 +60,6 @@ public class PropertyNames implements JSONSchemaElement{
 	@Override
 	public JSONSchemaElement clone() {
 		PropertyNames clone = new PropertyNames();
-		
 		clone.propertyNames = propertyNames.clone();
 		
 		return clone;

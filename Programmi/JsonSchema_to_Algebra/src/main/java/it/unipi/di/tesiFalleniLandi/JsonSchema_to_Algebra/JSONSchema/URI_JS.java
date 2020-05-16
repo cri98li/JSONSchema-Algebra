@@ -4,7 +4,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 
 import java.util.Iterator;
 
-
 public class URI_JS {
 	private String uri;
 	private String normalizedURI;
@@ -14,8 +13,7 @@ public class URI_JS {
 		this.uri = uri;
 	}
 	
-	public URI_JS() {
-	}
+	public URI_JS() { }
 
 	public void found() {
 		normalizeURI();
@@ -39,7 +37,7 @@ public class URI_JS {
 	private void normalizeURI() {
 		//start: uri --> #/$defs/a/b/foo
 		normalizedName = "";
-		normalizedURI ="";
+		normalizedURI = "";
 		
 		//caso #
 		if(uri.equals("#")) {

@@ -11,7 +11,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 public class Len_Assertion implements Assertion{
 	private Long min, max;
 	
-	public Len_Assertion() { }
+	public Len_Assertion() {
+	}
 	
 	public Len_Assertion(Long min, Long max) {
 		this.min = min;
@@ -55,13 +56,22 @@ public class Len_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
+		if((min == null || min == 0) && max == null) {
+			and.add(new Boolean_Assertion(false));
+			return and;
+		}
+
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_STRING);
 		and.add(type);
 
 		if(min != null && max != null) {
-			and.add(new Len_Assertion(null, min-1));
-			and.add(new Len_Assertion(max+1, null));
+			AnyOf_Assertion or = new AnyOf_Assertion();
+			if(min != 0)
+				or.add(new Len_Assertion(null, min-1));
+
+			or.add(new Len_Assertion(max+1, null));
+			and.add(or);
 			return and;
 		}
 		
@@ -91,6 +101,10 @@ public class Len_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		return new WitnessPattern(new MyPattern("^.{"+ min +"," + max + "}$"));
+		String minStr = "0", maxStr = "";
+		if(min != null) minStr = min.toString();
+		if(max != null) maxStr = max.toString();
+
+		return new WitnessPattern(new MyPattern("^.{"+ minStr +"," + maxStr + "}$"));
 	}
 }

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import java.util.LinkedList;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Const extends Enum {
 
@@ -26,16 +27,20 @@ public class Const extends Enum {
 		}
 
 	@Override
-	public Object toJSON() {
-		if(super.thereIsNull) return null;
-		if(!enumArray_array.isEmpty()) return enumArray_array.get(0);
-		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0);
-		if(!enumArray_obj.isEmpty()) return enumArray_obj.get(0);
-		if(!enumArray_bool.isEmpty()) return enumArray_bool.get(0);
-		if(!enumArray_num.isEmpty()) return enumArray_num.get(0);
-		if(!enumArray_str.isEmpty()) return enumArray_str.get(0);
-		
-		return "ERROR";
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		Object value = null;
+
+		if(super.thereIsNull) value = null;
+		else if(!enumArray_array.isEmpty()) value = enumArray_array.get(0);
+		else if(!enumArray_obj.isEmpty()) value = enumArray_obj.get(0);
+		else if(!enumArray_bool.isEmpty()) value = enumArray_bool.get(0);
+		else if(!enumArray_num.isEmpty()) value = enumArray_num.get(0);
+		else if(!enumArray_str.isEmpty()) value = enumArray_str.get(0);
+
+		obj.put("const", value);
+
+		return obj;
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class Const extends Enum {
 
 		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
 
-		return ""; //non ci dovrei mai cadere
+		return "";
 	}
 
 	@Override

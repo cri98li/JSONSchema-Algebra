@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Ref implements JSONSchemaElement{
 	private URI_JS uri;
@@ -37,13 +38,15 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public Object toJSON() {
-		return uri.toString();
+		JSONObject obj = new JSONObject();
+		obj.put("ref", uri.toString());
+
+		return obj;
 	}
 
 	@Override
 	public List<URI_JS> getRef() {
 		List<URI_JS> returnList = new LinkedList<>();
-		
 		returnList.add(uri);
 		
 		return returnList;
@@ -62,7 +65,6 @@ public class Ref implements JSONSchemaElement{
 	@Override
 	public Ref clone() {
 		Ref clone = new Ref();
-		
 		clone.uri = uri.clone();
 		
 		return clone;

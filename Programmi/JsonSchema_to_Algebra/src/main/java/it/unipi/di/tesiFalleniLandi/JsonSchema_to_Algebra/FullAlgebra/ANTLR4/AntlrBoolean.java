@@ -1,7 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
 public class AntlrBoolean implements AntlrValue{
-
 	private boolean value;
 	
 	public AntlrBoolean(boolean value) {

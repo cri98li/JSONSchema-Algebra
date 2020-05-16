@@ -1,8 +1,11 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class WitnessVar implements WitnessAssertion{
     private String name;
@@ -22,20 +25,25 @@ public class WitnessVar implements WitnessAssertion{
                 '}';
     }
 
-
     @Override
     public WitnessAssertion merge(WitnessAssertion a) {
+        if (a == null) return this;
         return null;
     }
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
+        return null;
     }
 
     @Override
     public Assertion getFullAlgebra() {
-        return null; //non ci arrivo
+        return new Ref_Assertion(name);
+    }
+
+    @Override
+    public WitnessVar clone() {
+        return new WitnessVar(name);
     }
 
     @Override
@@ -45,67 +53,42 @@ public class WitnessVar implements WitnessAssertion{
 
         WitnessVar that = (WitnessVar) o;
 
-        return name != null ? name.equals(that.name) : that.name == null;
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
+
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
+    }
+
+    @Override
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
+    }
+
+    @Override
+    public WitnessAssertion groupize() {
+        return this;
+    }
+
+    @Override
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        return this.clone();
+    }
+
+    @Override
+    public WitnessAssertion DNF() {
+        return this.clone();
+    }
+
 }
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-
-public class WitnessVar implements WitnessAssertion{
-    private String name;
-
-    public WitnessVar(String name) {
-        this.name = name;
-    }
-
-    public String getValue(){
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "WitnessVar{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
-
-    @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        return null;
-    }
-
-    @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
-    }
-
-    @Override
-    public Assertion getFullAlgebra() {
-        return null; //non ci arrivo
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WitnessVar that = (WitnessVar) o;
-
-        return name != null ? name.equals(that.name) : that.name == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
-    }
-}
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

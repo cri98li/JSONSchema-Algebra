@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Pattern implements JSONSchemaElement{
 	private String pattern;
@@ -14,8 +15,7 @@ public class Pattern implements JSONSchemaElement{
 		pattern = (String)str;
 	}
 	
-	public Pattern() {
-	}
+	public Pattern() { }
 
 	@Override
 	public String toString() {
@@ -23,10 +23,12 @@ public class Pattern implements JSONSchemaElement{
 	}
 
 
-
 	@Override
-	public String toJSON() {
-		return pattern;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("pattern", pattern);
+
+		return obj;
 	}
 
 	@Override
@@ -39,32 +41,23 @@ public class Pattern implements JSONSchemaElement{
 		return 1;
 	}
 
-
-
 	@Override
 	public Pattern assertionSeparation() {
 		Pattern obj = new Pattern();
-		
 		obj.pattern = pattern;
 		
 		return obj;
 	}
-
-
 
 	@Override
 	public List<URI_JS> getRef() {
 		return new LinkedList<>();
 	}
 
-
-
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		return null;
 	}
-
-
 
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
@@ -73,7 +66,6 @@ public class Pattern implements JSONSchemaElement{
 	
 	@Override
 	public Pattern clone(){
-		
 		return new Pattern(new String(pattern));
 	}
 

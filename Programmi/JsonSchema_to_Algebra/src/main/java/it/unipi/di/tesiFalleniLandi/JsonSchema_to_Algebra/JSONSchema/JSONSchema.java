@@ -9,15 +9,10 @@ import java.util.Map.Entry;
 
 public class JSONSchema implements JSONSchemaElement{
 	
-	private Boolean booleanAsJSONSchema; //Per gestire il caso di schema booleano
+	private Boolean booleanAsJSONSchema; //To handle boolean value
 	
-	private HashMap<String, JSONSchemaElement> jsonSchema; //Dizionario di keywords presenti nello schema
-	
-	/**
-	 * Costruttore, prova a parsare un Object in boolean o in JSONObject.
-	 * Nel caso di JSONObject, si procede con la creazione delle parole chiave di JSONSchema presenti nel JSONObject.
-	 * @param obj
-	 */
+	private HashMap<String, JSONSchemaElement> jsonSchema; //Dictionary of keywords in the schema
+
 	public JSONSchema(Object obj) {
 		jsonSchema = new HashMap<>();
 		JSONObject object = null;
@@ -29,7 +24,6 @@ public class JSONSchema implements JSONSchemaElement{
 			object = (JSONObject) obj;
 		}
 		
-		//inizio parsing
 		Iterator<?> it = object.keySet().iterator();
 		
 		if(object.keySet().size() == 0) { //caso schema vuoto
@@ -41,7 +35,7 @@ public class JSONSchema implements JSONSchemaElement{
 			String key = (String) it.next();
 			switch(key) { 
 			
-			//I valori di properties, patternProperties e additionalProperties vengono memorizzati nella stessa classe (Properties).
+			//properties, patternProperties and additionalProperties grouped in Properties.
 			case "properties":
 				jsonSchema.putIfAbsent("properties", new Properties());
 				((Properties) jsonSchema.get("properties")).setProperties(object.get(key));
@@ -57,7 +51,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Properties) jsonSchema.get("properties")).setAdditionalProperties(object.get(key));
 				break;
 				
-			//I valori di dependencies, dependentSchemas e dependentRequired vengono memorizzati nella stessa classe (Dependencies).
+			//dependencies, dependentSchemas and dependentRequired grouped in Dependencies.
 			case "dependencies":
 				jsonSchema.putIfAbsent("dependencies", new Dependencies());
 				((Dependencies) jsonSchema.get("dependencies")).setDependencies(object.get(key));
@@ -73,7 +67,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Dependencies) jsonSchema.get("dependencies")).setDependentRequired(object.get(key));
 				break;
 				
-			//I valori di items, additionalItems vengono memorizzati nella stessa classe (Items).	
+			//items and additionalItems grouped in Items.
 			case "items":
 				jsonSchema.putIfAbsent("items", new Items());
 				((Items) jsonSchema.get("items")).setItems(object.get(key));
@@ -84,7 +78,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Items) jsonSchema.get("items")).setAdditionalItems(object.get(key));
 				break;
 			
-			//I valori di if, then e else vengono memorizzati nella stessa classe (IfThenElse).
+			//if, then and else grouped IfThenElse.
 			case "if":
 				jsonSchema.putIfAbsent("ifThenElse", new IfThenElse());
 				((IfThenElse) jsonSchema.get("ifThenElse")).setIf(object.get(key));
@@ -120,7 +114,7 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("anyOf", new AnyOf(object.get(key)));
 				break;
 			
-			//I valori di minItems e maxItems vengono memorizzati nella stessa classe (BetweenItems).
+			//minItems and maxItems grouped in BetweenItems.
 			case "minItems":
 				jsonSchema.putIfAbsent("betweenItems", new BetweenItems());
 				((BetweenItems) jsonSchema.get("betweenItems")).setMinItems(object.get(key));
@@ -135,7 +129,7 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("multipleOf", new MultipleOf(object.get(key)));
 				break;
 				
-			//I valori di minLength e maxLength vengono memorizzati nella stessa classe (Length).
+			//minLength and maxLength grouped in Length.
 			case "minLength":
 				jsonSchema.putIfAbsent("length", new Length());
 				((Length) jsonSchema.get("length")).setMinLength(object.get(key));
@@ -146,7 +140,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Length) jsonSchema.get("length")).setMaxLength(object.get(key));
 				break;
 				
-			//I valori di contains, minContains e maxContains vengono memorizzati nella stessa classe (Contains).
+			//contains, minContains and maxContains grouped in Contains.
 			case "contains":
 				jsonSchema.putIfAbsent("contains", new Contains());
 				((Contains) jsonSchema.get("contains")).setContains(object.get(key));
@@ -162,7 +156,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Contains) jsonSchema.get("contains")).setMaxContains(object.get(key));
 				break;
 				
-			//I valori di minimum, maximum, exclusiveMinimum e exclusiveMaximum vengono memorizzati nella stessa classe (BetweenNumber).
+			//Iminimum, maximum, exclusiveMinimum and exclusiveMaximum grouped in BetweenNumber.
 			case "minimum":
 				jsonSchema.putIfAbsent("betweenNumber", new BetweenNumber());
 				((BetweenNumber) jsonSchema.get("betweenNumber")).setMin(object.get(key));
@@ -195,7 +189,7 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("uniqueItems", new UniqueItems(object.get(key)));
 				break;
 				
-			//I valori di minProperties e maxProperties vengono memorizzati nella stessa classe (BetweenProperties).
+			//minProperties and maxProperties grouped in BetweenProperties.
 			case "minProperties":
 				jsonSchema.putIfAbsent("betweenProperties", new BetweenProperties());
 				((BetweenProperties) jsonSchema.get("betweenProperties")).setMinProperties(object.get(key));
@@ -247,8 +241,7 @@ public class JSONSchema implements JSONSchemaElement{
 	}
 	
 	
-	public JSONSchema() {
-	}
+	public JSONSchema() { }
 
 	public void addJSONSchemaElement(String key, JSONSchemaElement value) {
 		if(jsonSchema == null)	jsonSchema = new HashMap<>();
@@ -258,13 +251,21 @@ public class JSONSchema implements JSONSchemaElement{
 	@Override
 	public Object toJSON() {
 		JSONObject schema = new JSONObject();
-		
-		//caso boolean as a Schema
+
+		//boolean as a Schema
 		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
-		for(Entry<String, JSONSchemaElement> entry : entries)
-			Utils.putContent(schema, entry.getKey(), entry.getValue().toJSON());
+		for(Entry<String, JSONSchemaElement> entry : entries){
+			JSONObject toAdd = (JSONObject)entry.getValue().toJSON();
+			Set<String> subSchemaKeySet = toAdd.keySet();
+			for (String key : subSchemaKeySet){
+				if(key.equals(Utils.PUTCONTENT))
+					schema.putAll((JSONObject) toAdd.get(key));
+				else
+					schema.put(key, toAdd.get(key));
+			}
+		}
 		
 		return schema;
 	}
@@ -283,8 +284,6 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
-			
-			
 			//TYPE SEPARATION
 			/*if(entry.getKey().equals("type")) {
 				AnyOf anyOf = new AnyOf();
@@ -349,18 +348,14 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
-		for(Entry<String, JSONSchemaElement> entry : entries) {			
+		for(Entry<String, JSONSchemaElement> entry : entries) {
 			String returnedValue = entry.getValue().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.COMMA + returnedValue;
 			nElement += entry.getValue().numberOfAssertions();
 		}
-		
-		/*
-		 * if(entries.isEmpty()) return "true";
-		 * if(str.isEmpty()) return "";
-		 */
+
 		if(nElement == 0) return "";
 		if(nElement == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
 		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));

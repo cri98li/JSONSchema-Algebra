@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Not implements JSONSchemaElement {
 	private JSONSchema value;
@@ -13,9 +14,7 @@ public class Not implements JSONSchemaElement {
 		value = new JSONSchema(obj);
 	}
 	
-	public Not() {
-		// TODO Auto-generated constructor stub
-	}
+	public Not() { }
 
 	@Override
 	public String toString() {
@@ -23,8 +22,11 @@ public class Not implements JSONSchemaElement {
 	}
 
 	@Override
-	public Object toJSON() {
-		return value.toJSON();
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("not", value.toJSON());
+
+		return obj;
 	}
 
 	@Override
@@ -35,7 +37,6 @@ public class Not implements JSONSchemaElement {
 	@Override
 	public Not assertionSeparation() {
 		Not obj = new Not();
-		
 		obj.value = value.assertionSeparation();
 		
 		return obj;
@@ -69,7 +70,6 @@ public class Not implements JSONSchemaElement {
 	@Override
 	public Not clone(){
 		Not clone = new Not();
-		
 		clone.value = value.clone();
 		
 		return clone;

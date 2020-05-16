@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class MultipleOf implements JSONSchemaElement{
 	private Object value;
@@ -22,8 +23,11 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public Object toJSON() {
-		return value;
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("multipleOf", value);
+
+		return obj;
 	}
 
 	@Override

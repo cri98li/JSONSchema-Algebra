@@ -71,8 +71,8 @@ public class GrammarStringDefinitions {
 
 	//defs e rootdef
 	public static final String DEFS = "def \"%s\" = %s";
-	public static final String ROOTDEF = "rootdef \"%s\" = %s";
-	public static final String ROOTDEF_DEFAULTNAME = "\"root\"";
+	public static final String ROOTDEF = "rootdef %s = %s";
+	public static final String ROOTDEF_DEFAULTNAME = "root";
 	public static final String NOT_DEFS = "not_";
 
 	//if-then-else

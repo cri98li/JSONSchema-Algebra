@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class Required implements JSONSchemaElement{
 	private List<String> required;
@@ -28,13 +29,16 @@ public class Required implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		for(String s : required)
 			array.add(s);
-		
-		return array;
+
+		obj.put("required", array);
+
+		return obj;
 	}
 
 	@Override

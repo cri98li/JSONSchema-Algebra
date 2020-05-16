@@ -1,11 +1,13 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.NotMof_Assertion;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class WitnessNotMof implements WitnessAssertion{
     private Double value;
@@ -57,6 +59,11 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion clone() {
+        return new WitnessNotMof(value);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -70,83 +77,34 @@ public class WitnessNotMof implements WitnessAssertion{
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
     }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.NotMof_Assertion;
-
-public class WitnessNotMof implements WitnessAssertion{
-    private Double value;
-
-    public WitnessNotMof(Double value) {
-        this.value = value;
-    }
-
-    public Double getValue() {
-        return value;
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public String toString() {
-        return "WitnessNotMof{" +
-                "value=" + value +
-                '}';
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
-        if(a.getClass() == this.getClass())
-            return this.merge((WitnessNotMof) a);
-
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-        return and;
-    }
-
-    public WitnessAssertion merge(WitnessNotMof notMof) {
-        Double val1 = notMof.value;
-        Double val2 = this.value;
-
-        if(val1 % val2 == 0)
-            return new WitnessNotMof(val2);
-        else if(val2 % val1 == 0)
-            return new WitnessNotMof(val1);
-        else{
-            WitnessAnd and = new WitnessAnd();
-            and.add(notMof);
-            and.add(this);
-
-            return and;
-        }
+    public WitnessAssertion groupize() {
+        return this;
     }
 
     @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_NUMBER);
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        return new HashSet<>();
     }
 
     @Override
-    public Assertion getFullAlgebra() {
-        return new NotMof_Assertion(value);
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        return this.clone();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        WitnessNotMof that = (WitnessNotMof) o;
-
-        return value != null ? value.equals(that.value) : that.value == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+    public WitnessAssertion DNF() {
+        return this.clone();
     }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

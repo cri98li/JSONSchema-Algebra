@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
@@ -39,13 +40,15 @@ public class AllOf implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		for(JSONSchema js : allOf)
 			array.add(js.toJSON());
-		
-		return array;
+
+		obj.put("allOf", array);
+		return obj;
 	}
 
 	@Override

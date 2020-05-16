@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class Const_Assertion implements Assertion{
-	
 	private Object value;
 
 	public Const_Assertion(Object value) {
@@ -74,7 +73,7 @@ public class Const_Assertion implements Assertion{
 			return or;
 		}
 		
-		//caso array
+		//array
 		if(value.getClass() == LinkedList.class) {
 			@SuppressWarnings("unchecked")
 			List<Object> array = (List<Object>) value;
@@ -95,7 +94,7 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		
-		//caso object
+		//object
 		JSONObject object = (JSONObject) value;
 		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
@@ -176,7 +175,7 @@ public class Const_Assertion implements Assertion{
 		if(value.getClass() == String.class) {
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
-			and.add(new WitnessPattern(new MyPattern((String) value)));
+			and.add(new WitnessPattern(new MyPattern("^"+(String) value+"$")));
 			return and;
 		}
 
@@ -209,7 +208,7 @@ public class Const_Assertion implements Assertion{
 			return and;
 		}
 
-		//Caso array
+		//array
 		WitnessAnd and = new WitnessAnd();
 		and.add(new WitnessType(GrammarStringDefinitions.TYPE_ARRAY));
 		WitnessItems items = new WitnessItems();

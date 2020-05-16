@@ -7,7 +7,6 @@ import org.json.simple.JSONObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Bet_Assertion implements Assertion{
-	
 	private Object min, max;
 	
 	public Bet_Assertion() {	}

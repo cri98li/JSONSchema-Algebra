@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
 
 public class OneOf implements JSONSchemaElement{
 	private List<JSONSchema> oneOf;
@@ -36,16 +37,18 @@ public class OneOf implements JSONSchemaElement{
 	}
 
 
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONArray toJSON() {
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 		
 		for(JSONSchema js : oneOf)
 			array.add(js.toJSON());
-		
-		return array;
+
+		obj.put("oneOf", array);
+
+		return obj;
 	}
 
 	@Override

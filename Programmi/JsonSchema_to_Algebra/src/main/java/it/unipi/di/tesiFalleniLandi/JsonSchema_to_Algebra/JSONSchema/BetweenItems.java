@@ -70,7 +70,6 @@ public class BetweenItems implements JSONSchemaElement{
 
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
-		
 		return new LinkedList<>();
 	}
 

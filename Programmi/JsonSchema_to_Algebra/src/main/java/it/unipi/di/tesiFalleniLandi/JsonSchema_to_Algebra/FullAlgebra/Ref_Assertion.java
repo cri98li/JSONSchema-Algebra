@@ -21,7 +21,7 @@ public class Ref_Assertion implements Assertion{
 	public JSONObject toJSONSchema() {
 		JSONObject obj = new JSONObject();
 
-		if(ref.equals("rootdef")) {
+		if(Defs_Assertion.env != null && ref.equals(Defs_Assertion.env.getRootName())) {
 			obj.put("ref", "#" + ref);
 		}else {
 			obj.put("ref", "#/$defs/" + ref);

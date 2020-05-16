@@ -1,12 +1,11 @@
-<<<<<<< HEAD
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
+import jdk.jshell.execution.Util;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class WitnessItems implements WitnessAssertion{
     private List<WitnessAssertion> items;
@@ -24,14 +23,19 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     public void addItems(WitnessAssertion item){
-        if(!((WitnessBoolean)item).getValue()) {
-            blocked = true;
-            additionalItems = item;
-            return;
+        try{
+            if(!((WitnessBoolean)item).getValue()) {
+                blocked = true;
+                additionalItems = item;
+                return;
+            }else{
+                items.add(item);
+                return;
+            }
+        }catch (ClassCastException e) {
+            if (!blocked)
+                items.add(item);
         }
-
-        if(!blocked)
-            items.add(item);
     }
 
     @Override
@@ -69,25 +73,21 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     public WitnessAssertion merge(WitnessItems a) {
-        if(a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
-            if(((WitnessBoolean)a.additionalItems).getValue())
+        if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
+            if (((WitnessBoolean) a.additionalItems).getValue())
                 return a.additionalItems;
             else {
                 WitnessAnd and = new WitnessAnd();
                 and.add(a);
-                and.add(new WitnessContains(0l,0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+                and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
                 return and;
             }
 
-
-
-
-
-        for(int i = items.size()-1; i >= 0; i--)
-            if( additionalItems!= null && additionalItems.equals(items.get(i)))
+        for (int i = items.size() - 1; i >= 0; i--)
+            if (additionalItems != null && additionalItems.equals(items.get(i)))
                 items.remove(i);
-            else if(items.get(i).getClass() == WitnessBoolean.class && ((WitnessBoolean) items.get(i)).getValue() == false){
-                for(int j = items.size()-1; j >= i; j--)
+            else if (items.get(i).getClass() == WitnessBoolean.class && ((WitnessBoolean) items.get(i)).getValue() == false) {
+                for (int j = items.size() - 1; j >= i; j--)
                     items.remove(j);
 
                 additionalItems = new WitnessBoolean(false);
@@ -95,20 +95,44 @@ public class WitnessItems implements WitnessAssertion{
 
         WitnessItems ite = new WitnessItems();
 
-        ite.additionalItems = a;
-        if(a.additionalItems == null) ite.additionalItems = additionalItems;
-        if(a.additionalItems != null && additionalItems != null) ite.additionalItems = a.additionalItems.merge(additionalItems);
+        ite.additionalItems = a.additionalItems;
+        if (a.additionalItems == null) ite.additionalItems = additionalItems;
+        if (a.additionalItems != null && this.additionalItems != null)
+            ite.additionalItems = a.additionalItems.clone().merge(this.additionalItems);
 
         int i;
         int min = (a.items.size() < items.size()) ? a.items.size() : items.size();
-        for(i = 0; i < min; i++)
-            ite.addItems(items.get(i).merge(a.items.get(i)));
+        for (i = 0; i < min; i++) {
+            WitnessAssertion tmp = items.get(i).merge(a.items.get(i));
+            if(tmp != null)
+                ite.addItems(tmp);
+            else{
+                WitnessAnd and = new WitnessAnd();
+                and.add(items.get(i));
+                and.add(a.items.get(i));
+                ite.addItems(and);
+            }
+        }
 
-        for(; i < a.items.size(); i++)
-            ite.addItems(a.items.get(i));
 
-        for(; i < items.size(); i++)
-            ite.addItems(items.get(i));
+
+        for(; i < a.items.size(); i++) {
+            WitnessAssertion tmp = a.items.get(i).merge(this.additionalItems);
+            if(tmp != null)
+                ite.addItems(tmp);
+            else
+                ite.addItems(a.items.get(i));
+        }
+
+
+        for(; i < items.size(); i++) {
+            WitnessAssertion tmp = items.get(i).merge(a.additionalItems);
+            if(tmp != null)
+                ite.addItems(tmp);
+            else
+                ite.addItems(items.get(i));
+        }
+
 
         return ite;
     }
@@ -130,88 +154,135 @@ public class WitnessItems implements WitnessAssertion{
 
         return items;
     }
-}
-=======
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
-
-import java.util.LinkedList;
-import java.util.List;
-
-public class WitnessItems implements WitnessAssertion{
-    private List<WitnessAssertion> items;
-    private WitnessAssertion additionalItems;
-
-    public WitnessItems() {
-        items = new LinkedList<>();
-    }
-
-    public void setAdditionalItems(WitnessAssertion addItem){
-        additionalItems = addItem;
-    }
-
-    public void addItems(WitnessAssertion item){
-        items.add(item);
-    }
 
     @Override
-    public String toString() {
-        return "WitnessItems{" +
-                "items=" + items +
-                ", additionalItems=" + additionalItems +
-                '}';
-    }
+    public WitnessAssertion clone() {
+        WitnessItems clone = new WitnessItems();
+        for(WitnessAssertion assertion : items)
+            clone.items.add(assertion.clone());
 
-    @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a.getClass() == this.getClass()) return this.merge((WitnessItems) a);
-
-        WitnessAnd and = new WitnessAnd();
-        and.add(this);
-        and.add(a);
-        return and;
-    }
-
-    public WitnessAssertion merge(WitnessItems a) {
-        WitnessItems ite = new WitnessItems();
-
-        ite.additionalItems = a;
-        if(a.additionalItems == null) ite.additionalItems = additionalItems;
-        if(a.additionalItems != null && additionalItems != null) ite.additionalItems = a.additionalItems.merge(additionalItems);
-
-        int i;
-        int min = (a.items.size() < items.size()) ? a.items.size() : items.size();
-        for(i = 0; i < min; i++)
-            ite.addItems(items.get(i).merge(a.items.get(i)));
-
-        for(; i < a.items.size(); i++)
-            ite.addItems(a.items.get(i));
-
-        for(; i < items.size(); i++)
-            ite.addItems(items.get(i));
-
-        return ite;
-    }
-
-    @Override
-    public WitnessType getGroupType() {
-        return new WitnessType(GrammarStringDefinitions.TYPE_ARRAY);
-    }
-
-    @Override
-    public Assertion getFullAlgebra() {
-        Items_Assertion items = new Items_Assertion();
-
-        for(WitnessAssertion a : this.items)
-            items.add(a.getFullAlgebra());
+        clone.blocked = blocked;
 
         if(additionalItems != null)
-            items.setAdditionalItems(additionalItems.getFullAlgebra());
+            clone.additionalItems = additionalItems.clone();
+
+        return clone;
+    }
+
+    @Override
+    public WitnessAssertion not() {
+        return getFullAlgebra().not().toWitnessAlgebra();
+    }
+
+    @Override
+    public WitnessAssertion notElimination() {
+        return getFullAlgebra().notElimination().toWitnessAlgebra();
+    }
+
+    @Override
+    public WitnessAssertion groupize() {
+        WitnessItems items = new WitnessItems();
+        if(additionalItems != null) {
+            if(additionalItems.getClass() != WitnessAnd.class) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(additionalItems);
+                items.additionalItems = and.groupize();
+            }
+        }
+
+        for(WitnessAssertion assertion : this.items)
+            if(assertion.getClass() != WitnessAnd.class) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(assertion);
+                items.addItems(and.groupize());
+            }else
+                items.addItems(assertion.groupize());
 
         return items;
     }
+
+    @Override
+    public Set<WitnessAssertion> variableNormalization_separation() {
+        HashSet set = new HashSet<>();
+
+        if(items != null){
+            for(int i = 0; i < items.size(); i++){
+                if(items.get(i).getClass() != WitnessBoolean.class) {
+                    set.addAll(items.get(i).variableNormalization_separation());
+                    set.add(items.get(i));
+                    items.set(i, new WitnessVar(Utils_Witness.getName(items.get(i))));
+                }else
+                    set.add(items.get(i));
+            }
+        }
+
+        if(additionalItems != null){
+            if(additionalItems.getClass() != WitnessBoolean.class) {
+                set.addAll(additionalItems.variableNormalization_separation());
+                set.add(additionalItems);
+                additionalItems = new WitnessVar(Utils_Witness.getName(additionalItems));
+            }else
+                set.add(additionalItems);
+        }
+
+        return set;
+    }
+
+    @Override
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+        WitnessItems newItems = new WitnessItems();
+
+        if(items != null){
+            for(WitnessAssertion assertion : items)
+                newItems.addItems(assertion.variableNormalization_expansion(env));
+        }
+
+        if(additionalItems != null)
+            newItems.setAdditionalItems(additionalItems.variableNormalization_expansion(env));
+
+        return newItems;
+    }
+
+    @Override
+    public WitnessAssertion DNF() {
+        WitnessItems newItems = new WitnessItems();
+
+        if(items != null){
+            for(WitnessAssertion assertion : items)
+                newItems.addItems(assertion.DNF());
+        }
+
+        if(additionalItems != null)
+            newItems.setAdditionalItems(additionalItems.DNF());
+
+        return newItems;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WitnessItems that = (WitnessItems) o;
+
+        if (blocked != that.blocked) return false;
+
+        if(!Objects.equals(that.additionalItems, additionalItems)) return false;
+
+        if(that.items.size() != items.size()) return false;
+
+        List<WitnessAssertion> check = new LinkedList<>();
+        check.addAll(this.items);
+        check.removeAll(that.items);
+
+        return check.size() == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = items != null ? items.hashCode() : 0;
+        result = 31 * result + (blocked ? 1 : 0);
+        result = 31 * result + (additionalItems != null ? additionalItems.hashCode() : 0);
+        return result;
+    }
 }
->>>>>>> 9be72e1ac293591d2d50b1d0779180c7b28dedeb

@@ -37,7 +37,6 @@ public class ExName_Assertion implements Assertion{
 
 	@Override
 	public Assertion notElimination() {
-		// TODO Auto-generated method stub
 		return new ExName_Assertion(names.notElimination());
 	}
 

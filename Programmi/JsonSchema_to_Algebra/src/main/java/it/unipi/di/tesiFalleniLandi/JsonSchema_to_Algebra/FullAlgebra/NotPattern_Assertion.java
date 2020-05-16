@@ -8,8 +8,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern
 
 public class NotPattern_Assertion implements Assertion{
 	private PosixPattern notPattern;
-	
-	public NotPattern_Assertion() {	}
 
 	public NotPattern_Assertion(PosixPattern pattern) {
 		this.notPattern = pattern;
