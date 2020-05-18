@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaLexer;
@@ -43,7 +44,7 @@ public class MainClass
 							JsonSchema = new JSONSchema(object);
 						}
 
-						System.out.println(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(JsonSchema)));
+						System.out.println(Utils.beauty(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(JsonSchema))));
 						break;
 
 					//ALGEBRA --> JSON
@@ -84,7 +85,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(_schema.notElimination().toGrammarString());
+						System.out.println(Utils.beauty(_schema.notElimination().toGrammarString()));
 						break;
 
 					case 4:
@@ -102,7 +103,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(_schema.notElimination().toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString());
+						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString()));
 						break;
 
 					default:

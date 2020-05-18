@@ -168,9 +168,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	}
 
 	private GatewayResponse canonicalization(String body) {
-		Assertion schema = Utils_FullAlgebra.parseString(body);
+		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
 
-		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).notElimination().getFullAlgebra().toGrammarString()),
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).merge(null).groupize().getFullAlgebra().toGrammarString()),
 				200,
 				"type", "application/json+schema",
 				false);
