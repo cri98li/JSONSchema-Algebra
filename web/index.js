@@ -119,7 +119,8 @@ function sendRequest(){
             if(action != "toGrammarString" 
                     && action != "notEliminationFull" 
                     && action != "andMerging"
-                    && action != "notEliminationWitness" )
+                    && action != "notEliminationWitness" 
+                    && action != "Canonicalization")
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
                 $("#outputTextarea").val(data);
