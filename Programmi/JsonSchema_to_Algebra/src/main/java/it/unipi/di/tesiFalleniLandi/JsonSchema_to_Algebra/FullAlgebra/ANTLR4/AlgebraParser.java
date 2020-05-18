@@ -21,10 +21,12 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 			case "t":
 			case "tt":
 				return new Boolean_Assertion(true);
+			default:
+				return new Boolean_Assertion(false);
 		}
-		return new Boolean_Assertion(false);
 	}
 
+	@Override
 	public AllOf_Assertion visitParseAssertionList(GrammaticaParser.ParseAssertionListContext ctx) {
 		AllOf_Assertion list = new AllOf_Assertion();
 
@@ -433,10 +435,12 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return prop;
 	}
 
+	@Override
 	public PatternRequired_Assertion visitNewPatternRequired(GrammaticaParser.NewPatternRequiredContext ctx) {
 		return (PatternRequired_Assertion) visit(ctx.pattern_required());
 	}
 
+	@Override
 	public PatternRequired_Assertion visitParsePatternRequired(GrammaticaParser.ParsePatternRequiredContext ctx) {
 		PatternRequired_Assertion p = new PatternRequired_Assertion();
 
@@ -661,18 +665,19 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return new ExName_Assertion((Assertion) visit(ctx.assertion()));
 	}
 
+	@Override
 	public IfBoolThen_Assertion visitParseIfBoolThen(GrammaticaParser.ParseIfBoolThenContext ctx){
-		Boolean b = false;
 		switch(ctx.BOOLEAN().getText()){
 			case "true":
 			case "t":
 			case "tt":
-				b=true;
+				return new IfBoolThen_Assertion(true);
+			default:
+				return new IfBoolThen_Assertion(false);
 		}
-
-		return new IfBoolThen_Assertion(b);
 	}
 
+	@Override
 	public IfBoolThen_Assertion visitNewIfBoolThen(GrammaticaParser.NewIfBoolThenContext ctx){
 		return (IfBoolThen_Assertion) visit(ctx.ifBoolThen_assertion());
 	}

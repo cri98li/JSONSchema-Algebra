@@ -12,7 +12,7 @@ public class MultipleOf implements JSONSchemaElement{
 	private Object value;
 	
 	public MultipleOf(Object obj) {
-		Object value = (Object) obj;
+		Object value = obj;
 		
 		this.value = value;
 	}

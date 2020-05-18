@@ -98,7 +98,7 @@ public class URI_JS {
             }
 
             @Override
-            public String next() throws NoSuchElementException {
+            public String next() {
             	try {
 					return splittedURI[currentIndex];
 				}catch (Exception e){

@@ -107,4 +107,6 @@ public class GrammarStringDefinitions {
 
 	//IfBoolThen
 	public static final String IFBOOLTHEN = "ifBoolThen(%s)";
+
+	private GrammarStringDefinitions(){}
 }
