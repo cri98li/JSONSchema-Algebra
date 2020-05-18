@@ -16,7 +16,6 @@ public class RepeatedItems_Assertion implements Assertion{
 
 	@Override
 	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
 		Type_Assertion type = new Type_Assertion();
 		type.add("arr");
 		Not_Assertion not = new Not_Assertion(new UniqueItems_Assertion());

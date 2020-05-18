@@ -16,7 +16,7 @@ public class MainClass_Algebra {
 		JSONObject JSON = (JSONObject) schema.toJSONSchema();
 		System.out.println(JSON.toJSONString());
 
-		System.out.println(Utils.beauty(((JSONObject)schema.notElimination().toJSONSchema()).toJSONString()));
+		//System.out.println(Utils.beauty(((JSONObject)schema.notElimination());
 
 
 		System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));

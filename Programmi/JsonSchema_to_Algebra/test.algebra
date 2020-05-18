@@ -1,16 +1,42 @@
 rootdef "x" = allOf[
-    type[num, bool],
-    anyOf[
-        allOf[
-        {
-            type[arr],
-            items[ref("x");]
-        },
-        {
-            type[arr],
-            items[ref("y");]
-        }
-        ],
-        type[bool]
-    ]
+		allOf[
+			mof(1),
+			type[int]
+		],
+		oneOf[
+			mof(1),
+			type[int]
+		],
+        anyOf[
+			mof(1),
+			type[int]
+		],
+		not(allOf[
+			const("abc"),
+			enum[null, 12, true, [1,2,3], {"a":30,"b":100}]
+		]),
+		ifThenElse(
+			type[null];
+			length(10,100);
+			bet(10,100)),
+		req["a", "b", "c"],
+		props[
+			"a": xbet(1,10),
+			"b": allOf[
+				betItems(1,+inf),
+				uniqueItems,
+				type[arr],
+				items[contains(1, 5; true),names(true);false]
+			],
+			"c": allOf[
+				pattern("^\[0-9]{3}?[0-9]{3}-[0-9]{4}$"),
+				type[str]
+			],
+			"^\[0-9]{3}?[0-9]{3}-[0-9]{4}$": ref("e")
+			;ref("f")],
+		pro(1,3)
+	],
+	def "e" = not(type[num]),
+	def "f" = anyOf[
+		type[str, num]
 ]

@@ -142,7 +142,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     @Override
     public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> finalSet = new HashSet<WitnessAssertion>();
+        Set<WitnessAssertion> finalSet = new HashSet<>();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
                 finalSet.addAll(entry.getValue().variableNormalization_separation());

@@ -1,16 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Map.Entry;
-
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class Dependencies implements JSONSchemaElement{
 	
@@ -31,14 +26,14 @@ public class Dependencies implements JSONSchemaElement{
 				JSONSchema js = new JSONSchema(entry.getValue());
 				dependentSchemas.put((String)entry.getKey(), js);
 			}catch(ClassCastException ex) {
-				if(dependentRequired == null) dependentRequired = new HashMap<String, List<String>>();
+				if(dependentRequired == null) dependentRequired = new HashMap<>();
 				LinkedList<String> list = new LinkedList<>();
 				JSONArray array = (JSONArray) entry.getValue();
 				
 				Iterator<?> it_array = array.iterator();
 				
 				while(it_array.hasNext()) {
-					list.add(new String((String) it_array.next()));
+					list.add(((String) it_array.next()));
 				}
 				
 				dependentRequired.put((String) entry.getKey(), list);
@@ -49,7 +44,7 @@ public class Dependencies implements JSONSchemaElement{
 	public void setDependentRequired(Object obj) {
 		JSONObject object = (JSONObject) obj;
 		
-		dependentRequired = new HashMap<String, List<String>>();
+		dependentRequired = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -61,7 +56,7 @@ public class Dependencies implements JSONSchemaElement{
 			Iterator<?> it_array = array.iterator();
 			
 			while(it_array.hasNext()) {
-				list.add(new String((String) it_array.next()));
+				list.add((String) it_array.next());
 			}
 			
 			dependentRequired.put(key, list);

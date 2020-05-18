@@ -3,7 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
-import jdk.jshell.execution.Util;
 
 import java.util.*;
 
@@ -30,7 +29,6 @@ public class WitnessItems implements WitnessAssertion{
                 return;
             }else{
                 items.add(item);
-                return;
             }
         }catch (ClassCastException e) {
             if (!blocked)
@@ -64,8 +62,6 @@ public class WitnessItems implements WitnessAssertion{
                 items.remove(i);
             else
                 break;
-
-
 
         if(a.getClass() == this.getClass()) return this.merge((WitnessItems) a);
 

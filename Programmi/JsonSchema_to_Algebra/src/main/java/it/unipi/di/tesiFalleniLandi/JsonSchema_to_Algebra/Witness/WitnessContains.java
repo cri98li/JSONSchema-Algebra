@@ -4,12 +4,10 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-import org.antlr.v4.runtime.tree.Tree;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class WitnessContains implements WitnessAssertion{
     private Double min, max;
@@ -159,7 +157,7 @@ public class WitnessContains implements WitnessAssertion{
         Set<WitnessAssertion> set = new HashSet<>();
 
         if(contains != null || !isAnArray) {
-            if(contains.getClass() != WitnessBoolean.class) {
+            if(contains != null && contains.getClass() != WitnessBoolean.class) {
                 set.addAll(contains.variableNormalization_separation());
                 set.add(contains);
                 contains = new WitnessVar(Utils_Witness.getName(contains));
@@ -186,5 +184,10 @@ public class WitnessContains implements WitnessAssertion{
         contains.contains = this.contains.DNF();
 
         return contains;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(min, max, contains, isAnArray);
     }
 }

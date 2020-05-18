@@ -8,7 +8,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Asser
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con xbet
     private Double min, max;

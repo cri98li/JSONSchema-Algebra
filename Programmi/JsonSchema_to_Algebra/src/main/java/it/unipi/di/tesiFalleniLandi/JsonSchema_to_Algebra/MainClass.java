@@ -24,7 +24,7 @@ import java.util.Scanner;
 
 public class MainClass
 {
-	public static void main( String[] args ) throws FileNotFoundException, IOException, ParseException{
+	public static void main( String[] args ) throws IOException, ParseException{
 		String filename = "";
 		int op;
 

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class URI_JS {
 	private String uri;
@@ -97,8 +98,13 @@ public class URI_JS {
             }
 
             @Override
-            public String next() {
-                return splittedURI[currentIndex];
+            public String next() throws NoSuchElementException {
+            	try {
+					return splittedURI[currentIndex];
+				}catch (Exception e){
+            		throw new NoSuchElementException(e.getMessage());
+				}
+
             }
             
             @Override

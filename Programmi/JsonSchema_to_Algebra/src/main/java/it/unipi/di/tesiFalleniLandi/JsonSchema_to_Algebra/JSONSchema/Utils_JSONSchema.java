@@ -1,5 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,15 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
-
 public class Utils_JSONSchema {
 
-	public static JSONSchema parse(String path) throws FileNotFoundException, IOException, ParseException {
+	public static JSONSchema parse(String path) throws IOException, ParseException {
 
 		try (Reader reader = new FileReader(path)){
 			JSONObject object = (JSONObject) new JSONParser().parse(reader);

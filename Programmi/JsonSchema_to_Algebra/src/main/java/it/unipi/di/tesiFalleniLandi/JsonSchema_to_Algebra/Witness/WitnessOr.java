@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AnyOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 
@@ -73,9 +72,6 @@ public class WitnessOr implements WitnessAssertion{
      */
     @Override
     public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null)
-            return this;
-
         if(a != null && a.getClass() == this.getClass())
             return null; //this.size = n and a.size = m --> return size O(n*m)
 

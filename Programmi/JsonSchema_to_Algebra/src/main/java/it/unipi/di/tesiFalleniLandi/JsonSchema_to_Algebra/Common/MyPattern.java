@@ -4,7 +4,6 @@ import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RegExp;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -121,5 +120,10 @@ public class MyPattern implements PosixPattern{
         MyPattern myPattern = (MyPattern) o;
 
         return Objects.equals(regex, myPattern.regex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(automaton, regex);
     }
 }

@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -136,9 +135,7 @@ public class Type_Assertion implements Assertion{
 	public WitnessAssertion toWitnessAlgebra() {
 		if(types.size() == 1) return new WitnessType(types.get(0));
 
-		WitnessType type = new WitnessType(types);
-
-		return type;
+		return new WitnessType(types);
 	}
 
 	private String toJsonTypeName(String type) {

@@ -234,7 +234,7 @@ public class JSONSchema implements JSONSchemaElement{
 			
 			default:
 				jsonSchema.putIfAbsent("unknow", new UnknowElement());
-				((UnknowElement) jsonSchema.get("unknow")).add(key, object.get(key));;
+				((UnknowElement) jsonSchema.get("unknow")).add(key, object.get(key));
 				break;
 			}
 		}

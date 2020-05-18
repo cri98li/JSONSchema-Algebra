@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 public class Defs_Assertion implements Assertion{
@@ -17,7 +18,7 @@ public class Defs_Assertion implements Assertion{
 	
 	public Defs_Assertion() {
 		env = this;
-		defs = new HashMap<String, Assertion>();
+		defs = new HashMap<>();
 	}
 	
 	public void add(String key, Assertion value) throws ParseCancellationException {
@@ -87,7 +88,7 @@ public class Defs_Assertion implements Assertion{
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 
 			for (Entry<String, Assertion> entry : entrySet)
-				if (!entry.getKey().equals(rootDef))
+				if (!Objects.equals(entry.getKey(), rootDef))
 					def += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
 				else
 					if(rootDef != null)

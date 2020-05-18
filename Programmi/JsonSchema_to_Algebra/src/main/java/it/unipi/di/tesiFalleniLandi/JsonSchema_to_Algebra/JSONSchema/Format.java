@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import com.amazonaws.http.apache.utils.ApacheUtils;
 import org.json.simple.JSONObject;
 
 import java.util.Iterator;

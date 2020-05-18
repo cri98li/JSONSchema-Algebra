@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBet;
 import org.json.simple.JSONObject;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-
 public class Bet_Assertion implements Assertion{
-	private Object min, max;
+	private Object min;
+	private Object max;
 	
 	public Bet_Assertion() {	}
 	
@@ -71,7 +70,8 @@ public class Bet_Assertion implements Assertion{
 	}
 	
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = GrammarStringDefinitions.NEG_INF;
+		String max = GrammarStringDefinitions.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
@@ -81,7 +81,8 @@ public class Bet_Assertion implements Assertion{
 
 	@Override
 	public WitnessBet toWitnessAlgebra() {
-		Double min = null, max = null;
+		Double min = null;
+		Double max = null;
 
 		if(this.min != null)
 			min = Double.parseDouble(this.min.toString());

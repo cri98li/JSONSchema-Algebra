@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class WitnessPro implements WitnessAssertion{
@@ -77,7 +78,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
-        return new Pro_Assertion(Double.valueOf(min).longValue(), max == Double.POSITIVE_INFINITY ? null : Double.valueOf(max).longValue());
+        return new Pro_Assertion(min.longValue(), max == Double.POSITIVE_INFINITY ? null : max.longValue());
     }
 
     @Override
@@ -92,8 +93,8 @@ public class WitnessPro implements WitnessAssertion{
 
         WitnessPro that = (WitnessPro) o;
 
-        if (min != null ? !min.equals(that.min) : that.min != null) return false;
-        return max != null ? max.equals(that.max) : that.max == null;
+        if (!Objects.equals(min, that.min)) return false;
+        return Objects.equals(max, that.max);
     }
 
     @Override

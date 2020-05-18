@@ -1,12 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import org.json.simple.JSONObject;
-
 public class Utils {
 
 	public static final String PUTCONTENT = "putContent";

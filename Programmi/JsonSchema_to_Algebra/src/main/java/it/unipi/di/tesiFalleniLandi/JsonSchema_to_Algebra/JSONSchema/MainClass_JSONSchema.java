@@ -1,16 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 public class MainClass_JSONSchema {
-public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
+public static void main(String[] args) throws IOException, ParseException {
 	String path = "test.json";
 	JSONSchema root;
 	

@@ -247,15 +247,12 @@ public class WitnessAnd implements WitnessAssertion{
             return or;
         }
 
-        WitnessOr orList = (WitnessOr) andList.get(WitnessOr.class).get(0);
+        or = (WitnessOr) andList.get(WitnessOr.class).remove(0);
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
-
-                for(WitnessAssertion assertion : entry.getValue()){
-                    if(!orList.equals(assertion)) {
-                        or.add(orList.DNF(assertion));
-                    }
-                }
+            for(WitnessAssertion assertion : entry.getValue()) {
+                or = or.DNF(assertion);
+            }
         }
 
         return or.DNF();

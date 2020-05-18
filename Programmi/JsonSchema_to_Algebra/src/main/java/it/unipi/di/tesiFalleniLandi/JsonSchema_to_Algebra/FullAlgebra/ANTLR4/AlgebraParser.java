@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.Json_valueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -46,8 +46,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Bet_Assertion visitParseBetweenAssertion(GrammaticaParser.ParseBetweenAssertionContext ctx) {
-		AntlrValue min = (AntlrValue) visit(ctx.json_value(0))
-				, max = (AntlrValue) visit(ctx.json_value(1));
+		AntlrValue min = (AntlrValue) visit(ctx.json_value(0));
+		AntlrValue max = (AntlrValue) visit(ctx.json_value(1));
 
 		return new Bet_Assertion(min.getValue(), max.getValue());
 	}
@@ -60,8 +60,8 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public XBet_Assertion visitParseXBetweenAssertion(GrammaticaParser.ParseXBetweenAssertionContext ctx) {
-		AntlrValue min = (AntlrValue) visit(ctx.json_value(0))
-				, max = (AntlrValue) visit(ctx.json_value(1));
+		AntlrValue min = (AntlrValue) visit(ctx.json_value(0));
+		AntlrValue max = (AntlrValue) visit(ctx.json_value(1));
 
 		return new XBet_Assertion(min.getValue(), max.getValue());
 	}
@@ -124,7 +124,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		for(TerminalNode terminalNode : ctx.TYPE())
 			array.add(new AntlrString(terminalNode.getText()));
 
-		if(ctx.NULL().size() > 0)
+		if(!ctx.NULL().isEmpty())
 			array.add(new AntlrString("null"));
 
 		return array;
@@ -627,6 +627,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 
+	/*
 	public _Annotation_Assertion visitNewAnnotations(GrammaticaParser.NewAnnotationsContext ctx) {
 		return (_Annotation_Assertion) visitChildren(ctx);
 	}
@@ -641,6 +642,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 		return annotations;
 	}
+	*/
 
 
 	@Override

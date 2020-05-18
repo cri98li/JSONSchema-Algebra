@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenProperties implements JSONSchemaElement{
 	private Object minProperties;
@@ -58,7 +57,7 @@ public class BetweenProperties implements JSONSchemaElement{
 		if(maxProperties != null) obj.maxProperties = maxProperties;
 		
 		return obj;
-	};
+	}
 	
 	@Override
 	public List<URI_JS> getRef() {

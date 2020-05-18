@@ -122,7 +122,12 @@ public class WitnessType implements WitnessAssertion{
 
     @Override
     public int hashCode() {
-        return Objects.hash(type);
+        int hash = 0;
+
+        for(String str : type)
+            hash += Objects.hash(str);
+
+        return hash;
     }
 
     @Override

@@ -8,7 +8,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Asser
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge con notMof
     private Double value;

@@ -1,14 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class Enum implements JSONSchemaElement{
 	protected List<String> enumArray_str;
@@ -73,7 +72,7 @@ public class Enum implements JSONSchemaElement{
 		if(putBooleanValue(currentObject)) return;
 		if(putNullValue(currentObject)) return;
 		if(putArrayValue(currentObject)) return;
-		if(putObjectValue(currentObject)) return;
+		putObjectValue(currentObject);
 	}
 	
 	private boolean putStringValue(Object obj) {
@@ -87,7 +86,7 @@ public class Enum implements JSONSchemaElement{
 	
 	private boolean putNumericValue(Object obj) {
 		if(obj.getClass() == Double.class || obj.getClass() == Long.class || obj.getClass() == Integer.class){
-			enumArray_num.add((Object) obj);
+			enumArray_num.add(obj);
 			return true;
 		}
 

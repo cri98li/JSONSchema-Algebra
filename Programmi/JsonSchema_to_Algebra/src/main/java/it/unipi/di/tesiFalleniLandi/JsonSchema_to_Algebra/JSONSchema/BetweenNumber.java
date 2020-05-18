@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.json.simple.JSONObject;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import org.json.simple.JSONObject;
-
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 
 public class BetweenNumber implements JSONSchemaElement{
 	private Object maximum;
@@ -101,9 +100,9 @@ public class BetweenNumber implements JSONSchemaElement{
 			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
 		
 		
-		if(str1 == "" && str2 != null)
+		if(str1.isEmpty() && str1 != null)
 			return str2;
-		if(str2 == "" && str1 != null)
+		if(str2.isEmpty() && str2 != null)
 			return str1;
 		
 		return str1 + GrammarStringDefinitions.COMMA + str2;
