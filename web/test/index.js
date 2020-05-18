@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    $.get( "http://jsonschema.ddns.net:8080/getResults", function( data ) {
+    $.get( "https://jsonschema.ddns.net:8080/getResults", function( data ) {
         console.log( data );
         var str = "";
         json = JSON.parse(data);
@@ -25,7 +25,7 @@ $("#execute").click(function(){
     $("#execute").prop('disabled', true);
     $("#execute").html('Running');
 
-    $.get( "http://jsonschema.ddns.net:8080/test", function( data ) {
+    $.get( "https://jsonschema.ddns.net:8080/test", function( data ) {
         location.reload();
     });
 });

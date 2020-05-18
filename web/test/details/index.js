@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    $.get( "http://jsonschema.ddns.net:8080/getTests?"+window.location.search.substr(1), function( data ) {
+    $.get( "https://jsonschema.ddns.net:8080/getTests?"+window.location.search.substr(1), function( data ) {
         console.log( data );
         var str = "";
         json = JSON.parse(data);
