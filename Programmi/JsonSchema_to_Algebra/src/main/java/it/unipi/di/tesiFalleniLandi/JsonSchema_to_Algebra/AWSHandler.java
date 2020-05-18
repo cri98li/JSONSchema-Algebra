@@ -51,6 +51,9 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 
 			case "notEliminationWitness":
 				return notEliminationWitness((String) input.get("body"));
+
+			case "Canonicalization":
+				return canonicalization((String) input.get("body"));
 			}
 			
 			
@@ -156,6 +159,15 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	}
 
 	private GatewayResponse notEliminationWitness(String body) {
+		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
+
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).groupize().getFullAlgebra().toGrammarString()),
+				200,
+				"type", "application/json+schema",
+				false);
+	}
+
+	private GatewayResponse canonicalization(String body) {
 		Assertion schema = Utils_FullAlgebra.parseString(body);
 
 		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).notElimination().getFullAlgebra().toGrammarString()),
