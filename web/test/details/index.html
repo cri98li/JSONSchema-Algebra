@@ -21,6 +21,10 @@
             body{
                 padding-top: 20px;
             }
+
+            textarea{
+                white-space: nowrap;
+            }
         </style>
 
 
@@ -33,20 +37,13 @@
         <div class="container-fluid">
             <div class="row mt-5">
                 <div class="col-12 text-left">
-                    <a href="/" class="text-decoration-none">Go back</a>
+                    <a href="./.." class="text-decoration-none">Go back</a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="mt-1">Tests</h1>
-                    <h4 class="mt-3">How to add test files to the suite</h4>
-                    <p class="mt-1">
-                        You can add test by uploading file into this folder. <br>
-                        You must name the file as described in this document.
-                    </p>
-
-                    <button type="button" id="execute" class="btn btn-primary btn-lg mt-4">Execute test</button>
+                    <h1 class="mt-1">Details</h1>
 
 
                 </div>
@@ -55,18 +52,15 @@
                         <table class="table table-striped">
                         <thead>
                             <tr>
-                            <th>#</th>
-                            <th>Result</th>
-                            <th>Date</th>
-                            <th>Details</th>
+                            <th>Output</th>
+                            <th>Expected</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr>
-                            <td>1,001</td>
-                            <td>Lorem</td>
-                            <td>ipsum</td>
-                            <td>sit</td>
+                            <td>1</td>
+                            <td><textarea class="form-control" id="inputTextarea" rows="10" placeholder="Input textarea"></textarea></td>
+                            <td><textarea class="form-control" id="inputTextarea" rows="10" placeholder="Input textarea"></textarea></td>
                             </tr>
                         </tbody>
                         </table>
