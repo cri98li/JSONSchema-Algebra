@@ -62,26 +62,27 @@ public class WitnessAnd implements WitnessAssertion{
 
             for (Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet()) {
                 int size = sameTypeAssertion.getValue().size();
-                WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge(null);//indagare caso ritorna and
+                WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge(null);
 
                 for (int i = 1; i < size; i++) {
-                    merged = merged.merge(sameTypeAssertion.getValue().get(i)); //pensa al caso di ritorno di una andList.................. notMulOf non mergiabili
-                    if (merged != null)
+                    WitnessAssertion oldMerge = merged;
+                    merged = merged.merge(sameTypeAssertion.getValue().get(i));
+                    if (merged != null) {
                         modified |= true;
+                        if (merged.getClass() == WitnessBoolean.class) {
+                            WitnessBoolean b = (WitnessBoolean) merged;
+                            if (!b.getValue())
+                                return b;
+                        }
+                    }
                     else {
                         newAnd.add(sameTypeAssertion.getValue().get(i));
-                        merged = sameTypeAssertion.getValue().get(0);
-                        continue;
-                    }
-                    if (merged.getClass() == WitnessBoolean.class) {
-                        WitnessBoolean b = (WitnessBoolean) merged;
-                        if (!b.getValue())
-                            return b;
+                        merged = oldMerge;
                     }
                 }
 
                 if (merged != null)
-                    newAnd.add(merged); //Così considero il fatto che potrebbe ritornare un tipo diverso da quello originale (uniq+repeated --> type(Arr)=> false)
+                    newAnd.add(merged);
             }
 
 
