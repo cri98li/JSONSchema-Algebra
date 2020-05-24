@@ -113,7 +113,7 @@ function sendRequest(){
 
     $.ajax({ 
         type : "POST", 
-        url : "https:jsonschema.duckdns.org:8080/execute?op="+action, 
+        url : "https://jsonschema.duckdns.org:8080/execute?op="+action, 
         data : inputTextarea,
         beforeSend: function(xhr){xhr.setRequestHeader('Content-Type', 'text/plain');},
         success : function(data) { 
