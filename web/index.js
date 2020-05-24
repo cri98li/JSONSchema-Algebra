@@ -111,9 +111,12 @@ function sendRequest(){
     $("#translate").html('Loading...');
     //$('#loadingGif').show();
 
-    $.post("https://mqmukc9q5h.execute-api.eu-west-1.amazonaws.com/pubblico/jsonschema-to-algebra?action="+action,
-        inputTextarea,
-        function(data){
+    $.ajax({ 
+        type : "POST", 
+        url : "https:jsonschema.duckdns.org:8080/execute?op="+action, 
+        data : inputTextarea,
+        beforeSend: function(xhr){xhr.setRequestHeader('Content-Type', 'text/plain');},
+        success : function(data) { 
             console.log("Data: " + data );
             console.log(data);
             if(action != "toGrammarString" 
@@ -131,24 +134,26 @@ function sendRequest(){
 
                 $("#outputTextarea").trigger('change.dynSiz');
                 $("#inputTextarea").trigger('change.dynSiz');
-          },
-          "text"
-    )  .fail(function(xhr, status, error) {  
-        showAlert('Error: '+xhr.status, xhr.responseText);
+        }, 
+        error : function(data) { 
+            console.log(data);
+            showAlert('Error: '+ data.status, data.responseText);
         
-        $("#translate").prop('disabled', false);
-        $("#translate").html('Translate');
-        //$('#loadingGif').hide();
+            $("#translate").prop('disabled', false);
+            $("#translate").html('Translate');
+            //$('#loadingGif').hide();
+        } 
       });
-}
 
-function showAlert(title, body){
-    $("#alert-title").html("");
-    if(body == null || body == "")
-        $("#alert-body").html("Request Error");
-    else
-        $("#alert-body").html(body);
-    $('#alert').show();
+    function showAlert(title, body){
+        $("#alert-title").html("");
+        if(body == null || body == "")
+            $("#alert-body").html("Request Error");
+        else
+            $("#alert-body").html(body);
+        $('#alert').show();
+    }
+
 }
 
 
