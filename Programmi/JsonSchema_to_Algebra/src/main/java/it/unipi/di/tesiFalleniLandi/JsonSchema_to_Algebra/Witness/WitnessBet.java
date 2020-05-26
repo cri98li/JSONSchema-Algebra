@@ -35,7 +35,12 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    @Override
+    public WitnessAssertion mergeElement(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -43,17 +48,17 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
             return type.not().toWitnessAlgebra();
         }
 
-        if(a == null) return this;
-
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessBet) a);
+            return this.mergeElement((WitnessBet) a);
         if(a.getClass() == WitnessXBet.class)
-            return this.merge((WitnessXBet) a);
+            return this.mergeElement((WitnessXBet) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessBet a) {
+
+
+    public WitnessAssertion mergeElement(WitnessBet a) {
         if(a.min > max || a.max < min){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -68,7 +73,7 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
         return (this.equals(newBet) && a.equals(newBet)) ? null : newBet;
     }
 
-    public WitnessAssertion merge(WitnessXBet a) { //TODO: check
+    public WitnessAssertion mergeElement(WitnessXBet a) { //TODO: check
         if(a.min >= max || a.max <= min){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);

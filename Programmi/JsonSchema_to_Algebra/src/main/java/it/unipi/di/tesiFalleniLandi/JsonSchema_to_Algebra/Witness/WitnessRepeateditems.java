@@ -17,8 +17,13 @@ public class WitnessRepeateditems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         return null;
+    }
+
+    @Override
+    public WitnessAssertion merge() {
+        return this;
     }
 
     @Override

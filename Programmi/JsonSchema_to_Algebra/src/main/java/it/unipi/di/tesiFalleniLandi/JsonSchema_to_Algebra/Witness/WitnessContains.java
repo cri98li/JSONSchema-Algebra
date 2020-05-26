@@ -46,18 +46,26 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(this.contains != null && this.contains.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.contains).getValue())
                 return new WitnessBoolean(false);
         }
-        if(a.getClass() == this.getClass()) return this.merge((WitnessContains) a);
+        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessContains) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessContains a) {
+    @Override
+    public WitnessAssertion merge() {
+        WitnessContains newContains = this.clone();
+
+        newContains.contains = contains.merge();
+
+        return newContains;
+    }
+
+    public WitnessAssertion mergeElement(WitnessContains a) {
         if(a.contains.getClass() == WitnessBoolean.class || isAnArray) {
             if (!((WitnessBoolean)a.contains).getValue())
                 return new WitnessBoolean(false);
@@ -65,7 +73,7 @@ public class WitnessContains implements WitnessAssertion{
 
         WitnessContains contains = new WitnessContains();
 
-        contains.contains = contains.merge(a.contains);
+        contains.contains = contains.mergeElement(a.contains);
 
         contains.min = (min < a.min) ? a.min : min;
 
@@ -134,7 +142,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() {
+    public WitnessAssertion groupize() throws WitnessException {
         WitnessContains contains = new WitnessContains();
 
         contains.min = min;
@@ -169,7 +177,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessContains contains = clone();
 
         contains.contains = this.contains.variableNormalization_expansion(env);
@@ -178,7 +186,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion DNF() {
+    public WitnessAssertion DNF() throws WitnessException {
         WitnessContains contains = clone();
 
         contains.contains = this.contains.DNF();

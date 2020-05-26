@@ -11,7 +11,9 @@ public interface WitnessAssertion extends Cloneable{
      * @return null if the objects cannot be merged, otherwise it returns the merged object
      *              (if the object cannot be unified within a single assertion, it returns a WitnessAnd)
      */
-    public WitnessAssertion merge(WitnessAssertion a);
+    public WitnessAssertion mergeElement(WitnessAssertion a);
+
+    public WitnessAssertion merge();
 
     /**
      * Return the relative Type of an assertion
@@ -28,18 +30,18 @@ public interface WitnessAssertion extends Cloneable{
 
     public WitnessAssertion clone();
 
-    public WitnessAssertion not();
+    public WitnessAssertion not() throws WitnessException;
 
-    public WitnessAssertion notElimination();
+    public WitnessAssertion notElimination() throws WitnessException;
 
     //Se and, ritorna and sottoforma di gruppo, altrimenti propaga. se terminal node ritorna this
-    public WitnessAssertion groupize();
+    public WitnessAssertion groupize() throws WitnessException;
 
     //colleziona tutte le definizioni da creare nella fase di variable normalization, il nome della variabile è dato da:
     public Set<WitnessAssertion> variableNormalization_separation();
 
     //espande le variabili "unguarded" con la loro definizione
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env);
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException;
 
-    public WitnessAssertion DNF();
+    public WitnessAssertion DNF() throws WitnessException;
 }

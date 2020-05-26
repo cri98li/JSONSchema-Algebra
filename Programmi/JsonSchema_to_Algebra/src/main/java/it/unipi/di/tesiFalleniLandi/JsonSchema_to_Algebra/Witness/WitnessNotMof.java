@@ -27,15 +27,19 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
-        if(a == null) return this;
+    public WitnessAssertion mergeElement(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessNotMof) a);
+            return this.mergeElement((WitnessNotMof) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessNotMof notMof) {
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessAssertion mergeElement(WitnessNotMof notMof) {
         Double val1 = notMof.value;
         Double val2 = this.value;
 

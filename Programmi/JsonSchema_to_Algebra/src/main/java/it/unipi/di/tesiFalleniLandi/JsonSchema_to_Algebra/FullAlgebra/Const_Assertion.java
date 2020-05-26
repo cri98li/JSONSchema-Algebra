@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONObject;
 
@@ -63,7 +63,7 @@ public class Const_Assertion implements Assertion{
 		
 		if(value.getClass() == String.class) {
 			AnyOf_Assertion or = new AnyOf_Assertion();
-			Pattern_Assertion pattern = new Pattern_Assertion(new MyPattern((String) value));
+			Pattern_Assertion pattern = new Pattern_Assertion(new Pattern((String) value));
 			
 			type.add("str");
 			or.add(type.not());
@@ -174,7 +174,7 @@ public class Const_Assertion implements Assertion{
 		if(value.getClass() == String.class) {
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
-			and.add(new WitnessPattern(new MyPattern("^"+(String) value+"$")));
+			and.add(new WitnessPattern(new Pattern("^"+(String) value+"$")));
 			return and;
 		}
 
@@ -200,7 +200,7 @@ public class Const_Assertion implements Assertion{
 			Required_Assertion req = new Required_Assertion();
 			for(Map.Entry<String, ?> entry : entrySet){
 				req.add(entry.getKey());
-				and.add(new WitnessProperty(new MyPattern(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
+				and.add(new WitnessProperty(new Pattern(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
 			}
 			and.add(req.toWitnessAlgebra());
 			and.add(new WitnessPro(Double.parseDouble(""+entrySet.size()), Double.parseDouble(""+entrySet.size())));

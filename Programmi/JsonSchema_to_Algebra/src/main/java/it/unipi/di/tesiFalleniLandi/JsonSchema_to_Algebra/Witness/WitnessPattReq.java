@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
@@ -25,7 +25,7 @@ public class WitnessPattReq implements WitnessAssertion{
         return key;
     }
 
-    public void setKey(MyPattern key) {
+    public void setKey(Pattern key) {
         this.key = key;
     }
 
@@ -38,21 +38,28 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(this.value.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.value).getValue())
                 return new WitnessBoolean(false);
         }
 
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessPattReq) a);
+            return this.mergeElement((WitnessPattReq) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessPattReq a) {
+    @Override
+    public WitnessAssertion merge() {
+        WitnessPattReq clone = this.clone();
+
+        clone.value = value.merge();
+
+        return clone;
+    }
+
+    public WitnessAssertion mergeElement(WitnessPattReq a) {
         if(a.value.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)a.value).getValue())
                 return new WitnessBoolean(false);
@@ -77,7 +84,7 @@ public class WitnessPattReq implements WitnessAssertion{
     public WitnessPattReq clone() {
         WitnessPattReq clone = new WitnessPattReq();
 
-        clone.key = new MyPattern((MyPattern) key);
+        clone.key = new Pattern(key.toString()); //TODO: clone pattern
         clone.value = value.clone();
 
         return clone;
@@ -112,7 +119,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() {
+    public WitnessAssertion groupize() throws WitnessException {
         WitnessPattReq pattReq = new WitnessPattReq();
 
         pattReq.key = key;
@@ -145,7 +152,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessPattReq pattReq = clone();
         if(value != null) pattReq.value = this.value.variableNormalization_expansion(env);
 

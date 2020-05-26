@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -152,13 +153,13 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 	private GatewayResponse andMerging(String body) {
 		Assertion schema = Utils_FullAlgebra.parseString(body);
 
-		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema.notElimination()).merge(null).getFullAlgebra().toGrammarString()),
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema.notElimination()).mergeElement(null).getFullAlgebra().toGrammarString()),
 				200,
 				"type", "application/json+schema",
 				false);
 	}
 
-	private GatewayResponse notEliminationWitness(String body) {
+	private GatewayResponse notEliminationWitness(String body) throws WitnessException {
 		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
 
 		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).groupize().getFullAlgebra().toGrammarString()),
@@ -167,10 +168,10 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				false);
 	}
 
-	private GatewayResponse canonicalization(String body) {
+	private GatewayResponse canonicalization(String body) throws WitnessException {
 		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
 
-		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).merge(null).groupize().getFullAlgebra().toGrammarString()),
+		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).mergeElement(null).groupize().getFullAlgebra().toGrammarString()),
 				200,
 				"type", "application/json+schema",
 				false);

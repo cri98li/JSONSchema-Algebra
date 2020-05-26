@@ -44,28 +44,29 @@ public class WitnessType implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-
-        if(a.getClass() == WitnessOr.class || a.getClass() == WitnessAnd.class) return a.merge(this);
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+        if(a.getClass() == WitnessOr.class || a.getClass() == WitnessAnd.class) return a.mergeElement(this);
 
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessType) a);
+            return this.mergeElement((WitnessType) a);
 
         return null;
     }
 
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
 
-    public WitnessAssertion merge(WitnessType a) {
 
-        WitnessType tmp = a;
+    public WitnessAssertion mergeElement(WitnessType a) {
         WitnessType newType = new WitnessType();
 
         //same type
         if(a.equals(this))
             return this;
 
-        for(String str : type){//**
+        for(String str : type){
             if(a.type.contains(str)) {
                 newType.add(str);
                 continue;

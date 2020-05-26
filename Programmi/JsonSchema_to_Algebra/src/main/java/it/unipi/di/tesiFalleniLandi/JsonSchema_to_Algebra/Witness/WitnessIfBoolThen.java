@@ -23,14 +23,18 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-        if(a.getClass() == this.getClass()) return this.merge((WitnessIfBoolThen) a);
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessIfBoolThen) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessIfBoolThen a) {
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessAssertion mergeElement(WitnessIfBoolThen a) {
         if(a.value == value) return this;
         else{
             Type_Assertion type = new Type_Assertion();

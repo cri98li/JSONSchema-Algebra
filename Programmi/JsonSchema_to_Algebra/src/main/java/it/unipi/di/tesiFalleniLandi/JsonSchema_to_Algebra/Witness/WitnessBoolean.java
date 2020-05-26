@@ -21,15 +21,19 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-        if(a.getClass() == this.getClass()) return this.merge((WitnessBoolean) a);
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessBoolean) a);
 
         if(this.value) return a; // S AND true = S
         else return this; // S AND false = false
     }
 
-    public WitnessBoolean merge(WitnessBoolean a) {
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessBoolean mergeElement(WitnessBoolean a) {
         return new WitnessBoolean(a.value && value);
     }
 

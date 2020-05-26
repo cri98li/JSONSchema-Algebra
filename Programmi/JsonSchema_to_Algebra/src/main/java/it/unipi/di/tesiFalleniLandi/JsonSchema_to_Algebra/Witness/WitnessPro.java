@@ -45,16 +45,19 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessPro) a);
+            return this.mergeElement((WitnessPro) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessPro a) {
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessAssertion mergeElement(WitnessPro a) {
         WitnessPro pro = new WitnessPro();
 
         pro.min = (this.min < a.min) ? a.min : min;

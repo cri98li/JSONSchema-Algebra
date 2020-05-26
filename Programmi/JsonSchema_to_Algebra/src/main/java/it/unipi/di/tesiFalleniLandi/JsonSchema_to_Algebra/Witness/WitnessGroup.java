@@ -14,15 +14,18 @@ public class WitnessGroup implements WitnessAssertion{
         typedAssertions = new LinkedList<>();
     }
 
-    public void add(WitnessAssertion assertion) {
+    public void add(WitnessAssertion assertion) throws WitnessException {
         if(assertion.getClass() == WitnessType.class)
-            types.addAll(((WitnessType) assertion).separeTypes());
+            if(types.isEmpty())
+                types.addAll(((WitnessType) assertion).separeTypes());
+            else
+                throw new WitnessException("Not possible allOf of two different type", false);
         else
             typedAssertions.add(assertion);
     }
 
     //Separa i gruppi e richiama typeElimination
-    public List<WitnessAssertion> canonicalize(){
+    public List<WitnessAssertion> canonicalize() throws WitnessException {
         List<WitnessAssertion> returnList = new LinkedList<>();
 
         HashMap<WitnessType, WitnessGroup> groups = new HashMap<>();
@@ -98,7 +101,12 @@ public class WitnessGroup implements WitnessAssertion{
     }*/
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public WitnessAssertion merge() {
         throw new UnsupportedOperationException();
     }
 
@@ -117,8 +125,6 @@ public class WitnessGroup implements WitnessAssertion{
         for(WitnessAssertion assertion : typedAssertions)
             allOf.add(assertion.getFullAlgebra());
 
-        //allOf.add(new Pattern_Assertion(new MyPattern("I'm a group")));
-
         return allOf;
     }
 
@@ -136,12 +142,12 @@ public class WitnessGroup implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws WitnessException {
         return getFullAlgebra().not().toWitnessAlgebra().groupize();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws WitnessException {
         return getFullAlgebra().notElimination().toWitnessAlgebra().groupize();
     }
 
@@ -161,7 +167,7 @@ public class WitnessGroup implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessGroup newGroup = new WitnessGroup();
         newGroup.types = new LinkedList<>(types);
         for(WitnessAssertion assertion : typedAssertions){
@@ -175,7 +181,7 @@ public class WitnessGroup implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion DNF() {
+    public WitnessAssertion DNF() throws WitnessException {
         WitnessGroup newGroup = new WitnessGroup();
         newGroup.types = new LinkedList<>(types);
 

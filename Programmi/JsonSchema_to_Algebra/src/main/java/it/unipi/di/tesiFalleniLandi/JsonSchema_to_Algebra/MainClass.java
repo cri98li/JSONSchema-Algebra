@@ -17,7 +17,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -103,7 +102,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().merge(null).getFullAlgebra().toGrammarString()));
+						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().mergeElement(null).getFullAlgebra().toGrammarString()));
 						break;
 
 					default:

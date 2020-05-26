@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 
 import java.util.List;
@@ -12,27 +12,27 @@ public class Utils_PattOfS {
     private static String truePattern =".*";
 
     public static PosixPattern pattOfS(Assertion a){
-        return new MyPattern(truePattern);
+        return new Pattern(truePattern);
     }
 
     public static PosixPattern pattOfS(Type_Assertion a){
-        if(a.contains(GrammarStringDefinitions.TYPE_STRING)) return new MyPattern(truePattern);
+        if(a.contains(GrammarStringDefinitions.TYPE_STRING)) return new Pattern(truePattern);
 
-        return new MyPattern(truePattern);
+        return new Pattern(truePattern);
     }
 
     public static PosixPattern pattOfS(Const_Assertion a){
         Object obj = a.getValue();
-        if(obj.getClass() == String.class) return new MyPattern((String) obj);
+        if(obj.getClass() == String.class) return new Pattern((String) obj);
 
-        return new MyPattern(falsePattern);
+        return new Pattern(falsePattern);
     }
 
     public static PosixPattern pattOfS(AllOf_Assertion a){
         List<Assertion> and = a.getAndList();
         PosixPattern p = pattOfS(and.get(0));
         for(int i = 0; i < and.size(); i++)
-            p = p.and(pattOfS(and.get(i)));
+            p = p.intersect(pattOfS(and.get(i))); //TODO: pattOfS intersect
 
         return p;
     }
@@ -41,13 +41,14 @@ public class Utils_PattOfS {
         List<Assertion> or = a.getOrList();
         PosixPattern p = pattOfS(or.get(0));
         for(int i = 0; i < or.size(); i++)
-            p = p.or(pattOfS(or.get(i)));
+            p = p.intersect(pattOfS(or.get(i))); //TODO: pattOfS union
 
         return p;
     }
 
     public static PosixPattern pattOfS(Not_Assertion a){
-        return pattOfS(a.getValue()).complement();
+        //return pattOfS(a.getValue()).complement(); TODO: pattOfS
+        return null;
     }
 
     public static PosixPattern pattOfS(Pattern_Assertion a){

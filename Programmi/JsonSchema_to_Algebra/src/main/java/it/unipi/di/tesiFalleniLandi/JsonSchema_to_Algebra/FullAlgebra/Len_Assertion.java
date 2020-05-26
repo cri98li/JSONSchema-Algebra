@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
 import org.json.simple.JSONObject;
@@ -103,6 +104,7 @@ public class Len_Assertion implements Assertion{
 		if(min != null) minStr = min.toString();
 		if(max != null) maxStr = max.toString();
 
-		return new WitnessPattern(new MyPattern("^.{"+ minStr +"," + maxStr + "}$"));
+		//r/e/turn new WitnessPattern(Pattern.createFromRegexp("^.{"+ minStr +"," + maxStr + "}$"));
+		return new WitnessPattern(Pattern.createFromRegexp("createFromRegexpnolen")); //TODO: sintassi non ancora accettata
 	}
 }

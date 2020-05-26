@@ -7,14 +7,11 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_Full
 import java.io.IOException;
 
 public class MainWitness {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, WitnessException {
         String path = "test.algebra";
 
         Assertion schema = Utils_FullAlgebra.parseFile(path);
 
-        System.out.println(schema.toString());
-
-        //WitnessEnv env = (WitnessEnv) schema.notElimination().toWitnessAlgebra();
         WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(schema);
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
@@ -25,16 +22,14 @@ public class MainWitness {
 
         //System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
+        /*
         System.out.println("\r\n\r\n DNF: \r\n");
 
         env = env.DNF();
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));*/
 
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
-
-        env = env.merge(null);
-
+        env = (WitnessEnv) env.merge();
         System.out.println("\r\n\r\n Merge: \r\n");
-
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         //System.out.println("\r\n\r\n Groupize: \r\n");

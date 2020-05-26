@@ -25,9 +25,14 @@ public class WitnessVar implements WitnessAssertion{
                 '}';
     }
 
+
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if (a == null) return this;
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    @Override
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         return null;
     }
 

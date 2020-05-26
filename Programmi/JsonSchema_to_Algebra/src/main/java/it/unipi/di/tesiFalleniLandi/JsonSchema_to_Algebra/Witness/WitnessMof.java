@@ -28,25 +28,37 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-        if(a.getClass() == WitnessMof.class) {
-            WitnessMof mof = (WitnessMof) a;
-            return new WitnessMof(mof.value * (value / gcd(mof.value, value)));
-        }else if(a.getClass() == WitnessNotMof.class) {
-            WitnessNotMof notMof = (WitnessNotMof) a;
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+
+        if(a.getClass() == WitnessMof.class)
+            return this.mergeElement((WitnessMof) a);
+        else if(a.getClass() == WitnessNotMof.class)
+            return this.mergeElement((WitnessNotMof) a);
+
+        return null;
+    }
+
+    public WitnessAssertion mergeElement(WitnessMof a) {
+        return new WitnessMof(a.value * (value / gcd(a.value, value)));
+    }
+
+    public WitnessAssertion mergeElement(WitnessNotMof a) {
+            WitnessNotMof notMof = a;
             Double val1 = notMof.getValue();
             Double val2 = this.value;
 
-                if(val2 % val1 == 0) {
-                    Type_Assertion type = new Type_Assertion();
-                    type.add(GrammarStringDefinitions.TYPE_NUMBER);
+            if(val2 % val1 == 0) {
+                Type_Assertion type = new Type_Assertion();
+                type.add(GrammarStringDefinitions.TYPE_NUMBER);
 
-                    return type.not().toWitnessAlgebra();
-                }else
-                    return null;
-        }else
-            return null;
+                return type.not().toWitnessAlgebra();
+            }else
+                return null;
+    }
+
+    @Override
+    public WitnessAssertion merge() {
+        return this;
     }
 
     @Override

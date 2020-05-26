@@ -42,7 +42,12 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    @Override
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -50,15 +55,13 @@ public class WitnessXBet implements WitnessAssertion{
             return type.not().toWitnessAlgebra();
         }
 
-        if(a == null) return this;
-
         if(a.getClass() == this.getClass())
-            return this.merge((WitnessXBet) a);
+            return this.mergeElement((WitnessXBet) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessXBet a) {
+    public WitnessAssertion mergeElement(WitnessXBet a) {
         if(a.min > max || a.max < min){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);

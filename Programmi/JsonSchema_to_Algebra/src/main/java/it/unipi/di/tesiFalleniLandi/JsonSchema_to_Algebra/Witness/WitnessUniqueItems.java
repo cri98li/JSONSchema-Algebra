@@ -16,20 +16,23 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
-
-        if(a.getClass() == this.getClass()) return merge((WitnessUniqueItems) a);
-        if(a.getClass() == WitnessRepeateditems.class) return merge((WitnessRepeateditems) a);
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
+        if(a.getClass() == this.getClass()) return mergeElement((WitnessUniqueItems) a);
+        if(a.getClass() == WitnessRepeateditems.class) return mergeElement((WitnessRepeateditems) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessUniqueItems a) {
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessAssertion mergeElement(WitnessUniqueItems a) {
         return a;
     }
 
-    public WitnessAssertion merge(WitnessRepeateditems a) {
+    public WitnessAssertion mergeElement(WitnessRepeateditems a) {
         Type_Assertion t = new Type_Assertion();
         t.add(GrammarStringDefinitions.TYPE_ARRAY);
 

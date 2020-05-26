@@ -62,6 +62,20 @@ public class WitnessOr implements WitnessAssertion{
                 '}';
     }
 
+    @Override
+    public WitnessAssertion merge() {
+        List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
+
+        if(tmp != null) {
+            for (WitnessAssertion and : tmp) {
+                WitnessAssertion returnedValue = and.merge();
+                this.add((returnedValue == null) ? and : returnedValue);
+            }
+        }
+
+        return this;
+    }
+
     /*
     a può essere un oggetto di un qualsiasi tipo,
         per ogni( b = orList.get(a.class)[i])
@@ -71,7 +85,7 @@ public class WitnessOr implements WitnessAssertion{
     nel caso di a.class = or?
      */
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(a != null && a.getClass() == this.getClass())
             return null; //this.size = n and a.size = m --> return size O(n*m)
 
@@ -84,7 +98,7 @@ public class WitnessOr implements WitnessAssertion{
                 notFalseElement += entry.getValue().size();
 
                 for (WitnessAssertion assertion : entry.getValue()) {
-                    WitnessAssertion merged = a.merge(assertion);
+                    WitnessAssertion merged = a.mergeElement(assertion);
 
                     if (merged == null) continue;
 
@@ -108,16 +122,10 @@ public class WitnessOr implements WitnessAssertion{
             //orList.put(a.getClass(), newList);
         }
 
-        List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
-        if(tmp != null) {
-            for (WitnessAssertion and : tmp) {
-                WitnessAssertion returnedValue = and.merge(null);
-                this.add((returnedValue == null) ? and : returnedValue);
-            }
-        }
-
         return this;
     }
+
+
 
     @Override
     public WitnessType getGroupType() {
@@ -178,7 +186,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() {
+    public WitnessAssertion groupize() throws WitnessException {
         WitnessOr newOr = new WitnessOr();
         WitnessGroup group = new WitnessGroup();
 
@@ -211,7 +219,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessOr or = new WitnessOr();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
@@ -226,7 +234,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion DNF() {
+    public WitnessAssertion DNF() throws WitnessException {
         WitnessOr or = new WitnessOr();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())

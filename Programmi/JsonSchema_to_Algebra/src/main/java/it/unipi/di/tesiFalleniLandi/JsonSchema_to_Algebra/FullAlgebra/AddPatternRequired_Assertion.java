@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
 
@@ -91,10 +91,11 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() {
-		PosixPattern p = new MyPattern("^$");
+		PosixPattern p = Pattern.createFromRegexp("^$");
 		for(PosixPattern pattern : pattList)
-			p = p.or(pattern);
+			p = p.intersect(pattern);
 
-		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());
+		return new WitnessPattReq(p, additionalProperties.toWitnessAlgebra());
+		//return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra()); TODO: addPattReq complement
 	}
 }

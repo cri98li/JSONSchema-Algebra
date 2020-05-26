@@ -45,8 +45,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
             if(((WitnessBoolean)additionalItems).getValue())
                 return additionalItems;
@@ -63,12 +62,24 @@ public class WitnessItems implements WitnessAssertion{
             else
                 break;
 
-        if(a.getClass() == this.getClass()) return this.merge((WitnessItems) a);
+        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessItems) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessItems a) {
+    @Override
+    public WitnessAssertion merge() {
+        WitnessItems newWitnessItems = new WitnessItems();
+        for(WitnessAssertion item : items)
+            newWitnessItems.addItems(item.merge());
+
+        if(additionalItems != null)
+            newWitnessItems.setAdditionalItems(additionalItems.merge());
+
+        return newWitnessItems;
+    }
+
+    public WitnessAssertion mergeElement(WitnessItems a) {
         if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
             if (((WitnessBoolean) a.additionalItems).getValue())
                 return a.additionalItems;
@@ -94,12 +105,12 @@ public class WitnessItems implements WitnessAssertion{
         ite.additionalItems = a.additionalItems;
         if (a.additionalItems == null) ite.additionalItems = additionalItems;
         if (a.additionalItems != null && this.additionalItems != null)
-            ite.additionalItems = a.additionalItems.clone().merge(this.additionalItems);
+            ite.additionalItems = a.additionalItems.clone().mergeElement(this.additionalItems);
 
         int i;
         int min = (a.items.size() < items.size()) ? a.items.size() : items.size();
         for (i = 0; i < min; i++) {
-            WitnessAssertion tmp = items.get(i).merge(a.items.get(i));
+            WitnessAssertion tmp = items.get(i).mergeElement(a.items.get(i));
             if(tmp != null)
                 ite.addItems(tmp);
             else{
@@ -113,7 +124,7 @@ public class WitnessItems implements WitnessAssertion{
 
 
         for(; i < a.items.size(); i++) {
-            WitnessAssertion tmp = a.items.get(i).merge(this.additionalItems);
+            WitnessAssertion tmp = a.items.get(i).mergeElement(this.additionalItems);
             if(tmp != null)
                 ite.addItems(tmp);
             else
@@ -122,7 +133,7 @@ public class WitnessItems implements WitnessAssertion{
 
 
         for(; i < items.size(); i++) {
-            WitnessAssertion tmp = items.get(i).merge(a.additionalItems);
+            WitnessAssertion tmp = items.get(i).mergeElement(a.additionalItems);
             if(tmp != null)
                 ite.addItems(tmp);
             else
@@ -176,7 +187,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() {
+    public WitnessAssertion groupize() throws WitnessException {
         WitnessItems items = new WitnessItems();
         if(additionalItems != null) {
             if(additionalItems.getClass() != WitnessAnd.class) {
@@ -225,7 +236,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
+    public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessItems newItems = new WitnessItems();
 
         if(items != null){
@@ -240,7 +251,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion DNF() {
+    public WitnessAssertion DNF() throws WitnessException {
         WitnessItems newItems = new WitnessItems();
 
         if(items != null){

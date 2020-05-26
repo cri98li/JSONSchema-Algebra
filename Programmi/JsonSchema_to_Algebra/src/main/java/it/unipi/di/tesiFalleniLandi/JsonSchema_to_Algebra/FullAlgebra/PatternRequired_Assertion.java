@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
@@ -121,7 +121,7 @@ public class PatternRequired_Assertion implements Assertion{
 		Set<Entry<PosixPattern, Assertion>> entrySet = pattReq.entrySet();
 
 		for(Entry<PosixPattern, Assertion> entry : entrySet) {
-			PosixPattern p = new MyPattern(entry.getKey().getPattern());
+			PosixPattern p = entry.getKey(); //TODO: pattern clone
 			WitnessPattReq pattReq = new WitnessPattReq(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattReq);
 		}

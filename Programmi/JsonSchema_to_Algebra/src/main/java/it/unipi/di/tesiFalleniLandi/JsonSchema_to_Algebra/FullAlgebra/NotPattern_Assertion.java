@@ -48,6 +48,6 @@ public class NotPattern_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		return new WitnessPattern(notPattern.complement());
+		return new WitnessPattern(notPattern);//TODO: complement
 	}
 }

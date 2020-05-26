@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
@@ -26,16 +26,20 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessAssertion a) {
-        if(a == null) return this;
+    public WitnessAssertion mergeElement(WitnessAssertion a) {
         if(a.getClass() == this.getClass())
-            return merge((WitnessPattern) a);
+            return mergeElement((WitnessPattern) a);
 
         return null;
     }
 
-    public WitnessAssertion merge(WitnessPattern a) {
-        return new WitnessPattern(pattern.and(a.pattern));
+    @Override
+    public WitnessAssertion merge() {
+        return this;
+    }
+
+    public WitnessAssertion mergeElement(WitnessPattern a) {
+        return new WitnessPattern(pattern.intersect(a.pattern));
     }
 
     @Override
@@ -51,7 +55,7 @@ public class WitnessPattern implements WitnessAssertion{
     @Override
     public WitnessAssertion clone() {
         WitnessPattern clone = new WitnessPattern();
-        clone.pattern = new MyPattern((MyPattern) pattern);
+        clone.pattern = new Pattern(pattern.toString()); //TODO: clone
 
         return clone;
     }

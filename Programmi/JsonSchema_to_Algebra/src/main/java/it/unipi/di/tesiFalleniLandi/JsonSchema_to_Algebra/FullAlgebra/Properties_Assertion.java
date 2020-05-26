@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
@@ -86,7 +86,7 @@ public class Properties_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		AddPatternRequired_Assertion addPattRequired = new AddPatternRequired_Assertion();
 		AnyOf_Assertion or = new AnyOf_Assertion();
-		type.add("obj");
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		and.add(type);
 		and.add(or);
 		
@@ -95,8 +95,8 @@ public class Properties_Assertion implements Assertion{
 		for(Entry<String, Assertion> entry : entrySet) {
 			Assertion not = entry.getValue().not();
 			if(not != null) {
-				or.add(new PatternRequired_Assertion(new MyPattern(entry.getKey()), not));
-				addPattRequired.addName(new MyPattern(entry.getKey()));
+				or.add(new PatternRequired_Assertion(Pattern.createFromRegexp(entry.getKey()), not)); //TODO: createFromName
+				addPattRequired.addName(Pattern.createFromRegexp(entry.getKey())); //TODO createFromName
 			}
 		}
 
@@ -185,29 +185,28 @@ public class Properties_Assertion implements Assertion{
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
 		WitnessAnd and = new WitnessAnd();
-		PosixPattern addPatt = new MyPattern("");
+		PosixPattern addPatt = Pattern.createFromRegexp("bug*"); //TODO: *
 
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 
 		for(Entry<String, Assertion> entry : entrySet) {
-			PosixPattern p = new MyPattern(entry.getKey());
+			PosixPattern p = Pattern.createFromRegexp(entry.getKey()); //TODO: createFromName
 			WitnessProperty prop = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(prop);
-			addPatt.or(p);
+			addPatt.intersect(p); //TODO: or
 		}
 
 		Set<Entry<PosixPattern, Assertion>> entrySetPatt = patternProperties.entrySet();
 
 		for(Entry<PosixPattern, Assertion> entry : entrySetPatt) {
-			PosixPattern p = new MyPattern(entry.getKey().getPattern());
+			PosixPattern p = Pattern.createFromRegexp(entry.getKey().toString()); //TODO: check
 			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattProp);
-			addPatt.or(p);
+			addPatt.intersect(p); //TODO: or
 		}
 
 		if(additionalProperties != null) {
-			addPatt.complement();
-			WitnessProperty addProp = new WitnessProperty(addPatt, additionalProperties.toWitnessAlgebra());
+			WitnessProperty addProp = new WitnessProperty(addPatt/*TODO: complemento*/, additionalProperties.toWitnessAlgebra());
 			and.add(addProp);
 		}
 

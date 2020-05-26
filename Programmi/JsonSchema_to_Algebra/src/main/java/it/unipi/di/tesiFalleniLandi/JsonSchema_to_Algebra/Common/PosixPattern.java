@@ -6,36 +6,9 @@ import java.util.Set;
  * Interface to represent a pattern and them minimum set of operations we need to perform
  */
 public interface PosixPattern {
+    public PosixPattern intersect(PosixPattern p);
 
-    /**
-     * @return the complement of the current PosixPattern
-     */
-    public PosixPattern complement();
-
-    /**
-     * @param p
-     * @return the union of the current PosixPattern with a given one (OR)
-     */
-    public PosixPattern or(PosixPattern p);
-
-    /**
-     *
-     * @param p
-     * @return a new pattern that match only the string matched by this and p
-     */
-    public PosixPattern and(PosixPattern p);
-
-    /**
-     *
-     * @return the current pattern if representable with regex, null otherwise
-     */
-    public String getPattern();
-
-    /**
-     *
-     * @return true if the current pattern satisfies the given one
-     */
-    public boolean contains(PosixPattern p);
+    public PosixPattern minus(PosixPattern p);
 
     /**
      *
@@ -47,7 +20,7 @@ public interface PosixPattern {
      *
      * @return a finite set of words of the pattern domain
      */
-    public Set<String> generateWord();
+    public Set<String> generateWords();
 
     /**
      * Match a given string with the current

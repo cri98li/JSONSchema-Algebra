@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.MyPattern;
+import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.Json_valueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
@@ -336,7 +336,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
 		String str = ctx.STRING().getText();
 
-		return new Pattern_Assertion(new MyPattern(str.substring(1, str.length()-1)));
+		return new Pattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
 	}
 
 	@Override
@@ -348,7 +348,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public NotPattern_Assertion visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx) {
 		String str = ctx.STRING().getText();
 
-		return new NotPattern_Assertion(new MyPattern(str.substring(1, str.length()-1)));
+		return new NotPattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
 	}
 
 	@Override
@@ -427,7 +427,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 		for(int i = 0; i < list.size(); i++) {
 			if(idList.get(i).getText().charAt(1) == '^')
-				prop.addPatternProperties(new MyPattern(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+				prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
 			else
 				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
@@ -448,7 +448,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size(); i++) {
-			p.add(new MyPattern(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
+			p.add(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
 		}
 
 		return p;
@@ -467,7 +467,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < idList.size(); i++) {
-			addPattReq.addName(new MyPattern((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
+			addPattReq.addName(Pattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
 		}
 
 		addPattReq.setAdditionalProperties(assertion);
@@ -484,7 +484,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 		for(int i = 0; i < list.size()-1; i++) {
 			if(idList.get(i).getText().charAt(1) == '^')
-				prop.addPatternProperties(new MyPattern(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+				prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
 			else
 				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}

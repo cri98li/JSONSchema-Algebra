@@ -43,7 +43,12 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessEnv merge(WitnessAssertion a) {
+    public WitnessEnv mergeElement(WitnessAssertion a) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public WitnessAssertion merge() {
         Set<Map.Entry<WitnessVar, WitnessAssertion>> entrySet = varList.entrySet();
         WitnessEnv newEnv = new WitnessEnv();
 
@@ -51,9 +56,9 @@ public class WitnessEnv implements WitnessAssertion {
             WitnessVar name = entry.getKey();
 
             if(name.equals(rootVar))
-                newEnv.setRootVar(new WitnessVar(name.getValue()), varList.get(name).merge(null));
+                newEnv.setRootVar(new WitnessVar(name.getValue()), varList.get(name).merge());
             else
-                newEnv.add(new WitnessVar(name.getValue()), varList.get(name).merge(null));
+                newEnv.add(new WitnessVar(name.getValue()), varList.get(name).merge());
         }
 
         return newEnv;
@@ -129,7 +134,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessEnv groupize() {
+    public WitnessEnv groupize() throws WitnessException {
         WitnessEnv env = new WitnessEnv();
         if(rootVar != null) env.rootVar = (WitnessVar) rootVar.groupize();
 
@@ -160,7 +165,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessEnv variableNormalization_expansion(WitnessEnv env) {
+    public WitnessEnv variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessEnv newEnv = new WitnessEnv();
 
         newEnv.rootVar = rootVar.clone();
@@ -174,7 +179,7 @@ public class WitnessEnv implements WitnessAssertion {
         return newEnv;
     }
 
-    public WitnessEnv DNF(){
+    public WitnessEnv DNF() throws WitnessException {
         WitnessEnv dnf = new WitnessEnv();
 
         dnf.rootVar = rootVar;
