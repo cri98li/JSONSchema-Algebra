@@ -188,10 +188,13 @@ public class WitnessOr implements WitnessAssertion{
     @Override
     public WitnessAssertion groupize() throws WitnessException {
         WitnessOr newOr = new WitnessOr();
-        WitnessGroup group = new WitnessGroup();
+        //WitnessGroup group = new WitnessGroup();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
+                newOr.add(assertion.groupize());
+
+            /*
                 if(assertion.getGroupType() != null)
                     group.add(assertion.groupize());
                 else if(assertion.getClass() == WitnessAnd.class)
@@ -201,7 +204,9 @@ public class WitnessOr implements WitnessAssertion{
 
         if(!group.isEmpty()){
             newOr.orList.put(WitnessGroup.class, group.canonicalize());
-        }
+
+
+        }*/
 
         return newOr;
     }

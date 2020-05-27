@@ -60,10 +60,6 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessPattReq a) {
-        if(a.value.getClass() == WitnessBoolean.class) {
-            if (!((WitnessBoolean)a.value).getValue())
-                return new WitnessBoolean(false);
-        }
 
         return null;
     }

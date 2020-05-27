@@ -32,6 +32,8 @@ public class MainWitness {
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
+        System.out.println(Utils.beauty(env.groupize().getFullAlgebra().toGrammarString()));
+
         //System.out.println("\r\n\r\n Groupize: \r\n");
 
         //System.out.println(Utils.beauty(env.groupize().getFullAlgebra().toGrammarString()));

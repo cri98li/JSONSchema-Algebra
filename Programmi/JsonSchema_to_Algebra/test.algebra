@@ -1,30 +1,20 @@
-rootdef "x" = allOf[
-    type[str],
-    type[int],
-    mof(1),
-    mof(6),
-    bet(1,10),
-    xbet(2,7),
-    items[mof(1), mof(2);],items[mof(2), mof(4);],
-    props["a":mof(1);],
-    props["a":mof(3);],
-    anyOf[
-        type[bool],
-        {
-            ifBoolThen(true),
-            ifBoolThen(tt)
-        },
-        {
-            type[bool],
-            type[obj, str, int, num, null, numNotInt, arr]
-        },
+rootdef "x" = anyOf[
+    {
+        mof(3)
+    },
+    {
+        type[num],
+        mof(2),
         allOf[
-              mof(1),
-              mof(1000000)
-            ]
-        ],
-	anyOf[
-		mof(1),
-		type[int]
-	]
+            anyOf[
+                {
+                    type[obj],
+                    pro(0,1)
+                }
+            ],
+            ref("x"),
+            pattern("a*")
+        ]
+    }
+
 ]

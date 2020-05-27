@@ -55,7 +55,7 @@ public class WitnessPattern implements WitnessAssertion{
     @Override
     public WitnessAssertion clone() {
         WitnessPattern clone = new WitnessPattern();
-        clone.pattern = new Pattern(pattern.toString()); //TODO: clone
+        clone.pattern = pattern; //TODO: clone
 
         return clone;
     }

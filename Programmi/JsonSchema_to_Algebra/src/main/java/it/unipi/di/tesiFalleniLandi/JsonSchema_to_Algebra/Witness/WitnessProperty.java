@@ -91,7 +91,7 @@ public class WitnessProperty implements WitnessAssertion{
     public WitnessProperty clone() {
         WitnessProperty clone = new WitnessProperty();
 
-        clone.key = new Pattern(key.toString()); //TODO: witnessProp
+        clone.key = key; //TODO: witnessProp
         clone.value = value.clone();
 
         return clone;

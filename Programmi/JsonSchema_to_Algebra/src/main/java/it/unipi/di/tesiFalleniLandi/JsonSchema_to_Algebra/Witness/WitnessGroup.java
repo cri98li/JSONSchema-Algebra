@@ -19,7 +19,7 @@ public class WitnessGroup implements WitnessAssertion{
             if(types.isEmpty())
                 types.addAll(((WitnessType) assertion).separeTypes());
             else
-                if(types.contains((WitnessType) assertion)) {
+                if(types.contains(assertion)) {
                     types = new LinkedList<>();
                     types.add((WitnessType) assertion);
                 }

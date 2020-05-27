@@ -200,7 +200,11 @@ public class WitnessAnd implements WitnessAssertion{
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
                 if(assertion.getGroupType() != null)
-                    group.add(assertion.groupize());
+                    try {
+                        group.add(assertion.groupize());
+                    }catch(WitnessException we){
+                        return new WitnessBoolean(false);
+                    }
                 else if(assertion.getClass() == WitnessOr.class)
                     and.add(assertion.groupize());
                 else
