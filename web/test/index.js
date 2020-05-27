@@ -43,7 +43,7 @@ function isRunning(){
 
         setInterval(() => {
             isRunning();
-        }, 500);
+        }, 3000);
     });
     
 }
