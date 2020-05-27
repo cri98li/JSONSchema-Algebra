@@ -1,8 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessType;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -133,8 +132,27 @@ public class Type_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		if(types.size() == 1) return new WitnessType(types.get(0));
+		if(types.size() == 1) {
+			if(types.get(0).equals(GrammarStringDefinitions.TYPE_INTEGER)){
+				WitnessAnd and = new WitnessAnd();
+				and.add(new WitnessMof(1.0));
+				and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
+				return and;
+			}
+			return new WitnessType(types.get(0));
+		}
 
+		if(types.contains(GrammarStringDefinitions.TYPE_INTEGER)){
+			types.remove(GrammarStringDefinitions.TYPE_INTEGER);
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessMof(1.0));
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
+			WitnessOr or = new WitnessOr();
+			or.add(new WitnessType(types));
+			or.add(and);
+
+			return or;
+		}
 		return new WitnessType(types);
 	}
 

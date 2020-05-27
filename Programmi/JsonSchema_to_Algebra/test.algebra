@@ -1,6 +1,6 @@
 rootdef "x" = allOf[
     type[str],
-    type[str, int],
+    type[int],
     mof(1),
     mof(6),
     bet(1,10),

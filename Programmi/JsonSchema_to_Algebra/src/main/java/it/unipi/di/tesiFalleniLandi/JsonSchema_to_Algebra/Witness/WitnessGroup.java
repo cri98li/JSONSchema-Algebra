@@ -19,7 +19,12 @@ public class WitnessGroup implements WitnessAssertion{
             if(types.isEmpty())
                 types.addAll(((WitnessType) assertion).separeTypes());
             else
-                throw new WitnessException("Not possible allOf of two different type", false);
+                if(types.contains((WitnessType) assertion)) {
+                    types = new LinkedList<>();
+                    types.add((WitnessType) assertion);
+                }
+                else
+                    throw new WitnessException("Not possible allOf of two different type", false);
         else
             typedAssertions.add(assertion);
     }
