@@ -36,14 +36,13 @@ function isRunning(){
         if(data == 'true'){
             $("#execute").prop('disabled', true);
             $("#execute").html('Running');
+            setInterval(() => {
+                isRunning();
+            }, 3000);
         }else{
             $("#execute").prop('disabled', false);
             $("#execute").html('Execute Tests');
         }
-
-        setInterval(() => {
-            isRunning();
-        }, 3000);
     });
     
 }

@@ -84,7 +84,7 @@ public class WitnessPattReq implements WitnessAssertion{
     public WitnessPattReq clone() {
         WitnessPattReq clone = new WitnessPattReq();
 
-        clone.key = new Pattern(key.toString()); //TODO: clone pattern
+        clone.key = key; //TODO: clone pattern
         clone.value = value.clone();
 
         return clone;
