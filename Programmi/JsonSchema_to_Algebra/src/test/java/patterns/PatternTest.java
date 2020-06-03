@@ -1,0 +1,144 @@
+package patterns;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.junit.Ignore;
+import java.util.Set;
+import java.util.HashSet;
+
+public class PatternTest {
+
+  @Test
+  public void testCreateFromName() {
+    Pattern pattern = Pattern.createFromName("foo");
+    assert(pattern.domainSize() == 1);
+    assert(pattern.generateWords().contains("foo"));
+  }
+
+  @Test
+  public void testIsEmptyFalse() {
+    Pattern pattern = Pattern.createFromRegexp("a?"); 
+    assertFalse(pattern.isEmpty());
+  }
+ 
+  @Test
+  public void testIsEmptyTrue() {
+    Pattern a = Pattern.createFromRegexp("a");
+    Pattern b = Pattern.createFromRegexp("b");
+    Pattern c = a.intersect(b);
+    assertTrue(c != null);
+    assertTrue(c.isEmpty());
+  }
+
+  @Test
+  public void testIsIntersectEmptyFalse() {
+    Pattern a = Pattern.createFromRegexp("a*");
+    Pattern b = Pattern.createFromRegexp("b*");
+    // (a*) & (b*) includes the empty word
+    assertFalse(a.intersect(b).isEmpty());
+  }
+
+  @Test
+  public void testGenerateWords() {
+    assertTrue(Pattern.createFromRegexp("a?").generateWords().contains("a"));
+  }
+
+  @Test
+  public void testGenerateWordsInf() {
+    Set<String> words = Pattern.createFromRegexp("a+").generateWords();
+    assertTrue(words.size() == 1);
+    assertTrue(words.contains("a"));
+  }
+
+  @Test
+  public void testDomainSize() {
+    assertTrue(Pattern.createFromRegexp("a|b|c").domainSize() == Integer.valueOf(3));
+  }
+
+  @Test
+  public void testDomainSizeInf() {
+    assertTrue(Pattern.createFromRegexp("a*").domainSize() == null);
+  }
+ 
+  @Test
+  public void testMinus() {
+    Pattern p1 = Pattern.createFromRegexp("aa?");
+    Pattern p2 = Pattern.createFromRegexp("a");
+
+    assertFalse(p1.minus(p2).isEmpty());
+    assertTrue(p2.minus(p1).isEmpty());
+  }
+
+  @Test
+  public void testMatchTrue() {
+    assertTrue(Pattern.createFromRegexp("aa*").match("aa"));
+  }
+
+  @Test
+  public void testMatchFalse() {
+    assertFalse(Pattern.createFromRegexp("aa*").match("abc"));
+  }
+
+  @Test
+  public void testClone() {
+    Pattern p1 = Pattern.createFromRegexp("a*");
+    Pattern p2 = p1.clone();
+
+    assertTrue(p1 != p2);
+    assertTrue(p1.isEquivalent(p2));
+  }
+
+  
+  @Test
+  public void testSubsetOf() {
+    Pattern p1 = Pattern.createFromRegexp("a*");
+    Pattern p2 = Pattern.createFromRegexp("a+");
+
+    assertFalse(p1.isSubsetOf(p2));
+    assertTrue(p2.isSubsetOf(p1));
+  }
+
+  @Test
+  public void testIsEquivalent() {
+    Pattern p1 = Pattern.createFromRegexp("aa*");
+    Pattern p2 = Pattern.createFromRegexp("a+");
+
+    assertTrue(p1.isEquivalent(p1));
+    assertTrue(p1.isEquivalent(p2));
+    assertTrue(p2.isEquivalent(p1));
+  }
+
+  @Test
+  public void testComplement() {
+    Pattern p = Pattern.createFromRegexp("a");
+
+    assertTrue(p.isEquivalent(p.complement().complement()));
+  }
+
+  @Test
+  public void testUnion() {
+    Pattern p1 = Pattern.createFromRegexp("a?");
+    Pattern p2 = Pattern.createFromRegexp("b?");
+    Pattern u = p1.union(p2);
+
+    assertTrue(u.match(""));
+    assertTrue(u.match("a"));
+    assertTrue(u.match("b"));
+  }
+
+  @Test
+  public void testListComplement() {
+    Pattern p1 = Pattern.createFromRegexp("a");
+    Pattern p2 = Pattern.createFromRegexp("b");
+  
+    Set<Pattern> patterns =  new HashSet<Pattern>();
+    patterns.add(p1);
+    patterns.add(p2);
+
+    Pattern c = Pattern.listComplement(patterns);
+    assertFalse(c.match("a"));
+    assertFalse(c.match("b"));
+    assertTrue(c.match("c"));
+  }
+
+}
