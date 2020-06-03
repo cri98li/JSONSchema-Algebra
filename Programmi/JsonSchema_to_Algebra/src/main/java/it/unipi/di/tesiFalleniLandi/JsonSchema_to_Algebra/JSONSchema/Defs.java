@@ -12,7 +12,7 @@ public class Defs implements JSONSchemaElement{
 	private JSONSchema rootDef;
 	
 	public Defs(Object obj) {
-		JSONObject jsonObject = null;
+		JSONObject jsonObject;
 		try {
 			jsonObject = (JSONObject) obj;
 		}catch(ClassCastException ex) {
@@ -64,8 +64,9 @@ public class Defs implements JSONSchemaElement{
 		for(Entry<String, JSONSchema> entry : entrySet)
 			def.put(entry.getKey(), entry.getValue().toJSON());
 		obj.put("$defs", def);
+
 		if(rootDef != null)
-				obj.put(Utils.PUTCONTENT, rootDef.toJSON());
+				obj.put(Utils.ROOTDEF_FOR_JSONSCHEMA, rootDef.toJSON());
 
 		return obj;
 	}

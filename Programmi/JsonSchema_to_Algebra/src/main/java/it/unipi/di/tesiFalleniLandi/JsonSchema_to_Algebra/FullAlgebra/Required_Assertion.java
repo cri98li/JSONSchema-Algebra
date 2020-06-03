@@ -72,7 +72,7 @@ public class Required_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		if(reqList.isEmpty()) return "";
+		if(reqList.isEmpty()) return str;
 		
 		Iterator<String> it = reqList.iterator();
 		

@@ -5,9 +5,14 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Asse
 
 import java.util.*;
 
+/**
+ * Classe di supporto per la fase di canonicalization,
+ * Raccoglie le asserzioni contenute in un AND e attua lo step di raggruppamento.
+ * Alla fine del processo ogni WitnessGroup contiene un solo tipo e le sue relative asserzioni
+ */
 public class WitnessGroup implements WitnessAssertion{
-    private List<WitnessType> types;
-    private List<WitnessAssertion> typedAssertions; //WitnessAnd ??? (dopo è richiesto nuovamente di fare and merging)
+    private List<WitnessType> types; // lista di type assertion (come se fossero in OR)
+    private List<WitnessAssertion> typedAssertions; // lista di asserzioni (escluse type assertion)
 
     public WitnessGroup(){
         types = new LinkedList<>();

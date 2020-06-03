@@ -16,15 +16,7 @@ public class UnknowElement implements JSONSchemaElement {
 	}
 	
 	public void add(String key, Object value) {
-		/*try {
-			obj.put(key, (String)value);
-		}catch(ClassCastException e) {
-			JSONObject obj = (JSONObject) value;
-			Set<Entry<?, ?>> entrySet = obj.entrySet();
-		}*/
-		
 		obj.put(key, value);
-		
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -91,7 +91,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() {
-		PosixPattern p = Pattern.createFromRegexp("bug*"); //TODO: bug dovrebbe essere vuoto
+		PosixPattern p = Pattern.createFromRegexp("bug*"); //TODO: bug --> dovrebbe essere vuoto
 		for(PosixPattern pattern : pattList)
 			p = p.intersect(pattern);
 

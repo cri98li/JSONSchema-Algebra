@@ -19,7 +19,7 @@ public class Items implements JSONSchemaElement{
 	public Items() {}
 	
 	public void setItems(Object obj) {
-		JSONArray array = null;
+		JSONArray array;
 		
 		try{
 			array = (JSONArray) obj;

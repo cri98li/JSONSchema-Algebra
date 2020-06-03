@@ -13,6 +13,10 @@ public interface WitnessAssertion extends Cloneable{
      */
     public WitnessAssertion mergeElement(WitnessAssertion a);
 
+    /**
+     * propagates merge over the schema
+     * @return
+     */
     public WitnessAssertion merge();
 
     /**

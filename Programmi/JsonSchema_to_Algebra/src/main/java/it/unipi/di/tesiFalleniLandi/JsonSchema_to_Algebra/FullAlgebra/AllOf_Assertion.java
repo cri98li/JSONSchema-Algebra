@@ -37,7 +37,7 @@ public class AllOf_Assertion implements Assertion{
 	private boolean contains(Assertion assertion){
 		if(andList == null) return false;
 		for(Assertion a : andList)
-			if(a.getClass() == assertion.getClass()) return true; //qui potremmo chiamare il metodo per semplificare i bet
+			if(a.getClass() == assertion.getClass()) return true;
 
 		return false;
 	}
@@ -54,6 +54,7 @@ public class AllOf_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
+		// allOf contenente false
 		if(containsFalseBooleanAssertion){
 			JSONArray array = new JSONArray();
 			JSONObject obj = new JSONObject();
@@ -62,7 +63,8 @@ public class AllOf_Assertion implements Assertion{
 			return obj;
 		}
 
-		if(duplicates) {
+
+		if(duplicates) {  // se ci sono duplicati allora traduco con "allOf"
 			JSONArray array = new JSONArray();
 			
 			for(Assertion assertion : andList)
@@ -73,7 +75,7 @@ public class AllOf_Assertion implements Assertion{
 
 			return obj;
 
-		} else {
+		} else {  //se non ci sono duplicati lo traduco come JSONObject
 			JSONObject obj = new JSONObject();
 
 			for (Assertion assertion : andList)

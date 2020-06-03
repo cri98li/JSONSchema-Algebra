@@ -13,11 +13,9 @@ public class Format implements JSONSchemaElement{
 	public Format(Object obj) {
 		format = (String)obj;
 	}
-	
-	
+
 	public Format() {
 	}
-
 
 	@Override
 	public JSONObject toJSON() {

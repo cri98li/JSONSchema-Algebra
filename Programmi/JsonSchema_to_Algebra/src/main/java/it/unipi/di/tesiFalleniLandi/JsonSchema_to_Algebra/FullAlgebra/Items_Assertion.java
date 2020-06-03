@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-//TODO: pensare ad items di jsonObject
 public class Items_Assertion implements Assertion{
 	private List<Assertion> itemsArray;
 	private Assertion additionalItems;
@@ -58,7 +57,7 @@ public class Items_Assertion implements Assertion{
 	}
 
 	@Override
-	public Assertion not() { //TODO: caso == null
+	public Assertion not() {
 		
 		//only additionaItems
 		if(additionalItems != null && itemsArray == null) {
@@ -91,7 +90,6 @@ public class Items_Assertion implements Assertion{
 		//ADDITIONAL ITEMS
 		Boolean[] bm = new Boolean[itemsArray.size()];
 		Arrays.fill(bm, false);
-		//Or_Assertion orAdditionalItems = new Or_Assertion(); non è rootOr????
 		Assertion notAdditionalItems = additionalItems.not();
 		
 		do {

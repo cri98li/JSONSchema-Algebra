@@ -197,31 +197,7 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public Enum assertionSeparation() {
-		Enum _enum = new Enum();
-		
-		if(enumArray_str != null) _enum.enumArray_str = new LinkedList<>(enumArray_str);
-		
-		if(enumArray_num != null) _enum.enumArray_num = new LinkedList<>(enumArray_num);
-		
-		if(enumArray_bool != null) _enum.enumArray_bool = new LinkedList<>(enumArray_bool);
-		
-		if(enumArray_array != null) {
-			for(JSONArray s : enumArray_array)
-				if(!s.isEmpty())
-					_enum.enumArray_array.add(s);
-		}
-		
-		_enum.thereIsNull = this.thereIsNull;
-		
-		//No assertion separation dentro enum ???
-		if(enumArray_obj != null) {
-			for(JSONObject obj : enumArray_obj)
-				_enum.enumArray_obj.add(obj);
-		}
-		
-		_enum.arrayOnly = arrayOnly;
-		
-		return _enum;
+		return this.clone();
 	}
 
 	@Override

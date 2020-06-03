@@ -5,10 +5,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Classe di utilità per rappresentare URI
+ */
 public class URI_JS {
-	private String uri;
-	private String normalizedURI;
-	private String normalizedName;
+	private String uri;				//URI originale 		es: properties/aaa/properties/bbb
+	private String normalizedURI;	//URI nomalizzato 		es: /$defs/
+	private String normalizedName;	//Nome dell'elemento 	es: aaa_properties_bbb
 	
 	public URI_JS(String uri) {
 		this.uri = uri;
@@ -19,13 +22,17 @@ public class URI_JS {
 	public void found() {
 		normalizeURI();
 	}
-	
+
+	/**
+	 *
+	 * @return ritorna l'uri originale se non normalizzato, l'uri normalizzato altrimenti
+	 */
 	public String toString() {
 		if(normalizedURI == null)
 			return uri;
 		return normalizedName;
 	}
-	
+
 	public String getNormalizedName() {
 		normalizeURI();
 		return normalizedName;
@@ -35,6 +42,7 @@ public class URI_JS {
 		this.normalizedName = normalizedName;
 	}
 
+	//Tenta di normalizzare un URI
 	private void normalizeURI() {
 		//start: uri --> #/$defs/a/b/foo
 		normalizedName = "";
@@ -79,7 +87,9 @@ public class URI_JS {
 	
 	
 	
-	
+	/*
+	Divide l'URI secondo i "/", ritorna poi l'iteratore *
+	 */
 	public Iterator<String> iterator() {
         Iterator<String> it = new Iterator<>() {
 
@@ -97,6 +107,7 @@ public class URI_JS {
                 return currentIndex != splittedURI.length;
             }
 
+            // *** ATTENZIONE: per far andare avanti l'iteratore, richiamare il metodo remove
             @Override
             public String next() {
             	try {

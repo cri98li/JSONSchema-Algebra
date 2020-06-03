@@ -6,12 +6,25 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import java.util.*;
 
 public class WitnessAnd implements WitnessAssertion{
+    /**
+     * Lista di asserzioni in AND raggruppate per tipo, ottimizzazione per metodo merge
+     *
+     * Es:
+     *      < WitnessMof, <mof(1), mof(2), mof(3)>>
+     *      < WitnessPattern, <pattern("..."), pattern("..."), ...>>
+     *      ...
+     */
     private HashMap<Object, List<WitnessAssertion>> andList;
 
     public WitnessAnd() {
         this.andList = new HashMap<>();
     }
 
+    /*
+    Aggiunge un'asserzione in AND.
+    Se l'asserzione è una lista di AND, viene appiattita
+    Se l'asserzione è un'istanza di uniqueItems o repeatedItems viene aggiunta solo se non presente (assorbita)
+     */
     public boolean add(WitnessAssertion el){
         boolean b = false;
         if(el.getClass() == WitnessAnd.class) {
@@ -30,6 +43,7 @@ public class WitnessAnd implements WitnessAssertion{
             } else return false;
         }
 
+        // inserisce l'asserzione nella rispettiva lista
         if(andList.containsKey(el.getClass())) {
             if(andList.get(el.getClass()).contains(el)) return false;
             andList.get(el.getClass()).add(el);
@@ -52,7 +66,7 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) {
-        if(this.add(a))//se la lista è stata modificata faccio il merge
+        if(this.add(a)) //se la lista è stata modificata faccio il merge
             return this.merge();
         return this;
     }
@@ -133,7 +147,7 @@ public class WitnessAnd implements WitnessAssertion{
             }
         }
 
-        //TOFIX: newAnd.andList.get(WitnessOr.class).remove(or); de la lista è 1 sola bisogna rimuovere anche l'elemento dentro l'hashmap
+        //TOFIX: newAnd.andList.get(WitnessOr.class).remove(or); de la lista è una sola bisogna rimuovere anche l'elemento dentro l'hashmap
         /*
         if(newAnd.andList.containsKey(WitnessOr.class)){
             for(Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet())
@@ -192,11 +206,21 @@ public class WitnessAnd implements WitnessAssertion{
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
+    /**
+     * INPUT: lista di asserzioni in and
+     * OUPUT: lista in and contenente solo istanze di WitnessGroup, WitnessOr e WitnessVar
+     */
     @Override
     public WitnessAssertion groupize() throws WitnessException {
         WitnessAnd and = new WitnessAnd();
         WitnessGroup group = new WitnessGroup();
 
+        /*
+        Per tutte le asserzioni nella lista:
+            - Se l'asserzione è un ITE, viene propagato il metodo e viene aggiunta ad un nuovo gruppo
+            - Se l'asserzione non è un ITE, allora può essere un OR. Se lo è viene propagato il metodo e aggiunto l'or alla lista di and
+            - Se l'asserzione non è un ITE && non è un OR --> è una variabile. Viene aggiunta alla lista di and
+         */
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
                 if(assertion.getGroupType() != null)
@@ -212,7 +236,7 @@ public class WitnessAnd implements WitnessAssertion{
 
         if(!group.isEmpty()){
             List<WitnessAssertion> groups = null;
-            groups = group.canonicalize();
+            groups = group.canonicalize(); //divido il gruppo misto in N gruppi tipizzati
             if(groups.size() == 1)
                 and.andList.put(WitnessGroup.class, groups);
             else{
@@ -253,11 +277,13 @@ public class WitnessAnd implements WitnessAssertion{
         return and;
     }
 
+    //TODO: check
     @Override
     public WitnessAssertion DNF() throws WitnessException {
         WitnessOr or = new WitnessOr();
 
         if(!andList.containsKey(WitnessOr.class)) {
+            //Se non contiene un OR, creo un OR unitario contenente la lista in and --> mantengo l'invariante
             or.add(this.clone());
             return or;
         }

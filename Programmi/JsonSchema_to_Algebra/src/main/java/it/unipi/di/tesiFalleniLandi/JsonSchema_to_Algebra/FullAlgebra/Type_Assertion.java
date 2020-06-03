@@ -67,6 +67,7 @@ public class Type_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
+		// aggiungo tutti i tipi
 		Type_Assertion notType = new Type_Assertion();
 		notType.add(GrammarStringDefinitions.TYPE_STRING);
 		notType.add(GrammarStringDefinitions.TYPE_OBJECT);
@@ -75,6 +76,7 @@ public class Type_Assertion implements Assertion{
 		notType.add(GrammarStringDefinitions.TYPE_BOOLEAN);
 		notType.add(GrammarStringDefinitions.TYPE_NULL);
 
+		// rimuovo quelli che sono contenuti in this
 		for(String type : types) {
 			notType.types.remove(type);
 		}
@@ -100,6 +102,7 @@ public class Type_Assertion implements Assertion{
 		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT) && types.contains(GrammarStringDefinitions.TYPE_INTEGER))
 			notType.types.remove(GrammarStringDefinitions.TYPE_NUMBER);
 
+		// negazione di type contenente tutti i tipi possibili
 		if(notType.types.isEmpty()) {
 			AllOf_Assertion a =new AllOf_Assertion();
 			a.add(new Boolean_Assertion(false));

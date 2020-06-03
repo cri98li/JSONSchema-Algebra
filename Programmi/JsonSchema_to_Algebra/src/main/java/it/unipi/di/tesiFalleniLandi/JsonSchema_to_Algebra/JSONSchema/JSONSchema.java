@@ -26,7 +26,7 @@ public class JSONSchema implements JSONSchemaElement{
 		
 		Iterator<?> it = object.keySet().iterator();
 		
-		if(object.keySet().size() == 0) { //caso schema vuoto
+		if(object.keySet().size() == 0) { // empty schema
 			booleanAsJSONSchema = true;
 			return;			
 		}
@@ -252,7 +252,7 @@ public class JSONSchema implements JSONSchemaElement{
 	public Object toJSON() {
 		JSONObject schema = new JSONObject();
 
-		//boolean as a Schema
+		//boolean as a schema
 		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
@@ -260,7 +260,7 @@ public class JSONSchema implements JSONSchemaElement{
 			JSONObject toAdd = (JSONObject)entry.getValue().toJSON();
 			Set<String> subSchemaKeySet = toAdd.keySet();
 			for (String key : subSchemaKeySet){
-				if(key.equals(Utils.PUTCONTENT))
+				if(key.equals(Utils.ROOTDEF_FOR_JSONSCHEMA))
 					schema.putAll((JSONObject) toAdd.get(key));
 				else
 					schema.put(key, toAdd.get(key));
@@ -274,6 +274,7 @@ public class JSONSchema implements JSONSchemaElement{
 	public JSONSchema assertionSeparation() {
 		JSONSchema schema = new JSONSchema();
 		schema.jsonSchema = new HashMap<>();
+
 		if(booleanAsJSONSchema != null) {
 			schema.booleanAsJSONSchema = booleanAsJSONSchema;
 			return schema;
@@ -284,43 +285,15 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
-			//TYPE SEPARATION
-			/*if(entry.getKey().equals("type")) {
-				AnyOf anyOf = new AnyOf();
-				Type type = ((Type)entry.getValue());
-				
-				if(type.type_array != null)
-					for(String str : type.type_array) {
-						JSONSchema tmp = new JSONSchema();
-						tmp.jsonSchema = new HashMap<>();
-						Type t = new Type();
-						t.type = str;
-						tmp.jsonSchema.put("type", t);
-						anyOf.addElement(tmp);
-					}
-				else {
-					JSONSchema tmp = new JSONSchema();
-					tmp.jsonSchema = new HashMap<>();
-					tmp.jsonSchema.put("type", type);
-					anyOf.addElement(tmp);
-				}
-				
-				JSONSchema tmp = new JSONSchema();
-				tmp.jsonSchema = new HashMap<>();
-				tmp.jsonSchema.put("anyOf", anyOf);
-				((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
-				continue;
-			}*/
 			
 			//$schema, id e %defs non vanno dentro allOf
-			if(entry.getKey().equals("$schema") 
+			if(entry.getKey().equals("$schema")
 					|| entry.getKey().equals("id")
 					|| entry.getKey().equals("$id")
 					|| entry.getKey().equals("unknow")) {
 				schema.jsonSchema.put(entry.getKey(), entry.getValue());
 				continue;
 			}
-			
 			
 			JSONSchema tmp = new JSONSchema();
 			tmp.jsonSchema = new HashMap<>();
@@ -382,7 +355,8 @@ public class JSONSchema implements JSONSchemaElement{
 		if(booleanAsJSONSchema != null) return returnList;
 		
 		Set<Entry<String, JSONSchemaElement>> entrySet = jsonSchema.entrySet();
-		
+
+		//cerca i ref all'interno dello schema
 		for(Entry<String, JSONSchemaElement> entry : entrySet)
 			returnList.addAll(entry.getValue().getRef());
 		
@@ -396,7 +370,8 @@ public class JSONSchema implements JSONSchemaElement{
 			return this;
 		
 		String nextElement = URIIterator.next();
-		
+
+		//dato un nome di definizione cerca di risolverlo
 		if(jsonSchema.containsKey(nextElement))
 			return jsonSchema.get(nextElement).searchDef(URIIterator);
 		

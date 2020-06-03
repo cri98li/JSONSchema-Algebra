@@ -117,7 +117,7 @@ public class Type implements JSONSchemaElement {
 	@Override
 	public Type clone() {
 		if(type_array.size() == 1) {
-			return new Type(new String(type_array.get(0)));
+			return new Type(type_array.get(0));
 		}else {
 			Type newType = new Type();
 			newType.type_array = new LinkedList<>();

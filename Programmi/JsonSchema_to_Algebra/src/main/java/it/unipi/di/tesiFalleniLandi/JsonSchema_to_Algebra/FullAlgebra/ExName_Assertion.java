@@ -19,7 +19,6 @@ public class ExName_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		//throw new UnsupportedOperationException();
 		return new Not_Assertion(new Names_Assertion(names)).toJSONSchema();
 	}
 	
@@ -27,7 +26,7 @@ public class ExName_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add("obj");
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		and.add(type);
 		if(names.not() != null)
 			and.add(new Names_Assertion(names.not()));

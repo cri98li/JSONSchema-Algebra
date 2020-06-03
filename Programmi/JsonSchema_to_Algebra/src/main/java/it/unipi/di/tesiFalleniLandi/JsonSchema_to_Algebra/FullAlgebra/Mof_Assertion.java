@@ -28,7 +28,7 @@ public class Mof_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion notMof = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add("num");
+		type.add(GrammarStringDefinitions.TYPE_NUMBER);
 		notMof.add(type);
 		notMof.add(new NotMof_Assertion(mof));
 		return notMof;

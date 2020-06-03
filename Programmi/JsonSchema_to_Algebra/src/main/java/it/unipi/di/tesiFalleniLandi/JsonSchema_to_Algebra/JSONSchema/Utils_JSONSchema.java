@@ -24,20 +24,21 @@ public class Utils_JSONSchema {
 		}
 	}
 
+	//esegue prima la reference normalization, poi l'assertion separation
 	public static JSONSchema normalize(JSONSchema root) {
 		return referenceNormalization(root).assertionSeparation();
 	}
 
 	public static JSONSchema referenceNormalization(JSONSchema root) {
 		JSONSchema newRoot = new JSONSchema();
-		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef());
+		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef()); //Raccolgo tutte le definizioni
 
-		List<URI_JS> refList = root.getRef();
+		List<URI_JS> refList = root.getRef(); //Raccolgo tutti i riferimenti
 
 		Defs finalDefs = new Defs();
 
 		for(URI_JS ref : refList) {
-			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#')
+			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#') //non risolvo i riferimenti a me stesso e quelli a file esterni
 				continue;
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
@@ -55,7 +56,7 @@ public class Utils_JSONSchema {
 			}else
 				System.out.println("NON TROVATO: "+ref.toString());
 
-			//ref not resolved.
+			//ref non trovata in defsList, provo a risolverla navigando nel documento
 			JSONSchema newDef = root.searchDef(ref.iterator());
 			if(newDef != null) {
 				ref.found();

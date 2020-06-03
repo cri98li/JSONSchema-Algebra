@@ -2,45 +2,18 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
 public class Utils {
 
-	public static final String PUTCONTENT = "putContent";
+	//Usata da Defs e JSONSchema per ricostruire l'oggetto json originale:
+		//dopo normalizzazione ho: { "$defs": { ...: ... , ROOTDEF_FOR_JSONSCHEMA: rootDefAssertions} }
+	public static final String ROOTDEF_FOR_JSONSCHEMA = "putContent";
 
-	/*
-	//Inserisce il contenuto di toPut in schema
-	//@param schema dove inserire il contenuto di toPut
-	//@param keyword parola chiave associata a toPut
-	//@param toPut Oggetto da inserire in schema
 
-	@SuppressWarnings("unchecked")
-	public static void putContent(JSONObject schema, String keyword, Object toPut) {
-		List<String> putContentKeywords = Arrays.asList( new String[]{
-				"properties",
-				"ifThenElse",
-				"items",
-				"betweenItems",
-				"length",
-				"contains",
-				"betweenNumber",
-				"betweenProperties",
-				"unknow",
-				"assertionList",
-				"rootDef",
-				"AllOf_Schema",
-				PUTCONTENT
-		});
-		
-		if(!putContentKeywords.contains(keyword))
-		{
-			schema.put(keyword, toPut);
-			return;
-		}
-		
-		Set<?> keys = ((JSONObject) toPut).keySet();
-		for(Object key : keys) {
-			schema.put(key, ((JSONObject) toPut).get(key));
-		}
-	}
+	/**
+	 * Indenta l'algebra
+	 * INPUT: algebra, già dotata di \r\n
+	 * OUTPUT: algebra, tabulata
+	 * @param input
+	 * @return
 	 */
-	
 	public static String beauty(String input) {
 		String output = "";
 		int tab = 0;
@@ -72,7 +45,7 @@ public class Utils {
 		return output;
 	}
 	
-	
+	//restituisce una stringa contenente n tab ("\t")
 	private static String tabs(int n) {
 		String output = "";
 		

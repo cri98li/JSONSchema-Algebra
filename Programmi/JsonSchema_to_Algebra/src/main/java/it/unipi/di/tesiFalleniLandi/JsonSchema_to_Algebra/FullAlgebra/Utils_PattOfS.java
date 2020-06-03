@@ -7,9 +7,10 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import java.util.List;
 
 public class Utils_PattOfS {
+    //Vedi definizione sul documento
 
-    private static String falsePattern ="$^";
-    private static String truePattern =".*";
+    private static String falsePattern ="$^"; //TODO: check
+    private static String truePattern =".*"; //TODO: check
 
     public static PosixPattern pattOfS(Assertion a){
         return new Pattern(truePattern);

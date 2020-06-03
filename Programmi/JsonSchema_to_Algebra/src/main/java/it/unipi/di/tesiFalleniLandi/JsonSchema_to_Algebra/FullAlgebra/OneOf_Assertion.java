@@ -86,12 +86,10 @@ public class OneOf_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		String str = "";
-		
-		Iterator<Assertion> it = xorList.iterator();
-			
-		while(it.hasNext()) {
-			String returnedValue = it.next().toGrammarString();
-			if(returnedValue.isEmpty())
+
+		for (Assertion assertion : xorList) {
+			String returnedValue = assertion.toGrammarString();
+			if (returnedValue.isEmpty())
 				continue;
 			str += GrammarStringDefinitions.COMMA + returnedValue;
 		}

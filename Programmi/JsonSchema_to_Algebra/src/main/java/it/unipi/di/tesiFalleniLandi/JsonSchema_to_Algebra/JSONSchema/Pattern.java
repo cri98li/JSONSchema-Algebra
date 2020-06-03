@@ -66,7 +66,7 @@ public class Pattern implements JSONSchemaElement{
 	
 	@Override
 	public Pattern clone(){
-		return new Pattern(new String(pattern));
+		return new Pattern(pattern);
 	}
 
 }

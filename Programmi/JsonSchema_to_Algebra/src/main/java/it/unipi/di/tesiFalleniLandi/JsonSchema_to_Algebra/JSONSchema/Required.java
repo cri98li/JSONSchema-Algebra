@@ -44,7 +44,7 @@ public class Required implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		
-		if(required.isEmpty()) return "";
+		if(required.isEmpty()) return str;
 		
 		Iterator<String> it = required.iterator();
 		

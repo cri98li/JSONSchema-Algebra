@@ -12,8 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Defs_Assertion implements Assertion{
-	private HashMap<String, Assertion> defs;
-	private String rootDef;
+	private HashMap<String, Assertion> defs; // all the definitions
+	private String rootDef; // name of the main definition
 	protected static Defs_Assertion env = null; //used by pattOfS
 	
 	public Defs_Assertion() {
@@ -62,8 +62,8 @@ public class Defs_Assertion implements Assertion{
 	@Override
 	public Defs_Assertion notElimination() {
 		Defs_Assertion returnDef = new Defs_Assertion();
-		//Completo i not
 
+		//Completo i not
 		for(Entry<String, Assertion> entry : defs.entrySet()) {
 			returnDef.defs.put(entry.getKey(), entry.getValue().notElimination());
 
