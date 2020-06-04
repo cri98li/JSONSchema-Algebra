@@ -1,5 +1,6 @@
 package patterns;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.Collections;
 
@@ -86,7 +87,7 @@ public class Pattern {
     If the language is not finite, this returns one word that matches. 
     If the language is empty, this returns null.
   */
-  public Set<String> generateWords() {
+  public Collection<String> generateWords() {
     Set<String> words = SpecialOperations.getFiniteStrings(this.automaton);
 
     if (words != null)
@@ -106,7 +107,7 @@ public class Pattern {
   /**
     Given {A1, .., An}, returns pattern for not(A1|...|An)
   */
-  public static Pattern listComplement(Set<Pattern> patterns) {
+  public static Pattern listComplement(Collection<Pattern> patterns) {
     Pattern u = null;
 
     for (Pattern p : patterns) {
@@ -119,7 +120,41 @@ public class Pattern {
     return u.complement();
   }
 
+
+  /**
+    Returns true iff the language declared by the two patterns overlaps,
+    i.e. their intersection is not empty.
+  */
+  public static boolean overlaps(Pattern left, Pattern right) {
+    return ! left.automaton.overlap(right.automaton).isEmpty();
+  }
+
+
+  /**
+    Returns true iff there are two patterns that overlap.
+  */ 
+  public static boolean overlaps(Collection<Pattern> patterns) {
+     boolean answer = false;
+      Pattern[] array = patterns.toArray(new Pattern[0]);
+    
+     for (int i = 0; i < array.length; i++) {
+       Pattern first = array[i];
+
+       if (i  == array.length - 1) 
+         break;
+
+       for (int j = i + 1; j < array.length; j++) {
+         Pattern second = array[j];
+
+         if (Pattern.overlaps(first, second)) 
+           return true;
+       }
+     }
  
+     return false; 
+  }
+
+
   /**
     Returns a string representation of the automaton (states and transitions).
   */

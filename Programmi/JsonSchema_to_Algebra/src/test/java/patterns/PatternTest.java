@@ -3,7 +3,7 @@ package patterns;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Ignore;
-import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
 
 public class PatternTest {
@@ -45,7 +45,7 @@ public class PatternTest {
 
   @Test
   public void testGenerateWordsInf() {
-    Set<String> words = Pattern.createFromRegexp("a+").generateWords();
+    Collection<String> words = Pattern.createFromRegexp("a+").generateWords();
     assertTrue(words.size() == 1);
     assertTrue(words.contains("a"));
   }
@@ -131,7 +131,7 @@ public class PatternTest {
     Pattern p1 = Pattern.createFromRegexp("a");
     Pattern p2 = Pattern.createFromRegexp("b");
   
-    Set<Pattern> patterns =  new HashSet<Pattern>();
+    Collection<Pattern> patterns =  new HashSet<Pattern>();
     patterns.add(p1);
     patterns.add(p2);
 
@@ -139,6 +139,45 @@ public class PatternTest {
     assertFalse(c.match("a"));
     assertFalse(c.match("b"));
     assertTrue(c.match("c"));
+  }
+
+  @Test
+  public void testOverlaps() {
+    Pattern p1 = Pattern.createFromRegexp("a?b?");
+    Pattern p2 = Pattern.createFromRegexp("b?c?");
+    Pattern p3 = Pattern.createFromRegexp("xyz");
+
+    assertTrue(Pattern.overlaps(p1, p2));
+    assertFalse(Pattern.overlaps(p1, p3));
+    assertFalse(Pattern.overlaps(p2,p3));
+  }
+
+  @Test
+  public void testOverlapsCollection() {
+    Pattern p1 = Pattern.createFromRegexp("a?b?");
+    Pattern p2 = Pattern.createFromRegexp("b?c?");
+    Pattern p3 = Pattern.createFromRegexp("xyz");
+
+    Collection<Pattern> collection = new HashSet<Pattern>();
+    collection.add(p1);
+    collection.add(p2);
+    collection.add(p3);
+
+    assertTrue(Pattern.overlaps(collection));
+  }
+
+  @Test
+  public void testOverlapsCollectionNoMatch() {
+    Pattern p1 = Pattern.createFromRegexp("foo");
+    Pattern p2 = Pattern.createFromRegexp("bar");
+    Pattern p3 = Pattern.createFromRegexp("baz");
+
+    Collection<Pattern> collection = new HashSet<Pattern>();
+    collection.add(p1);
+    collection.add(p2);
+    collection.add(p3);
+
+    assertFalse(Pattern.overlaps(collection));
   }
 
 }
