@@ -1,15 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
 import org.json.simple.JSONObject;
+import patterns.Pattern;
 
 public class Pattern_Assertion implements Assertion{
-	private PosixPattern pattern;
+	private Pattern pattern;
 
-	public Pattern_Assertion(PosixPattern pattern) {
+	public Pattern_Assertion(Pattern pattern) {
 		this.pattern = pattern;
 	}
 
@@ -18,7 +18,7 @@ public class Pattern_Assertion implements Assertion{
 		return "Pattern_Assertion [" + pattern + "]";
 	}
 
-	public PosixPattern getValue(){
+	public Pattern getValue(){
 		return pattern;
 	}
 
@@ -47,7 +47,7 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.PATTERN, pattern);
+		return String.format(GrammarStringDefinitions.PATTERN, pattern.toString());
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -55,7 +54,7 @@ public class Required_Assertion implements Assertion{
 
 		for(String key : reqList){
 			Properties_Assertion props = new Properties_Assertion();
-			props.addPatternProperties(Pattern.createFromRegexp(key), new Boolean_Assertion(false)); //TODO: createFromName
+			props.addPatternProperties(Pattern.createFromName(key), new Boolean_Assertion(false));
 			or.add(props);
 		}
 		and.add(or);
@@ -96,7 +95,7 @@ public class Required_Assertion implements Assertion{
 		or.add(type);
 
 		for(String str : reqList) {
-			PosixPattern p = Pattern.createFromRegexp(str); //TODO: createFromName
+			Pattern p = Pattern.createFromName(str);
 			WitnessPattReq pattReq = new WitnessPattReq(p, new WitnessBoolean(true));
 			and.add(pattReq);
 		}

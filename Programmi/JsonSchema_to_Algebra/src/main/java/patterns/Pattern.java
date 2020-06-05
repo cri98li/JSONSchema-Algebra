@@ -5,8 +5,9 @@ import java.util.Set;
 import java.util.Collections;
 
 import dk.brics.automaton.*;
-
 public class Pattern {
+  private String initialPattern;
+  private boolean printable;
 
   // TODO - explore runautomaton
 
@@ -22,12 +23,18 @@ public class Pattern {
 
   private Pattern(Automaton automaton) {
     this.automaton = automaton;
+
+    printable = false;
   }
 
   private Pattern(String regex) {
     // TODO - adapt regexp syntax
   
     this((new RegExp(regex)).toAutomaton());
+
+    initialPattern = regex;
+    this.printable = true;
+
   } 
 
   public boolean isEmpty(){
@@ -85,7 +92,8 @@ public class Pattern {
     Returns the set of accepted strings, assuming this automaton has a finite language. 
     If the language is not finite, this returns one word that matches. 
     If the language is empty, this returns null.
-  */
+   * @return
+   */
   public Collection<String> generateWords() {
     Set<String> words = SpecialOperations.getFiniteStrings(this.automaton);
 
@@ -99,7 +107,12 @@ public class Pattern {
   }
 
   public Pattern clone() {
-    return new Pattern(this.automaton.clone());
+    Pattern clone = new Pattern(this.automaton.clone());
+
+    clone.printable = printable;
+    clone.initialPattern = initialPattern;
+
+    return clone;
   }
 
   
@@ -159,7 +172,16 @@ public class Pattern {
   */
   @Override
   public String toString() {
-    return this.automaton.toString();
+    return printable ? initialPattern : this.automaton.toString();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Pattern pattern = (Pattern) o;
+
+    return this.isEquivalent(pattern);
+  }
 }

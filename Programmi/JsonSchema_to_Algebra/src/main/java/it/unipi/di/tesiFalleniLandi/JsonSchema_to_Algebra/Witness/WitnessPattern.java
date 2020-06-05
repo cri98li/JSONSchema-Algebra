@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
 
@@ -10,9 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WitnessPattern implements WitnessAssertion{
-    private PosixPattern pattern;
+    private Pattern pattern;
 
-    public WitnessPattern(PosixPattern pattern){
+    public WitnessPattern(Pattern pattern){
         this.pattern = pattern;
     }
 
@@ -55,7 +54,7 @@ public class WitnessPattern implements WitnessAssertion{
     @Override
     public WitnessAssertion clone() {
         WitnessPattern clone = new WitnessPattern();
-        clone.pattern = pattern; //TODO: clone
+        clone.pattern = pattern.clone();
 
         return clone;
     }
@@ -67,7 +66,7 @@ public class WitnessPattern implements WitnessAssertion{
 
         WitnessPattern that = (WitnessPattern) o;
 
-        return pattern.equals(that.pattern);
+        return pattern.isEquivalent(that.pattern);
     }
 
     @Override

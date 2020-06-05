@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
@@ -10,26 +9,26 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 
 public class PatternRequired_Assertion implements Assertion{
-	private HashMap<PosixPattern, Assertion> pattReq;
+	private HashMap<Pattern, Assertion> pattReq;
 
 	public PatternRequired_Assertion() {
 		pattReq = new HashMap<>();
 	}
 	
-	public PatternRequired_Assertion(HashMap<PosixPattern, Assertion> pattReq) {
+	public PatternRequired_Assertion(HashMap<Pattern, Assertion> pattReq) {
 		this.pattReq = pattReq;
 	}
 	
-	public PatternRequired_Assertion(PosixPattern name, Assertion assertion) {
+	public PatternRequired_Assertion(Pattern name, Assertion assertion) {
 		pattReq = new HashMap<>();
 		pattReq.put(name, assertion);
 	}
 
-	public void add(PosixPattern key, Assertion value) {
+	public void add(Pattern key, Assertion value) {
 		if(pattReq.containsKey(key)) throw new ParseCancellationException("Detected 2 patternRequired with the same name");
 		pattReq.put(key, value);
 	}
@@ -45,7 +44,7 @@ public class PatternRequired_Assertion implements Assertion{
 		t.add(GrammarStringDefinitions.TYPE_OBJECT);
 		AllOf_Assertion and = new AllOf_Assertion();
 
-		for(Entry<PosixPattern, Assertion> entry : pattReq.entrySet()) {
+		for(Map.Entry<Pattern, Assertion> entry : pattReq.entrySet()) {
 			Properties_Assertion pro = new Properties_Assertion();
 			pro.addPatternProperties(entry.getKey(), entry.getValue().not());
 			and.add(new Not_Assertion(pro));
@@ -61,9 +60,9 @@ public class PatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		Set<Entry<PosixPattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Entry<PosixPattern, Assertion> entry : entrySet) {
+		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
 			Properties_Assertion properties = new Properties_Assertion();
 			Assertion not = entry.getValue().not();
 			if(not != null)
@@ -80,9 +79,9 @@ public class PatternRequired_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		PatternRequired_Assertion pattReqAss = new PatternRequired_Assertion();
-		Set<Entry<PosixPattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Entry<PosixPattern, Assertion> entry : entrySet) {
+		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
 			Assertion not = entry.getValue().notElimination();
 			if(not != null)
 				pattReqAss.add(entry.getKey(), not);
@@ -96,8 +95,8 @@ public class PatternRequired_Assertion implements Assertion{
 		String str = "";
 		
 		if(pattReq != null) {
-			Set<Entry<PosixPattern, Assertion>> entrySet = pattReq.entrySet();
-			for(Entry<PosixPattern, Assertion> entry : entrySet) {
+			Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
+			for(Map.Entry<Pattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
 					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
@@ -118,10 +117,10 @@ public class PatternRequired_Assertion implements Assertion{
 		or.add(type);
 		or.add(and);
 
-		Set<Entry<PosixPattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
 
-		for(Entry<PosixPattern, Assertion> entry : entrySet) {
-			PosixPattern p = entry.getKey(); //TODO: pattern clone
+		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
+			Pattern p = entry.getKey().clone();
 			WitnessPattReq pattReq = new WitnessPattReq(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattReq);
 		}

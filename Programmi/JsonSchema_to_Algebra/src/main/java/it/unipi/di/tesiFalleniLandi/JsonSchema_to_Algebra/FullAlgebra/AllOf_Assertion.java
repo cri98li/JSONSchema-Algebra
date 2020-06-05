@@ -12,7 +12,7 @@ import java.util.List;
 public class AllOf_Assertion implements Assertion{
 	private List<Assertion> andList;
 	private boolean duplicates, //used to replace allOf[...] keyword with { ... } when possible
-			containsFalseBooleanAssertion; //allOf false - we return allOf: false (TODO: correct?? can we throw an exception instead)
+			containsFalseBooleanAssertion; //allOf false - we return allOf: false (TODO: correct?? can we throw an exception instead???)
 	
 	public AllOf_Assertion() {
 		this.andList = new LinkedList<>();

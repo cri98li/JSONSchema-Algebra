@@ -2,21 +2,20 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class AddPatternRequired_Assertion implements Assertion{
-	private List<PosixPattern> pattList;
+	private List<Pattern> pattList;
 	private Assertion additionalProperties;
 
 	public AddPatternRequired_Assertion() {
 		pattList = new LinkedList<>();
 	}
 	
-	public AddPatternRequired_Assertion(List<PosixPattern> pattList, Assertion additionalProperties) {
+	public AddPatternRequired_Assertion(List<Pattern> pattList, Assertion additionalProperties) {
 		this.pattList = pattList;
 		this.additionalProperties = additionalProperties;
 	}
@@ -27,7 +26,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 				+ "]";
 	}
 
-	public void setPattList(List<PosixPattern> pattList) {
+	public void setPattList(List<Pattern> pattList) {
 		this.pattList = pattList;
 	}
 
@@ -35,7 +34,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		this.additionalProperties = additionalProperties;
 	}
 	
-	public void addName(PosixPattern name) {
+	public void addName(Pattern name) {
 		pattList.add(name);
 	}
 
@@ -52,7 +51,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		
-		for(PosixPattern name : pattList) {
+		for(Pattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
 		}
 		if(additionalProperties.not() != null)
@@ -77,7 +76,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		for(PosixPattern s : pattList)
+		for(Pattern s : pattList)
 			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
 		
 		if(additionalProperties == null)
@@ -91,11 +90,10 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() {
-		PosixPattern p = Pattern.createFromRegexp("bug*"); //TODO: bug --> dovrebbe essere vuoto
-		for(PosixPattern pattern : pattList)
+		Pattern p = Pattern.createFromRegexp("*");
+		for(Pattern pattern : pattList)
 			p = p.intersect(pattern);
 
-		return new WitnessPattReq(p, additionalProperties.toWitnessAlgebra());
-		//return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra()); TODO: addPattReq complement
+		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());
 	}
 }

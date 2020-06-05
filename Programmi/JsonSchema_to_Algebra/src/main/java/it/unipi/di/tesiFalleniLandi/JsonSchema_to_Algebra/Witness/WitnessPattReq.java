@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
 
@@ -11,17 +10,17 @@ import java.util.Objects;
 import java.util.Set;
 
 public class WitnessPattReq implements WitnessAssertion{
-    private PosixPattern key;
+    private Pattern key;
     private WitnessAssertion value;
 
-    public WitnessPattReq(PosixPattern key, WitnessAssertion assertion){
+    public WitnessPattReq(Pattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
     }
 
     protected WitnessPattReq() { }
 
-    public PosixPattern getKey() {
+    public Pattern getKey() {
         return key;
     }
 
@@ -80,7 +79,7 @@ public class WitnessPattReq implements WitnessAssertion{
     public WitnessPattReq clone() {
         WitnessPattReq clone = new WitnessPattReq();
 
-        clone.key = key; //TODO: clone pattern
+        clone.key = key.clone();
         clone.value = value.clone();
 
         return clone;

@@ -1,20 +1,5 @@
 rootdef "x" = anyOf[
-    {
-        mof(3)
-    },
-    {
-        type[num],
-        mof(2),
-        allOf[
-            anyOf[
-                {
-                    type[obj],
-                    pro(0,1)
-                }
-            ],
-            ref("x"),
-            pattern("a*")
-        ]
-    }
+        pattern("test"),
+        length(1, 39)
+    ]
 
-]

@@ -1,14 +1,14 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
+import patterns.Pattern;
 
 public class NotPattern_Assertion implements Assertion{
-	private PosixPattern notPattern;
+	private Pattern notPattern;
 
-	public NotPattern_Assertion(PosixPattern pattern) {
+	public NotPattern_Assertion(Pattern pattern) {
 		this.notPattern = pattern;
 	}
 
@@ -48,6 +48,6 @@ public class NotPattern_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		return new WitnessPattern(notPattern);//TODO: complement
+		return new WitnessPattern(notPattern.complement());
 	}
 }

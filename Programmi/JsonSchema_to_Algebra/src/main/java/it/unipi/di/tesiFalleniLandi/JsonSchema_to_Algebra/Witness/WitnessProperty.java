@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.PosixPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 
@@ -11,17 +10,17 @@ import java.util.Objects;
 import java.util.Set;
 
 public class WitnessProperty implements WitnessAssertion{
-    private PosixPattern key;
+    private Pattern key;
     private WitnessAssertion value;
 
     protected WitnessProperty() { }
 
-    public WitnessProperty(PosixPattern key, WitnessAssertion assertion){
+    public WitnessProperty(Pattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
     }
 
-    public PosixPattern getKey() {
+    public Pattern getKey() {
         return key;
     }
 
@@ -60,15 +59,15 @@ public class WitnessProperty implements WitnessAssertion{
         if(a.value.getClass() == WitnessBoolean.class && !((WitnessBoolean)a.value).getValue()) return a.value;
 
 
-        if(a.key.equals(this.key)){ //TODO: confronto
+        if(a.key.equals(this.key)){
             WitnessAnd and = new WitnessAnd();
             and.add(a.value);
             and.add(this.value);
-            return new WitnessProperty(new Pattern(a.key.toString()/*TODO: .getPattern()*/), and.mergeElement(null));
+            return new WitnessProperty(Pattern.createFromRegexp(a.key.toString()), and.mergeElement(null));
         }
 
         if(a.value.equals(this.value)){
-            return new WitnessProperty(a.key.intersect(this.key), this.value); //TODO: or
+            return new WitnessProperty(a.key.intersect(this.key), this.value);
         }
 
         return null;
@@ -91,7 +90,7 @@ public class WitnessProperty implements WitnessAssertion{
     public WitnessProperty clone() {
         WitnessProperty clone = new WitnessProperty();
 
-        clone.key = key; //TODO: witnessProp
+        clone.key = key.clone();
         clone.value = value.clone();
 
         return clone;

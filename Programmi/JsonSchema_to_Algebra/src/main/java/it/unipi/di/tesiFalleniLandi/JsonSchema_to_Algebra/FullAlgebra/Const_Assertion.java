@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//TODO: controlla cosa succede quando creiamo un pattern da una stringa che in verità è un pattern (se viene interpretata come stringa statica [corretto] o come pattern [sbagliato])
 public class Const_Assertion implements Assertion{
 	private Object value;
 
@@ -37,7 +38,7 @@ public class Const_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		
 		if(value == null) {
-			type.add("null");
+			type.add(GrammarStringDefinitions.TYPE_NULL);
 			
 			return type.not();
 		}
@@ -63,7 +64,7 @@ public class Const_Assertion implements Assertion{
 		
 		if(value.getClass() == String.class) {
 			AnyOf_Assertion or = new AnyOf_Assertion();
-			Pattern_Assertion pattern = new Pattern_Assertion(new Pattern((String) value));
+			Pattern_Assertion pattern = new Pattern_Assertion(Pattern.createFromName((String) value));
 			
 			type.add("str");
 			or.add(type.not());
@@ -174,7 +175,7 @@ public class Const_Assertion implements Assertion{
 		if(value.getClass() == String.class) {
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
-			and.add(new WitnessPattern(new Pattern("^"+(String) value+"$")));
+			and.add(new WitnessPattern(Pattern.createFromName((String) value)/*new Pattern("^"+(String) value+"$")*/));
 			return and;
 		}
 
@@ -200,7 +201,7 @@ public class Const_Assertion implements Assertion{
 			Required_Assertion req = new Required_Assertion();
 			for(Map.Entry<String, ?> entry : entrySet){
 				req.add(entry.getKey());
-				and.add(new WitnessProperty(new Pattern(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
+				and.add(new WitnessProperty(Pattern.createFromName(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
 			}
 			and.add(req.toWitnessAlgebra());
 			and.add(new WitnessPro(Double.parseDouble(""+entrySet.size()), Double.parseDouble(""+entrySet.size())));
