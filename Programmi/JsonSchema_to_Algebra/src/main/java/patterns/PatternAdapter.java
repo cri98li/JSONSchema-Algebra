@@ -1,5 +1,7 @@
 package patterns;
 
+//import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
   Translates JSON Schema pattern syntax (a subset of ECMAScript) such that 
   the Bricks automaton package can handle them.
@@ -10,15 +12,18 @@ public class PatternAdapter {
   /**
     JSON Schema patterns are not anchored 
     unless they start with a ^ and end with a $.
+  
+    @param regex String in ECMAScript  syntax
+    @return  regex String in Bricks syntax
   */
-  protected static String bound(String regex) {
+  protected static String bound(String ecmaRegex) {
     String bricksRegex;
-    if (regex.startsWith("^"))
-      bricksRegex = regex.substring(1);
+    if (ecmaRegex.startsWith("^"))
+      bricksRegex = ecmaRegex.substring(1);
     else
-      bricksRegex = "@" + regex;
+      bricksRegex = "@" + ecmaRegex;
 
-     if (regex.endsWith("$") && !regex.endsWith("\\$"))
+     if (ecmaRegex.endsWith("$") && !ecmaRegex.endsWith("\\$"))
        bricksRegex = bricksRegex.substring(0, bricksRegex.length() - 1);
      else
        bricksRegex = bricksRegex + "@";
@@ -26,8 +31,12 @@ public class PatternAdapter {
      return bricksRegex;
   }
 
-  public static String rewrite(String regex) {
-    return bound(regex); // TODO - more to be done
+  /*
+    @param regex String in ECMAScript  syntax
+    @return  regex String in Bricks syntax
+  */
+  public static String rewrite(String ecmaRegex) {
+    return bound(ecmaRegex); // TODO - more to be done
   }
 
 }

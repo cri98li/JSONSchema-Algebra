@@ -85,7 +85,6 @@ public class PatternTest {
   }
 
   @Test
-  @Ignore
   public void testMatchFalse() {
     assertFalse(Pattern.createFromRegexp("^aa*$").match("abc"));
   }
@@ -187,6 +186,12 @@ public class PatternTest {
     collection.add(p3);
 
     assertFalse(Pattern.overlaps(collection));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void  testInvalidPattern() {
+    Pattern p = Pattern.createFromRegexp("{1,");
+    System.out.println(p.toAutomatonString());
   }
 
 }

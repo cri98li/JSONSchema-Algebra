@@ -17,7 +17,5 @@ public class PatternAdapterTest {
     //assertEquals("@foo$@", PatternAdapter.bound("foo\\$"));
   }
 
-  // TODO - add all the tests from JSON Schema Test Suite
-  // https://github.com/json-schema-org/JSON-Schema-Test-Suite/blob/master/tests/draft6/pattern.json
-  
+   
 }

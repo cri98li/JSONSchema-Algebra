@@ -5,36 +5,55 @@ import java.util.Set;
 import java.util.Collections;
 
 import dk.brics.automaton.*;
+
 public class Pattern {
-  private String initialPattern;
-  private boolean printable;
 
-  // TODO - explore runautomaton
 
+  /**
+    The internal Bricks automaton.
+  */
   private Automaton automaton;
 
+
+  /**
+    Records the original regular expression.
+  **/
+  private String initialPattern;
+
+
+  /**
+    True iff the initial pattern can be printed.
+  */
+  private boolean printable;
+
+  /**
+    @param String constant that is not a regular expression
+  */
   public static Pattern createFromName(String patternName) {
     return new Pattern(BasicAutomata.makeString(patternName));
   }
 
-  public static Pattern createFromRegexp(String regex) {
-    return new Pattern(PatternAdapter.rewrite(regex));
+  /**
+    @param regex String in ECMAScript syntax (not anchored by default)
+    @exception IllegalArgumentException if regex is invalid
+  */
+  public static Pattern createFromRegexp(String ecmaRegex) {
+    return new Pattern(PatternAdapter.rewrite(ecmaRegex));
   }
+
 
   private Pattern(Automaton automaton) {
     this.automaton = automaton;
-
     printable = false;
   }
 
-  private Pattern(String regex) {
-    // TODO - adapt regexp syntax
-  
-    this((new RegExp(regex)).toAutomaton());
-
-    initialPattern = regex;
+  /**
+    Assumes that regex is already in the Bricks syntax!
+  */
+  private Pattern(String bricksRegex) {
+    this((new RegExp(bricksRegex)).toAutomaton());
+    initialPattern = bricksRegex;
     this.printable = true;
-
   } 
 
   public boolean isEmpty(){
@@ -42,8 +61,8 @@ public class Pattern {
   }
 
   public boolean match(String str) {
-    // TODO - for full performance, use the RunAutomaton class.
-    //return BasicOperations.run(this.automaton, str);
+    // The less performant way to match a string.
+    // return BasicOperations.run(this.automaton, str);
 
     // For full performance, we use the RunAutomaton class.
     RunAutomaton ra = new RunAutomaton(this.automaton);
@@ -92,8 +111,7 @@ public class Pattern {
     Returns the set of accepted strings, assuming this automaton has a finite language. 
     If the language is not finite, this returns one word that matches. 
     If the language is empty, this returns null.
-   * @return
-   */
+  */
   public Collection<String> generateWords() {
     Set<String> words = SpecialOperations.getFiniteStrings(this.automaton);
 
@@ -108,10 +126,8 @@ public class Pattern {
 
   public Pattern clone() {
     Pattern clone = new Pattern(this.automaton.clone());
-
-    clone.printable = printable;
-    clone.initialPattern = initialPattern;
-
+    clone.printable = this.printable;
+    clone.initialPattern = this.initialPattern;
     return clone;
   }
 
@@ -168,20 +184,28 @@ public class Pattern {
 
 
   /**
-    Returns a string representation of the automaton (states and transitions).
+    Returns a string representation, either of the regexp,
+    or of the automaton (its states and transitions).
   */
   @Override
   public String toString() {
-    return printable ? initialPattern : this.automaton.toString();
+    return printable ? initialPattern : this.toAutomatonString();
+  }
+
+  
+  protected String toAutomatonString() {
+    return this.automaton.toString();
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) 
+      return true;
+    if (o == null || getClass() != o.getClass()) 
+      return false;
 
     Pattern pattern = (Pattern) o;
-
     return this.isEquivalent(pattern);
   }
+
 }
