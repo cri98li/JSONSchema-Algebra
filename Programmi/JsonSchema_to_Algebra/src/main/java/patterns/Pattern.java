@@ -17,8 +17,7 @@ public class Pattern {
   }
 
   public static Pattern createFromRegexp(String regex) {
-    // TODO - regex in JSON Schema are not bounded, need to fix this
-    return new Pattern(regex);
+    return new Pattern(PatternAdapter.rewrite(regex));
   }
 
   private Pattern(Automaton automaton) {
