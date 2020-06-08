@@ -8,12 +8,14 @@ import java.util.HashSet;
 
 public class PatternTest {
 
+
   @Test
   public void testCreateFromName() {
     Pattern pattern = Pattern.createFromName("foo");
     assertTrue(pattern.domainSize() == 1);
     assertTrue(pattern.generateWords().contains("foo"));
   }
+
 
   @Test
   public void testCreateFromRegexp() {
@@ -25,11 +27,13 @@ public class PatternTest {
     assertTrue(Pattern.createFromRegexp("^foo$").match("foo"));
   }
 
+
   @Test
   public void testIsEmptyFalse() {
     Pattern pattern = Pattern.createFromRegexp("^a?$"); 
     assertFalse(pattern.isEmpty());
   }
+
 
   @Test
   public void testIsEmptyTrue() {
@@ -40,6 +44,7 @@ public class PatternTest {
     assertTrue(c.isEmpty());
   }
 
+
   @Test
   public void testIsIntersectEmptyFalse() {
     Pattern a = Pattern.createFromRegexp("^a*$");
@@ -48,10 +53,12 @@ public class PatternTest {
     assertFalse(a.intersect(b).isEmpty());
   }
 
+
   @Test
   public void testGenerateWords() {
     assertTrue(Pattern.createFromRegexp("^a?$").generateWords().contains("a"));
   }
+
 
   @Test
   public void testGenerateWordsInf() {
@@ -60,16 +67,19 @@ public class PatternTest {
     assertTrue(words.contains("a"));
   }
 
+
   @Test
   public void testDomainSize() {
     assertTrue(Pattern.createFromRegexp("^a|b|c$").domainSize() == Integer.valueOf(3));
   }
 
+
   @Test
   public void testDomainSizeInf() {
     assertTrue(Pattern.createFromRegexp("^a*$").domainSize() == null);
   }
- 
+
+
   @Test
   public void testMinus() {
     Pattern p1 = Pattern.createFromRegexp("^aa?$");
@@ -79,15 +89,18 @@ public class PatternTest {
     assertTrue(p2.minus(p1).isEmpty());
   }
 
+
   @Test
   public void testMatchTrue() {
     assertTrue(Pattern.createFromRegexp("aa*").match("aa"));
   }
 
+
   @Test
   public void testMatchFalse() {
     assertFalse(Pattern.createFromRegexp("^aa*$").match("abc"));
   }
+
 
   @Test
   public void testClone() {
@@ -98,6 +111,7 @@ public class PatternTest {
     assertTrue(p1.isEquivalent(p2));
   }
 
+
   @Test
   public void testSubsetOf() {
     Pattern p1 = Pattern.createFromRegexp("^a*$");
@@ -106,6 +120,7 @@ public class PatternTest {
     assertFalse(p1.isSubsetOf(p2));
     assertTrue(p2.isSubsetOf(p1));
   }
+
 
   @Test
   public void testIsEquivalent() {
@@ -117,11 +132,14 @@ public class PatternTest {
     assertTrue(p2.isEquivalent(p1));
   }
 
+
   @Test
   public void testComplement() {
     Pattern p = Pattern.createFromRegexp("^a$");
     assertTrue(p.isEquivalent(p.complement().complement()));
   }
+
+
 
   @Test
   public void testUnion() {
@@ -133,6 +151,7 @@ public class PatternTest {
     assertTrue(u.match("a"));
     assertTrue(u.match("b"));
   }
+
 
   @Test
   public void testListComplement() {
@@ -149,6 +168,7 @@ public class PatternTest {
     assertTrue(c.match("c"));
   }
 
+
   @Test
   public void testOverlaps() {
     Pattern p1 = Pattern.createFromRegexp("^a?b?$");
@@ -159,6 +179,7 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(p1, p3));
     assertFalse(Pattern.overlaps(p2,p3));
   }
+
 
   @Test
   public void testOverlapsCollection() {
@@ -174,6 +195,7 @@ public class PatternTest {
     assertTrue(Pattern.overlaps(collection));
   }
 
+
   @Test
   public void testOverlapsCollectionNoMatch() {
     Pattern p1 = Pattern.createFromRegexp("^foo$");
@@ -188,10 +210,28 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(collection));
   }
 
+
   @Test(expected = IllegalArgumentException.class)
-  public void  testInvalidPattern() {
-    Pattern p = Pattern.createFromRegexp("{1,");
+  public void testInvalidPattern() {
+    Pattern p = Pattern.createFromRegexp("{1,"); // invalid syntax
     System.out.println(p.toAutomatonString());
   }
 
+
+  @Test
+  public void testAt() {
+    Pattern p = Pattern.createFromRegexp("@");
+
+    assertTrue(p.match("@"));
+    assertTrue(p.match("@bc"));
+  }
+
+
+  @Test
+  public void testDigits() {
+    Pattern p = Pattern.createFromRegexp("^[0-9]$");
+
+    assertTrue(p.match("1"));
+    assertFalse(p.match("a"));
+  }
 }
