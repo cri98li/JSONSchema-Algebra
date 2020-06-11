@@ -228,7 +228,6 @@ public class PatternTest {
   @Ignore  // ignore for now, interfers with "-ea" flag
   public void testInvalidPattern() {
     Pattern p = Pattern.createFromRegexp("{1,"); // invalid syntax
-    System.out.println(p.toAutomatonString());
   }
 
 
@@ -253,8 +252,6 @@ public class PatternTest {
   @Test
   public void testWhitespace() {
     Pattern p = Pattern.createFromRegexp("^[ \\n\\t\\r\\f\\v]+$");
-
-    System.out.println(p.toAutomatonString());
 
     assertTrue("<space>", p.match(" "));
     assertTrue("<newline>", p.match("\n"));

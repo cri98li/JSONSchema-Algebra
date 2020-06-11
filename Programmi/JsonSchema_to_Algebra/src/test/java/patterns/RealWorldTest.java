@@ -83,26 +83,109 @@ public class RealWorldTest {
   }  
 
   
+
+
+  @Test //(expected = IllegalArgumentException.class)
+  public void testSwaggerHost() {
+    // js_10009.json.
+   Pattern p = Pattern.createFromRegexp("^[^{}/ :\\\\]+(?::\\d+)?$");
+
+   assertTrue(p.match("swagger.io"));
+   assertTrue(p.match("petstore.swagger.wordnik.com"));
+   assertTrue(p.match("example.com:8089"));
+  }
+
+
   @Test
-  public void testSwaggerHostFixed() {
-    // js_10009.json, but with fixes (!)
-    // This regex contains lookaheads, which Bricks cannot handle properly.
-    Pattern p = Pattern.createFromRegexp("^[^{}\\/ :\\]+(?::\\d+)?$");
+  public void testSwaggerBasePathFixed() {
+    // js_10009.json, with fix.
+    assertTrue(Pattern.createFromRegexp("^/").match("/api"));
+  }
 
-    assertFalse(p.toString().contains("?:")); // Make sure "?:" is ignored.
+  
+  @Test
+  public void testUniqueIdentifier() {
+    // js_10015.json
+    Pattern p = Pattern.createFromRegexp("^[-_.A-Za-z0-9]+$");
 
-    assertTrue(p.match("swagger.io"));
-    assertTrue(p.match("petstore.swagger.wordnik.com"));
-    assertTrue(p.match("example.com:8089"));
+    assertTrue(p.match("foo-bar_baz.09"));
   }
 
 
-  @Ignore
-  @Test(expected = IllegalArgumentException.class)
-  public void testSwaggerHostBroken() {
-    // js_10009.json, as found in that file, with syntax errors.
-    Pattern p = Pattern.createFromRegexp("^[^{}/ :\\\\]+(?::\\d+)?$");
+  @Test
+  public void testCountryCode() {
+    // js_10015.json
+    // ISO 3166-1 alpha-2 country code in upper case.
+    Pattern p = Pattern.createFromRegexp("^[A-Z]{2}$");
+
+    assertTrue(p.match("DE"));
   }
 
+  
+  @Test
+  public void testAge() {
+    // js_10015.json
+    // RFC3339 date (or prefix).
+    Pattern p = Pattern.createFromRegexp("^\\d\\d\\d\\d(-\\d\\d(-\\d\\d)?)?$");
+
+    assertTrue(p.match("1985-04-12"));
+    assertFalse(p.match("1985-04-12T23:20:50.52Z"));
+  }
+
+
+  @Test
+  public void testNameOfDirectory() {
+    // js_10019.json
+    assertTrue(Pattern.createFromRegexp("^[a-zA-Z0-9_.]*$").match("shot01"));
+  } 
+
+  
+  @Test
+  public void testDateTime() {
+    // js_1002.json
+    Pattern p = Pattern.createFromRegexp("^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))");
+   
+    assertTrue(p.match("1985-04-12T23:20:50.52Z"));
+    assertTrue(p.match("2009-04-16T12:07:25.123+01:00"));
+  }
+
+
+  @Test
+  public void testNameOf() {
+    // js_10021.json
+    Pattern p = Pattern.createFromRegexp("^\\w*$");
+
+    assertTrue(p.match("Hulk"));
+    assertTrue(p.match("maya2016"));
+  }
+
+/*
+
+
+js_10021.json:            "pattern": "^mongodb://[\\w/@:.]*$",
+js_10021.json:            "pattern": "^\\w*$",
+js_10021.json:            "pattern": "^http[\\w/@:.]*$",
+js_10021.json:            "pattern": "^http[\\w/@:.]*$",
+js_10021.json:            "pattern": "^[0-9]*$",
+js_10021.json:            "pattern": "^\\w*$",
+js_10021.json:            "pattern": "^\\w*$",
+js_10021.json:            "pattern": "^[\\w.]*$",
+js_10021.json:            "pattern": "^[\\w.]*$",
+js_10025.json:            "pattern": "^[a-zA-Z0-9_.]*$",
+js_10031.json:            "pattern": "^[a-zA-Z0-9_.]*$",
+js_10033.json:            "pattern": "^[a-zA-Z0-9_.]*$",
+js_10035.json:      "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$",
+js_10035.json:      "pattern": "^/",
+js_10036.json:                        "pattern": "^[\\w\\-@]+\\.[\\w\\-\\.#\\*\\[\\]\\?]+$"
+js_10036.json:                        "pattern": "^[\\w\\-\\*\\[\\]\\?]+@[\\w\\-]+\\.[\\w\\-\\*\\[\\]\\?]+$"
+js_1004.json:      "pattern": "^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?"
+js_1004.json:      "pattern": "^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?"
+js_10040.json:                "pattern": "^[\\w\\-]+(\\.[\\w\\-^#]+)+$"
+js_10040.json:                "pattern": "^[\\w\\-]+@[\\w\\-]+(\\.[\\w\\-^#]+)+$"
+js_10040.json:                        "pattern": "^[\\w\\-]+\\..+$"
+js_10040.json:                        "pattern": "^[\\w\\-]+\\@[\\w\\-]+\\..+$"
+
+
+*/
 
 }

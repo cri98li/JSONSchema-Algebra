@@ -7,7 +7,6 @@ import org.junit.Ignore;
 public class PatternAdapterTest {
 
 
-
   @Test
   public void testBound() {
     assertEquals("@foo@", PatternAdapter.rewrite("foo"));
@@ -99,4 +98,9 @@ public class PatternAdapterTest {
   }  
 
 
+  @Test
+  public void testAnyWordCharacter() {
+    assertEquals("[a-zA-Z0-9_]", PatternAdapter.rewriteCore("\\w"));
+    assertEquals("[a-zA-Z0-9_]", PatternAdapter.rewriteCore("[\\w]"));
+  }
 }

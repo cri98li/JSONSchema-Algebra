@@ -1,6 +1,7 @@
 package patterns;
 
-//import org.apache.commons.lang3.StringEscapeUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
   Translates JSON Schema pattern syntax (a subset of ECMAScript) such that 
@@ -8,6 +9,9 @@ package patterns;
 */
 
 public class PatternAdapter {
+
+  private static final Logger logger = Logger.getLogger("PatternAdapter");
+
 
   /**
     JSON Schema patterns are not anchored
@@ -37,7 +41,8 @@ public class PatternAdapter {
     Mimicks a poor man's recursive descent parser to rewrite the regex from left to right.
   */
   protected static String rewriteCore(String ecmaRegex) {
-    //System.out.println("\nrewriteCore: " + ecmaRegex);
+    logger.setLevel(Level.OFF); // ALL
+    logger.info("rewriteCore: " + ecmaRegex);
    
     if (ecmaRegex.isEmpty())
       return "";
@@ -62,12 +67,16 @@ public class PatternAdapter {
     }
 
     // Preserve single characters to be matched.
-    if (ecmaRegex.matches("^[a-zA-Z|0-9()?*+: ].*$"))
+    if (ecmaRegex.matches("^[a-zA-Z|0-9()?*+: /_-].*$"))
       return ecmaRegex.substring(0,1) + rewriteCore(ecmaRegex.substring(1));
 
     // Bricks automaton does not know "\d" for digits.
     if (ecmaRegex.matches("^\\\\d.*$"))
       return "[0-9]" + rewriteCore(ecmaRegex.substring(2));
+
+    // Bricks automaton does not know "\w" for any word character.
+    if (ecmaRegex.matches("^\\\\w.*$"))
+      return "[a-zA-Z0-9_]" + rewriteCore(ecmaRegex.substring(2));
 
     // Preserve what is already escaped.
     if (ecmaRegex.matches("^\\\\[.*+?!$dntrfv()].*$")) 
@@ -119,7 +128,7 @@ public class PatternAdapter {
     Rewriting within a character class "[abc...]".
   */
   protected static String rewriteCharClass(String ecmaRegex) {
-    //System.out.println("\nrewriteCharClass: " + ecmaRegex);
+    logger.info("rewriteCharClass: " + ecmaRegex);
 
     if (ecmaRegex.isEmpty())
       return "";
@@ -137,6 +146,10 @@ public class PatternAdapter {
     // Bricks automaton does not know "\d" for digits.
     if (ecmaRegex.matches("^\\\\d.*$"))
       return "0-9" + rewriteCharClass(ecmaRegex.substring(2));
+
+    // Bricks automaton does not know "\w" for any word character.
+    if (ecmaRegex.matches("^\\\\w.*$"))
+      return "a-zA-Z0-9_" + rewriteCharClass(ecmaRegex.substring(2));
 
     if (ecmaRegex.matches("^\\\\S.*$")) // TODO - this is probably too crude
       return "^\\r\\n\\t\\f\\v " + rewriteCharClass(ecmaRegex.substring(2)); 
