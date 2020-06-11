@@ -41,7 +41,9 @@ public class PatternAdapter {
     Mimicks a poor man's recursive descent parser to rewrite the regex from left to right.
   */
   protected static String rewriteCore(String ecmaRegex) {
-    logger.setLevel(Level.OFF); // ALL
+    logger.setLevel(Level.OFF); 
+    //logger.setLevel(Level.ALL);
+
     logger.info("rewriteCore: " + ecmaRegex);
    
     if (ecmaRegex.isEmpty())
@@ -67,7 +69,7 @@ public class PatternAdapter {
     }
 
     // Preserve single characters to be matched.
-    if (ecmaRegex.matches("^[a-zA-Z|0-9()?*+: /_-].*$"))
+    if (ecmaRegex.matches("^[a-zA-Z|0-9()?*+: /_#-\\.].*$"))
       return ecmaRegex.substring(0,1) + rewriteCore(ecmaRegex.substring(1));
 
     // Bricks automaton does not know "\d" for digits.
@@ -139,8 +141,8 @@ public class PatternAdapter {
     if (ecmaRegex.matches("^[a-zA-Z0-9]-[a-zA-Z0-9].*$"))
       return ecmaRegex.substring(0,3) + rewriteCharClass(ecmaRegex.substring(3));
 
-    // Characters that are simply preserved.
-    if (ecmaRegex.matches("^[-a-zA-Z0-9_ ().+{}:/].*$"))
+    // Single characters that are simply preserved.
+    if (ecmaRegex.matches("^[-a-zA-Z0-9_ ().+{}:/@#].*$"))
       return ecmaRegex.substring(0, 1) + rewriteCharClass(ecmaRegex.substring(1));
 
     // Bricks automaton does not know "\d" for digits.
@@ -159,7 +161,7 @@ public class PatternAdapter {
       return ecmaRegex.substring(0,2) + rewriteCharClass(ecmaRegex.substring(2));
 
     // Preserve what is already escaped.
-    if (ecmaRegex.matches("^\\\\[.*+?!dntrfv].*$"))
+    if (ecmaRegex.matches("^\\\\[.*+?!dntrfv-].*$"))
       return ecmaRegex.substring(0,2) + rewriteCharClass(ecmaRegex.substring(2));
 
     // "\"

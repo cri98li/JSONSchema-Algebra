@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.Collections;
 
-import org.apache.commons.text.StringEscapeUtils;
-
 import dk.brics.automaton.*;
 
 public class Pattern {

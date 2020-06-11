@@ -83,8 +83,6 @@ public class RealWorldTest {
   }  
 
   
-
-
   @Test //(expected = IllegalArgumentException.class)
   public void testSwaggerHost() {
     // js_10009.json.
@@ -159,32 +157,178 @@ public class RealWorldTest {
     assertTrue(p.match("maya2016"));
   }
 
+   
+  @Test
+  public void testAddressToMongoDB() {
+    // js_10021.json
+    Pattern p = Pattern.createFromRegexp("^mongodb://[\\w/@:.]*$");
+
+    assertTrue(p.match("mongodb://localhost:27017"));
+  }
+
+  @Test
+  public void testAddressToSentryEtc() {
+    // js_10021.json
+    Pattern p = Pattern.createFromRegexp("^http[\\w/@:.]*$");
+
+    assertTrue(p.match("https://5b872b280de742919b115bdc8da076a5:8d278266fe764361b8fa6024af004a9c@logs.mindbender.com/2"));
+    assertTrue(p.match("http://192.168.99.101"));
+  }
+
+
+  @Test
+  public void testContainerID() {
+    // js_10021.json
+    Pattern p = Pattern.createFromRegexp("^[\\w.]*$");
+
+    assertTrue(p.match("avalon.container"));
+  }
+
+
+  @Test
+  public void testFilter() {
+    // js_10036.json
+    Pattern p = Pattern.createFromRegexp("^[\\w\\-@]+\\.[\\w\\-\\.#\\*\\[\\]\\?]+$");
+
+    assertTrue(p.match("ab@.abc#?*[]")); // I made this string up.
+  }
+
+
+  @Test
+  public void testFilter2() {
+    // js_10036.json
+    Pattern p = Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+@[\\w\\-]+\\.[\\w\\-\\*\\[\\]\\?]+$");
+
+    assertTrue(p.match("ab*?@abc.com?")); // I made this string up.
+  }
+
+ 
+  @Test 
+  public void testExpires() {
+    //js_1004.json
+    Pattern p = Pattern.createFromRegexp("^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?");
+
+    assertTrue(p.match("1985-04-12T23:20:50.52Z"));
+    assertTrue(p.match("2009-04-16T12:07:25.123+01:00"));
+  }
+
+
+  @Test
+  public void testResourceID() {
+    // js_10040.json 
+    Pattern p = Pattern.createFromRegexp("^[\\w\\-]+(\\.[\\w\\-^#]+)+$");
+    
+    assertTrue(p.match("foo-.bar#.baz^")); // I made this up.
+  }
+
+
+  @Test
+  public void testResource() {
+    // js_10040.json
+    Pattern p = Pattern.createFromRegexp("^[\\w\\-]+\\..+$");
+
+    assertTrue(p.match("foo-.bar#.baz^")); // I made this up.
+  }
+
+
+  @Test
+  @Ignore
+  public void testProto() {
+    // js_10041.json
+    Pattern p = Pattern.createFromRegexp("^tcp$|^udp$|^\\*$");
+
+    System.out.println(p.toAutomatonString());
+
+    assertTrue(p.match("tcp"));
+    assertTrue(p.match("udp"));
+    assertTrue(p.match(""));
+    assertTrue(p.match("***"));
+    assertFalse(p.match("tcudp"));
+  }
+
+  
+  @Test
+  @Ignore
+  public void testEndpoint() {
+    // js_10041.json
+    Pattern p = Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+$");
+
+   // TODO
+  }
+
+
+/*
+js_10041.json:                "pattern": "^tcp$|^udp$|^\\*$"
+js_10042.json:                "pattern": "^tcp$|^udp$"
+js_10051.json:                "pattern": "^cell$|^campus$|^region$|^global$"
+js_10376.json:            "pattern": "^(\\/?((\\.{2})|([a-z0-9\\-]*))($|\\/))*$",
+js_116.json:            "pattern": "^PMID:[0-9]+$|^doi:10\\.[0-9]{4}[\\d\\S\\:\\.]+$",
+js_13403.json:          "pattern": "^$|^List$",
+*/
+
+  
 /*
 
-
-js_10021.json:            "pattern": "^mongodb://[\\w/@:.]*$",
-js_10021.json:            "pattern": "^\\w*$",
-js_10021.json:            "pattern": "^http[\\w/@:.]*$",
-js_10021.json:            "pattern": "^http[\\w/@:.]*$",
-js_10021.json:            "pattern": "^[0-9]*$",
-js_10021.json:            "pattern": "^\\w*$",
-js_10021.json:            "pattern": "^\\w*$",
-js_10021.json:            "pattern": "^[\\w.]*$",
-js_10021.json:            "pattern": "^[\\w.]*$",
-js_10025.json:            "pattern": "^[a-zA-Z0-9_.]*$",
-js_10031.json:            "pattern": "^[a-zA-Z0-9_.]*$",
-js_10033.json:            "pattern": "^[a-zA-Z0-9_.]*$",
-js_10035.json:      "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$",
-js_10035.json:      "pattern": "^/",
-js_10036.json:                        "pattern": "^[\\w\\-@]+\\.[\\w\\-\\.#\\*\\[\\]\\?]+$"
-js_10036.json:                        "pattern": "^[\\w\\-\\*\\[\\]\\?]+@[\\w\\-]+\\.[\\w\\-\\*\\[\\]\\?]+$"
-js_1004.json:      "pattern": "^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?"
-js_1004.json:      "pattern": "^(\\d{4})(-)?(\\d\\d)(-)?(\\d\\d)(T)?(\\d\\d)(:)?(\\d\\d)(:)?(\\d\\d)(\\.\\d+)?(Z|([+-])(\\d\\d)(:)?(\\d\\d))?"
-js_10040.json:                "pattern": "^[\\w\\-]+(\\.[\\w\\-^#]+)+$"
-js_10040.json:                "pattern": "^[\\w\\-]+@[\\w\\-]+(\\.[\\w\\-^#]+)+$"
-js_10040.json:                        "pattern": "^[\\w\\-]+\\..+$"
-js_10040.json:                        "pattern": "^[\\w\\-]+\\@[\\w\\-]+\\..+$"
-
+js_10041.json:                "pattern": "^tcp$|^udp$|^\\*$"
+js_10041.json:                "pattern": "^[\\w\\-\\*\\[\\]\\?]+$"
+js_10042.json:                "pattern": "^[\\w\\-\\.]+$"
+js_10042.json:                "pattern": "^infra$"
+js_10042.json:                "pattern": "^tcp$|^udp$"
+js_10042.json:                "pattern": "^native:|docker://.+|http://.+|file://.+$"
+js_10042.json:                    "pattern": "^[\\w\\-]+$"
+js_10043.json:                "pattern": "^[\\w\\s\\-\\*\\/,]+$"
+js_10046.json:                "pattern": "^[\\w\\-\\.\\*\\[\\]\\?]+$"
+js_10047.json:        "pattern": "^[a-zA-Z0-9\\-_]+(\\.[a-zA-Z0-9\\-_^#]+)+$"
+js_10047.json:                "pattern": "^[a-zA-Z0-9\\-_]+$"
+js_10051.json:        "pattern": "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9\\-_^#]+)+$"
+js_10051.json:                "pattern": "^cell$|^campus$|^region$|^global$"
+js_10051.json:            "required": ["scope", "pattern", "alias"]
+js_10053.json:            "pattern": "[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}"
+js_10053.json:            "pattern": "^/[a-z\\-]+$"
+js_10053.json:            "pattern": "^[\\w\\-\\.#@\\*\\[\\]\\?]+$"
+js_10053.json:            "pattern": "[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}"
+js_10053.json:            "pattern": "^/[a-z\\-]+$"
+js_10053.json:            "pattern": "^[\\w\\-\\.#@\\*\\[\\]\\?]+$"
+js_10055.json:                "pattern": "^[\\w\\-\\.\\*\\[\\]\\?]+$"
+js_10056.json:        "pattern": "^(\\w+)(:\\w+)*$"
+js_10059.json:        "pattern": "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9\\-_^#]+)+$"
+js_10059.json:            "pattern": {"type": "string"},
+js_10059.json:            "required": ["cells", "pattern", "types", "identity-group",
+js_10092.json:      "pattern": "^(application/|audio/|example/|image/|multipart/|text/|video/)"
+js_10092.json:        {"pattern": "^([a-z]){2,3}$"},
+js_10092.json:        {"pattern": "^([a-z]){2,3}-"}
+js_1010.json:            "pattern": "^(debug|info|warn|crit|fatal|unknown)$"
+js_1010.json:            "pattern": "^0$"
+js_1011.json:                    "pattern": "^2e$"
+js_1011.json:            "pattern": "^aint.metrics$"
+js_1011.json:            "pattern": "^info$"
+js_1012.json:            "pattern": "^2c$"
+js_1013.json:            "pattern": "^2d$"
+js_10250.json:            "pattern": "^(schema:)"},
+js_10250.json:              "pattern": "^(schema:)"
+js_10250.json:              "pattern": "^(mailto)",
+js_10250.json:                "pattern": "^(mailto)",
+js_10327.json:      "pattern": "^(\\d+(\\.\\d+)*)$"
+js_10327.json:      "pattern": "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])( \\(.*\\))?$"
+js_10327.json:      "pattern": "^(\\d+(\\.\\d+)*)((a|b|c|rc)(\\d+))?(\\.(post)(\\d+))?(\\.(dev)(\\d+))?$"
+js_10327.json:      "pattern": "^[0-9a-z_.-+]+$"
+js_10327.json:      "pattern": "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?$"
+js_10327.json:      "pattern": "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?$"
+js_10327.json:      "pattern": "^([A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*)(:[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*)?(\\[[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?\\])?$"
+js_10327.json:      "pattern": "^[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*$"
+js_10327.json:      "pattern": "^[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_0-9]*)*$"
+js_1033.json:      "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$",
+js_1033.json:      "pattern": "^/",
+js_10338.json:      "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$",
+js_10338.json:      "pattern": "^/",
+js_10351.json:            "pattern": "^http://"
+js_10351.json:            "pattern": "^/"
+js_10351.json:                    "pattern": "^/"
+js_10355.json:                    "pattern": "^[a-zA-Z0-9_]+$"
+js_10358.json:            "pattern": "^http://"
+js_10358.json:            "pattern": "^/"
+js_10358.json:                    "pattern": "^/"
+js_10360.json:      "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$",
 
 */
 

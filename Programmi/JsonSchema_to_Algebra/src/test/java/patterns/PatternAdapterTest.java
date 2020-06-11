@@ -21,6 +21,16 @@ public class PatternAdapterTest {
 
 
   @Test
+  @Ignore
+  public void testMultiBound() {
+    assertEquals("foo|bar", PatternAdapter.rewrite("^foo$|^bar$"));
+    assertEquals("foo@|bar@", PatternAdapter.rewrite("^foo|^bar"));
+    assertEquals("@foo|bar@", PatternAdapter.rewrite("foo$|^bar"));
+    assertEquals("foo|@bar|", PatternAdapter.rewrite("^foo$|bar"));
+  }
+
+
+  @Test
   public void testNonWhitespace() {
     assertEquals("[^\\r\\n\\t\\f\\v ]+", PatternAdapter.rewriteCore("[\\S]+"));
   } 
@@ -36,6 +46,7 @@ public class PatternAdapterTest {
  
     // Must preserve "\*".
     assertEquals("\\*", PatternAdapter.rewriteCore("\\*"));
+
   }
 
   
@@ -71,9 +82,10 @@ public class PatternAdapterTest {
     assertEquals("[0-9]+\\+[0-9]", PatternAdapter.rewriteCore("[0-9]+\\+[0-9]"));
     assertEquals("[.+-]", PatternAdapter.rewriteCore("[.+-]"));
     assertEquals("[\\.+-]", PatternAdapter.rewriteCore("[\\.+-]"));
+    assertEquals("[\\-]", PatternAdapter.rewriteCore("[\\-]"));
   }
 
-  
+
 
   @Test
   public void testGroupNoncapturing() {
@@ -103,4 +115,6 @@ public class PatternAdapterTest {
     assertEquals("[a-zA-Z0-9_]", PatternAdapter.rewriteCore("\\w"));
     assertEquals("[a-zA-Z0-9_]", PatternAdapter.rewriteCore("[\\w]"));
   }
+
+
 }

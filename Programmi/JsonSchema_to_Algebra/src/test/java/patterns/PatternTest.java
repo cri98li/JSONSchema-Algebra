@@ -209,7 +209,6 @@ public class PatternTest {
 
 
   @Test
-  //@Ignore
   public void testOverlapsCollectionNoMatch() {
     Pattern p1 = Pattern.createFromRegexp("^foo$");
     Pattern p2 = Pattern.createFromRegexp("^bar$");
@@ -280,4 +279,16 @@ public class PatternTest {
     assertTrue("aaa", p.match("aaa"));
     assertFalse("a", p.match("a"));
   } 
+
+
+
+  @Test
+  @Ignore
+  public void testOr() {
+    Pattern p = Pattern.createFromRegexp("^foo$|^bar$");
+
+    assertTrue("foo", p.match("foo"));
+    assertTrue("bar", p.match("bar"));
+    assertFalse("fobar", p.match("fobar"));
+  }
 }
