@@ -6,6 +6,7 @@ import org.junit.Ignore;
 
 public class RealWorldTest {
 
+
   @Test
   public void testOr() {
     Pattern p = Pattern.createFromRegexp("^dev|alpha|beta|rc|RC|stable$");
@@ -17,14 +18,14 @@ public class RealWorldTest {
 
 
   @Test
-  @Ignore
   public void testBackslash() { // TODO
-    Pattern p = Pattern.createFromRegexp("^[\\S]+");
+    Pattern p = Pattern.createFromRegexp("^[\\S]+$");
 
     // matches any non-whitespace characters
-    assertTrue(p.match("foo"));
-    assertFalse(p.match("a b"));
-    assertFalse(p.match("a\nb"));
+    assertTrue("foo", p.match("foo"));
+    assertFalse("a b", p.match("a b"));
+    assertFalse("a\nb", p.match("a\nb"));
+    assertFalse("\t", p.match("\t"));
   }
 
 
@@ -51,27 +52,21 @@ public class RealWorldTest {
   @Test
   public void testFoo() {
     Pattern p = Pattern.createFromRegexp("^a+@(b+\\.)+c+$");
-    //System.out.println(p.toString());
-    //System.out.println(p.toAutomatonString());
-
-    //System.out.println(p.generateWords());
     assertTrue(p.match("aaa@bbb.ccc"));
   }
 
 
   @Test
-  @Ignore
   public void testEmail() {
     // js_1.json, property author_email
     Pattern p = Pattern.createFromRegexp("^[a-z\\d_\\.\\+-]+@([a-z\\d\\.-]+\\.)+[a-z]+$");
 
-    assertTrue(p.match("bill.gates@microsoft.com"));
-    assertFalse(p.match("bill.gates.microsoft.com"));
+    assertTrue("correct email", p.match("bill.gates@microsoft.com"));
+    assertFalse("incorrect email", p.match("bill.gates.microsoft.com"));
   }
 
-  
+
   @Test
-  @Ignore
   public void testBackslashD() {
     // js_100.json, policy
     Pattern p = Pattern.createFromRegexp("^((\\d+\\.)?(\\d+\\.)?(\\*|\\d+))|builtin$");
@@ -89,14 +84,25 @@ public class RealWorldTest {
 
   
   @Test
-  @Ignore
-  public void testSwaggerHost() {
-    // js_10009.json
+  public void testSwaggerHostFixed() {
+    // js_10009.json, but with fixes (!)
     // This regex contains lookaheads, which Bricks cannot handle properly.
-    Pattern p = Pattern.createFromRegexp("^[^{}/ :\\\\]+(?::\\d+)?$");
+    Pattern p = Pattern.createFromRegexp("^[^{}\\/ :\\]+(?::\\d+)?$");
+
+    assertFalse(p.toString().contains("?:")); // Make sure "?:" is ignored.
 
     assertTrue(p.match("swagger.io"));
     assertTrue(p.match("petstore.swagger.wordnik.com"));
     assertTrue(p.match("example.com:8089"));
   }
+
+
+  @Ignore
+  @Test(expected = IllegalArgumentException.class)
+  public void testSwaggerHostBroken() {
+    // js_10009.json, as found in that file, with syntax errors.
+    Pattern p = Pattern.createFromRegexp("^[^{}/ :\\\\]+(?::\\d+)?$");
+  }
+
+
 }

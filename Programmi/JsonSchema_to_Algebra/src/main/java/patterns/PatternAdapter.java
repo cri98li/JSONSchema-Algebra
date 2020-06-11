@@ -42,10 +42,27 @@ public class PatternAdapter {
     if (ecmaRegex.isEmpty())
       return "";
 
-    //System.out.println("\n->" + ecmaRegex);
+    //if (ecmaRegex.matches("^[a-zA-Z0-9)][*?+].*$"))
+    //  return ecmaRegex.substring(0,2) + rewriteCore(ecmaRegex.substring(2));
+
+    // Ignore non capturing goups "?:".
+    if (ecmaRegex.startsWith("?:"))
+      return rewriteCore(ecmaRegex.substring(2));
+
+    // Repetition, e.g. a{3}.
+    if (ecmaRegex.matches("^\\{\\d\\}.*$")) {
+      int endPos = ecmaRegex.indexOf("}");
+      return ecmaRegex.substring(0, endPos + 1) + rewriteCore(ecmaRegex.substring(endPos + 1));
+    }
+
+    // Repetition, e.g. a{3,5}.
+    if (ecmaRegex.matches("^\\{\\d,\\d\\}.*$")) {
+      int endPos = ecmaRegex.indexOf("}");
+      return ecmaRegex.substring(0, endPos + 1) + rewriteCore(ecmaRegex.substring(endPos + 1));
+    }
 
     // Preserve single characters to be matched.
-    if (ecmaRegex.matches("^[a-zA-Z].*$"))
+    if (ecmaRegex.matches("^[a-zA-Z|0-9()?*+: ].*$"))
       return ecmaRegex.substring(0,1) + rewriteCore(ecmaRegex.substring(1));
 
     // Bricks automaton does not know "\d" for digits.
@@ -53,12 +70,21 @@ public class PatternAdapter {
       return "[0-9]" + rewriteCore(ecmaRegex.substring(2));
 
     // Preserve what is already escaped.
-    if (ecmaRegex.matches("^\\\\\\\\[.*+?!@d].*$"))
-      return ecmaRegex.substring(0,3) + rewriteCore(ecmaRegex.substring(3));
+    if (ecmaRegex.matches("^\\\\[.*+?!$dntrfv()].*$")) 
+      return ecmaRegex.substring(0,2) + rewriteCore(ecmaRegex.substring(2));
+
+    // Vertical tab "\v" is not recognized by Bricks automata.
+    //if (ecmaRegex.matches("^\\\\v.*$"))
+    //  return "\\u000b" + rewriteCore(ecmaRegex.substring(2));
+
+    // Supposed to match "\\"
+    if (ecmaRegex.matches("^\\\\\\\\.*$"))
+      return ecmaRegex.substring(0,2) + rewriteCore(ecmaRegex.substring(2));
 
     if (ecmaRegex.startsWith("@"))
       return "\\@" + rewriteCore(ecmaRegex.substring(1));
 
+    // Recognize a charclass [... someting ...]
     if (ecmaRegex.startsWith("[")) {
       // find position of closing parenthesis.
       int escapedPar = ecmaRegex.indexOf("\\]");
@@ -70,8 +96,20 @@ public class PatternAdapter {
 
       String charclass = rewriteCharClass(ecmaRegex.substring(1, endPar));
 
-      return "[" + charclass + "]" + rewriteCore(ecmaRegex.substring(endPar+1));
+      // handle [...]+, [...]?, [..]*
+      if (endPar < ecmaRegex.length() - 1) {
+        char lookahead = ecmaRegex.charAt(endPar + 1);
+        if (lookahead == '+' || lookahead == '?' || lookahead == '*' )
+          return "[" + charclass + "]" + Character.toString(lookahead) + rewriteCore(ecmaRegex.substring(endPar + 2)); 
+        else
+          return "[" + charclass + "]" + rewriteCore(ecmaRegex.substring(endPar + 1));
+     } else 
+       return "[" + charclass + "]";
     }
+
+
+    // If part of the string is unprocessed, this is usually a bug.
+    assert ecmaRegex.isEmpty() : ("Left over ecmaRegex: " + ecmaRegex);
 
     return ecmaRegex;
   }
@@ -83,15 +121,44 @@ public class PatternAdapter {
   protected static String rewriteCharClass(String ecmaRegex) {
     //System.out.println("\nrewriteCharClass: " + ecmaRegex);
 
-    if (ecmaRegex.matches("^[a-zA-Z0-9].*$"))
+    if (ecmaRegex.isEmpty())
+      return "";
+
+    if (ecmaRegex.charAt(0) == '^')
+      return "^" + rewriteCharClass(ecmaRegex.substring(1));
+
+    if (ecmaRegex.matches("^[a-zA-Z0-9]-[a-zA-Z0-9].*$"))
+      return ecmaRegex.substring(0,3) + rewriteCharClass(ecmaRegex.substring(3));
+
+    // Characters that are simply preserved.
+    if (ecmaRegex.matches("^[-a-zA-Z0-9_ ().+{}:/].*$"))
       return ecmaRegex.substring(0, 1) + rewriteCharClass(ecmaRegex.substring(1));
 
     // Bricks automaton does not know "\d" for digits.
     if (ecmaRegex.matches("^\\\\d.*$"))
       return "0-9" + rewriteCharClass(ecmaRegex.substring(2));
 
+    if (ecmaRegex.matches("^\\\\S.*$")) // TODO - this is probably too crude
+      return "^\\r\\n\\t\\f\\v " + rewriteCharClass(ecmaRegex.substring(2)); 
+
+    // Preserve escaped brackets \[ and \].
     if (ecmaRegex.matches("^\\\\[\\]\\[].*$"))
       return ecmaRegex.substring(0,2) + rewriteCharClass(ecmaRegex.substring(2));
+
+    // Preserve what is already escaped.
+    if (ecmaRegex.matches("^\\\\[.*+?!dntrfv].*$"))
+      return ecmaRegex.substring(0,2) + rewriteCharClass(ecmaRegex.substring(2));
+
+    // "\"
+    if (ecmaRegex.matches("^\\\\.*$"))
+      return "\\\\" + rewriteCharClass(ecmaRegex.substring(1));
+
+    // Vertical tab "\v" is not recognized by Bricks automata.
+    //if (ecmaRegex.matches("^\\\\v.*$"))
+    //  return "\\u000b" + rewriteCharClass(ecmaRegex.substring(2));
+
+    // If part of the string is unprocessed, this is usually a bug.
+    assert ecmaRegex.isEmpty() : ("Left over ecmaRegex: '" + ecmaRegex + "'");
 
     return ecmaRegex; // TODO
   }
@@ -102,15 +169,8 @@ public class PatternAdapter {
     @return regex String in Bricks syntax
   */
   public static String rewrite(String ecmaRegex) {
-    // Make sure you first escape, and then bind to ^ and $.
-    // Otherwise, trailing "@" symbols get escaped, too.
-    /*
-    String escaped = escape(ecmaRegex);
+    // TODO - inline
 
-    String resolved = resolve(escaped);
-   
-    String bounded = bound(resolved);
-    */
     return translate(ecmaRegex); 
   }
 
