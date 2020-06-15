@@ -161,19 +161,16 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> set = new HashSet<>();
-
+    public void variableNormalization_separation(WitnessEnv env) {
         if(contains != null || !isAnArray) {
             if(contains != null && contains.getClass() != WitnessBoolean.class) {
-                set.addAll(contains.variableNormalization_separation());
-                set.add(contains);
-                contains = new WitnessVar(Utils_Witness.getName(contains));
-            }else
-                set.add(contains);
-        }
+                contains.variableNormalization_separation(env);
+                WitnessVar var = new WitnessVar(Utils_Witness.getName(contains));
 
-        return set;
+                env.add(var, contains);
+                contains = var;
+            }
+        }
     }
 
     @Override

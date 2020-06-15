@@ -97,8 +97,8 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        return new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
+
     }
 
     @Override

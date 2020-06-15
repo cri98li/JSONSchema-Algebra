@@ -6,13 +6,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Asse
 import java.util.*;
 
 /**
- * Classe di supporto per la fase di canonicalization,
- * Raccoglie le asserzioni contenute in un AND e attua lo step di raggruppamento.
- * Alla fine del processo ogni WitnessGroup contiene un solo tipo e le sue relative asserzioni
+ * support class for the canonicalization phase,
+ * collect the assertion contained in AND, then proceeds with the separation of the group.
+ * At the end of the process, every WitnessGroup, contains only one type and its related assertions.
  */
 public class WitnessGroup implements WitnessAssertion{
-    private List<WitnessType> types; // lista di type assertion (come se fossero in OR)
-    private List<WitnessAssertion> typedAssertions; // lista di asserzioni (escluse type assertion)
+    private List<WitnessType> types; // type assertion list (like a OR)
+    private List<WitnessAssertion> typedAssertions; // assertion list (excluded type assertion)
 
     public WitnessGroup(){
         types = new LinkedList<>();
@@ -34,7 +34,6 @@ public class WitnessGroup implements WitnessAssertion{
             typedAssertions.add(assertion);
     }
 
-    //Separa i gruppi e richiama typeElimination
     public List<WitnessAssertion> canonicalize() throws WitnessException {
         List<WitnessAssertion> returnList = new LinkedList<>();
 
@@ -52,8 +51,7 @@ public class WitnessGroup implements WitnessAssertion{
                     group.add(assertion);
             }
         }
-        else{
-            //no type specified
+        else{ //no type specified
 
             WitnessGroup group = new WitnessGroup();
             WitnessType type = new WitnessType(GrammarStringDefinitions.TYPE_NUMBER);
@@ -117,7 +115,17 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessAssertion merge() {
-        throw new UnsupportedOperationException();
+        WitnessAnd and = new WitnessAnd();
+        and.add(types.get(0));
+
+        for(WitnessAssertion assertion : typedAssertions)
+            and.add(assertion);
+
+        and = (WitnessAnd) and.merge();
+
+        try {
+            return and.groupize();
+        }catch (WitnessException e){return null;}
     }
 
     @Override
@@ -167,13 +175,9 @@ public class WitnessGroup implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> set = new HashSet<>();
-
+    public void variableNormalization_separation(WitnessEnv env) {
         for(WitnessAssertion assertion : typedAssertions)
-            set.addAll(assertion.variableNormalization_separation());
-
-        return set;
+            assertion.variableNormalization_separation(env);
     }
 
     @Override

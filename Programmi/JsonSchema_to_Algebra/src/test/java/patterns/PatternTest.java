@@ -8,14 +8,12 @@ import java.util.HashSet;
 
 public class PatternTest {
 
-
   @Test
   public void testCreateFromName() {
     Pattern pattern = Pattern.createFromName("foo");
     assertTrue(pattern.domainSize() == 1);
     assertTrue(pattern.generateWords().contains("foo"));
   }
-
 
   @Test
   public void testCreateFromRegexp() {
@@ -27,17 +25,13 @@ public class PatternTest {
     assertTrue(Pattern.createFromRegexp("^foo$").match("foo"));
   }
 
-
   @Test
-  //@Ignore
   public void testIsEmptyFalse() {
     Pattern pattern = Pattern.createFromRegexp("^a?$"); 
     assertFalse(pattern.isEmpty());
   }
 
-
   @Test
-  //@Ignore
   public void testIsEmptyTrue() {
     Pattern a = Pattern.createFromRegexp("^a$");
     Pattern b = Pattern.createFromRegexp("^b$");
@@ -46,9 +40,7 @@ public class PatternTest {
     assertTrue(c.isEmpty());
   }
 
-
   @Test
-  //@Ignore
   public void testIsIntersectEmptyFalse() {
     Pattern a = Pattern.createFromRegexp("^a*$");
     Pattern b = Pattern.createFromRegexp("^b*$");
@@ -56,39 +48,29 @@ public class PatternTest {
     assertFalse(a.intersect(b).isEmpty());
   }
 
-
   @Test
-  //@Ignore
   public void testGenerateWords() {
     assertTrue(Pattern.createFromRegexp("^a?$").generateWords().contains("a"));
   }
 
-
   @Test
-  //@Ignore
   public void testGenerateWordsInf() {
     Collection<String> words = Pattern.createFromRegexp("^a+$").generateWords();
     assertTrue(words.size() == 1);
     assertTrue(words.contains("a"));
   }
 
-
   @Test
-  //@Ignore
   public void testDomainSize() {
     assertTrue(Pattern.createFromRegexp("^a|b|c$").domainSize() == Integer.valueOf(3));
   }
 
-
   @Test
-  //@Ignore
   public void testDomainSizeInf() {
     assertTrue(Pattern.createFromRegexp("^a*$").domainSize() == null);
   }
-
-
+ 
   @Test
-  //@Ignore
   public void testMinus() {
     Pattern p1 = Pattern.createFromRegexp("^aa?$");
     Pattern p2 = Pattern.createFromRegexp("^a$");
@@ -97,18 +79,15 @@ public class PatternTest {
     assertTrue(p2.minus(p1).isEmpty());
   }
 
-
   @Test
   public void testMatchTrue() {
     assertTrue(Pattern.createFromRegexp("aa*").match("aa"));
   }
 
-
   @Test
   public void testMatchFalse() {
     assertFalse(Pattern.createFromRegexp("^aa*$").match("abc"));
   }
-
 
   @Test
   public void testClone() {
@@ -119,7 +98,6 @@ public class PatternTest {
     assertTrue(p1.isEquivalent(p2));
   }
 
-
   @Test
   public void testSubsetOf() {
     Pattern p1 = Pattern.createFromRegexp("^a*$");
@@ -129,9 +107,7 @@ public class PatternTest {
     assertTrue(p2.isSubsetOf(p1));
   }
 
-
   @Test
-  //@Ignore
   public void testIsEquivalent() {
     Pattern p1 = Pattern.createFromRegexp("^aa*$");
     Pattern p2 = Pattern.createFromRegexp("^a+$");
@@ -141,15 +117,11 @@ public class PatternTest {
     assertTrue(p2.isEquivalent(p1));
   }
 
-
   @Test
-  //@Ignore
   public void testComplement() {
     Pattern p = Pattern.createFromRegexp("^a$");
     assertTrue(p.isEquivalent(p.complement().complement()));
   }
-
-
 
   @Test
   public void testUnion() {
@@ -161,7 +133,6 @@ public class PatternTest {
     assertTrue(u.match("a"));
     assertTrue(u.match("b"));
   }
-
 
   @Test
   public void testListComplement() {
@@ -178,9 +149,7 @@ public class PatternTest {
     assertTrue(c.match("c"));
   }
 
-
   @Test
-  //@Ignore
   public void testOverlaps() {
     Pattern p1 = Pattern.createFromRegexp("^a?b?$");
     Pattern p2 = Pattern.createFromRegexp("^b?c?$");
@@ -191,9 +160,7 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(p2,p3));
   }
 
-
   @Test
-  //@Ignore
   public void testOverlapsCollection() {
     Pattern p1 = Pattern.createFromRegexp("^a?b?$");
     Pattern p2 = Pattern.createFromRegexp("^b?c?$");
@@ -206,7 +173,6 @@ public class PatternTest {
 
     assertTrue(Pattern.overlaps(collection));
   }
-
 
   @Test
   public void testOverlapsCollectionNoMatch() {
@@ -222,73 +188,10 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(collection));
   }
 
-
   @Test(expected = IllegalArgumentException.class)
-  @Ignore  // ignore for now, interfers with "-ea" flag
-  public void testInvalidPattern() {
-    Pattern p = Pattern.createFromRegexp("{1,"); // invalid syntax
+  public void  testInvalidPattern() {
+    Pattern p = Pattern.createFromRegexp("{1,");
+    System.out.println(p.toAutomatonString());
   }
 
-
-  @Test
-  public void testAt() {
-    Pattern p = Pattern.createFromRegexp("@");
-
-    assertTrue(p.match("@"));
-    assertTrue(p.match("@bc"));
-  }
-
-
-  @Test
-  public void testDigits() {
-    Pattern p = Pattern.createFromRegexp("^[0-9]$");
-
-    assertTrue(p.match("1"));
-    assertFalse(p.match("a"));
-  }
-
-
-  @Test
-  public void testWhitespace() {
-    Pattern p = Pattern.createFromRegexp("^[ \\n\\t\\r\\f\\v]+$");
-
-    assertTrue("<space>", p.match(" "));
-    assertTrue("<newline>", p.match("\n"));
-    assertTrue("<tab>", p.match("\t\t\t"));
-    assertTrue("<vtab>", p.match("\u000b")); // "\v"
-
-    assertFalse(p.match("ntr"));
-  }
-
-
-  @Test
-  public void testNoBlankOrNewline(){
-    Pattern p = Pattern.createFromRegexp("^[^ \\n]+$");
-
-    assertFalse("<space>", p.match(" "));
-    assertFalse("<newline>", p.match("\n"));
-
-    assertTrue("\\n", p.match("\\n"));
-  }
-
-
-  @Test
-  public void testRepetition() {
-    Pattern p = Pattern.createFromRegexp("^a{3}$");
-
-    assertTrue("aaa", p.match("aaa"));
-    assertFalse("a", p.match("a"));
-  } 
-
-
-
-  @Test
-  @Ignore
-  public void testOr() {
-    Pattern p = Pattern.createFromRegexp("^foo$|^bar$");
-
-    assertTrue("foo", p.match("foo"));
-    assertTrue("bar", p.match("bar"));
-    assertFalse("fobar", p.match("fobar"));
-  }
 }

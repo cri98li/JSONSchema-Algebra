@@ -54,7 +54,7 @@ public class AllOf_Assertion implements Assertion{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJSONSchema() {
-		// allOf contenente false
+		// allOf containing false
 		if(containsFalseBooleanAssertion){
 			JSONArray array = new JSONArray();
 			JSONObject obj = new JSONObject();
@@ -64,7 +64,7 @@ public class AllOf_Assertion implements Assertion{
 		}
 
 
-		if(duplicates) {  // se ci sono duplicati allora traduco con "allOf"
+		if(duplicates) {  // if there are duplicates, then translate as "allOf"
 			JSONArray array = new JSONArray();
 			
 			for(Assertion assertion : andList)
@@ -75,7 +75,7 @@ public class AllOf_Assertion implements Assertion{
 
 			return obj;
 
-		} else {  //se non ci sono duplicati lo traduco come JSONObject
+		} else {  //if there are no duplicates, then translate as JSONObject
 			JSONObject obj = new JSONObject();
 
 			for (Assertion assertion : andList)

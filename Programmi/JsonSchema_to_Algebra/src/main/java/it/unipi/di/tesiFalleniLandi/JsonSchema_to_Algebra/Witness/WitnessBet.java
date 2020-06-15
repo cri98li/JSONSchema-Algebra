@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con xbet
+public class WitnessBet implements WitnessAssertion{
     private Double min, max;
 
     protected WitnessBet(){ }
@@ -80,24 +80,28 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
 
             return type.not().toWitnessAlgebra();
         }
-        boolean invariati = true;
         WitnessAnd and = new WitnessAnd();
 
         if(a.getMax() <= max && a.getMin() >= min) return new WitnessXBet(a.getMin(), a.getMax());
         if(a.getMax() > max && a.getMin() < min) return new WitnessBet(min, max);
 
         //caso non vittoria assoluta
-        if(a.getMax() > max) {
+        if(a.getMax() > max)
             and.add(new WitnessBet(null, max));
-            invariati = false;
-        }
+        else
+            and.add(new WitnessXBet(null, a.getMax()));
 
-        if(a.getMin() < min){
+        if(a.getMin() < min)
             and.add(new WitnessBet(min, null));
-            invariati = false;
-        }
+        else
+            and.add(new WitnessXBet(a.getMin(), null));
 
-        return invariati ? null : and;
+        //check if the output is the same as the input
+        WitnessAnd andTmp = new WitnessAnd();
+        andTmp.add(this);
+        andTmp.add(a);
+
+        return and.equals(andTmp) ? null : and;
 
     }
 
@@ -132,8 +136,7 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        return new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
     }
 
     @Override
@@ -145,6 +148,7 @@ public class WitnessBet implements WitnessAssertion{ //fare anche caso merge con
     public WitnessAssertion DNF() {
         return this.clone();
     }
+
 
     @Override
     public boolean equals(Object o) {

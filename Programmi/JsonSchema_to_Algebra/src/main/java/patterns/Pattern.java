@@ -16,7 +16,7 @@ public class Pattern {
 
 
   /**
-    Records the underlying regular expression in Bricks (!) syntax.
+    Records the original regular expression.
   **/
   private String initialPattern;
 
@@ -26,14 +26,12 @@ public class Pattern {
   */
   private boolean printable;
 
-
   /**
     @param String constant that is not a regular expression
   */
   public static Pattern createFromName(String patternName) {
     return new Pattern(BasicAutomata.makeString(patternName));
   }
-
 
   /**
     @param regex String in ECMAScript syntax (not anchored by default)
@@ -49,35 +47,18 @@ public class Pattern {
     printable = false;
   }
 
-
   /**
     Assumes that regex is already in the Bricks syntax!
   */
-  protected Pattern(String bricksRegex) {
-    this.initialPattern = bricksRegex;
+  private Pattern(String bricksRegex) {
+    this((new RegExp(bricksRegex)).toAutomaton());
+    initialPattern = bricksRegex;
     this.printable = true;
-
-    // This escapes too much.
-    //String regexString = StringEscapeUtils.unescapeEcmaScript(bricksRegex);
-
-    //System.out.println("before unescaping : \t" + bricksRegex);
-
-    String regexString = bricksRegex.replaceAll("\\\\n", "\n");
-    regexString = regexString.replaceAll("\\\\t", "\t");
-    regexString = regexString.replaceAll("\\\\r", "\r");
-    regexString = regexString.replaceAll("\\\\f", "\f");
-    regexString = regexString.replaceAll("\\\\v", "\u000b");  
- 
-    //System.out.println("after unescaping:   \t" + regexString);
-
-    this.automaton = (new RegExp(regexString)).toAutomaton();
-  }
-
+  } 
 
   public boolean isEmpty(){
     return BasicOperations.isEmpty(this.automaton);
   }
-
 
   public boolean match(String str) {
     // The less performant way to match a string.
@@ -88,27 +69,22 @@ public class Pattern {
     return ra.run(str);
   }
 
-
   public Pattern intersect(Pattern p) {
     Automaton a = BasicOperations.intersection(this.automaton, p.automaton);
     return new Pattern(a);
   }
 
-
   public Pattern minus(Pattern p) {
     return new Pattern(BasicOperations.minus(this.automaton, p.automaton));
   }
-
 
   public Pattern union(Pattern p) {
     return new Pattern(BasicOperations.union(this.automaton, p.automaton));
   }
 
-
   public Pattern complement() {
     return new Pattern(BasicOperations.complement(this.automaton));
   }
-
 
   /**
     Returns true if this pattern declares a language that is a subset
@@ -118,11 +94,9 @@ public class Pattern {
     return BasicOperations.subsetOf(this.automaton, p.automaton);
   }
 
-
   public boolean isEquivalent(Pattern p) {
     return this.automaton.equals(p.automaton);
   }
-
 
   /**
     If domain(a) is finite, return |a|. Otherwise, return null.
@@ -149,7 +123,6 @@ public class Pattern {
 
     return null;
   }
-
 
   public Pattern clone() {
     Pattern clone = new Pattern(this.automaton.clone());

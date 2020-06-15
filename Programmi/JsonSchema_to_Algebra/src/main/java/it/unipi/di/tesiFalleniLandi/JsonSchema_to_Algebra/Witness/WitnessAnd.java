@@ -7,9 +7,9 @@ import java.util.*;
 
 public class WitnessAnd implements WitnessAssertion{
     /**
-     * Lista di asserzioni in AND raggruppate per tipo, ottimizzazione per metodo merge
+     * list of assertion in and, grouped by class to optimize the merge method
      *
-     * Es:
+     * Ex:
      *      < WitnessMof, <mof(1), mof(2), mof(3)>>
      *      < WitnessPattern, <pattern("..."), pattern("..."), ...>>
      *      ...
@@ -21,9 +21,9 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     /*
-    Aggiunge un'asserzione in AND.
-    Se l'asserzione è una lista di AND, viene appiattita
-    Se l'asserzione è un'istanza di uniqueItems o repeatedItems viene aggiunta solo se non presente (assorbita)
+    Add an assertion - el - to the andList.
+    if el is an instance of WitnessAnd, we add every element of el.andList in this.andList
+    if el is an instance of uniqueItems or repeatedItems, we check if andList do not contain it, then we add it
      */
     public boolean add(WitnessAssertion el){
         boolean b = false;
@@ -216,10 +216,10 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessGroup group = new WitnessGroup();
 
         /*
-        Per tutte le asserzioni nella lista:
-            - Se l'asserzione è un ITE, viene propagato il metodo e viene aggiunta ad un nuovo gruppo
-            - Se l'asserzione non è un ITE, allora può essere un OR. Se lo è viene propagato il metodo e aggiunto l'or alla lista di and
-            - Se l'asserzione non è un ITE && non è un OR --> è una variabile. Viene aggiunta alla lista di and
+        For each assertion in andList:
+            - if the assertion is an ITE, we call the method on the assertion and then we add the result to the group
+            - if the assertion is not an ITE and is an OR assertion, we call the method on the assertion and then we add the result to the new andList
+            - if the assertion is not an ITe and is not an OR it is a variable, so we add it to the new andList
          */
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
@@ -236,7 +236,7 @@ public class WitnessAnd implements WitnessAssertion{
 
         if(!group.isEmpty()){
             List<WitnessAssertion> groups = null;
-            groups = group.canonicalize(); //divido il gruppo misto in N gruppi tipizzati
+            groups = group.canonicalize(); //split the group in N typed groups
             if(groups.size() == 1)
                 and.andList.put(WitnessGroup.class, groups);
             else{
@@ -251,15 +251,11 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> set = new HashSet<>();
-
+    public void variableNormalization_separation(WitnessEnv env) {
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()){
-                set.addAll(assertion.variableNormalization_separation());
+                assertion.variableNormalization_separation(env);
             }
-
-        return set;
     }
 
     @Override

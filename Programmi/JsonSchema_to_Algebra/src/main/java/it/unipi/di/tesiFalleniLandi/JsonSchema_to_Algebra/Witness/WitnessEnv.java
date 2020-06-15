@@ -146,22 +146,10 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> finalSet = new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
-                finalSet.addAll(entry.getValue().variableNormalization_separation());
-
-        Iterator<WitnessAssertion> it = finalSet.iterator();
-
-        while (it.hasNext()) {
-            WitnessAssertion assertion = it.next();
-            if(assertion.getClass() != WitnessBoolean.class) {
-                add(new WitnessVar(Utils_Witness.getName(assertion)), assertion);
-            }
-        }
-
-        return finalSet;
+            entry.getValue().variableNormalization_separation(this);
     }
 
     @Override
@@ -185,8 +173,9 @@ public class WitnessEnv implements WitnessAssertion {
         dnf.rootVar = rootVar;
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
-            dnf.varList.put(entry.getKey(), (entry.getValue()).DNF());//TODO: QUI NON SONO PIÙ IN AND!!!
+            dnf.varList.put(entry.getKey(), (entry.getValue()).DNF());
 
         return dnf;
     }
+
 }

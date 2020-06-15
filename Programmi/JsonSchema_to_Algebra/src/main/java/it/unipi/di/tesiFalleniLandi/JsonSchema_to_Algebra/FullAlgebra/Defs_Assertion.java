@@ -63,11 +63,11 @@ public class Defs_Assertion implements Assertion{
 	public Defs_Assertion notElimination() {
 		Defs_Assertion returnDef = new Defs_Assertion();
 
-		//Completo i not
+		//Complete the not
 		for(Entry<String, Assertion> entry : defs.entrySet()) {
 			returnDef.defs.put(entry.getKey(), entry.getValue().notElimination());
 
-			//caso negazione di not_x --> x
+			//case negation of not_x --> x
 			if(entry.getKey().startsWith(GrammarStringDefinitions.NOT_DEFS))
 				continue;
 

@@ -78,11 +78,11 @@ public class WitnessOr implements WitnessAssertion{
 
     /*
     a può essere un oggetto di un qualsiasi tipo,
-        per ogni( b = orList.get(a.class)[i])
+        foreach( b = orList.get(a.class)[i])
             if(b.merge(a).equals(a)
-                quando è soddisfatto a è soddisfatto anche l'elemento dentro all'or
+                when a is satisfied, b is also satisfied so the entire orAssertion is true
 
-    nel caso di a.class = or?
+    if a.class = or?
      */
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) {
@@ -212,15 +212,11 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        Set<WitnessAssertion> set = new HashSet<>();
-
+    public void variableNormalization_separation(WitnessEnv env) {
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
-                set.addAll(assertion.variableNormalization_separation());
+                assertion.variableNormalization_separation(env);
             }
-
-        return set;
     }
 
     @Override
@@ -276,4 +272,5 @@ public class WitnessOr implements WitnessAssertion{
 
         return hash;
     }
+
 }

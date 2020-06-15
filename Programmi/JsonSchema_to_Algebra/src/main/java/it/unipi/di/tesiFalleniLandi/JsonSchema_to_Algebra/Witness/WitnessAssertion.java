@@ -31,21 +31,53 @@ public interface WitnessAssertion extends Cloneable{
      */
     public Assertion getFullAlgebra();
 
-
+    /**
+     * Clone the object
+     * @return a new clone assertion
+     */
     public WitnessAssertion clone();
 
+    /**
+     *
+     * @return return the complement of the current object
+     */
     public WitnessAssertion not() throws WitnessException;
 
+    /**
+     *
+     * @return apply the not-elimination/not-pushing step as described in the paper, then return the new instance
+     */
     public WitnessAssertion notElimination() throws WitnessException;
 
     //Se and, ritorna and sottoforma di gruppo, altrimenti propaga. se terminal node ritorna this
+
+    /**
+     * If this is and andAssertion, the method return a new andAssertion with witnessgroup[0..*], witnessVar[0..*], WitnessOr[0..*].
+     * if this is a terminal node (mof, pattern...) the method return this, otherwise the method propagate to the contained assertion
+     * @return return an object as described before
+     * @throws WitnessException
+     */
     public WitnessAssertion groupize() throws WitnessException;
 
-    //colleziona tutte le definizioni da creare nella fase di variable normalization, il nome della variabile è dato da:
-    public Set<WitnessAssertion> variableNormalization_separation();
+    /**
+     * Collect and save all the definition to create in the variable normalization phase,
+     * the name of the variable is: ClassName + hash of the value.
+     * @param env collection of (variableName, variableContent) where the method add all the new variables
+     */
+    public void variableNormalization_separation(WitnessEnv env);
 
-    //espande le variabili "unguarded" con la loro definizione
+    /**
+     * Expands all the unguarded variables with their respective definition
+     * @param env collection of (variableName, variableContent)*
+     * @return  return this.clone if the assertion do not contain any unguarded variables, otherwise return a new assertion as described before
+     * @throws WitnessException
+     */
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException;
 
+    /**
+     * Reduce the assertion in Disjunctive Normal Form
+     * @return the same assertion reduced in Disjunctive Normal Form
+     * @throws WitnessException
+     */
     public WitnessAssertion DNF() throws WitnessException;
 }

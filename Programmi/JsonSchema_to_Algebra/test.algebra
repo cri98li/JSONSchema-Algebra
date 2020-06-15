@@ -1,5 +1,9 @@
-rootdef "x" = anyOf[
-        pattern("test"),
-        length(1, 39)
-    ]
-
+allOf[
+    anyOf[
+        mof(1),
+        mof(2)
+    ],
+    mof(32),
+    mof(12),
+    type[int]
+]

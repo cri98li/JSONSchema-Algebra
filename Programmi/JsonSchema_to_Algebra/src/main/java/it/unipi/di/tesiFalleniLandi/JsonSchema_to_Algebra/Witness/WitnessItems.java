@@ -76,6 +76,8 @@ public class WitnessItems implements WitnessAssertion{
         if(additionalItems != null)
             newWitnessItems.setAdditionalItems(additionalItems.merge());
 
+        newWitnessItems.blocked = blocked;
+
         return newWitnessItems;
     }
 
@@ -189,50 +191,38 @@ public class WitnessItems implements WitnessAssertion{
     @Override
     public WitnessAssertion groupize() throws WitnessException {
         WitnessItems items = new WitnessItems();
-        if(additionalItems != null) {
-            if(additionalItems.getClass() != WitnessAnd.class) {
-                WitnessAnd and = new WitnessAnd();
-                and.add(additionalItems);
-                items.additionalItems = and.groupize();
-            }
-        }
+
+        if(additionalItems != null)
+                items.additionalItems = additionalItems.groupize();
 
         for(WitnessAssertion assertion : this.items)
-            if(assertion.getClass() != WitnessAnd.class) {
-                WitnessAnd and = new WitnessAnd();
-                and.add(assertion);
-                items.addItems(and.groupize());
-            }else
                 items.addItems(assertion.groupize());
 
         return items;
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        HashSet set = new HashSet<>();
-
+    public void variableNormalization_separation(WitnessEnv env) {
         if(items != null){
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).getClass() != WitnessBoolean.class) {
-                    set.addAll(items.get(i).variableNormalization_separation());
-                    set.add(items.get(i));
-                    items.set(i, new WitnessVar(Utils_Witness.getName(items.get(i))));
-                }else
-                    set.add(items.get(i));
+                    items.get(i).variableNormalization_separation(env);
+                    WitnessVar var = new WitnessVar(Utils_Witness.getName(items.get(i)));
+                    env.add(var, items.get(i));
+
+                    items.set(i, var);
+                }
             }
         }
 
         if(additionalItems != null){
             if(additionalItems.getClass() != WitnessBoolean.class) {
-                set.addAll(additionalItems.variableNormalization_separation());
-                set.add(additionalItems);
-                additionalItems = new WitnessVar(Utils_Witness.getName(additionalItems));
-            }else
-                set.add(additionalItems);
+                additionalItems.variableNormalization_separation(env);
+                WitnessVar var = new WitnessVar(Utils_Witness.getName(additionalItems));
+                env.add(var, additionalItems);
+                additionalItems = var;
+            }
         }
-
-        return set;
     }
 
     @Override

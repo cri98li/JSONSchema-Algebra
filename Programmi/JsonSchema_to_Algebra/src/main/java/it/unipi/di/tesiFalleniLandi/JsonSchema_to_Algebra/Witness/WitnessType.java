@@ -147,8 +147,8 @@ public class WitnessType implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        return new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
+        return;
     }
 
     @Override
@@ -160,4 +160,5 @@ public class WitnessType implements WitnessAssertion{
     public WitnessAssertion DNF() {
         return this.clone();
     }
+
 }

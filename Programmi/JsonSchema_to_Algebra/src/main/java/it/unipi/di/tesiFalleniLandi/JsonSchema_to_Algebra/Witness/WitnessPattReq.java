@@ -38,11 +38,6 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) {
-        if(this.value.getClass() == WitnessBoolean.class) {
-            if (!((WitnessBoolean)this.value).getValue())
-                return new WitnessBoolean(false);
-        }
-
         if(a.getClass() == this.getClass())
             return this.mergeElement((WitnessPattReq) a);
 
@@ -52,6 +47,10 @@ public class WitnessPattReq implements WitnessAssertion{
     @Override
     public WitnessAssertion merge() {
         WitnessPattReq clone = this.clone();
+
+        //Boolean rewritings
+        if((this.value.getClass() == WitnessBoolean.class) && (!((WitnessBoolean)this.value).getValue()))
+            return new WitnessBoolean(false);
 
         clone.value = value.merge();
 
@@ -131,19 +130,16 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        HashSet set = new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
 
-        if(value != null) {
-            if(value.getClass() != WitnessBoolean.class) {
-                set.addAll(value.variableNormalization_separation());
-                set.add(value);
-                value = new WitnessVar(Utils_Witness.getName(value));
-            }else
-                set.add(value);
+        if (value != null) {
+            if (value.getClass() != WitnessBoolean.class) {
+                value.variableNormalization_separation(env);
+                WitnessVar var = new WitnessVar(Utils_Witness.getName(value));
+                env.add(var, value);
+                value = var;
+            }
         }
-
-        return set;
     }
 
     @Override

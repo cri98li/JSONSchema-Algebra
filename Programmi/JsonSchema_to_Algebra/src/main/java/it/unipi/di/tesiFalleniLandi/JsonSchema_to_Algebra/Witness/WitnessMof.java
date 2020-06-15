@@ -118,8 +118,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public Set<WitnessAssertion> variableNormalization_separation() {
-        return new HashSet<>();
+    public void variableNormalization_separation(WitnessEnv env) {
     }
 
     @Override
