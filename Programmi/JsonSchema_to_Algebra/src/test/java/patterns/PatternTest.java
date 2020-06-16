@@ -6,17 +6,62 @@ import org.junit.Ignore;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 public class PatternTest {
 
   @Test
-  public void testCreateFromName() {
+  public void testNonWhiteSpace() throws REException {
+    Pattern pattern = Pattern.createFromRegexp("^[\\S]+$");
+
+    assertTrue("foo-bar", pattern.match("foo-bar"));
+    assertFalse("<space>", pattern.match(" "));
+  }
+
+
+  @Test
+  public void testNonWhiteSpaceOutsideRange() throws REException {
+    Pattern pattern = Pattern.createFromRegexp("^\\S$");
+
+    assertTrue("x", pattern.match("x"));
+    assertFalse("<newline>", pattern.match("\n"));
+  }
+
+
+  @Test(expected=UnsupportedOperationException.class)
+  public void testNonWhiteSpaceNegated() throws REException {
+    Pattern pattern = Pattern.createFromRegexp("^[^0-9\\S]$");  // it is wrong to split this into [^0-9]|[^\S]
+
+    System.out.println(pattern.toAutomatonString());
+    
+    assertTrue("<blank>", pattern.match(" "));
+    assertTrue("<newline>", pattern.match("\n"));
+    assertFalse("<digit>", pattern.match("1"));
+    assertFalse("x", pattern.match("x"));
+  }
+
+  
+
+  @Test // Works
+  public void testNonWhiteSpacePositive() throws REException {
+    Pattern pattern = Pattern.createFromRegexp("^[0-9\\S]$");
+
+    assertTrue("<character>", pattern.match("a")); 
+    assertFalse("<newline>", pattern.match("\n"));
+  }
+
+
+
+  @Test
+  public void testCreateFromName() throws REException {
     Pattern pattern = Pattern.createFromName("foo");
     assertTrue(pattern.domainSize() == 1);
     assertTrue(pattern.generateWords().contains("foo"));
   }
 
+
   @Test
-  public void testCreateFromRegexp() {
+  @Ignore // This is not implemented yet.
+  public void testCreateFromRegexp() throws REException {
     // Regexps are not anchored by default.
     assertTrue(Pattern.createFromRegexp("foo").match("some-foo-thing"));
     assertTrue(Pattern.createFromRegexp("foo").match("foo"));
@@ -25,14 +70,16 @@ public class PatternTest {
     assertTrue(Pattern.createFromRegexp("^foo$").match("foo"));
   }
 
+
   @Test
-  public void testIsEmptyFalse() {
+  public void testIsEmptyFalse() throws REException {
     Pattern pattern = Pattern.createFromRegexp("^a?$"); 
     assertFalse(pattern.isEmpty());
   }
 
+
   @Test
-  public void testIsEmptyTrue() {
+  public void testIsEmptyTrue() throws REException {
     Pattern a = Pattern.createFromRegexp("^a$");
     Pattern b = Pattern.createFromRegexp("^b$");
     Pattern c = a.intersect(b);
@@ -40,38 +87,44 @@ public class PatternTest {
     assertTrue(c.isEmpty());
   }
 
+
   @Test
-  public void testIsIntersectEmptyFalse() {
+  public void testIsIntersectEmptyFalse() throws REException {
     Pattern a = Pattern.createFromRegexp("^a*$");
     Pattern b = Pattern.createFromRegexp("^b*$");
     // (a*) & (b*) includes the empty word
     assertFalse(a.intersect(b).isEmpty());
   }
 
+
   @Test
-  public void testGenerateWords() {
+  public void testGenerateWords() throws REException {
     assertTrue(Pattern.createFromRegexp("^a?$").generateWords().contains("a"));
   }
 
+
   @Test
-  public void testGenerateWordsInf() {
+  public void testGenerateWordsInf() throws REException {
     Collection<String> words = Pattern.createFromRegexp("^a+$").generateWords();
     assertTrue(words.size() == 1);
     assertTrue(words.contains("a"));
   }
 
-  @Test
-  public void testDomainSize() {
-    assertTrue(Pattern.createFromRegexp("^a|b|c$").domainSize() == Integer.valueOf(3));
-  }
 
   @Test
-  public void testDomainSizeInf() {
+  public void testDomainSize() throws REException {
+    assertTrue(Pattern.createFromRegexp("^(a|b|c)").domainSize() == Integer.valueOf(3));
+  }
+
+
+  @Test
+  public void testDomainSizeInf() throws REException {
     assertTrue(Pattern.createFromRegexp("^a*$").domainSize() == null);
   }
- 
+
+
   @Test
-  public void testMinus() {
+  public void testMinus() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^aa?$");
     Pattern p2 = Pattern.createFromRegexp("^a$");
 
@@ -79,18 +132,21 @@ public class PatternTest {
     assertTrue(p2.minus(p1).isEmpty());
   }
 
+
   @Test
-  public void testMatchTrue() {
+  public void testMatchTrue() throws REException {
     assertTrue(Pattern.createFromRegexp("aa*").match("aa"));
   }
 
+
   @Test
-  public void testMatchFalse() {
+  public void testMatchFalse() throws REException {
     assertFalse(Pattern.createFromRegexp("^aa*$").match("abc"));
   }
 
+
   @Test
-  public void testClone() {
+  public void testClone() throws REException {
     Pattern p1 = Pattern.createFromRegexp("a*");
     Pattern p2 = p1.clone();
 
@@ -98,8 +154,9 @@ public class PatternTest {
     assertTrue(p1.isEquivalent(p2));
   }
 
+
   @Test
-  public void testSubsetOf() {
+  public void testSubsetOf() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^a*$");
     Pattern p2 = Pattern.createFromRegexp("^a+$");
 
@@ -107,8 +164,9 @@ public class PatternTest {
     assertTrue(p2.isSubsetOf(p1));
   }
 
+
   @Test
-  public void testIsEquivalent() {
+  public void testIsEquivalent() throws REException{
     Pattern p1 = Pattern.createFromRegexp("^aa*$");
     Pattern p2 = Pattern.createFromRegexp("^a+$");
 
@@ -117,14 +175,17 @@ public class PatternTest {
     assertTrue(p2.isEquivalent(p1));
   }
 
+
   @Test
-  public void testComplement() {
+  public void testComplement() throws REException {
     Pattern p = Pattern.createFromRegexp("^a$");
     assertTrue(p.isEquivalent(p.complement().complement()));
   }
 
+
+
   @Test
-  public void testUnion() {
+  public void testUnion() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^a?$");
     Pattern p2 = Pattern.createFromRegexp("^b?$");
     Pattern u = p1.union(p2);
@@ -134,8 +195,9 @@ public class PatternTest {
     assertTrue(u.match("b"));
   }
 
+
   @Test
-  public void testListComplement() {
+  public void testListComplement() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^a$");
     Pattern p2 = Pattern.createFromRegexp("^b$");
   
@@ -149,8 +211,9 @@ public class PatternTest {
     assertTrue(c.match("c"));
   }
 
+
   @Test
-  public void testOverlaps() {
+  public void testOverlaps() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^a?b?$");
     Pattern p2 = Pattern.createFromRegexp("^b?c?$");
     Pattern p3 = Pattern.createFromName("xyz");
@@ -160,8 +223,9 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(p2,p3));
   }
 
+
   @Test
-  public void testOverlapsCollection() {
+  public void testOverlapsCollection() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^a?b?$");
     Pattern p2 = Pattern.createFromRegexp("^b?c?$");
     Pattern p3 = Pattern.createFromName("xyz");
@@ -174,8 +238,9 @@ public class PatternTest {
     assertTrue(Pattern.overlaps(collection));
   }
 
+
   @Test
-  public void testOverlapsCollectionNoMatch() {
+  public void testOverlapsCollectionNoMatch() throws REException {
     Pattern p1 = Pattern.createFromRegexp("^foo$");
     Pattern p2 = Pattern.createFromRegexp("^bar$");
     Pattern p3 = Pattern.createFromRegexp("^baz$");
@@ -188,10 +253,200 @@ public class PatternTest {
     assertFalse(Pattern.overlaps(collection));
   }
 
+
+  // Must fail gracefully with an exception.
   @Test(expected = IllegalArgumentException.class)
-  public void  testInvalidPattern() {
-    Pattern p = Pattern.createFromRegexp("{1,");
+  public void testInvalidPattern() throws REException {
+    Pattern p = Pattern.createFromRegexp("^a{1,2$"); // invalid syntax
     System.out.println(p.toAutomatonString());
   }
 
+
+  @Test
+  public void testAt() throws REException {
+    Pattern p = Pattern.createFromRegexp("^@$");
+
+    assertTrue("@", p.match("@"));
+    assertFalse("a", p.match("a"));
+  }
+
+
+  @Test
+  public void testDigits() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[0-9]$");
+
+    assertTrue(p.match("1"));
+    assertFalse(p.match("a"));
+  }
+
+
+  @Test
+  public void testDigits2() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[a-z0-9]$");
+
+    assertTrue(p.match("1"));
+    assertFalse(p.match("42"));
+  }
+
+
+  @Test
+  public void testPosRange() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[a-z]$");
+    assertTrue(p.match("a"));
+    assertFalse(p.match("1"));
+  }
+
+
+  @Test
+  public void testNegPosRange() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[^a-z]$");
+    assertFalse(p.match("a"));
+    assertTrue(p.match("1"));
+  }
+
+
+  @Test
+  public void testGnueRegexpWhitespace() throws REException {
+    // Tests the whitespace symbols supported by gnu.regexp.
+    Pattern p = Pattern.createFromRegexp("^[ \\n\\t\\r]+$");
+
+    assertTrue("<newline>", p.match("\n"));
+    assertTrue("<tab>", p.match("\t"));
+    assertTrue("<returnescape>", p.match("\r"));
+
+  }
+
+  @Test
+  public void testWhitespace() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[ \\n\\t\\r\\f\\v]+$");
+
+    assertTrue("<space>", p.match(" "));
+    assertTrue("<newline>", p.match("\n"));
+    assertTrue("<tab>", p.match("\t\t\t"));
+    assertTrue("<formfeed>", p.match("\f\t\n"));
+    assertTrue("<vtab>", p.match("\u000b")); // '\v', not known to Java
+
+    assertFalse(p.match("ntr"));
+  }
+
+
+  @Test
+  public void testFormFeedOutsideRange() throws REException {
+    // "\f" is not originally supported by gnu.regexp.
+    // This had to be added, so we need to test this explicitly.
+    Pattern p = Pattern.createFromRegexp("^\\f+$");
+
+    assertTrue("<formfeed>", p.match("\f"));
+    assertFalse("escaped f", p.match("\\f\\f\\f"));
+  }
+
+  @Test
+  public void testVerticalTabOutsideRange() throws REException {
+    // "\v" is not originally supported by gnu.regexp.
+    // This had to be added, so we need to test this explicitly.
+    Pattern p = Pattern.createFromRegexp("^\\v+$");
+
+    assertTrue("<vtab>", p.match("\u000b"));
+    assertFalse("escaped v", p.match("\\v\\v"));
+  }
+
+  @Test
+  public void testNoBlankOrNewline() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[^ \\n]+$");
+
+    assertFalse("<space>", p.match(" "));
+    assertFalse("<newline>", p.match("\n"));
+
+    assertTrue("\\n", p.match("\\n"));
+  }
+
+
+  @Test
+  public void testRepetition() throws REException {
+    Pattern p = Pattern.createFromRegexp("^a{3}$");
+
+    assertTrue("aaa", p.match("aaa"));
+    assertFalse("a", p.match("a"));
+  } 
+
+
+
+  @Test
+  @Ignore
+  public void testOr() throws REException {
+    Pattern p = Pattern.createFromRegexp("^foo$|^bar$");
+
+    assertTrue("foo", p.match("foo"));
+    assertTrue("bar", p.match("bar"));
+    assertFalse("fobar", p.match("fobar"));
+  }
+
+  @Test
+  public void testAtInRange() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[abc@]+$");
+
+    //assertTrue("aaa", p.match("aaa"));
+    assertTrue("@@@", p.match("@@@"));
+    assertFalse("def", p.match("def"));
+  }
+
+
+  @Test
+  public void testAtInRange2() throws REException {
+    Pattern p = Pattern.createFromRegexp("^[@-C]+$");
+
+    assertTrue("AAA", p.match("AAA"));
+    assertTrue("@BC", p.match("@BC"));
+    assertFalse("def", p.match("def"));
+  }
+
+
+  @Test
+  public void testDash() throws REException {
+    assertTrue(Pattern.createFromRegexp("^\\-$").match("-"));
+    assertTrue(Pattern.createFromRegexp("^-$").match("-"));
+    assertTrue(Pattern.createFromRegexp("^[\\-]$").match("-"));
+    assertTrue(Pattern.createFromRegexp("^[-]$").match("-"));
+  }
+
+ 
+  @Test
+  public void testParExpr() throws REException {
+    assertTrue(Pattern.createFromRegexp("^abc[()]def$").match("abc(def"));
+    assertTrue(Pattern.createFromRegexp("^abc[\\(\\)]def$").match("abc(def"));
+    assertTrue(Pattern.createFromRegexp("^abc\\(\\)def$").match("abc()def"));
+    assertTrue(Pattern.createFromRegexp("^abc()def$").match("abcdef"));
+  }
+
+
+  @Test
+  public void testDots() throws REException {
+    assertTrue("<match any>", Pattern.createFromRegexp("^.$").match("x"));
+    assertTrue("<match dot>", Pattern.createFromRegexp("^\\.$").match("."));
+
+    assertFalse("<match any, range>", Pattern.createFromRegexp("^[.]$").match("x"));
+
+    assertFalse("<match dot, range>", Pattern.createFromRegexp("^[\\.]$").match("x"));
+    assertTrue("<match dot, range>", Pattern.createFromRegexp("^[.]$").match("."));
+  }
+
+  @Test
+  public void testPlusMinus() throws REException {
+    Pattern p = Pattern.createFromRegexp("^([\\.]|\\+|-)$");
+
+    assertTrue(p.match("."));
+    assertTrue(p.match("+"));
+    assertTrue(p.match("-"));
+    assertFalse(p.match("x"));
+  }
+
+
+  @Test
+  public void testFoo() throws REException {
+    Pattern p = Pattern.createFromRegexp("^a+@(b+\\.)+c+$");
+    assertTrue(p.match("aaa@bbb.ccc"));
+  }
+
+
+  // TODO - add all POSIX charclasses.
 }
