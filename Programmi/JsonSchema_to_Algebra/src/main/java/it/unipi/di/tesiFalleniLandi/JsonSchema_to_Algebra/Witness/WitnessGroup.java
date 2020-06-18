@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import patterns.REException;
 
 import java.util.*;
 
@@ -115,7 +116,7 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessAssertion merge() {
-        WitnessAnd and = new WitnessAnd();
+        /*WitnessAnd and = new WitnessAnd();
         and.add(types.get(0));
 
         for(WitnessAssertion assertion : typedAssertions)
@@ -125,7 +126,8 @@ public class WitnessGroup implements WitnessAssertion{
 
         try {
             return and.groupize();
-        }catch (WitnessException e){return null;}
+        }catch (WitnessException e){return null;}*/
+        return this;
     }
 
     @Override
@@ -160,12 +162,12 @@ public class WitnessGroup implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws WitnessException {
+    public WitnessAssertion not() throws WitnessException, REException {
         return getFullAlgebra().not().toWitnessAlgebra().groupize();
     }
 
     @Override
-    public WitnessAssertion notElimination() throws WitnessException {
+    public WitnessAssertion notElimination() throws WitnessException, REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra().groupize();
     }
 

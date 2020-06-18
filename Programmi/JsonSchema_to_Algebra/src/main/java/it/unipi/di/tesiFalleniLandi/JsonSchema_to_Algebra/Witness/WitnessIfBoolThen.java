@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfBoolThen_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(a.getClass() == this.getClass()) return this.mergeElement((WitnessIfBoolThen) a);
 
         return null;
@@ -34,7 +35,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
         return this;
     }
 
-    public WitnessAssertion mergeElement(WitnessIfBoolThen a) {
+    public WitnessAssertion mergeElement(WitnessIfBoolThen a) throws REException {
         if(a.value == value) return this;
         else{
             Type_Assertion type = new Type_Assertion();
@@ -76,12 +77,12 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

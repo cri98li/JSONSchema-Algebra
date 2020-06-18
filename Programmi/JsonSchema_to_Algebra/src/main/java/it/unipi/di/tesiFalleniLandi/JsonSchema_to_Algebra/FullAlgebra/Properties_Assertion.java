@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAsserti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessProperty;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -182,7 +183,7 @@ public class Properties_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
 		Pattern addPatt = Pattern.createFromRegexp("*");
 

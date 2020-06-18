@@ -5,6 +5,7 @@ import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -86,7 +87,7 @@ public class Required_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();

@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -169,7 +170,7 @@ public class Const_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		if(value == null) return new WitnessType(GrammarStringDefinitions.TYPE_NULL);
 
 		if(value.getClass() == String.class) {

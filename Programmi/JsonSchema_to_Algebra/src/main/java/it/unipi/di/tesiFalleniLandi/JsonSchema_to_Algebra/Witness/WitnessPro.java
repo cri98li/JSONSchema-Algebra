@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -45,9 +46,10 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
-        if(a.getClass() == this.getClass())
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
+        if(a.getClass() == this.getClass()) {
             return this.mergeElement((WitnessPro) a);
+        }
 
         return null;
     }
@@ -57,7 +59,7 @@ public class WitnessPro implements WitnessAssertion{
         return this;
     }
 
-    public WitnessAssertion mergeElement(WitnessPro a) {
+    public WitnessAssertion mergeElement(WitnessPro a) throws REException {
         WitnessPro pro = new WitnessPro();
 
         pro.min = (this.min < a.min) ? a.min : min;
@@ -108,12 +110,12 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

@@ -8,7 +8,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-// import gnu.regexp.*;
+//import gnu.regexp.*;
 
 class IntPair implements Serializable {
   public int first, second;
@@ -68,7 +68,7 @@ public class RE extends REToken {
 
   // The localized strings are kept in a separate file
   private static ResourceBundle messages =
-      PropertyResourceBundle.getBundle("patterns/MessagesBundle", Locale.getDefault());
+          PropertyResourceBundle.getBundle("patterns/MessagesBundle", Locale.getDefault());
 
   // These are, respectively, the first and last tokens in our linked list
   // If there is only one token, firstToken == lastToken

@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -37,7 +39,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(value.getClass() == WitnessBoolean.class && !((WitnessBoolean)value).getValue()) return value;
         if(a.getClass() == this.getClass())
             return this.mergeElement((WitnessProperty) a);
@@ -46,7 +48,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         //Boolean Rewritings
         if(value.getClass() == WitnessBoolean.class && ((WitnessBoolean) value).getValue()) return value;
 
@@ -57,7 +59,7 @@ public class WitnessProperty implements WitnessAssertion{
         return newProp;
     }
 
-    public WitnessAssertion mergeElement(WitnessProperty a) {
+    public WitnessAssertion mergeElement(WitnessProperty a) throws REException {
         if(a.key.equals(this.key)){
             WitnessAnd and = new WitnessAnd();
             and.add(a.value);
@@ -114,12 +116,12 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
@@ -145,7 +147,7 @@ public class WitnessProperty implements WitnessAssertion{
 
         if (value != null) {
             //TODO: true <--> allOf[true] ?
-            if (value.getClass() != WitnessBoolean.class) {
+            if (value.getClass() != WitnessBoolean.class || value.getClass() != WitnessVar.class) {
                 value.variableNormalization_separation(env);
                 WitnessVar var = new WitnessVar(Utils_Witness.getName(value));
                 env.add(var, value);
@@ -156,7 +158,8 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessProperty prop = this.clone();
+        WitnessProperty prop = new WitnessProperty();
+        prop.key = this.key;
         if(value != null)   prop.value = this.value.variableNormalization_expansion(env);
 
         return prop;
@@ -164,7 +167,8 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public WitnessAssertion DNF() throws WitnessException {
-        WitnessProperty prop = this.clone();
+        WitnessProperty prop = new WitnessProperty();
+        prop.key = this.key;
         if(value != null)   prop.value = this.value.DNF();
 
         return prop;

@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -102,7 +103,7 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessEnv toWitnessAlgebra() {
+	public WitnessEnv toWitnessAlgebra() throws REException {
 		WitnessEnv env = new WitnessEnv();
 
 		for(Entry<String, Assertion> entry : defs.entrySet())

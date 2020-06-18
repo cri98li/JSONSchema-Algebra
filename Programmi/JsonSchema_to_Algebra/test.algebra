@@ -1,9 +1,1 @@
-allOf[
-    anyOf[
-        mof(1),
-        mof(2)
-    ],
-    mof(32),
-    mof(12),
-    type[int]
-]
+allOf[props["a":mof(1);]]

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
+import patterns.REException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +90,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessPattReq toWitnessAlgebra() {
+	public WitnessPattReq toWitnessAlgebra() throws REException {
 		Pattern p = Pattern.createFromRegexp("*");
 		for(Pattern pattern : pattList)
 			p = p.intersect(pattern);

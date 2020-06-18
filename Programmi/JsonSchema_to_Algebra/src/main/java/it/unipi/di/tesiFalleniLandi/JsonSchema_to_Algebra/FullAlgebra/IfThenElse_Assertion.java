@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 public class IfThenElse_Assertion implements Assertion{
 	private Assertion ifStatement, thenStatement, elseStatement;
@@ -92,7 +93,7 @@ public class IfThenElse_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		if(elseStatement == null){
 			or.add(ifStatement.not().toWitnessAlgebra());

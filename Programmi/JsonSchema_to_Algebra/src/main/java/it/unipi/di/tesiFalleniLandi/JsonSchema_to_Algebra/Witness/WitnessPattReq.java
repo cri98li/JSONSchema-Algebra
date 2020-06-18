@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         WitnessPattReq clone = this.clone();
 
         //Boolean rewritings
@@ -103,12 +104,12 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
@@ -144,7 +145,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessPattReq pattReq = clone();
+        WitnessPattReq pattReq = new WitnessPattReq();
+        pattReq.key = this.key;
         if(value != null) pattReq.value = this.value.variableNormalization_expansion(env);
 
         return pattReq;
@@ -152,7 +154,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion DNF() {
-        WitnessPattReq pattReq = clone();
+        WitnessPattReq pattReq = new WitnessPattReq();
+        pattReq.key = this.key;
         if(value != null) pattReq.value = this.value.clone();
 
         return pattReq;

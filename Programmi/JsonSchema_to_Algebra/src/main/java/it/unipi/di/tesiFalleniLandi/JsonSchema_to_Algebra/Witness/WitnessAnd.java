@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import patterns.REException;
 
 import java.util.*;
 
@@ -65,7 +66,7 @@ public class WitnessAnd implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(this.add(a)) //se la lista è stata modificata faccio il merge
             return this.merge();
         return this;
@@ -197,12 +198,12 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
@@ -319,6 +320,12 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public int hashCode() {
+        return andList != null ? andList.hashCode() : 0;
+    }
+
+    /*
+    @Override
+    public int hashCode() {
         int hash = 0;
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
@@ -327,5 +334,6 @@ public class WitnessAnd implements WitnessAssertion{
 
         return hash;
     }
+     */
 
 }

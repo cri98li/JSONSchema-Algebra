@@ -2,6 +2,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import patterns.REException;
 
 /**
  * This class provides an empty implementation of {@link GrammaticaVisitor},

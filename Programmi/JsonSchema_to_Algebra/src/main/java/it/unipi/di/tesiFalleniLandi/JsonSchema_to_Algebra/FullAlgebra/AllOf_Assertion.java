@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -133,7 +134,7 @@ public class AllOf_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAnd toWitnessAlgebra() {
+	public WitnessAnd toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
 		for(Assertion a : andList)
 			and.add(a.toWitnessAlgebra());

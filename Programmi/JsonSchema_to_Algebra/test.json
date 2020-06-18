@@ -1,14 +1,3 @@
-{
-  "allOf": [
-    {
-      "properties": {
-        "bar": {"type": "integer"}
-      }
-    },
-    {
-      "properties": {
-        "foo": {"type": "string"}
-      }
-    }
-  ]
+"propertyNames": {
+"pattern": "^[A-Za-z]*$"
 }

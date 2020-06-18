@@ -2,13 +2,24 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
+import patterns.REException;
 
 import java.util.List;
 
 public class Utils_PattOfS {
     //Vedi definizione sul documento
 
-    private static Pattern truePattern = Pattern.createFromRegexp(".*");
+    private static Pattern truePattern;
+
+    static {
+        try {
+            truePattern = Pattern.createFromRegexp(".*");
+        } catch (REException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
     //private static String falsePattern ="(?!x)x"; //TODO: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
     private static Pattern falsePattern = truePattern.complement();
 

@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 public class Not_Assertion implements Assertion{
 	
@@ -49,7 +50,7 @@ public class Not_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		return not.notElimination().toWitnessAlgebra();
 	}
 }

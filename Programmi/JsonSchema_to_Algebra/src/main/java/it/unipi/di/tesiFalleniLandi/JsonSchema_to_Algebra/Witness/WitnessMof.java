@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Mof_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
 
         if(a.getClass() == WitnessMof.class)
             return this.mergeElement((WitnessMof) a);
@@ -42,7 +43,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
         return new WitnessMof(a.value * (value / gcd(a.value, value)));
     }
 
-    public WitnessAssertion mergeElement(WitnessNotMof a) {
+    public WitnessAssertion mergeElement(WitnessNotMof a) throws REException {
             WitnessNotMof notMof = a;
             Double val1 = notMof.getValue();
             Double val2 = this.value;
@@ -99,16 +100,24 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
 
     @Override
     public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
+
+    /*
+    @Override
+    public int hashCode() {
         return Objects.hash(value);
     }
 
+     */
+
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

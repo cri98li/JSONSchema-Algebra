@@ -5,6 +5,7 @@ import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 public class Len_Assertion implements Assertion{
 	private Long min, max;
@@ -88,7 +89,7 @@ public class Len_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		String minStr = "0", maxStr = "";
 		if(min != null) minStr = min.toString();
 		if(max != null) maxStr = max.toString();

@@ -3,11 +3,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
+import patterns.REException;
 
 import java.io.IOException;
 
 public class MainWitness {
-    public static void main(String[] args) throws IOException, WitnessException {
+    public static void main(String[] args) throws IOException, WitnessException, REException {
         String path = "test.algebra";
 
         Assertion schema = Utils_FullAlgebra.parseFile(path);

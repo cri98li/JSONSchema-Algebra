@@ -11,6 +11,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import patterns.REException;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class Utils_FullAlgebra {
      * @param root Rappresentazione di un focumento in oggetti di tipo Assertion (Full algebra)
      * @return ritorna WitnessEnv costruito come indicato sopra
      */
-    public static WitnessEnv getWitnessAlgebra(Assertion root){
+    public static WitnessEnv getWitnessAlgebra(Assertion root) throws REException {
         WitnessAssertion returnedValue = root.notElimination().toWitnessAlgebra();
         if(returnedValue.getClass() != WitnessEnv.class){
             WitnessEnv env = new WitnessEnv();

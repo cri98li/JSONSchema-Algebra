@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import patterns.REException;
 
 import java.util.Set;
 
@@ -11,13 +12,13 @@ public interface WitnessAssertion extends Cloneable{
      * @return null if the objects cannot be merged, otherwise it returns the merged object
      *              (if the object cannot be unified within a single assertion, it returns a WitnessAnd)
      */
-    public WitnessAssertion mergeElement(WitnessAssertion a);
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException;
 
     /**
      * propagates merge over the schema
      * @return
      */
-    public WitnessAssertion merge();
+    public WitnessAssertion merge() throws REException;
 
     /**
      * Return the relative Type of an assertion
@@ -41,13 +42,13 @@ public interface WitnessAssertion extends Cloneable{
      *
      * @return return the complement of the current object
      */
-    public WitnessAssertion not() throws WitnessException;
+    public WitnessAssertion not() throws WitnessException, REException;
 
     /**
      *
      * @return apply the not-elimination/not-pushing step as described in the paper, then return the new instance
      */
-    public WitnessAssertion notElimination() throws WitnessException;
+    public WitnessAssertion notElimination() throws WitnessException, REException;
 
     //Se and, ritorna and sottoforma di gruppo, altrimenti propaga. se terminal node ritorna this
 

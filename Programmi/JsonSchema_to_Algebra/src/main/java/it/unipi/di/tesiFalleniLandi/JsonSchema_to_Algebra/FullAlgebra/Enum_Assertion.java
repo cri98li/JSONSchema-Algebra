@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAsserti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class Enum_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		for(Object obj : _enum)
 			or.add(new Const_Assertion(obj).toWitnessAlgebra());

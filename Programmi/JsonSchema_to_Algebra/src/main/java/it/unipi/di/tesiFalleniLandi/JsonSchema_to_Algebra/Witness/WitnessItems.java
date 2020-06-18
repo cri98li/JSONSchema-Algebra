@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
+import patterns.REException;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
             if(((WitnessBoolean)additionalItems).getValue())
                 return additionalItems;
@@ -68,7 +69,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         WitnessItems newWitnessItems = new WitnessItems();
         for(WitnessAssertion item : items)
             newWitnessItems.addItems(item.merge());
@@ -81,7 +82,7 @@ public class WitnessItems implements WitnessAssertion{
         return newWitnessItems;
     }
 
-    public WitnessAssertion mergeElement(WitnessItems a) {
+    public WitnessAssertion mergeElement(WitnessItems a) throws REException {
         if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
             if (((WitnessBoolean) a.additionalItems).getValue())
                 return a.additionalItems;
@@ -179,12 +180,12 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

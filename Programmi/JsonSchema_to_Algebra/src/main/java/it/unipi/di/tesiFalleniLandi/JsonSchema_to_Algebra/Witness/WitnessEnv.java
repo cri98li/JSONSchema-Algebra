@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
+import patterns.REException;
 
 import java.util.*;
 
@@ -48,7 +49,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         Set<Map.Entry<WitnessVar, WitnessAssertion>> entrySet = varList.entrySet();
         WitnessEnv newEnv = new WitnessEnv();
 
@@ -124,12 +125,12 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

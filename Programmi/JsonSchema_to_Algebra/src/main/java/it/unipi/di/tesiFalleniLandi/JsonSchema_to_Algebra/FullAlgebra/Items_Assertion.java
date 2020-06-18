@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAsserti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessItems;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -169,7 +170,7 @@ public class Items_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessItems witIte = new WitnessItems();
 
 		if(additionalItems != null) witIte.setAdditionalItems(additionalItems.toWitnessAlgebra());

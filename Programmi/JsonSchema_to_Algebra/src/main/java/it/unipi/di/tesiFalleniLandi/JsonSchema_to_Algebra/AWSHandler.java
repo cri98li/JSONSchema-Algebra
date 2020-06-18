@@ -11,6 +11,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessExcepti
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import patterns.REException;
 
 import java.util.*;
 
@@ -150,7 +151,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				false);
 	}
 
-	private GatewayResponse andMerging(String body) {
+	private GatewayResponse andMerging(String body) throws REException {
 		Assertion schema = Utils_FullAlgebra.parseString(body);
 
 		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema.notElimination()).mergeElement(null).getFullAlgebra().toGrammarString()),
@@ -159,7 +160,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				false);
 	}
 
-	private GatewayResponse notEliminationWitness(String body) throws WitnessException {
+	private GatewayResponse notEliminationWitness(String body) throws WitnessException, REException {
 		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
 
 		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).groupize().getFullAlgebra().toGrammarString()),
@@ -168,7 +169,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				false);
 	}
 
-	private GatewayResponse canonicalization(String body) throws WitnessException {
+	private GatewayResponse canonicalization(String body) throws WitnessException, REException {
 		Assertion schema = Utils_FullAlgebra.parseString(body).notElimination();
 
 		return new GatewayResponse(Utils.beauty(Utils_FullAlgebra.getWitnessAlgebra(schema).mergeElement(null).groupize().getFullAlgebra().toGrammarString()),

@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.XBet_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -61,16 +62,16 @@ public class WitnessXBet implements WitnessAssertion{
         return null;
     }
 
-    public WitnessAssertion mergeElement(WitnessXBet a) {
-        if(a.min > max || a.max < min){
+    public WitnessAssertion mergeElement(WitnessXBet a) throws REException {
+        Double m = (min < a.min) ? a.min : min;
+        Double M = (max > a.max) ? a.max : max;
+
+        if(a.min > max || a.max < min || m.equals(M)){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
 
             return type.not().toWitnessAlgebra();
         }
-
-        Double m = (min < a.min) ? a.min : min;
-        Double M = (max > a.max) ? a.max : max;
 
         WitnessXBet newXBet = new WitnessXBet(m, M);
         return (this.equals(newXBet) && a.equals(newXBet)) ? null : newXBet;
@@ -109,12 +110,12 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

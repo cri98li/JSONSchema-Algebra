@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AnyOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import patterns.REException;
 
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
 
         if(tmp != null) {
@@ -85,7 +86,7 @@ public class WitnessOr implements WitnessAssertion{
     if a.class = or?
      */
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) {
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(a != null && a.getClass() == this.getClass())
             return null; //this.size = n and a.size = m --> return size O(n*m)
 
@@ -176,12 +177,12 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
@@ -264,6 +265,12 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public int hashCode() {
+        return orList != null ? orList.hashCode() : 0;
+    }
+
+    /*
+    @Override
+    public int hashCode() {
         int hash = 0;
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
@@ -272,5 +279,7 @@ public class WitnessOr implements WitnessAssertion{
 
         return hash;
     }
+
+     */
 
 }

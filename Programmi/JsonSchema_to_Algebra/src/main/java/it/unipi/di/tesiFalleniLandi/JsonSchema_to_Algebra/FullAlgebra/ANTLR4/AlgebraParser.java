@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.Gra
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import patterns.REException;
 
 import java.util.List;
 
@@ -336,7 +337,11 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
 		String str = ctx.STRING().getText();
 
-		return new Pattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
+		try {
+			return new Pattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
+		} catch (REException e) {
+			throw new ParseCancellationException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -348,7 +353,11 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	public NotPattern_Assertion visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx) {
 		String str = ctx.STRING().getText();
 
-		return new NotPattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
+		try {
+			return new NotPattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
+		} catch (REException e) {
+			throw new ParseCancellationException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -426,8 +435,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size(); i++) {
-			if(idList.get(i).getText().charAt(1) == '^')
-				prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+			if(idList.get(i).getText().charAt(1) == '^') {
+				try {
+					prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+				} catch (REException e) {
+					throw new ParseCancellationException(e.getMessage());
+				}
+			}
 			else
 				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
@@ -448,7 +462,11 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size(); i++) {
-			p.add(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
+			try {
+				p.add(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
+			} catch (REException e) {
+				throw new ParseCancellationException(e.getMessage());
+			}
 		}
 
 		return p;
@@ -467,7 +485,11 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < idList.size(); i++) {
-			addPattReq.addName(Pattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
+			try {
+				addPattReq.addName(Pattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
+			} catch (REException e) {
+				throw new ParseCancellationException(e.getMessage());
+			}
 		}
 
 		addPattReq.setAdditionalProperties(assertion);
@@ -483,8 +505,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size()-1; i++) {
-			if(idList.get(i).getText().charAt(1) == '^')
-				prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+			if(idList.get(i).getText().charAt(1) == '^') {
+				try {
+					prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
+				} catch (REException e) {
+					throw new ParseCancellationException(e.getMessage());
+				}
+			}
 			else
 				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}

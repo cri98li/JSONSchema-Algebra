@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import patterns.REException;
 
 public interface Assertion extends AlgebraParserElement{
 	/**
@@ -31,5 +32,5 @@ public interface Assertion extends AlgebraParserElement{
 	 * Translate the object from the full-algebra representation to the witness-algebra (core-algebra plus some useful operators)
 	 * @return return a WitnessAlgebra object
 	 */
-	public WitnessAssertion toWitnessAlgebra();
+	public WitnessAssertion toWitnessAlgebra() throws REException;
 }

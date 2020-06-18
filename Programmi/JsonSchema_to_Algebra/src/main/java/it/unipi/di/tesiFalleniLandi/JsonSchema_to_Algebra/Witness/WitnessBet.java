@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import patterns.REException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -40,7 +41,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeElement(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion mergeElement(WitnessAssertion a) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -58,7 +59,7 @@ public class WitnessBet implements WitnessAssertion{
 
 
 
-    public WitnessAssertion mergeElement(WitnessBet a) {
+    public WitnessAssertion mergeElement(WitnessBet a) throws REException {
         if(a.min > max || a.max < min){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -73,7 +74,7 @@ public class WitnessBet implements WitnessAssertion{
         return (this.equals(newBet) && a.equals(newBet)) ? null : newBet;
     }
 
-    public WitnessAssertion mergeElement(WitnessXBet a) { //TODO: check
+    public WitnessAssertion mergeElement(WitnessXBet a) throws REException { //TODO: check
         if(a.min >= max || a.max <= min){
             Type_Assertion type = new Type_Assertion();
             type.add(GrammarStringDefinitions.TYPE_NUMBER);
@@ -82,8 +83,10 @@ public class WitnessBet implements WitnessAssertion{
         }
         WitnessAnd and = new WitnessAnd();
 
-        if(a.getMax() <= max && a.getMin() >= min) return new WitnessXBet(a.getMin(), a.getMax());
-        if(a.getMax() > max && a.getMin() < min) return new WitnessBet(min, max);
+        if(a.getMax() <= max && a.getMin() >= min)
+            return new WitnessXBet(a.getMin(), a.getMax());
+        if(a.getMax() > max && a.getMin() < min)
+            return new WitnessBet(min, max);
 
         //caso non vittoria assoluta
         if(a.getMax() > max)
@@ -121,12 +124,12 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() {
+    public WitnessAssertion not() throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
     }
 
     @Override
-    public WitnessAssertion notElimination() {
+    public WitnessAssertion notElimination() throws REException {
         return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 

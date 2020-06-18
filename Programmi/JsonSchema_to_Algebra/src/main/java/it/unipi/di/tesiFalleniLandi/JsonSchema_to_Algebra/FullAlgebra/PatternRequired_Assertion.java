@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAsserti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import patterns.REException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class PatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();

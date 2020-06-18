@@ -36,7 +36,7 @@ public class Pro_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
-		if(min != null && min != 0 && max == null) {
+		if((min == null || min == 0) && max == null) {
 			and.add(new Boolean_Assertion(false));
 			return and;
 		}

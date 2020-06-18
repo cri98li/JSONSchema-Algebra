@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessContains;
 import org.json.simple.JSONObject;
+import patterns.REException;
 
 public class Exist_Assertion implements Assertion{
 	private Long min;
@@ -109,7 +110,7 @@ public class Exist_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		return new WitnessContains(min, max, contains.toWitnessAlgebra());
 	}
 }
