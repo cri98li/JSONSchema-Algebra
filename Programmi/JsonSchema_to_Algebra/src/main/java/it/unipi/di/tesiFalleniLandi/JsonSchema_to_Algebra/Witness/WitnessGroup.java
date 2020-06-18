@@ -111,7 +111,8 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) {
-        throw new UnsupportedOperationException();
+        return null;
+        //throw new UnsupportedOperationException();
     }
 
     @Override

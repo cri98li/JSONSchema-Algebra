@@ -185,7 +185,7 @@ public class Properties_Assertion implements Assertion{
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
-		Pattern addPatt = Pattern.createFromRegexp("*");
+		Pattern addPatt = Pattern.createFromRegexp(".*"); //TODO: ask
 
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 
