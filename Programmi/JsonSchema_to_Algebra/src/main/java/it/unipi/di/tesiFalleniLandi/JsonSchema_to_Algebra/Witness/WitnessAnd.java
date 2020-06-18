@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
 import java.util.*;
@@ -265,9 +266,13 @@ public class WitnessAnd implements WitnessAssertion{
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()){
-                if(assertion.getClass() == WitnessVar.class)
-                    and.add(env.getDefinition((WitnessVar) assertion));
-                else
+                if(assertion.getClass() == WitnessVar.class) {
+                    WitnessAssertion resolvedAssertion = env.getDefinition((WitnessVar) assertion);
+                    if(resolvedAssertion != null)
+                        and.add(env.getDefinition((WitnessVar) assertion));
+                    else
+                        throw new ParseCancellationException("Definition not found: "+assertion.toString());
+                }else
                     and.add(assertion.variableNormalization_expansion(env));
             }
 
