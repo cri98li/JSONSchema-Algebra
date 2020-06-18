@@ -74,7 +74,7 @@ public class WitnessAnd implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge() throws REException {
         WitnessAnd newAnd = new WitnessAnd();
         boolean modified = false;
 
