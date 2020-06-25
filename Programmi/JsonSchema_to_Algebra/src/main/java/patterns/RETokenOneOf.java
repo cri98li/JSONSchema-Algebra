@@ -4,7 +4,11 @@ import java.util.Vector;
 
 
 final class RETokenOneOf extends REToken {
-  protected Vector options;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+protected Vector<REToken> options;
   protected boolean negative;
 
   // This constructor is used for convenience when we know the set beforehand,
@@ -13,13 +17,13 @@ final class RETokenOneOf extends REToken {
 
   RETokenOneOf(int subIndex, String optionsStr, boolean negative, boolean insens) {
     super(subIndex);
-    options = new Vector();
+    options = new Vector<REToken>();
     this.negative = negative;
     for (int i = 0; i < optionsStr.length(); i++)
       options.addElement(new RETokenChar(subIndex,optionsStr.charAt(i),insens));
   }
 
-  RETokenOneOf(int subIndex, Vector options, boolean negative) {
+  RETokenOneOf(int subIndex, Vector<REToken> options, boolean negative) {
     super(subIndex);
     this.options = options;
     this.negative = negative;
@@ -46,6 +50,10 @@ final class RETokenOneOf extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 
 }

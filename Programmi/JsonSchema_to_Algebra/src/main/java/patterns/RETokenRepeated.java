@@ -1,11 +1,13 @@
 
 package patterns;
 
-import java.util.Vector;
-
 
 final class RETokenRepeated extends REToken {
-    protected REToken token;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected REToken token;
     protected int min,max;
     protected boolean stingy;
     
@@ -56,5 +58,9 @@ final class RETokenRepeated extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }

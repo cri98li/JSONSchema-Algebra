@@ -134,7 +134,7 @@ public class PatternAdapter implements REVisitor {
 
 
   public void visit(RETokenPOSIX re) {
-    logger.info(re.getClass() + ":" + re.toString() + ", type:" + re.s_nameTable[re.type] + ", negated " + (re.negated));
+    logger.info(re.getClass() + ":" + re.toString() + ", type:" + RETokenPOSIX.s_nameTable[re.type] + ", negated " + (re.negated));
 
     boolean openedPar = false;
 

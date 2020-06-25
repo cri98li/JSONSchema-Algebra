@@ -34,7 +34,12 @@ import java.util.BitSet;
  */
 
 public final class RESyntax implements Serializable {
-    static final String DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator");
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	static final String DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator");
 
     private static final String SYNTAX_IS_FINAL = RE.getLocalizedMessage("syntax.final");
 

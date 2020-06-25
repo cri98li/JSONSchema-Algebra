@@ -9,7 +9,11 @@ import java.io.Serializable;
  * de tester si anchor < s.length
  */
 class CharIndexedCharArray implements CharIndexed, Serializable {
-    private char[] s;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private char[] s;
     private int anchor;
     
     CharIndexedCharArray(char[] str, int index) {

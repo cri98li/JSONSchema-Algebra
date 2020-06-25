@@ -7,7 +7,11 @@ import java.io.Serializable;
 
 
 class CharIndexedString implements CharIndexed, Serializable {
-    private String s;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String s;
     private int anchor;
     private int len;
     

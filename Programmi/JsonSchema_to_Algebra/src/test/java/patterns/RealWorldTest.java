@@ -250,8 +250,7 @@ public class RealWorldTest {
   @Test
   @Ignore
   public void testEndpoint() throws REException {
-    // js_10041.json
-    Pattern p = Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+$");
+    Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+$");
 
    // TODO
   }

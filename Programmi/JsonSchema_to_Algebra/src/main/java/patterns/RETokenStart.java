@@ -2,11 +2,12 @@ package patterns;
 
 
 class RETokenStart extends REToken {
-  private String newline; // matches after a newline
-    
-  RETokenStart(int subIndex, String newline) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+RETokenStart(int subIndex, String newline) {
     super(subIndex);
-    this.newline = newline;
   }
     
   void dump(StringBuffer os) {
@@ -15,5 +16,9 @@ class RETokenStart extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }

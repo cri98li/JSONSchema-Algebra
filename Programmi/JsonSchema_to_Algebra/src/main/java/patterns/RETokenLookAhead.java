@@ -5,7 +5,11 @@ package patterns;
  * @author Shashank Bapat
  */
 final class RETokenLookAhead extends REToken {
-  REToken re;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+REToken re;
   boolean negative;
 
   RETokenLookAhead(REToken re, boolean negative) throws REException {
@@ -23,6 +27,10 @@ final class RETokenLookAhead extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }
 

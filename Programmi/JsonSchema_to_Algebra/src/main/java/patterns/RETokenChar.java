@@ -3,13 +3,15 @@ package patterns;
 
 
 final class RETokenChar extends REToken {
-  protected char[] ch;
-  private boolean insens;
-
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+protected char[] ch;
   RETokenChar(int subIndex, char c, boolean ins) {
     super(subIndex);
     ch = new char [1];
-    ch[0] = (insens = ins) ? Character.toLowerCase(c) : c;
+    ch[0] = (ins) ? Character.toLowerCase(c) : c;
   }
 
   int getMinimumLength() {
@@ -40,6 +42,11 @@ final class RETokenChar extends REToken {
   public void accept(REVisitor v) {
     v.visit(this);
   }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
+  }
+
 }
 
 

@@ -1,21 +1,27 @@
 package patterns;
 
-import java.io.InputStream;
-import java.io.Reader;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-//import gnu.regexp.*;
+// import gnu.regexp.*;
 
 class IntPair implements Serializable {
-  public int first, second;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+public int first, second;
 }
 
 class CharUnit implements Serializable {
-  public char ch;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+public char ch;
   public boolean bk;
 }
 
@@ -63,12 +69,17 @@ class CharUnit implements Serializable {
  * @version 1.1.4-dev, to be released
  */
 public class RE extends REToken {
-  // This String will be returned by getVersion()
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+// This String will be returned by getVersion()
   private static final String VERSION = "1.1.4-dev";
 
   // The localized strings are kept in a separate file
   private static ResourceBundle messages =
-          PropertyResourceBundle.getBundle("patterns/MessagesBundle", Locale.getDefault());
+      PropertyResourceBundle.getBundle("patterns/MessagesBundle", Locale.getDefault());
 
   // These are, respectively, the first and last tokens in our linked list
   // If there is only one token, firstToken == lastToken
@@ -241,7 +252,7 @@ public class RE extends REToken {
     int pLength = pattern.length;
 
     numSubs = 0; // Number of subexpressions in this token.
-    Vector branches = null;
+    Vector<REToken> branches = null;
 
     // linked list of tokens (sort of -- some closed loops can exist)
     firstToken = lastToken = null;
@@ -285,7 +296,7 @@ public class RE extends REToken {
         RE theBranch = new RE(firstToken, lastToken, numSubs, subIndex, minimumLength);
         minimumLength = 0;
         if (branches == null) {
-          branches = new Vector();
+          branches = new Vector<REToken>();
         }
         branches.addElement(theBranch);
         firstToken = lastToken = currentToken = null;
@@ -331,7 +342,7 @@ public class RE extends REToken {
       //  [...] | [^...]
 
       else if ((unit.ch == '[') && !unit.bk) {
-        Vector options = new Vector();
+        Vector<REToken> options = new Vector<REToken>();
         boolean negative = false;
         char lastChar = 0;
         if (index == pLength)
@@ -1019,22 +1030,11 @@ public class RE extends REToken {
     os.append(')');
   }
 
-  // Cast input appropriately or throw exception
-  private static CharIndexed makeCharIndexed(Object input, int index) {
-    // We could let a String fall through to final input, but since
-    // it's the most likely input type, we check it first.
-    if (input instanceof String) return new CharIndexedString((String) input, index);
-    else if (input instanceof char[]) return new CharIndexedCharArray((char[]) input, index);
-    else if (input instanceof StringBuffer)
-      return new CharIndexedStringBuffer((StringBuffer) input, index);
-    else if (input instanceof InputStream)
-      return new CharIndexedInputStream((InputStream) input, index);
-    else if (input instanceof Reader) return new CharIndexedReader((Reader) input, index);
-    else if (input instanceof CharIndexed) return (CharIndexed) input; // do we lose index info?
-    else return new CharIndexedString(input.toString(), index);
-  }
-
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }

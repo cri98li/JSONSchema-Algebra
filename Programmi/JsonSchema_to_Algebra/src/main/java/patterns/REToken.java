@@ -6,10 +6,17 @@ package patterns;
 
 import java.io.Serializable;
 
-abstract class REToken implements Serializable, RETokenI {
+abstract class REToken implements Serializable, RETokenI, RETokenIBool {
 
-  protected REToken next = null;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+protected REToken next = null;
   protected REToken uncle = null;
+
+  protected boolean hasStart = false;
+
   protected int subIndex;
 
   protected REToken(int subIndex) {

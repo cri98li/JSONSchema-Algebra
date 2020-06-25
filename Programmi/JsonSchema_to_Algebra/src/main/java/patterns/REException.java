@@ -6,7 +6,11 @@ import java.text.MessageFormat;
 
 
 public class REException extends Exception {
-  private int type;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private int type;
   private int pos;
 
   // Error conditions from GNU regcomp(3) manual
@@ -123,7 +127,8 @@ public class REException extends Exception {
    * being compiled.
    */
   public String getMessage() {
-    Object[] args = {new Integer(pos)};
+    @SuppressWarnings("deprecation")
+	Object[] args = {new Integer(pos)};
     StringBuffer sb = new StringBuffer();
     String prefix = RE.getLocalizedMessage("error.prefix");
     sb.append(MessageFormat.format(prefix, args));

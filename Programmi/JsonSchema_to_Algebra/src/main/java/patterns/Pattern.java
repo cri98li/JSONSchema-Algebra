@@ -1,225 +1,206 @@
 package patterns;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.Collections;
+import java.util.Set;
 
-import dk.brics.automaton.*;
+import dk.brics.automaton.Automaton;
+import dk.brics.automaton.BasicAutomata;
+import dk.brics.automaton.BasicOperations;
+import dk.brics.automaton.RegExp;
+import dk.brics.automaton.RunAutomaton;
+import dk.brics.automaton.SpecialOperations;
 
 public class Pattern {
 
+	/**
+	 * The internal Bricks automaton.
+	 */
+	private Automaton automaton;
 
-  /**
-    The internal Bricks automaton.
-  */
-  private Automaton automaton;
+	/**
+	 * Records the underlying regular expression in Bricks (!) syntax.
+	 **/
+	private String initialPattern;
 
+	/**
+	 * True iff the initial pattern can be printed.
+	 */
+	private boolean printable;
 
-  /**
-    Records the underlying regular expression in Bricks (!) syntax.
-  **/
-  private String initialPattern;
+	/**
+	 * @param String constant that is not a regular expression
+	 */
+	public static Pattern createFromName(String patternName) {
+		return new Pattern(BasicAutomata.makeString(patternName));
+	}
 
+	/**
+	 * @param ecmaRegex String in ECMAScript syntax (not anchored by default)
+	 * @exception IllegalArgumentException if regex is invalid
+	 * @exception REException              if ecmaRegex contains syntax error
+	 */
+	public static Pattern createFromRegexp(String ecmaRegex) throws REException {
+		return new Pattern(PatternAdapter.rewrite(ecmaRegex));
+	}
 
-  /**
-    True iff the initial pattern can be printed.
-  */
-  private boolean printable;
+	private Pattern(Automaton automaton) {
+		this.automaton = automaton;
+		printable = false;
+	}
 
+	/**
+	 * Assumes that regex is already in the Bricks syntax!
+	 */
+	protected Pattern(String bricksRegex) {
+		this.initialPattern = bricksRegex;
+		this.printable = true;
+		this.automaton = (new RegExp(bricksRegex)).toAutomaton();
+	}
 
-  /**
-    @param String constant that is not a regular expression
-  */
-  public static Pattern createFromName(String patternName) {
-    return new Pattern(BasicAutomata.makeString(patternName));
-  }
+	public boolean isEmpty() {
+		return BasicOperations.isEmpty(this.automaton);
+	}
 
+	public boolean match(String str) {
+		// The less performant way to match a string.
+		// return BasicOperations.run(this.automaton, str);
 
-  /**
-    @param ecmaRegex String in ECMAScript syntax (not anchored by default)
-    @exception IllegalArgumentException if regex is invalid
-    @exception REException if ecmaRegex contains syntax error
-  */
-  public static Pattern createFromRegexp(String ecmaRegex) throws REException {
-    return new Pattern(PatternAdapter.rewrite(ecmaRegex));
-  }
+		// For full performance, we use the RunAutomaton class.
+		RunAutomaton ra = new RunAutomaton(this.automaton);
+		return ra.run(str);
+	}
 
+	public Pattern intersect(Pattern p) {
+		Automaton a = BasicOperations.intersection(this.automaton, p.automaton);
+		return new Pattern(a);
+	}
 
-  private Pattern(Automaton automaton) {
-    this.automaton = automaton;
-    printable = false;
-  }
+	public Pattern minus(Pattern p) {
+		return new Pattern(BasicOperations.minus(this.automaton, p.automaton));
+	}
 
+	public Pattern union(Pattern p) {
+		return new Pattern(BasicOperations.union(this.automaton, p.automaton));
+	}
 
-  /**
-    Assumes that regex is already in the Bricks syntax!
-  */
-  protected Pattern(String bricksRegex) {
-    this.initialPattern = bricksRegex;
-    this.printable = true;
-    this.automaton = (new RegExp(bricksRegex)).toAutomaton();
-  }
+	public Pattern complement() {
+		return new Pattern(BasicOperations.complement(this.automaton));
+	}
 
+	/**
+	 * Returns true if this pattern declares a language that is a subset of the
+	 * language declared by pattern p.
+	 */
+	public boolean isSubsetOf(Pattern p) {
+		return BasicOperations.subsetOf(this.automaton, p.automaton);
+	}
 
-  public boolean isEmpty(){
-    return BasicOperations.isEmpty(this.automaton);
-  }
+	public boolean isEquivalent(Pattern p) {
+		return this.automaton.equals(p.automaton);
+	}
 
+	/**
+	 * If domain(a) is finite, return |a|. Otherwise, return null.
+	 */
+	public Integer domainSize() {
+		Set<String> domain = SpecialOperations.getFiniteStrings(this.automaton);
+		return domain == null ? null : Integer.valueOf(domain.size());
+	}
 
-  public boolean match(String str) {
-    // The less performant way to match a string.
-    // return BasicOperations.run(this.automaton, str);
+	/**
+	 * Returns the set of accepted strings, assuming this automaton has a finite
+	 * language. If the language is not finite, this returns one word that matches.
+	 * If the language is empty, this returns null.
+	 */
+	public Collection<String> generateWords() {
+		Set<String> words = SpecialOperations.getFiniteStrings(this.automaton);
 
-    // For full performance, we use the RunAutomaton class.
-    RunAutomaton ra = new RunAutomaton(this.automaton);
-    return ra.run(str);
-  }
+		if (words != null)
+			return words;
 
+		if (words == null && !this.automaton.isEmpty())
+			return Collections.singleton(BasicOperations.getShortestExample(this.automaton, true));
 
-  public Pattern intersect(Pattern p) {
-    Automaton a = BasicOperations.intersection(this.automaton, p.automaton);
-    return new Pattern(a);
-  }
+		return null;
+	}
 
+	public Pattern clone() {
+		Pattern clone = new Pattern(this.automaton.clone());
+		clone.printable = this.printable;
+		clone.initialPattern = this.initialPattern;
+		return clone;
+	}
 
-  public Pattern minus(Pattern p) {
-    return new Pattern(BasicOperations.minus(this.automaton, p.automaton));
-  }
+	/**
+	 * Given {A1, .., An}, returns pattern for not(A1|...|An)
+	 */
+	public static Pattern listComplement(Collection<Pattern> patterns) {
+		Pattern u = null;
 
+		for (Pattern p : patterns) {
+			if (u == null)
+				u = p;
+			else
+				u = u.union(p);
+		}
 
-  public Pattern union(Pattern p) {
-    return new Pattern(BasicOperations.union(this.automaton, p.automaton));
-  }
+		return u.complement();
+	}
 
+	/**
+	 * Returns true iff the language declared by the two patterns overlaps, i.e.
+	 * their intersection is not empty.
+	 */
+	public static boolean overlaps(Pattern left, Pattern right) {
+		return !left.automaton.overlap(right.automaton).isEmpty();
+	}
 
-  public Pattern complement() {
-    return new Pattern(BasicOperations.complement(this.automaton));
-  }
+	/**
+	 * Returns true iff there are two patterns that overlap.
+	 */
+	public static boolean overlaps(Collection<Pattern> patterns) {
+		Pattern[] array = patterns.toArray(new Pattern[0]);
 
+		for (int i = 0; i < array.length; i++) {
+			Pattern first = array[i];
 
-  /**
-    Returns true if this pattern declares a language that is a subset
-    of the language declared by pattern p.
-  */
-  public boolean isSubsetOf(Pattern p) {
-    return BasicOperations.subsetOf(this.automaton, p.automaton);
-  }
+			if (i == array.length - 1)
+				break;
 
+			for (int j = i + 1; j < array.length; j++) {
+				Pattern second = array[j];
 
-  public boolean isEquivalent(Pattern p) {
-    return this.automaton.equals(p.automaton);
-  }
+				if (Pattern.overlaps(first, second))
+					return true;
+			}
+		}
 
+		return false;
+	}
 
-  /**
-    If domain(a) is finite, return |a|. Otherwise, return null.
-  */
-  public Integer domainSize() {
-    Set<String> domain = SpecialOperations.getFiniteStrings(this.automaton);
-    return domain == null? null : Integer.valueOf(domain.size());
-  }
+	/**
+	 * Returns a string representation, either of the regexp, or of the automaton
+	 * (its states and transitions).
+	 */
+	@Override
+	public String toString() {
+		return printable ? initialPattern : this.toAutomatonString();
+	}
 
- 
-  /**
-    Returns the set of accepted strings, assuming this automaton has a finite language. 
-    If the language is not finite, this returns one word that matches. 
-    If the language is empty, this returns null.
-  */
-  public Collection<String> generateWords() {
-    Set<String> words = SpecialOperations.getFiniteStrings(this.automaton);
+	protected String toAutomatonString() {
+		return this.automaton.toString();
+	}
 
-    if (words != null)
-      return words;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-    if (words == null && !this.automaton.isEmpty())
-      return Collections.singleton(BasicOperations.getShortestExample(this.automaton, true));
-
-    return null;
-  }
-
-
-  public Pattern clone() {
-    Pattern clone = new Pattern(this.automaton.clone());
-    clone.printable = this.printable;
-    clone.initialPattern = this.initialPattern;
-    return clone;
-  }
-
-  
-  /**
-    Given {A1, .., An}, returns pattern for not(A1|...|An)
-  */
-  public static Pattern listComplement(Collection<Pattern> patterns) {
-    Pattern u = null;
-
-    for (Pattern p : patterns) {
-      if (u == null)
-        u = p;
-      else
-        u = u.union(p);
-    }
-
-    return u.complement();
-  }
-
-
-  /**
-    Returns true iff the language declared by the two patterns overlaps,
-    i.e. their intersection is not empty.
-  */
-  public static boolean overlaps(Pattern left, Pattern right) {
-    return ! left.automaton.overlap(right.automaton).isEmpty();
-  }
-
-
-  /**
-    Returns true iff there are two patterns that overlap.
-  */ 
-  public static boolean overlaps(Collection<Pattern> patterns) {
-     boolean answer = false;
-      Pattern[] array = patterns.toArray(new Pattern[0]);
-    
-     for (int i = 0; i < array.length; i++) {
-       Pattern first = array[i];
-
-       if (i  == array.length - 1) 
-         break;
-
-       for (int j = i + 1; j < array.length; j++) {
-         Pattern second = array[j];
-
-         if (Pattern.overlaps(first, second)) 
-           return true;
-       }
-     }
- 
-     return false; 
-  }
-
-
-  /**
-    Returns a string representation, either of the regexp,
-    or of the automaton (its states and transitions).
-  */
-  @Override
-  public String toString() {
-    return printable ? initialPattern : this.toAutomatonString();
-  }
-
-  
-  protected String toAutomatonString() {
-    return this.automaton.toString();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) 
-      return true;
-    if (o == null || getClass() != o.getClass()) 
-      return false;
-
-    Pattern pattern = (Pattern) o;
-    return this.isEquivalent(pattern);
-  }
+		Pattern pattern = (Pattern) o;
+		return this.isEquivalent(pattern);
+	}
 
 }

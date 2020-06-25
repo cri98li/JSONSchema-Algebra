@@ -2,13 +2,11 @@ package patterns;
 
 final class RETokenEnd extends REToken {
   /**
-   * Indicates whether this token should match on a line break.
-   */
-  private String newline;
-
-  RETokenEnd(int subIndex,String newline) { 
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+RETokenEnd(int subIndex,String newline) { 
     super(subIndex);
-    this.newline = newline;
   }
 
   void dump(StringBuffer os) {
@@ -17,5 +15,9 @@ final class RETokenEnd extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }

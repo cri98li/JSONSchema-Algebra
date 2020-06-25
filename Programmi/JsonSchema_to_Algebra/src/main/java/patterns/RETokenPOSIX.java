@@ -2,7 +2,11 @@ package patterns;
 
 
 final class RETokenPOSIX extends REToken {
-  int type;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+int type;
   boolean insens;
   boolean negated;
 
@@ -44,7 +48,6 @@ final class RETokenPOSIX extends REToken {
     return 1;
   }
 
-
   void dump(StringBuffer os) {
     if (negated) os.append('^');
     os.append("[:" + s_nameTable[type] + ":]");
@@ -52,5 +55,9 @@ final class RETokenPOSIX extends REToken {
 
   public void accept(REVisitor v) {
     v.visit(this);
+  }
+
+  public boolean accept(REBoolVisitor v) {
+    return v.visit(this);
   }
 }

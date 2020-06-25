@@ -21,7 +21,11 @@ package patterns;
 import java.io.Serializable;
 
 class CharIndexedStringBuffer implements CharIndexed, Serializable {
-    private StringBuffer s;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private StringBuffer s;
     private int anchor;
 
     CharIndexedStringBuffer(StringBuffer str, int index) {
