@@ -1,242 +1,302 @@
 package patterns;
 
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.lang.StringBuffer;
-
 /**
-  Translates JSON Schema pattern syntax (a subset of ECMAScript) such that 
-  the Bricks automaton package can handle them.
-*/
+ * Translates JSON Schema pattern syntax (a subset of ECMAScript) such that the
+ * Bricks automaton package can handle them.
+ */
 
 public class PatternAdapter implements REVisitor {
 
-  private static final Logger logger = Logger.getLogger("PatternAdapter");
+	private static final Logger logger = Logger.getLogger("PatternAdapter");
 
-  /**
-    @param ecmaRegex String in ECMAScript syntax
-    @return regex String in Bricks syntax
-    @throws REException if ecmaRegex has syntax errors
-  */
-  public static String rewrite(String ecmaRegex) throws REException {
+	/**
+	 * A stack tracking path to root when traversing AST of a regular expression.
+	 */
+	private Stack<REToken> stack = new Stack<REToken>();
 
-    logger.setLevel(Level.OFF); // Switch OFF/ALL
+	/**
+	 * @param ecmaRegex String in ECMAScript syntax
+	 * @return regex String in Bricks syntax
+	 * @throws REException if ecmaRegex has syntax errors
+	 */
+	public static String rewrite(String ecmaRegex) throws REException {
 
-    // Parse ecmaRegex into parse tree.
-    RE ast = new RE(ecmaRegex);
-    logger.info("AST " + ast.toString() + " has class " + ast.getClass());
+		logger.setLevel(Level.OFF); // Switch OFF/ALL
+		// logger.setLevel(Level.ALL); // Switch OFF/ALL
 
-    PatternAdapter pa = new PatternAdapter(); // TODO - switch to static?
-    ast.accept(pa);
+		// Parse ecmaRegex into parse tree.
+		RE ast = new RE(ecmaRegex);
+		logger.info("AST " + ast.toString() + " has class " + ast.getClass());
 
+		PatternAdapter pa = new PatternAdapter();
+		ast.accept(pa);
 
-    // If EcmaScript regex does not start with "^",
-    // we must translate this to prefix "@" in Bricks syntax.
+		// If EcmaScript regex does not start with "^",
+		// we must translate this to prefix "@" in Bricks syntax.
 
-    // TODO - make sure we also bind end of string.
+		// TODO - make sure we also bind end of string.
 
- 
-    logger.info(ast.toString() + "\t" + ast.getClass());
-    logger.info("Result of rewriting: '" + pa.bricksRegex + "'");
+		logger.info(ast.toString() + "\t" + ast.getClass());
+		logger.info("Result of rewriting: '" + pa.bricksRegex + "'");
 
-    // Ensure that the pattern can be parsed
-    //RegexParser parser = new RegexParser(ecmaRegex);
-    //RegexNode node = parser.parse();
-    //assert(node != null);
+		// Ensure that the pattern can be parsed
+		// RegexParser parser = new RegexParser(ecmaRegex);
+		// RegexNode node = parser.parse();
+		// assert(node != null);
 
-    // TODO - implement visitor on the node
+		// return translate(ecmaRegex);
+		return pa.bricksRegex.toString();
+	}
 
-    //return translate(ecmaRegex); 
-    return pa.bricksRegex.toString();
-  }
+	// For assembling the rewritten regex in Bricks syntax.
+	private StringBuffer bricksRegex = new StringBuffer();
 
-  
-  // For assembling the rewritten regex in Bricks syntax.
-  private StringBuffer bricksRegex = new StringBuffer(); 
- 
-  // In descending from RETokenOneOf to children, remember the parent.
-  private  REToken visitedParent = null;
+	// In descending from RETokenOneOf to children, remember the parent.
+	private REToken visitedParent = null;
 
-  public void visit(RE re) {
-    logger.info(re.getClass() + ": " + re.toString());
-    REToken next = re.firstToken;
-    logger.info(next.getClass() + ": " + next.toString());
-    next.accept(this);
+	public void visit(RE re) {
+		// TODO - this is currently just a 70% hack.
+		if (stack.empty()) {
+			if (!(re.firstToken instanceof RETokenStart)) {
+				logger.info("start not bounded");
+				bricksRegex.append('@');
+			}
+		}
 
-    while (next.hasNext()) {
-      next = next.getNext();
-      logger.info(next.getClass() + ": " + next.toString());
-      next.accept(this);
-    }
-  }
+		stack.push(re);
 
-  public void visit(RETokenAny re) {
-    logger.info(re.getClass() + ": " + re.toString());
-    bricksRegex.append(".");
-  }
+		logger.info(re.getClass() + ": " + re.toString());
+		REToken next = re.firstToken;
+		logger.info(next.getClass() + ": " + next.toString());
+		next.accept(this);
 
-  public void visit(RETokenBackRef re) {}
+		while (next.hasNext()) {
+			next = next.getNext();
+			logger.info(next.getClass() + ": " + next.toString());
+			next.accept(this);
+		}
 
-  public void visit(RETokenChar re) {
-    logger.info(re.getClass() + ": " + re);
+		stack.pop();
 
-    String token = re.toString();
+		// TODO - this is currently just a 70% hack.
+		if (stack.empty()) {
+			int posEnd = -1;
+			int posEndSub = -1;
+			int pos = 0;
 
-    // Bricks syntax requires that @ symbols are escaped.
-    token = token.replaceAll("@", "\\\\@");
+			// The regexp is bounded if the last two tokens are "End" and "EndSub".
+			next = re.firstToken;
 
-    // Need to escape backslashes.
-    token = token.replaceAll("\\\\", "\\\\");
+			if (next instanceof RETokenEnd)
+				posEnd = pos;
 
-    
-    // Escape parentheses, if not done so yet.
-    token = token.replaceAll("(?<!\\\\)\\(", "\\\\(");
-    token = token.replaceAll("(?<!\\\\)\\)", "\\\\)");
+			while (next.hasNext()) {
+				pos++;
+				next = next.getNext();
 
-    // We have to escape "." if it's not contained in [ ].
-    if (this.visitedParent instanceof RETokenOneOf) {
-      RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
-      if (!parent.negative)
-        token = token.replaceAll("(?<!\\\\)\\.", "\\\\.");
-        token = token.replaceAll("(?<!\\\\)\\+", "\\\\+");
-    }
-    
-    bricksRegex.append(token);
-  }
+				if (next instanceof RETokenEnd)
+					posEnd = pos;
+				if (next instanceof RETokenEndSub)
+					posEndSub = pos;
+			}
 
-  public void visit(RETokenEnd re) {}
+			logger.info("posEnd: " + posEnd + ", posEndSub: " + posEndSub);
 
-  public void visit(RETokenEndSub re) {}
+			if (posEnd == -1 || ((posEnd != -1) && posEnd + 1 != posEndSub)) {
+				logger.info("end not bounded");
+				bricksRegex.append("@");
+			}
+		}
+	}
 
-  public void visit(RETokenLookAhead re) {}
+	public void visit(RETokenAny re) {
+		logger.info(re.getClass() + ": " + re.toString());
+		bricksRegex.append(".");
+	}
 
-  public void visit(RETokenOneOf re) {
-    logger.info(re.getClass() + ": " + re.toString() + (re.negative ? "(negative)" : "") +  " with " + re.options.size() + " options");
+	public void visit(RETokenBackRef re) {
+	}
 
-    REToken oldParent = this.visitedParent;
-    this.visitedParent = re;
+	public void visit(RETokenChar re) {
+		logger.info(re.getClass() + ": " + re);
 
-    bricksRegex.append(re.negative ? "[^" : '(');
+		String token = re.toString();
 
-    for (int i = 0; i < re.options.size(); i++) {
-      if (!re.negative && i > 0)
-        bricksRegex.append('|');
+		// Bricks syntax requires that @ symbols are escaped.
+		token = token.replaceAll("@", "\\\\@");
 
-      logger.info(re.options.elementAt(i).getClass().toString() );
-      ((REToken) re.options.elementAt(i)).accept(this);
-    }
+		// Need to escape backslashes.
+		token = token.replaceAll("\\\\", "\\\\");
 
-    bricksRegex.append(re.negative ? ']' : ')');
+		// Escape parentheses, if not done so yet.
+		token = token.replaceAll("(?<!\\\\)\\(", "\\\\(");
+		token = token.replaceAll("(?<!\\\\)\\)", "\\\\)");
 
-    this.visitedParent = oldParent;
-  }
+		// We have to escape "." if it's not contained in [ ].
+		if (this.visitedParent instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+			if (!parent.negative)
+				token = token.replaceAll("(?<!\\\\)\\.", "\\\\.");
+			token = token.replaceAll("(?<!\\\\)\\+", "\\\\+");
+		}
 
+		bricksRegex.append(token);
+	}
 
-  public void visit(RETokenPOSIX re) {
-    logger.info(re.getClass() + ":" + re.toString() + ", type:" + RETokenPOSIX.s_nameTable[re.type] + ", negated " + (re.negated));
+	public void visit(RETokenEnd re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+	}
 
-    boolean openedPar = false;
+	public void visit(RETokenEndSub re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+	}
 
-    // Do not open a second "[".
-    if (this.visitedParent instanceof RETokenOneOf) {
-      RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+	public void visit(RETokenLookAhead re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+	}
 
-      if (parent.negative && re.negated)
-        throw new UnsupportedOperationException("Double negation not supported yet.");
+	public void visit(RETokenOneOf re) {
+		stack.push(re);
+		logger.info(re.getClass() + ": " + re.toString() + (re.negative ? "(negative)" : "") + " with "
+				+ re.options.size() + " options");
 
-      if (!parent.negative) {
-        bricksRegex.append('[');
-        openedPar = true;
-      }
+		// TODO - can be replaced by use of stack
+		REToken oldParent = this.visitedParent;
+		this.visitedParent = re;
 
-      if (parent.negative || re.negated)
-        bricksRegex.append('^');
+		bricksRegex.append(re.negative ? "[^" : '(');
 
-      // Do not add double negation.
-    } else if (re.negated) { 
-      bricksRegex.append("[^");
-      openedPar = true;
-    } else {
-      bricksRegex.append('[');
-      openedPar = true;
-    }
+		for (int i = 0; i < re.options.size(); i++) {
+			if (!re.negative && i > 0)
+				bricksRegex.append('|');
 
-    if (re.type == RETokenPOSIX.SPACE) {
-      // \S  :=  [^\r\n\t\f\v ]
+			logger.info(re.options.elementAt(i).getClass().toString());
+			((REToken) re.options.elementAt(i)).accept(this);
+		}
 
-      bricksRegex.append("\r\n\t\f");
-      bricksRegex.append((char) 11); // \v
-      bricksRegex.append(' '); // a single space
+		bricksRegex.append(re.negative ? ']' : ')');
 
-    } else if (re.type == RETokenPOSIX.DIGIT) {
-     // \d := [0-8]
-     bricksRegex.append("0-9");
+		this.visitedParent = oldParent;
+		stack.pop();
+	}
 
-    } else if (re.type == RETokenPOSIX.PUNCT) { // TODO - do we really need this?
-      // \.  
-      bricksRegex.append("\\.");
- 
-    } else if (re.type == RETokenPOSIX.ALNUM) {
-      // \w
-      bricksRegex.append("a-zA-Z0-9_");
-    } else {
-       assert false : "Not implemented yet" ; // TODO
-    }
+	public void visit(RETokenPOSIX re) {
+		logger.info(re.getClass() + ":" + re.toString() + ", type:" + RETokenPOSIX.s_nameTable[re.type] + ", negated "
+				+ (re.negated));
 
-    if (openedPar)
-      bricksRegex.append(']');
-  }
+		boolean openedPar = false;
 
-  public void visit(RETokenRange re) {
-    logger.info(re.getClass().toString() + ": " + re.toString());
+		// Do not open a second "[".
+		if (this.visitedParent instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
 
-    boolean openedPar = false;
+			if (parent.negative && re.negated)
+				throw new UnsupportedOperationException("Double negation not supported yet.");
 
-    // Do not open a second "[".
-    if (this.visitedParent instanceof RETokenOneOf) {
-      RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+			if (!parent.negative) {
+				bricksRegex.append('[');
+				openedPar = true;
+			}
 
-      if (!parent.negative) {
-        bricksRegex.append("[");
-        openedPar = true;
-      }
-    }
+			if (parent.negative || re.negated)
+				bricksRegex.append('^');
 
-    re.dump(bricksRegex);
- 
-    if (openedPar)
-      bricksRegex.append("]");
-  }
+			// Do not add double negation.
+		} else if (re.negated) {
+			bricksRegex.append("[^");
+			openedPar = true;
+		} else {
+			bricksRegex.append('[');
+			openedPar = true;
+		}
 
-  /** 
-    Highly similar to RETokenREpeated.dump method.
-  */
-  public void visit(RETokenRepeated re) {
-    bricksRegex.append("(");
-    re.token.accept(this);
-    bricksRegex.append(")");
+		if (re.type == RETokenPOSIX.SPACE) {
+			// \S := [^\r\n\t\f\v ]
 
-    if ((re.max == Integer.MAX_VALUE) && (re.min <= 1))
-      bricksRegex.append( (re.min == 0) ? '*' : '+');
-    else if ((re.min == 0) && (re.max == 1))
-      bricksRegex.append('?');
-    else {
-      bricksRegex.append('{').append(re.min);
-      if (re.max > re.min) {
-        bricksRegex.append(',');
-        if (re.max!= Integer.MAX_VALUE)
-          bricksRegex.append(re.max);
-      }
-      bricksRegex.append('}'); 
-    }
-    if (re.stingy)
-      bricksRegex.append('?'); // TODO: check whether we need this.
-  }
+			bricksRegex.append("\r\n\t\f");
+			bricksRegex.append((char) 11); // \v
+			bricksRegex.append(' '); // a single space
 
+		} else if (re.type == RETokenPOSIX.DIGIT) {
+			// \d := [0-8]
+			bricksRegex.append("0-9");
 
-  public void visit(RETokenStart re) {}
+		} else if (re.type == RETokenPOSIX.PUNCT) { // TODO - do we really need this?
+			// \.
+			bricksRegex.append("\\.");
 
-  public void visit(RETokenWordBoundary re) {}
+		} else if (re.type == RETokenPOSIX.ALNUM) {
+			// \w
+			bricksRegex.append("a-zA-Z0-9_");
+		} else {
+			assert false : "Not implemented yet"; // TODO
+		}
+
+		if (openedPar)
+			bricksRegex.append(']');
+	}
+
+	public void visit(RETokenRange re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+
+		boolean openedPar = false;
+
+		// Do not open a second "[".
+		if (this.visitedParent instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+
+			if (!parent.negative) {
+				bricksRegex.append("[");
+				openedPar = true;
+			}
+		}
+
+		re.dump(bricksRegex);
+
+		if (openedPar)
+			bricksRegex.append("]");
+	}
+
+	/**
+	 * Highly similar to RETokenREpeated.dump method.
+	 */
+	public void visit(RETokenRepeated re) {
+		stack.push(re);
+		logger.info(re.getClass().toString() + ": " + re.toString());
+
+		bricksRegex.append("(");
+		re.token.accept(this);
+		bricksRegex.append(")");
+
+		if ((re.max == Integer.MAX_VALUE) && (re.min <= 1))
+			bricksRegex.append((re.min == 0) ? '*' : '+');
+		else if ((re.min == 0) && (re.max == 1))
+			bricksRegex.append('?');
+		else {
+			bricksRegex.append('{').append(re.min);
+			if (re.max > re.min) {
+				bricksRegex.append(',');
+				if (re.max != Integer.MAX_VALUE)
+					bricksRegex.append(re.max);
+			}
+			bricksRegex.append('}');
+		}
+		if (re.stingy)
+			bricksRegex.append('?'); // TODO: check whether we need this.
+
+		stack.pop();
+	}
+
+	public void visit(RETokenStart re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+	}
+
+	public void visit(RETokenWordBoundary re) {
+		logger.info(re.getClass().toString() + ": " + re.toString());
+	}
 
 }

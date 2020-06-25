@@ -9,17 +9,18 @@ public class PatternAdapterTest {
 
 	// TODO - test patterns with positive or negative lookahead
 	// Possibly throw an exception.
-	/*
-	 * @Test public void testRepetitions() throws REException {
-	 * assertEquals("(abc)*", PatternAdapter.rewrite("^(abc)*$"));
-	 * assertEquals("(a)+", PatternAdapter.rewrite("^a+$"));
-	 * assertEquals("foo(bar)?", PatternAdapter.rewrite("^foo(bar)?$")); }
-	 */
+
 	@Test
-	@Ignore // Not implemented yet.
+	@Ignore // Not implemented yet
+	public void testRepetitions() throws REException {
+		assertEquals("(abc)*", PatternAdapter.rewrite("^(abc)*$"));
+		assertEquals("(a)+", PatternAdapter.rewrite("^a+$"));
+		assertEquals("foo(bar)?", PatternAdapter.rewrite("^foo(bar)?$"));
+	}
+
+	@Test
 	public void testBound() throws REException {
 		assertEquals("@foo@", PatternAdapter.rewrite("foo"));
-
 		assertEquals("@foo", PatternAdapter.rewrite("foo$"));
 		assertEquals("foo@", PatternAdapter.rewrite("^foo"));
 		assertEquals("foo", PatternAdapter.rewrite("^foo$"));

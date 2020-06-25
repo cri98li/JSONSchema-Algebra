@@ -101,6 +101,7 @@ public class PatternTest {
 	}
 
 	@Test
+	@Ignore
 	public void testDomainSize() throws REException {
 		assertTrue(Pattern.createFromRegexp("^(a|b|c)").domainSize() == Integer.valueOf(3));
 	}
