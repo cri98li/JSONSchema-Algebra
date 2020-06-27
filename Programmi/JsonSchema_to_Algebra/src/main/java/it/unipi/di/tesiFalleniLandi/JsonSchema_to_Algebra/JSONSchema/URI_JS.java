@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -44,6 +45,9 @@ public class URI_JS {
 
 	//Tenta di normalizzare un URI
 	private void normalizeURI() {
+		if(uri.contains(".json"))
+			throw new ParseCancellationException("Unsupported URI");
+
 		//start: uri --> #/$defs/a/b/foo
 		normalizedName = "";
 		normalizedURI = "";

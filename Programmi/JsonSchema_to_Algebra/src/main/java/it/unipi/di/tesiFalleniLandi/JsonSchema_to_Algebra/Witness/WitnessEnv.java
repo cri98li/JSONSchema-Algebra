@@ -149,7 +149,7 @@ public class WitnessEnv implements WitnessAssertion {
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
 
-        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
+        for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.clone().varList.entrySet())
             entry.getValue().variableNormalization_separation(this);
     }
 

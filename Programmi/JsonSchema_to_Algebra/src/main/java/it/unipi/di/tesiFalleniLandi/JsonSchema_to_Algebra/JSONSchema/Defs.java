@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONObject;
 
 import java.util.*;
@@ -16,8 +17,7 @@ public class Defs implements JSONSchemaElement{
 		try {
 			jsonObject = (JSONObject) obj;
 		}catch(ClassCastException ex) {
-			System.out.println("Error: $defs must be valid JSON Object!");
-			return;
+			throw new ParseCancellationException("Error: $defs must be valid JSON Object!");
 		}
 		
 		schemaDefs = new HashMap<>();
@@ -28,7 +28,7 @@ public class Defs implements JSONSchemaElement{
 			try{
 				schemaDefs.putIfAbsent((String) entry.getKey(), new JSONSchema(entry.getValue()));
 			}catch(ClassCastException ex) {
-				System.out.println("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
+				throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
 			}
 		}
 	}
