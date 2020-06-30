@@ -115,8 +115,14 @@ public class WitnessType implements WitnessAssertion{
         WitnessType type1 = (WitnessType) o;
 
         LinkedList<String> list = new LinkedList();
-        list.addAll(this.type);
-        list.removeAll(type1.type);
+
+        if(this.type.size() >= type1.type.size()) {
+            list.addAll(this.type);
+            list.removeAll(type1.type);
+        }else{
+            list.addAll(type1.type);
+            list.removeAll(this.type);
+        }
 
         return list.size() == 0;
 
@@ -126,18 +132,6 @@ public class WitnessType implements WitnessAssertion{
     public int hashCode() {
         return type != null ? type.hashCode() : 0;
     }
-
-    /*
-    @Override
-    public int hashCode() {
-        int hash = 0;
-
-        for(String str : type)
-            hash += Objects.hash(str);
-
-        return hash;
-    }
-     */
 
     @Override
     public WitnessAssertion not() throws REException {
@@ -156,7 +150,6 @@ public class WitnessType implements WitnessAssertion{
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
-        return;
     }
 
     @Override

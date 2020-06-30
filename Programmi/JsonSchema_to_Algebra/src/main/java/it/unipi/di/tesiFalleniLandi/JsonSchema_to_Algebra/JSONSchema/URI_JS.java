@@ -45,7 +45,7 @@ public class URI_JS {
 
 	//Tenta di normalizzare un URI
 	private void normalizeURI() {
-		if(uri.contains(".json"))
+		if(uri.toLowerCase().contains(".json") || !uri.startsWith("#"))
 			throw new ParseCancellationException("Unsupported URI");
 
 		//start: uri --> #/$defs/a/b/foo

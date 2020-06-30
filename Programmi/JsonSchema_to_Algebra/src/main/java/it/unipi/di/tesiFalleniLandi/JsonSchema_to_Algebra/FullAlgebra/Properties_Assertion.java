@@ -210,6 +210,6 @@ public class Properties_Assertion implements Assertion{
 			and.add(addProp);
 		}
 
-		return and;
+		return (and.isUnitaryAnd() != null) ? and.isUnitaryAnd() : and;
 	}
 }

@@ -72,6 +72,23 @@ public class Utils_FullAlgebra {
         return (Defs_Assertion) schema;
     }
 
+    public static Assertion parse(String path) throws IOException {
+        Reader reader = new FileReader(path);
+        GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(new ErrorListener());
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        GrammaticaParser parser = new GrammaticaParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new ErrorListener());
+
+        ParseTree tree = parser.assertion();
+        AlgebraParser p = new AlgebraParser();
+        Assertion schema = (Assertion) p.visit(tree);
+
+        return schema;
+    }
+
     /**
      * Dato un oggetto istanza di Assertion (Full algebra), ne restituisce la rappresentazione come WitnessEnv
      * WitnessEnv è un oggetto che contiene le coppie <variabile (def name), valore>.

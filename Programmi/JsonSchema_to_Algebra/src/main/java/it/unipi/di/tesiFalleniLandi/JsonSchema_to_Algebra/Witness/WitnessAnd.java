@@ -16,10 +16,10 @@ public class WitnessAnd implements WitnessAssertion{
      *      < WitnessPattern, <pattern("..."), pattern("..."), ...>>
      *      ...
      */
-    private HashMap<Object, List<WitnessAssertion>> andList;
+    private LinkedHashMap<Object, List<WitnessAssertion>> andList;
 
     public WitnessAnd() {
-        this.andList = new HashMap<>();
+        this.andList = new LinkedHashMap<>();
     }
 
     /*
@@ -27,8 +27,24 @@ public class WitnessAnd implements WitnessAssertion{
     if el is an instance of WitnessAnd, we add every element of el.andList in this.andList
     if el is an instance of uniqueItems or repeatedItems, we check if andList do not contain it, then we add it
      */
-    public boolean add(WitnessAssertion el){
+    public boolean add(WitnessAssertion el) {
         boolean b = false;
+
+        if(this.andList.containsKey(WitnessGroup.class)){
+            LinkedList<WitnessAssertion> tmp = (LinkedList<WitnessAssertion>) this.andList.get(WitnessGroup.class);
+            if(tmp.size() == 1) {
+                if(tmp.getFirst().getGroupType().equals(el.getGroupType())){
+                    try{
+                        ((WitnessGroup)tmp.getFirst()).add(el);
+                    }catch(WitnessException e){
+                        e.printStackTrace();
+                    }
+                }
+            }else{
+                return false;
+            }
+        }
+
         if(el.getClass() == WitnessAnd.class) {
             for (Map.Entry<Object, List<WitnessAssertion>> entry : ((WitnessAnd) el).andList.entrySet())
                 for (WitnessAssertion assertion : entry.getValue())
@@ -167,10 +183,28 @@ public class WitnessAnd implements WitnessAssertion{
         }
         */
 
+        //se è un and unitario restituisco solo quel valore
+        WitnessAssertion value = isUnitaryAnd();
+        if(value != null)
+            return value;
+            //return (modified) ? value.merge() : value; //TODO: giusto??
+
         if(modified)
             return newAnd.merge();
         return newAnd;
     }
+
+    public WitnessAssertion isUnitaryAnd(){
+        if(andList.size() == 1) {
+            Iterator<Map.Entry<Object, List<WitnessAssertion>>> entry = andList.entrySet().iterator();
+            Object key = entry.next().getKey();
+            if(andList.get(key).size() == 1)
+                return andList.get(key).get(0);
+        }
+
+        return null;
+    }
+
 
     @Override
     public WitnessType getGroupType() {
@@ -314,8 +348,15 @@ public class WitnessAnd implements WitnessAssertion{
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : witnessAnd.andList.entrySet()){
             if(!this.andList.containsKey(entry.getKey())) return false;
-            List<WitnessAssertion> check = new LinkedList<>(witnessAnd.andList.get(entry.getKey()));
-            check.removeAll(this.andList.get(entry.getKey()));
+            List<WitnessAssertion> check = null;
+
+            if(witnessAnd.andList.get(entry.getKey()).size() >= this.andList.get(entry.getKey()).size()) {
+                check = new LinkedList<>(witnessAnd.andList.get(entry.getKey()));
+                check.removeAll(this.andList.get(entry.getKey()));
+            }else{
+                check = new LinkedList<>(this.andList.get(entry.getKey()));
+                check.removeAll(witnessAnd.andList.get(entry.getKey()));
+            }
 
             b &= check.size() == 0;
         }

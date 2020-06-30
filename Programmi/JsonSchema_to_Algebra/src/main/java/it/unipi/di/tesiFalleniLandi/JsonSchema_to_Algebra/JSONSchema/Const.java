@@ -17,10 +17,6 @@ public class Const extends Enum {
 	}
 	
 	public String toString() {
-		if(!super.arrayOnly)
-			return "Const [enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
-				+ enumArray_bool + ", enumArray_obj=" + enumArray_obj + ", enumArray_array=" + enumArray_array+ ", thereIsNull=" + thereIsNull + "]";
-			
 		return "[enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
 			+ enumArray_bool + ", enumArray_obj=" + enumArray_obj + ", enumArray_array=" + enumArray_array
 			+ ", thereIsNull=" + thereIsNull + "]";

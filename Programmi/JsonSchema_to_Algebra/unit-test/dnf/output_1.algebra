@@ -1,0 +1,1 @@
+anyOf[allOf[mof(1), mof(2)], allOf[mof(1), mof(3)]]

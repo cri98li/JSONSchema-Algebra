@@ -137,15 +137,15 @@ public class Dependencies implements JSONSchemaElement{
 			String str = "";
 
 			Set<String> keys = dependentRequired.keySet();
-			
-			for(String key : keys) {
+
+			for (String key : keys) {
 				String reqList = "";
 				String req = "";
 				List<String> list = dependentRequired.get(key);
-				for(String tmp : list) {
+				for (String tmp : list) {
 					reqList += "\"" + tmp + "\"" + ",";
 				}
-				
+
 				reqList = reqList.substring(0, reqList.length() - 1);
 				reqList = String.format(GrammarStringDefinitions.REQUIRED, reqList);
 				req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + key + "\"");
@@ -156,10 +156,14 @@ public class Dependencies implements JSONSchemaElement{
 			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
 			String allOf = String.format(GrammarStringDefinitions.ALLOF, str);
 			dr = String.format(GrammarStringDefinitions.IF_THEN, typeObj, allOf);
-			
+
 		}
-		
-		return ds + GrammarStringDefinitions.COMMA + dr;
+		if(!ds.isEmpty() && !dr.isEmpty()) {
+			return ds + GrammarStringDefinitions.COMMA + dr;
+		}else if(!ds.isEmpty())
+			return ds;
+		else
+			return dr;
 	}
 
 	@Override

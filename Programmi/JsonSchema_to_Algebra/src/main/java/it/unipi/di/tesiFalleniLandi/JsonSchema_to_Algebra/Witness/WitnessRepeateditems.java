@@ -70,4 +70,14 @@ public class WitnessRepeateditems implements WitnessAssertion{
     public WitnessAssertion DNF() {
         return this.clone();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getClass() == obj.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

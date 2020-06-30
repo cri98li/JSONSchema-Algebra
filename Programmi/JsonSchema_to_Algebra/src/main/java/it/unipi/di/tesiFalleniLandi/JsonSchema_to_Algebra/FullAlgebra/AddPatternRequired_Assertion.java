@@ -41,8 +41,18 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public Object toJSONSchema() {
-		throw new UnsupportedOperationException("Da trovare la libreria");
+		Type_Assertion type = new Type_Assertion();
+		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		Properties_Assertion prop = new  Properties_Assertion();
 
+		for(Pattern p : pattList)
+			prop.addPatternProperties(p, new Boolean_Assertion(true));
+
+		prop.setAdditionalProperties(additionalProperties.not());
+
+		IfThenElse_Assertion ifThen = new IfThenElse_Assertion(type, prop.not(), null);
+
+		return ifThen.toJSONSchema();
 	}
 
 	@Override
@@ -91,7 +101,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() throws REException {
-		Pattern p = Pattern.createFromRegexp("*");
+		Pattern p = Pattern.createFromRegexp(".*");
 		for(Pattern pattern : pattList)
 			p = p.intersect(pattern);
 

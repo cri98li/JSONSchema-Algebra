@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,20 +14,31 @@ public class Type implements JSONSchemaElement {
 	protected List<String> type_array;
 	
 	public Type(Object obj){
-		try{
+		if(obj == null || (obj.getClass() != String.class && obj.getClass() != JSONArray.class))
+			throw new ParseCancellationException("Error: Expected JsonArray or Sting in type!\r\n");
+
+		if(obj.getClass() == String.class) {
 			String type_str = (String) obj;
 			type_array = new LinkedList<>();
+
+			//Verify the type string value
+			jsonTypeToGrammar(type_str);
+
 			type_array.add(type_str);
 			return;
-		}catch(ClassCastException e) {}
+		}
 		
 		JSONArray array = (JSONArray) obj;
 		type_array = new LinkedList<>();
 		
 		Iterator<?> it = array.iterator();
 		
-		while(it.hasNext())
-			type_array.add((String) it.next());
+		while(it.hasNext()){
+			String str = (String) it.next();
+			////Verify the type string value
+			jsonTypeToGrammar(str);
+			type_array.add(str);
+		}
 	}
 	
 	public Type() { }
@@ -84,9 +96,9 @@ public class Type implements JSONSchemaElement {
 		case "object": return GrammarStringDefinitions.TYPE_OBJECT;
 		case "boolean": return GrammarStringDefinitions.TYPE_BOOLEAN;
 		case "null": return GrammarStringDefinitions.TYPE_NULL;
+			default:
+				throw new ParseCancellationException("Error: type '"+type+"' is not allowed!\r\n");
 		}
-		
-		return null;
 	}
 
 	@Override

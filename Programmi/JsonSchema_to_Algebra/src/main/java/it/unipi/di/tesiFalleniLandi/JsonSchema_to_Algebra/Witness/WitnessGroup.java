@@ -2,6 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import patterns.Pattern;
 import patterns.REException;
 
 import java.util.*;
@@ -94,21 +97,6 @@ public class WitnessGroup implements WitnessAssertion{
         return returnList;
     }
 
-
-    /*private WitnessGroup assertionTypeElimination() throws WitnessException {
-        if(types == null || types.size() != 1) throw new WitnessException("You need to perform canonicalize first");
-        WitnessType type = this.types.get(0);
-        WitnessGroup typeEliminatedGroup = new WitnessGroup();
-        typeEliminatedGroup.add(type);
-        for(WitnessAssertion assertion : typedAssertions){
-            WitnessType assertionType = assertion.getGroupType();
-            if(assertionType != null && assertionType.equals(type))
-                typeEliminatedGroup.add(assertion);
-        }
-
-        return typeEliminatedGroup;
-    }*/
-
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) {
         return null;
@@ -133,7 +121,10 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        throw new UnsupportedOperationException();
+        if(types.size() > 1)
+            return null;
+        else
+            return types.get(0);
     }
 
     @Override
@@ -145,6 +136,8 @@ public class WitnessGroup implements WitnessAssertion{
 
         for(WitnessAssertion assertion : typedAssertions)
             allOf.add(assertion.getFullAlgebra());
+
+        allOf.add(new Pattern_Assertion(Pattern.createFromName("sono un gruppo")));
 
         return allOf;
     }
@@ -187,10 +180,15 @@ public class WitnessGroup implements WitnessAssertion{
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
         WitnessGroup newGroup = new WitnessGroup();
         newGroup.types = new LinkedList<>(types);
+
         for(WitnessAssertion assertion : typedAssertions){
-            if(assertion.getClass() == WitnessVar.class)
-                newGroup.add(env.getDefinition((WitnessVar) assertion));
-            else
+            if(assertion.getClass() == WitnessVar.class) {
+                WitnessAssertion resolvedAssertion = env.getDefinition((WitnessVar) assertion);
+                if(resolvedAssertion != null)
+                    newGroup.add(env.getDefinition((WitnessVar) assertion));
+                else
+                    throw new ParseCancellationException("Definition not found: "+assertion.toString());
+            }else
                 newGroup.add(assertion.variableNormalization_expansion(env));
         }
 
@@ -216,12 +214,27 @@ public class WitnessGroup implements WitnessAssertion{
         WitnessGroup group = (WitnessGroup) o;
 
         LinkedList<WitnessAssertion> check = new LinkedList<>();
-        check.addAll(typedAssertions);
-        check.removeAll(group.typedAssertions);
+
+        if(typedAssertions.size() >= group.typedAssertions.size()) {
+            check.addAll(typedAssertions);
+            check.removeAll(group.typedAssertions);
+        }else{
+            check.addAll(group.typedAssertions);
+            check.removeAll(typedAssertions);
+        }
+
         if(check.size() != 0) return false;
 
-        check.addAll(types);
-        check.removeAll(group.types);
+        check = new LinkedList<>();
+
+        if(types.size() >= group.types.size()) {
+            check.addAll(types);
+            check.removeAll(group.types);
+        }else{
+            check.addAll(group.types);
+            check.removeAll(types);
+        }
+
         return check.size() == 0;
     }
 

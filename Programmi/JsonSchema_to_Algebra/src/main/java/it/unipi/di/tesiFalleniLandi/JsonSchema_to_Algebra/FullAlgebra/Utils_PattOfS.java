@@ -20,8 +20,16 @@ public class Utils_PattOfS {
         }
     }
 
-    //private static String falsePattern ="(?!x)x"; //TODO: https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
-    private static Pattern falsePattern = truePattern.complement();
+    private static Pattern falsePattern;
+
+    static {
+        try {
+            falsePattern = Pattern.createFromRegexp("#");
+        } catch (REException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
 
     public static Pattern pattOfS(Assertion a){
         //return new Pattern(truePattern);

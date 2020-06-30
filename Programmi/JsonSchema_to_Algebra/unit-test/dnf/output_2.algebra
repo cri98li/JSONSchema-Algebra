@@ -1,0 +1,6 @@
+anyOf[
+    allOf[mof(3), mof(5)],
+    allOf[mof(3), mof(6)],
+    allOf[mof(5), mof(4)],
+    allOf[mof(4), mof(6)]
+]

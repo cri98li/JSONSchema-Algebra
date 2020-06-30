@@ -1,8 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -178,11 +180,13 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "required":
-				jsonSchema.put("required", new Required(object.get(key)));
+				try {
+					jsonSchema.put("required", new Required(object.get(key)));
+				}catch(UnsenseAssertion e){}
 				break;
 				
 			case "pattern":
-				jsonSchema.put("pattern", new Pattern(object.get(key)));
+				jsonSchema.put("pattern", new Pattern(JSONValue.escape((String) object.get(key))));
 				break;
 				
 			case "uniqueItems":
@@ -308,7 +312,7 @@ public class JSONSchema implements JSONSchemaElement{
 
 	@Override
 	public String toString() {
-		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\\r\\n jsonSchema=" + jsonSchema + "]";
+		return "JSONSchema [booleanAsJSONSchema=" + booleanAsJSONSchema + "\r\n jsonSchema=" + jsonSchema + "]";
 	}
 	
 

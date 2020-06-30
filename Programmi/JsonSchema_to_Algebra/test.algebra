@@ -1,1 +1,18 @@
-allOf[props["a":mof(1);]]
+rootdef "root" = allOf[
+	type[obj],
+	props[
+		"name": allOf[
+			pattern("^[a-z0-9\\-]+$"),
+			type[str]
+		],
+		"taxon_id": allOf[
+			type[str]
+		],
+		"scientific_name": allOf[
+			pattern("^(\\S+(\\s|\\S)*\S+|\\S)$|^)$"),
+			type[str]
+		]
+		;false],
+	req["name",
+		"taxon_id"]
+]

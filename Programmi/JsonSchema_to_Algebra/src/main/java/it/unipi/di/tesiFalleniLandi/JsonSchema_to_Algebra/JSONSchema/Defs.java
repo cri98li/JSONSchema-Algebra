@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class Defs implements JSONSchemaElement{
+public class Defs implements JSONSchemaElement {
 	private HashMap<String, JSONSchema> schemaDefs;
 	private JSONSchema rootDef;
 	
@@ -28,6 +28,8 @@ public class Defs implements JSONSchemaElement{
 			try{
 				schemaDefs.putIfAbsent((String) entry.getKey(), new JSONSchema(entry.getValue()));
 			}catch(ClassCastException ex) {
+				if(entry.getValue().getClass() == String.class)
+					throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+entry.toString());
 				throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
 			}
 		}
@@ -94,7 +96,7 @@ public class Defs implements JSONSchemaElement{
 		if(rootDef != null)
 			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", rootDef.toGrammarString());
 		else
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"" , "");
+			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"" , "{true}");//TODO: pensare a qualcosa di più elegante
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
@@ -133,8 +135,13 @@ public class Defs implements JSONSchemaElement{
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
+		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
+
 		returnList.add(new AbstractMap.SimpleEntry<>("",this));
-		//ci va aggiunto rootDef????
+
+		for(Entry<String, JSONSchema> entry : entrySet)
+			returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+
 		return returnList;
 	}
 

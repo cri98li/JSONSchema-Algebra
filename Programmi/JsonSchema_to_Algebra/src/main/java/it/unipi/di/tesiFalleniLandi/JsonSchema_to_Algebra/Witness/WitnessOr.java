@@ -167,8 +167,15 @@ public class WitnessOr implements WitnessAssertion{
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : witnessOr.orList.entrySet()){
             if(!this.orList.containsKey(entry.getKey())) return false;
-            List<WitnessAssertion> check = new LinkedList<>(witnessOr.orList.get(entry.getKey()));
-            check.removeAll(this.orList.get(entry.getKey()));
+            List<WitnessAssertion> check = null;
+
+            if(witnessOr.orList.get(entry.getKey()).size() >= this.orList.get(entry.getKey()).size()) {
+                check = new LinkedList<>(witnessOr.orList.get(entry.getKey()));
+                check.removeAll(this.orList.get(entry.getKey()));
+            }else{
+                check = new LinkedList<>(this.orList.get(entry.getKey()));
+                check.removeAll(witnessOr.orList.get(entry.getKey()));
+            }
 
             b &= check.size() == 0;
         }
@@ -252,6 +259,7 @@ public class WitnessOr implements WitnessAssertion{
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
+
                 WitnessAnd and = new WitnessAnd();
 
                 and.add(assertion);

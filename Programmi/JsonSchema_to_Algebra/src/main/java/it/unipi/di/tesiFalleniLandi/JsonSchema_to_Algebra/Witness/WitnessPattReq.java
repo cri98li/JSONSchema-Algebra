@@ -59,6 +59,13 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessPattReq a) {
+        if(this.key.isSubsetOf(a.key) && this.value.equals(a.value)){
+            return this;
+        }
+
+        if(a.key.isSubsetOf(this.key) && a.value.equals(this.value)){
+            return a;
+        }
 
         return null;
     }

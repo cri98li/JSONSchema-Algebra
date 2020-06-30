@@ -5,7 +5,12 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import patterns.REException;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainWitness {
     public static void main(String[] args) throws IOException, WitnessException, REException {
@@ -17,14 +22,8 @@ public class MainWitness {
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
-        //env = env.merge(null).groupize();
-
-        //System.out.println("\r\n\r\n Merge: \r\n");
-
-        //System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
-
-
         env = (WitnessEnv) env.merge();
+
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
@@ -34,12 +33,9 @@ public class MainWitness {
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n DNF: \r\n");
+
         env = env.DNF();
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
-
-        env = (WitnessEnv) env.merge();
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
-
 
         System.out.println("\r\n\r\n Separation: \r\n");
 

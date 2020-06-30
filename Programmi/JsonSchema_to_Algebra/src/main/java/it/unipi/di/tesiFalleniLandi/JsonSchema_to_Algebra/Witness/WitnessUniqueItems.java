@@ -37,7 +37,8 @@ public class WitnessUniqueItems implements WitnessAssertion{
         Type_Assertion t = new Type_Assertion();
         t.add(GrammarStringDefinitions.TYPE_ARRAY);
 
-        return new IfThenElse_Assertion(t, new Boolean_Assertion(false), null).toWitnessAlgebra();
+        //return new IfThenElse_Assertion(t, new Boolean_Assertion(false), null).toWitnessAlgebra();
+        return t.not().toWitnessAlgebra();
     }
 
     @Override
@@ -82,5 +83,15 @@ public class WitnessUniqueItems implements WitnessAssertion{
     @Override
     public WitnessAssertion DNF() {
         return this.clone();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getClass() == obj.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

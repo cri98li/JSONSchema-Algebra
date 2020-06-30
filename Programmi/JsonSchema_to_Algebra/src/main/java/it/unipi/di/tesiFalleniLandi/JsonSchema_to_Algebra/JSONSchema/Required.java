@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,15 +14,27 @@ public class Required implements JSONSchemaElement{
 	private List<String> required;
 
 	public Required(Object obj) {
-		JSONArray array = (JSONArray) obj;
+		JSONArray array;
+		try {
+			array = (JSONArray) obj;
+		}catch (ClassCastException ex) {
+			//per consistenza con draft-4
+			if(obj.getClass() == String.class) {
+				required = new LinkedList<>();
+				required.add((String) obj);
+				return;
+			}
+
+			throw new UnsenseAssertion(ex.getMessage());
+		}
 		required = new LinkedList<>();
-		
+
 		Iterator<?> it = array.iterator();
-		
+
 		while(it.hasNext())
 			required.add((String) it.next());
 	}
-	
+
 	public Required() {
 		required = new LinkedList<>();
 	}

@@ -270,8 +270,13 @@ public class WitnessItems implements WitnessAssertion{
         if(that.items.size() != items.size()) return false;
 
         List<WitnessAssertion> check = new LinkedList<>();
-        check.addAll(this.items);
-        check.removeAll(that.items);
+        if(this.items.size() >= that.items.size()) {
+            check.addAll(this.items);
+            check.removeAll(that.items);
+        }else{
+            check.addAll(that.items);
+            check.removeAll(this.items);
+        }
 
         return check.size() == 0;
     }

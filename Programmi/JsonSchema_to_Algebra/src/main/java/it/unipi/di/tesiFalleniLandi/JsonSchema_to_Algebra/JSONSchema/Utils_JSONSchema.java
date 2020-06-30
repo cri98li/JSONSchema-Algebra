@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -51,10 +52,8 @@ public class Utils_JSONSchema {
 				}
 			}
 			if(found) {
-				System.out.println("TROVATO: "+ref.toString());
 				continue;
-			}else
-				System.out.println("NON TROVATO: "+ref.toString());
+			}
 
 			//ref non trovata in defsList, provo a risolverla navigando nel documento
 			JSONSchema newDef = root.searchDef(ref.iterator());
@@ -62,6 +61,8 @@ public class Utils_JSONSchema {
 				ref.found();
 				finalDefs.addDef(ref.getNormalizedName(), newDef);
 			}
+			else
+				throw new ParseCancellationException("ref not resolved!");
 		}
 
 		//add all defs defined but not used
@@ -79,7 +80,7 @@ public class Utils_JSONSchema {
 	}
 
 	private static JSONSchema compareDefsRefs(Entry<String, Defs> entry, URI_JS ref) {
-		System.out.println("CONFRONTO: "+entry.getKey()+"\r\n\t"+ref.toString().replace("definitions", "$defs"));
+		//System.out.println("CONFRONTO: "+entry.getKey()+"\r\n\t"+ref.toString().replace("definitions", "$defs"));
 
 		String[] defUriSplitted = entry.getKey().split("/");
 		String[] refUriSplitted = ref.toString().replace("definitions", "$defs").split("/");
@@ -104,7 +105,8 @@ public class Utils_JSONSchema {
 
 
 	public static String toGrammarString(JSONSchema root) {
-		return Utils.beauty(root.toGrammarString());
+
+		return Utils.beauty(root.toGrammarString().replace("\\\\\\\\", "\\"));
 	}
 
 }

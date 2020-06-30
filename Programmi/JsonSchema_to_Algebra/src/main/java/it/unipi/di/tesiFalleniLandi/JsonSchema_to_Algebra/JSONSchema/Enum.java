@@ -16,36 +16,17 @@ public class Enum implements JSONSchemaElement{
 	protected List<JSONObject> enumArray_obj;
 	protected List<JSONArray> enumArray_array;
 	protected boolean thereIsNull;
-	protected boolean arrayOnly;
 	
-	private Enum(JSONArray array) {
-		arrayOnly = true;
+	protected Enum() {
 		enumArray_str = new LinkedList<>();
 		enumArray_num = new LinkedList<>();
 		enumArray_bool = new LinkedList<>();
 		enumArray_obj = new LinkedList<>();
 		enumArray_array = new LinkedList<>();
 		thereIsNull = false;
-		
-		Iterator<?> it = array.iterator();
-		while(it.hasNext()){
-			Object currentObject = it.next();
-			parseArray(currentObject);
-		}
-	}
-	
-	protected Enum() {
-		arrayOnly = false;
-		enumArray_str = new LinkedList<>();
-		enumArray_num = new LinkedList<>();
-		enumArray_bool = new LinkedList<>();
-		enumArray_obj = new LinkedList<>();
-		enumArray_array = new LinkedList<>();
-		arrayOnly = false;
 	}
 	
 	public Enum(Object obj) {
-		arrayOnly = false;
 		enumArray_str = new LinkedList<>();
 		enumArray_num = new LinkedList<>();
 		enumArray_bool = new LinkedList<>();
@@ -126,14 +107,10 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public String toString() {
-		if(!arrayOnly)
-			return "Enum [enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
+		return "Enum [enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
 				+ enumArray_bool + ", enumArray_obj=" + enumArray_obj + ", enumArray_array=" + enumArray_array
 				+ ", thereIsNull=" + thereIsNull + "]";
-		
-		return "[enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
-		+ enumArray_bool + ", enumArray_obj=" + enumArray_obj + ", enumArray_array=" + enumArray_array
-		+ ", thereIsNull=" + thereIsNull + "]";
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -184,12 +161,6 @@ public class Enum implements JSONSchemaElement{
 		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toJSONString());
 		
 		if(thereIsNull) str += (separator + "null");
-		
-		if(arrayOnly)
-			if(str.isEmpty()) //caso array vuoto
-				return "[]";
-			else
-				return "["+ str.subSequence(separator.length(), str.length()) + "]";
 
 		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
 	}
@@ -217,7 +188,7 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		return enumArray_str.size() + enumArray_array.size() + enumArray_bool.size() + enumArray_obj.size() + enumArray_num.size();
 	}
 	
 	public Enum clone() {
@@ -239,8 +210,6 @@ public class Enum implements JSONSchemaElement{
 		while(it_JSA.hasNext()) clone.enumArray_array.add((JSONArray) it_JSA.next().clone());
 
 		clone.thereIsNull = thereIsNull;
-		
-		clone.arrayOnly = arrayOnly;
 		
 		return clone;
 	}

@@ -61,14 +61,14 @@ public class WitnessProperty implements WitnessAssertion{
 
     public WitnessAssertion mergeElement(WitnessProperty a) throws REException {
         if(a.key.equals(this.key)){
-            WitnessAnd and = new WitnessAnd();
+            /*WitnessAnd and = new WitnessAnd();
             and.add(a.value);
-            and.add(this.value);
-            return new WitnessProperty(Pattern.createFromRegexp(a.key.toString()), and.mergeElement(null));
+            and.add(this.value);*/
+            return new WitnessProperty(a.key.clone(), a.value.mergeElement(this.value));
         }
 
         if(a.value.equals(this.value)){
-            return new WitnessProperty(a.key.intersect(this.key), this.value);
+            return new WitnessProperty(a.key.union(this.key), this.value);
         }
 
         return null;

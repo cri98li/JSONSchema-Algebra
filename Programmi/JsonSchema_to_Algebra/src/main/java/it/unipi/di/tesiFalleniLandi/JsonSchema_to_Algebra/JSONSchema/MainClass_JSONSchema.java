@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -18,11 +19,9 @@ public static void main(String[] args) throws IOException, ParseException {
     	JSONObject object = (JSONObject) new JSONParser().parse(reader);
     	root = new JSONSchema(object);
     }
-    
-    System.out.println(root.toJSON().toString().replace("\\", ""));
-    
-    System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
-    
+
+    System.out.println((root.toJSON()).toString().replace("\\\\\\\\", "\\"));
+    //System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
     System.out.println("NORMALIZZATO algebra: "+Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
 	}
 }

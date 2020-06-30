@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.*;
@@ -15,34 +17,65 @@ public class Properties implements JSONSchemaElement{
 	public Properties() { }
 	
 	public void setProperties(Object obj) {
-		JSONObject object = (JSONObject) obj;
+		JSONObject object = null;
+
+		try{
+			object = (JSONObject) obj;
+		}catch(ClassCastException ex){
+			if(obj.getClass() == JSONArray.class)
+				throw new ParseCancellationException("Error: properties value must be JsonObject, not JsonArray!\r\n");
+		}
+
 		properties = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
 		while(it.hasNext()) {
 			String key = (String) it.next();
-			JSONSchema value = new JSONSchema(object.get(key));
+			JSONSchema value = null;
+
+			try {
+				value = new JSONSchema(object.get(key));
+			}catch (ClassCastException ex){
+				throw new ParseCancellationException("Error: the value in properties must be String: JsonObject!\r\n");
+			}
 			
 			properties.put(key, value);
 		}
 	}
 	
 	public void setPatternProperties(Object obj) {
-		JSONObject object = (JSONObject) obj;
+		JSONObject object = null;
+
+		try{
+			object = (JSONObject) obj;
+		}catch(ClassCastException ex){
+			if(obj.getClass() == JSONArray.class)
+				throw new ParseCancellationException("Error: patterProperties value must be JsonObject, not JsonArray!\r\n");
+		}
+
 		patternProperties = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
 		
 		while(it.hasNext()) {
 			String key = (String) it.next();
-			JSONSchema value = new JSONSchema(object.get(key));
+			JSONSchema value = null;
+
+			try {
+				value = new JSONSchema(object.get(key));
+			}catch (ClassCastException ex){
+				throw new ParseCancellationException("Error: the value in patterProperties must be String: JsonObject!\r\n");
+			}
 			
 			patternProperties.put(key, value);
 		}
 	}
 	
 	public void setAdditionalProperties(Object obj) {
+		if(obj.getClass() != JSONObject.class && obj.getClass() != Boolean.class)
+			throw new ParseCancellationException("Error: Expected JsonObject in additionalProperties!\r\n");
+
 		additionalProperties = new JSONSchema(obj);
 	}
 	
@@ -204,6 +237,7 @@ public class Properties implements JSONSchemaElement{
 				URIIterator.remove();
 				return properties.get(next).searchDef(URIIterator);
 			}
+			break;
 			
 		case "patternProperties":
 			URIIterator.remove();
@@ -212,6 +246,7 @@ public class Properties implements JSONSchemaElement{
 				URIIterator.remove();
 				return patternProperties.get(next).searchDef(URIIterator);
 			}
+			break;
 			
 		case "additionalProperties":
 			URIIterator.remove();

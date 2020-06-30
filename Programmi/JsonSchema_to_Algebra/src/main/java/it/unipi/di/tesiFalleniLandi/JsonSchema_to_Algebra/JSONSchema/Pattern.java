@@ -26,7 +26,7 @@ public class Pattern implements JSONSchemaElement{
 	@Override
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
-		obj.put("pattern", pattern);
+		obj.put("pattern", JSONObject.escape(pattern));
 
 		return obj;
 	}
