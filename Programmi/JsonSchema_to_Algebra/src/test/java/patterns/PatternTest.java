@@ -56,7 +56,6 @@ public class PatternTest {
 	}
 
 	@Test
-	@Ignore // This is not implemented yet.
 	public void testCreateFromRegexp() throws REException {
 		// Regexps are not anchored by default.
 		assertTrue(Pattern.createFromRegexp("foo").match("some-foo-thing"));
