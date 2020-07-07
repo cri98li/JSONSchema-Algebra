@@ -147,6 +147,9 @@ public class PatternAdapter implements REVisitor {
 		token = token.replaceAll("(?<!\\\\)\\(", "\\\\(");
 		token = token.replaceAll("(?<!\\\\)\\)", "\\\\)");
 
+		token = token.replaceAll("(?<!\\\\)\\[", "\\\\]");
+		token = token.replaceAll("(?<!\\\\)\\]", "\\\\[");
+
 		// We have to escape "." if it's not contained in [ ].
 		if (this.visitedParent instanceof RETokenOneOf) {
 			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;

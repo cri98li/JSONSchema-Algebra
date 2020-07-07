@@ -824,7 +824,7 @@ public class RE extends REToken {
 			}
 
 			// Escaped symbols -- added by Steffi S.
-			// \\ | \* | \+ for example
+			// \\ | \* | \+ | \[ | \] for example
 			else if (unit.bk) {
 				addToken(currentToken);
 				currentToken = new RETokenChar(subIndex, '\\', insens);

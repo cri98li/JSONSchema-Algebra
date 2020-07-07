@@ -243,6 +243,21 @@ public class PatternTest {
 	}
 
 	@Test
+	public void testBracket() throws REException {
+		Pattern p = Pattern.createFromRegexp("^(\\[|\\])$");
+
+		assertTrue("[", p.match("["));
+	}
+
+	@Test
+	public void testBracketRange() throws REException {
+		// The original pattern inspiring this test: "^[\\w\\-\\*\\[\\]\\?]+$"
+		Pattern p = Pattern.createFromRegexp("^[\\[\\]]$");
+
+		assertTrue("[", p.match("["));
+	}
+
+	@Test
 	public void testBackslashStar() throws REException {
 		Pattern p = Pattern.createFromRegexp("^\\\\*$");
 

@@ -1,9 +1,7 @@
 package patterns;
 
 final class RETokenChar extends REToken {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	protected char[] ch;
 

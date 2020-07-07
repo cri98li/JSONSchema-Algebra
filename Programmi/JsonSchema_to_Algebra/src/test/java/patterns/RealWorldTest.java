@@ -170,12 +170,11 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore // Does not work yet.
 	public void testFilter() throws REException {
 		// js_10036.json
 		Pattern p = Pattern.createFromRegexp("^[\\w\\-@]+\\.[\\w\\-\\.#\\*\\[\\]\\?]+$");
 
-		assertTrue(p.match("ab@.abc#?*[]")); // I made this string up.
+		assertTrue(p.match("ab@.ab-c#?*[]")); // I made this string up.
 	}
 
 	@Test
@@ -216,8 +215,6 @@ public class RealWorldTest {
 	public void testProto() throws REException {
 		// js_10041.json
 		Pattern p = Pattern.createFromRegexp("^tcp$|^udp$|^\\\\*$");
-
-		System.out.println(p.toAutomatonString());
 
 		assertTrue(p.match("tcp"));
 		assertTrue(p.match("udp"));
