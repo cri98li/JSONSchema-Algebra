@@ -242,6 +242,14 @@ public class PatternTest {
 		assertFalse("a", p.match("a"));
 	}
 
+	@Test
+	public void testBackslashStar() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\\\*$");
+
+		assertTrue("\\", p.match("\\"));
+		assertTrue("\\\\", p.match("\\\\"));
+	}
+
 	// In Bricks automaton, '#' stands for the empty language.
 	@Test
 	public void testHash() throws REException {

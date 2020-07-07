@@ -214,17 +214,15 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore
 	public void testProto() throws REException {
 		// js_10041.json
-		Pattern p = Pattern.createFromRegexp("^tcp$|^udp$|^\\*$");
+		Pattern p = Pattern.createFromRegexp("^tcp$|^udp$|^\\\\*$");
 
 		System.out.println(p.toAutomatonString());
 
 		assertTrue(p.match("tcp"));
 		assertTrue(p.match("udp"));
-		assertTrue(p.match(""));
-		assertTrue(p.match("***"));
+		assertTrue(p.match("\\\\"));
 		assertFalse(p.match("tcudp"));
 	}
 
