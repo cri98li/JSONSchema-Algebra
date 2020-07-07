@@ -9,14 +9,15 @@ import org.junit.Test;
 public class RealWorldTest {
 
 	@Test
-	@Ignore
 	public void testOr() throws REException {
 		// js_0.json
 		Pattern p = Pattern.createFromRegexp("^dev|alpha|beta|rc|RC|stable$");
 
 		assertTrue(p.match("dev"));
+		assertTrue(p.match("developer")); // Note that only the first word is bounded.
 		assertTrue(p.match("alpha"));
-		assertFalse(p.match("dev|alpha"));
+		assertTrue(p.match("foo-alpha-bar"));
+		assertFalse(p.match("stables and horses"));
 	}
 
 	@Test
