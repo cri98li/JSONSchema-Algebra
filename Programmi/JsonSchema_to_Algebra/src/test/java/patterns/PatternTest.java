@@ -1,5 +1,6 @@
 package patterns;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -101,9 +102,8 @@ public class PatternTest {
 	}
 
 	@Test
-	@Ignore
 	public void testDomainSize() throws REException {
-		assertTrue(Pattern.createFromRegexp("^(a|b|c)").domainSize() == Integer.valueOf(3));
+		assertEquals(Pattern.createFromRegexp("^(a|b|c)$").domainSize(), Integer.valueOf(3));
 	}
 
 	@Test
