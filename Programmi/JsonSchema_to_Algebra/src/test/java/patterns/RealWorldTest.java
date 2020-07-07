@@ -198,7 +198,6 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore // Broken
 	public void testResourceID() throws REException {
 		// js_10040.json
 		Pattern p = Pattern.createFromRegexp("^[\\w\\-]+(\\.[\\w\\-^#]+)+$");

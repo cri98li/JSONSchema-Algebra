@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class PatternTest {
@@ -243,6 +242,14 @@ public class PatternTest {
 		assertFalse("a", p.match("a"));
 	}
 
+	// In Bricks automaton, '#' stands for the empty language.
+	@Test
+	public void testHash() throws REException {
+		Pattern p = Pattern.createFromRegexp("^[a#d]$");
+
+		assertTrue(p.match("#"));
+	}
+
 	@Test
 	public void testDigits() throws REException {
 		Pattern p = Pattern.createFromRegexp("^[0-9]$");
@@ -336,7 +343,6 @@ public class PatternTest {
 	}
 
 	@Test
-	@Ignore
 	public void testOr() throws REException {
 		Pattern p = Pattern.createFromRegexp("^foo$|^bar$");
 

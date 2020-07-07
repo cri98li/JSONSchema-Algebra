@@ -25,8 +25,8 @@ public class PatternAdapter implements REVisitor {
 	 */
 	public static String rewrite(String ecmaRegex) throws REException {
 
-		// logger.setLevel(Level.OFF); // Switch OFF/ALL
-		logger.setLevel(Level.ALL); // Switch OFF/ALL
+		logger.setLevel(Level.OFF); // Switch OFF/ALL
+		// logger.setLevel(Level.ALL); // Switch OFF/ALL
 
 		// Parse ecmaRegex into parse tree.
 		RE ast = new RE(ecmaRegex);
@@ -69,8 +69,6 @@ public class PatternAdapter implements REVisitor {
 
 		stack.push(re);
 
-		System.out.println(stack);
-
 		if (stack.size() == 3 && (stack.elementAt(0) instanceof RE) && (stack.elementAt(1) instanceof RETokenOneOf)) {
 			if (!(re.firstToken instanceof RETokenStart)) {
 				logger.info("start not bounded (1)");
@@ -94,8 +92,6 @@ public class PatternAdapter implements REVisitor {
 		// TODO - this is currently just a 70% hack.
 		if (stack.empty() && re.firstToken == re.lastToken && (re.firstToken instanceof RETokenOneOf))
 			return;
-
-		System.out.println(stack.toString());
 
 		if ((stack.empty() || (stack.size() == 2 && (stack.elementAt(0) instanceof RE)
 				&& (stack.elementAt(1) instanceof RETokenOneOf)))) {

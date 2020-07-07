@@ -55,7 +55,10 @@ public class Pattern {
 	protected Pattern(String bricksRegex) {
 		this.initialPattern = bricksRegex;
 		this.printable = true;
-		this.automaton = (new RegExp(bricksRegex)).toAutomaton();
+
+		// In Bricks, '#' is the empty language. Disable this.
+		int flags = RegExp.ALL & ~RegExp.EMPTY;
+		this.automaton = (new RegExp(bricksRegex, flags)).toAutomaton();
 	}
 
 	public boolean isEmpty() {
