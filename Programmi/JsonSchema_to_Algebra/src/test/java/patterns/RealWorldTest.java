@@ -3,6 +3,7 @@ package patterns;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RealWorldTest {
@@ -229,10 +230,32 @@ public class RealWorldTest {
 		assertTrue(p.match("-*[]?"));
 	}
 
+	@Test
+	@Ignore // Does not work yet, requires proper rewriting of ^$ into @
+	public void testPathType() throws REException {
+		// js_10376.json
+		Pattern p = Pattern.createFromRegexp("^(\\/?((\\.{2})|([a-z0-9\\-]*))($|\\/))*$");
+
+		assertTrue(p.match("/foo/bar/../baz/"));
+	}
+
+	@Test
+	@Ignore // Does not work yet, please fix next
+	public void testRegistrationType() throws REException {
+		// js_13403.json
+		Pattern p = Pattern.createFromRegexp("^$|^List$");
+
+		System.out.println(p.toAutomatonString());
+
+		assertTrue(p.match(""));
+		assertTrue(p.match("List"));
+		assertFalse(p.match("Listing"));
+	}
+
 	/*
-	 * js_10376.json: "pattern": "^(\\/?((\\.{2})|([a-z0-9\\-]*))($|\\/))*$",
 	 * js_116.json: "pattern": "^PMID:[0-9]+$|^doi:10\\.[0-9]{4}[\\d\\S\\:\\.]+$",
-	 * js_13403.json: "pattern": "^$|^List$",
+	 * js_13403.json: "pattern": "^$|^List$", "pattern":
+	 * "^ClientSideExtension\\..*$"
 	 */
 
 	/*

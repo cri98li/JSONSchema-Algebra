@@ -7,9 +7,19 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PatternTest {
+
+	@Test
+	@Ignore // isEmpty fails for some reason
+	public void testEmptyString() throws REException {
+		Pattern pattern = Pattern.createFromRegexp("^()$");
+
+		assertTrue(pattern.match(""));
+		assertTrue(pattern.isEmpty()); // fails
+	}
 
 	@Test
 	public void testNonWhiteSpace() throws REException {
