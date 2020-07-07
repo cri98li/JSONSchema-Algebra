@@ -3,7 +3,6 @@ package patterns;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RealWorldTest {
@@ -223,11 +222,11 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore
 	public void testEndpoint() throws REException {
-		Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+$");
+		// js_10041.json
+		Pattern p = Pattern.createFromRegexp("^[\\w\\-\\*\\[\\]\\?]+$");
 
-		// TODO
+		assertTrue(p.match("-*[]?"));
 	}
 
 	/*
