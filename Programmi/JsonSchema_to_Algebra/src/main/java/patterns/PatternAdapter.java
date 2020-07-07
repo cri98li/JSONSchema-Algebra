@@ -25,8 +25,8 @@ public class PatternAdapter implements REVisitor {
 	 */
 	public static String rewrite(String ecmaRegex) throws REException {
 
-		logger.setLevel(Level.OFF); // Switch OFF/ALL
-		// logger.setLevel(Level.ALL); // Switch OFF/ALL
+		// logger.setLevel(Level.OFF); // Switch OFF/ALL
+		logger.setLevel(Level.ALL); // Switch OFF/ALL
 
 		// Parse ecmaRegex into parse tree.
 		RE ast = new RE(ecmaRegex);
@@ -61,13 +61,22 @@ public class PatternAdapter implements REVisitor {
 	public void visit(RE re) {
 		// TODO - this is currently just a 70% hack.
 		if (stack.empty()) {
-			if (!(re.firstToken instanceof RETokenStart)) {
+			if (!(re.firstToken instanceof RETokenStart) && !(re.firstToken instanceof RETokenOneOf)) {
 				logger.info("start not bounded");
 				bricksRegex.append('@');
 			}
 		}
 
 		stack.push(re);
+
+		System.out.println(stack);
+
+		if (stack.size() == 3 && (stack.elementAt(0) instanceof RE) && (stack.elementAt(1) instanceof RETokenOneOf)) {
+			if (!(re.firstToken instanceof RETokenStart)) {
+				logger.info("start not bounded (1)");
+				bricksRegex.append('@');
+			}
+		}
 
 		logger.info(re.getClass() + ": " + re.toString());
 		REToken next = re.firstToken;
@@ -83,7 +92,13 @@ public class PatternAdapter implements REVisitor {
 		stack.pop();
 
 		// TODO - this is currently just a 70% hack.
-		if (stack.empty()) {
+		if (stack.empty() && re.firstToken == re.lastToken && (re.firstToken instanceof RETokenOneOf))
+			return;
+
+		System.out.println(stack.toString());
+
+		if ((stack.empty() || (stack.size() == 2 && (stack.elementAt(0) instanceof RE)
+				&& (stack.elementAt(1) instanceof RETokenOneOf)))) {
 			int posEnd = -1;
 			int posEndSub = -1;
 			int pos = 0;
@@ -106,7 +121,7 @@ public class PatternAdapter implements REVisitor {
 
 			logger.info("posEnd: " + posEnd + ", posEndSub: " + posEndSub);
 
-			if (posEnd == -1 || ((posEnd != -1) && posEnd + 1 != posEndSub)) {
+			if ((posEnd == -1 || ((posEnd != -1) && posEnd + 1 != posEndSub))) {
 				logger.info("end not bounded");
 				bricksRegex.append("@");
 			}
@@ -262,7 +277,7 @@ public class PatternAdapter implements REVisitor {
 	}
 
 	/**
-	 * Highly similar to RETokenREpeated.dump method.
+	 * Highly similar to RETokenRepeated.dump() method.
 	 */
 	public void visit(RETokenRepeated re) {
 		stack.push(re);

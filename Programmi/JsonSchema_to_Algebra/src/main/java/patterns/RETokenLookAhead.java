@@ -5,32 +5,27 @@ package patterns;
  * @author Shashank Bapat
  */
 final class RETokenLookAhead extends REToken {
-  /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-REToken re;
-  boolean negative;
+	REToken re;
+	boolean negative;
 
-  RETokenLookAhead(REToken re, boolean negative) throws REException {
-    super(0);
-    this.re = re;
-    this.negative = negative;
-  }
+	RETokenLookAhead(REToken re, boolean negative) throws REException {
+		super(0);
+		this.re = re;
+		this.negative = negative;
+	}
 
-  void dump(StringBuffer os) {
-    os.append("(?");
-    os.append(negative ? '!' : '=');
-    re.dumpAll(os);
-    os.append(')');
-  }
+	void dump(StringBuffer os) {
+		os.append("(?");
+		os.append(negative ? '!' : '=');
+		re.dumpAll(os);
+		os.append(')');
+	}
 
-  public void accept(REVisitor v) {
-    v.visit(this);
-  }
-
-  public boolean accept(REBoolVisitor v) {
-    return v.visit(this);
-  }
+	public void accept(REVisitor v) {
+		v.visit(this);
+	}
 }
-

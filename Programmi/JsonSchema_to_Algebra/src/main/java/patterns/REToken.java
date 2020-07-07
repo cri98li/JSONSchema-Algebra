@@ -6,7 +6,7 @@ package patterns;
 
 import java.io.Serializable;
 
-abstract class REToken implements Serializable, RETokenI, RETokenIBool {
+abstract class REToken implements Serializable, RETokenI {
 
 	private static final long serialVersionUID = 1L;
 	protected REToken next = null;

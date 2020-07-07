@@ -1,25 +1,21 @@
 package patterns;
 
-
 final class RETokenEndSub extends REToken {
-  /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-RETokenEndSub(int subIndex) {
-    super(subIndex);
-  }
-    
-  void dump(StringBuffer os) {
-  // handled by RE
-  }
+	RETokenEndSub(int subIndex) {
+		super(subIndex);
+	}
 
-  public void accept(REVisitor v) {
-    v.visit(this);
-  }
+	void dump(StringBuffer os) {
+		// handled by RE
+	}
 
-  public boolean accept(REBoolVisitor v) {
-    return v.visit(this);
-  }
+	public void accept(REVisitor v) {
+		v.visit(this);
+	}
+
 }

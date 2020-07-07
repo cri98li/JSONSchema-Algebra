@@ -1,28 +1,23 @@
 package patterns;
 
-
 final class RETokenBackRef extends REToken {
-  /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-private int num;
-  RETokenBackRef(int subIndex, int num, boolean insens) {
-    super(subIndex);
-    this.num = num;
-  }
+	private int num;
 
-  void dump(StringBuffer os) {
-    os.append('\\').append(num);
-  }
+	RETokenBackRef(int subIndex, int num, boolean insens) {
+		super(subIndex);
+		this.num = num;
+	}
 
-  public void accept(REVisitor v) {
-    v.visit(this);
-  }
+	void dump(StringBuffer os) {
+		os.append('\\').append(num);
+	}
 
-  public boolean accept(REBoolVisitor v) {
-    return v.visit(this);
-  }
+	public void accept(REVisitor v) {
+		v.visit(this);
+	}
+
 }
-
-
