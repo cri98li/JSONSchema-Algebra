@@ -76,7 +76,6 @@ public class RealWorldTest {
 	}
 
 	@Test // (expected = IllegalArgumentException.class)
-	@Ignore // Broken
 	public void testSwaggerHost() throws REException {
 		// js_10009.json.
 		Pattern p = Pattern.createFromRegexp("^[^{}/ :\\\\]+(?::\\d+)?$");
@@ -87,7 +86,6 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore // Broken
 	public void testSwaggerBasePathFixed() throws REException {
 		// js_10009.json, with fix.
 		assertTrue(Pattern.createFromRegexp("^/").match("/api"));
