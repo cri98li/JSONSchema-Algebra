@@ -264,7 +264,10 @@ public class PatternTest {
 		// The original pattern inspiring this test: "^[\\w\\-\\*\\[\\]\\?]+$"
 		Pattern p = Pattern.createFromRegexp("^[\\[\\]]$");
 
+		System.out.println(p.toAutomatonString());
+
 		assertTrue("[", p.match("["));
+		assertTrue("]", p.match("]"));
 	}
 
 	@Test
