@@ -231,7 +231,7 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore // Does not work yet, requires proper rewriting of ^$ into @
+	@Ignore // Does not work yet, requires *proper* rewriting of ^$ into @
 	public void testPathType() throws REException {
 		// js_10376.json
 		Pattern p = Pattern.createFromRegexp("^(\\/?((\\.{2})|([a-z0-9\\-]*))($|\\/))*$");

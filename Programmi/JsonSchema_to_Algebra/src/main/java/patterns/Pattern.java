@@ -21,12 +21,12 @@ public class Pattern {
 	/**
 	 * Records the underlying regular expression in Bricks (!) syntax.
 	 **/
-	private String initialPattern;
+	private String originalBricksPattern = null;
 
 	/**
-	 * True iff the initial pattern can be printed.
+	 * A string representation of the underlying pattern.
 	 */
-	private boolean printable;
+	private String printablePattern;
 
 	/**
 	 * @param String constant that is not a regular expression
@@ -46,15 +46,13 @@ public class Pattern {
 
 	private Pattern(Automaton automaton) {
 		this.automaton = automaton;
-		printable = false;
 	}
 
 	/**
 	 * Assumes that regex is already in the Bricks syntax!
 	 */
 	protected Pattern(String bricksRegex) {
-		this.initialPattern = bricksRegex;
-		this.printable = true;
+		this.originalBricksPattern = bricksRegex;
 
 		// In Bricks, '#' is the empty language. Disable this.
 		int flags = RegExp.ALL & ~RegExp.EMPTY;
@@ -76,19 +74,31 @@ public class Pattern {
 
 	public Pattern intersect(Pattern p) {
 		Automaton a = BasicOperations.intersection(this.automaton, p.automaton);
-		return new Pattern(a);
+		Pattern pi = new Pattern(a);
+
+		pi.printablePattern = "allOf[" + this.toString() + ", " + p.toString() + "]";
+		return pi;
 	}
 
 	public Pattern minus(Pattern p) {
-		return new Pattern(BasicOperations.minus(this.automaton, p.automaton));
+		Pattern m = new Pattern(BasicOperations.minus(this.automaton, p.automaton));
+
+		m.printablePattern = "allOf[" + this.toString() + ", not(" + p.toString() + ")]";
+		return m;
 	}
 
 	public Pattern union(Pattern p) {
-		return new Pattern(BasicOperations.union(this.automaton, p.automaton));
+		Pattern u = new Pattern(BasicOperations.union(this.automaton, p.automaton));
+
+		u.printablePattern = "anyOf[" + this.toString() + ", " + p.toString() + "]";
+		return u;
 	}
 
 	public Pattern complement() {
-		return new Pattern(BasicOperations.complement(this.automaton));
+		Pattern complement = new Pattern(BasicOperations.complement(this.automaton));
+		complement.printablePattern = "not(" + this.toString() + ")";
+
+		return complement;
 	}
 
 	/**
@@ -130,8 +140,8 @@ public class Pattern {
 
 	public Pattern clone() {
 		Pattern clone = new Pattern(this.automaton.clone());
-		clone.printable = this.printable;
-		clone.initialPattern = this.initialPattern;
+		clone.originalBricksPattern = this.originalBricksPattern;
+		clone.printablePattern = this.printablePattern;
 		return clone;
 	}
 
@@ -182,15 +192,21 @@ public class Pattern {
 		return false;
 	}
 
-	/**
-	 * Returns a string representation, either of the regexp, or of the automaton
-	 * (its states and transitions).
-	 */
 	@Override
 	public String toString() {
-		return printable ? initialPattern : this.toAutomatonString();
+
+		if (this.originalBricksPattern != null)
+			return "base(" + this.originalBricksPattern + ")";
+
+		assert (this.printablePattern != null) : "should not have happened";
+		return this.printablePattern;
 	}
 
+	/**
+	 * For debugging purposes.
+	 * 
+	 * @return Serialization of the automaton states and transitions.
+	 */
 	protected String toAutomatonString() {
 		return this.automaton.toString();
 	}

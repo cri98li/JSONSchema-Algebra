@@ -41,8 +41,6 @@ public class PatternTest {
 	public void testNonWhiteSpaceNegated() throws REException {
 		Pattern pattern = Pattern.createFromRegexp("^[^0-9\\S]$"); // it is wrong to split this into [^0-9]|[^\S]
 
-		System.out.println(pattern.toAutomatonString());
-
 		assertTrue("<blank>", pattern.match(" "));
 		assertTrue("<newline>", pattern.match("\n"));
 		assertFalse("<digit>", pattern.match("1"));
@@ -240,8 +238,7 @@ public class PatternTest {
 	// Must fail gracefully with an exception.
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidPattern() throws REException {
-		Pattern p = Pattern.createFromRegexp("^a{1,2$"); // invalid syntax
-		System.out.println(p.toAutomatonString());
+		Pattern.createFromRegexp("^a{1,2$"); // invalid syntax
 	}
 
 	@Test
@@ -263,8 +260,6 @@ public class PatternTest {
 	public void testBracketRange() throws REException {
 		// The original pattern inspiring this test: "^[\\w\\-\\*\\[\\]\\?]+$"
 		Pattern p = Pattern.createFromRegexp("^[\\[\\]]$");
-
-		System.out.println(p.toAutomatonString());
 
 		assertTrue("[", p.match("["));
 		assertTrue("]", p.match("]"));
