@@ -207,7 +207,7 @@ public class Pattern {
 	 * 
 	 * @return Serialization of the automaton states and transitions.
 	 */
-	protected String toAutomatonString() {
+	public String toAutomatonString() {
 		return this.automaton.toString();
 	}
 
