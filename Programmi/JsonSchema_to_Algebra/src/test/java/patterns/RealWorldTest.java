@@ -288,11 +288,6 @@ public class RealWorldTest {
 	}
 
 	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * js_10042.json: "pattern": "^native:|docker://.+|http://.+|file://.+$"
 	 * js_10042.json: "pattern": "^[\\w\\-]+$" js_10043.json: "pattern":
 	 * "^[\\w\\s\\-\\*\\/,]+$" js_10046.json: "pattern":
 	 * "^[\\w\\-\\.\\*\\[\\]\\?]+$" js_10047.json: "pattern":
