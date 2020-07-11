@@ -245,24 +245,53 @@ public class RealWorldTest {
 		// js_13403.json
 		Pattern p = Pattern.createFromRegexp("^$|^List$");
 
-		System.out.println(p.toAutomatonString());
-
 		assertTrue(p.match(""));
 		assertTrue(p.match("List"));
 		assertFalse(p.match("Listing"));
 	}
 
-	/*
-	 * js_116.json: "pattern": "^PMID:[0-9]+$|^doi:10\\.[0-9]{4}[\\d\\S\\:\\.]+$",
-	 * js_13403.json: "pattern": "^$|^List$", "pattern":
-	 * "^ClientSideExtension\\..*$"
-	 */
+	@Test
+	public void testClientSideExtension() throws REException {
+		// js_13403.json
+		Pattern p = Pattern.createFromRegexp("^ClientSideExtension\\\\..*$");
+
+		assertTrue(p.match("ClientSideExtension\\1"));
+		assertTrue(p.match("ClientSideExtension\\\\abc"));
+	}
+
+	@Test
+	public void testPublicationIdentifier() throws REException {
+		// js_116.jso
+		Pattern p = Pattern.createFromRegexp("^PMID:[0-9]+$|^doi:10\\.[0-9]{4}[\\d\\S\\:\\.]+");
+
+		assertTrue(p.match("PMID:12345678"));
+		assertTrue(p.match("doi:10.1234/abc123"));
+	}
+
+	@Test
+	public void testObjectName() throws REException {
+		// js_10042.json
+		Pattern p = Pattern.createFromRegexp("^[\\w\\-\\.]+$");
+
+		assertTrue(p.match("a-b-c...-d"));
+	}
+
+	@Test
+	public void testImage() throws REException {
+		// js_10042.json
+		Pattern p = Pattern.createFromRegexp("^native:|docker://.+|http://.+|file://.+$");
+
+		assertTrue(p.match("native:"));
+		assertTrue(p.match("docker://foo"));
+		assertTrue(p.match("http://bar"));
+		assertTrue(p.match("file://baz"));
+	}
 
 	/*
 	 * 
-	 * js_10041.json: "pattern": "^tcp$|^udp$|^\\*$" js_10041.json: "pattern":
-	 * "^[\\w\\-\\*\\[\\]\\?]+$" js_10042.json: "pattern": "^[\\w\\-\\.]+$"
-	 * js_10042.json: "pattern": "^infra$" js_10042.json: "pattern": "^tcp$|^udp$"
+	 * 
+	 * 
+	 * 
 	 * js_10042.json: "pattern": "^native:|docker://.+|http://.+|file://.+$"
 	 * js_10042.json: "pattern": "^[\\w\\-]+$" js_10043.json: "pattern":
 	 * "^[\\w\\s\\-\\*\\/,]+$" js_10046.json: "pattern":
