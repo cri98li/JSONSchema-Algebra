@@ -228,8 +228,15 @@ public class PatternAdapter implements REVisitor {
 			openedPar = true;
 		}
 
-		if (re.type == RETokenPOSIX.SPACE) {
+		if (re.type == RETokenPOSIX.NWSCHAR) {
 			// \S := [^\r\n\t\f\v ]
+
+			bricksRegex.append("\r\n\t\f");
+			bricksRegex.append((char) 11); // \v
+			bricksRegex.append(' '); // a single space
+
+		} else if (re.type == RETokenPOSIX.WSCHAR) {
+			// \s := [\r\n\t\f\v ]
 
 			bricksRegex.append("\r\n\t\f");
 			bricksRegex.append((char) 11); // \v

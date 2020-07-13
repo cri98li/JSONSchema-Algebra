@@ -305,11 +305,20 @@ public class RealWorldTest {
 
 	@Test
 	public void testPathNotNullChar() throws REException {
-		// pp_27348.json from July
+		// pp_27348.json from 07/2020
 		// "pattern": "^[^\\0]+$"
 		Pattern p = Pattern.createFromRegexp("^[^\\0]+$"); // anything but the null-chars
 
 		assertTrue(p.match("000"));
+	}
+
+	@Test
+	public void testServiceBenefits() throws REException {
+		// pp_13386.json from 07/2020
+		// "pattern": "^(?:\\S+\\s+){0,9}\\S+$"
+		Pattern p = Pattern.createFromRegexp("^(?:\\S+\\s+){0,9}\\S+$");
+
+		assertTrue(p.match("Integrated with CDN"));
 	}
 
 	/*

@@ -40,6 +40,14 @@ public class PatternTest {
 	}
 
 	@Test
+	public void testWhiteSpaceChar() throws REException {
+		Pattern pattern = Pattern.createFromRegexp("^[\\s]+$");
+
+		assertTrue("<ws>", pattern.match(" "));
+		assertTrue("<newline>", pattern.match("\n"));
+	}
+
+	@Test
 	public void testNonWhiteSpaceOutsideRange() throws REException {
 		Pattern pattern = Pattern.createFromRegexp("^\\S$");
 
