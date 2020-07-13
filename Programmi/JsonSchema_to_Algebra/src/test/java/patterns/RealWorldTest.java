@@ -287,12 +287,28 @@ public class RealWorldTest {
 		assertTrue(p.match("file://baz"));
 	}
 
+	@Test
+	public void testArray() throws REException {
+		// js_10042.json
+		Pattern p = Pattern.createFromRegexp("^[\\w\\-]+$");
+
+		assertTrue(p.match("a-b-c"));
+	}
+
+	@Test
+	public void testExpression() throws REException {
+		// js_10043.json
+		Pattern p = Pattern.createFromRegexp("^[\\w\\s\\-\\*\\/,]+$");
+
+		assertTrue(p.match("a1 -*/,"));
+	}
+
 	/*
-	 * js_10042.json: "pattern": "^[\\w\\-]+$" js_10043.json: "pattern":
-	 * "^[\\w\\s\\-\\*\\/,]+$" js_10046.json: "pattern":
-	 * "^[\\w\\-\\.\\*\\[\\]\\?]+$" js_10047.json: "pattern":
-	 * "^[a-zA-Z0-9\\-_]+(\\.[a-zA-Z0-9\\-_^#]+)+$" js_10047.json: "pattern":
-	 * "^[a-zA-Z0-9\\-_]+$" js_10051.json: "pattern":
+	 * 
+	 * 
+	 * js_10046.json: "pattern": "^[\\w\\-\\.\\*\\[\\]\\?]+$" js_10047.json:
+	 * "pattern": "^[a-zA-Z0-9\\-_]+(\\.[a-zA-Z0-9\\-_^#]+)+$" js_10047.json:
+	 * "pattern": "^[a-zA-Z0-9\\-_]+$" js_10051.json: "pattern":
 	 * "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9\\-_^#]+)+$" js_10051.json: "pattern":
 	 * "^cell$|^campus$|^region$|^global$" js_10051.json: "required": ["scope",
 	 * "pattern", "alias"] js_10053.json: "pattern":
