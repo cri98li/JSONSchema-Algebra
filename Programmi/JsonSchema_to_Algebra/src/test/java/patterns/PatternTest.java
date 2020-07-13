@@ -16,8 +16,6 @@ public class PatternTest {
 	public void testNullRange() throws REException {
 		Pattern pattern = Pattern.createFromRegexp("^[^\\0]$");
 
-		System.out.println(pattern.toAutomatonString());
-
 		assertTrue(pattern.match("a"));
 		assertTrue(pattern.match("0")); // 0 != \0
 	}
@@ -321,6 +319,14 @@ public class PatternTest {
 
 		assertTrue(p.match("a"));
 		assertFalse(p.match("3"));
+	}
+
+	@Test
+	public void testWord() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\w+$"); // [a-zA-Z0-9_]
+
+		assertTrue(p.match("abcABC123_"));
+		assertFalse(p.match("!"));
 	}
 
 	@Test

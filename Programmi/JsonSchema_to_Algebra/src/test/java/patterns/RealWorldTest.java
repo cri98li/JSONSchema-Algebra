@@ -321,6 +321,23 @@ public class RealWorldTest {
 		assertTrue(p.match("Integrated with CDN"));
 	}
 
+	@Test
+	public void testBureauCode() throws REException {
+		// pp_12123.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("[0-9]{3}:[0-9]{2}");
+
+		assertTrue(p.match("123:45"));
+	}
+
+	@Test
+	public void testDescribeByType() throws REException {
+		// pp_12123.json from 07/2020
+		// Actually, there is a typo in this regexp, the first '/' ought to be escaped.
+		Pattern p = Pattern.createFromRegexp("^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$");
+
+		assertTrue(p.match("application/pdf"));
+	}
+
 	/*
 	 * 
 	 * 
