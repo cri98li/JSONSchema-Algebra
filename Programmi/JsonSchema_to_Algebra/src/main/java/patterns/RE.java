@@ -411,11 +411,8 @@ public class RE extends REToken {
 								break;
 							case 'S':
 								negate = true;
-								posixID = RETokenPOSIX.NWSCHAR; // edited by Steffi
-								break;
 							case 's':
-								negate = false;
-								posixID = RETokenPOSIX.WSCHAR; // edited by STeffi
+								posixID = RETokenPOSIX.SPACE; // edited by Steffi
 								break;
 							case 'W':
 								negate = true;
@@ -788,7 +785,7 @@ public class RE extends REToken {
 
 			else if (unit.bk && (unit.ch == 's') && syntax.get(RESyntax.RE_CHAR_CLASS_ESCAPES)) {
 				addToken(currentToken);
-				currentToken = new RETokenPOSIX(subIndex, RETokenPOSIX.WSCHAR, insens, false);
+				currentToken = new RETokenPOSIX(subIndex, RETokenPOSIX.SPACE, insens, false);
 			}
 
 			// NON-WHITESPACE OPERATOR
@@ -796,7 +793,7 @@ public class RE extends REToken {
 
 			else if (unit.bk && (unit.ch == 'S') && syntax.get(RESyntax.RE_CHAR_CLASS_ESCAPES)) {
 				addToken(currentToken);
-				currentToken = new RETokenPOSIX(subIndex, RETokenPOSIX.NWSCHAR, insens, true);
+				currentToken = new RETokenPOSIX(subIndex, RETokenPOSIX.SPACE, insens, true);
 			}
 
 			// TAB ESCAPE
