@@ -316,6 +316,14 @@ public class PatternTest {
 	}
 
 	@Test
+	public void testNonDigit() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\D$");
+
+		assertTrue(p.match("a"));
+		assertFalse(p.match("3"));
+	}
+
+	@Test
 	public void testPosRange() throws REException {
 		Pattern p = Pattern.createFromRegexp("^[a-z]$");
 		assertTrue(p.match("a"));
