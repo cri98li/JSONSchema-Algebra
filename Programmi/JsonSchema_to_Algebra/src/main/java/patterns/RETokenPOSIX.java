@@ -21,10 +21,11 @@ final class RETokenPOSIX extends REToken {
 	static final int SPACE = 9;
 	static final int UPPER = 10;
 	static final int XDIGIT = 11;
+	static final int INDEX0 = 12; // \0, added by Steffi
 
 	// Array indices correspond to constants defined above.
 	static final String[] s_nameTable = { "alnum", "alpha", "blank", "cntrl", "digit", "graph", "lower", "print",
-			"punct", "space", "upper", "xdigit" };
+			"punct", "space", "upper", "xdigit", "index0" };
 
 	// The RE constructor uses this to look up the constant for a string
 	static int intValue(String key) {

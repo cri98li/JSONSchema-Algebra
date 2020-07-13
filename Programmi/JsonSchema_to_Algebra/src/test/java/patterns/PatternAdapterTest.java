@@ -2,7 +2,6 @@ package patterns;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class PatternAdapterTest {
@@ -11,7 +10,6 @@ public class PatternAdapterTest {
 	// Possibly throw an exception.
 
 	@Test
-	@Ignore
 	public void testASCIINull() throws REException {
 		assertEquals("[^\0]", PatternAdapter.rewrite("^[^\\0]$"));
 	}
@@ -80,11 +78,11 @@ public class PatternAdapterTest {
 
 	@Test
 	public void testDigits() throws REException {
-		// assertEquals("[0-9]", PatternAdapter.rewrite("^\\d$"));
-		// assertEquals("\\\\d", PatternAdapter.rewrite("^\\\\d$"));
+		assertEquals("[0-9]", PatternAdapter.rewrite("^\\d$"));
+		assertEquals("\\\\d", PatternAdapter.rewrite("^\\\\d$"));
 		// assertEquals("(a|[0-9]|a)", PatternAdapter.rewrite("^[a\\d]$")); // TODO -
 		// why 'a' twice?
-		// assertEquals("foo([0-9])bar", PatternAdapter.rewrite("^foo[\\d]bar$"));
+		assertEquals("foo([0-9])bar", PatternAdapter.rewrite("^foo[\\d]bar$"));
 		assertEquals("foo(a|b|c|\\]|d|e|f|[0-9]|f)bar", PatternAdapter.rewrite("^foo[abc\\]def\\d]bar$"));
 	}
 

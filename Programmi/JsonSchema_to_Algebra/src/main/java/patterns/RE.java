@@ -401,7 +401,7 @@ public class RE extends REToken {
 						char asciiEsc = 0;
 
 						// Recognize \d, \S, \..
-						if (("dswDSW.".indexOf(pattern[index]) != -1)
+						if (("dswDSW0.".indexOf(pattern[index]) != -1)
 								&& syntax.get(RESyntax.RE_CHAR_CLASS_ESC_IN_LISTS)) {
 							switch (pattern[index]) {
 							case 'D':
@@ -419,6 +419,11 @@ public class RE extends REToken {
 							case 'w':
 								posixID = RETokenPOSIX.ALNUM;
 								break;
+							case '0':
+								posixID = RETokenPOSIX.INDEX0;
+								negate = false;
+								break;
+
 							case '.': // Added by Steffi S.
 								negate = false; // guesswork
 								posixID = RETokenPOSIX.PUNCT; // "\."

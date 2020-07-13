@@ -13,9 +13,10 @@ import org.junit.Test;
 public class PatternTest {
 
 	@Test
-	@Ignore // TODO
 	public void testNullRange() throws REException {
 		Pattern pattern = Pattern.createFromRegexp("^[^\\0]$");
+
+		System.out.println(pattern.toAutomatonString());
 
 		assertTrue(pattern.match("a"));
 		assertTrue(pattern.match("0")); // 0 != \0

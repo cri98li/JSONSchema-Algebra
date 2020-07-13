@@ -25,8 +25,8 @@ public class PatternAdapter implements REVisitor {
 	 */
 	public static String rewrite(String ecmaRegex) throws REException {
 
-		// logger.setLevel(Level.OFF); // Switch OFF/ALL
-		logger.setLevel(Level.ALL); // Switch OFF/ALL
+		logger.setLevel(Level.OFF); // Switch OFF/ALL
+		// logger.setLevel(Level.ALL); // Switch OFF/ALL
 
 		// Parse ecmaRegex into parse tree.
 		RE ast = new RE(ecmaRegex);
@@ -54,9 +54,6 @@ public class PatternAdapter implements REVisitor {
 
 	// For assembling the rewritten regex in Bricks syntax.
 	private StringBuffer bricksRegex = new StringBuffer();
-
-	// In descending from RETokenOneOf to children, remember the parent.
-	private REToken visitedParent = null;
 
 	public void visit(RE re) {
 		// TODO - this is currently just a 70% hack.
@@ -151,8 +148,12 @@ public class PatternAdapter implements REVisitor {
 		token = token.replaceAll("(?<!\\\\)\\]", "\\\\]");
 
 		// We have to escape "." if it's not contained in [ ].
-		if (this.visitedParent instanceof RETokenOneOf) {
-			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+		REToken visitedParent = null;
+		if (stack.size() >= 2)
+			visitedParent = stack.elementAt(stack.size() - 1);
+
+		if (visitedParent != null && visitedParent instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) visitedParent;
 			if (!parent.negative)
 				token = token.replaceAll("(?<!\\\\)\\.", "\\\\.");
 			token = token.replaceAll("(?<!\\\\)\\+", "\\\\+");
@@ -178,35 +179,34 @@ public class PatternAdapter implements REVisitor {
 		logger.info(re.getClass() + ": " + re.toString() + (re.negative ? "(negative)" : "") + " with "
 				+ re.options.size() + " options");
 
-		// TODO - can be replaced by use of stack
-		REToken oldParent = this.visitedParent;
-		this.visitedParent = re;
-
 		bricksRegex.append(re.negative ? "[^" : '(');
 
 		for (int i = 0; i < re.options.size(); i++) {
 			if (!re.negative && i > 0)
 				bricksRegex.append('|');
 
-			logger.info(re.options.elementAt(i).getClass().toString());
+			// logger.info(re.options.elementAt(i).getClass().toString());
 			((REToken) re.options.elementAt(i)).accept(this);
 		}
 
 		bricksRegex.append(re.negative ? ']' : ')');
 
-		this.visitedParent = oldParent;
 		stack.pop();
 	}
 
 	public void visit(RETokenPOSIX re) {
-		logger.info(re.getClass() + ":" + re.toString() + ", type:" + RETokenPOSIX.s_nameTable[re.type] + ", negated "
+		logger.info(re.getClass() + ":" + re.toString() + ", type:" + RETokenPOSIX.s_nameTable[re.type] + ", negated: "
 				+ (re.negated));
 
 		boolean openedPar = false;
 
+		REToken visitedParent = null;
+		if (stack.size() >= 2)
+			visitedParent = stack.elementAt(stack.size() - 1);
+
 		// Do not open a second "[".
-		if (this.visitedParent instanceof RETokenOneOf) {
-			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+		if (visitedParent != null && visitedParent instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) visitedParent;
 
 			if (parent.negative && re.negated)
 				throw new UnsupportedOperationException("Double negation not supported yet.");
@@ -216,7 +216,7 @@ public class PatternAdapter implements REVisitor {
 				openedPar = true;
 			}
 
-			if (parent.negative || re.negated)
+			if (!parent.negative && re.negated)
 				bricksRegex.append('^');
 
 			// Do not add double negation.
@@ -246,6 +246,10 @@ public class PatternAdapter implements REVisitor {
 		} else if (re.type == RETokenPOSIX.ALNUM) {
 			// \w
 			bricksRegex.append("a-zA-Z0-9_");
+
+		} else if (re.type == RETokenPOSIX.INDEX0) {
+			// \0
+			bricksRegex.append("\0");
 		} else {
 			assert false : "Not implemented yet"; // TODO
 		}
@@ -260,8 +264,8 @@ public class PatternAdapter implements REVisitor {
 		boolean openedPar = false;
 
 		// Do not open a second "[".
-		if (this.visitedParent instanceof RETokenOneOf) {
-			RETokenOneOf parent = (RETokenOneOf) this.visitedParent;
+		if (stack.size() >= 2 && stack.elementAt(stack.size() - 1) instanceof RETokenOneOf) {
+			RETokenOneOf parent = (RETokenOneOf) stack.elementAt(stack.size() - 1);
 
 			if (!parent.negative) {
 				bricksRegex.append("[");

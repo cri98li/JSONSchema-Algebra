@@ -304,13 +304,11 @@ public class RealWorldTest {
 	}
 
 	@Test
-	@Ignore // TODO
 	public void testPathNotNullChar() throws REException {
 		// pp_27348.json from July
 		// "pattern": "^[^\\0]+$"
 		Pattern p = Pattern.createFromRegexp("^[^\\0]+$"); // anything but the null-chars
 
-		System.out.println(p.toAutomatonString());
 		assertTrue(p.match("000"));
 	}
 
