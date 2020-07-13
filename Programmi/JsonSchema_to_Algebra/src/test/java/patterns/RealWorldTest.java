@@ -338,53 +338,12 @@ public class RealWorldTest {
 		assertTrue(p.match("application/pdf"));
 	}
 
-	/*
-	 * 
-	 * 
-	 * js_10046.json: "pattern": "^[\\w\\-\\.\\*\\[\\]\\?]+$" js_10047.json:
-	 * "pattern": "^[a-zA-Z0-9\\-_]+(\\.[a-zA-Z0-9\\-_^#]+)+$" js_10047.json:
-	 * "pattern": "^[a-zA-Z0-9\\-_]+$" js_10051.json: "pattern":
-	 * "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9\\-_^#]+)+$" js_10051.json: "pattern":
-	 * "^cell$|^campus$|^region$|^global$" js_10051.json: "required": ["scope",
-	 * "pattern", "alias"] js_10053.json: "pattern":
-	 * "[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}" js_10053.json:
-	 * "pattern": "^/[a-z\\-]+$" js_10053.json: "pattern":
-	 * "^[\\w\\-\\.#@\\*\\[\\]\\?]+$" js_10053.json: "pattern":
-	 * "[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}" js_10053.json:
-	 * "pattern": "^/[a-z\\-]+$" js_10053.json: "pattern":
-	 * "^[\\w\\-\\.#@\\*\\[\\]\\?]+$" js_10055.json: "pattern":
-	 * "^[\\w\\-\\.\\*\\[\\]\\?]+$" js_10056.json: "pattern": "^(\\w+)(:\\w+)*$"
-	 * js_10059.json: "pattern": "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9\\-_^#]+)+$"
-	 * js_10059.json: "pattern": {"type": "string"}, js_10059.json: "required":
-	 * ["cells", "pattern", "types", "identity-group", js_10092.json: "pattern":
-	 * "^(application/|audio/|example/|image/|multipart/|text/|video/)"
-	 * js_10092.json: {"pattern": "^([a-z]){2,3}$"}, js_10092.json: {"pattern":
-	 * "^([a-z]){2,3}-"} js_1010.json: "pattern":
-	 * "^(debug|info|warn|crit|fatal|unknown)$" js_1010.json: "pattern": "^0$"
-	 * js_1011.json: "pattern": "^2e$" js_1011.json: "pattern": "^aint.metrics$"
-	 * js_1011.json: "pattern": "^info$" js_1012.json: "pattern": "^2c$"
-	 * js_1013.json: "pattern": "^2d$" js_10250.json: "pattern": "^(schema:)"},
-	 * js_10250.json: "pattern": "^(schema:)" js_10250.json: "pattern": "^(mailto)",
-	 * js_10250.json: "pattern": "^(mailto)", js_10327.json: "pattern":
-	 * "^(\\d+(\\.\\d+)*)$" js_10327.json: "pattern":
-	 * "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])( \\(.*\\))?$" js_10327.json:
-	 * "pattern":
-	 * "^(\\d+(\\.\\d+)*)((a|b|c|rc)(\\d+))?(\\.(post)(\\d+))?(\\.(dev)(\\d+))?$"
-	 * js_10327.json: "pattern": "^[0-9a-z_.-+]+$" js_10327.json: "pattern":
-	 * "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?$" js_10327.json: "pattern":
-	 * "^[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?$" js_10327.json: "pattern":
-	 * "^([A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*)(:[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*)?(\\[[0-9A-Za-z]([0-9A-Za-z_.-]*[0-9A-Za-z])?\\])?$"
-	 * js_10327.json: "pattern":
-	 * "^[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_][A-Za-z_0-9]*)*$" js_10327.json:
-	 * "pattern": "^[A-Za-z_][A-Za-z_0-9]*([.][A-Za-z_0-9]*)*$" js_1033.json:
-	 * "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$", js_1033.json: "pattern": "^/",
-	 * js_10338.json: "pattern": "^[^{}/ :\\\\]+(?::\\d+)?$", js_10338.json:
-	 * "pattern": "^/", js_10351.json: "pattern": "^http://" js_10351.json:
-	 * "pattern": "^/" js_10351.json: "pattern": "^/" js_10355.json: "pattern":
-	 * "^[a-zA-Z0-9_]+$" js_10358.json: "pattern": "^http://" js_10358.json:
-	 * "pattern": "^/" js_10358.json: "pattern": "^/" js_10360.json: "pattern":
-	 * "^[^{}/ :\\\\]+(?::\\d+)?$",
-	 * 
-	 */
+	@Test
+	public void testUnicodeStringRanges() throws REException {
+		// pp_2121.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("^[\u0151-\u0171\u0142-\u0161]*$");
+
+		assertFalse(p.match("abc"));
+	}
 
 }

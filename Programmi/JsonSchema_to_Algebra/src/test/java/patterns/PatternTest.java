@@ -12,6 +12,10 @@ import org.junit.Test;
 
 public class PatternTest {
 
+	// What we cannot match yet.
+	// TODO \k<name>
+	// TODO \n (for nth subpattern)
+
 	@Test
 	public void testNullRange() throws REException {
 		Pattern pattern = Pattern.createFromRegexp("^[^\\0]$");
@@ -480,8 +484,23 @@ public class PatternTest {
 	@Test
 	public void testFoo() throws REException {
 		Pattern p = Pattern.createFromRegexp("^a+@(b+\\.)+c+$");
+
 		assertTrue(p.match("aaa@bbb.ccc"));
 	}
 
-	// TODO - add all POSIX charclasses.
+	@Test
+	public void testUnicode() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\u0214$");
+
+		assertTrue(p.match("Ȕ"));
+	}
+
+	@Test
+	public void testUnicodeRange() throws REException {
+		Pattern p = Pattern.createFromRegexp("^[\u0214-\u0216]$");
+
+		assertTrue(p.match("Ȕ"));
+		assertEquals(p.domainSize().intValue(), 3);
+	}
+
 }
