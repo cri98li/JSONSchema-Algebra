@@ -2,12 +2,19 @@ package patterns;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PatternAdapterTest {
 
 	// TODO - test patterns with positive or negative lookahead
 	// Possibly throw an exception.
+
+	@Test
+	@Ignore
+	public void testASCIINull() throws REException {
+		assertEquals("[^\0]", PatternAdapter.rewrite("^[^\\0]$"));
+	}
 
 	@Test
 	public void testRepetitions() throws REException {
