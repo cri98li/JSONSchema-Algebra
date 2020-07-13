@@ -326,7 +326,15 @@ public class PatternTest {
 		Pattern p = Pattern.createFromRegexp("^\\w+$"); // [a-zA-Z0-9_]
 
 		assertTrue(p.match("abcABC123_"));
-		assertFalse(p.match("!"));
+		assertFalse(p.match("!!!"));
+	}
+
+	@Test
+	public void testNonWord() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\W+$"); // [^a-zA-Z0-9_]
+
+		assertFalse(p.match("abcABC123_"));
+		assertTrue(p.match("!!!"));
 	}
 
 	@Test
