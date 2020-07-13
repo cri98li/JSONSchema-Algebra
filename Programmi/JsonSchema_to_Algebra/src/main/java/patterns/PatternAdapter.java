@@ -25,8 +25,8 @@ public class PatternAdapter implements REVisitor {
 	 */
 	public static String rewrite(String ecmaRegex) throws REException {
 
-		logger.setLevel(Level.OFF); // Switch OFF/ALL
-		// logger.setLevel(Level.ALL); // Switch OFF/ALL
+		// logger.setLevel(Level.OFF); // Switch OFF/ALL
+		logger.setLevel(Level.ALL); // Switch OFF/ALL
 
 		// Parse ecmaRegex into parse tree.
 		RE ast = new RE(ecmaRegex);
