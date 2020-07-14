@@ -542,4 +542,9 @@ public class PatternTest {
 		assertTrue(p.match("This island is beautiful"));
 		assertTrue(p.match("Is the island beautiful?"));
 	}
+
+	@Test(expected = REException.class)
+	public void testControlCharacter() throws REException {
+		Pattern.createFromRegexp("\\ca"); // CTRL+a
+	}
 }

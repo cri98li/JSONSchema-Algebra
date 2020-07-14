@@ -738,6 +738,12 @@ public class RE extends REToken {
 				throw new REException("\\B not yet supported.", REException.REG_EEND, subIndex);
 			}
 
+			// CONTROL CHARACTERS
+			// \c
+			else if (unit.bk && (unit.ch == 'c') && syntax.get(RESyntax.RE_STRING_ANCHORS)) {
+				throw new REException("\\cY not yet supported.", REException.REG_EEND, subIndex);
+			}
+
 			// DIGIT OPERATOR
 			// \d if RE_CHAR_CLASS_ESCAPES is set
 
