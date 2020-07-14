@@ -29,8 +29,6 @@ public class GroupConstructTests {
 	public void testPosLookahead() throws REException {
 		Pattern p = Pattern.createFromRegexp("X(?=Y)");
 
-		System.out.println(p.toAutomatonString());
-
 		assertTrue(p.match("XYZ"));
 		assertFalse(p.match("XX"));
 	}
@@ -39,10 +37,23 @@ public class GroupConstructTests {
 	public void testNegLookahead() throws REException {
 		Pattern p = Pattern.createFromRegexp("X(?!Y)");
 
-		System.out.println(p.toAutomatonString());
-
 		assertFalse(p.match("XYZ"));
 		assertTrue(p.match("XX"));
 	}
 
+	@Test(expected = REException.class)
+	public void testNegLookbehind() throws REException {
+		Pattern p = Pattern.createFromRegexp("(?<=a)b");
+
+		assertFalse(p.match("bbb"));
+		assertTrue(p.match("abc"));
+	}
+
+	@Test(expected = REException.class)
+	public void testPosLookbehind() throws REException {
+		Pattern p = Pattern.createFromRegexp("(?<!a)b");
+
+		assertTrue(p.match("bbb"));
+		assertFalse(p.match("abc"));
+	}
 }

@@ -418,4 +418,15 @@ public class RealWorldTest {
 		assertTrue(p.match("www.google.com"));
 		assertFalse(p.match("http://www.google.com"));
 	}
+
+	// Negative lookbehind not yet supported.
+	// There are about 10 real-world instances in our data from July 2020.
+	@Test(expected = REException.class)
+	public void testRequestCriteria() throws REException {
+		// pp_56128.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("(?<!\\\\)=");
+
+		assertTrue(p.match("P=NP"));
+		assertFalse(p.match("P\\=NP"));
+	}
 }
