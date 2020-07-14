@@ -395,4 +395,27 @@ public class RealWorldTest {
 				+ "(-(?<extension>[0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*"
 				+ "(-(?<privateUse>x(-[A-Za-z0-9]{1,8})+))?)|(?<privateUse>x(-[A-Za-z0-9]{1,8})+))$");
 	}
+
+	// Positive lookaheads not yet supported.
+	// This is rather rare (ca. 100 real-world instances).
+	@Test(expected = REException.class)
+	public void testAdminPassword() throws REException {
+		// pp_1623.json from 07/2020
+		Pattern p = Pattern.createFromRegexp(
+				"^(?=.*[a-z])(?=.*[A-Z])" + "(?=.*[!@#$%\\^&\\*\\(\\)])[a-zA-Z\\d!@#$%\\^&\\*\\(\\)]{12,123}$");
+
+		assertTrue(p.match("someSecret!Password"));
+		assertFalse(p.match("somesecret!password")); // Must contain at least one capitalized letter.
+	}
+
+	// Negative lookahead not yet supported.
+	// There are about 260 real-world instances in our data from July 2020.
+	@Test(expected = REException.class)
+	public void testHost() throws REException {
+		// pp_16745.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("^((?!\\://).)*$");
+
+		assertTrue(p.match("www.google.com"));
+		assertFalse(p.match("http://www.google.com"));
+	}
 }

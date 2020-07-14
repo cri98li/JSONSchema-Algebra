@@ -533,6 +533,7 @@ public class RE extends REToken {
 							negativelh = true;
 							lookAhead = true;
 							index += 2;
+							throw new REException("Negative lookahead not yet supported.", REException.REG_EEND, index); // TODO
 						}
 						break;
 					case '=':
@@ -540,6 +541,7 @@ public class RE extends REToken {
 							pure = true;
 							lookAhead = true;
 							index += 2;
+							throw new REException("Positive lookahead not yet supported.", REException.REG_EEND, index); // TODO
 						}
 						break;
 					case ':':

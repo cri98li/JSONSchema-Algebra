@@ -172,6 +172,15 @@ public class PatternAdapter implements REVisitor {
 
 	public void visit(RETokenLookAhead re) {
 		logger.info(re.getClass().toString() + ": " + re.toString());
+		stack.push(re);
+
+		bricksRegex.append("(?");
+		bricksRegex.append(re.negative ? '!' : '=');
+
+		re.re.accept(this);
+
+		bricksRegex.append(")");
+		stack.pop();
 	}
 
 	public void visit(RETokenOneOf re) {

@@ -5,9 +5,7 @@ package patterns;
  * @author Shashank Bapat
  */
 final class RETokenLookAhead extends REToken {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	REToken re;
 	boolean negative;

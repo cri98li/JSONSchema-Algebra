@@ -566,20 +566,4 @@ public class PatternTest {
 		assertTrue(p.match("B"));
 	}
 
-	@Test
-	public void testGroupMatch() throws REException {
-		Pattern p = Pattern.createFromRegexp("^(?:abc){3}$");
-
-		assertTrue(p.match("abcabcabc"));
-	}
-
-	// TODO - this is a rare case, but should be supported.
-	@Test(expected = REException.class)
-	public void testNamedCapturingGroup() throws REException {
-		Pattern p = Pattern.createFromRegexp("(?<foopattern>)^foo.*$");
-
-		System.out.println(p.toAutomatonString());
-
-		assertTrue(p.match("foobar"));
-	}
 }
