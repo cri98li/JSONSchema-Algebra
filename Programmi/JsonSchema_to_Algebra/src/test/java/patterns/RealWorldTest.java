@@ -364,6 +364,12 @@ public class RealWorldTest {
 		assertTrue(p.match("de-mv-rostock-polizeidienststellen"));
 	}
 
-	// pp_47048.json: "pattern":
-	// "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&/=]*)"
+	@Test
+	public void testServiceFeatures() throws REException {
+		// pp_13392.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("^(?:\\S+\\s+){0,9}\\S+$");
+
+		assertTrue(p.match("Online diary allows users to share immediate up-to-date information"));
+
+	}
 }

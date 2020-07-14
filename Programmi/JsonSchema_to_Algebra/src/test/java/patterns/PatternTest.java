@@ -565,4 +565,11 @@ public class PatternTest {
 		assertTrue(p.match("A"));
 		assertTrue(p.match("B"));
 	}
+
+	@Test
+	public void testGroupMatch() throws REException {
+		Pattern p = Pattern.createFromRegexp("^(?:abc){3}$");
+
+		assertTrue(p.match("abcabcabc"));
+	}
 }
