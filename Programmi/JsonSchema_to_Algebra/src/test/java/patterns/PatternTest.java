@@ -503,4 +503,25 @@ public class PatternTest {
 		assertEquals(p.domainSize().intValue(), 3);
 	}
 
+	// TODO - hex constants not yet supported
+	@Test(expected = REException.class)
+	public void testHexConstant() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\x41*$");
+
+		System.out.println(p.toAutomatonString());
+		assertTrue(p.match("AAA"));
+		assertFalse(p.match("x41111"));
+	}
+
+	// TODO - hex constants not yet supported
+	@Test(expected = REException.class)
+	public void testHexConstantInRange() throws REException {
+		Pattern p = Pattern.createFromRegexp("^[\\x41-\\x43]$");
+
+		System.out.println(p.toAutomatonString());
+
+		assertTrue(p.match("A"));
+		assertTrue(p.match("B"));
+		assertTrue(p.match("C"));
+	}
 }

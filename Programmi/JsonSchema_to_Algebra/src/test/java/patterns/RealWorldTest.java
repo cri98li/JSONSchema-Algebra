@@ -346,4 +346,13 @@ public class RealWorldTest {
 		assertFalse(p.match("abc"));
 	}
 
+	// TODO: Support hexadecimal constants in regular expressions,
+	// currently, about 4 real-world files contain this.
+	@Test(expected = REException.class)
+	public void testProof() throws REException {
+		// pp_34846.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("^[\\x00-\\xFF]{32}$");
+
+		assertTrue(p.match("6723B06A22F1A2F6009F4C6B12345678"));
+	}
 }
