@@ -429,4 +429,32 @@ public class RealWorldTest {
 		assertTrue(p.match("P=NP"));
 		assertFalse(p.match("P\\=NP"));
 	}
+
+	@Test
+	public void testAmazonStandardId() throws REException {
+		// pp_21828.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("/^[A-Z0-9]{10}$/");
+
+		assertTrue(p.match("B000J8VLEC"));
+		assertFalse(p.match("0123456789A"));
+	}
+
+	@Test
+	public void testAccessControlList() throws REException {
+		// pp_45260.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("/(\\*|GET|POST|PUT|PATCH|DELETE)(\\:/.*)?/g");
+
+		assertTrue(p.match("PUT:/foo.com"));
+	}
+
+	/*
+	 * 
+	 * pp_21828.json: "pattern": "/^[A-Z0-9]{10}$/", pp_21830.json: "pattern":
+	 * "/^[0-9]{13}$/", pp_21831.json: "pattern": "/^[0-9]{15}$/", pp_21832.json:
+	 * "pattern": "/^[0-9]{18}$/", pp_21833.json: "pattern": "/^[0-9]{4}$/",
+	 * pp_21833.json: "pattern": "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", pp_21835.json:
+	 * "pattern": "/^[0-9]{9}[0-9X]$/", pp_21836.json: "pattern":
+	 * "/^[0-9]{12}[0-9X]$/", pp_24218.json: "pattern": "/[1,-1]{1}/" pp_24220.json:
+	 * "pattern": "/[1,-1]{1}/"
+	 */
 }

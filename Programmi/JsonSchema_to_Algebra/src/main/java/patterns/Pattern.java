@@ -3,6 +3,9 @@ package patterns;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.BasicAutomata;
@@ -41,6 +44,13 @@ public class Pattern {
 	 * @exception REException              if ecmaRegex contains syntax error
 	 */
 	public static Pattern createFromRegexp(String ecmaRegex) throws REException {
+
+		// Pre-processing of regular expressions with modifiers.
+		java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("^\\/(.*)\\/[gmiyu]?$");
+		Matcher matcher = pattern.matcher(ecmaRegex);
+		if (matcher.matches()) {
+			ecmaRegex = matcher.group(1);
+		}
 		return new Pattern(PatternAdapter.rewrite(ecmaRegex));
 	}
 

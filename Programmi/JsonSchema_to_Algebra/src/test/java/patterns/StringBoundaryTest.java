@@ -13,4 +13,8 @@ public class StringBoundaryTest {
 	// "(^\\w|\\w$|\\W\\w|\\w\\W)"
 
 	// p_15620.json: "pattern": "^(?!$|^[A-Fa-f0-9]{64})[ -~]{1,255}$"
+
+	// pp_21833.json: "pattern": "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/",
+
+	// pp_24220.json: "pattern": "/[1,-1]{1}/"
 }
