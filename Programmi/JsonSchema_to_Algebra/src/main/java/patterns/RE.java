@@ -553,6 +553,7 @@ public class RE extends REToken {
 							comment = true;
 						}
 						break;
+					// TODO - handle named group identifiers
 					default:
 						throw new REException(getLocalizedMessage("repeat.no.token"), REException.REG_BADRPT, index);
 					}
