@@ -524,4 +524,22 @@ public class PatternTest {
 		assertTrue(p.match("B"));
 		assertTrue(p.match("C"));
 	}
+
+	// TODO - word boundaries not yet supported
+	@Test(expected = REException.class)
+	public void testWordBoundary() throws REException {
+		Pattern p = Pattern.createFromRegexp("\\bis\\b");
+
+		assertTrue(p.match("This island is beautiful"));
+		assertFalse(p.match("This island isn't beautiful"));
+	}
+
+	// TODO - non-word boundary \\B
+	@Test(expected = REException.class)
+	public void testNonWordBoundary() throws REException {
+		Pattern p = Pattern.createFromRegexp("\\Bis");
+
+		assertTrue(p.match("This island is beautiful"));
+		assertTrue(p.match("Is the island beautiful?"));
+	}
 }

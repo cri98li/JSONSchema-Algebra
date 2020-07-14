@@ -711,6 +711,7 @@ public class RE extends REToken {
 				addToken(currentToken);
 				currentToken = new RETokenWordBoundary(subIndex, RETokenWordBoundary.BEGIN | RETokenWordBoundary.END,
 						false);
+				throw new REException("\\b not yet supported.", REException.REG_EEND, subIndex);
 			}
 
 			// WORD BEGIN OPERATOR
@@ -734,6 +735,7 @@ public class RE extends REToken {
 				addToken(currentToken);
 				currentToken = new RETokenWordBoundary(subIndex, RETokenWordBoundary.BEGIN | RETokenWordBoundary.END,
 						true);
+				throw new REException("\\B not yet supported.", REException.REG_EEND, subIndex);
 			}
 
 			// DIGIT OPERATOR

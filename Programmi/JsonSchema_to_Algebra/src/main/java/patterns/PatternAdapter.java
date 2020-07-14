@@ -316,6 +316,9 @@ public class PatternAdapter implements REVisitor {
 
 	public void visit(RETokenWordBoundary re) {
 		logger.info(re.getClass().toString() + ": " + re.toString());
+
+		// TODO
+		// Actually, it should be "(^\\w|\\w$|\\W\\w|\\w\\W)"
 	}
 
 }
