@@ -401,7 +401,7 @@ public class RE extends REToken {
 						char asciiEsc = 0;
 
 						// Recognize \d, \S, \..
-						if (("dswDSW0.x".indexOf(pattern[index]) != -1)
+						if (("dswDSW0123456789.x".indexOf(pattern[index]) != -1)
 								&& syntax.get(RESyntax.RE_CHAR_CLASS_ESC_IN_LISTS)) {
 							switch (pattern[index]) {
 							case 'D':
@@ -431,6 +431,11 @@ public class RE extends REToken {
 
 							case 'x': // Added by Steffi S.
 								throw new REException("Hex constants not yet supported.", REException.REG_EEND,
+										subIndex);
+
+							default:
+								assert (Character.isDigit(pattern[index])) : "Expected octal constant here.";
+								throw new REException("Octal constants not yet supported.", REException.REG_EEND,
 										subIndex);
 
 							}
@@ -694,6 +699,14 @@ public class RE extends REToken {
 			else if (unit.bk && Character.isDigit(unit.ch) && !syntax.get(RESyntax.RE_NO_BK_REFS)) {
 				addToken(currentToken);
 				currentToken = new RETokenBackRef(subIndex, Character.digit(unit.ch, 10), insens);
+				throw new REException("Octal constants not yet supported.", REException.REG_EEND, subIndex); // TODO
+			}
+
+			// TODO - implement support for Hex constants.
+			// Added by Steffi S.
+			// \x<hexnum>
+			else if (unit.bk && (unit.ch == 'x')) {
+				throw new REException("Hex constants not yet supported.", REException.REG_EEND, subIndex); // TODO
 			}
 
 			// START OF STRING OPERATOR
@@ -790,13 +803,6 @@ public class RE extends REToken {
 			else if (unit.bk && (unit.ch == 'v')) {
 				addToken(currentToken);
 				currentToken = new RETokenChar(subIndex, (char) 11, false);
-			}
-
-			// TODO - implement support for Hex constants.
-			// Added by Steffi S.
-			// \x<hexnum>
-			else if (unit.bk && (unit.ch == 'x')) {
-				throw new REException("Hex constants not yet supported.", REException.REG_EEND, subIndex);
 			}
 
 			// WHITESPACE OPERATOR

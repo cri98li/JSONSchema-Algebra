@@ -547,4 +547,22 @@ public class PatternTest {
 	public void testControlCharacter() throws REException {
 		Pattern.createFromRegexp("\\ca"); // CTRL+a
 	}
+
+	// TODO - this is rather frequent and should be supported,
+	// Need to translate \\101 into \101, then Bricks can handle it.
+	@Test(expected = REException.class)
+	public void testOctalConstant() throws REException {
+		Pattern p = Pattern.createFromRegexp("^\\101[0-5]$"); // A0, A1, ...
+
+		// System.out.println(p.toAutomatonString());
+		assertTrue(p.match("A0"));
+	}
+
+	@Test(expected = REException.class)
+	public void testOctalConstantRange() throws REException {
+		Pattern p = Pattern.createFromRegexp("^[\\101-\\103]$");
+
+		assertTrue(p.match("A"));
+		assertTrue(p.match("B"));
+	}
 }

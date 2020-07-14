@@ -5,7 +5,7 @@ package patterns;
  * Bricks automata cannot match '^' and '$'.
  *
  */
-public class StringBoundaryTests {
+public class StringBoundaryTest {
 
 	// TODO
 	// \\b
