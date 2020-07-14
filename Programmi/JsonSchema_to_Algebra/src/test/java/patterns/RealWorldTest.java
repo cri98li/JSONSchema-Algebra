@@ -355,4 +355,15 @@ public class RealWorldTest {
 
 		assertTrue(p.match("6723B06A22F1A2F6009F4C6B12345678"));
 	}
+
+	@Test
+	public void testBezeichner() throws REException {
+		// pp_13158.json from 07/2020
+		Pattern p = Pattern.createFromRegexp("^[a-z0-9_-]{2,}$");
+
+		assertTrue(p.match("de-mv-rostock-polizeidienststellen"));
+	}
+
+	// pp_47048.json: "pattern":
+	// "[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&/=]*)"
 }
