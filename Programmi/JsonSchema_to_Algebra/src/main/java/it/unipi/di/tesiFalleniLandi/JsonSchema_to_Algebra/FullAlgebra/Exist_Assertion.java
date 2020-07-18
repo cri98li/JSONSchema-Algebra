@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessContains;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 public class Exist_Assertion implements Assertion{
@@ -39,21 +39,21 @@ public class Exist_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		if(contains.getClass() == Boolean_Assertion.class && ((Boolean_Assertion) contains).getValue()){
 
-			if(min != null) obj.put("minItems", min);
-			if(max != null) obj.put("maxItems", max);
+			if(min != null) obj.addProperty("minItems", min);
+			if(max != null) obj.addProperty("maxItems", max);
 
 			return obj;
 		}
 
 		if(contains != null)
-			obj.put("contains", contains.toJSONSchema());
+			obj.add("contains", contains.toJSONSchema());
 		
-		if(min != null) obj.put("minContains", min);
-		if(max != null) obj.put("maxContains", max);
+		if(min != null) obj.addProperty("minContains", min);
+		if(max != null) obj.addProperty("maxContains", max);
 		
 		return obj;
 	}

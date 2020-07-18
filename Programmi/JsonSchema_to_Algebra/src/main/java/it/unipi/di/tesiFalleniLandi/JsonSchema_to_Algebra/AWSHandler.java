@@ -8,16 +8,17 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_Full
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import patterns.REException;
 
 import java.util.*;
 
 public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Object> {
+	@Override
+	public Object handleRequest(LinkedHashMap<String, ?> stringLinkedHashMap, Context context) {
+		return null;
+	}
 
-	public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
+	/*public Object handleRequest(LinkedHashMap<String, ?> input, Context context) {
 		
 		try {
 			System.out.println("\tQUERY: "+input.get("queryStringParameters"));
@@ -76,7 +77,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 
 
 	private GatewayResponse toJSON(String body) throws ParseException {
-		JSONObject object;
+		JsonObject object;
 		object = (JSONObject) new JSONParser().parse(body.replace('\n', ' '));
 		JSONSchema schema = new JSONSchema(object);
 
@@ -176,7 +177,7 @@ public class AWSHandler implements RequestHandler<LinkedHashMap<String, ?>, Obje
 				200,
 				"type", "application/json+schema",
 				false);
-	}
+	}*/
 }
 
 

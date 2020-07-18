@@ -1,25 +1,26 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBet;
-import org.json.simple.JSONObject;
 
 public class Bet_Assertion implements Assertion{
-	private Object min;
-	private Object max;
+	private Number min;
+	private Number max;
 	
 	public Bet_Assertion() {	}
 	
-	public Bet_Assertion(Object min, Object max) {
+	public Bet_Assertion(Number min, Number max) {
 		this.min = min;
 		this.max = max;
 	}
 	
-	public void setMin(Object min) {
+	public void setMin(Number min) {
 		this.min = min;
 	}
 	
-	public void setMax(Object max) {
+	public void setMax(Number max) {
 		this.max = max;
 	}
 
@@ -30,11 +31,11 @@ public class Bet_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
-		if(min != null) obj.put("minimum", min);
-		if(max != null) obj.put("maximum", max);
+		if(min != null) obj.addProperty("minimum", min);
+		if(max != null) obj.addProperty("maximum", max);
 		
 		return obj;
 	}

@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
@@ -10,9 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WitnessPattern implements WitnessAssertion{
-    private Pattern pattern;
+    private ComplexPattern pattern;
 
-    public WitnessPattern(Pattern pattern){
+    public WitnessPattern(ComplexPattern pattern){
         this.pattern = pattern;
     }
 

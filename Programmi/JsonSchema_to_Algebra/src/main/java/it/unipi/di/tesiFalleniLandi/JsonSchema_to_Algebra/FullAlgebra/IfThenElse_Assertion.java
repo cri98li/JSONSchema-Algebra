@@ -1,10 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 public class IfThenElse_Assertion implements Assertion{
@@ -24,17 +25,17 @@ public class IfThenElse_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 
 		if(ifStatement != null)
-			obj.put("if", ifStatement.toJSONSchema());
+			obj.add("if", ifStatement.toJSONSchema());
 
 		if(thenStatement != null)
-			obj.put("then", thenStatement.toJSONSchema());
+			obj.add("then", thenStatement.toJSONSchema());
 
 		if(elseStatement != null)
-			obj.put("else", elseStatement.toJSONSchema());
+			obj.add("else", elseStatement.toJSONSchema());
 
 		return obj;
 	}

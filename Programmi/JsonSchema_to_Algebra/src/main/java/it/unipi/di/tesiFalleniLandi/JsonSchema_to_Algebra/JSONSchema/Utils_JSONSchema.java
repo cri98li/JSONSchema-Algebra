@@ -1,10 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,17 +19,19 @@ import java.util.Map.Entry;
 
 public class Utils_JSONSchema {
 
-	public static JSONSchema parse(String path) throws IOException, ParseException {
-
+	public static JSONSchema parse(String path) throws IOException {
+		Gson gson = new Gson();
 		try (Reader reader = new FileReader(path)){
-			JSONObject object = (JSONObject) new JSONParser().parse(reader);
+			JsonObject object = gson.fromJson(reader, JsonObject.class);
 			return new JSONSchema(object);
+		}catch (JsonSyntaxException ex){
+			throw new JsonSyntaxException("Expected JsonObject but was JsonArray");
 		}
 	}
 
 	//esegue prima la reference normalization, poi l'assertion separation
 	public static JSONSchema normalize(JSONSchema root) {
-		return referenceNormalization(root).assertionSeparation();
+		return referenceNormalization(root.clone()).assertionSeparation();
 	}
 
 	public static JSONSchema referenceNormalization(JSONSchema root) {
@@ -106,7 +110,21 @@ public class Utils_JSONSchema {
 
 	public static String toGrammarString(JSONSchema root) {
 
-		return Utils.beauty(root.toGrammarString().replace("\\\\\\\\", "\\"));
+		return Utils.beauty(root.toGrammarString());
+	}
+
+	public static JsonObject mergeJsonObject(JsonObject a, JsonObject b){
+		JsonObject obj = new JsonObject();
+
+		for(Entry<String, JsonElement> p : a.entrySet())
+			obj.add(p.getKey(), p.getValue());
+
+		for(Entry<String, JsonElement> p : b.entrySet())
+			obj.add(p.getKey(), p.getValue());
+
+
+
+		return obj;
 	}
 
 }

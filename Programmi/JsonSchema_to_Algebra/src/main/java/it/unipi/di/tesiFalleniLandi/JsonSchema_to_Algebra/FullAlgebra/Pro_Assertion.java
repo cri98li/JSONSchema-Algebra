@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPro;
-import org.json.simple.JSONObject;
 
 public class Pro_Assertion implements Assertion{
 	private Long min, max;
@@ -24,11 +24,11 @@ public class Pro_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
-		if(min != null)	obj.put("minProperties", min);
-		if(max != null)	obj.put("maxProperties", max);
+		if(min != null)	obj.addProperty("minProperties", min);
+		if(max != null)	obj.addProperty("maxProperties", max);
 		
 		return obj;
 	}

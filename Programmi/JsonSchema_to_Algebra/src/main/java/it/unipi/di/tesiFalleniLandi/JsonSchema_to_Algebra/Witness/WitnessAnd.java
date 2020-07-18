@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Type;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
@@ -30,21 +32,6 @@ public class WitnessAnd implements WitnessAssertion{
     public boolean add(WitnessAssertion el) {
         boolean b = false;
 
-        if(this.andList.containsKey(WitnessGroup.class)){
-            LinkedList<WitnessAssertion> tmp = (LinkedList<WitnessAssertion>) this.andList.get(WitnessGroup.class);
-            if(tmp.size() == 1) {
-                if(tmp.getFirst().getGroupType().equals(el.getGroupType())){
-                    try{
-                        ((WitnessGroup)tmp.getFirst()).add(el);
-                    }catch(WitnessException e){
-                        e.printStackTrace();
-                    }
-                }
-            }else{
-                return false;
-            }
-        }
-
         if(el.getClass() == WitnessAnd.class) {
             for (Map.Entry<Object, List<WitnessAssertion>> entry : ((WitnessAnd) el).andList.entrySet())
                 for (WitnessAssertion assertion : entry.getValue())
@@ -63,7 +50,7 @@ public class WitnessAnd implements WitnessAssertion{
 
         // inserisce l'asserzione nella rispettiva lista
         if(andList.containsKey(el.getClass())) {
-            if(andList.get(el.getClass()).contains(el)) return false;
+            //if(andList.get(el.getClass()).contains(el)) return false;
             andList.get(el.getClass()).add(el);
         }else {
             List<WitnessAssertion> list = new LinkedList<>();
@@ -247,44 +234,183 @@ public class WitnessAnd implements WitnessAssertion{
      * OUPUT: lista in and contenente solo istanze di WitnessGroup, WitnessOr e WitnessVar
      */
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
-        WitnessAnd and = new WitnessAnd();
-        WitnessGroup group = new WitnessGroup();
-
-        /*
-        For each assertion in andList:
-            - if the assertion is an ITE, we call the method on the assertion and then we add the result to the group
-            - if the assertion is not an ITE and is an OR assertion, we call the method on the assertion and then we add the result to the new andList
-            - if the assertion is not an ITe and is not an OR it is a variable, so we add it to the new andList
+    public WitnessAssertion groupize() throws WitnessException, REException {
+        /**
+         * non contiene type -- si restituisce un or di and
+         * contene 1 type -- si eliminano tutte le asserzioni che non coincidono
+         * contiene + type -- return false
          */
-        for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue())
-                if(assertion.getGroupType() != null)
-                    try {
-                        group.add(assertion.groupize());
-                    }catch(WitnessException we){
-                        return new WitnessBoolean(false);
-                    }
-                else if(assertion.getClass() == WitnessOr.class)
-                    and.add(assertion.groupize());
-                else
-                    and.add(assertion);
+        //WitnessAssertion first = null;
 
-        if(!group.isEmpty()){
-            List<WitnessAssertion> groups = null;
-            groups = group.canonicalize(); //split the group in N typed groups
-            if(groups.size() == 1)
-                and.andList.put(WitnessGroup.class, groups);
-            else{
+        if (andList.containsKey(WitnessType.class)) {
+            List<WitnessAssertion> types = andList.remove(WitnessType.class);
+            WitnessAssertion type = types.remove(0);
+            for (WitnessAssertion t : types)
+                type = type.mergeElement(t);
+
+            if(type.getClass() == WitnessBoolean.class)
+                return type;
+
+            //è 1 tipo
+            if (((WitnessType)type).separeTypes().size() == 1) {
+                WitnessAnd and = new WitnessAnd();
+                and.add(type);
+
+                for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
+                    for (WitnessAssertion assertion : entry.getValue()) {
+                        if(assertion.getGroupType() != null) {
+                            and.add(assertion.groupize());
+                        }
+                    }
+                        /*first = entry.getValue().get(0); //TODO: check
+                    if(first.getGroupType() != null) {
+                        if (first.getGroupType().equals(type.getGroupType()))
+                            and.andList.put(entry.getKey(), entry.getValue()); //TODO: commento
+
+                    else if (first.getGroupType() == null) //variabile o or
+                        for (WitnessAssertion tmp : entry.getValue())
+                            and.add(tmp.groupize()); //TODO: controlla che non ritorni and
+                }*/
+
+                }
+
+                return and;
+
+                //più di un tipo
+            } else {
                 WitnessOr or = new WitnessOr();
-                for(WitnessAssertion tmp : groups)
-                    or.add(tmp);
-                and.add(or);
+
+                HashMap<WitnessType, WitnessAnd> groups = new HashMap<>();
+
+                for (WitnessType t : ((WitnessType) type).separeTypes()) {
+                    WitnessAnd and = new WitnessAnd();
+                    and.add(t);
+                    groups.put(t, and);
+                    //or.add(and);
+                }
+
+
+                for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
+                    for (WitnessAssertion assertion : entry.getValue()) {
+                        if (assertion.getGroupType() != null) {
+                            if (groups.containsKey(assertion.getGroupType()))
+                                groups.get(assertion.getGroupType()).add(assertion.groupize());
+                        } else if (assertion.getGroupType() == null) {
+                            WitnessAssertion groupizeResult = assertion.groupize();
+                            for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
+                                e.getValue().add(groupizeResult);
+                        }
+                    /*
+                    first = entry.getValue().get(0); //TODO: check
+                    if (first.getGroupType() != null) {
+                        if (groups.containsKey(first.getGroupType()))
+                            groups.get(first.getGroupType()).andList.put(first.getClass(), entry.getValue());
+
+                    }else if (first.getGroupType() == null) //variabile o or
+                        for (WitnessAssertion tmp : entry.getValue()) {
+                            WitnessAssertion grupizeResult = tmp.groupize();
+                            for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
+                                e.getValue().add(grupizeResult);
+                        }
+                }*/
+                    }
+                }
+
+                //Elimino gli and unitari
+                for(Map.Entry<?, WitnessAnd> ands: groups.entrySet()){
+                    WitnessAssertion tmp = ands.getValue().isUnitaryAnd();
+                    if(tmp == null)
+                        or.add(ands.getValue());
+                    else
+                        or.add(tmp);
+                }
+
+                return or;
             }
         }
 
-        return and;
+        else { //Nessun tipo
+            WitnessOr or = new WitnessOr();
+            WitnessAnd and = new WitnessAnd();
+            HashMap<WitnessType, WitnessAnd> groups = new HashMap<>();
+
+            WitnessType type = new WitnessType(GrammarStringDefinitions.TYPE_NUMBER);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            and = new WitnessAnd();
+            type = new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            and = new WitnessAnd();
+            type = new WitnessType(GrammarStringDefinitions.TYPE_ARRAY);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            and = new WitnessAnd();
+            type = new WitnessType(GrammarStringDefinitions.TYPE_STRING);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            and = new WitnessAnd();
+            type = new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            and = new WitnessAnd();
+            type = new WitnessType(GrammarStringDefinitions.TYPE_NULL);
+            and.add(type);
+            groups.put(type, and);
+            //or.add(and);
+
+            for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
+                for (WitnessAssertion assertion : entry.getValue()) {
+                    if (assertion.getGroupType() != null) {
+                        if (groups.containsKey(assertion.getGroupType()))
+                            groups.get(assertion.getGroupType()).add(assertion.groupize());
+                    } else if (assertion.getGroupType() == null) {
+                        WitnessAssertion groupizeResult = assertion.groupize();
+                        for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
+                            e.getValue().add(groupizeResult);
+                    }
+                }
+            }
+            /*
+            for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
+                first = entry.getValue().get(0);
+                if (first.getGroupType() != null) {
+                    groups.get(first.getGroupType()).andList.put(first.getClass(), entry.getValue());
+
+                }else if (first.getGroupType() == null) //variabile o or
+                    for (WitnessAssertion tmp : entry.getValue()) {
+                        WitnessAssertion groupizeResult = tmp.groupize();
+
+                        for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
+                            e.getValue().add(groupizeResult);
+                    }
+            }
+            */
+
+
+            //Elimino gli and unitari
+            for(Map.Entry<?, WitnessAnd> ands: groups.entrySet()){
+                WitnessAssertion tmp = ands.getValue().isUnitaryAnd();
+                if(tmp == null)
+                    or.add(ands.getValue());
+                else
+                    or.add(tmp);
+            }
+
+            return or;
+        }
     }
+
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
@@ -320,7 +446,8 @@ public class WitnessAnd implements WitnessAssertion{
 
         if(!andList.containsKey(WitnessOr.class)) {
             //Se non contiene un OR, creo un OR unitario contenente la lista in and --> mantengo l'invariante
-            or.add(this.clone());
+            //or.add(this.clone());
+            or.add(this);
             return or;
         }
 

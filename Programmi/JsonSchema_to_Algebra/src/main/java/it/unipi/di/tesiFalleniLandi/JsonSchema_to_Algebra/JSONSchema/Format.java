@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,17 +11,17 @@ import java.util.Map.Entry;
 public class Format implements JSONSchemaElement{
 	private String format;
 	
-	public Format(Object obj) {
-		format = (String)obj;
+	public Format(JsonElement obj) {
+		format = obj.getAsString();
 	}
 
 	public Format() {
 	}
 
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("format", format);
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("format", format);
 
 		return obj;
 	}

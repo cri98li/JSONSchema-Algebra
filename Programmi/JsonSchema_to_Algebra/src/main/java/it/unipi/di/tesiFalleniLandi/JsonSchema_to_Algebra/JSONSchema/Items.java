@@ -1,8 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,30 +19,30 @@ public class Items implements JSONSchemaElement{
 	
 	public Items() {}
 	
-	public void setItems(Object obj) {
-		JSONArray array;
+	public void setItems(JsonElement obj) {
+		JsonArray array;
 		
 		try{
-			array = (JSONArray) obj;
-		}catch(ClassCastException e) {
+			array = obj.getAsJsonArray();
+		}catch(ClassCastException | IllegalStateException e) {
 			items = new JSONSchema(obj);
 			return;
 		}
 		
 		items_array = new LinkedList<>();
 		
-		Iterator<?> it = array.iterator();
+		Iterator<JsonElement> it = array.iterator();
 		
 		while(it.hasNext()) {
 			items_array.add(new JSONSchema(it.next()));
 		}
 	}
 	
-	public void setAdditionalItems(Object obj) {
+	public void setAdditionalItems(JsonElement obj) {
 		additionalItems_array = new JSONSchema(obj);
 	}
 	
-	public void setUnevaluatedItems(Object obj) {
+	public void setUnevaluatedItems(JsonElement obj) {
 		unevaluatedItems_array = new JSONSchema(obj);
 	}
 	
@@ -53,21 +54,21 @@ public class Items implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(items_array != null) {
-			JSONArray array = new JSONArray();
+			JsonArray array = new JsonArray();
 			for(JSONSchema js : items_array)
 				array.add(js.toJSON());
-			obj.put("items", array);
+			obj.add("items", array);
 		}
 		
-		if(additionalItems_array != null) obj.put("additionalItems", additionalItems_array.toJSON());
+		if(additionalItems_array != null) obj.add("additionalItems", additionalItems_array.toJSON());
 		
-		if(unevaluatedItems_array != null) obj.put("unevaluatedItems", unevaluatedItems_array.toJSON());
+		if(unevaluatedItems_array != null) obj.add("unevaluatedItems", unevaluatedItems_array.toJSON());
 		
-		if(items != null) obj.put("items", items.toJSON());
+		if(items != null) obj.add("items", items.toJSON());
 				
 		
 		return obj;
@@ -77,22 +78,24 @@ public class Items implements JSONSchemaElement{
 	public String toGrammarString() {
 		String str = "";
 		
-		if(items != null) {
+		if(items != null && items.numberOfAssertions() != 0) {
 			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
 		}
 
 		if(items_array != null) {
 			Iterator<JSONSchema> it = items_array.iterator();
-			if (it.hasNext())
-				str += it.next().toGrammarString();
 
 			while (it.hasNext()) {
-				str += "," + it.next().toGrammarString();
+				JSONSchemaElement jse = it.next();
+				if(jse.numberOfAssertions() != 0)
+					str += jse.toGrammarString() + ",";
 			}
+
+			str = str.substring(0, str.length()-1);
 		}
 		
 		String str2 = "";
-		if(additionalItems_array != null) {
+		if(additionalItems_array != null && additionalItems_array.numberOfAssertions() != 0) {
 			str2 = additionalItems_array.toGrammarString();
 			if(str.isEmpty())
 				return String.format(GrammarStringDefinitions.ITEMS, str2, "");
@@ -167,7 +170,17 @@ public class Items implements JSONSchemaElement{
 
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		if(items != null) return items.numberOfAssertions();
+
+		if(items_array != null)
+			for(JSONSchema s : items_array)
+				if(s.numberOfAssertions() > 0) return 1;
+
+		if(additionalItems_array != null) return additionalItems_array.numberOfAssertions();
+
+		if(unevaluatedItems_array != null) return unevaluatedItems_array.numberOfAssertions();
+
+		return 0;
 	} 
 	
 	@Override

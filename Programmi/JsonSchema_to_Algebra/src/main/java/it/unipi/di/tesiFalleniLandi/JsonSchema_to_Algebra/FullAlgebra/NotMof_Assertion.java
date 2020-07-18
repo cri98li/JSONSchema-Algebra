@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessNotMof;
 
@@ -16,7 +17,7 @@ public class NotMof_Assertion implements Assertion {
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public JsonObject toJSONSchema() {
 		return new Not_Assertion(new Mof_Assertion(notMof)).toJSONSchema();
 	}
 

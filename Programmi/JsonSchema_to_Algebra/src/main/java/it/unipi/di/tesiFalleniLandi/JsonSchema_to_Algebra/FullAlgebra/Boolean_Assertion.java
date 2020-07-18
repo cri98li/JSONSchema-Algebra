@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBoolean;
 
 public class Boolean_Assertion implements Assertion{
@@ -15,8 +17,8 @@ public class Boolean_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		return value;
+	public JsonElement toJSONSchema() {
+		return new JsonPrimitive(value);
 	}
 
 	@Override

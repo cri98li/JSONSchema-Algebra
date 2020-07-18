@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
@@ -11,21 +12,21 @@ import java.util.Objects;
 import java.util.Set;
 
 public class WitnessPattReq implements WitnessAssertion{
-    private Pattern key;
+    private ComplexPattern key;
     private WitnessAssertion value;
 
-    public WitnessPattReq(Pattern key, WitnessAssertion assertion){
+    public WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
     }
 
     protected WitnessPattReq() { }
 
-    public Pattern getKey() {
+    public ComplexPattern getKey() {
         return key;
     }
 
-    public void setKey(Pattern key) {
+    public void setKey(ComplexPattern key) {
         this.key = key;
     }
 
@@ -121,7 +122,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
+    public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessPattReq pattReq = new WitnessPattReq();
 
         pattReq.key = key;

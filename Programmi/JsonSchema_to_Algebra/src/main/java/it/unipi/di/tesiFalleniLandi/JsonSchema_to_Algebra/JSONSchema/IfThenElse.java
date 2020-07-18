@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,15 +16,15 @@ public class IfThenElse implements JSONSchemaElement {
 	
 	public IfThenElse(){ }
 	
-	public void setIf(Object obj) {
+	public void setIf(JsonElement obj) {
 		ifStatement = new JSONSchema(obj);
 	}
 	
-	public void setThen(Object obj) {
+	public void setThen(JsonElement obj) {
 		thenStatement = new JSONSchema(obj);
 	}
 	
-	public void setElse(Object obj) {
+	public void setElse(JsonElement obj) {
 		elseStatement = new JSONSchema(obj);
 	}
 
@@ -35,12 +36,12 @@ public class IfThenElse implements JSONSchemaElement {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(ifStatement != null) obj.put("if", ifStatement.toJSON());
-		if(thenStatement != null) obj.put("then", thenStatement.toJSON());
-		if(elseStatement != null) obj.put("else", elseStatement.toJSON());
+		if(ifStatement != null) obj.add("if", ifStatement.toJSON());
+		if(thenStatement != null) obj.add("then", thenStatement.toJSON());
+		if(elseStatement != null) obj.add("else", elseStatement.toJSON());
 		
 		return obj;
 	}
@@ -114,7 +115,13 @@ public class IfThenElse implements JSONSchemaElement {
 
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		int count = 0;
+
+		if(ifStatement != null) count=ifStatement.numberOfAssertions();
+		if(thenStatement != null) count=thenStatement.numberOfAssertions();
+		if(elseStatement != null) count=elseStatement.numberOfAssertions();
+
+		return count;
 	}
 	
 	public IfThenElse clone() {

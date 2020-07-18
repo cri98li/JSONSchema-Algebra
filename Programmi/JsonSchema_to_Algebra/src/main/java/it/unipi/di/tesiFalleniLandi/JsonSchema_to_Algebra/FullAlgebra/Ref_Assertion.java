@@ -1,9 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
-import org.json.simple.JSONObject;
 
 public class Ref_Assertion implements Assertion{
 	private String ref;
@@ -18,13 +19,13 @@ public class Ref_Assertion implements Assertion{
 	}
 
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 
 		if(Defs_Assertion.env != null && ref.equals(Defs_Assertion.env.getRootName())) {
-			obj.put("ref", "#" + ref);
+			obj.addProperty("ref", "#" + ref);
 		}else {
-			obj.put("ref", "#/$defs/" + ref);
+			obj.addProperty("ref", "#/$defs/" + ref);
 		}
 
 		return obj;
@@ -34,7 +35,7 @@ public class Ref_Assertion implements Assertion{
 	public Assertion not() {
 		if(ref.startsWith(GrammarStringDefinitions.NOT_DEFS))
 			return new Ref_Assertion(ref.substring(GrammarStringDefinitions.NOT_DEFS.length()));
-		else  return new Ref_Assertion(GrammarStringDefinitions.NOT_DEFS+ref);
+		else return new Ref_Assertion(GrammarStringDefinitions.NOT_DEFS+ref);
 	}
 
 	@Override

@@ -1,21 +1,39 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class AntlrArray implements AntlrValue{
-	private List<Object> list;
+	private JsonArray list;
 	
 	public AntlrArray() {
-		list = new LinkedList<>();
+		list = new JsonArray();
 	}
 	
 	public void add(AntlrValue value) {
-		list.add(value.getValue());
+
+		if(value == null) {
+			list.add(JsonNull.INSTANCE);
+		}
+		if(value.getClass() == AntlrString.class)
+			list.add((String) value.getValue());
+		else if(value.getClass() == AntlrLong.class || value.getClass() == AntlrDouble.class)
+			list.add((Number) value.getValue());
+		else if(value.getClass() == AntlrBoolean.class)
+			list.add((Boolean) value.getValue());
+		else if(value.getClass() == AntlrJsonObject.class)
+			list.add((JsonObject) value.getValue());
+		else if(value.getClass() == AntlrArray.class)
+			list.add((JsonArray) value.getValue());
 	}
 
 	@Override
-	public List<Object> getValue() {
+	public JsonArray getValue() {
 		return list;
 	}
 }

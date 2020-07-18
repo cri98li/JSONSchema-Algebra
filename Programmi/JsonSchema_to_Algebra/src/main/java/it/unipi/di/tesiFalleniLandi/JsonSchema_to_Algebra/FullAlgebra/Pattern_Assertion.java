@@ -1,15 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
-import org.json.simple.JSONObject;
-import patterns.Pattern;
 
 public class Pattern_Assertion implements Assertion{
-	private Pattern pattern;
+	private ComplexPattern pattern;
 
-	public Pattern_Assertion(Pattern pattern) {
+	public Pattern_Assertion(ComplexPattern pattern) {
 		this.pattern = pattern;
 	}
 
@@ -18,14 +19,15 @@ public class Pattern_Assertion implements Assertion{
 		return "Pattern_Assertion [" + pattern + "]";
 	}
 
-	public Pattern getValue(){
+	public ComplexPattern getValue(){
 		return pattern;
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		obj.put("pattern", pattern.toString());
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		if(pattern.isComplex()) return pattern.toJSONSchema(); //TODO: devo forse chiuderlo dentro un allOf? come evito i duplicati?
+		else obj.addProperty("pattern", pattern.getOriginalPattern());
 
 		return obj;
 	}
@@ -47,7 +49,7 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.PATTERN, pattern.toString());
+		return String.format(GrammarStringDefinitions.PATTERN, pattern.getAlgebraString());
 	}
 
 	@Override

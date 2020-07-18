@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map.Entry;
 public class Not implements JSONSchemaElement {
 	private JSONSchema value;
 	
-	public Not(Object obj) {
+	public Not(JsonElement obj) {
 		value = new JSONSchema(obj);
 	}
 	
@@ -22,9 +23,9 @@ public class Not implements JSONSchemaElement {
 	}
 
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("not", value.toJSON());
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.add("not", value.toJSON());
 
 		return obj;
 	}

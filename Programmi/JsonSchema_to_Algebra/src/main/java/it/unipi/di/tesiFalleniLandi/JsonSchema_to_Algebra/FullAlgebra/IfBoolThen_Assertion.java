@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessIfBoolThen;
 
@@ -11,10 +13,10 @@ public class IfBoolThen_Assertion implements Assertion {
     }
 
     @Override
-    public Object toJSONSchema() {
+    public JsonElement toJSONSchema() {
         Type_Assertion t = new Type_Assertion();
         t.add("bool");
-        return new IfThenElse_Assertion(t, new Const_Assertion(value), null).toJSONSchema();
+        return new IfThenElse_Assertion(t, new Const_Assertion(new JsonPrimitive(value)), null).toJSONSchema();
     }
 
     @Override

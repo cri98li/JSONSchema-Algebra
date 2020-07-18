@@ -45,8 +45,8 @@ public class GrammarStringDefinitions {
 	public static final String REQUIRED = "req[%s]";
 		
 	//pattern
-	public static final String PATTERN = "pattern(\"%s\")";
-	public static final String NOTPATTERN = "notPattern(\"%s\")";
+	public static final String PATTERN = "pattern(%s)";
+	public static final String NOTPATTERN = "notPattern(%s)";
 		
 	//length
 	public static final String LENGTH = "length(%s,%s)";
@@ -108,5 +108,8 @@ public class GrammarStringDefinitions {
 	//IfBoolThen
 	public static final String IFBOOLTHEN = "ifBoolThen(%s)";
 
-	private GrammarStringDefinitions(){}
+
+
+	//complexPattern
+	public static final String COMPLEXPATTERN = "%s";
 }

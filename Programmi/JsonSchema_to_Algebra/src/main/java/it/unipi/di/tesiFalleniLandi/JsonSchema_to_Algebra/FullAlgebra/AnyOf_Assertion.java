@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -36,15 +36,15 @@ public class AnyOf_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		JsonArray array = new JsonArray();
 
 		for(Assertion assertion : orList) {
 			array.add(assertion.toJSONSchema());
 		}
 
-		obj.put("anyOf", array);
+		obj.add("anyOf", array);
 
 		return obj;
 	}

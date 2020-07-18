@@ -1,10 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.LinkedList;
@@ -12,17 +11,18 @@ import java.util.List;
 
 public class Enum_Assertion implements Assertion{
 
-	private List<Object> _enum;
+	//private List<JsonElement> _enum;
+	private JsonArray _enum;
 	
-	public Enum_Assertion(List<Object> _enum) {
+	public Enum_Assertion(JsonArray _enum) {
 		this._enum = _enum;
 	}
 
 	public Enum_Assertion() {
-		_enum = new LinkedList<>();
+		_enum = new JsonArray();
 	}
 	
-	public void add(Object obj) {
+	public void add(JsonElement obj) {
 		_enum.add(obj);
 	}
 
@@ -33,15 +33,31 @@ public class Enum_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		JsonArray array = new JsonArray();
 
-		for(Object element : _enum) {
-			array.add(element);
+		for(JsonElement element : _enum) {
+			if(element.isJsonNull())
+				array.add(JsonNull.INSTANCE);
+
+			else if(element.isJsonObject())
+				array.add(element.getAsJsonObject());
+
+			else if(element.isJsonArray())
+				array.add(element.getAsJsonArray());
+
+			else if(element.getAsJsonPrimitive().isString())
+				array.add(element.getAsString());
+
+			else if(element.getAsJsonPrimitive().isNumber())
+				array.add(element.getAsNumber());
+
+			else
+				array.add(element.getAsBoolean());
 		}
 
-		obj.put("enum", array);
+		obj.add("enum", array);
 		return obj;
 	}
 
@@ -49,8 +65,8 @@ public class Enum_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion notEnum = new AllOf_Assertion();
 		
-		for(Object obj : _enum)
-			notEnum.add((new Const_Assertion(obj)).not());
+		for(JsonElement element : _enum)
+			notEnum.add((new Const_Assertion(element)).not());
 		
 		return notEnum;
 	}
@@ -62,18 +78,21 @@ public class Enum_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.ENUM, toGrammarString(_enum));
+		String tmp = _enum.toString();
+		tmp = tmp.substring(1, tmp.length()-1);
+		return String.format(GrammarStringDefinitions.ENUM, tmp);
 	}
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
-		for(Object obj : _enum)
-			or.add(new Const_Assertion(obj).toWitnessAlgebra());
+		for(JsonElement element : _enum)
+			or.add(new Const_Assertion(element).toWitnessAlgebra());
 
 		return or;
 	}
 
+	/*
 	private String toGrammarString(List<Object> list){
 		String str = "";
 
@@ -86,8 +105,8 @@ public class Enum_Assertion implements Assertion{
 				|| obj.getClass() == Double.class
 				|| obj.getClass() == Boolean.class)
 				str += GrammarStringDefinitions.COMMA + obj;
-			else if (obj.getClass() == JSONObject.class)
-				str += GrammarStringDefinitions.COMMA + ((JSONObject) obj).toJSONString();
+			else if (obj.getClass() == JsonObject.class)
+				str += GrammarStringDefinitions.COMMA + ((JsonObject) obj).toString();
 			else
 				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
 		}
@@ -95,6 +114,7 @@ public class Enum_Assertion implements Assertion{
 
 		return str.substring(GrammarStringDefinitions.COMMA.length());
 	}
+	*/
 	
 	
 }

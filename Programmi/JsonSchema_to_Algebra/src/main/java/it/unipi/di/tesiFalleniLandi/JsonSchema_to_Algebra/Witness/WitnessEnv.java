@@ -15,9 +15,9 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     public void add(WitnessVar key, WitnessAssertion value){
-        WitnessAnd and = new WitnessAnd();
-        and.add(value);
-        varList.put(key, and);
+        //WitnessAnd and = new WitnessAnd();
+        //and.add(value);
+        varList.put(key, value);
     }
 
     public void add(WitnessVar key, WitnessAnd value){
@@ -29,9 +29,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     public void setRootVar(WitnessVar key, WitnessAssertion value){
-        WitnessAnd and = new WitnessAnd();
-        and.add(value);
-        varList.put(key, and);
+        varList.put(key, value);
         rootVar = key;
     }
 
@@ -135,9 +133,10 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessEnv groupize() throws WitnessException {
+    public WitnessEnv groupize() throws WitnessException, REException {
         WitnessEnv env = new WitnessEnv();
-        if(rootVar != null) env.rootVar = (WitnessVar) rootVar.groupize();
+        if(rootVar != null)
+            env.rootVar = (WitnessVar) rootVar.groupize();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet()) {
             env.add(entry.getKey(), entry.getValue().groupize());

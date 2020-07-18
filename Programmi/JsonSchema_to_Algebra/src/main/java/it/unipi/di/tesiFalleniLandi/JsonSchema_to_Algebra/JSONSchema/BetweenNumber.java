@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,51 +11,62 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BetweenNumber implements JSONSchemaElement{
-	private Object maximum;
-	private Object minimum;
-	private Object exclusiveMaximum;
-	private Object exclusiveMinimum;
+	private Number maximum;
+	private Number minimum;
+	private Number exclusiveMaximum;
+	private Number exclusiveMinimum;
 	private Boolean booleanExclusiveMaximum;
 	private Boolean booleanExclusiveMinimum;
 	
 	public BetweenNumber() { }
 	
-	public void setMax(Object obj) {
+	public void setMax(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected number as value of maximum got " + obj);
+
 		if(booleanExclusiveMaximum != null && booleanExclusiveMaximum)
-			this.exclusiveMaximum = obj;
+			this.exclusiveMaximum = obj.getAsNumber();
 		else
-			this.maximum = obj;
+			this.maximum = obj.getAsNumber();
 	}
 	
-	public void setMin(Object obj) {
+	public void setMin(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected number as value of minimum got "+ obj);
+
 		if(booleanExclusiveMinimum != null && booleanExclusiveMinimum)
-			this.exclusiveMaximum = obj;
+			this.exclusiveMaximum = obj.getAsNumber();
 		else
-			this.minimum = obj;
+			this.minimum = obj.getAsNumber();
 	}
 	
 	
-	public void setExclusiveMax(Object obj) {
+	public void setExclusiveMax(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || (!obj.getAsJsonPrimitive().isBoolean() && !obj.getAsJsonPrimitive().isNumber()))
+			throw new ParseCancellationException("expected number or boolean as value of exclusiveMaximum got "+obj);
+
 		try {
-			booleanExclusiveMaximum = (boolean) obj;
+			booleanExclusiveMaximum = obj.getAsBoolean();
 			if(booleanExclusiveMaximum && maximum != null) {
 				exclusiveMaximum = maximum;
 				maximum = null;
 			}
 		}catch(ClassCastException e) {
-			this.exclusiveMaximum = obj;
+			this.exclusiveMaximum = obj.getAsNumber();
 		}
 	}
 	
-	public void setExclusiveMin(Object obj) {
+	public void setExclusiveMin(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || (!obj.getAsJsonPrimitive().isBoolean() && !obj.getAsJsonPrimitive().isNumber()))
+			throw new ParseCancellationException("expected number or boolean as value of exclusiveMinimum got "+obj);
 		try {
-			booleanExclusiveMinimum = (boolean) obj;
+			booleanExclusiveMinimum = obj.getAsBoolean();
 			if(booleanExclusiveMinimum && minimum != null) {
 				exclusiveMinimum = minimum;
 				minimum = null;
 			}
 		}catch(ClassCastException e) {
-			this.exclusiveMinimum = obj;
+			this.exclusiveMinimum = obj.getAsNumber();
 		}
 	}
 
@@ -66,17 +79,17 @@ public class BetweenNumber implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(maximum != null) obj.put("maximum", maximum);
-		if(minimum != null) obj.put("minimum", minimum);
+		if(maximum != null) obj.addProperty("maximum", maximum);
+		if(minimum != null) obj.addProperty("minimum", minimum);
 		
-		if(exclusiveMaximum != null) obj.put("exclusiveMaximum", exclusiveMaximum);
-		if(exclusiveMinimum != null) obj.put("exclusiveMinimum", exclusiveMinimum);
+		if(exclusiveMaximum != null) obj.addProperty("exclusiveMaximum", exclusiveMaximum);
+		if(exclusiveMinimum != null) obj.addProperty("exclusiveMinimum", exclusiveMinimum);
 		
-		if(booleanExclusiveMaximum != null) obj.put("exclusiveMaximum", booleanExclusiveMaximum);
-		if(booleanExclusiveMinimum != null) obj.put("exclusiveMinimum", booleanExclusiveMinimum);
+		if(booleanExclusiveMaximum != null) obj.addProperty("exclusiveMaximum", booleanExclusiveMaximum);
+		if(booleanExclusiveMinimum != null) obj.addProperty("exclusiveMinimum", booleanExclusiveMinimum);
 		
 		return obj;
 	}

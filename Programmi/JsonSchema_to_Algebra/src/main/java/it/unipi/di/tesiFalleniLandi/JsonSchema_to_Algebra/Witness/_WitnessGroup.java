@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
@@ -14,11 +15,11 @@ import java.util.*;
  * collect the assertion contained in AND, then proceeds with the separation of the group.
  * At the end of the process, every WitnessGroup, contains only one type and its related assertions.
  */
-public class WitnessGroup implements WitnessAssertion{
+public class _WitnessGroup implements WitnessAssertion{
     private List<WitnessType> types; // type assertion list (like a OR)
     private List<WitnessAssertion> typedAssertions; // assertion list (excluded type assertion)
 
-    public WitnessGroup(){
+    public _WitnessGroup(){
         types = new LinkedList<>();
         typedAssertions = new LinkedList<>();
     }
@@ -41,48 +42,48 @@ public class WitnessGroup implements WitnessAssertion{
     public List<WitnessAssertion> canonicalize() throws WitnessException {
         List<WitnessAssertion> returnList = new LinkedList<>();
 
-        HashMap<WitnessType, WitnessGroup> groups = new HashMap<>();
+        HashMap<WitnessType, _WitnessGroup> groups = new HashMap<>();
         if(!types.isEmpty()) {
             for (WitnessType type : types){
-                WitnessGroup group = new WitnessGroup();
+                _WitnessGroup group = new _WitnessGroup();
                 group.add(type);
                 groups.put(type, group);
             }
 
             for(WitnessAssertion assertion : typedAssertions){
-                WitnessGroup group = groups.get(assertion.getGroupType());
+                _WitnessGroup group = groups.get(assertion.getGroupType());
                 if(group != null)
                     group.add(assertion);
             }
         }
         else{ //no type specified
 
-            WitnessGroup group = new WitnessGroup();
+            _WitnessGroup group = new _WitnessGroup();
             WitnessType type = new WitnessType(GrammarStringDefinitions.TYPE_NUMBER);
             group.add(type);
             groups.put(type, group);
 
-            group = new WitnessGroup();
+            group = new _WitnessGroup();
             type = new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
             group.add(type);
             groups.put(type, group);
 
-            group = new WitnessGroup();
+            group = new _WitnessGroup();
             type = new WitnessType(GrammarStringDefinitions.TYPE_ARRAY);
             group.add(type);
             groups.put(type, group);
 
-            group = new WitnessGroup();
+            group = new _WitnessGroup();
             type = new WitnessType(GrammarStringDefinitions.TYPE_STRING);
             group.add(type);
             groups.put(type, group);
 
-            group = new WitnessGroup();
+            group = new _WitnessGroup();
             type = new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN);
             group.add(type);
             groups.put(type, group);
 
-            group = new WitnessGroup();
+            group = new _WitnessGroup();
             type = new WitnessType(GrammarStringDefinitions.TYPE_NULL);
             group.add(type);
             groups.put(type, group);
@@ -91,7 +92,7 @@ public class WitnessGroup implements WitnessAssertion{
                 groups.get(assertion.getGroupType()).add(assertion);
         }
 
-        for(Map.Entry<WitnessType, WitnessGroup> entry : groups.entrySet())
+        for(Map.Entry<WitnessType, _WitnessGroup> entry : groups.entrySet())
             returnList.add(entry.getValue());
 
         return returnList;
@@ -137,14 +138,14 @@ public class WitnessGroup implements WitnessAssertion{
         for(WitnessAssertion assertion : typedAssertions)
             allOf.add(assertion.getFullAlgebra());
 
-        allOf.add(new Pattern_Assertion(Pattern.createFromName("sono un gruppo")));
+        allOf.add(new Pattern_Assertion(ComplexPattern.createFromName("sono un gruppo")));
 
         return allOf;
     }
 
     @Override
     public WitnessAssertion clone() {
-        WitnessGroup clone = new WitnessGroup();
+        _WitnessGroup clone = new _WitnessGroup();
 
         for(WitnessType type : types)
             clone.types.add(type.clone());
@@ -178,7 +179,7 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessGroup newGroup = new WitnessGroup();
+        _WitnessGroup newGroup = new _WitnessGroup();
         newGroup.types = new LinkedList<>(types);
 
         for(WitnessAssertion assertion : typedAssertions){
@@ -197,7 +198,7 @@ public class WitnessGroup implements WitnessAssertion{
 
     @Override
     public WitnessAssertion DNF() throws WitnessException {
-        WitnessGroup newGroup = new WitnessGroup();
+        _WitnessGroup newGroup = new _WitnessGroup();
         newGroup.types = new LinkedList<>(types);
 
         for(WitnessAssertion assertion : typedAssertions){
@@ -211,7 +212,7 @@ public class WitnessGroup implements WitnessAssertion{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WitnessGroup group = (WitnessGroup) o;
+        _WitnessGroup group = (_WitnessGroup) o;
 
         LinkedList<WitnessAssertion> check = new LinkedList<>();
 

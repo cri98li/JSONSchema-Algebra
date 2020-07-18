@@ -1,8 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 public class Names_Assertion implements Assertion{
@@ -18,9 +19,9 @@ public class Names_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		obj.put("propertyNames", names.toJSONSchema());
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		obj.add("propertyNames", names.toJSONSchema());
 
 		return obj;
 	}

@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,17 +16,17 @@ public class Contains implements JSONSchemaElement{
 	
 	public Contains() { }
 	
-	public void setContains(Object obj) {
+	public void setContains(JsonElement obj) {
 		contains = new JSONSchema(obj);
 	}
 	
-	public void setMinContains(Object obj) {
-		Long value = (Long) obj;
+	public void setMinContains(JsonElement obj) {
+		Long value = obj.getAsLong();
 		minContains = value;
 	}
 	
-	public void setMaxContains(Object obj) {
-		Long value = (Long) obj;
+	public void setMaxContains(JsonElement obj) {
+		Long value = obj.getAsLong();
 		maxContains = value;
 	}
 	
@@ -36,19 +37,19 @@ public class Contains implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(contains != null) obj.put("contains", contains.toJSON());
-		if(minContains != null) obj.put("minContains", minContains);
-		if(maxContains != null) obj.put("maxContains", maxContains);
+		if(contains != null) obj.add("contains", contains.toJSON());
+		if(minContains != null) obj.addProperty("minContains", minContains);
+		if(maxContains != null) obj.addProperty("maxContains", maxContains);
 		
 		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = GrammarStringDefinitions.POS_INF;
 		String str_contains = "";
 
 		if(minContains != null) min = minContains+"";
@@ -94,7 +95,10 @@ public class Contains implements JSONSchemaElement{
 
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		if(contains != null)
+			return contains.numberOfAssertions();
+
+		return 0;
 	}
 	
 	public Contains clone() {

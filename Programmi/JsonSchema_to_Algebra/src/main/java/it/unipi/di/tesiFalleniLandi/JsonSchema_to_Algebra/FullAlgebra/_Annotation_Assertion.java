@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import org.json.simple.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: not implemented
@@ -21,10 +23,11 @@ public class _Annotation_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
-		obj.putAll(annotations);
+		for(Map.Entry<String, String> entry : annotations.entrySet())
+			obj.addProperty(entry.getKey(), entry.getValue());
 		
 		return obj;
 	}

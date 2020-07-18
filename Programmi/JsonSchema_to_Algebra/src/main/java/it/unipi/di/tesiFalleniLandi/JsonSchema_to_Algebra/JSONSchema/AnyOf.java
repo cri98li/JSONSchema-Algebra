@@ -1,8 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,18 +13,20 @@ import java.util.Map.Entry;
 public class AnyOf implements JSONSchemaElement{
 	private List<JSONSchema> anyOf;
 	
-	public AnyOf(Object obj) {
-		JSONArray array = (JSONArray) obj;
+	public AnyOf(JsonElement obj) {
+		JsonArray array = obj.getAsJsonArray();
 		anyOf = new LinkedList<>();
 		
-		Iterator<?> it = array.iterator();
+		Iterator<JsonElement> it = array.iterator();
 		
 		while(it.hasNext()) {
 			anyOf.add(new JSONSchema(it.next()));
 		}
 	}
 
-	public AnyOf() { }
+	public AnyOf() {
+		anyOf = new LinkedList<>();
+	}
 	
 	public void addElement(JSONSchema schema) {
 		if(anyOf == null) anyOf = new LinkedList<>();
@@ -37,14 +40,14 @@ public class AnyOf implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		JsonArray array = new JsonArray();
 		
 		for(JSONSchema js : anyOf)
 			array.add(js.toJSON());
 
-		obj.put("allOf", array);
+		obj.add("allOf", array);
 		return obj;
 	}
 
@@ -67,7 +70,12 @@ public class AnyOf implements JSONSchemaElement{
 	
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		int returnValue = 0;
+		if(anyOf != null)
+			for(JSONSchemaElement jse : anyOf)
+				returnValue += jse.numberOfAssertions();
+
+		return returnValue;
 	}
 
 	@Override

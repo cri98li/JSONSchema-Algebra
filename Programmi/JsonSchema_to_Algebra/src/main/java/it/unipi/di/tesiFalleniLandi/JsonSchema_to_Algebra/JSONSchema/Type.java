@@ -1,10 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
+import javax.json.Json;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,31 +16,34 @@ import java.util.Map.Entry;
 public class Type implements JSONSchemaElement {
 	protected List<String> type_array;
 	
-	public Type(Object obj){
-		if(obj == null || (obj.getClass() != String.class && obj.getClass() != JSONArray.class))
+	public Type(JsonElement obj){
+		if(obj.isJsonNull())
 			throw new ParseCancellationException("Error: Expected JsonArray or Sting in type!\r\n");
 
-		if(obj.getClass() == String.class) {
-			String type_str = (String) obj;
+		if(obj.isJsonArray()){
+			JsonArray array = obj.getAsJsonArray();
 			type_array = new LinkedList<>();
 
-			//Verify the type string value
-			jsonTypeToGrammar(type_str);
+			Iterator<JsonElement> it = array.iterator();
 
-			type_array.add(type_str);
-			return;
-		}
-		
-		JSONArray array = (JSONArray) obj;
-		type_array = new LinkedList<>();
-		
-		Iterator<?> it = array.iterator();
-		
-		while(it.hasNext()){
-			String str = (String) it.next();
-			////Verify the type string value
-			jsonTypeToGrammar(str);
-			type_array.add(str);
+			while(it.hasNext()){
+				JsonElement str = it.next();
+				////Verify the type string value
+				if(!str.isJsonPrimitive() || !str.getAsJsonPrimitive().isString())
+					throw new ParseCancellationException("Error: Expected JsonArray or Sting in type but was "+ obj);
+				jsonTypeToGrammar(str.getAsJsonPrimitive().getAsString());
+				type_array.add(str.getAsString());
+			}
+		}else {
+			if(obj.isJsonPrimitive() && obj.getAsJsonPrimitive().isString()) {
+				String type_str = obj.getAsString();
+				//Verify the type string value
+				jsonTypeToGrammar(type_str);
+				type_array = new LinkedList<>();
+				type_array.add(type_str);
+				return;
+			} else
+				throw new ParseCancellationException("Error: Expected JsonArray or Sting in type but was "+ obj);
 		}
 	}
 	
@@ -50,19 +56,19 @@ public class Type implements JSONSchemaElement {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 
 		if(type_array.size() == 1) {
-			obj.put("type", type_array.get(0));
+			obj.addProperty("type", type_array.get(0));
 			return obj;
 		}
 		
-		JSONArray array = new JSONArray();
+		JsonArray array = new JsonArray();
 		for(String s : type_array)
 			array.add(s);
 
-		obj.put("type", array);
+		obj.add("type", array);
 
 		return obj;
 	}
@@ -129,7 +135,7 @@ public class Type implements JSONSchemaElement {
 	@Override
 	public Type clone() {
 		if(type_array.size() == 1) {
-			return new Type(type_array.get(0));
+			return new Type(new JsonPrimitive(type_array.get(0)));
 		}else {
 			Type newType = new Type();
 			newType.type_array = new LinkedList<>();

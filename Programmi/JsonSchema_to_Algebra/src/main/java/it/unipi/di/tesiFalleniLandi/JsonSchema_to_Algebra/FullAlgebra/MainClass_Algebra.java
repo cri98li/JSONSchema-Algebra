@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
@@ -11,14 +11,13 @@ public class MainClass_Algebra {
 		
         Assertion schema = Utils_FullAlgebra.parseFile(path);
 
-		System.out.println(schema.toString());
+		JsonObject JSON = (JsonObject) schema.toJSONSchema();
+		System.out.println(JSON.toString());
 
-		JSONObject JSON = (JSONObject) schema.toJSONSchema();
-		System.out.println(JSON.toJSONString());
+		schema = schema.notElimination();
+		System.out.println(Utils.beauty(schema.toGrammarString()));
 
-		//System.out.println(Utils.beauty(((JSONObject)schema.notElimination());
-
-
-		System.out.println(Utils.beauty(schema.notElimination().toGrammarString()));
+		JSON = (JsonObject) schema.toJSONSchema();
+		System.out.println(JSON.toString());
 	}
 }

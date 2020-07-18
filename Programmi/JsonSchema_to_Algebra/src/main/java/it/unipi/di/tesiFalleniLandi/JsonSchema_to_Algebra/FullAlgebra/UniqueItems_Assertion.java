@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessUniqueItems;
-import org.json.simple.JSONObject;
 
 public class UniqueItems_Assertion implements Assertion{
 	
@@ -15,9 +15,9 @@ public class UniqueItems_Assertion implements Assertion{
 	}
 
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		obj.put("uniqueItems", true);
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("uniqueItems", true);
 
 		return obj;
 	}

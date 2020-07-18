@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.json.simple.JSONObject;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -12,24 +14,25 @@ public class Defs implements JSONSchemaElement {
 	private HashMap<String, JSONSchema> schemaDefs;
 	private JSONSchema rootDef;
 	
-	public Defs(Object obj) {
-		JSONObject jsonObject;
+	public Defs(JsonElement obj) {
+		JsonObject jsonObject;
 		try {
-			jsonObject = (JSONObject) obj;
+			jsonObject = obj.getAsJsonObject();
 		}catch(ClassCastException ex) {
 			throw new ParseCancellationException("Error: $defs must be valid JSON Object!");
 		}
 		
 		schemaDefs = new HashMap<>();
-		@SuppressWarnings("unchecked")
-		Set<Map.Entry<?,?>> entrySet = jsonObject.entrySet();
 		
-		for(Entry<?, ?> entry : entrySet) {
+		for(Entry<String, JsonElement> entry : jsonObject.entrySet()) {
 			try{
 				schemaDefs.putIfAbsent((String) entry.getKey(), new JSONSchema(entry.getValue()));
 			}catch(ClassCastException ex) {
-				if(entry.getValue().getClass() == String.class)
-					throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+entry.toString());
+				try{
+					entry.getValue().getAsString();
+				}catch (ClassCastException exx) {
+					throw new ParseCancellationException("Error: no valid Defs Object!\r\n" + entry.toString());
+				}
 				throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
 			}
 		}
@@ -57,18 +60,18 @@ public class Defs implements JSONSchemaElement {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		JSONObject def = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		JsonObject def = new JsonObject();
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
-			def.put(entry.getKey(), entry.getValue().toJSON());
-		obj.put("$defs", def);
+			def.add(entry.getKey(), entry.getValue().toJSON());
+		obj.add("$defs", def);
 
 		if(rootDef != null)
-				obj.put(Utils.ROOTDEF_FOR_JSONSCHEMA, rootDef.toJSON());
+				obj.add(Utils.ROOTDEF_FOR_JSONSCHEMA, rootDef.toJSON());
 
 		return obj;
 	}
@@ -93,7 +96,7 @@ public class Defs implements JSONSchemaElement {
 	public String toGrammarString() {
 		String defs = "";
 		
-		if(rootDef != null)
+		if(rootDef != null && rootDef.numberOfAssertions() > 0)
 			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", rootDef.toGrammarString());
 		else
 			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"" , "{true}");//TODO: pensare a qualcosa di più elegante
@@ -101,7 +104,10 @@ public class Defs implements JSONSchemaElement {
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 
 		for(Entry<String, JSONSchema> entry : entrySet)
-			defs += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
+			if(entry.getValue().numberOfAssertions() > 0) {
+				String decodedKey = new JsonPrimitive(entry.getKey()).toString();
+				defs += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, decodedKey.substring(1, decodedKey.length()-1), entry.getValue().toGrammarString());
+			}
 		
 		if(defs.isEmpty()) return ""; //definizione non ancora supportata
 		return defs.substring(GrammarStringDefinitions.COMMA.length());
@@ -140,7 +146,7 @@ public class Defs implements JSONSchemaElement {
 		returnList.add(new AbstractMap.SimpleEntry<>("",this));
 
 		for(Entry<String, JSONSchema> entry : entrySet)
-			returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 
 		return returnList;
 	}
@@ -160,8 +166,9 @@ public class Defs implements JSONSchemaElement {
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
 			clone.schemaDefs.put(entry.getKey(), entry.getValue().clone());
-		
-		clone.rootDef = rootDef;
+
+		if(rootDef != null)
+			clone.rootDef = rootDef.clone();
 		
 		return clone;
 	}

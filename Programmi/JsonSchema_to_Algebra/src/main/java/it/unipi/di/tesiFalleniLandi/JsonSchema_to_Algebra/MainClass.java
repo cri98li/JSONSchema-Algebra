@@ -1,5 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
@@ -13,9 +16,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONS
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.Scanner;
 
 public class MainClass
 {
-	public static void main( String[] args ) throws IOException, ParseException{
+	public static void main( String[] args ) throws IOException{
 		String filename = "";
 		int op;
 
@@ -38,8 +38,9 @@ public class MainClass
 					//JSON --> ALGEBRA
 					case 1:
 						JSONSchema JsonSchema;
+						Gson gson = new Gson();
 						try (Reader reader = new FileReader(filename)) {
-							JSONObject object = (JSONObject) new JSONParser().parse(reader);
+							JsonObject object = gson.fromJson(reader, JsonObject.class);
 							JsonSchema = new JSONSchema(object);
 						}
 
@@ -63,8 +64,8 @@ public class MainClass
 							schema = (Assertion) p.visit(tree);
 						}
 
-						JSONObject JSON = (JSONObject)schema.toJSONSchema();
-						System.out.println(JSON.toJSONString());
+						JsonObject JSON = (JsonObject)schema.toJSONSchema();
+						System.out.println(JSON.toString());
 						break;
 
 					//NOT ELIMINATION
@@ -133,7 +134,8 @@ public class MainClass
 						JSONSchema root;
 
 						try (Reader reader = new FileReader(path)){
-							JSONObject object = (JSONObject) new JSONParser().parse(reader);
+							Gson gson = new Gson();
+							JsonObject object = gson.fromJson(reader, JsonObject.class);
 							root = new JSONSchema(object);
 
 							Utils_JSONSchema.toGrammarString(root.assertionSeparation());

@@ -1,8 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -14,13 +15,11 @@ public class Dependencies implements JSONSchemaElement{
 	
 	public Dependencies() {	}
 	
-	public void setDependencies(Object obj) {
-		JSONObject object = (JSONObject) obj;
+	public void setDependencies(JsonElement obj) {
+		JsonObject object = obj.getAsJsonObject();
+
 		
-		@SuppressWarnings("unchecked")
-		Set<Entry<?, ?>> entrySet = object.entrySet();
-		
-		for(Entry<?,?> entry : entrySet) {
+		for(Entry<String,JsonElement> entry : object.entrySet()) {
 			try {
 				if(dependentSchemas == null)  dependentSchemas = new HashMap<>();
 				JSONSchema js = new JSONSchema(entry.getValue());
@@ -28,7 +27,7 @@ public class Dependencies implements JSONSchemaElement{
 			}catch(ClassCastException ex) {
 				if(dependentRequired == null) dependentRequired = new HashMap<>();
 				LinkedList<String> list = new LinkedList<>();
-				JSONArray array = (JSONArray) entry.getValue();
+				JsonArray array = (JsonArray) entry.getValue();
 				
 				Iterator<?> it_array = array.iterator();
 				
@@ -41,8 +40,8 @@ public class Dependencies implements JSONSchemaElement{
 		}
 	}
 
-	public void setDependentRequired(Object obj) {
-		JSONObject object = (JSONObject) obj;
+	public void setDependentRequired(JsonElement obj) {
+		JsonObject object = obj.getAsJsonObject();
 		
 		dependentRequired = new HashMap<>();
 		
@@ -51,7 +50,7 @@ public class Dependencies implements JSONSchemaElement{
 		while(it.hasNext()) {
 			LinkedList<String> list = new LinkedList<>();
 			String key = (String) it.next();
-			JSONArray array = (JSONArray) object.get(key);
+			JsonArray array = object.get(key).getAsJsonArray();
 			
 			Iterator<?> it_array = array.iterator();
 			
@@ -63,47 +62,45 @@ public class Dependencies implements JSONSchemaElement{
 		}
 	}
 	
-	public void setDependentSchemas(Object obj){
-		JSONObject object = (JSONObject) obj;
+	public void setDependentSchemas(JsonElement obj){
+		JsonObject object = obj.getAsJsonObject();
 		dependentSchemas = new HashMap<>();
+
 		
-		@SuppressWarnings("unchecked")
-		Set<Entry<?, ?>> entrySet = object.entrySet();
-		
-		for(Entry<?,?> entry : entrySet)
-			dependentSchemas.put((String)entry.getKey(), new JSONSchema(entry.getValue()));
+		for(Entry<String,JsonElement> entry : object.entrySet())
+			dependentSchemas.put(entry.getKey(), new JSONSchema(entry.getValue()));
 	}
 
 	@SuppressWarnings("unchecked")
 	//TODO: json schema version
 	@Override
-	public Object toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
 		if(dependentSchemas != null && !dependentSchemas.isEmpty()){
-			JSONObject tmp = new JSONObject();
+			JsonObject tmp = new JsonObject();
 			Set<String> keys = dependentSchemas.keySet();
 				
 			for(String key : keys)
-				tmp.put(key, dependentSchemas.get(key).toJSON());
+				tmp.add(key, dependentSchemas.get(key).toJSON());
 				
-			obj.put("dependentSchemas", tmp);
+			obj.add("dependentSchemas", tmp);
 		}
 		
 		if(dependentRequired != null && !dependentRequired.isEmpty()){
-			JSONObject tmp = new JSONObject();
+			JsonObject tmp = new JsonObject();
 			Set<String> keys = dependentRequired.keySet();
 				
 			for(String key : keys) {
-				JSONArray array = new JSONArray();
+				JsonArray array = new JsonArray();
 				List<String> list = dependentRequired.get(key);
 				for(String str : list) {
 					array.add(str);
 				}
-				tmp.put(key, array);
+				tmp.add(key, array);
 			}
 				
-			obj.put("dependentRequired", tmp);
+			obj.add("dependentRequired", tmp);
 		}
 		
 		return obj;
@@ -168,7 +165,17 @@ public class Dependencies implements JSONSchemaElement{
 
 	@Override
 	public int numberOfAssertions() {
-		return 1;
+		int count = 0;
+
+		if(dependentSchemas != null)
+			for(Entry<String, JSONSchema> entry : dependentSchemas.entrySet())
+				count += entry.getValue().numberOfAssertions();
+
+		//TODO: check
+		if(dependentRequired != null)
+			count += dependentRequired.size();
+
+		return count;
 	}
 
 	@Override

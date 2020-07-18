@@ -1,10 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -15,16 +17,17 @@ public class JSONSchema implements JSONSchemaElement{
 	
 	private HashMap<String, JSONSchemaElement> jsonSchema; //Dictionary of keywords in the schema
 
-	public JSONSchema(Object obj) {
+	public JSONSchema(JsonElement obj) {
 		jsonSchema = new HashMap<>();
-		JSONObject object = null;
+		JsonObject object = null;
 
-		try {
-			booleanAsJSONSchema = (Boolean) obj;
+		if(obj.isJsonPrimitive() && obj.getAsJsonPrimitive().isBoolean()){
+			booleanAsJSONSchema = obj.getAsBoolean();
 			return;
-		}catch(ClassCastException e) {
-			object = (JSONObject) obj;
-		}
+		}else if(obj.isJsonObject())
+			object = obj.getAsJsonObject();
+		else
+			throw new ParseCancellationException("Expected Object or boolean but was "+obj.getClass());
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -186,7 +189,7 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 				
 			case "pattern":
-				jsonSchema.put("pattern", new Pattern(JSONValue.escape((String) object.get(key))));
+				jsonSchema.put("pattern", new Pattern(object.get(key)));
 				break;
 				
 			case "uniqueItems":
@@ -253,21 +256,23 @@ public class JSONSchema implements JSONSchemaElement{
 	}
 	
 	@Override
-	public Object toJSON() {
-		JSONObject schema = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject schema = new JsonObject();
 
 		//boolean as a schema
-		if(booleanAsJSONSchema != null) return booleanAsJSONSchema;
+		if(booleanAsJSONSchema != null){
+			return new JsonPrimitive(booleanAsJSONSchema);
+		}
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries){
-			JSONObject toAdd = (JSONObject)entry.getValue().toJSON();
+			JsonObject toAdd = (JsonObject)entry.getValue().toJSON();
 			Set<String> subSchemaKeySet = toAdd.keySet();
 			for (String key : subSchemaKeySet){
 				if(key.equals(Utils.ROOTDEF_FOR_JSONSCHEMA))
-					schema.putAll((JSONObject) toAdd.get(key));
+					Utils_JSONSchema.mergeJsonObject(schema, (JsonObject) toAdd.get(key));
 				else
-					schema.put(key, toAdd.get(key));
+					schema.add(key, toAdd.get(key));
 			}
 		}
 		
@@ -326,6 +331,8 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
+			if(entry.getValue().numberOfAssertions() == 0) continue;
+
 			String returnedValue = entry.getValue().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
@@ -342,6 +349,7 @@ public class JSONSchema implements JSONSchemaElement{
 		int count = 0;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
+
 		for(Entry<String, JSONSchemaElement> entry : entries)
 			count += entry.getValue().numberOfAssertions();
 

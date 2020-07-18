@@ -1,9 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessRepeateditems;
-import org.json.simple.JSONObject;
+
 
 public class RepeatedItems_Assertion implements Assertion{
 
@@ -15,7 +16,7 @@ public class RepeatedItems_Assertion implements Assertion{
 	}
 
 	@Override
-	public JSONObject toJSONSchema() {
+	public JsonElement toJSONSchema() {
 		Type_Assertion type = new Type_Assertion();
 		type.add("arr");
 		Not_Assertion not = new Not_Assertion(new UniqueItems_Assertion());

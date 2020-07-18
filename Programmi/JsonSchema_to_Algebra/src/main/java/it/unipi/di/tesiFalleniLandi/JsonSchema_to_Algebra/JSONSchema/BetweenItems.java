@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,17 +11,22 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BetweenItems implements JSONSchemaElement{
-	private Object minItems;
-	private Object maxItems;
+	private Number minItems;
+	private Number maxItems;
 	
 	public BetweenItems() { }
 	
-	public void setMinItems(Object obj) {
-			minItems = obj;
+	public void setMinItems(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected integer as value of minItems got "+obj);
+
+		minItems = obj.getAsNumber();
 	}
 	
-	public void setMaxItems(Object obj) {
-		maxItems = obj;
+	public void setMaxItems(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected integer as value of maxItems got "+obj);
+		maxItems = obj.getAsNumber();
 	}
 	
 	@Override
@@ -29,11 +36,11 @@ public class BetweenItems implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(minItems != null) obj.put("minItems", minItems);
-		if(maxItems != null) obj.put("maxItems", maxItems);
+		if(minItems != null) obj.addProperty("minItems", minItems);
+		if(maxItems != null) obj.addProperty("maxItems", maxItems);
 		
 		return obj;
 	}

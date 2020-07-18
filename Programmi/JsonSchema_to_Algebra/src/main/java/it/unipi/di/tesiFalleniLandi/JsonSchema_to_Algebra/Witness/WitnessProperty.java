@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.Pattern;
@@ -12,21 +13,21 @@ import java.util.Objects;
 import java.util.Set;
 
 public class WitnessProperty implements WitnessAssertion{
-    private Pattern key;
+    private ComplexPattern key;
     private WitnessAssertion value;
 
     protected WitnessProperty() { }
 
-    public WitnessProperty(Pattern key, WitnessAssertion assertion){
+    public WitnessProperty(ComplexPattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
     }
 
-    public Pattern getKey() {
+    public ComplexPattern getKey() {
         return key;
     }
 
-    public void setKey(Pattern key) {
+    public void setKey(ComplexPattern key) {
         this.key = key;
     }
 
@@ -60,7 +61,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessProperty a) throws REException {
-        if(a.key.equals(this.key)){
+        if(a.key.toString().equals(this.key.toString())){
             /*WitnessAnd and = new WitnessAnd();
             and.add(a.value);
             and.add(this.value);*/
@@ -126,7 +127,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
+    public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessProperty prop = new WitnessProperty();
 
         prop.key = key;

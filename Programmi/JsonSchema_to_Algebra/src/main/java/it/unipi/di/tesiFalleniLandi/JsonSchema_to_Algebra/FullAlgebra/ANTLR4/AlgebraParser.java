@@ -1,5 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
+import com.google.gson.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.*;
+import org.apache.http.impl.client.NullBackoffStrategy;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.Json_valueContext;
@@ -52,7 +55,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		AntlrValue min = (AntlrValue) visit(ctx.json_value(0));
 		AntlrValue max = (AntlrValue) visit(ctx.json_value(1));
 
-		return new Bet_Assertion(min.getValue(), max.getValue());
+		return new Bet_Assertion((Number) min.getValue(), (Number) max.getValue());
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		AntlrValue min = (AntlrValue) visit(ctx.json_value(0));
 		AntlrValue max = (AntlrValue) visit(ctx.json_value(1));
 
-		return new XBet_Assertion(min.getValue(), max.getValue());
+		return new XBet_Assertion((Number) min.getValue(), (Number) max.getValue());
 	}
 
 
@@ -112,10 +115,10 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	@Override
 	public Type_Assertion visitNewTypeAssertion(GrammaticaParser.NewTypeAssertionContext ctx) {
 		Type_Assertion type = new Type_Assertion();
-		List<Object> typeList = ((AntlrArray)visit(ctx.type_assertion())).getValue();
+		JsonArray typeList = ((AntlrArray)visit(ctx.type_assertion())).getValue();
 
-		for(Object s : typeList)
-			type.add((String) s);
+		for(JsonElement s : typeList)
+			type.add(s.getAsString());
 
 		return type;
 	}
@@ -245,7 +248,23 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		//trattare null con classe NullAntlr ?
 		for(Json_valueContext value : valueList) {
 			AntlrValue tmp = (AntlrValue) visit(value);
-			_enum.add(tmp.getValue());
+			JsonElement val = null;
+
+			if(tmp.getValue() == null)
+				val = JsonNull.INSTANCE;
+			else if(tmp.getValue().getClass() == String.class)
+				val = new JsonPrimitive((String) tmp.getValue());
+			else if(tmp.getValue().getClass() == Long.class || tmp.getValue().getClass() == Double.class)
+				val = new JsonPrimitive((Number) tmp.getValue());
+			else if(tmp.getValue().getClass() == Boolean.class)
+				val = new JsonPrimitive((Boolean) tmp.getValue());
+			else if(tmp.getValue().getClass() == JsonArray.class)
+				val = (JsonArray) tmp.getValue();
+			else
+				val = (JsonObject) tmp.getValue();
+
+
+			_enum.add(val);
 		}
 
 		return _enum;
@@ -335,13 +354,74 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public Pattern_Assertion visitParsePattern(GrammaticaParser.ParsePatternContext ctx) {
-		String str = ctx.STRING().getText();
+		Pattern_Assertion pattern = null;
 
 		try {
-			return new Pattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
-		} catch (REException e) {
-			throw new ParseCancellationException(e.getMessage());
+			pattern = new Pattern_Assertion((ComplexPattern) visit(ctx.pAssertion()));
+		} catch (java.lang.IllegalArgumentException e) {
+			throw new ParseCancellationException("REException: "+e.getMessage());
 		}
+
+
+		return pattern;
+	}
+
+	@Override
+	public ComplexPattern visitNewComplexPatternString(GrammaticaParser.NewComplexPatternStringContext ctx) {
+		try {
+			String tmp = ctx.STRING().getText();
+			return ComplexPattern.createFromRegexp(tmp.substring(1, tmp.length()-1));
+		} catch (REException e) {
+			throw new ParseCancellationException("REException: "+ e.toString());
+		}
+	}
+
+	@Override
+	public ComplexPattern visitNewpAllOf(GrammaticaParser.NewpAllOfContext ctx) {
+		return (ComplexPattern) visit(ctx.pAllOf());
+	}
+
+	@Override
+	public ComplexPattern visitParsePAllOf(GrammaticaParser.ParsePAllOfContext ctx) {
+		List<GrammaticaParser.PAssertionContext> list = ctx.pAssertion();
+
+		ComplexPattern p = (ComplexPattern) visit(list.get(0));
+
+		for(int i = 1; i < list.size(); i++){
+			GrammaticaParser.PAssertionContext el = list.get(i);
+			p = p.intersect((ComplexPattern) visit(el));
+		}
+
+		return p;
+	}
+
+	@Override
+	public ComplexPattern visitNewpAnyOf(GrammaticaParser.NewpAnyOfContext ctx) {
+		return (ComplexPattern) visit(ctx.pAnyOf());
+	}
+
+	@Override
+	public ComplexPattern visitParsePAnyOf(GrammaticaParser.ParsePAnyOfContext ctx) {
+		List<GrammaticaParser.PAssertionContext> list = ctx.pAssertion();
+
+		ComplexPattern p = (ComplexPattern) visit(list.get(0));
+
+		for(int i = 1; i < list.size(); i++){
+			GrammaticaParser.PAssertionContext el = list.get(i);
+			p = p.union((ComplexPattern) visit(el));
+		}
+
+		return p;
+	}
+
+	@Override
+	public ComplexPattern visitNewpNot(GrammaticaParser.NewpNotContext ctx) {
+		return (ComplexPattern) visit(ctx.pNot());
+	}
+
+	@Override
+	public ComplexPattern visitParsepNot(GrammaticaParser.ParsepNotContext ctx) {
+		return ((ComplexPattern) visit(ctx.pAssertion())).complement();
 	}
 
 	@Override
@@ -351,13 +431,9 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 	@Override
 	public NotPattern_Assertion visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx) {
-		String str = ctx.STRING().getText();
+		 AlgebraParserElement el = visit(ctx.pAssertion());
 
-		try {
-			return new NotPattern_Assertion(Pattern.createFromRegexp(str.substring(1, str.length()-1)));
-		} catch (REException e) {
-			throw new ParseCancellationException(e.getMessage());
-		}
+		return new NotPattern_Assertion((ComplexPattern) el);
 	}
 
 	@Override
@@ -393,8 +469,22 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	@Override
 	public Const_Assertion visitParseConst(GrammaticaParser.ParseConstContext ctx) {
 		AntlrValue value = (AntlrValue) visit(ctx.json_value());
+		JsonElement val = null;
 
-		return new Const_Assertion(value.getValue());
+		if(value.getValue() == null)
+			val = JsonNull.INSTANCE;
+		else if(value.getValue().getClass() == String.class)
+			val = new JsonPrimitive((String) value.getValue());
+		else if(value.getValue().getClass() == Long.class || value.getValue().getClass() == Double.class)
+			val = new JsonPrimitive((Number) value.getValue());
+		else if(value.getValue().getClass() == Boolean.class)
+			val = new JsonPrimitive((Boolean) value.getValue());
+		else if(value.getValue().getClass() == JsonArray.class)
+			val = (JsonArray) value.getValue();
+		else
+			val = (JsonObject) value.getValue();
+
+		return new Const_Assertion(val);
 	}
 
 	@Override
@@ -427,24 +517,29 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 	}
 
 
+
 	@Override
 	public Properties_Assertion visitParseProperties(GrammaticaParser.ParsePropertiesContext ctx) {
 		Properties_Assertion prop = new Properties_Assertion();
 
 		List<AssertionContext> list = ctx.assertion();
-		List<TerminalNode> idList = ctx.STRING();
 
-		for(int i = 0; i < list.size(); i++) {
-			if(idList.get(i).getText().charAt(1) == '^') {
-				try {
-					prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
-				} catch (REException e) {
-					throw new ParseCancellationException(e.getMessage());
+		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
+			for(int i = 0; i < list.size(); i++) {
+				if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) { //se è una stringa
+					if (idList.get(i).getText().charAt(1) == '^') {
+						try {
+							prop.addPatternProperties(ComplexPattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString()), (Assertion) visit(list.get(i)));
+						} catch (java.lang.IllegalArgumentException | REException e) {
+							throw new ParseCancellationException("REException: " + e.getMessage());
+						}
+					} else
+						prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString(), (Assertion) visit(list.get(i)));
+				}else{
+					prop.addPatternProperties((ComplexPattern) visit(idList.get(i)), (Assertion) visit(list.get(i)));
 				}
+
 			}
-			else
-				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
-		}
 
 		return prop;
 	}
@@ -459,13 +554,17 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		PatternRequired_Assertion p = new PatternRequired_Assertion();
 
 		List<AssertionContext> list = ctx.assertion();
-		List<TerminalNode> idList = ctx.STRING();
+		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
 
 		for(int i = 0; i < list.size(); i++) {
-			try {
-				p.add(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
-			} catch (REException e) {
-				throw new ParseCancellationException(e.getMessage());
+			if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) {
+				try {
+					p.add(ComplexPattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString()), (Assertion) visit(list.get(i)));
+				} catch (java.lang.IllegalArgumentException | REException e) {
+					throw new ParseCancellationException("REException: " + e.getMessage());
+				}
+			}else{
+				p.add((ComplexPattern) visit(idList.get(i)), (Assertion) visit(list.get(i)));
 			}
 		}
 
@@ -482,13 +581,17 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		AddPatternRequired_Assertion addPattReq = new AddPatternRequired_Assertion();
 
 		Assertion assertion = (Assertion) visit(ctx.assertion());
-		List<TerminalNode> idList = ctx.STRING();
+		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
 
 		for(int i = 0; i < idList.size(); i++) {
-			try {
-				addPattReq.addName(Pattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
-			} catch (REException e) {
-				throw new ParseCancellationException(e.getMessage());
+			if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) {
+				try {
+					addPattReq.addName(ComplexPattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())));
+				} catch (java.lang.IllegalArgumentException | REException e) {
+					throw new ParseCancellationException("REException: "+e.getMessage());
+				}
+			}else{
+				addPattReq.addName((ComplexPattern) visit(idList.get(i)));
 			}
 		}
 
@@ -502,18 +605,21 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		Properties_Assertion prop = new Properties_Assertion();
 
 		List<AssertionContext> list = ctx.assertion();
-		List<TerminalNode> idList = ctx.STRING();
+		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
 
 		for(int i = 0; i < list.size()-1; i++) {
-			if(idList.get(i).getText().charAt(1) == '^') {
-				try {
-					prop.addPatternProperties(Pattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()),  (Assertion) visit(list.get(i)));
-				} catch (REException e) {
-					throw new ParseCancellationException(e.getMessage());
-				}
+			if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) {
+				if (idList.get(i).getText().charAt(1) == '^') {
+					try {
+						prop.addPatternProperties(ComplexPattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString()), (Assertion) visit(list.get(i)));
+					} catch (java.lang.IllegalArgumentException | REException e) {
+						throw new ParseCancellationException("REException: " + e.getMessage());
+					}
+				} else
+					prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString(), (Assertion) visit(list.get(i)));
+			}else{
+				prop.addPatternProperties((ComplexPattern) visit(idList.get(i)), (Assertion) visit(list.get(i)));
 			}
-			else
-				prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
 
 		prop.setAdditionalProperties((Assertion) visit(list.get(list.size()-1)));

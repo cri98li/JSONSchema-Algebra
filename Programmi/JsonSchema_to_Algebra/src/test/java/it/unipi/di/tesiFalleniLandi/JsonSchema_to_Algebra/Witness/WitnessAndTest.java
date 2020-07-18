@@ -3,13 +3,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Len_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import patterns.REException;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
@@ -91,42 +88,6 @@ public class WitnessAndTest {
 
     @Test
     public void testCanonicalization1() throws REException, WitnessException {
-        WitnessAnd a = new WitnessAnd();
-        a.add(new WitnessMof(3.0));
-        a.add(new Len_Assertion(3L,7L).toWitnessAlgebra());
-        a.add(new WitnessPro(1.0,3.0));
-        a.add(new WitnessUniqueItems());
-        a.add(new WitnessIfBoolThen(true));
-
-        WitnessGroup g1 = new WitnessGroup();
-        g1.add(new WitnessType("num"));
-        g1.add(new WitnessMof(3.0));
-        WitnessGroup g2 = new WitnessGroup();
-        g2.add(new WitnessType("str"));
-        g2.add(new Len_Assertion(3L,7L).toWitnessAlgebra());
-        WitnessGroup g3 = new WitnessGroup();
-        g3.add(new WitnessType("obj"));
-        g3.add(new WitnessPro(1.0,3.0));
-        WitnessGroup g4 = new WitnessGroup();
-        g4.add(new WitnessType("arr"));
-        g4.add(new WitnessUniqueItems());
-        WitnessGroup g5 = new WitnessGroup();
-        g5.add(new WitnessType("bool"));
-        g5.add(new WitnessIfBoolThen(true));
-        WitnessGroup g6 = new WitnessGroup();
-        g6.add(new WitnessType("null"));
-
-        WitnessAnd output = new WitnessAnd();
-        WitnessOr or = new WitnessOr();
-        or.add(g1);
-        or.add(g2);
-        or.add(g3);
-        or.add(g4);
-        or.add(g5);
-        or.add(g6);
-        output.add(or);
-
-        assertEquals(a.groupize(), output);
     }
 
 

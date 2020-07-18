@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,8 +29,8 @@ public class Type_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 
 		if(types.contains(GrammarStringDefinitions.TYPE_NUMNOTINT)){
 			AnyOf_Assertion or = new AnyOf_Assertion();
@@ -52,15 +54,15 @@ public class Type_Assertion implements Assertion{
 
 
 		if(types.size() == 1){
-			obj.put("type", toJsonTypeName(types.get(0)));
+			obj.addProperty("type", toJsonTypeName(types.get(0)));
 			return obj;
 		}
 
-		JSONArray array = new JSONArray();
+		JsonArray array = new JsonArray();
 		for(String str : types)
 			array.add(toJsonTypeName(str));
 
-		obj.put("type", array);
+		obj.add("type", array);
 
 		return obj;
 	}

@@ -58,7 +58,7 @@ public interface WitnessAssertion extends Cloneable{
      * @return return an object as described before
      * @throws WitnessException
      */
-    public WitnessAssertion groupize() throws WitnessException;
+    public WitnessAssertion groupize() throws WitnessException, REException;
 
     /**
      * Collect and save all the definition to create in the variable normalization phase,

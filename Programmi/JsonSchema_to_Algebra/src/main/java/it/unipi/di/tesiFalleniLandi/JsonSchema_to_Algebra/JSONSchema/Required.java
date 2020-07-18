@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,26 +15,25 @@ import java.util.Map.Entry;
 public class Required implements JSONSchemaElement{
 	private List<String> required;
 
-	public Required(Object obj) {
-		JSONArray array;
-		try {
-			array = (JSONArray) obj;
-		}catch (ClassCastException ex) {
-			//per consistenza con draft-4
-			if(obj.getClass() == String.class) {
+	public Required(JsonElement obj) {
+		if(obj.isJsonArray()){
+			JsonArray array = obj.getAsJsonArray();
+			required = new LinkedList<>();
+
+			Iterator<JsonElement> it = array.iterator();
+
+			while(it.hasNext())
+				required.add(it.next().getAsString());
+
+		} else {
+			try {
+				//per consistenza con draft-4
 				required = new LinkedList<>();
-				required.add((String) obj);
-				return;
+				required.add(obj.getAsString());
+			}catch (ClassCastException ex) {
+				throw new UnsenseAssertion(ex.getMessage());
 			}
-
-			throw new UnsenseAssertion(ex.getMessage());
 		}
-		required = new LinkedList<>();
-
-		Iterator<?> it = array.iterator();
-
-		while(it.hasNext())
-			required.add((String) it.next());
 	}
 
 	public Required() {
@@ -41,14 +42,14 @@ public class Required implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		JsonArray array = new JsonArray();
 		
 		for(String s : required)
 			array.add(s);
 
-		obj.put("required", array);
+		obj.add("required", array);
 
 		return obj;
 	}
@@ -56,16 +57,23 @@ public class Required implements JSONSchemaElement{
 	@Override
 	public String toGrammarString() {
 		String str = "";
+		String tmp = "";
+		String decodedKey = "";
 		
 		if(required.isEmpty()) return str;
 		
 		Iterator<String> it = required.iterator();
 		
-		if(it.hasNext())
-			str += "\""+it.next()+"\"";
+		if(it.hasNext()) {
+			tmp = it.next();
+			decodedKey = new JsonPrimitive(tmp).toString();
+			str += "\"" + decodedKey.substring(1, decodedKey.length()-1) + "\"";
+		}
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.COMMA +"\""+ it.next()+"\"";
+			tmp = it.next();
+			decodedKey = new JsonPrimitive(tmp).toString();
+			str += GrammarStringDefinitions.COMMA +"\""+ decodedKey.substring(1,decodedKey.length()-1)+"\"";
 		}
 		
 		return String.format(GrammarStringDefinitions.REQUIRED, str);

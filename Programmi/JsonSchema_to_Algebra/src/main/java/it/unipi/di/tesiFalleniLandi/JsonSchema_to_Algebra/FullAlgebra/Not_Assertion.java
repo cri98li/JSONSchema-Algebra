@@ -1,8 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import org.json.simple.JSONObject;
+
 import patterns.REException;
 
 public class Not_Assertion implements Assertion{
@@ -19,9 +20,9 @@ public class Not_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		obj.put("not", not.toJSONSchema());
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		obj.add("not", not.toJSONSchema());
 
 		return obj;
 	}

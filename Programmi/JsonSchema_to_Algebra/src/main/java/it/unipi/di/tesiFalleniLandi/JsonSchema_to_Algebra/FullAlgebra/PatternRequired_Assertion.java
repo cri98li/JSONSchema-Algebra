@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
@@ -14,22 +16,22 @@ import java.util.Map;
 import java.util.Set;
 
 public class PatternRequired_Assertion implements Assertion{
-	private HashMap<Pattern, Assertion> pattReq;
+	private HashMap<ComplexPattern, Assertion> pattReq;
 
 	public PatternRequired_Assertion() {
 		pattReq = new HashMap<>();
 	}
 	
-	public PatternRequired_Assertion(HashMap<Pattern, Assertion> pattReq) {
+	public PatternRequired_Assertion(HashMap<ComplexPattern, Assertion> pattReq) {
 		this.pattReq = pattReq;
 	}
 	
-	public PatternRequired_Assertion(Pattern name, Assertion assertion) {
+	public PatternRequired_Assertion(ComplexPattern name, Assertion assertion) {
 		pattReq = new HashMap<>();
 		pattReq.put(name, assertion);
 	}
 
-	public void add(Pattern key, Assertion value) {
+	public void add(ComplexPattern key, Assertion value) {
 		if(pattReq.containsKey(key)) throw new ParseCancellationException("Detected 2 patternRequired with the same name");
 		pattReq.put(key, value);
 	}
@@ -40,12 +42,12 @@ public class PatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public JsonElement toJSONSchema() {
 		Type_Assertion t = new Type_Assertion();
 		t.add(GrammarStringDefinitions.TYPE_OBJECT);
 		AllOf_Assertion and = new AllOf_Assertion();
 
-		for(Map.Entry<Pattern, Assertion> entry : pattReq.entrySet()) {
+		for(Map.Entry<ComplexPattern, Assertion> entry : pattReq.entrySet()) {
 			Properties_Assertion pro = new Properties_Assertion();
 			pro.addPatternProperties(entry.getKey(), entry.getValue().not());
 			and.add(new Not_Assertion(pro));
@@ -61,9 +63,9 @@ public class PatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add("obj");
 		
-		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
+		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 			Properties_Assertion properties = new Properties_Assertion();
 			Assertion not = entry.getValue().not();
 			if(not != null)
@@ -80,9 +82,9 @@ public class PatternRequired_Assertion implements Assertion{
 	@Override
 	public Assertion notElimination() {
 		PatternRequired_Assertion pattReqAss = new PatternRequired_Assertion();
-		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 		
-		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
+		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 			Assertion not = entry.getValue().notElimination();
 			if(not != null)
 				pattReqAss.add(entry.getKey(), not);
@@ -96,11 +98,11 @@ public class PatternRequired_Assertion implements Assertion{
 		String str = "";
 		
 		if(pattReq != null) {
-			Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
-			for(Map.Entry<Pattern, Assertion> entry : entrySet) {
+			Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
+			for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
+					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey().getAlgebraString(), returnedValue);
 			}
 		}
 
@@ -118,10 +120,10 @@ public class PatternRequired_Assertion implements Assertion{
 		or.add(type);
 		or.add(and);
 
-		Set<Map.Entry<Pattern, Assertion>> entrySet = pattReq.entrySet();
+		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 
-		for(Map.Entry<Pattern, Assertion> entry : entrySet) {
-			Pattern p = entry.getKey().clone();
+		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
+			ComplexPattern p = entry.getKey().clone();
 			WitnessPattReq pattReq = new WitnessPattReq(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattReq);
 		}

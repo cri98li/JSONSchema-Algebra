@@ -1,14 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessMof;
-import org.json.simple.JSONObject;
 
 public class Mof_Assertion implements Assertion{
-	private Object mof;
+	private Number mof;
 	
 	public Mof_Assertion(Object mof) {
-		this.mof = mof;
+		this.mof = (Number) mof;
 	}
 
 	@Override
@@ -17,9 +18,9 @@ public class Mof_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
-		obj.put("multipleOf", mof);
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("multipleOf", mof);
 
 		return obj;
 	}

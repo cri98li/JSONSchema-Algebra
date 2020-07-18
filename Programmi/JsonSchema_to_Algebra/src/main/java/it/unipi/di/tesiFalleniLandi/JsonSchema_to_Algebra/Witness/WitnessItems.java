@@ -190,14 +190,24 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
+    public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessItems items = new WitnessItems();
 
         if(additionalItems != null)
+            if(additionalItems.getClass() != WitnessAnd.class){
+                WitnessAnd and = new WitnessAnd();
+                and.add(additionalItems);
+                items.additionalItems = and.groupize();
+            }else
                 items.additionalItems = additionalItems.groupize();
 
         for(WitnessAssertion assertion : this.items)
-                items.addItems(assertion.groupize());
+                if(assertion.getClass() != WitnessAnd.class){
+                    WitnessAnd and = new WitnessAnd();
+                    and.add(assertion);
+                    items.addItems(and.groupize());
+                }else
+                    items.addItems(assertion.groupize());
 
         return items;
     }

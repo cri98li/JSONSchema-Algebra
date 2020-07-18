@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,9 +11,13 @@ import java.util.Map.Entry;
 
 public class UniqueItems implements JSONSchemaElement{
 	private boolean uniqueItems;
-	
-	public UniqueItems(Object obj){
-		uniqueItems = (boolean) obj;
+
+	public UniqueItems(JsonElement obj){
+		uniqueItems = obj.getAsBoolean();
+	}
+
+	private UniqueItems(boolean obj){
+		uniqueItems = obj;
 	}
 	
 	public UniqueItems() { }
@@ -23,9 +28,9 @@ public class UniqueItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("uniqueItems", uniqueItems);
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("uniqueItems", uniqueItems);
 
 		return obj;
 	}

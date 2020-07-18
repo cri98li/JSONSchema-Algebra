@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,10 +22,10 @@ public class UnknowElement implements JSONSchemaElement {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		obj.putAll(obj);
+		//obj.putAll(obj);
 		
 		return obj;
 	}

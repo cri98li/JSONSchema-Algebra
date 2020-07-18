@@ -1,11 +1,16 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
+import javax.json.Json;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +18,9 @@ import java.util.Set;
 
 //TODO: controlla cosa succede quando creiamo un pattern da una stringa che in verità è un pattern (se viene interpretata come stringa statica [corretto] o come pattern [sbagliato])
 public class Const_Assertion implements Assertion{
-	private Object value;
+	private JsonElement value;
 
-	public Const_Assertion(Object value) {
+	public Const_Assertion(JsonElement value) {
 		this.value = value;
 	}
 
@@ -26,10 +31,24 @@ public class Const_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 
-		obj.put("const", value);
+		if(value.isJsonNull()) {
+			obj.add("const", JsonNull.INSTANCE);
+			return obj;
+		}
+
+		if(value.isJsonObject())
+			obj.add("const", value);
+		else if(value.isJsonArray())
+			obj.add("const", value);
+		else if(value.getAsJsonPrimitive().isString())
+			obj.addProperty("const", value.getAsString());
+		else if(value.getAsJsonPrimitive().isNumber())
+			obj.addProperty("const", value.getAsNumber());
+		else if(value.getAsJsonPrimitive().isBoolean())
+			obj.addProperty("const", value.getAsBoolean());
 
 		return obj;
 	}
@@ -38,54 +57,47 @@ public class Const_Assertion implements Assertion{
 	public Assertion not() {
 		Type_Assertion type = new Type_Assertion();
 		
-		if(value == null) {
+		if(value.isJsonNull()) {
 			type.add(GrammarStringDefinitions.TYPE_NULL);
-			
 			return type.not();
 		}
 
-		if(value.getClass() == Boolean.class) {
-			AnyOf_Assertion or = new AnyOf_Assertion();
-			type.add("bool");
-			or.add(type.not());
-			or.add(new IfBoolThen_Assertion((Boolean) value).not());
+		if(value.isJsonObject()) {
+			JsonObject object = value.getAsJsonObject();
+			AllOf_Assertion and = new AllOf_Assertion();
+			Properties_Assertion properties = new Properties_Assertion();
+			Long size = (long) object.size();
+			Pro_Assertion pro = new Pro_Assertion(size, size);
+			Required_Assertion req = new Required_Assertion();
 
-			return or;
-		}
-		
-		if(value.getClass() == Long.class || value.getClass() == Double.class) {
-			AnyOf_Assertion or = new AnyOf_Assertion();
-			Bet_Assertion bet = new Bet_Assertion(value, value);
-			type.add("num");
-			or.add(type.not());
-			or.add(bet.not());
-			
-			return or;
-		}
-		
-		if(value.getClass() == String.class) {
-			AnyOf_Assertion or = new AnyOf_Assertion();
-			Pattern_Assertion pattern = new Pattern_Assertion(Pattern.createFromName((String) value));
-			
-			type.add("str");
-			or.add(type.not());
-			or.add(pattern.not());
-			
-			return or;
-		}
-		
-		//array
-		if(value.getClass() == LinkedList.class) {
 			@SuppressWarnings("unchecked")
-			List<Object> array = (List<Object>) value;
+			Set<Map.Entry<String, JsonElement>> keys = object.entrySet();
+
+			for (Map.Entry<String, JsonElement> entry : keys) {
+				properties.addProperties(entry.getKey(), new Const_Assertion(entry.getValue()));
+				req.add(entry.getKey());
+			}
+
+			type.add("obj");
+			and.add(properties);
+			and.add(type);
+			and.add(req);
+			and.add(pro);
+
+			return and.not();
+		}
+
+		//array
+		if(value.isJsonArray()) {
+			@SuppressWarnings("unchecked")
+			JsonArray array = value.getAsJsonArray();
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
 			AnyOf_Assertion or = new AnyOf_Assertion();
-			//BetItems_Assertion betItems = new BetItems_Assertion((long) array.size(), (long) array.size());
 			Exist_Assertion betItems = new Exist_Assertion((long) array.size(), (long) array.size(), new Boolean_Assertion(true));
 
-			for (Object obj : array)
-				items.add(new Const_Assertion(obj));
+			for (JsonElement element : array)
+				items.add(new Const_Assertion(element));
 
 			or.add(betItems.not());
 			or.add(items.not());
@@ -93,30 +105,35 @@ public class Const_Assertion implements Assertion{
 
 			return or;
 		}
-		
-		
-		//object
-		JSONObject object = (JSONObject) value;
-		AllOf_Assertion and = new AllOf_Assertion();
-		Properties_Assertion properties = new Properties_Assertion();
-		Long size = (long) object.size();
-		Pro_Assertion pro = new Pro_Assertion(size, size);
-		Required_Assertion req = new Required_Assertion();
-		
-		@SuppressWarnings("unchecked")
-		Set<Map.Entry<String, ?>> keys = object.entrySet();
-		for(Map.Entry<String, ?> entry : keys) {
-			properties.addProperties(entry.getKey(), new Const_Assertion(entry.getValue()));
-			req.add(entry.getKey());
+
+		if(value.getAsJsonPrimitive().isBoolean()) {
+			AnyOf_Assertion or = new AnyOf_Assertion();
+			type.add("bool");
+			or.add(type.not());
+			or.add(new IfBoolThen_Assertion(value.getAsBoolean()).not());
+
+			return or;
 		}
 		
-		type.add("obj");
-		and.add(properties);
-		and.add(type);
-		and.add(req);
-		and.add(pro);
-		
-		return and.not();
+		if(value.getAsJsonPrimitive().isNumber()) {
+			AnyOf_Assertion or = new AnyOf_Assertion();
+			Bet_Assertion bet = new Bet_Assertion(value.getAsNumber(), value.getAsNumber());
+			type.add("num");
+			or.add(type.not());
+			or.add(bet.not());
+			
+			return or;
+		}
+
+		//String
+		AnyOf_Assertion or = new AnyOf_Assertion();
+		Pattern_Assertion pattern = new Pattern_Assertion(ComplexPattern.createFromName(value.getAsString())); //TODO: getAsString or toString?
+
+		type.add("str");
+		or.add(type.not());
+		or.add(pattern.not());
+
+		return or;
 	}
 
 	@Override
@@ -127,23 +144,18 @@ public class Const_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		if(value == null) return String.format(GrammarStringDefinitions.CONST, "null");
+		if(value.isJsonNull()) return String.format(GrammarStringDefinitions.CONST, "null");
 
-		if(value.getClass() == String.class)
+		if(value.isJsonObject() || value.isJsonArray())
+			return String.format(GrammarStringDefinitions.CONST, value.toString());
+
+		if(value.getAsJsonPrimitive().isString())
 			return String.format(GrammarStringDefinitions.CONST, "\"" + value + "\"");
 
-		if(value.getClass() == Long.class
-				|| value.getClass() == Double.class
-				|| value.getClass() == Boolean.class)
-			return String.format(GrammarStringDefinitions.CONST, value);
-
-		if(value.getClass() == JSONObject.class)
-			return String.format(GrammarStringDefinitions.CONST, ((JSONObject) value).toJSONString());
-
-		return toGrammarString((List<Object>) value);
-
+		return String.format(GrammarStringDefinitions.CONST, value);
 	}
 
+	/*
 	private String toGrammarString(List<Object> list){
 		String str = "";
 
@@ -158,8 +170,8 @@ public class Const_Assertion implements Assertion{
 					|| obj.getClass() == Boolean.class)
 				str += GrammarStringDefinitions.COMMA + obj;
 
-			else if (obj.getClass() == JSONObject.class)
-				str += GrammarStringDefinitions.COMMA + "\"" + ((JSONObject) obj).toJSONString() + "\"";
+			else if (obj.getClass() == JsonObject.class)
+				str += GrammarStringDefinitions.COMMA + "\"" + ((JsonObject) obj).toString() + "\"";
 
 			else
 				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
@@ -167,58 +179,58 @@ public class Const_Assertion implements Assertion{
 
 		if(str.isEmpty()) return "";
 		return str.substring(GrammarStringDefinitions.COMMA.length());
-	}
+	}*/
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
-		if(value == null) return new WitnessType(GrammarStringDefinitions.TYPE_NULL);
+		if(value.isJsonNull()) return new WitnessType(GrammarStringDefinitions.TYPE_NULL);
 
-		if(value.getClass() == String.class) {
-			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
-			and.add(new WitnessPattern(Pattern.createFromName((String) value)/*new Pattern("^"+(String) value+"$")*/));
-			return and;
-		}
-
-		if(value.getClass() == Boolean.class){
-			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN));
-			and.add(new WitnessIfBoolThen((Boolean) value));
-			return and;
-		}
-
-		if(value.getClass() == Long.class
-				|| value.getClass() == Double.class){
-			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
-			and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));
-			return and;
-		}
-
-		if(value.getClass() == JSONObject.class) {
+		if(value.isJsonObject()) {
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessType(GrammarStringDefinitions.TYPE_OBJECT));
-			Set<Map.Entry<String, ?>> entrySet = ((JSONObject) value).entrySet();
+			Set<Map.Entry<String, JsonElement>> entrySet = ((JsonObject) value).entrySet();
 			Required_Assertion req = new Required_Assertion();
-			for(Map.Entry<String, ?> entry : entrySet){
+
+			for(Map.Entry<String, JsonElement> entry : entrySet){
 				req.add(entry.getKey());
-				and.add(new WitnessProperty(Pattern.createFromName(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
+				and.add(new WitnessProperty(ComplexPattern.createFromName(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
 			}
 			and.add(req.toWitnessAlgebra());
 			and.add(new WitnessPro(Double.parseDouble(""+entrySet.size()), Double.parseDouble(""+entrySet.size())));
 			return and;
 		}
 
-		//array
-		WitnessAnd and = new WitnessAnd();
-		and.add(new WitnessType(GrammarStringDefinitions.TYPE_ARRAY));
-		WitnessItems items = new WitnessItems();
-		LinkedList<Object> array = (LinkedList) value;
-		for(Object obj : array)
-			items.addItems(new Const_Assertion(obj).toWitnessAlgebra());
+		if(value.isJsonArray()){
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_ARRAY));
+			WitnessItems items = new WitnessItems();
+			JsonArray array = value.getAsJsonArray();
+			for(JsonElement element : array)
+				items.addItems(new Const_Assertion(element).toWitnessAlgebra());
 
-		and.add(new WitnessContains(Long.parseLong(""+array.size()), Long.parseLong(""+array.size()), new WitnessBoolean(true)));
-		and.add(items);
+			and.add(new WitnessContains(Long.parseLong(""+array.size()), Long.parseLong(""+array.size()), new WitnessBoolean(true)));
+			and.add(items);
+			return and;
+		}
+
+		if(value.getAsJsonPrimitive().isString()) {
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
+			and.add(new WitnessPattern(ComplexPattern.createFromName(value.getAsString())));
+			return and;
+		}
+
+		if(value.getAsJsonPrimitive().isBoolean()){
+			WitnessAnd and = new WitnessAnd();
+			and.add(new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN));
+			and.add(new WitnessIfBoolThen(value.getAsBoolean()));
+			return and;
+		}
+
+		WitnessAnd and = new WitnessAnd();
+		and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
+		and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));
+
 		return and;
 	}
 

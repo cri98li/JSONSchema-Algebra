@@ -77,9 +77,23 @@ unique_items_assertion : 'uniqueItems'																				#ParseUniqueItems;
 
 repeated_items_assertion : 'repeatedItems'																			#ParseRepeatedItems;
 
-pattern_assertion : 'pattern''(' STRING ')'																			#ParsePattern;
 
-not_pattern_assertion : 'notPattern''(' STRING ')'																	#ParseNotPattern;
+pAllOf : 'pAllOf''[' pAssertion (',' pAssertion)* ']'														#ParsePAllOf;
+
+pAnyOf : 'pAnyOf''[' pAssertion (',' pAssertion)* ']'															#ParsePAnyOf;
+
+pNot : 'pNot''('pAssertion')'																						#ParsepNot;
+
+pAssertion: pAllOf																								#NewpAllOf
+                | pAnyOf																						#NewpAnyOf
+                | pNot																							#NewpNot
+                | STRING																						#NewComplexPatternString;
+
+
+pattern_assertion : 'pattern''(' pAssertion')'														                #ParsePattern;
+
+
+not_pattern_assertion : 'notPattern''(' pAssertion ')'												                    #ParseNotPattern;
 
 items_assertion : 'items''[' assertion (',' assertion)*';'']'														#ParseOnlyItems
 					| 'items''[' (assertion (',' assertion)*)?';'assertion']'										#ParseAdditionalItems
@@ -87,15 +101,15 @@ items_assertion : 'items''[' assertion (',' assertion)*';'']'														#Pars
 
 contains_assertion : 'contains''(' json_value ',' json_value ';' assertion	')'										#ParseContains;
 
-properties : 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';' assertion ']'						#ParseAdditionalProperties
-				| 'props''[' (STRING ':' assertion (','STRING ':' assertion)*)? ';'']'								#ParseProperties;
+properties : 'props''[' ( pAssertion ':' assertion (','pAssertion ':' assertion)*)? ';' assertion ']'						#ParseAdditionalProperties
+				| 'props''[' (pAssertion ':' assertion (','pAssertion ':' assertion)*)? ';'']'								#ParseProperties;
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 
 def_assertion: (
                         ((defList_assertion ',')?	'rootdef' STRING '=' assertion (',' defList_assertion)? )
                         | defList_assertion
-               )	#ParseDefRoot;
+               )	                                                                                                #ParseDefRoot;
 
 defList_assertion: 'def'STRING'=' assertion (',' 'def'STRING'=' assertion)*                                         #ParseDef;
 
@@ -107,9 +121,9 @@ propertyExNames_assertion: 'exNames''(' assertion ')'																#ParsePrope
 
 annotations: 'annotations''['STRING':'STRING (','STRING':'STRING)*	']'												#ParseAnnotations; //non implemented in JSON_to_Grammar
 
-pattern_required: 'pattReq''[' STRING ':' assertion (',' STRING ':' assertion)* ']'									#ParsePatternRequired;
+pattern_required: 'pattReq''[' pAssertion ':' assertion (',' pAssertion ':' assertion)* ']'									#ParsePatternRequired;
 
-additional_pattern_required: 'addPattReq''(' '['(STRING (',' STRING)*)*']' ':' assertion ')'						#ParseAdditionalPatternRequired;
+additional_pattern_required: 'addPattReq''(' '['(pAssertion (',' pAssertion)*)*']' ':' assertion ')'						#ParseAdditionalPatternRequired;
 
 ifBoolThen_assertion: 'ifBoolThen''('BOOLEAN')'                                                                     #ParseIfBoolThen;
 
@@ -130,7 +144,7 @@ TYPE : 'obj' | 'str' | 'num' | 'int' | 'arr' | 'bool' | 'numNotInt';
 INT : '-'?[0-9]+; // Define token INT as one or more digits
 DOUBLE: '-'?[0-9]+'.'[E0-9]+;
 WS : [ \t\r\n]+ -> skip ; // Define whitespace rule, toss it out
-STRING : '"' .*? '"';
+STRING : '"' ( ESC | ~[\\"\r\n] )* '"';
 BOOLEAN :  't' | 'tt' | 'f' | 'ff' | 'true' | 'false' ;
 
 fragment ESC

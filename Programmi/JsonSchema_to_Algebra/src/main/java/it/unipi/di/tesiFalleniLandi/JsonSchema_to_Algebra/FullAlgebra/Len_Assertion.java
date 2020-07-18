@@ -1,10 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 public class Len_Assertion implements Assertion{
@@ -33,11 +34,11 @@ public class Len_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		
-		if(min != null)	obj.put("minLength", min);
-		if(max != null)	obj.put("maxLength", max);
+		if(min != null)	obj.addProperty("minLength", min);
+		if(max != null)	obj.addProperty("maxLength", max);
 		
 		return obj;
 	}
@@ -94,6 +95,6 @@ public class Len_Assertion implements Assertion{
 		if(min != null) minStr = min.toString();
 		if(max != null) maxStr = max.toString();
 
-		return new WitnessPattern(Pattern.createFromRegexp("^.{"+ minStr +"," + maxStr + "}$"));
+		return new WitnessPattern(ComplexPattern.createFromRegexp("^.{"+ minStr +"," + maxStr + "}$"));
 	}
 }

@@ -1,9 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -54,34 +56,34 @@ public class AllOf_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
+	public JsonElement toJSONSchema() {
 		// allOf containing false
 		if(containsFalseBooleanAssertion){
-			JSONArray array = new JSONArray();
-			JSONObject obj = new JSONObject();
-			obj.put("allOf", array);
+			JsonArray array = new JsonArray();
+			JsonObject obj = new JsonObject();
+			obj.add("allOf", array);
 			array.add(false);
 			return obj;
 		}
 
 
 		if(duplicates) {  // if there are duplicates, then translate as "allOf"
-			JSONArray array = new JSONArray();
+			JsonArray array = new JsonArray();
 			
 			for(Assertion assertion : andList)
 				array.add(assertion.toJSONSchema());
 
-			JSONObject obj = new JSONObject();
-			obj.put("allOf", array);
+			JsonObject obj = new JsonObject();
+			obj.add("allOf", array);
 
 			return obj;
 
 		} else {  //if there are no duplicates, then translate as JSONObject
-			JSONObject obj = new JSONObject();
+			JsonObject obj = new JsonObject();
 
 			for (Assertion assertion : andList)
 				if (assertion.getClass() != Boolean_Assertion.class) {
-					obj.putAll((JSONObject) assertion.toJSONSchema());
+					obj = Utils_JSONSchema.mergeJsonObject(obj, assertion.toJSONSchema().getAsJsonObject());
 				}
 
 			return obj;
@@ -136,6 +138,7 @@ public class AllOf_Assertion implements Assertion{
 	@Override
 	public WitnessAnd toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
+
 		for(Assertion a : andList)
 			and.add(a.toWitnessAlgebra());
 

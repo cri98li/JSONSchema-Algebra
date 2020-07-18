@@ -1,18 +1,31 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class Pattern implements JSONSchemaElement{
 	private String pattern;
-	
-	public Pattern(Object str) {
-		pattern = (String)str;
+
+	public Pattern(JsonElement str) {
+		try{
+			str.getAsString();
+		}catch (Exception e) {
+			throw new ParseCancellationException("Error: patter must be String!");
+		}
+
+		pattern = str.getAsString();
+	}
+
+	private Pattern(String pattern) {
+		this.pattern = pattern;
 	}
 	
 	public Pattern() { }
@@ -24,15 +37,16 @@ public class Pattern implements JSONSchemaElement{
 
 
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("pattern", JSONObject.escape(pattern));
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.add("pattern", new JsonPrimitive(pattern));
 
 		return obj;
 	}
 
 	@Override
 	public String toGrammarString() {
+		String pattern = new JsonPrimitive(this.pattern).toString();
 		return String.format(GrammarStringDefinitions.PATTERN, pattern);
 	}
 	
@@ -43,10 +57,7 @@ public class Pattern implements JSONSchemaElement{
 
 	@Override
 	public Pattern assertionSeparation() {
-		Pattern obj = new Pattern();
-		obj.pattern = pattern;
-		
-		return obj;
+		return this.clone();
 	}
 
 	@Override

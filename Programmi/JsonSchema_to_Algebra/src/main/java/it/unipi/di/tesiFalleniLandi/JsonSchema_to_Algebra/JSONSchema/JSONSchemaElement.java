@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -9,7 +11,7 @@ interface JSONSchemaElement extends Cloneable{
 	 * Exports the class as a json object (using json simple).
 	 * @return an object that represent the schema, see implementations for more details
 	 */
-	public Object toJSON();
+	public JsonElement toJSON();
 	
 	/**
 	 * Apply the assertion separation step.

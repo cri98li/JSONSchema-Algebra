@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,17 +11,23 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BetweenProperties implements JSONSchemaElement{
-	private Object minProperties;
-	private Object maxProperties;
+	private Number minProperties;
+	private Number maxProperties;
 	
 	public BetweenProperties() { }
 	
-	public void setMinProperties(Object obj) {
-		minProperties = obj;
+	public void setMinProperties(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected integer as value of minProperties");
+
+		minProperties = obj.getAsNumber();
 	}
 	
-	public void setMaxProperties(Object obj) {
-		maxProperties = obj;
+	public void setMaxProperties(JsonElement obj) {
+		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
+			throw new ParseCancellationException("expected integer as value of maxProperties");
+
+		maxProperties = obj.getAsNumber();
 	}
 
 	@Override
@@ -29,13 +37,13 @@ public class BetweenProperties implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(minProperties != null) obj.put("minProperties", minProperties);
+		if(minProperties != null) obj.addProperty("minProperties", minProperties);
 		
-		if(maxProperties != null) obj.put("maxProperties", maxProperties);
-		
+		if(maxProperties != null) obj.addProperty("maxProperties", maxProperties);
+
 		return obj;
 	}
 

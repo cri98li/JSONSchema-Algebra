@@ -1,10 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -33,14 +35,14 @@ public class Required_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJSONSchema() {
-		JSONArray array = new JSONArray();
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonArray array = new JsonArray();
+		JsonObject obj = new JsonObject();
 
 		for(String str : reqList)
 			array.add(str);
 
-		obj.put("required", array);
+		obj.add("required", array);
 
 		return obj;
 	}
@@ -55,7 +57,7 @@ public class Required_Assertion implements Assertion{
 
 		for(String key : reqList){
 			Properties_Assertion props = new Properties_Assertion();
-			props.addPatternProperties(Pattern.createFromName(key), new Boolean_Assertion(false));
+			props.addPatternProperties(ComplexPattern.createFromName(key), new Boolean_Assertion(false));
 			or.add(props);
 		}
 		and.add(or);
@@ -96,7 +98,7 @@ public class Required_Assertion implements Assertion{
 		or.add(type);
 
 		for(String str : reqList) {
-			Pattern p = Pattern.createFromName(str);
+			ComplexPattern p = ComplexPattern.createFromName(str);
 			WitnessPattReq pattReq = new WitnessPattReq(p, new WitnessBoolean(true));
 			and.add(pattReq);
 		}

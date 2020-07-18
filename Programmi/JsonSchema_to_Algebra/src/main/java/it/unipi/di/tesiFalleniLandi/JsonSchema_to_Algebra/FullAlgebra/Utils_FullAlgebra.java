@@ -10,9 +10,11 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import patterns.REException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -25,6 +27,8 @@ public class Utils_FullAlgebra {
      * @throws IOException errori nell'accesso al file
      */
     public static Defs_Assertion parseFile(String path) throws IOException {
+        if(new File(path).length() <= 2) throw new ParseCancellationException("Empty File");
+
         Reader reader = new FileReader(path);
         GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
         lexer.removeErrorListeners();
@@ -52,6 +56,7 @@ public class Utils_FullAlgebra {
      * * @return ritorna un'istanza di Defs_Assertion
      */
     public static Defs_Assertion parseString(String toParse) {
+        if(toParse.length() <= 2) throw new ParseCancellationException("Empty String");
         GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(toParse));
         lexer.removeErrorListeners();
         lexer.addErrorListener(new ErrorListener());
@@ -73,6 +78,8 @@ public class Utils_FullAlgebra {
     }
 
     public static Assertion parse(String path) throws IOException {
+        if(new File(path).length() <= 2) throw new ParseCancellationException("Empty File");
+
         Reader reader = new FileReader(path);
         GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
         lexer.removeErrorListeners();

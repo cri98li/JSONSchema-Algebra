@@ -1,7 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
 
@@ -11,7 +14,7 @@ public class Const extends Enum {
 		super();
 	}
 	
-	public Const(Object obj) {
+	public Const(JsonElement obj) {
 		super();
 		parseArray(obj);
 	}
@@ -23,18 +26,15 @@ public class Const extends Enum {
 		}
 
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		Object value = null;
+	public JsonObject toJSON() {
+		JsonObject obj = new JsonObject();
 
-		if(super.thereIsNull) value = null;
-		else if(!enumArray_array.isEmpty()) value = enumArray_array.get(0);
-		else if(!enumArray_obj.isEmpty()) value = enumArray_obj.get(0);
-		else if(!enumArray_bool.isEmpty()) value = enumArray_bool.get(0);
-		else if(!enumArray_num.isEmpty()) value = enumArray_num.get(0);
-		else if(!enumArray_str.isEmpty()) value = enumArray_str.get(0);
-
-		obj.put("const", value);
+		if(super.thereIsNull) obj.add("const", JsonNull.INSTANCE);
+		else if(!enumArray_array.isEmpty()) obj.add("const", enumArray_array.get(0));
+		else if(!enumArray_obj.isEmpty()) obj.add("const", enumArray_obj.get(0));
+		else if(!enumArray_bool.isEmpty()) obj.addProperty("const", enumArray_bool.get(0));
+		else if(!enumArray_num.isEmpty()) obj.addProperty("const", enumArray_num.get(0));
+		else if(!enumArray_str.isEmpty()) obj.addProperty("const", enumArray_str.get(0));
 
 		return obj;
 	}
@@ -46,8 +46,11 @@ public class Const extends Enum {
 
 	@Override
 	public String toGrammarString() {
-		if(!enumArray_str.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, "\""+ enumArray_str.get(0) +"\"");
+
+		if(!enumArray_str.isEmpty()) {
+			String decodedKey = new JsonPrimitive(enumArray_str.get(0)).toString();
+			return String.format(GrammarStringDefinitions.CONST, decodedKey);
+		}
 		
 		if(!enumArray_num.isEmpty())
 			return String.format(GrammarStringDefinitions.CONST, enumArray_num.get(0).toString());
@@ -56,10 +59,10 @@ public class Const extends Enum {
 			return String.format(GrammarStringDefinitions.CONST, enumArray_bool.get(0).toString());
 		
 		if(!enumArray_array.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_array.get(0));
+			return String.format(GrammarStringDefinitions.CONST, enumArray_array.get(0).toString());
 
 		if(!enumArray_obj.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_obj.get(0).toJSONString());
+			return String.format(GrammarStringDefinitions.CONST, enumArray_obj.get(0).toString());
 
 		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
 

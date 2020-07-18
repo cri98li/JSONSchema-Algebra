@@ -1,7 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,11 +16,11 @@ public class Ref implements JSONSchemaElement{
 	
 	protected Ref() {}
 	
-	public Ref(Object uri) {
+	public Ref(JsonElement uri) {
 		try {
-			this.uri = new URI_JS((String)uri);
+			this.uri = new URI_JS(uri.getAsString());
 		}catch(ClassCastException ex) {
-			System.out.println("Error: $ref must be string!");
+			throw new ParseCancellationException("Error: $ref must be string!");
 		}
 	}
 
@@ -28,7 +31,8 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.REF, uri.getNormalizedName());
+		String uri = new JsonPrimitive(this.uri.getNormalizedName()).toString();
+		return String.format(GrammarStringDefinitions.REF, uri.substring(1, uri.length()-1));
 	}
 	
 	@Override
@@ -37,9 +41,9 @@ public class Ref implements JSONSchemaElement{
 	}
 
 	@Override
-	public Object toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("ref", uri.toString());
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("ref", uri.toString());
 
 		return obj;
 	}

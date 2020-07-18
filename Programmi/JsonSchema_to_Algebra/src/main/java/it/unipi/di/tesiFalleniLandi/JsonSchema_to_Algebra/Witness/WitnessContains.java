@@ -144,7 +144,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
+    public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessContains contains = new WitnessContains();
 
         contains.min = min;

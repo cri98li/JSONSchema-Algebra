@@ -1,8 +1,7 @@
-// Generated from Grammatica.g4 by ANTLR 4.8
+// Generated from Grammatica.g4 by ANTLR 4.7.2
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import patterns.REException;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -376,6 +375,55 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseRepeatedItems(GrammaticaParser.ParseRepeatedItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePAllOf}
+	 * labeled alternative in {@link GrammaticaParser#pAllOf}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePAllOf(GrammaticaParser.ParsePAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsePAnyOf}
+	 * labeled alternative in {@link GrammaticaParser#pAnyOf}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsePAnyOf(GrammaticaParser.ParsePAnyOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParsepNot}
+	 * labeled alternative in {@link GrammaticaParser#pNot}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParsepNot(GrammaticaParser.ParsepNotContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewpAllOf}
+	 * labeled alternative in {@link GrammaticaParser#pAssertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewpAllOf(GrammaticaParser.NewpAllOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewpAnyOf}
+	 * labeled alternative in {@link GrammaticaParser#pAssertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewpAnyOf(GrammaticaParser.NewpAnyOfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewpNot}
+	 * labeled alternative in {@link GrammaticaParser#pAssertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewpNot(GrammaticaParser.NewpNotContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NewComplexPatternString}
+	 * labeled alternative in {@link GrammaticaParser#pAssertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewComplexPatternString(GrammaticaParser.NewComplexPatternStringContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParsePattern}
 	 * labeled alternative in {@link GrammaticaParser#pattern_assertion}.

@@ -7,6 +7,7 @@ import patterns.REException;
 import java.util.*;
 
 public class WitnessOr implements WitnessAssertion{
+
     private Map<Object, List<WitnessAssertion>> orList;
 
     public WitnessOr() {
@@ -14,18 +15,26 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     public boolean add(WitnessAssertion el){
-        if(el.getClass() == this.getClass()) return add((WitnessOr) el);
+        if(el.getClass() == this.getClass())
+            return add((WitnessOr) el);
+
         else if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class)
             return addUni_Rep(el);
+
+        else if(el.getClass() == WitnessBoolean.class && ((WitnessBoolean) el).getValue() == false) return false;
+
         else {
-            if(orList.containsKey(el.getClass()))
-                if(orList.get(el.getClass()).contains(el))
-                    return false;
-                else{
+            if(orList.containsKey(el.getClass())) {
+                if (el.getClass() == WitnessType.class){
+                    if (orList.get(el.getClass()).contains(el))
+                        return false;
+                    orList.get(el.getClass()).add(el);
+                    return true;
+                } else {
                     orList.get(el.getClass()).add(el);
                     return true;
                 }
-            else{
+            }else{
                 List<WitnessAssertion> list = new LinkedList<>();
                 list.add(el);
                 orList.put(el.getClass(), list);
@@ -194,27 +203,22 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion groupize() throws WitnessException {
+    public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessOr newOr = new WitnessOr();
-        //WitnessGroup group = new WitnessGroup();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue())
-                newOr.add(assertion.groupize());
+            for(WitnessAssertion assertion : entry.getValue()) {
+                WitnessAnd tmp = null;
 
-            /*
-                if(assertion.getGroupType() != null)
-                    group.add(assertion.groupize());
-                else if(assertion.getClass() == WitnessAnd.class)
-                    newOr.add(assertion.groupize());
-                else
-                    newOr.add(assertion);
+                //Creo un and per poi fare il gruppo
+                if (assertion.getClass() != WitnessAnd.class) { //TODO: top_groupize su singole asserzioni???
+                    tmp = new WitnessAnd();
+                    tmp.add(assertion);
+                }else
+                    tmp = (WitnessAnd) assertion;
 
-        if(!group.isEmpty()){
-            newOr.orList.put(WitnessGroup.class, group.canonicalize());
-
-
-        }*/
+                newOr.add(tmp.groupize());
+            }
 
         return newOr;
     }

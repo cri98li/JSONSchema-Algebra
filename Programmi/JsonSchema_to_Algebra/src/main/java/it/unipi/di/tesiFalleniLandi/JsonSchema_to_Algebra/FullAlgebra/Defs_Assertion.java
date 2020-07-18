@@ -1,10 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.HashMap;
@@ -37,17 +38,17 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public Object toJSONSchema() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSONSchema() {
+		JsonObject obj = new JsonObject();
 		if(rootDef != null)
-			obj = (JSONObject) defs.get(rootDef).toJSONSchema();
+			obj = defs.get(rootDef).toJSONSchema().getAsJsonObject();
 
-		JSONObject jsonDefs = new JSONObject();
+		JsonObject jsonDefs = new JsonObject();
 		for(Entry<String, Assertion> a : defs.entrySet())
 			if(!a.getKey().equals(rootDef))
-				jsonDefs.put(a.getKey(), a.getValue().toJSONSchema());
+				jsonDefs.add(a.getKey(), a.getValue().toJSONSchema().getAsJsonObject());
 
-		obj.put("$defs", jsonDefs);
+		obj.add("$defs", jsonDefs);
 
 		return obj;
 	}

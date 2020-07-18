@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,14 +13,14 @@ public class PropertyNames implements JSONSchemaElement{
 	
 	public PropertyNames() { }
 	
-	public PropertyNames(Object obj) {
+	public PropertyNames(JsonElement obj) {
 		this.propertyNames = new JSONSchema(obj);
 	}
 
 	@Override
-	public Object toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("propertyNames", propertyNames.toJSON());
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
+		obj.add("propertyNames", propertyNames.toJSON());
 
 		return obj;
 	}

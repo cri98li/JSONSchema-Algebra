@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
@@ -9,14 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AddPatternRequired_Assertion implements Assertion{
-	private List<Pattern> pattList;
+	private List<ComplexPattern> pattList;
 	private Assertion additionalProperties;
 
 	public AddPatternRequired_Assertion() {
 		pattList = new LinkedList<>();
 	}
 	
-	public AddPatternRequired_Assertion(List<Pattern> pattList, Assertion additionalProperties) {
+	public AddPatternRequired_Assertion(List<ComplexPattern> pattList, Assertion additionalProperties) {
 		this.pattList = pattList;
 		this.additionalProperties = additionalProperties;
 	}
@@ -27,7 +29,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 				+ "]";
 	}
 
-	public void setPattList(List<Pattern> pattList) {
+	public void setPattList(List<ComplexPattern> pattList) {
 		this.pattList = pattList;
 	}
 
@@ -35,22 +37,22 @@ public class AddPatternRequired_Assertion implements Assertion{
 		this.additionalProperties = additionalProperties;
 	}
 	
-	public void addName(Pattern name) {
+	public void addName(ComplexPattern name) {
 		pattList.add(name);
 	}
 
 	@Override
-	public Object toJSONSchema() {
+	public JsonElement toJSONSchema() {
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		Properties_Assertion prop = new  Properties_Assertion();
 
-		for(Pattern p : pattList)
+		for(ComplexPattern p : pattList)
 			prop.addPatternProperties(p, new Boolean_Assertion(true));
 
 		prop.setAdditionalProperties(additionalProperties.not());
 
-		IfThenElse_Assertion ifThen = new IfThenElse_Assertion(type, prop.not(), null);
+		IfThenElse_Assertion ifThen = new IfThenElse_Assertion(type, new Not_Assertion(prop), null);
 
 		return ifThen.toJSONSchema();
 	}
@@ -62,7 +64,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		type.add(GrammarStringDefinitions.TYPE_OBJECT);
 		
-		for(Pattern name : pattList) {
+		for(ComplexPattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
 		}
 		if(additionalProperties.not() != null)
@@ -87,7 +89,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	public String toGrammarString() {
 		String str = "";
 		
-		for(Pattern s : pattList)
+		for(ComplexPattern s : pattList)
 			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
 		
 		if(additionalProperties == null)
@@ -101,8 +103,8 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessPattReq toWitnessAlgebra() throws REException {
-		Pattern p = Pattern.createFromRegexp(".*");
-		for(Pattern pattern : pattList)
+		ComplexPattern p = ComplexPattern.createFromRegexp(".*");
+		for(ComplexPattern pattern : pattList)
 			p = p.intersect(pattern);
 
 		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());

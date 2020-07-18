@@ -1,10 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessItems;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import patterns.REException;
 
 import java.util.Arrays;
@@ -40,19 +40,19 @@ public class Items_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSONSchema() {
-		JSONArray array = new JSONArray();
-		JSONObject obj = new JSONObject();
+	public JsonObject toJSONSchema() {
+		JsonArray array = new JsonArray();
+		JsonObject obj = new JsonObject();
 
 		if(itemsArray != null) {
 			for (Assertion assertion : itemsArray)
 				array.add(assertion.toJSONSchema());
 
-			obj.put("items", array);
+			obj.add("items", array);
 		}
 
 		if(additionalItems != null)
-			obj.put("additionalItems", additionalItems.toJSONSchema());
+			obj.add("additionalItems", additionalItems.toJSONSchema());
 	
 		return obj;
 	}

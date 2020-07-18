@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
 import patterns.REException;
 
@@ -8,7 +9,7 @@ public interface Assertion extends AlgebraParserElement{
 	 * Exports the class as a json object (using json simple).
 	 * @return return an object that represent the schema, see implementations for more details
 	 */
-	public Object toJSONSchema();
+	public JsonElement toJSONSchema();
 	
 	/**
 	 *

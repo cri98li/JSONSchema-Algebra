@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,17 +11,17 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Length implements JSONSchemaElement{
-	private Object minLength;
-	private Object maxLength;
+	private Number minLength;
+	private Number maxLength;
 	
 	public Length () { }
 	
-	public void setMinLength(Object obj) {
-		minLength = obj;
+	public void setMinLength(JsonElement obj) {
+		minLength = obj.getAsNumber();
 	}
 	
-	public void setMaxLength(Object obj) {
-		maxLength = obj;
+	public void setMaxLength(JsonElement obj) {
+		maxLength = obj.getAsNumber();
 	}
 	
 	@Override
@@ -29,11 +31,11 @@ public class Length implements JSONSchemaElement{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
+	public JsonElement toJSON() {
+		JsonObject obj = new JsonObject();
 		
-		if(minLength != null) obj.put("minLength", minLength);
-		if(maxLength != null) obj.put("maxLength", maxLength);		
+		if(minLength != null) obj.addProperty("minLength", minLength);
+		if(maxLength != null) obj.addProperty("maxLength", maxLength);
 		
 		return obj;
 	}
@@ -81,11 +83,9 @@ public class Length implements JSONSchemaElement{
 	@Override
 	public Length clone(){
 		Length newLen = new Length();
-		
-		if(minLength != null)
-			newLen.setMinLength(minLength);
-		if(maxLength != null)
-			newLen.setMaxLength(maxLength);
+
+		newLen.minLength = minLength;
+		newLen.maxLength = maxLength;
 		
 		return newLen;
 	}
