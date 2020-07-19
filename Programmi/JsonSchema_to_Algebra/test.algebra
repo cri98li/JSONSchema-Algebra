@@ -1,4 +1,1 @@
-{
-pattern("ciao"),
-notPattern("aaa")
-}
+props["a": mof(2); mof(3)];

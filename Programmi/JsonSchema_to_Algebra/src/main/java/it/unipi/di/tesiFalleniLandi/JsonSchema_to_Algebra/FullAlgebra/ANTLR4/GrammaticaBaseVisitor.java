@@ -445,14 +445,7 @@ public class GrammaticaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParseItems(GrammaticaParser.ParseItemsContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -460,13 +453,6 @@ public class GrammaticaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitParseContains(GrammaticaParser.ParseContainsContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -481,13 +467,6 @@ public class GrammaticaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitParseConst(GrammaticaParser.ParseConstContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

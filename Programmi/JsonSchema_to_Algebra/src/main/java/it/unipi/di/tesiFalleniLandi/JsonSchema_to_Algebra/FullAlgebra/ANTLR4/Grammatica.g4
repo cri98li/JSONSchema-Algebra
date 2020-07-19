@@ -95,23 +95,18 @@ pattern_assertion : 'pattern''(' pAssertion')'														                #Par
 
 not_pattern_assertion : 'notPattern''(' pAssertion ')'												                    #ParseNotPattern;
 
-items_assertion : 'items''[' assertion (',' assertion)*';'']'														#ParseOnlyItems
-					| 'items''[' (assertion (',' assertion)*)?';'assertion']'										#ParseAdditionalItems
+items_assertion : 'items''[' (assertion (',' assertion)*)?';'assertion?']'										#ParseItems
 					;
 
 contains_assertion : 'contains''(' json_value ',' json_value ';' assertion	')'										#ParseContains;
 
-properties : 'props''[' ( pAssertion ':' assertion (','pAssertion ':' assertion)*)? ';' assertion ']'						#ParseAdditionalProperties
-				| 'props''[' (pAssertion ':' assertion (','pAssertion ':' assertion)*)? ';'']'								#ParseProperties;
+properties : 'props''[' ( pAssertion ':' assertion (','pAssertion ':' assertion)*)? ';' assertion? ']'						#ParseProperties;
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 
-def_assertion: (
-                        ((defList_assertion ',')?	'rootdef' STRING '=' assertion (',' defList_assertion)? )
-                        | defList_assertion
-               )	                                                                                                #ParseDefRoot;
+def_assertion: ('def'|'rootdef') STRING '=' assertion 	(',' (('def'|'rootdef') STRING '=' assertion))*										#ParseDef;
 
-defList_assertion: 'def'STRING'=' assertion (',' 'def'STRING'=' assertion)*                                         #ParseDef;
+DEF_FIRMA: (ESC+ STRING);
 
 ref_assertion: 'ref''(' STRING ')'																					#ParseRef;
 

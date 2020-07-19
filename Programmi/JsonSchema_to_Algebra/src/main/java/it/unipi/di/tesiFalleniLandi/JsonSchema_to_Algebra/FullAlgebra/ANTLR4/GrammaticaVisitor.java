@@ -439,19 +439,12 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseNotPattern(GrammaticaParser.ParseNotPatternContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseOnlyItems}
+	 * Visit a parse tree produced by the {@code ParseItems}
 	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ParseAdditionalItems}
-	 * labeled alternative in {@link GrammaticaParser#items_assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx);
+	T visitParseItems(GrammaticaParser.ParseItemsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseContains}
 	 * labeled alternative in {@link GrammaticaParser#contains_assertion}.
@@ -459,13 +452,6 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseContains(GrammaticaParser.ParseContainsContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ParseAdditionalProperties}
-	 * labeled alternative in {@link GrammaticaParser#properties}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParseProperties}
 	 * labeled alternative in {@link GrammaticaParser#properties}.
@@ -481,15 +467,8 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParseConst(GrammaticaParser.ParseConstContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParseDefRoot}
-	 * labeled alternative in {@link GrammaticaParser#def_assertion}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code ParseDef}
-	 * labeled alternative in {@link GrammaticaParser#defList_assertion}.
+	 * labeled alternative in {@link GrammaticaParser#def_assertion}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

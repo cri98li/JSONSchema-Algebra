@@ -195,7 +195,7 @@ public class Properties_Assertion implements Assertion{
 			ComplexPattern p = ComplexPattern.createFromName(entry.getKey());
 			WitnessProperty prop = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(prop);
-			addPatt.intersect(p);
+			addPatt = addPatt.intersect(p);
 		}
 
 		Set<Entry<ComplexPattern, Assertion>> entrySetPatt = patternProperties.entrySet();
@@ -204,7 +204,7 @@ public class Properties_Assertion implements Assertion{
 			ComplexPattern p = entry.getKey().clone();
 			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattProp);
-			addPatt.intersect(p);
+			addPatt = addPatt.intersect(p);
 		}
 
 		if(additionalProperties != null) {

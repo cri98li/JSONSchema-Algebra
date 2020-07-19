@@ -104,6 +104,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	@Override
 	public WitnessPattReq toWitnessAlgebra() throws REException {
 		ComplexPattern p = ComplexPattern.createFromRegexp(".*");
+
 		for(ComplexPattern pattern : pattList)
 			p = p.intersect(pattern);
 

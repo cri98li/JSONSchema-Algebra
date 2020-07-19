@@ -120,7 +120,7 @@ public class Defs_Assertion implements Assertion{
 		return defs.get(ref);
 	}
 
-	protected String getRootName(){
+	public String getRootName(){
 		return rootDef;
 	}
 }

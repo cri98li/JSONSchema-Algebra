@@ -492,6 +492,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return (Items_Assertion) visit(ctx.items_assertion());
 	}
 
+	/*
 	@Override
 	public Items_Assertion visitParseOnlyItems(GrammaticaParser.ParseOnlyItemsContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
@@ -502,16 +503,20 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 		return items;
 	}
+	*/
 
 	@Override
-	public Items_Assertion visitParseAdditionalItems(GrammaticaParser.ParseAdditionalItemsContext ctx) {
+	public Items_Assertion visitParseItems(GrammaticaParser.ParseItemsContext ctx) {
 		List<AssertionContext> list = ctx.assertion();
-		Items_Assertion items= new Items_Assertion();
+		Items_Assertion items = new Items_Assertion();
+		boolean thereIsAnAdditional = ctx.getText().contains(";"+ list.get(list.size()-1).getText()+"]");
 
-		for(int i = 0; i < list.size()-1; i++)
+		if(thereIsAnAdditional)
+			items.setAdditionalItems((Assertion) visit(list.remove(list.size()-1)));
+
+		for(int i = 0; i < list.size(); i++)
 			items.add((Assertion) visit(list.get(i)));
 
-		items.setAdditionalItems((Assertion) visit(list.get(list.size()-1)));
 
 		return items;
 	}
@@ -523,8 +528,11 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		Properties_Assertion prop = new Properties_Assertion();
 
 		List<AssertionContext> list = ctx.assertion();
-
 		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
+
+		if(list.size() == idList.size()+1)
+			prop.setAdditionalProperties((Assertion) visit(list.remove(list.size()-1)));
+
 			for(int i = 0; i < list.size(); i++) {
 				if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) { //se è una stringa
 					if (idList.get(i).getText().charAt(1) == '^') {
@@ -540,6 +548,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 				}
 
 			}
+
 
 		return prop;
 	}
@@ -600,6 +609,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		return addPattReq;
 	}
 
+	/*
 	@Override
 	public Assertion visitParseAdditionalProperties(GrammaticaParser.ParseAdditionalPropertiesContext ctx) {
 		Properties_Assertion prop = new Properties_Assertion();
@@ -625,7 +635,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		prop.setAdditionalProperties((Assertion) visit(list.get(list.size()-1)));
 
 		return prop;
-	}
+	}*/
 
 	@Override
 	public Properties_Assertion visitNewProperties(GrammaticaParser.NewPropertiesContext ctx) {
@@ -716,12 +726,21 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<TerminalNode> idList = ctx.STRING();
 
 		for(int i = 0; i < list.size(); i++) {
-			defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
+			if(ctx.getText().contains("rootdef"+idList.get(i).getText())) {
+				if (defs.getRootName() == null) {
+					String tmp = idList.get(i).getText().replace("rootdef", "").trim();
+					defs.setRootDef(tmp.substring(1, tmp.length() - 1), (Assertion) visit(list.get(i)));
+				}
+				else throw new ParseCancellationException("Multiple rootdef detected!");
+			}
+			else
+				defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
 		}
 
 		return defs;
 	}
 
+	/*
 	@Override
 	public Defs_Assertion visitParseDefRoot(GrammaticaParser.ParseDefRootContext ctx) {
 		Defs_Assertion defs = new Defs_Assertion();
@@ -741,6 +760,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 
 		return defs;
 	}
+	*/
 
 	@Override
 	public Ref_Assertion visitNewRef(GrammaticaParser.NewRefContext ctx) {
