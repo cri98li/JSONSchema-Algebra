@@ -2,12 +2,14 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.Pattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -21,6 +23,10 @@ public class WitnessProperty implements WitnessAssertion{
     public WitnessProperty(ComplexPattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
+    }
+
+    public WitnessAssertion getValue() {
+        return value;
     }
 
     public ComplexPattern getKey() {
@@ -37,6 +43,11 @@ public class WitnessProperty implements WitnessAssertion{
                 "key=" + key +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        value.checkLoopReferences(env, varList);
     }
 
     @Override
@@ -134,8 +145,12 @@ public class WitnessProperty implements WitnessAssertion{
         if(value != null ){
             if(value.getClass() != WitnessAnd.class) {
                 WitnessAnd and = new WitnessAnd();
-                and.add(value);
-                prop.value = and.groupize();
+                try {
+                    and.add(value);
+                    prop.value = and.groupize();
+                }catch (UnsenseAssertion e){
+                    prop.value = new WitnessBoolean(false);
+                }
             }else
                 prop.value = value.groupize();
         }
@@ -148,7 +163,7 @@ public class WitnessProperty implements WitnessAssertion{
 
         if (value != null) {
             //TODO: true <--> allOf[true] ?
-            if (value.getClass() != WitnessBoolean.class || value.getClass() != WitnessVar.class) {
+            if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
                 value.variableNormalization_separation(env);
                 WitnessVar var = new WitnessVar(Utils_Witness.getName(value));
                 env.add(var, value);
@@ -159,11 +174,13 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
+        /*
         WitnessProperty prop = new WitnessProperty();
         prop.key = this.key;
         if(value != null)   prop.value = this.value.variableNormalization_expansion(env);
+        */
 
-        return prop;
+        return this;
     }
 
     @Override

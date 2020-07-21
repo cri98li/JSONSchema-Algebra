@@ -124,7 +124,7 @@ public class PatternRequired_Assertion implements Assertion{
 
 		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 			ComplexPattern p = entry.getKey().clone();
-			WitnessPattReq pattReq = new WitnessPattReq(p, entry.getValue().toWitnessAlgebra());
+			WitnessPattReq pattReq = WitnessPattReq.build(p, entry.getValue().toWitnessAlgebra());
 			and.add(pattReq);
 		}
 

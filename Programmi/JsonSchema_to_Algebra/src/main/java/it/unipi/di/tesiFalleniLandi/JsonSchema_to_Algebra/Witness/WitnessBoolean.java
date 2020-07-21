@@ -4,6 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,11 @@ public class WitnessBoolean implements WitnessAssertion{
         return "WitnessBoolean{" +
                 "value=" + value +
                 '}';
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        return;
     }
 
     @Override

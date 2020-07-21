@@ -108,6 +108,6 @@ public class AddPatternRequired_Assertion implements Assertion{
 		for(ComplexPattern pattern : pattList)
 			p = p.intersect(pattern);
 
-		return new WitnessPattReq(p.complement(), additionalProperties.toWitnessAlgebra());
+		return WitnessPattReq.build(p.complement(), additionalProperties.toWitnessAlgebra());
 	}
 }

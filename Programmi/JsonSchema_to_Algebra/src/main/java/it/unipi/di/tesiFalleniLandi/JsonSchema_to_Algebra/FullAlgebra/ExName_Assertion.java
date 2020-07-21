@@ -47,6 +47,6 @@ public class ExName_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() {
-		return new WitnessPattReq(Utils_PattOfS.pattOfS(names), new WitnessBoolean(true));
+		return WitnessPattReq.build(Utils_PattOfS.pattOfS(names), new WitnessBoolean(true));
 	}
 }

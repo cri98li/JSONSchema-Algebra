@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -38,6 +39,11 @@ public class WitnessBet implements WitnessAssertion{
     @Override
     public WitnessAssertion merge() {
         return this;
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        return;
     }
 
     @Override

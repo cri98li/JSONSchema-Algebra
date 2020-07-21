@@ -1,1 +1,9 @@
-props["a": mof(2); mof(3)];
+{
+    type[obj],
+    props[
+        "prop_a":{
+            mof(1),
+            type[num]
+        }
+    ;]
+}

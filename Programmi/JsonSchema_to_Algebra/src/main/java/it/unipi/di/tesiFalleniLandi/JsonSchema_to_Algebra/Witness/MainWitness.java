@@ -20,24 +20,25 @@ public class MainWitness {
 
         //System.out.println(schema.toGrammarString());
 
-        //WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(schema);
+        WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(schema); //fa anche not elimination
 
-        WitnessEnv env = (WitnessEnv) schema.toWitnessAlgebra();
+        //WitnessEnv env = (WitnessEnv) schema.toWitnessAlgebra();
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
-
         env = (WitnessEnv) env.merge();
+
+        env.checkLoopReferences(null, null);
 
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.flush();
-        //System.out.println(env.getFullAlgebra().toGrammarString());
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Groupize: \r\n");
         System.out.flush();
 
         env = env.groupize();
-        //System.out.println(env.getFullAlgebra().toGrammarString());
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n DNF: \r\n");
         System.out.flush();
@@ -50,7 +51,7 @@ public class MainWitness {
 
         env.variableNormalization_separation(null);
 
-        //System.out.println(env.getFullAlgebra().toGrammarString());
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Expansion: \r\n");
         System.out.flush();
@@ -58,6 +59,13 @@ public class MainWitness {
         env = env.variableNormalization_expansion(null);
 
         //System.out.println(env.getFullAlgebra().toGrammarString());
+
+        System.out.println("\r\n\r\n objectPrepare: \r\n");
+        System.out.flush();
+
+        env.objectPrepare();
+
+        System.out.println(Utils.beauty(env.merge().getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n FINE! \r\n");
         System.out.flush();

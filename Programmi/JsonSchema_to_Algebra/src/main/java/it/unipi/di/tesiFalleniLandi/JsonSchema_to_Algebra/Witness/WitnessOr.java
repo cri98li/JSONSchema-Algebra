@@ -28,6 +28,7 @@ public class WitnessOr implements WitnessAssertion{
                 if (el.getClass() == WitnessType.class){
                     if (orList.get(el.getClass()).contains(el))
                         return false;
+
                     orList.get(el.getClass()).add(el);
                     return true;
                 } else {
@@ -86,14 +87,21 @@ public class WitnessOr implements WitnessAssertion{
         return this;
     }
 
-    /*
-    a può essere un oggetto di un qualsiasi tipo,
-        foreach( b = orList.get(a.class)[i])
-            if(b.merge(a).equals(a)
-                when a is satisfied, b is also satisfied so the entire orAssertion is true
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
+            for(WitnessAssertion assertion : entry.getValue())
+                assertion.checkLoopReferences(env, varList);
+    }
 
-    if a.class = or?
-     */
+    /*
+        a può essere un oggetto di un qualsiasi tipo,
+            foreach( b = orList.get(a.class)[i])
+                if(b.merge(a).equals(a)
+                    when a is satisfied, b is also satisfied so the entire orAssertion is true
+
+        if a.class = or?
+         */
     @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(a != null && a.getClass() == this.getClass())
@@ -225,6 +233,7 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
+
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
                 assertion.variableNormalization_separation(env);
@@ -258,7 +267,7 @@ public class WitnessOr implements WitnessAssertion{
         return or;
     }
 
-    protected WitnessOr DNF(WitnessAssertion toAdd) {
+    protected WitnessOr DNF(WitnessAssertion toAdd) throws WitnessException {
         WitnessOr or = new WitnessOr();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
@@ -273,6 +282,15 @@ public class WitnessOr implements WitnessAssertion{
             }
 
         return or;
+    }
+
+    public void objectPrepare() throws REException, WitnessException {
+        if(orList.containsKey(WitnessAnd.class)){
+            List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
+            for(WitnessAssertion assertion : ands) {
+                ((WitnessAnd)assertion).objectPrepare();
+            }
+        }
     }
 
     @Override

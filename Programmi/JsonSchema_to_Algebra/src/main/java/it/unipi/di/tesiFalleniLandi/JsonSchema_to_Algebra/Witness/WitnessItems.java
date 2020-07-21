@@ -46,6 +46,15 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        for(WitnessAssertion item : items)
+            item.checkLoopReferences(env, varList);
+
+        if(additionalItems != null)
+            additionalItems.checkLoopReferences(env, varList);
+    }
+
+    @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
             if(((WitnessBoolean)additionalItems).getValue())
@@ -238,7 +247,7 @@ public class WitnessItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessItems newItems = new WitnessItems();
+        /*WitnessItems newItems = new WitnessItems();
 
         if(items != null){
             for(WitnessAssertion assertion : items)
@@ -248,7 +257,9 @@ public class WitnessItems implements WitnessAssertion{
         if(additionalItems != null)
             newItems.setAdditionalItems(additionalItems.variableNormalization_expansion(env));
 
-        return newItems;
+        return newItems;*/
+
+        return this;
     }
 
     @Override

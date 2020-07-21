@@ -1,5 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
+/**
+ * Eccezione lanciata quando vengono trovati nel documento asserzioni del tipo required(true)
+ */
+
 public class UnsenseAssertion extends RuntimeException{
     public UnsenseAssertion() {
     }

@@ -3,9 +3,17 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface WitnessAssertion extends Cloneable{
+    /**
+     * check for loop between ref
+     * @param env
+     * @param varList
+     */
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException;
+
     /**
      * Perform the and-merging as described in the paper plus other little simplifications
      * @param a

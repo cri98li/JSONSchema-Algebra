@@ -7,20 +7,38 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
 import patterns.REException;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class WitnessPattReq implements WitnessAssertion{
+    private static HashMap<Object, WitnessPattReq> instances;
+
+    public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
+        if(instances == null) instances = new HashMap<>();
+
+        WitnessPattReq tmp = new WitnessPattReq(key, assertion);
+
+        if(instances.containsKey(tmp.toString()))
+            return instances.get(tmp.toString());
+
+        instances.put(tmp.toString(), tmp);
+        return tmp;
+    }
+
+
+
     private ComplexPattern key;
     private WitnessAssertion value;
 
-    public WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
+    private WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
         this.key = key;
         value = assertion;
     }
 
-    protected WitnessPattReq() { }
+    public WitnessAssertion getValue() {
+        return value;
+    }
+
+    private WitnessPattReq() { }
 
     public ComplexPattern getKey() {
         return key;
@@ -36,6 +54,11 @@ public class WitnessPattReq implements WitnessAssertion{
                 "key=" + key +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        value.checkLoopReferences(env, varList);
     }
 
     @Override
@@ -153,11 +176,12 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessPattReq pattReq = new WitnessPattReq();
+        /*WitnessPattReq pattReq = new WitnessPattReq();
         pattReq.key = this.key;
         if(value != null) pattReq.value = this.value.variableNormalization_expansion(env);
 
-        return pattReq;
+        return pattReq;*/
+        return this;
     }
 
     @Override

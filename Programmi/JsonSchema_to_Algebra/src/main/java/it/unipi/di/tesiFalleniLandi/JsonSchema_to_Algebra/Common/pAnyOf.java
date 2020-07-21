@@ -13,7 +13,10 @@ public class pAnyOf implements ComplexPatternElement {
     }
 
     public void add(ComplexPatternElement el){
-        pAnyOf.add(el);
+        if (el.getClass() == this.getClass())
+            pAnyOf.addAll(((pAnyOf) el).pAnyOf);
+        else
+            pAnyOf.add(el);
     }
 
     @Override

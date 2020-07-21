@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -43,6 +44,11 @@ public class WitnessPro implements WitnessAssertion{
                 "min=" + min +
                 ", max=" + max +
                 '}';
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        return;
     }
 
     @Override
@@ -126,6 +132,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
+
     }
 
     @Override

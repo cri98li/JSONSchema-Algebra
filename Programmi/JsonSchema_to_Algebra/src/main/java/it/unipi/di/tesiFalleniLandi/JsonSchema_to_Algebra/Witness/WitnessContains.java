@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Asse
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import patterns.REException;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,6 +45,11 @@ public class WitnessContains implements WitnessAssertion{
                 ", max=" + max +
                 ", contains=" + contains +
                 '}';
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        if(contains != null) contains.checkLoopReferences(env, varList);
     }
 
     @Override
@@ -177,11 +183,13 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessContains contains = clone();
+        /*WitnessContains contains = clone();
 
         contains.contains = this.contains.variableNormalization_expansion(env);
 
-        return contains;
+        return contains;*/
+
+        return this;
     }
 
     @Override

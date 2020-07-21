@@ -45,6 +45,11 @@ public class WitnessType implements WitnessAssertion{
     }
 
     @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        return;
+    }
+
+    @Override
     public WitnessAssertion mergeElement(WitnessAssertion a) throws REException {
         if(a.getClass() == WitnessOr.class || a.getClass() == WitnessAnd.class) return a.mergeElement(this);
 

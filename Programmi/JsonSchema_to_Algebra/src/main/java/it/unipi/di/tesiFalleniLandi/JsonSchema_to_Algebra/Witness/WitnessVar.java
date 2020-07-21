@@ -4,9 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
 import patterns.REException;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class WitnessVar implements WitnessAssertion{
     private String name;
@@ -30,6 +28,17 @@ public class WitnessVar implements WitnessAssertion{
     @Override
     public WitnessAssertion merge() {
         return this;
+    }
+
+    @Override
+    public void checkLoopReferences(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+        if(varList.contains(this)){
+            throw new WitnessException("Recursive definition!!");
+        }else{
+            varList.add(this);
+            env.getDefinition(this).checkLoopReferences(env, varList);
+            varList.remove(this);
+        }
     }
 
     @Override

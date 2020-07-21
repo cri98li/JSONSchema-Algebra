@@ -99,7 +99,7 @@ public class Required_Assertion implements Assertion{
 
 		for(String str : reqList) {
 			ComplexPattern p = ComplexPattern.createFromName(str);
-			WitnessPattReq pattReq = new WitnessPattReq(p, new WitnessBoolean(true));
+			WitnessPattReq pattReq = WitnessPattReq.build(p, new WitnessBoolean(true));
 			and.add(pattReq);
 		}
 
