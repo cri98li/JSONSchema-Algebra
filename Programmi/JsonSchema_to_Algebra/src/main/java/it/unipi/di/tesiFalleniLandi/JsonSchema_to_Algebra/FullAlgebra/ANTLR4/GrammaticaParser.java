@@ -25,7 +25,7 @@ public class GrammaticaParser extends Parser {
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
 		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
 		T__45=46, T__46=47, T__47=48, T__48=49, DEF_FIRMA=50, NULL=51, TYPE=52, 
-		INT=53, DOUBLE=54, WS=55, STRING=56, BOOLEAN=57;
+		INT=53, DOUBLE=54, WS=55, STRING=56, BOOLEAN=57, COMMENT=58, LINE_COMMENT=59;
 	public static final int
 		RULE_assertion_list = 0, RULE_assertion = 1, RULE_type_assertion = 2, 
 		RULE_between_assertion = 3, RULE_xbetween_assertion = 4, RULE_length_assertion = 5, 
@@ -77,7 +77,7 @@ public class GrammaticaParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, "DEF_FIRMA", "NULL", "TYPE", "INT", "DOUBLE", "WS", "STRING", 
-			"BOOLEAN"
+			"BOOLEAN", "COMMENT", "LINE_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -3480,7 +3480,7 @@ public class GrammaticaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3;\u01f1\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3=\u01f1\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+

@@ -157,3 +157,12 @@ fragment HEX
 fragment SAFECODEPOINT
    : ~ ["\\\u0000-\u001F]
    ;
+
+
+COMMENT
+    : '/*' .*? '*/' -> skip
+    ;
+
+LINE_COMMENT
+    : '//' ~[\r\n]* -> skip
+    ;
