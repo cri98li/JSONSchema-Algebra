@@ -58,10 +58,12 @@ public class MainWitness {
 
         env = env.variableNormalization_expansion(null);
 
-        //System.out.println(env.getFullAlgebra().toGrammarString());
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n objectPrepare: \r\n");
         System.out.flush();
+
+        env = (WitnessEnv) env.merge();
 
         env.objectPrepare();
 

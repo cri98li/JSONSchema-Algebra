@@ -102,7 +102,7 @@ public class PatternRequired_Assertion implements Assertion{
 			for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey().getAlgebraString(), returnedValue);
+					str += GrammarStringDefinitions.COMMA + entry.getKey().getAlgebraString()+":"+ returnedValue;
 			}
 		}
 

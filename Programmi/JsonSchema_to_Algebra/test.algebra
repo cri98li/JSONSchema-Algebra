@@ -1,9 +1,8 @@
 {
-    type[obj],
+    pattReq["^b":true],
+    pattReq["^a":{mof(2), type[int]}],
     props[
-        "prop_a":{
-            mof(1),
-            type[num]
-        }
+        "^a":{mof(1),type[int]},
+        "^b":{mof(2), type[int]}
     ;]
 }

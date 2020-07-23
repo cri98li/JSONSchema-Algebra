@@ -20,11 +20,18 @@ public class WitnessEnv implements WitnessAssertion {
     public void add(WitnessVar key, WitnessAssertion value){
         //WitnessAnd and = new WitnessAnd();
         //and.add(value);
+        if(WitnessAnd.class == value.getClass()){
+            add(key, (WitnessAnd) value);
+            return;
+        }
         varList.put(key, value);
     }
 
     public void add(WitnessVar key, WitnessAnd value){
-        varList.put(key, value);
+        if(value.isUnitaryAnd() == null)
+            varList.put(key, value);
+        else
+            varList.put(key, value.isUnitaryAnd());
     }
 
     public WitnessAssertion getDefinition(WitnessVar var){
@@ -198,9 +205,9 @@ public class WitnessEnv implements WitnessAssertion {
     public void objectPrepare() throws REException, WitnessException {
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
             if(entry.getValue().getClass() == WitnessAnd.class)
-                ((WitnessAnd) entry.getValue()).objectPrepare();
+                ((WitnessAnd) entry.getValue()).objectPrepare(this);
             else if(entry.getValue().getClass() == WitnessOr.class)
-                ((WitnessOr) entry.getValue()).objectPrepare();
+                ((WitnessOr) entry.getValue()).objectPrepare(this);
     }
 
 

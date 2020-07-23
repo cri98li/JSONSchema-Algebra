@@ -15,6 +15,9 @@ public class WitnessPattReq implements WitnessAssertion{
     public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
         if(instances == null) instances = new HashMap<>();
 
+        if(assertion.getClass() == WitnessAnd.class && ((WitnessAnd) assertion).isUnitaryAnd() != null)
+            assertion = ((WitnessAnd)assertion).isUnitaryAnd();
+
         WitnessPattReq tmp = new WitnessPattReq(key, assertion);
 
         if(instances.containsKey(tmp.toString()))
@@ -163,9 +166,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
-
         if (value != null) {
-            if (value.getClass() != WitnessBoolean.class) {
+            if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
                 value.variableNormalization_separation(env);
                 WitnessVar var = new WitnessVar(Utils_Witness.getName(value));
                 env.add(var, value);

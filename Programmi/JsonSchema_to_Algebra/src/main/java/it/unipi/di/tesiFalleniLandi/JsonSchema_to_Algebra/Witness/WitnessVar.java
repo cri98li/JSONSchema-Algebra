@@ -93,11 +93,12 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public void variableNormalization_separation(WitnessEnv env) {
+        return;
     }
 
     @Override
     public WitnessAssertion variableNormalization_expansion(WitnessEnv env) {
-        return this.clone();
+        return this;
     }
 
     @Override

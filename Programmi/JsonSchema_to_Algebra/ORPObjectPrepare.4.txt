@@ -1,0 +1,281 @@
+/**
+ * An object group is transformed during preparation.
+ *
+ * Before preparation it is a sequence of assertions, after preparation
+ * it is a quadruple: CPart, RPart,min,max
+ * where CPart is a list of properties P(r,S)
+ * RPart is a list of orp's where an ORP is a list of Requests Req(r,S,ol)
+ * where "ol" is the list of all the different orpLists to which the
+ * request belongs
+ * min and max are integers or (only for max) +Inf
+ * It is better to transform every object group into this Quad-Form
+ * BEFORE object preparation
+ *
+ */
+
+Define CList = List<Pair<Pattern,Assertion>>;
+
+Class QuadObject extends Assertion {
+  CList CPart,
+  List<ORP> RPart;
+  IntOrMaxInt  min, max;
+}
+
+class ORP {
+// is an or-list of Requests
+  List<Request> orp;
+
+/**
+ * Connects the Request to the ORP and vice versa
+ */
+  public void connect(Request r) {
+    r.orpList.add(this):
+    this.add(r);
+  };
+
+  public void deConnect(Requesr r) {}; // to be written
+  
+}
+  
+/**
+ * a Request is an element (r:S) of an orp
+ */
+ 
+class Request {
+   Pattern pattern;
+   Assertion schema;
+   List<ORP> orpList; // set by ORP.connect
+}
+  
+class ReqPair {
+   Request left;
+   Request right;
+}
+
+interface CoMatrix {
+ /**
+  * A coMatrix is a list of pairs (r1,r2) such that r1 MAY be
+  * compatible with r2.
+  * It is essential to remember that the order is irrelevant:
+  * if (r1,r2) is in the matrix it must be AS IF (r2,r1) were in
+  * the matrix as well
+  */  
+
+    /**
+     * For any pair (r,req) or (req,r) where req appears, id removes the
+     * pair and substitute it with (r,f1) ... (r,fn) where [f1,...,fn] is
+     * the content of "fragments"
+     */
+  void substitute(req,fragments);
+
+  void addPairs(List<ReqPair> pairList);
+
+   /**
+     * removePair(r1,r2) removes both (r1,r2) and (r2,r1)
+     */
+
+  void removePair(ReqPair pair);
+  ReqPair getValue();
+  boolean isEmpty();
+}
+
+///////////////////////////////////
+
+/**
+  * Transforms an object group into its quadform
+  *
+  * We use andMerge to transform into QuadForm and we do not perform any
+  * variable normalization hence in the resulting quadruple
+  * CP,RP,min,max, CP is a seq of pairs P(p,S) where all the name-patterns
+  * are distinct and all schemas are syntactically distinct and are either
+  * atoms or conjunctions of variables while in RP we may still have equal
+  * name-patterns or equal schemas RP is a list of ORP's, where an orp is a
+  * list of Requests: Req(r,S,ol)
+  */
+
+QuadObject toQuadForm(objectGroup) {
+  // ...
+}
+
+
+objectPrepare(QuadObject q) {
+   q.CPart = complete(q.CPart);  // Complete the CPart adding not(p1,..,pn):true
+   if listHasOverlaps(q.CPart) { q.CPart = splitCList(q.CPart); } // splitCList: see below
+  // q = variableSeparate(q,system); // really needed here? probably not
+   ORPList orpList = New ORPList(); // prepare a container
+                                    // for the new RPart
+   CoMatrix coMatrix = New CoMatrix();
+   q = combineCPRP(q,coMatrix); // internalize the CP in the RP
+   CHECK THAT NO ORP IS EMPTY; // if an ORP is empty, the object is equivalent to false
+                               // this is just an optimization, not really needed
+   q = variableSeparate(q,system);  // separate the variables
+                                    // since both complete and combineCPRP created schemas
+				    // where variables are combined ???
+   reduceCompatiblePairs(coMatrix,q); // split all compatible pairs
+                                    // this operation will modify q.RPart and q.RList
+   variableSeparate(orpList,system); // separate the variables again
+}                 
+
+////////////////////////////-
+/**
+ * given prop and list, 
+ * it returns a pair subProp, reducedList with the following properties:
+ * - dom(subProp) = dom(prop) - dom(list) where dom(X) are the names
+ *                  matched by the patterns in X
+ * - reducedList is obtained by splitting all elements 'elem' of list that
+ *   intersect with prop into a pair : ( (elem and prop) ; (elem minus prop) ),
+ *   where the schema of (elem and prop) is (elem.schema and prop.schema)
+ */
+Pair<Prop,List<Prop>> reduceElemWithList(Prop prop,List<Prop> list) {
+  if (list.isEmpty()) { return (prop,list); };
+  (subProp,reducedTail) = reduceElemWithList(prop,list.getNext());
+     /* if dom(subProp) is already empty there is not reduction left to perform */
+  Prop head = list.getValue();
+  if (subProp.pattern.isEmpty()) { return (subProp,head+reducedTail) ;}
+     /* else, we verify whether the first element of the list intersects prop */
+  Triple (int,propMinHead,headMinProp)
+                   = decompose(subProp.pattern,head.pattern);
+     /* if there is not intersection, we can stop here */
+  if (int.isEmpty()) { return (subProp,head+reducedTail); }
+     /* otherwise we split the element and we reduce prop */
+  newSubProp = new Prop(propMinHead,subProp.schema);  // prop minus getValue
+                                                       // is the reduced prop
+  newReducedList = new Prop(int,new And(subProp.schema,head.schema))
+                    + reducedTail; // the intersection goes in the list
+  if (headMinProp.isNotEmpty())
+     { newReducedList += new Prop(headMinProp,head.schema); }
+                         // right minus left : rightSchema goes in the list
+  return (newSubProp,newReducedList);
+}
+
+/**
+ * Splits a CP list
+ * it returns a CP list that is equivalent to list but where all different
+ * patterns are disjoint
+ */
+CList splitCList(CList list) {
+  if (list.isEmpty()) { return list };
+  CList expandedTail = splitCList(list.getNext()); 
+  Pair (subHead,reducedExpandedTail) = reduceElemWithList(list.getValue(),expandedTail);
+  if (subHead.pattern.isEmpty()) {return (reducedExpandedTail); }
+  else { return(subHead + reducedExpandedTail); }
+}
+
+/////////////////////////////////////////////////////////////////
+// Here you find combineCPRP that internalizes the CPart into the RPart
+
+/**
+/* The RPart of an object is a list of orp's, where every orp is a list
+   of requests (r:S). Before normalization each orp is typically a singleton, but,
+   after a while, we may need to prepare objects whose RPart contains orp's
+   which are not trivial.
+   Each request may belong to more orp's
+   The RList collects all requests, hence is the union of all lists of the RPart.
+   coMatrix contains all pairs of compatible request.
+*/
+
+QuadObject combineCPRP(QuadObject q,CoMatrix coMatrix){
+/* coReqs.get(prop)  all pairs requests that are compatible with prop
+   oldOrpToNewOrp.get(oldOrp) is the newOrp generated starting from oldOrp
+*/
+   HashMap<Prop,List<Request>> coReqs = New HashMap; 
+   HashMap<ORP,ORP> oldOrpToNewOrp = New HashMap; 
+   for (ORP oldOrp : q.RPart)   
+        { ORP newOrp = new ORP;
+	  oldOrpToNewOrp.put(oldOrp,newOrp);
+	}
+   List<Request> newRList = New List<Request>;
+   for (Request req : q.RList) {
+     for (Prop prop : q.CPart) {
+         pattInt = prop.pattern.intersect(req.pattern);
+         if (pattInt.isNotEmpty()) {
+           Assertion schemaAnd = new And(prop.schema,req.schema);
+           if (schemaAnd.notObviouslyEmpty()) {
+               Req newReq = new Req(pattInt, schemaAnd);
+	       newRList.add(newReq);
+	       coReqs.get(prop).add(newReq); // newReq is compatible with prop
+	       for (ORP oldOrp : req.orpList) {
+	         newOrp = oldOrpToNewOrp.get(oldOrp);
+	         newOrp.connect(newReq); // this creates a two-way connection
+	                               //between newOrp and newReq
+	       }
+	   }
+         } // end if pattInt.isNotEmpty
+      } // and for (prop : q.CPart)
+   } // end of for (req  : q.RList)
+/* for each prop we get the corresponding list of compatible requests, and we create the
+   set of all compatible pairs
+ */
+   for (Prop prop : q.CPart) {
+     List<Request> coList = coReqs.get(prop);
+     for (int i=0; i< coList.size()-1; i++) {
+       for (int j=i+1; j< coList.size(); j++) { coMatrix.add(ri,rj); }}};
+   return(new QuadObject(q.CP,newRList,newRPart,q.min,q.max));
+}
+
+
+////////////////////////////////////////////////////////////
+// Here we show how to reduce all compatible pairs
+
+void reduceCompatiblePairs(CoMatrix coMatrix, QuadObject q) {
+/* coMatrix contain all maybe-compatible pairs
+   for each maybe-compatible pair left-right, if it is really compatible,
+   we split left into three fragments, right into three fragments, and
+   we substitute left and right with their fragments both in the orp
+   to which they belong and in the coMatrix.
+   The intersection fragment will belong to both orps
+   RList contains all requests of the object. It is just the union of all
+   orp's after DISTINCT elimination.
+*/
+  while (coMatrix.isNotempty()) {
+    Pair left = coMatrix.getValue().left;
+    Pair right = coMatrix.getValue().right;
+    coMatrix.removePair(coMatrix.getValue());
+    Triple (int,leftMinRight,rightMinLeft) = decompose(left.pattern,
+                                                right.pattern);
+    if (int.isEmpty) { continue; }
+    Assertion leftMinRightSchema = new And(left.schema,new Not(right.schema));
+    Assertion rightMinLeftSchema = new And(right.schema,new Not(left.schema));
+    Assertion intSchema = new And(left.schema,right.schema);
+    List<Request> leftFragments = new List<>();
+    List<Request> rightFragments = new List<>();
+    if (intSchema.notObviouslyEmpty()) {
+      Request Req = new Request(int,intSchema);
+      leftFragments.add(Req);
+      rightFragments.add(Req);
+    }
+    if (leftMinRightSchema.isNotObviouslyEmpty() ) {
+      leftFragments.add(new Request(int,leftMinRightSchema));
+    }
+    if (leftMinRight.isNotEmpty()) {
+      leftFragments.add(new Request(leftMinRight,left.schema));
+    }
+    if (rightMinLeftSchema.isNotObviouslyEmpty() ) {
+      rightFragments.add(new Request(int,rightMinLeftSchema));
+    }
+    if (rightMinLeft.isNotEmpty()) {
+      rightFragments.add(new Request(rightMinLeft,right.schema));
+    }
+    for (lOrp: left.orpList) {
+      for (lF : leftFragments) { lOrp.connect(lF); }
+      lOrp.deConnect(left);  // beware: we are looping on lft.orpList
+                             // and modifying the list at the same time
+    }
+    for (rOrp: right.orpList) {
+      for (rF : rightFragments) { rOrp.connect(rF); }
+      rOrp.deConnect(right);
+    }
+    coMatrix.substitute(left,leftFragments);
+    coMatrix.substitute(right,rightFragments);
+    q.RList.remove(left).remove(right);
+    leftFragments.addAll(rightFragments); // we use set union since the intersection
+    q.RList.add(leftFragments);           // fragment appears in both leftF and rightF
+  }
+}
+  
+//////////////////////////////////-
+
+
+
+
+

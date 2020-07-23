@@ -6,6 +6,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDe
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Not_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
@@ -54,6 +56,25 @@ public class WitnessAnd implements WitnessAssertion{
                 andList.put(el.getClass(), list);
                 return true;
             } else return false;
+        }
+
+        //caso aggiunta di un tipo diverso
+        if(el.getClass() == WitnessType.class){
+            if(andList.get(WitnessType.class) == null){
+                List<WitnessAssertion> list = new LinkedList<>();
+                list.add(el);
+                andList.put(el.getClass(), list);
+                return true;
+            }
+            List<WitnessAssertion> typeList = andList.remove(WitnessType.class);
+            WitnessAssertion merged = ((WitnessType) el).mergeElement((WitnessType) typeList.get(0));
+            if(merged.getClass() == WitnessBoolean.class) throw new UnsenseAssertion("add di 2 and incompatibili");
+            else{
+                List<WitnessAssertion> list = new LinkedList<>();
+                list.add(merged);
+                andList.put(el.getClass(), list);
+                return true;
+            }
         }
 
         // inserisce l'asserzione nella rispettiva lista
@@ -198,6 +219,7 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     public WitnessAssertion isUnitaryAnd(){
+        if(andList.size() == 0) return new WitnessBoolean(true);
         if(andList.size() == 1) {
             Iterator<Map.Entry<Object, List<WitnessAssertion>>> entry = andList.entrySet().iterator();
             Object key = entry.next().getKey();
@@ -216,10 +238,17 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
+        //Contiene solo 1 booleano
+        if(andList.size() == 0)
+            return new Boolean_Assertion(true);
+
         AllOf_Assertion allOf = new AllOf_Assertion();
+
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
                 allOf.add(assertion.getFullAlgebra());
+
+
 
         return allOf;
     }
@@ -252,6 +281,9 @@ public class WitnessAnd implements WitnessAssertion{
      */
     @Override
     public WitnessAssertion groupize() throws WitnessException, REException {
+        //caso base: se and vuoto --> and[true] --> ritorno true
+        if(andList.size() == 0) return new WitnessBoolean(true);
+
         /**
          * non contiene type -- si restituisce un or di and
          * contene 1 type -- si eliminano tutte le asserzioni che non coincidono
@@ -282,16 +314,6 @@ public class WitnessAnd implements WitnessAssertion{
                             and.add(assertion.groupize());
                         }
                     }
-                        /*first = entry.getValue().get(0); //TODO: check
-                    if(first.getGroupType() != null) {
-                        if (first.getGroupType().equals(type.getGroupType()))
-                            and.andList.put(entry.getKey(), entry.getValue()); //TODO: commento
-
-                    else if (first.getGroupType() == null) //variabile o or
-                        for (WitnessAssertion tmp : entry.getValue())
-                            and.add(tmp.groupize()); //TODO: controlla che non ritorni and
-                }*/
-
                 }
 
                 return and;
@@ -357,37 +379,31 @@ public class WitnessAnd implements WitnessAssertion{
             WitnessType type = new WitnessType(GrammarStringDefinitions.TYPE_NUMBER);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             and = new WitnessAnd();
             type = new WitnessType(GrammarStringDefinitions.TYPE_OBJECT);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             and = new WitnessAnd();
             type = new WitnessType(GrammarStringDefinitions.TYPE_ARRAY);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             and = new WitnessAnd();
             type = new WitnessType(GrammarStringDefinitions.TYPE_STRING);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             and = new WitnessAnd();
             type = new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             and = new WitnessAnd();
             type = new WitnessType(GrammarStringDefinitions.TYPE_NULL);
             and.add(type);
             groups.put(type, and);
-            //or.add(and);
 
             for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
                 for (WitnessAssertion assertion : entry.getValue()) {
@@ -515,16 +531,22 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     //ipotizziamo che sia stata già effettuato l'and merging
-    public void objectPrepare() throws REException, WitnessException {
+    public void objectPrepare(WitnessEnv env) throws REException, WitnessException {
         List<WitnessAssertion> CPart = andList.get(WitnessProperty.class); //List<WitnessProperty>
         WitnessPro minMax = new WitnessPro();
 
         if(andList.get(WitnessPro.class) != null)
             minMax = (WitnessPro) andList.get(WitnessPro.class).get(0);
 
+        if(andList.get(WitnessType.class) == null)
+            return; //TODO: //throw new ParseCancellationException("and senza tipo");
+
         if(andList.get(WitnessType.class) != null && !andList.get(WitnessType.class).contains(new WitnessType(GrammarStringDefinitions.TYPE_OBJECT))){ //se non è un gruppo object
             return;
         }
+
+        if(andList.get(WitnessType.class).size() > 1)
+            throw new ParseCancellationException("and non gruppizzato");
 
 
         //complete and splitCPart --> da ottimizzare in una seconda fase
@@ -541,7 +563,7 @@ public class WitnessAnd implements WitnessAssertion{
             this.add(new WitnessProperty(p, new WitnessBoolean(true)));
 
             //splitCPart
-            CPart = splitClist(CPart);
+            //CPart = splitClist(CPart);
             //TODO: sostituire anche nell'and?
         }
 
@@ -552,9 +574,9 @@ public class WitnessAnd implements WitnessAssertion{
         for(WitnessAssertion assertion : CPart)
             coReqs.put(assertion, new LinkedList<>());
 
-        LinkedList<Map.Entry<WitnessAssertion, WitnessAssertion>> CoMatrix = new LinkedList<>();
+        LinkedList<Map.Entry<WitnessPattReq, WitnessPattReq>> CoMatrix = new LinkedList<>();
 
-        List<WitnessAssertion> RPart = andList.get(WitnessPattReq.class);
+        List<WitnessAssertion> RPart = andList.remove(WitnessPattReq.class);
         List<WitnessPattReq> NewRList;
 
         if(RPart != null) {
@@ -567,14 +589,14 @@ public class WitnessAnd implements WitnessAssertion{
 
                     ComplexPattern pattInt = ((WitnessProperty) C_assertion).getKey().intersect(((WitnessPattReq) R_assertion).getKey());
 
-                    if (pattInt.domainSize() != 0) {
+                    if (pattInt.domainSize() == null || pattInt.domainSize() != 0) { //isNotEmpty
 
                         WitnessAnd newAnd = new WitnessAnd();
                         newAnd.add(((WitnessProperty) C_assertion).getValue());
                         newAnd.add(((WitnessPattReq) R_assertion).getValue());
 
                         if (newAnd.notObviouslyEmpty()) {
-                            WitnessPattReq newReq = WitnessPattReq.build(pattInt, newAnd);
+                            WitnessPattReq newReq = WitnessPattReq.build(pattInt, newAnd.isUnitaryAnd() != null ? newAnd.isUnitaryAnd() : newAnd );
                             NewRList.add(newReq);
                             coReqs.get(C_assertion).add(newReq);
                         }
@@ -593,22 +615,18 @@ public class WitnessAnd implements WitnessAssertion{
         //init della coMatrix
         for(WitnessAssertion assertion : CPart){
             List<WitnessPattReq> coList = coReqs.get(assertion);
-            for (int i=0; i< coList.size()-1; i++) {
+            for (int i=0; i < coList.size()-1; i++) {
                 for (int j = i + 1; j < coList.size(); j++) {
                     CoMatrix.add(new AbstractMap.SimpleEntry<>(coList.get(i), coList.get(j)));
                 }
             }
         }
 
-        /*
-        for (Prop prop : q.CPart) {
-     List<Request> coList = coReqs.get(prop);
-     for (int i=0; i< coList.size()-1; i++) {
-       for (int j=i+1; j< coList.size(); j++) { coMatrix.add(ri,rj);
+        //variable saparation
+        this.variableNormalization_separation(env);
 
-     }}};
-         */
-
+        //Reduce compatible pairs
+        reduceCompatiblePairs(CoMatrix, null);
     }
 
     public boolean notObviouslyEmpty(){
@@ -679,7 +697,7 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessAnd and = new WitnessAnd();
         and.add(subProp_reducedTail.getKey().getValue());
         and.add(head.getValue());
-        newReducedList.add(new WitnessProperty(intersection, and)); // the intersection goes in the list
+        newReducedList.add(new WitnessProperty(intersection, and.isUnitaryAnd() != null ? and.isUnitaryAnd() : and)); // the intersection goes in the list
 
         if(headMinProp.domainSize() == null || headMinProp.domainSize() != 0)
             newReducedList.add(new WitnessProperty(headMinProp, head.getValue())); // right minus left : rightSchema goes in the list
@@ -688,22 +706,165 @@ public class WitnessAnd implements WitnessAssertion{
         return new AbstractMap.SimpleEntry<>(newSubPro, newReducedList);
     }
 
+    /** coMatrix contain all maybe-compatible pairs
+       for each maybe-compatible pair left-right, if it is really compatible,
+       we split left into three fragments, right into three fragments, and
+       we substitute left and right with their fragments both in the orp
+       to which they belong and in the coMatrix.
+       The intersection fragment will belong to both orps
+       RList contains all requests of the object. It is just the union of all
+       orp's after DISTINCT elimination.
+    */
+
+    private void reduceCompatiblePairs(LinkedList<Map.Entry<WitnessPattReq, WitnessPattReq>> coMatrix, Assertion q) throws REException {
+        while(!coMatrix.isEmpty()){
+            WitnessPattReq left = coMatrix.getFirst().getKey();
+            WitnessPattReq right = coMatrix.getFirst().getValue();
+            coMatrix.removeFirst();
+
+            ComplexPattern intersection = left.getKey().intersect(right.getKey());
+            ComplexPattern leftMinRight = left.getKey().minus(right.getKey());
+            ComplexPattern rightMinLeft = right.getKey().minus(left.getKey());
+
+            if(intersection.domainSize() != null && intersection.domainSize() == 0) continue;
+
+            WitnessAnd leftMinRightSchema = new WitnessAnd();
+            leftMinRightSchema.add(left.getValue());
+            leftMinRightSchema.add(new Not_Assertion(right.getValue().getFullAlgebra()).toWitnessAlgebra());
+
+            WitnessAnd rightMinLeftSchema = new WitnessAnd();
+            leftMinRightSchema.add(right.getValue());
+            leftMinRightSchema.add(new Not_Assertion(left.getValue().getFullAlgebra()).toWitnessAlgebra());
+
+            WitnessAnd intSchema = new WitnessAnd();
+            intSchema.add(left.getValue());
+            intSchema.add(right.getValue());
+
+            List<WitnessPattReq> leftFragments = new LinkedList<>();
+            List<WitnessPattReq> rightFragments = new LinkedList<>();
+
+            if(intSchema.notObviouslyEmpty()){
+                WitnessPattReq newRequest = WitnessPattReq.build(intersection, intSchema);
+                leftFragments.add(newRequest);
+                rightFragments.add(newRequest);
+            }
+            if(leftMinRightSchema.notObviouslyEmpty()){
+                leftFragments.add(WitnessPattReq.build(intersection, leftMinRightSchema.isUnitaryAnd() != null ? leftMinRightSchema.isUnitaryAnd() : leftMinRightSchema));
+            }
+            if(leftMinRight.domainSize() != null && leftMinRight.domainSize() != 0){
+                leftFragments.add(WitnessPattReq.build(leftMinRight, left.getValue()));
+            }
+            if(rightMinLeftSchema.notObviouslyEmpty()){
+                rightFragments.add(WitnessPattReq.build(intersection, rightMinLeftSchema.isUnitaryAnd() != null ? rightMinLeftSchema.isUnitaryAnd() : rightMinLeftSchema));
+            }
+            if(rightMinLeft.domainSize() != null && rightMinLeft.domainSize() != 0){
+                rightFragments.add(WitnessPattReq.build(rightMinLeft, right.getValue()));
+            }
+
+           //substitute
+            for(int i=0; i < coMatrix.size(); i++){
+                if(coMatrix.get(i).getKey().equals(left) || coMatrix.get(i).getValue().equals(left)) {
+                    coMatrix.remove(i);
+                    for(WitnessPattReq tmp : leftFragments)
+                        coMatrix.add(new AbstractMap.SimpleEntry<>(left, tmp));
+                }
+                if(coMatrix.get(i).getKey().equals(right) || coMatrix.get(i).getValue().equals(right)) {
+                    coMatrix.remove(i);
+                    for(WitnessPattReq tmp : rightFragments)
+                        coMatrix.add(new AbstractMap.SimpleEntry<>(right, tmp));
+                }
+            }
+
+            List<WitnessAssertion> RList = andList.get(WitnessOr.class);
+            for(WitnessAssertion RListEl : RList) {
+                ((WitnessOr)RListEl).remove(left);
+                ((WitnessOr)RListEl).remove(right);
+            }
+
+            leftFragments.addAll(rightFragments);
+
+            WitnessOr orTmp = new WitnessOr();
+            for(WitnessPattReq tmp : leftFragments)
+                orTmp.add(tmp);
+
+            this.add(orTmp);
+
+        }
+    }
+
+
+    /*
+     * void reduceCompatiblePairs(CoMatrix coMatrix, QuadObject q) {
+     *
+     *while(coMatrix.isNotempty())
+
+    {
+     *Pair left = coMatrix.getValue().left;
+     *Pair right = coMatrix.getValue().right;
+     *coMatrix.removePair(coMatrix.getValue());
+     *Triple( int,leftMinRight, rightMinLeft) =decompose(left.pattern,
+            * right.pattern);
+     *if (int.isEmpty) {
+        continue;
+    }
+     *Assertion leftMinRightSchema = new And(left.schema, new Not(right.schema));
+     *Assertion rightMinLeftSchema = new And(right.schema, new Not(left.schema));
+     *Assertion intSchema = new And(left.schema, right.schema);
+     *List<Request> leftFragments = new List<>();
+     *List<Request> rightFragments = new List<>();
+     *if (intSchema.notObviouslyEmpty()) {
+     *Request Req = new Request( int,intSchema);
+     *leftFragments.add(Req);
+     *rightFragments.add(Req);
+     *}
+     *if (leftMinRightSchema.isNotObviouslyEmpty()) {
+     *leftFragments.add(new Request( int,leftMinRightSchema));
+     *}
+     *if (leftMinRight.isNotEmpty()) {
+     *leftFragments.add(new Request(leftMinRight, left.schema));
+     *}
+     *if (rightMinLeftSchema.isNotObviouslyEmpty()) {
+     *rightFragments.add(new Request( int,rightMinLeftSchema));
+     *}
+     *if (rightMinLeft.isNotEmpty()) {
+     *rightFragments.add(new Request(rightMinLeft, right.schema));
+     *}
+     *for (lOrp:
+           left.orpList) {
+     *for (lF:
+           leftFragments) {
+            lOrp.connect(lF);
+        }
+     *lOrp.deConnect(left);  // beware: we are looping on lft.orpList
+     *                              // and modifying the list at the same time
+     *}
+     *for (rOrp:
+           right.orpList) {
+     *for (rF:
+           rightFragments) {
+            rOrp.connect(rF);
+        }
+     *rOrp.deConnect(right);
+     *}
+     *coMatrix.substitute(left, leftFragments);
+     *coMatrix.substitute(right, rightFragments);
+     *q.RList.remove(left).remove(right);
+     *leftFragments.addAll(rightFragments); // we use set union since the intersection
+     *q.RList.add(leftFragments);           // fragment appears in both leftF and rightF
+     *}
+     *
+}
+     * @return
+     */
+
+
+
+
+
+
     @Override
     public int hashCode() {
         return andList != null ? andList.hashCode() : 0;
     }
-
-    /*
-    @Override
-    public int hashCode() {
-        int hash = 0;
-
-        for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue())
-                hash += assertion.hashCode();
-
-        return hash;
-    }
-     */
 
 }

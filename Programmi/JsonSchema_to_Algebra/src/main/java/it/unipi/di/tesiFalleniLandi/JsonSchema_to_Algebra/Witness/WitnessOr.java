@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AnyOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import patterns.REException;
 
 import java.util.*;
@@ -21,7 +23,12 @@ public class WitnessOr implements WitnessAssertion{
         else if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class)
             return addUni_Rep(el);
 
-        else if(el.getClass() == WitnessBoolean.class && ((WitnessBoolean) el).getValue() == false) return false;
+        else if(el.getClass() == WitnessBoolean.class) {
+            if (((WitnessBoolean) el).getValue() == false)
+                return false;
+            else
+                throw new UnsenseAssertion("or.add(true)");
+        }
 
         else {
             if(orList.containsKey(el.getClass())) {
@@ -61,6 +68,13 @@ public class WitnessOr implements WitnessAssertion{
             orList.put(el.getClass(), list);
             return true;
         }
+
+        return false;
+    }
+
+    public boolean remove(WitnessAssertion assertion){
+        if(orList.containsKey(assertion.getClass()))
+            return orList.get(assertion.getClass()).remove(assertion);
 
         return false;
     }
@@ -152,6 +166,10 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
+        //caso solo 1 false
+        if(orList.size() == 0)
+            return new Boolean_Assertion(false);
+
         AnyOf_Assertion anyOf = new AnyOf_Assertion();
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
@@ -273,22 +291,26 @@ public class WitnessOr implements WitnessAssertion{
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
 
-                WitnessAnd and = new WitnessAnd();
+                try {
+                    WitnessAnd and = new WitnessAnd();
 
-                and.add(assertion);
-                and.add(toAdd);
+                    and.add(assertion);
+                    and.add(toAdd);
 
-                or.add(and);
+                    or.add(and);
+                }catch (UnsenseAssertion e){
+                    or.add(new WitnessBoolean(false));
+                }
             }
 
         return or;
     }
 
-    public void objectPrepare() throws REException, WitnessException {
+    public void objectPrepare(WitnessEnv env) throws REException, WitnessException {
         if(orList.containsKey(WitnessAnd.class)){
             List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
             for(WitnessAssertion assertion : ands) {
-                ((WitnessAnd)assertion).objectPrepare();
+                ((WitnessAnd)assertion).objectPrepare(env);
             }
         }
     }
