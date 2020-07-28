@@ -2,14 +2,19 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AlgebraParserElement;
+import org.apache.http.io.HttpMessageParserFactory;
 import patterns.Pattern;
 import patterns.REException;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ComplexPattern implements ComplexPatternElement {
+
+    private static HashMap<String, ComplexPattern> patternCache = new HashMap<>();
+    private static HashMap<String, ComplexPattern> complementCache = new HashMap<>();
 
     private ComplexPatternElement assertion;
     private String originalPattern;
@@ -59,19 +64,35 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
     public ComplexPattern complement() {
-        ComplexPattern cp = new ComplexPattern(this.stefaniePattern.complement());
+        if(complementCache.containsKey(this.toString())) {
+            System.out.println("lmao-");
+            return complementCache.get(this.toString());
+        }
 
+        ComplexPattern cp = new ComplexPattern(this.stefaniePattern.complement());
         cp.assertion = new pNot(this);
+
+        //complementCache.put(this.toString(), cp);
 
         return cp;
     }
 
     public static ComplexPattern createFromName(String patternName) {
-        return new ComplexPattern(Pattern.createFromName(patternName), "^"+patternName+"$");
+        if(patternCache.containsKey(patternName)) return patternCache.get(patternName);
+
+        ComplexPattern tmp = new ComplexPattern(Pattern.createFromName(patternName), "^"+patternName+"$");
+        patternCache.put(patternName, tmp);
+
+        return tmp;
     }
 
     public static ComplexPattern createFromRegexp(String ecmaRegex) throws REException {
-        return new ComplexPattern(Pattern.createFromRegexp(ecmaRegex), ecmaRegex);
+        if(patternCache.containsKey(ecmaRegex))
+            return patternCache.get(ecmaRegex);
+        ComplexPattern tmp = new ComplexPattern(Pattern.createFromRegexp(ecmaRegex), ecmaRegex);
+        patternCache.put(ecmaRegex, tmp);
+
+        return tmp;
     }
 
     public boolean isSubsetOf(ComplexPattern p) {
@@ -83,8 +104,10 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
 
-    public Integer domainSize() {
-        return this.stefaniePattern.domainSize();
+    public Float domainSize() {
+        if(this.stefaniePattern.domainSize() == null)
+            return Float.POSITIVE_INFINITY;
+        return Float.valueOf(this.stefaniePattern.domainSize());
     }
 
     public Collection<String> generateWords() {
@@ -129,7 +152,7 @@ public class ComplexPattern implements ComplexPatternElement {
 
     @Override
     public String toString() {
-        return (originalPattern == null) ? assertion.toString() : "\"" + originalPattern + "\"";
+        return (originalPattern == null) ? assertion.toString() : originalPattern; //"\"" + ... + "\""
     }
 
     @Override
@@ -164,5 +187,9 @@ public class ComplexPattern implements ComplexPatternElement {
 
     public String getOriginalPattern() {
         return originalPattern;
+    }
+
+    public boolean isEmptyDomain(){
+        return this.domainSize() == 0;
     }
 }
