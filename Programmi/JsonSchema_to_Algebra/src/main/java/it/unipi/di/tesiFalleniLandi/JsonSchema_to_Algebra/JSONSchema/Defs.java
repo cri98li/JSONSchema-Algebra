@@ -3,15 +3,16 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class Defs implements JSONSchemaElement {
-	private HashMap<String, JSONSchema> schemaDefs;
+	private LinkedHashMap<String, JSONSchema> schemaDefs;
 	private JSONSchema rootDef;
 	
 	public Defs(JsonElement obj) {
@@ -22,7 +23,7 @@ public class Defs implements JSONSchemaElement {
 			throw new ParseCancellationException("Error: $defs must be valid JSON Object!");
 		}
 		
-		schemaDefs = new HashMap<>();
+		schemaDefs = new LinkedHashMap<>();
 		
 		for(Entry<String, JsonElement> entry : jsonObject.entrySet()) {
 			try{
@@ -55,7 +56,7 @@ public class Defs implements JSONSchemaElement {
 	}
 	
 	public Defs() {	
-		schemaDefs = new HashMap<>();
+		schemaDefs = new LinkedHashMap<>();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -79,7 +80,6 @@ public class Defs implements JSONSchemaElement {
 	@Override
 	public Defs assertionSeparation() {
 		Defs obj = new Defs();
-		obj.schemaDefs = new HashMap<>();
 		
 		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
 		
@@ -93,28 +93,22 @@ public class Defs implements JSONSchemaElement {
 	}
 
 	@Override
-	public String toGrammarString() {
-		String defs = "";
-		
-		if(rootDef != null && rootDef.numberOfAssertions() > 0)
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", rootDef.toGrammarString());
-		else
-			defs = GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.ROOTDEF, "\"" + GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"" , "{true}");//TODO: pensare a qualcosa di più elegante
-		
-		Set<Entry<String, JSONSchema>> entrySet = schemaDefs.entrySet();
+	public Defs_Assertion toGrammar() {
+		Defs_Assertion defs_assertion = new Defs_Assertion();
+		String tmp = "";
 
-		for(Entry<String, JSONSchema> entry : entrySet)
-			if(entry.getValue().numberOfAssertions() > 0) {
-				String decodedKey = new JsonPrimitive(entry.getKey()).toString();
-				defs += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, decodedKey.substring(1, decodedKey.length()-1), entry.getValue().toGrammarString());
-			}
-		
-		if(defs.isEmpty()) return ""; //definizione non ancora supportata
-		return defs.substring(GrammarStringDefinitions.COMMA.length());
+		if(rootDef != null) defs_assertion.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, rootDef.toGrammar());
+
+		for(Entry<String, JSONSchema> entry : schemaDefs.entrySet()) {
+			tmp = new JsonPrimitive(entry.getKey()).toString();
+			defs_assertion.add(tmp.substring(1, tmp.length()-1), entry.getValue().toGrammar());
+		}
+
+		return defs_assertion;
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return schemaDefs.size() + ((rootDef == null) ? 0 : 1);
 	}
 

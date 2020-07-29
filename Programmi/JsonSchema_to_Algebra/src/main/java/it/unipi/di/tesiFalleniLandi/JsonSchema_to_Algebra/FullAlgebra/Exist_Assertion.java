@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessContains;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessContains;
 import patterns.REException;
 
 public class Exist_Assertion implements Assertion{
@@ -101,12 +101,12 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		String min = "0";
-		String max = GrammarStringDefinitions.POS_INF;
+		String max = FullAlgebraString.POS_INF;
 
 		if (this.min != null) min = this.min + "";
 		if (this.max != null) max = this.max + "";
 
-		return String.format(GrammarStringDefinitions.CONTAINS, min, max, contains.toGrammarString());
+		return FullAlgebraString.CONTAINS(min, max, contains.toGrammarString());
 	}
 
 	@Override

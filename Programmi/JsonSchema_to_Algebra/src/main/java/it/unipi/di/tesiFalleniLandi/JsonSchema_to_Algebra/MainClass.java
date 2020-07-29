@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
@@ -103,7 +102,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().mergeElement(null).getFullAlgebra().toGrammarString()));
+						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().mergeWith(null).getFullAlgebra().toGrammarString()));
 						break;
 
 					default:

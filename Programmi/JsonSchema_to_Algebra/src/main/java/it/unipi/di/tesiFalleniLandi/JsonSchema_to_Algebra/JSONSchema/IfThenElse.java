@@ -2,7 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfThenElse_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -47,18 +48,16 @@ public class IfThenElse implements JSONSchemaElement {
 	}
 
 	@Override
-	public String toGrammarString() {
-		String if_str = "", then_str = "", else_str = "";
-		if(ifStatement != null) { 
-			if_str = ifStatement.toGrammarString();
-			then_str = thenStatement.toGrammarString();
-		}
+	public Assertion toGrammar() {
+		IfThenElse_Assertion ifThenElse = null;
+
+		if(ifStatement != null)
+			ifThenElse = new IfThenElse_Assertion(ifStatement.toGrammar(), thenStatement.toGrammar(), null);
+
 		if(elseStatement != null)
-			else_str = elseStatement.toGrammarString();
-		else
-			return String.format(GrammarStringDefinitions.IF_THEN, if_str, then_str);
-		
-		return String.format(GrammarStringDefinitions.IF_THEN_ELSE, if_str, then_str, else_str);
+			ifThenElse = new IfThenElse_Assertion(ifStatement.toGrammar(), thenStatement.toGrammar(), elseStatement.toGrammar());
+
+		return ifThenElse;
 	}
 
 	@Override
@@ -114,12 +113,12 @@ public class IfThenElse implements JSONSchemaElement {
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		int count = 0;
 
-		if(ifStatement != null) count=ifStatement.numberOfAssertions();
-		if(thenStatement != null) count=thenStatement.numberOfAssertions();
-		if(elseStatement != null) count=elseStatement.numberOfAssertions();
+		if(ifStatement != null) count=ifStatement.numberOfTranslatableAssertions();
+		if(thenStatement != null) count=thenStatement.numberOfTranslatableAssertions();
+		if(elseStatement != null) count=elseStatement.numberOfTranslatableAssertions();
 
 		return count;
 	}

@@ -1,6 +1,5 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,7 +7,6 @@ import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -74,7 +72,7 @@ public class Utils_JSONSchema {
 			finalDefs.addDef(entry.getValue());
 
 		//schema with only definitions
-		if(root.numberOfAssertions() != 0)
+		if(root.numberOfTranslatableAssertions() != 0)
 			finalDefs.setRootDef(root.clone());
 
 		//add to schema the normalized defs
@@ -110,7 +108,7 @@ public class Utils_JSONSchema {
 
 	public static String toGrammarString(JSONSchema root) {
 
-		return Utils.beauty(root.toGrammarString());
+		return Utils.beauty(root.toGrammar().toGrammarString());
 	}
 
 	public static JsonObject mergeJsonObject(JsonObject a, JsonObject b){

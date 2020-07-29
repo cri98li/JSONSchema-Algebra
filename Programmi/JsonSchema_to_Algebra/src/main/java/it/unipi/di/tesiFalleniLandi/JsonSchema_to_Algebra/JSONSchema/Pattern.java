@@ -3,11 +3,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import patterns.REException;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -45,13 +46,17 @@ public class Pattern implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String pattern = new JsonPrimitive(this.pattern).toString();
-		return String.format(GrammarStringDefinitions.PATTERN, pattern);
+	public Assertion toGrammar() {
+		try {
+			String tmp = new JsonPrimitive(pattern).toString();
+			return new Pattern_Assertion(ComplexPattern.createFromRegexp(tmp.substring(1, tmp.length()-1)));
+		} catch (REException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 

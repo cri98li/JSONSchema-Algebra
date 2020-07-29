@@ -1,11 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 import patterns.REException;
 
 public class Len_Assertion implements Assertion{
@@ -52,7 +51,7 @@ public class Len_Assertion implements Assertion{
 		}
 
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_STRING);
+		type.add(FullAlgebraString.TYPE_STRING);
 		and.add(type);
 
 		if(min != null && max != null) {
@@ -81,12 +80,12 @@ public class Len_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = "0", max = GrammarStringDefinitions.POS_INF;
+		String min = "0", max = FullAlgebraString.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return String.format(GrammarStringDefinitions.LENGTH, min, max);
+		return FullAlgebraString.LENGTH(min, max);
 	}
 
 	@Override

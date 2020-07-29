@@ -1,8 +1,50 @@
-{
-    pattReq["^b":true],
-    pattReq["^a":{mof(2), type[int]}],
-    props[
-        "^a":{mof(1),type[int]},
-        "^b":{mof(2), type[int]}
-    ;]
+rootdef "root" = {
+	allOf[
+		{
+			anyOf[
+				req["start_date"],
+				req["sample_date"],
+				req["end_date"]
+			]
+		},
+		type[obj],
+		{
+			props[
+				"start_date_type": {
+					{
+						enum["at", "before", "after"]
+					}
+				},
+				"end_date": allOf[
+					type[str]
+				],
+				"confidence": {
+					{
+						enum["HIGH", "MEDIUM", "LOW"]
+					}
+				},
+				"data_type": enum["supplier-relationship"],
+				"sample_date": allOf[
+					type[str]
+				],
+				"retrieved_at": allOf[
+					type[str]
+				],
+				"source_url": type[str],
+				"start_date": allOf[
+					type[str]
+				],
+				"end_date_type": {
+					{
+						enum["at", "before", "after"]
+					}
+				}
+				;false]
+		},
+		req["data_type",
+			"supplier",
+			"customer",
+			"retrieved_at",
+			"confidence"]
+	]
 }

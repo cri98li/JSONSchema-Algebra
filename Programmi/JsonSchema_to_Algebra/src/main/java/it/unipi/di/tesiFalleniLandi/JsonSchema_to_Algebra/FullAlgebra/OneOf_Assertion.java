@@ -2,11 +2,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import patterns.REException;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ public class OneOf_Assertion implements Assertion{
 	}
 	
 	public void add(Assertion assertion) {
+		if(assertion == null) return;
 		xorList.add(assertion);
 	}
 	
@@ -86,18 +86,19 @@ public class OneOf_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 
 		for (Assertion assertion : xorList) {
 			String returnedValue = assertion.toGrammarString();
 			if (returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.COMMA + returnedValue;
+			str.append(FullAlgebraString.COMMA)
+					.append(returnedValue);
 		}
 		
-		if(str.isEmpty()) return "";
-		if(xorList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
-		return String.format(GrammarStringDefinitions.ONEOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+		if(str.length() == 0) return "";
+		if(xorList.size() == 1) return str.substring(FullAlgebraString.COMMA.length());
+		return FullAlgebraString.ONEOF(str.substring(FullAlgebraString.COMMA.length()));
 	}
 
 	@Override

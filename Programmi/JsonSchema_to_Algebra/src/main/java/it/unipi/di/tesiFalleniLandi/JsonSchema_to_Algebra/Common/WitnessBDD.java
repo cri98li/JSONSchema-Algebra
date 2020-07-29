@@ -1,43 +1,56 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import jdd.bdd.BDD;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 public class WitnessBDD {
-    private static HashMap<WitnessVar, Integer> indexNode;
-    private static int nextIndex;
+    private static WitnessBDD instance;
 
-    public static void init(ConcurrentHashMap<WitnessVar, WitnessAssertion> varList){
-        if(indexNode != null) throw new RuntimeException("This method must be called once!");
+    public static WitnessBDD getInstance(){
+        if(instance != null) return instance;
 
-        indexNode = new HashMap<>();
-        nextIndex = 0;
-        for(Map.Entry<WitnessVar, ?> entry : varList.entrySet())
-            indexNode.put(entry.getKey(), nextIndex++);
+        instance = new WitnessBDD(10000, 10000);
+        return instance;
     }
 
-
-
-
+    private BiMap<WitnessVar, Integer> indexNode;
     private BDD bdd;
 
-    public WitnessBDD(){
-        //creo il nuovo obdd, ma uso l'ordinamento già definito
-        bdd = new BDD(10, 10);
-    }
+    public final WitnessVar trueVar;
+    public final WitnessVar falseVar;
 
-    public WitnessBDD(int nodesize, int cachesize){
+
+    private WitnessBDD(int nodesize, int cachesize){
+        indexNode = HashBiMap.create();
         //creo il nuovo obdd, ma uso l'ordinamento già definito
         bdd = new BDD(nodesize, cachesize);
+
+
+        trueVar = new WitnessVar("OBDD_true");
+        falseVar = new WitnessVar("OBDD_false");
+        indexNode.put(trueVar, bdd.createVar());
+        indexNode.put(falseVar, bdd.createVar());
     }
 
+    public WitnessVar createVar(){
+        int i = bdd.createVar();
+        WitnessVar var = new WitnessVar("OBDD_"+i);
+        indexNode.put(var, i);
+
+        return var;
+    }
+
+    public void createVar(WitnessVar var){
+        if(indexNode.containsKey(var)) return;
+        int i = bdd.createVar();
+        indexNode.put(var, i);
+    }
 
     public WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessBDDException, WitnessException {
         Integer i1 = indexNode.get(u1);
@@ -47,12 +60,15 @@ public class WitnessBDD {
 
         int newI = bdd.and(i1, i2);
 
-        WitnessVar var = new WitnessVar("OBDD_"+newI);
+
+        WitnessVar var = indexNode.inverse().get(newI);
+        if(var == null)
+            var = new WitnessVar("OBDD_"+newI);
         WitnessAnd and = new WitnessAnd();
         and.add(u1);
         and.add(u2);
 
-         and = (WitnessAnd) and.variableNormalization_expansion(env); //TODO: CHECK
+         and = (WitnessAnd) and.varNormalization_expansion(env); //TODO: CHECK
 
         env.add(var, and);
 
@@ -70,12 +86,14 @@ public class WitnessBDD {
 
         int newI = bdd.or(i1, i2);
 
-        WitnessVar var = new WitnessVar("OBDD_"+newI);
+        WitnessVar var = indexNode.inverse().get(newI);
+        if(var == null)
+            var = new WitnessVar("OBDD_"+newI);
         WitnessOr or = new WitnessOr();
         or.add(u1);
         or.add(u2);
 
-        or = (WitnessOr) or.variableNormalization_expansion(env); //TODO: CHECK
+        or = (WitnessOr) or.varNormalization_expansion(env); //TODO: CHECK
 
         env.add(var, or);
 
@@ -83,6 +101,7 @@ public class WitnessBDD {
 
         return var;
     }
+
 }
 
 class WitnessBDDException extends WitnessException{

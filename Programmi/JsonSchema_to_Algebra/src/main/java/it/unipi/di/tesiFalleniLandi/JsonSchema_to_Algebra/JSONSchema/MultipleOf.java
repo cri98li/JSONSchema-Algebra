@@ -2,7 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Mof_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -38,8 +39,8 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.MULTIPLEOF, value);
+	public Assertion toGrammar() {
+		return new Mof_Assertion(value);
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class MultipleOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 	

@@ -2,8 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import patterns.REException;
 
 public class Names_Assertion implements Assertion{
@@ -30,7 +30,7 @@ public class Names_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		type.add(FullAlgebraString.TYPE_OBJECT);
 		and.add(type);
 		if(names.not() != null)
 			and.add(new ExName_Assertion(names.not()));
@@ -47,7 +47,7 @@ public class Names_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.PROPERTYNAMES, names.toGrammarString());
+		return FullAlgebraString.PROPERTYNAMES(names.toGrammarString());
 	}
 
 	@Override

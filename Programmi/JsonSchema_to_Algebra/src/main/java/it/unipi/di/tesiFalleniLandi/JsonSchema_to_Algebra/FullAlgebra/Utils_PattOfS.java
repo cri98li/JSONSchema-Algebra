@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AllOf;
 import patterns.Pattern;
 import patterns.REException;
 
@@ -33,11 +34,32 @@ public class Utils_PattOfS {
     }
 
     public static ComplexPattern pattOfS(Assertion a){
+        if(a.getClass() == Type_Assertion.class)
+            return pattOfS((Type_Assertion) a);
+
+        if(a.getClass() == Const_Assertion.class)
+            return pattOfS((Const_Assertion) a);
+
+        if(a.getClass() == AllOf_Assertion.class)
+            return pattOfS((AllOf_Assertion) a);
+
+        if(a.getClass() == AnyOf_Assertion.class)
+            return pattOfS((AnyOf_Assertion) a);
+
+        if(a.getClass() == Not_Assertion.class)
+            return pattOfS((Not_Assertion) a);
+
+        if(a.getClass() == Pattern_Assertion.class)
+            return pattOfS((Pattern_Assertion) a);
+
+        if(a.getClass() == Ref_Assertion.class)
+            return pattOfS((Ref_Assertion) a);
+
         return truePattern.clone();
     }
 
     public static ComplexPattern pattOfS(Type_Assertion a){
-        if(a.contains(GrammarStringDefinitions.TYPE_STRING)) return truePattern.clone();
+        if(a.contains(FullAlgebraString.TYPE_STRING)) return truePattern.clone();
 
         return falsePattern.clone();
     }

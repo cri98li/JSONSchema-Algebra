@@ -1,9 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessRepeateditems;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessRepeateditems;
 
 
 public class RepeatedItems_Assertion implements Assertion{
@@ -29,7 +29,7 @@ public class RepeatedItems_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_ARRAY);
+		type.add(FullAlgebraString.TYPE_ARRAY);
 		and.add(type);
 		and.add(new UniqueItems_Assertion());
 
@@ -43,7 +43,7 @@ public class RepeatedItems_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return GrammarStringDefinitions.REPEATEDITEMS;
+		return FullAlgebraString.REPEATEDITEMS;
 	}
 
 	@Override

@@ -1,0 +1,2 @@
+Error: Could not find or load main class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.MainWitness
+Caused by: java.lang.ClassNotFoundException: it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.MainWitness

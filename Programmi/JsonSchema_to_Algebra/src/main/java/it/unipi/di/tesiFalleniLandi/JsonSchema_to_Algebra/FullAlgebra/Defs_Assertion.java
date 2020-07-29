@@ -2,9 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
@@ -56,7 +56,7 @@ public class Defs_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		Defs_Assertion not = this.notElimination();
-		not.rootDef = GrammarStringDefinitions.NOT_DEFS + not.rootDef;
+		not.rootDef = FullAlgebraString.NOT_DEFS + not.rootDef;
 
 		return not;
 	}
@@ -70,11 +70,11 @@ public class Defs_Assertion implements Assertion{
 			returnDef.defs.put(entry.getKey(), entry.getValue().notElimination());
 
 			//case negation of not_x --> x
-			if(entry.getKey().startsWith(GrammarStringDefinitions.NOT_DEFS))
+			if(entry.getKey().startsWith(FullAlgebraString.NOT_DEFS))
 				continue;
 
-			if (!defs.containsKey(GrammarStringDefinitions.NOT_DEFS+entry.getKey()))
-				returnDef.defs.put(GrammarStringDefinitions.NOT_DEFS+entry.getKey(), entry.getValue().notElimination().not());
+			if (!defs.containsKey(FullAlgebraString.NOT_DEFS+entry.getKey()))
+				returnDef.defs.put(FullAlgebraString.NOT_DEFS+entry.getKey(), entry.getValue().notElimination().not());
 		}
 
 		returnDef.rootDef = rootDef;
@@ -84,23 +84,29 @@ public class Defs_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String def = "";
+		StringBuilder def = new StringBuilder();
 
 		if(defs != null) {
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 
-			for (Entry<String, Assertion> entry : entrySet)
-				if (!Objects.equals(entry.getKey(), rootDef))
-					def += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.DEFS, entry.getKey(), entry.getValue().toGrammarString());
-				else
-					if(rootDef != null)
-						def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, "\"" + rootDef + "\"", defs.get(rootDef).toGrammarString());
-					else
-						def += GrammarStringDefinitions.COMMA+String.format(GrammarStringDefinitions.ROOTDEF, "\""+GrammarStringDefinitions.ROOTDEF_DEFAULTNAME + "\"", "");
-			}
+			for (Entry<String, Assertion> entry : entrySet) {
+				String tmp = entry.getValue().toGrammarString();
+				if(tmp.isEmpty()) continue;
 
-		if(def.isEmpty()) return "";
-		return def.substring(GrammarStringDefinitions.COMMA.length());
+				if (!Objects.equals(entry.getKey(), rootDef)) {
+					def.append(FullAlgebraString.COMMA)
+							.append(FullAlgebraString.DEFS(entry.getKey(), tmp));
+				} else if (rootDef != null)
+					def.append(FullAlgebraString.COMMA)
+							.append(FullAlgebraString.ROOTDEF("\"" + rootDef + "\"", tmp));
+				else
+					def.append(FullAlgebraString.COMMA)
+							.append(FullAlgebraString.ROOTDEF("\"" + FullAlgebraString.ROOTDEF_DEFAULTNAME + "\"", ""));
+			}
+		}
+
+		if(def.length() == 0) return "";
+		return def.substring(FullAlgebraString.COMMA.length());
 	}
 
 	@Override

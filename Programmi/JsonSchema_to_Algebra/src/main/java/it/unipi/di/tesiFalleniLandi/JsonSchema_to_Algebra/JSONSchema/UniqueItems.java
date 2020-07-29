@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.UniqueItems_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,7 +20,9 @@ public class UniqueItems implements JSONSchemaElement{
 		uniqueItems = obj;
 	}
 	
-	public UniqueItems() { }
+	public UniqueItems() {
+		uniqueItems = false;
+	}
 
 	@Override
 	public String toString() {
@@ -36,14 +38,12 @@ public class UniqueItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		if(uniqueItems) return GrammarStringDefinitions.UNIQUEITEMS;
-		
-		return "";
+	public UniqueItems_Assertion toGrammar() {
+		return uniqueItems? new UniqueItems_Assertion() : null;
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 

@@ -3,38 +3,50 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Const_Assertion;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class Const extends Enum {
+public class Const implements JSONSchemaElement{
+	JsonElement _const;
 
 	private Const() {
-		super();
 	}
 	
-	public Const(JsonElement obj) {
-		super();
-		parseArray(obj);
+	public Const(JsonElement value) {
+		this._const = value;
 	}
-	
+
+	@Override
 	public String toString() {
-		return "[enumArray_str=" + enumArray_str + ", enumArray_num=" + enumArray_num + ", enumArray_bool="
-			+ enumArray_bool + ", enumArray_obj=" + enumArray_obj + ", enumArray_array=" + enumArray_array
-			+ ", thereIsNull=" + thereIsNull + "]";
-		}
+		return "Const{" +
+				"_const=" + _const +
+				'}';
+	}
 
 	@Override
 	public JsonObject toJSON() {
 		JsonObject obj = new JsonObject();
 
-		if(super.thereIsNull) obj.add("const", JsonNull.INSTANCE);
-		else if(!enumArray_array.isEmpty()) obj.add("const", enumArray_array.get(0));
-		else if(!enumArray_obj.isEmpty()) obj.add("const", enumArray_obj.get(0));
-		else if(!enumArray_bool.isEmpty()) obj.addProperty("const", enumArray_bool.get(0));
-		else if(!enumArray_num.isEmpty()) obj.addProperty("const", enumArray_num.get(0));
-		else if(!enumArray_str.isEmpty()) obj.addProperty("const", enumArray_str.get(0));
+		if(_const.isJsonNull()) {
+			obj.add("const", JsonNull.INSTANCE);
+			return obj;
+		}
+
+		if(_const.isJsonObject())
+			obj.add("const", _const);
+		else if(_const.isJsonArray())
+			obj.add("const", _const);
+		else if(_const.getAsJsonPrimitive().isString())
+			obj.addProperty("const", _const.getAsString());
+		else if(_const.getAsJsonPrimitive().isNumber())
+			obj.addProperty("const", _const.getAsNumber());
+		else if(_const.getAsJsonPrimitive().isBoolean())
+			obj.addProperty("const", _const.getAsBoolean());
 
 		return obj;
 	}
@@ -45,46 +57,33 @@ public class Const extends Enum {
 	}
 
 	@Override
-	public String toGrammarString() {
+	public Assertion toGrammar() {
+		return new Const_Assertion(_const.deepCopy());
+	}
 
-		if(!enumArray_str.isEmpty()) {
-			String decodedKey = new JsonPrimitive(enumArray_str.get(0)).toString();
-			return String.format(GrammarStringDefinitions.CONST, decodedKey);
-		}
-		
-		if(!enumArray_num.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_num.get(0).toString());
-		
-		if(!enumArray_bool.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_bool.get(0).toString());
-		
-		if(!enumArray_array.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_array.get(0).toString());
+	@Override
+	public int numberOfTranslatableAssertions() {
+		return 0;
+	}
 
-		if(!enumArray_obj.isEmpty())
-			return String.format(GrammarStringDefinitions.CONST, enumArray_obj.get(0).toString());
+	@Override
+	public List<Map.Entry<String, Defs>> collectDef() {
+		return new LinkedList<>();
+	}
 
-		if(thereIsNull) return String.format(GrammarStringDefinitions.CONST, "null");
+	@Override
+	public List<URI_JS> getRef() {
+		return new LinkedList<>();
+	}
 
-		return "";
+	@Override
+	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		return null;
 	}
 
 	@Override
 	public Const clone() {
-		Const clone = new Const();
 
-		clone.thereIsNull = thereIsNull;
-
-		if(enumArray_str != null) clone.enumArray_str = new LinkedList<>(enumArray_str);
-
-		if(enumArray_num != null) clone.enumArray_num = new LinkedList<>(enumArray_num);
-
-		if(enumArray_bool != null) clone.enumArray_bool = new LinkedList<>(enumArray_bool);
-
-		if(enumArray_array != null) clone.enumArray_array = new LinkedList<>(enumArray_array);
-
-		if(enumArray_obj != null) clone.enumArray_obj = new LinkedList<>(enumArray_obj);
-
-		return clone;
+		return new Const(_const.deepCopy());
 	}
 }

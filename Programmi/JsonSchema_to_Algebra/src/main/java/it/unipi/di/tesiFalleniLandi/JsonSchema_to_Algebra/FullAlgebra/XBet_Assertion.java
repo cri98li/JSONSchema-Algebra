@@ -1,12 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessXBet;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet;
 
 public class XBet_Assertion implements Assertion{
 	private Number min, max;
+
+	public XBet_Assertion() {
+	}
 	
 	public XBet_Assertion(Number min, Number max) {
 		this.min = min;
@@ -69,12 +72,12 @@ public class XBet_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = FullAlgebraString.NEG_INF, max = FullAlgebraString.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
+		return FullAlgebraString.BETWEENNUMBER_EXCLUSIVE(min, max);
 	}
 
 	@Override

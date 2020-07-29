@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -55,7 +55,7 @@ public class URI_JS {
 		//caso #
 		if(uri.equals("#")) {
 			normalizedURI = "";
-			normalizedName = GrammarStringDefinitions.ROOTDEF_DEFAULTNAME;
+			normalizedName = FullAlgebraString.ROOTDEF_DEFAULTNAME;
 			return;
 		}
 		

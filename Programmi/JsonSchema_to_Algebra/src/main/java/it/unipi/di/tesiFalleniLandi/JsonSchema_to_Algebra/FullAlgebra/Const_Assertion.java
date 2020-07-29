@@ -4,15 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import patterns.REException;
 
-import javax.json.Json;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,7 +54,7 @@ public class Const_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		
 		if(value.isJsonNull()) {
-			type.add(GrammarStringDefinitions.TYPE_NULL);
+			type.add(FullAlgebraString.TYPE_NULL);
 			return type.not();
 		}
 
@@ -144,15 +140,15 @@ public class Const_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		if(value.isJsonNull()) return String.format(GrammarStringDefinitions.CONST, "null");
+		if(value.isJsonNull()) return FullAlgebraString.CONST("null");
 
 		if(value.isJsonObject() || value.isJsonArray())
-			return String.format(GrammarStringDefinitions.CONST, value.toString());
+			return FullAlgebraString.CONST(value.toString());
 
 		if(value.getAsJsonPrimitive().isString())
-			return String.format(GrammarStringDefinitions.CONST, "\"" + value + "\"");
+			return FullAlgebraString.CONST("\"" + value.getAsString() + "\""  );
 
-		return String.format(GrammarStringDefinitions.CONST, value);
+		return FullAlgebraString.CONST(value.getAsString());
 	}
 
 	/*
@@ -183,11 +179,11 @@ public class Const_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
-		if(value.isJsonNull()) return new WitnessType(GrammarStringDefinitions.TYPE_NULL);
+		if(value.isJsonNull()) return new WitnessType(FullAlgebraString.TYPE_NULL);
 
 		if(value.isJsonObject()) {
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_OBJECT));
+			and.add(new WitnessType(FullAlgebraString.TYPE_OBJECT));
 			Set<Map.Entry<String, JsonElement>> entrySet = ((JsonObject) value).entrySet();
 			Required_Assertion req = new Required_Assertion();
 
@@ -202,7 +198,7 @@ public class Const_Assertion implements Assertion{
 
 		if(value.isJsonArray()){
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_ARRAY));
+			and.add(new WitnessType(FullAlgebraString.TYPE_ARRAY));
 			WitnessItems items = new WitnessItems();
 			JsonArray array = value.getAsJsonArray();
 			for(JsonElement element : array)
@@ -215,20 +211,20 @@ public class Const_Assertion implements Assertion{
 
 		if(value.getAsJsonPrimitive().isString()) {
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_STRING));
+			and.add(new WitnessType(FullAlgebraString.TYPE_STRING));
 			and.add(new WitnessPattern(ComplexPattern.createFromName(value.getAsString())));
 			return and;
 		}
 
 		if(value.getAsJsonPrimitive().isBoolean()){
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(GrammarStringDefinitions.TYPE_BOOLEAN));
+			and.add(new WitnessType(FullAlgebraString.TYPE_BOOLEAN));
 			and.add(new WitnessIfBoolThen(value.getAsBoolean()));
 			return and;
 		}
 
 		WitnessAnd and = new WitnessAnd();
-		and.add(new WitnessType(GrammarStringDefinitions.TYPE_NUMBER));
+		and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
 		and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));
 
 		return and;

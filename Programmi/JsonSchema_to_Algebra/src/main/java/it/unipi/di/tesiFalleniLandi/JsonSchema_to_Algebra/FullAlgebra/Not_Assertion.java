@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 
 import patterns.REException;
 
@@ -47,7 +47,10 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.NOT, not.toGrammarString());
+		String tmp = not.toGrammarString();
+		if(tmp.isEmpty()) return "";
+
+		return FullAlgebraString.NOT(tmp);
 	}
 
 	@Override

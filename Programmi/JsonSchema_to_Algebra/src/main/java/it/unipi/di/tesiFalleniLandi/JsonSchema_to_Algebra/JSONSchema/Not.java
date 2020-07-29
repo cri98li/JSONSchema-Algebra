@@ -2,7 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Not_Assertion;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,16 +32,16 @@ public class Not implements JSONSchemaElement {
 	}
 
 	@Override
-	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.NOT, value.toGrammarString());
+	public Assertion toGrammar() {
+		return new Not_Assertion(value.toGrammar());
 	}
 
 	@Override
 	public Not assertionSeparation() {
-		Not obj = new Not();
-		obj.value = value.assertionSeparation();
-		
-		return obj;
+		Not not = new Not();
+		not.value = value.assertionSeparation();
+
+		return not;
 	}
 
 	@Override
@@ -64,8 +65,8 @@ public class Not implements JSONSchemaElement {
 	}
 
 	@Override
-	public int numberOfAssertions() {
-		return value.numberOfAssertions();
+	public int numberOfTranslatableAssertions() {
+		return value.numberOfTranslatableAssertions();
 	}
 	
 	@Override

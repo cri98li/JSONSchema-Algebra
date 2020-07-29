@@ -2,8 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Len_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Length implements JSONSchemaElement{
-	private Number minLength;
-	private Number maxLength;
+	private Long minLength;
+	private Long maxLength;
 	
 	public Length () { }
 	
 	public void setMinLength(JsonElement obj) {
-		minLength = obj.getAsNumber();
+		minLength = obj.getAsLong();
 	}
 	
 	public void setMaxLength(JsonElement obj) {
-		maxLength = obj.getAsNumber();
+		maxLength = obj.getAsLong();
 	}
 	
 	@Override
@@ -41,17 +41,12 @@ public class Length implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String min = "0", max = GrammarStringDefinitions.POS_INF;
-		
-		if(minLength != null) min = minLength+"";
-		if(maxLength != null) max = maxLength+"";
-		
-		return String.format(GrammarStringDefinitions.LENGTH, min, max);
+	public Assertion toGrammar() {
+		return new Len_Assertion(minLength, maxLength);
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 

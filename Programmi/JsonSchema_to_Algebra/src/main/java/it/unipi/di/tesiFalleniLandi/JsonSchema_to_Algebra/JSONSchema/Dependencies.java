@@ -3,7 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -13,7 +14,10 @@ public class Dependencies implements JSONSchemaElement{
 	private HashMap<String, List<String>> dependentRequired;
 	private HashMap<String, JSONSchema> dependentSchemas;
 	
-	public Dependencies() {	}
+	public Dependencies() {
+		dependentSchemas = new HashMap<>();
+		dependentRequired = new HashMap<>();
+	}
 	
 	public void setDependencies(JsonElement obj) {
 		JsonObject object = obj.getAsJsonObject();
@@ -21,11 +25,9 @@ public class Dependencies implements JSONSchemaElement{
 		
 		for(Entry<String,JsonElement> entry : object.entrySet()) {
 			try {
-				if(dependentSchemas == null)  dependentSchemas = new HashMap<>();
 				JSONSchema js = new JSONSchema(entry.getValue());
 				dependentSchemas.put((String)entry.getKey(), js);
 			}catch(ClassCastException ex) {
-				if(dependentRequired == null) dependentRequired = new HashMap<>();
 				LinkedList<String> list = new LinkedList<>();
 				JsonArray array = (JsonArray) entry.getValue();
 				
@@ -44,18 +46,13 @@ public class Dependencies implements JSONSchemaElement{
 		JsonObject object = obj.getAsJsonObject();
 		
 		dependentRequired = new HashMap<>();
-		
-		Iterator<?> it = object.keySet().iterator();
-		
-		while(it.hasNext()) {
+
+		for(String key : object.keySet()) {
 			LinkedList<String> list = new LinkedList<>();
-			String key = (String) it.next();
 			JsonArray array = object.get(key).getAsJsonArray();
-			
-			Iterator<?> it_array = array.iterator();
-			
-			while(it_array.hasNext()) {
-				list.add((String) it_array.next());
+
+			for(JsonElement el : array) {
+				list.add(el.getAsString());
 			}
 			
 			dependentRequired.put(key, list);
@@ -77,7 +74,7 @@ public class Dependencies implements JSONSchemaElement{
 	public JsonElement toJSON() {
 		JsonObject obj = new JsonObject();
 		
-		if(dependentSchemas != null && !dependentSchemas.isEmpty()){
+		if(!dependentSchemas.isEmpty()){
 			JsonObject tmp = new JsonObject();
 			Set<String> keys = dependentSchemas.keySet();
 				
@@ -87,7 +84,7 @@ public class Dependencies implements JSONSchemaElement{
 			obj.add("dependentSchemas", tmp);
 		}
 		
-		if(dependentRequired != null && !dependentRequired.isEmpty()){
+		if(!dependentRequired.isEmpty()){
 			JsonObject tmp = new JsonObject();
 			Set<String> keys = dependentRequired.keySet();
 				
@@ -112,64 +109,67 @@ public class Dependencies implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String typeObj = String.format(GrammarStringDefinitions.TYPE, GrammarStringDefinitions.TYPE_OBJECT);
-		String ds = "";
-		String dr = "";
+	public Assertion toGrammar() {
+		Type_Assertion typeObj = new Type_Assertion(FullAlgebraString.TYPE_OBJECT);
+		IfThenElse_Assertion ds = null;
+		IfThenElse_Assertion dr = null;
 		
-		if(dependentSchemas != null && !dependentSchemas.isEmpty()) {
-			String str = "";
+		if(!dependentSchemas.isEmpty()) {
+			AllOf_Assertion allOf = new AllOf_Assertion();
+			Required_Assertion required;
+			IfThenElse_Assertion ifThenElse;
+
 			Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
 			for(Entry<String, JSONSchema> entry : entrySet) {
-				String req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + entry.getKey() + "\"");
-				str += String.format(GrammarStringDefinitions.IF_THEN, req, entry.getValue().toGrammarString());
-				str += GrammarStringDefinitions.COMMA;
+				required = new Required_Assertion();
+				required.add(entry.getKey());
+				ifThenElse = new IfThenElse_Assertion(required, entry.getValue().toGrammar(), null);
+				allOf.add(ifThenElse);
 			}
-			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
-			String allOf = String.format(GrammarStringDefinitions.ALLOF, str);
-			ds = String.format(GrammarStringDefinitions.IF_THEN, typeObj, allOf);
+			ds = new IfThenElse_Assertion(typeObj, allOf, null);
 		}
 		
-		if(dependentRequired != null && !dependentRequired.isEmpty()) {
-			String str = "";
+		if(!dependentRequired.isEmpty()) {
+			AllOf_Assertion allOf = new AllOf_Assertion();
 
 			Set<String> keys = dependentRequired.keySet();
 
 			for (String key : keys) {
-				String reqList = "";
-				String req = "";
+				Required_Assertion reqList = new Required_Assertion();
+				Required_Assertion req = new Required_Assertion();
+
 				List<String> list = dependentRequired.get(key);
 				for (String tmp : list) {
-					reqList += "\"" + tmp + "\"" + ",";
+					reqList.add(tmp);
 				}
 
-				reqList = reqList.substring(0, reqList.length() - 1);
-				reqList = String.format(GrammarStringDefinitions.REQUIRED, reqList);
-				req = String.format(GrammarStringDefinitions.REQUIRED, "\"" + key + "\"");
-				str += String.format(GrammarStringDefinitions.IF_THEN, req, reqList);
-				str += GrammarStringDefinitions.COMMA;
+				req.add(key);
+				IfThenElse_Assertion ifThen = new IfThenElse_Assertion(req, reqList, null);
+				allOf.add(ifThen);
+
 			}
 
-			str = str.substring(0, str.length() - GrammarStringDefinitions.COMMA.length());
-			String allOf = String.format(GrammarStringDefinitions.ALLOF, str);
-			dr = String.format(GrammarStringDefinitions.IF_THEN, typeObj, allOf);
-
+			dr = new IfThenElse_Assertion( typeObj, allOf, null);
 		}
-		if(!ds.isEmpty() && !dr.isEmpty()) {
-			return ds + GrammarStringDefinitions.COMMA + dr;
-		}else if(!ds.isEmpty())
+
+		if(ds != null && dr != null) {
+			AllOf_Assertion allOf = new AllOf_Assertion();
+			allOf.add(ds);
+			allOf.add(dr);
+			return allOf;
+		}else if(ds != null)
 			return ds;
 		else
 			return dr;
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		int count = 0;
 
 		if(dependentSchemas != null)
 			for(Entry<String, JSONSchema> entry : dependentSchemas.entrySet())
-				count += entry.getValue().numberOfAssertions();
+				count += entry.getValue().numberOfTranslatableAssertions();
 
 		//TODO: check
 		if(dependentRequired != null)
@@ -212,7 +212,7 @@ public class Dependencies implements JSONSchemaElement{
 			return null;
 		
 		URIIterator.remove();
-		if(dependentSchemas != null && dependentSchemas.containsKey(URIIterator.next())) {
+		if(dependentSchemas.containsKey(URIIterator.next())) {
 			JSONSchema tmp = dependentSchemas.get(URIIterator.next());
 			URIIterator.remove();
 			return tmp.searchDef(URIIterator);
@@ -224,26 +224,17 @@ public class Dependencies implements JSONSchemaElement{
 	@Override
 	public Dependencies clone() {
 		Dependencies newDependencies = new Dependencies();
-		
-		if(dependentRequired != null) {
-			newDependencies.dependentRequired = new HashMap<>();
-			Set<Entry<String, List<String>>> entrySet = dependentRequired.entrySet();
-			for(Entry<String, List<String>> entry : entrySet) {
-				List<String> list = new LinkedList<>();
-				list.addAll(entry.getValue());
-				newDependencies.dependentRequired.put(entry.getKey(), list);
-			}
+
+		for(Entry<String, List<String>> entry : dependentRequired.entrySet()) {
+			List<String> list = new LinkedList<>();
+			list.addAll(entry.getValue());
+			newDependencies.dependentRequired.put(entry.getKey(), list);
 		}
-		
-		if(dependentSchemas != null) {
-			newDependencies.dependentSchemas = new HashMap<>();
+
 			
-			Set<Entry<String, JSONSchema>> entrySet = dependentSchemas.entrySet();
-			
-			for(Entry<String, JSONSchema> entry : entrySet)
-				newDependencies.dependentSchemas.put(entry.getKey(), entry.getValue().clone());
-		}
-		
+		for(Entry<String, JSONSchema> entry : dependentSchemas.entrySet())
+			newDependencies.dependentSchemas.put(entry.getKey(), entry.getValue().clone());
+
 		return newDependencies;
 	}
 

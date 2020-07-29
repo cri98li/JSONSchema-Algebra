@@ -2,7 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BetweenItems implements JSONSchemaElement{
-	private Number minItems;
-	private Number maxItems;
+	private Long minItems;
+	private Long maxItems;
 	
 	public BetweenItems() { }
 	
@@ -20,13 +21,13 @@ public class BetweenItems implements JSONSchemaElement{
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of minItems got "+obj);
 
-		minItems = obj.getAsNumber();
+		minItems = obj.getAsLong();
 	}
 	
 	public void setMaxItems(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of maxItems got "+obj);
-		maxItems = obj.getAsNumber();
+		maxItems = obj.getAsLong();
 	}
 	
 	@Override
@@ -46,13 +47,8 @@ public class BetweenItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String min = "0", max = GrammarStringDefinitions.POS_INF;
-
-		if (minItems != null) min = minItems + "";
-		if (maxItems != null) max = maxItems + "";
-
-		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
+	public Exist_Assertion toGrammar() {
+		return new Exist_Assertion(minItems, maxItems, new Boolean_Assertion(true));
 	}
 
 	@Override
@@ -81,7 +77,7 @@ public class BetweenItems implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 

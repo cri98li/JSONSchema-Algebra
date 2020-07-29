@@ -2,9 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessItems;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessItems;
 import patterns.REException;
 
 import java.util.Arrays;
@@ -146,27 +146,39 @@ public class Items_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 
 		if(itemsArray != null) {
 
-			if (itemsArray.size() == 1 && additionalItems == null)
-				return String.format(GrammarStringDefinitions.ITEMS, itemsArray.get(0).toGrammarString(), "");
+			if (itemsArray.size() == 1 && additionalItems == null) {
+				String tmp = itemsArray.get(0).toGrammarString();
+				if(tmp.isEmpty()) return "";
+				return FullAlgebraString.ITEMS(tmp, "");
+			}
 
 			Iterator<Assertion> it = itemsArray.iterator();
-			if (it.hasNext())
-				str += it.next().toGrammarString();
+			String tmp = "";
+			while (tmp.isEmpty() && it.hasNext()) {
+				tmp = it.next().toGrammarString();
+			}
+			str.append(tmp);
 
 			while (it.hasNext()) {
-				str += GrammarStringDefinitions.COMMA + it.next().toGrammarString();
+				tmp = it.next().toGrammarString();
+				if(tmp.isEmpty()) continue;
+				str.append(FullAlgebraString.COMMA)
+						.append(tmp);
 			}
 		}
 		
 		String str2 = "";
 		if(additionalItems != null)
 			str2 = additionalItems.toGrammarString();
-		
-		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
+
+		if(str2.isEmpty() && str.length() == 0)
+			return "";
+
+		return FullAlgebraString.ITEMS(str.toString(), str2);
 	}
 
 	@Override

@@ -3,7 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,10 +15,10 @@ import java.util.Map.Entry;
 public class Items implements JSONSchemaElement{
 	private List<JSONSchema> items_array;
 	private JSONSchema items;
-	private JSONSchema additionalItems_array;
+	private JSONSchema additionalItems;
 	private JSONSchema unevaluatedItems_array;
 	
-	public Items() {}
+	public Items() { }
 	
 	public void setItems(JsonElement obj) {
 		JsonArray array;
@@ -39,7 +40,7 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(JsonElement obj) {
-		additionalItems_array = new JSONSchema(obj);
+		additionalItems = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(JsonElement obj) {
@@ -49,7 +50,7 @@ public class Items implements JSONSchemaElement{
 	@Override
 	public String toString() {
 		return "Items [items_array=" + items_array + ", items=" + items + ", additionalItems_array="
-				+ additionalItems_array + ", unevaluatedItems_array=" + unevaluatedItems_array + "]";
+				+ additionalItems + ", unevaluatedItems_array=" + unevaluatedItems_array + "]";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -64,7 +65,7 @@ public class Items implements JSONSchemaElement{
 			obj.add("items", array);
 		}
 		
-		if(additionalItems_array != null) obj.add("additionalItems", additionalItems_array.toJSON());
+		if(additionalItems != null) obj.add("additionalItems", additionalItems.toJSON());
 		
 		if(unevaluatedItems_array != null) obj.add("unevaluatedItems", unevaluatedItems_array.toJSON());
 		
@@ -75,32 +76,20 @@ public class Items implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String str = "";
-		
-		if(items != null && items.numberOfAssertions() != 0) {
-			return String.format(GrammarStringDefinitions.ITEMS, "", items.toGrammarString());
-		}
+	public Assertion toGrammar() {
+		Items_Assertion item = new Items_Assertion();
 
-		if(items_array != null) {
-			Iterator<JSONSchema> it = items_array.iterator();
+		if(items_array != null)
+			for(JSONSchema element : items_array)
+				item.add(element.toGrammar());
 
-			while (it.hasNext()) {
-				JSONSchemaElement jse = it.next();
-				if(jse.numberOfAssertions() != 0)
-					str += jse.toGrammarString() + ",";
-			}
+		if(items != null)
+			item.add(items.toGrammar());
 
-			str = str.substring(0, str.length()-1);
-		}
-		
-		String str2 = "";
-		if(additionalItems_array != null && additionalItems_array.numberOfAssertions() != 0) {
-			str2 = additionalItems_array.toGrammarString();
-			if(str.isEmpty())
-				return String.format(GrammarStringDefinitions.ITEMS, str2, "");
-		}
-		return String.format(GrammarStringDefinitions.ITEMS, str, str2);
+		if(additionalItems != null)
+			item.setAdditionalItems(additionalItems.toGrammar());
+
+		return item;
 	}
 
 	@Override
@@ -114,7 +103,7 @@ public class Items implements JSONSchemaElement{
 		}
 		
 		if(items != null) obj.items = items.assertionSeparation();
-		if(additionalItems_array != null) obj.additionalItems_array = additionalItems_array.assertionSeparation();
+		if(additionalItems != null) obj.additionalItems = additionalItems.assertionSeparation();
 		if(unevaluatedItems_array != null) obj.unevaluatedItems_array = unevaluatedItems_array.assertionSeparation();
 		
 		return obj;
@@ -129,7 +118,7 @@ public class Items implements JSONSchemaElement{
 				returnList.addAll(s.getRef());
 		
 		if(items != null) returnList.addAll(items.getRef());
-		if(additionalItems_array != null) returnList.addAll(additionalItems_array.getRef());
+		if(additionalItems != null) returnList.addAll(additionalItems.getRef());
 		if(unevaluatedItems_array != null) returnList.addAll(unevaluatedItems_array.getRef());
 		
 		return returnList;
@@ -144,7 +133,7 @@ public class Items implements JSONSchemaElement{
 				return items.searchDef(URIIterator);
 			case "additionalItems":
 				URIIterator.remove();
-				return additionalItems_array.searchDef(URIIterator);
+				return additionalItems.searchDef(URIIterator);
 			case "unevaluatedItems":
 				URIIterator.remove();
 				return unevaluatedItems_array.searchDef(URIIterator);
@@ -162,23 +151,23 @@ public class Items implements JSONSchemaElement{
 		}
 		
 		if(items != null) returnList.addAll(Utils_JSONSchema.addPathElement("items",items.collectDef()));
-		if(additionalItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("additionalItems", additionalItems_array.collectDef()));
+		if(additionalItems != null) returnList.addAll(Utils_JSONSchema.addPathElement("additionalItems", additionalItems.collectDef()));
 		if(unevaluatedItems_array != null) returnList.addAll(Utils_JSONSchema.addPathElement("unevaluatedItems", unevaluatedItems_array.collectDef()));
 		
 		return returnList;
 	}
 
 	@Override
-	public int numberOfAssertions() {
-		if(items != null) return items.numberOfAssertions();
+	public int numberOfTranslatableAssertions() {
+		if(items != null) return items.numberOfTranslatableAssertions();
 
 		if(items_array != null)
 			for(JSONSchema s : items_array)
-				if(s.numberOfAssertions() > 0) return 1;
+				if(s.numberOfTranslatableAssertions() > 0) return 1;
 
-		if(additionalItems_array != null) return additionalItems_array.numberOfAssertions();
+		if(additionalItems != null) return additionalItems.numberOfTranslatableAssertions();
 
-		if(unevaluatedItems_array != null) return unevaluatedItems_array.numberOfAssertions();
+		if(unevaluatedItems_array != null) return unevaluatedItems_array.numberOfTranslatableAssertions();
 
 		return 0;
 	} 
@@ -197,7 +186,7 @@ public class Items implements JSONSchemaElement{
 			}
 		}
 
-		if(additionalItems_array != null) newItems.additionalItems_array = additionalItems_array.clone();
+		if(additionalItems != null) newItems.additionalItems = additionalItems.clone();
 		if(unevaluatedItems_array != null) newItems.unevaluatedItems_array = unevaluatedItems_array.clone();
 		
 		return newItems;

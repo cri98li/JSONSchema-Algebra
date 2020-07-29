@@ -3,7 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.OneOf_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -54,31 +55,22 @@ public class OneOf implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String str = "";
-		
-		Iterator<JSONSchema> it = oneOf.iterator();
-			
-		while(it.hasNext()) {
-			String returnedValue = it.next().toGrammarString();
-			if(returnedValue.isEmpty())
-				continue;
-			str += GrammarStringDefinitions.COMMA + returnedValue;
-		}
-		
-		if(str.isEmpty()) return "";
-		if(oneOf.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
-		return String.format(GrammarStringDefinitions.ONEOF, str.substring(GrammarStringDefinitions.COMMA.length()));
-		//return str;
+	public Assertion toGrammar() {
+		OneOf_Assertion oneOf = new OneOf_Assertion();
+
+		for(JSONSchema element : this.oneOf)
+			oneOf.add(element.toGrammar());
+
+		return oneOf;
 	}
 
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		int returnValue = 0;
 		if(oneOf != null)
 			for(JSONSchemaElement jse : oneOf)
-				returnValue += jse.numberOfAssertions();
+				returnValue += jse.numberOfTranslatableAssertions();
 
 		return returnValue;
 	}

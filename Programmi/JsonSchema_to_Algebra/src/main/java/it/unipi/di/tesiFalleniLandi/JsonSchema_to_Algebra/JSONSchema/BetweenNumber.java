@@ -2,7 +2,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.XBet_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -95,22 +98,49 @@ public class BetweenNumber implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
+	public Assertion toGrammar() {
+		AllOf_Assertion allOf = new AllOf_Assertion();
+		Bet_Assertion bet = new Bet_Assertion();
+		XBet_Assertion xbet = new XBet_Assertion();
+		allOf.add(bet);
+		allOf.add(xbet);
+
+		if(minimum != null) {
+			bet.setMin(minimum);
+		}
+		if(maximum != null){
+			bet.setMax(maximum);
+		}
+
+		if(minimum != null || maximum != null){
+
+		}
+
+
+		if(exclusiveMinimum != null) {
+			xbet.setMin(exclusiveMinimum);
+		}
+		if(exclusiveMaximum != null) {
+			xbet.setMax(exclusiveMaximum);
+		}
+
+		return allOf;
+		/*
 		String str1 = ""; //bet
 		String str2 = ""; //xbet
 
-		String min = GrammarStringDefinitions.NEG_INF, max = GrammarStringDefinitions.POS_INF;
+		String min = FullAlgebraString.NEG_INF, max = FullAlgebraString.POS_INF;
 		if(minimum != null) min = minimum+"";
 		if(maximum != null) max = maximum+"";
 		
 		if(minimum != null || maximum != null)
-			str1 = String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
+			str1 = String.format(FullAlgebraString.BETWEENNUMBER, min, max);
 		
 		if(exclusiveMinimum != null) min = exclusiveMinimum+"";
 		if(exclusiveMaximum != null) max = exclusiveMaximum+"";
 		
 		if(exclusiveMinimum != null || exclusiveMaximum != null)
-			str2 = String.format(GrammarStringDefinitions.BETWEENNUMBER_EXCL, min, max);
+			str2 = String.format(FullAlgebraString.BETWEENNUMBER_EXCL, min, max);
 		
 		
 		if(str1.isEmpty() && str1 != null)
@@ -118,7 +148,8 @@ public class BetweenNumber implements JSONSchemaElement{
 		if(str2.isEmpty() && str2 != null)
 			return str1;
 		
-		return str1 + GrammarStringDefinitions.COMMA + str2;
+		return str1 + FullAlgebraString.COMMA + str2;
+		 */
 	}
 
 	@Override
@@ -154,7 +185,7 @@ public class BetweenNumber implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 	

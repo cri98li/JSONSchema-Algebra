@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType;
 import org.junit.Test;
-import patterns.Pattern;
-import patterns.REException;
 
 import static org.junit.Assert.*;
 
@@ -19,11 +19,9 @@ public class WitnessTypeTest {
 
     @Test
     public void mergeDifferentType(){
-        WitnessType t1 = new WitnessType();
-        t1.add("num");
+        WitnessType t1 = new WitnessType("num");
         t1.add("bool");
-        WitnessType t2 = new WitnessType();
-        t2.add("str");
+        WitnessType t2 = new WitnessType("str");
         t2.add("obj");
         WitnessBoolean output = new WitnessBoolean(false);
 
@@ -32,11 +30,9 @@ public class WitnessTypeTest {
 
     @Test
     public void mergeNumWithInt(){
-        WitnessType t1 = new WitnessType();
-        t1.add("num");
+        WitnessType t1 = new WitnessType("num");
         t1.add("bool");
-        WitnessType t2 = new WitnessType();
-        t2.add("int");
+        WitnessType t2 = new WitnessType("int");
         t2.add("obj");
         WitnessType output = new WitnessType("int");
 
@@ -45,11 +41,9 @@ public class WitnessTypeTest {
 
     @Test
     public void mergeNumWithNumNotInt(){
-        WitnessType t1 = new WitnessType();
-        t1.add("num");
+        WitnessType t1 = new WitnessType("num");
         t1.add("bool");
-        WitnessType t2 = new WitnessType();
-        t2.add("numNotInt");
+        WitnessType t2 = new WitnessType("numNotInt");
         t2.add("obj");
         WitnessType output = new WitnessType("numNotInt");
 

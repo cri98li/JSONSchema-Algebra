@@ -1,13 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.*;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import patterns.REException;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Enum_Assertion implements Assertion{
 
@@ -78,9 +75,12 @@ public class Enum_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
+		if(_enum.size() == 0)
+			return "";
+
 		String tmp = _enum.toString();
 		tmp = tmp.substring(1, tmp.length()-1);
-		return String.format(GrammarStringDefinitions.ENUM, tmp);
+		return FullAlgebraString.ENUM(tmp);
 	}
 
 	@Override

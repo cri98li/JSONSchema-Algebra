@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class BetweenProperties implements JSONSchemaElement{
-	private Number minProperties;
-	private Number maxProperties;
+	private Long minProperties;
+	private Long maxProperties;
 	
 	public BetweenProperties() { }
 	
@@ -20,14 +20,14 @@ public class BetweenProperties implements JSONSchemaElement{
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of minProperties");
 
-		minProperties = obj.getAsNumber();
+		minProperties = obj.getAsLong();
 	}
 	
 	public void setMaxProperties(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of maxProperties");
 
-		maxProperties = obj.getAsNumber();
+		maxProperties = obj.getAsLong();
 	}
 
 	@Override
@@ -48,13 +48,8 @@ public class BetweenProperties implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String min = "0", max = GrammarStringDefinitions.POS_INF;
-		
-		if(minProperties != null) min = minProperties+"";
-		if(maxProperties != null) max = maxProperties+"";
-		
-		return String.format(GrammarStringDefinitions.BETWEENPROPERTIES, min, max);
+	public Pro_Assertion toGrammar() {
+		return new Pro_Assertion(minProperties, maxProperties);
 	}
 
 	@Override
@@ -84,7 +79,7 @@ public class BetweenProperties implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 	

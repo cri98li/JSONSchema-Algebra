@@ -2,10 +2,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 
 public class Pattern_Assertion implements Assertion{
 	private ComplexPattern pattern;
@@ -37,7 +37,7 @@ public class Pattern_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		and.add(new NotPattern_Assertion(pattern));
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_STRING);
+		type.add(FullAlgebraString.TYPE_STRING);
 		and.add(type);
 		return and;
 	}
@@ -49,7 +49,7 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.PATTERN, pattern.getAlgebraString());
+		return FullAlgebraString.PATTERN(pattern.getAlgebraString());
 	}
 
 	@Override

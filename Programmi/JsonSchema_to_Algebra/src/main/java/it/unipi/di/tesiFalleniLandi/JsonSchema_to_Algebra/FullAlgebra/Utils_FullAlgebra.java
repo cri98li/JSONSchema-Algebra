@@ -1,13 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaLexer;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessEnv;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessVar;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -43,7 +43,7 @@ public class Utils_FullAlgebra {
         Assertion schema = (Assertion) p.visit(tree);
         if (schema.getClass() != Defs_Assertion.class) {
             Defs_Assertion tmp = new Defs_Assertion();
-            tmp.setRootDef(GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, schema);
+            tmp.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, schema);
             schema = tmp;
         }
 
@@ -70,30 +70,11 @@ public class Utils_FullAlgebra {
         Assertion schema = (Assertion) p.visit(tree);
         if (schema.getClass() != Defs_Assertion.class) {
             Defs_Assertion tmp = new Defs_Assertion();
-            tmp.setRootDef(GrammarStringDefinitions.ROOTDEF_DEFAULTNAME, schema);
+            tmp.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, schema);
             schema = tmp;
         }
 
         return (Defs_Assertion) schema;
-    }
-
-    public static Assertion parse(String path) throws IOException {
-        if(new File(path).length() <= 2) throw new ParseCancellationException("Empty File");
-
-        Reader reader = new FileReader(path);
-        GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromReader(reader));
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(new ErrorListener());
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        GrammaticaParser parser = new GrammaticaParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(new ErrorListener());
-
-        ParseTree tree = parser.assertion();
-        AlgebraParser p = new AlgebraParser();
-        Assertion schema = (Assertion) p.visit(tree);
-
-        return schema;
     }
 
     /**
@@ -102,14 +83,14 @@ public class Utils_FullAlgebra {
      * Se root è Defs_Assertion richiama ne restituisce la versione convertita, altrimenti crea un WitnessEnv on una variaile di nome
      * GrammarStringDefinitions.ROOTDEF_DEFAULTNAME e valore root.toWitnessAlgebra().
      * root viene in ogni cso notEliminato/completato
-     * @param root Rappresentazione di un focumento in oggetti di tipo Assertion (Full algebra)
+     * @param root Rappresentazione di un documento in oggetti di tipo Assertion (Full algebra)
      * @return ritorna WitnessEnv costruito come indicato sopra
      */
     public static WitnessEnv getWitnessAlgebra(Assertion root) throws REException {
         WitnessAssertion returnedValue = root.notElimination().toWitnessAlgebra();
         if(returnedValue.getClass() != WitnessEnv.class){
             WitnessEnv env = new WitnessEnv();
-            env.setRootVar(new WitnessVar(GrammarStringDefinitions.ROOTDEF_DEFAULTNAME), returnedValue);
+            env.setRootVar(new WitnessVar(FullAlgebraString.ROOTDEF_DEFAULTNAME), returnedValue);
             return env;
         }
         return (WitnessEnv) returnedValue;

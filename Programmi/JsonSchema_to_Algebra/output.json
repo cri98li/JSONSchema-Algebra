@@ -1,1 +1,1307 @@
-{"$defs":{"numeriPositivi":{"type":"number"}},"additionalProperties":null,"enum":["a",3000,false,["c",12,true]],"properties":{"a":{"$ref":"#\/$defs\/numeriPositivi"},"b":{"$defs":{"numeriPiccoli":{"maximum":5},"numeriGrandi":{"minimum":5}}},"c":{"$ref":"#\/properties\/a"}}}
+def "date" = allOf[
+	anyOf[
+		req[
+			"year",
+			"month"
+		],
+		req[
+			"month",
+			"day"
+		]
+	],
+	type[
+		obj
+	],
+	props[
+		"month": type[
+			num
+		],
+		"year": type[
+			num
+		],
+		"day": type[
+			num,
+			null
+		];
+		false
+	]
+],
+def "identifier" = allOf[
+	type[
+		obj
+	],
+	props[
+		"uid": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"identifier_system_code": type[
+			str
+		];
+		
+	],
+	req[
+		"uid",
+		"identifier_system_code"
+	]
+],
+def "address" = oneOf[
+	allOf[
+		length(2,+inf),
+		type[
+			str,
+			null
+		]
+	],
+	allOf[
+		anyOf[
+			req[
+				"street_address"
+			],
+			req[
+				"postal_code"
+			],
+			req[
+				"locality",
+				"country"
+			]
+		],
+		type[
+			obj
+		],
+		props[
+			"street_address": type[
+				str
+			],
+			"country": type[
+				str
+			],
+			"country_code": type[
+				str
+			],
+			"locality": type[
+				str
+			],
+			"region": type[
+				str
+			],
+			"postal_code": type[
+				str
+			];
+			
+		]
+	]
+],
+def "unknown-entity-type" = allOf[
+	type[
+		obj
+	],
+	props[
+		"website": oneOf[
+			allOf[
+				length(5,+inf),
+				type[
+					str
+				]
+			],
+			allOf[
+				type[
+					arr,
+					null
+				],
+				items[
+					allOf[
+						length(5,+inf),
+						type[
+							str
+						]
+					];
+					
+				]
+			]
+		],
+		"addresses": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("address-with-type");
+				
+			]
+		],
+		"registered_address": ref("address"),
+		"headquarters_address": ref("address"),
+		"identifiers": allOf[
+			type[
+				arr,
+				null
+			],
+			items[
+				ref("identifier");
+				
+			]
+		],
+		"jurisdiction": type[
+			str
+		],
+		"telephone_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"fax_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"alternative_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("alternative-name");
+				
+			]
+		],
+		"industry_codes": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("industry-code");
+				
+			]
+		],
+		"mailing_address": ref("address"),
+		"uid": type[
+			str
+		],
+		"name": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"other_attributes": type[
+			obj
+		],
+		"previous_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("previous-name");
+				
+			]
+		];
+		false
+	],
+	req[
+		"name"
+	]
+],
+def "total-shares" = allOf[
+	type[
+		obj
+	],
+	props[
+		"number": type[
+			int
+		],
+		"share_class": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		];
+		
+	],
+	req[
+		"number"
+	]
+],
+def "officer" = allOf[
+	type[
+		obj
+	],
+	props[
+		"end_date": anyOf[
+			allOf[
+				true,
+				type[
+					str
+				]
+			],
+			type[
+				null
+			]
+		],
+		"uid": type[
+			str
+		],
+		"name": allOf[
+			not(pattern("^[\\.\\,\\*\\\\\\-\\s\\{\\}\\(\\)]+$")),
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"other_attributes": allOf[
+			type[
+				obj
+			],
+			props[
+				"address": ref("address"),
+				"nationality": type[
+					str
+				],
+				"date_of_birth": allOf[
+					true,
+					type[
+						str
+					]
+				],
+				"type": allOf[
+					type[
+						str
+					],
+					enum[
+						"Person","Company"
+					]
+				],
+				"person_uid": type[
+					str
+				];
+				
+			]
+		],
+		"position": type[
+			str
+		],
+		"start_date": anyOf[
+			allOf[
+				true,
+				type[
+					str
+				]
+			],
+			type[
+				null
+			]
+		];
+		
+	],
+	req[
+		"name"
+	]
+],
+def "organisation" = allOf[
+	type[
+		obj
+	],
+	props[
+		"website": oneOf[
+			allOf[
+				length(5,+inf),
+				type[
+					str
+				]
+			],
+			allOf[
+				type[
+					arr,
+					null
+				],
+				items[
+					allOf[
+						length(5,+inf),
+						type[
+							str
+						]
+					];
+					
+				]
+			]
+		],
+		"addresses": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("address-with-type");
+				
+			]
+		],
+		"registered_address": ref("address"),
+		"headquarters_address": ref("address"),
+		"identifiers": allOf[
+			type[
+				arr,
+				null
+			],
+			items[
+				ref("identifier");
+				
+			]
+		],
+		"jurisdiction": type[
+			str
+		],
+		"telephone_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"fax_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"alternative_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("alternative-name");
+				
+			]
+		],
+		"legal_form": type[
+			str
+		],
+		"industry_codes": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("industry-code");
+				
+			]
+		],
+		"mailing_address": ref("address"),
+		"name": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"other_attributes": type[
+			obj
+		],
+		"previous_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("previous-name");
+				
+			]
+		];
+		false
+	],
+	req[
+		"name"
+	]
+],
+def "share-parcel" = allOf[
+	type[
+		obj
+	],
+	props[
+		"end_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"percentage_of_shares_max": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num,
+				null
+			]
+		],
+		"percentage_of_shares": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num
+			]
+		],
+		"voting_percentage": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num
+			]
+		],
+		"percentage_of_shares_min": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num,
+				null
+			]
+		],
+		"shareholders": allOf[
+			contains(1,+inf;true),
+			type[
+				arr
+			],
+			items[
+				allOf[
+					type[
+						obj
+					],
+					req[
+						"name"
+					],
+					props[
+						"identifier": type[
+							str
+						],
+						"company_number": type[
+							str
+						],
+						"address": ref("address"),
+						"address_country": type[
+							str
+						],
+						"jurisdiction": type[
+							str
+						],
+						"name": allOf[
+							length(1,+inf),
+							type[
+								str
+							]
+						],
+						"type": enum[
+							"Company","Person"
+						];
+						
+					]
+				];
+				
+			]
+		],
+		"number_of_shares": type[
+			int
+		],
+		"share_class": type[
+			str
+		],
+		"voting_percentage_min": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num,
+				null
+			]
+		],
+		"sample_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"voting_percentage_max": allOf[
+			{
+				bet(0,100),
+				xbet(-inf,+inf)
+			},
+			type[
+				num,
+				null
+			]
+		],
+		"start_date": allOf[
+			true,
+			type[
+				str
+			]
+		];
+		
+	]
+],
+def "company-for-nesting" = allOf[
+	anyOf[
+		req[
+			"name"
+		],
+		req[
+			"company_number"
+		]
+	],
+	type[
+		obj
+	],
+	props[
+		"company_type": type[
+			str,
+			null
+		],
+		"addresses": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("address-with-type");
+				
+			]
+		],
+		"registered_address": ref("address"),
+		"jurisdiction": type[
+			str
+		],
+		"telephone_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"retrieved_at": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"alternative_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("alternative-name");
+				
+			]
+		],
+		"share_parcels": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("share-parcel");
+				
+			]
+		],
+		"branch": allOf[
+			type[
+				str,
+				null
+			],
+			enum[
+				"F","L",null
+			]
+		],
+		"industry_codes": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("industry-code");
+				
+			]
+		],
+		"filings": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("filing");
+				
+			]
+		],
+		"jurisdiction_code": allOf[
+			length(2,5),
+			type[
+				str
+			]
+		],
+		"previous_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("previous-name");
+				
+			]
+		],
+		"incorporation_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"officers": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("officer");
+				
+			]
+		],
+		"registry_url": type[
+			str
+		],
+		"website": oneOf[
+			allOf[
+				length(5,+inf),
+				type[
+					str
+				]
+			],
+			allOf[
+				type[
+					arr,
+					null
+				],
+				items[
+					allOf[
+						length(5,+inf),
+						type[
+							str
+						]
+					];
+					
+				]
+			]
+		],
+		"headquarters_address": ref("address"),
+		"identifiers": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("identifier");
+				
+			]
+		],
+		"fax_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"mailing_address": ref("address"),
+		"company_number": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"name": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"all_attributes": allOf[
+			type[
+				obj
+			],
+			props[
+				"merged_into": allOf[
+					type[
+						obj
+					],
+					props[
+						"effective_date": allOf[
+							true,
+							type[
+								str
+							]
+						],
+						"surviving_company": allOf[
+							anyOf[
+								req[
+									"name"
+								],
+								req[
+									"company_number"
+								]
+							],
+							type[
+								obj
+							],
+							props[
+								"company_number": allOf[
+									length(1,+inf),
+									type[
+										str
+									]
+								],
+								"jurisdiction": allOf[
+									length(2,+inf),
+									type[
+										str
+									]
+								],
+								"name": allOf[
+									length(1,+inf),
+									type[
+										str
+									]
+								];
+								
+							]
+						];
+						false
+					],
+					req[
+						"surviving_company"
+					]
+				],
+				"number_of_employees": anyOf[
+					allOf[
+						length(1,+inf),
+						type[
+							str
+						]
+					],
+					allOf[
+						{
+							bet(0,+inf),
+							xbet(-inf,+inf)
+						},
+						type[
+							num
+						]
+					]
+				],
+				"home_company_number": allOf[
+					length(1,+inf),
+					type[
+						str,
+						null
+					]
+				],
+				"home_legal_name": allOf[
+					length(1,+inf),
+					type[
+						str,
+						null
+					]
+				],
+				"registered_agent_address": allOf[
+					length(1,+inf),
+					type[
+						str,
+						null
+					]
+				],
+				"registered_agent_name": allOf[
+					length(1,+inf),
+					type[
+						str,
+						null
+					]
+				],
+				"jurisdiction_of_origin": allOf[
+					length(1,+inf),
+					type[
+						str,
+						null
+					]
+				];
+				
+			]
+		],
+		"current_status": type[
+			str,
+			null
+		],
+		"total_shares": ref("total-shares"),
+		"dissolution_date": allOf[
+			true,
+			type[
+				str
+			]
+		];
+		false
+	]
+],
+def "filing" = allOf[
+	anyOf[
+		req[
+			"title"
+		],
+		req[
+			"description"
+		],
+		req[
+			"filing_type_name"
+		]
+	],
+	type[
+		obj
+	],
+	props[
+		"date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"uid": type[
+			str
+		],
+		"other_attributes": type[
+			obj
+		],
+		"description": type[
+			str
+		],
+		"title": type[
+			str
+		],
+		"filing_type_name": type[
+			str
+		],
+		"url": type[
+			str
+		],
+		"filing_type_code": type[
+			str
+		];
+		
+	],
+	req[
+		"date"
+	]
+],
+def "address-with-type" = allOf[
+	type[
+		obj
+	],
+	props[
+		"address": ref("address"),
+		"type": enum[
+			"registered","headquarters","mailing","trading","unknown"
+		];
+		false
+	],
+	req[
+		"address",
+		"type"
+	]
+],
+def "alternative-name" = allOf[
+	type[
+		obj
+	],
+	props[
+		"end_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"company_name": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"language": allOf[
+			length(2,2),
+			type[
+				str
+			]
+		],
+		"type": allOf[
+			type[
+				str
+			],
+			enum[
+				"trading","abbreviation","legal","unknown","alias"
+			]
+		],
+		"start_date": allOf[
+			true,
+			type[
+				str
+			]
+		];
+		
+	],
+	req[
+		"company_name",
+		"type"
+	]
+],
+def "industry-code" = allOf[
+	type[
+		obj
+	],
+	props[
+		"end_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"code": type[
+			str
+		],
+		"name": type[
+			str
+		],
+		"code_scheme_id": type[
+			str
+		],
+		"start_date": allOf[
+			true,
+			type[
+				str
+			]
+		];
+		
+	],
+	req[
+		"code",
+		"code_scheme_id"
+	]
+],
+def "person" = allOf[
+	type[
+		obj
+	],
+	props[
+		"website": oneOf[
+			allOf[
+				length(5,+inf),
+				type[
+					str
+				]
+			],
+			allOf[
+				type[
+					arr,
+					null
+				],
+				items[
+					allOf[
+						length(5,+inf),
+						type[
+							str
+						]
+					];
+					
+				]
+			]
+		],
+		"addresses": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("address-with-type");
+				
+			]
+		],
+		"registered_address": ref("address"),
+		"headquarters_address": ref("address"),
+		"country_of_residence": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"date_of_birth": anyOf[
+			allOf[
+				true,
+				type[
+					str
+				]
+			],
+			ref("date")
+		],
+		"identifiers": allOf[
+			type[
+				arr,
+				null
+			],
+			items[
+				ref("identifier");
+				
+			]
+		],
+		"jurisdiction": type[
+			str
+		],
+		"telephone_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"fax_number": allOf[
+			length(4,+inf),
+			type[
+				str
+			]
+		],
+		"alternative_names": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("alternative-name");
+				
+			]
+		],
+		"industry_codes": allOf[
+			type[
+				arr
+			],
+			items[
+				ref("industry-code");
+				
+			]
+		],
+		"relationship_with_company": enum[
+			"employee","director","shareholder",null
+		],
+		"mailing_address": ref("address"),
+		"uid": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"nationality": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"name": ref("person-name"),
+		"other_attributes": type[
+			obj
+		],
+		"company": ref("company-for-nesting");
+		false
+	],
+	req[
+		"name"
+	]
+],
+rootdef "root" = allOf[
+	anyOf[
+		req[
+			"start_date"
+		],
+		req[
+			"sample_date"
+		],
+		req[
+			"end_date"
+		]
+	],
+	type[
+		obj
+	],
+	props[
+		"start_date_type": enum[
+			"at","before","after"
+		],
+		"end_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"supplier": ref("entity"),
+		"confidence": enum[
+			"HIGH","MEDIUM","LOW"
+		],
+		"data_type": enum[
+			"supplier-relationship"
+		],
+		"sample_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"retrieved_at": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"source_url": type[
+			str
+		],
+		"customer": ref("entity"),
+		"start_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"end_date_type": enum[
+			"at","before","after"
+		];
+		false
+	],
+	req[
+		"data_type",
+		"supplier",
+		"customer",
+		"retrieved_at",
+		"confidence"
+	]
+],
+def "previous-name" = allOf[
+	type[
+		obj
+	],
+	props[
+		"company_name": allOf[
+			length(1,+inf),
+			type[
+				str
+			]
+		],
+		"con_date": allOf[
+			true,
+			type[
+				str
+			]
+		],
+		"start_date": allOf[
+			true,
+			type[
+				str
+			]
+		];
+		
+	],
+	req[
+		"company_name"
+	]
+],
+def "person-name" = oneOf[
+	allOf[
+		true,
+		type[
+			str,
+			null
+		]
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			"suffixes": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"last_name": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"given_name": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"middle_name": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"title": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"family_name": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			],
+			"first_name": allOf[
+				true,
+				type[
+					str,
+					null
+				]
+			];
+			
+		]
+	]
+],
+def "entity" = allOf[
+	oneOf[
+		props[
+			"entity_type": enum[
+				"company"
+			],
+			"entity_properties": ref("company-for-nesting");
+			
+		],
+		props[
+			"entity_type": enum[
+				"person"
+			],
+			"entity_properties": ref("person");
+			
+		],
+		props[
+			"entity_type": enum[
+				"organisation"
+			],
+			"entity_properties": ref("organisation");
+			
+		],
+		props[
+			"entity_type": enum[
+				"unknown"
+			],
+			"entity_properties": ref("unknown-entity-type");
+			
+		]
+	],
+	type[
+		obj
+	],
+	req[
+		"entity_type",
+		"entity_properties"
+	]
+]

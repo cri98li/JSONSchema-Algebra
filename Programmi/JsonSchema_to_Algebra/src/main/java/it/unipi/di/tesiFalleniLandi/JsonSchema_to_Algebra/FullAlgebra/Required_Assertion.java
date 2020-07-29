@@ -3,10 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -52,7 +51,7 @@ public class Required_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		AnyOf_Assertion or = new AnyOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		type.add(FullAlgebraString.TYPE_OBJECT);
 		and.add(type);
 
 		for(String key : reqList){
@@ -72,20 +71,25 @@ public class Required_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		
-		if(reqList.isEmpty()) return str;
+		if(reqList.isEmpty()) return "";
 		
 		Iterator<String> it = reqList.iterator();
 		
 		if(it.hasNext())
-			str += "\""+it.next()+"\"";
+			str.append("\"")
+					.append(it.next())
+					.append("\"");
 		
 		while(it.hasNext()) {
-			str += GrammarStringDefinitions.COMMA +"\""+ it.next()+"\"";
+			str.append(FullAlgebraString.COMMA)
+					.append("\"")
+					.append(it.next())
+					.append("\"");
 		}
 		
-		return String.format(GrammarStringDefinitions.REQUIRED, str);
+		return FullAlgebraString.REQUIRED(str.toString());
 	}
 
 	@Override
@@ -93,7 +97,7 @@ public class Required_Assertion implements Assertion{
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
-		tmp.add(GrammarStringDefinitions.TYPE_OBJECT);
+		tmp.add(FullAlgebraString.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
 		or.add(type);
 

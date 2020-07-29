@@ -4,10 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import javax.json.Json;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,34 +74,29 @@ public class Type implements JSONSchemaElement {
 	}
 
 	@Override
-	public String toGrammarString() {
+	public Type_Assertion toGrammar() {
+		Type_Assertion types = new Type_Assertion();
+
+		for(String s : type_array)
+			types.add(jsonTypeToGrammar(s));
 		
-		if(type_array.size() == 1) return String.format(GrammarStringDefinitions.TYPE, jsonTypeToGrammar(type_array.get(0)));
-		
-		String str = "";
-		Iterator <String> it = type_array.iterator();
-		
-		while(it.hasNext()) {
-			str += GrammarStringDefinitions.COMMA + jsonTypeToGrammar(it.next());
-		}
-		
-		return String.format(GrammarStringDefinitions.TYPE, str.substring(GrammarStringDefinitions.COMMA.length()));
+		return types;
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 	
 	private String jsonTypeToGrammar(String type) {
 		switch(type) {
-		case "array": return GrammarStringDefinitions.TYPE_ARRAY;
-		case "integer": return GrammarStringDefinitions.TYPE_INTEGER;
-		case "number": return GrammarStringDefinitions.TYPE_NUMBER;
-		case "string": return GrammarStringDefinitions.TYPE_STRING;
-		case "object": return GrammarStringDefinitions.TYPE_OBJECT;
-		case "boolean": return GrammarStringDefinitions.TYPE_BOOLEAN;
-		case "null": return GrammarStringDefinitions.TYPE_NULL;
+		case "array": return FullAlgebraString.TYPE_ARRAY;
+		case "integer": return FullAlgebraString.TYPE_INTEGER;
+		case "number": return FullAlgebraString.TYPE_NUMBER;
+		case "string": return FullAlgebraString.TYPE_STRING;
+		case "object": return FullAlgebraString.TYPE_OBJECT;
+		case "boolean": return FullAlgebraString.TYPE_BOOLEAN;
+		case "null": return FullAlgebraString.TYPE_NULL;
 			default:
 				throw new ParseCancellationException("Error: type '"+type+"' is not allowed!\r\n");
 		}

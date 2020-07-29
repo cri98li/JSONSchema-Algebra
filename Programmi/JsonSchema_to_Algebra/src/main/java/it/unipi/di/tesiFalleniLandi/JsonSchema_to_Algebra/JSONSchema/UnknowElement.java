@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.source.tree.AssertTree;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ public class UnknowElement implements JSONSchemaElement {
 	}
 
 	@Override
-	public String toGrammarString() {
+	public Assertion toGrammar() {
 		/*String str = "";
 		
 		Set<Entry<String, Object>> entrySet = obj.entrySet();
@@ -40,11 +42,11 @@ public class UnknowElement implements JSONSchemaElement {
 			str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEUNKNOW, entry.getKey(), entry.getValue().toString());
 		
 		return String.format(GrammarStringDefinitions.UNKNOW, str.substring(GrammarStringDefinitions.COMMA.length()));*/
-		return "";
+		return null;
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		//return obj.size();
 		return 0;
 	}

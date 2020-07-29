@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Names_Assertion;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,13 +34,13 @@ public class PropertyNames implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		return String.format(GrammarStringDefinitions.PROPERTYNAMES, propertyNames.toGrammarString());
+	public Names_Assertion toGrammar() {
+		return new Names_Assertion(propertyNames.toGrammar());
 	}
 
 	@Override
-	public int numberOfAssertions() {
-		return propertyNames.numberOfAssertions();
+	public int numberOfTranslatableAssertions() {
+		return propertyNames.numberOfTranslatableAssertions();
 	}
 
 	@Override

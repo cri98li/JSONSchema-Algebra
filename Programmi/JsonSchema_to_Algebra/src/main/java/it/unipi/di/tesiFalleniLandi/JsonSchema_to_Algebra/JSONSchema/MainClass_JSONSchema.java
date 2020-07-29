@@ -3,9 +3,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -27,6 +29,11 @@ public static void main(String[] args) throws IOException {
     System.out.println(gson.toJson(root.toJSON()));
     //System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
     System.out.println("NORMALIZZATO algebra: "+(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root))));
+
+	FileWriter fw = new FileWriter("output.json");
+	fw.write(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
+	fw.close();
+
 	System.out.println("\nParsing\n"+(Utils_FullAlgebra.parseString(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)))));
 	}
 }

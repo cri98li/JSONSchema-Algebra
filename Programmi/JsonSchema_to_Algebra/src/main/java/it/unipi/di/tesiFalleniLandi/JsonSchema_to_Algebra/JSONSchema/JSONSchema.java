@@ -3,9 +3,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.*;
@@ -185,7 +187,9 @@ public class JSONSchema implements JSONSchemaElement{
 			case "required":
 				try {
 					jsonSchema.put("required", new Required(object.get(key)));
-				}catch(UnsenseAssertion e){}
+				}catch(UnsenseAssertion e){
+					//TODO: required : true
+				}
 				break;
 				
 			case "pattern":
@@ -322,36 +326,28 @@ public class JSONSchema implements JSONSchemaElement{
 	
 
 	@Override
-	public String toGrammarString() {
-		String str = "";
-		int nElement = 0;
-		
-		if(booleanAsJSONSchema != null) return booleanAsJSONSchema + "";
-		
-		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
-		
-		for(Entry<String, JSONSchemaElement> entry : entries) {
-			if(entry.getValue().numberOfAssertions() == 0) continue;
+	public Assertion toGrammar() {
+		AllOf_Assertion allOf = new AllOf_Assertion();
 
-			String returnedValue = entry.getValue().toGrammarString();
-			if(returnedValue.isEmpty())
-				continue;
-			str += GrammarStringDefinitions.COMMA + returnedValue;
-			nElement += entry.getValue().numberOfAssertions();
+		if(booleanAsJSONSchema != null)
+			return new Boolean_Assertion(booleanAsJSONSchema);
+
+		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
+		for(Entry<String, JSONSchemaElement> entry : entries){
+			if(entry.getValue().getClass() == UnknowElement.class) continue;
+			allOf.add(entry.getValue().toGrammar());
 		}
 
-		if(nElement == 0) return "";
-		if(nElement == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
-		return String.format(GrammarStringDefinitions.JSONSCHEMA, str.substring(GrammarStringDefinitions.COMMA.length()));
+		return allOf;
 	}
 	
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		int count = 0;
 		
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 
 		for(Entry<String, JSONSchemaElement> entry : entries)
-			count += entry.getValue().numberOfAssertions();
+			count += entry.getValue().numberOfTranslatableAssertions();
 
 		if(booleanAsJSONSchema != null)
 			count++;

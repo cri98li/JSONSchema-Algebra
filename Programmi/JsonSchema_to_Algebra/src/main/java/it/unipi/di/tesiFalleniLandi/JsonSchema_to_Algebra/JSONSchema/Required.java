@@ -3,9 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Required_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -55,32 +54,17 @@ public class Required implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String str = "";
-		String tmp = "";
-		String decodedKey = "";
-		
-		if(required.isEmpty()) return str;
-		
-		Iterator<String> it = required.iterator();
-		
-		if(it.hasNext()) {
-			tmp = it.next();
-			decodedKey = new JsonPrimitive(tmp).toString();
-			str += "\"" + decodedKey.substring(1, decodedKey.length()-1) + "\"";
-		}
-		
-		while(it.hasNext()) {
-			tmp = it.next();
-			decodedKey = new JsonPrimitive(tmp).toString();
-			str += GrammarStringDefinitions.COMMA +"\""+ decodedKey.substring(1,decodedKey.length()-1)+"\"";
-		}
-		
-		return String.format(GrammarStringDefinitions.REQUIRED, str);
+	public Required_Assertion toGrammar() {
+		Required_Assertion req = new Required_Assertion();
+
+		for(String s : required)
+			req.add(s);
+
+		return req;
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return (required.size() == 0)? 0: 1;
 	}
 

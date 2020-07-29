@@ -2,8 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -18,6 +18,7 @@ public class AnyOf_Assertion implements Assertion{
 	}
 	
 	public void add(Assertion assertion) {
+		if(assertion == null) return;
 		orList.add(assertion);
 	}
 	
@@ -86,12 +87,12 @@ public class AnyOf_Assertion implements Assertion{
 			String returnedValue = next.toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.COMMA + returnedValue;
+			str += FullAlgebraString.COMMA + returnedValue;
 		}
 		
 		if(str.isEmpty()) return "";
-		if(orList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
-		return String.format(GrammarStringDefinitions.ANYOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+		if(orList.size() == 1) return str.substring(FullAlgebraString.COMMA.length());
+		return FullAlgebraString.ANYOF(str.substring(FullAlgebraString.COMMA.length()));
 	}
 
 	public WitnessOr toWitnessAlgebra() throws REException {

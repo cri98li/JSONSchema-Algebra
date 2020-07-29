@@ -1,3 +1,14 @@
+
+{
+    type[obj],
+    pattReq["^a": {type[int], mof(1)}],
+    pattReq["^.d": true],
+    props[
+        "^a": {type[int], mof(1)},
+        "^.b" : {type[int], bet(1,100)}
+    ;]
+}
+
 /**
  * An object group is transformed during preparation.
  *

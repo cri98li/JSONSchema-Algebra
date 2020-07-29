@@ -2,6 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,12 +34,12 @@ public class Format implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		return "";
+	public Assertion toGrammar() {
+		return new Boolean_Assertion(true); //TODO: format in fullAlgebra
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 0;
 	}
 

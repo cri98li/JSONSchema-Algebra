@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.Iterator;
@@ -30,13 +30,13 @@ public class Ref implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String uri = new JsonPrimitive(this.uri.getNormalizedName()).toString();
-		return String.format(GrammarStringDefinitions.REF, uri.substring(1, uri.length()-1));
+	public Ref_Assertion toGrammar() {
+		String tmp = new JsonPrimitive(uri.getNormalizedName()).toString();
+		return new Ref_Assertion(tmp.substring(1, tmp.length()-1));
 	}
 	
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		return 1;
 	}
 

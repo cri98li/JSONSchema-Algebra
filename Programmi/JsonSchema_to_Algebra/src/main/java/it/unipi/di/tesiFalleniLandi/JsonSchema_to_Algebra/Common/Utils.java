@@ -15,34 +15,34 @@ public class Utils {
 	 * @return
 	 */
 	public static String beauty(String input) {
-		String output = "";
+		StringBuilder output = new StringBuilder();
 		int tab = 0;
-		
+
 		for(int i = 0; i < input.length(); i++) {
 			char c = input.charAt(i);
 			Character c1 = (i+1 == input.length()) ? null : input.charAt(i+1);
-			
+
 			switch(c) {
-			case '\n':
-				output += (c1 != null && (c1 == '}' || c1 == ']')) ? c+tabs(tab-1) : c+tabs(tab);
-				continue;
-				
-			case '[': case '{':
-				tab++;
-				break;
-				
-			case ']': case '}':
-				tab--;
-				break;
-				
-			default:
-				break;
+				case '\n':
+					output.append((c1 != null && (c1 == '}' || c1 == ']')) ? c+tabs(tab-1) : c+tabs(tab));
+					continue;
+
+				case '[': case '{':
+					tab++;
+					break;
+
+				case ']': case '}':
+					tab--;
+					break;
+
+				default:
+					break;
 			}
-			
-			output += c;
+
+			output.append(c);
 		}
-		
-		return output;
+
+		return output.toString();
 	}
 	
 	//restituisce una stringa contenente n tab ("\t")

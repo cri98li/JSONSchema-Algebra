@@ -1,10 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
 import patterns.REException;
 
 import java.util.LinkedList;
@@ -44,7 +43,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	@Override
 	public JsonElement toJSONSchema() {
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		type.add(FullAlgebraString.TYPE_OBJECT);
 		Properties_Assertion prop = new  Properties_Assertion();
 
 		for(ComplexPattern p : pattList)
@@ -62,7 +61,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		type.add(FullAlgebraString.TYPE_OBJECT);
 		
 		for(ComplexPattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
@@ -87,18 +86,21 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		
 		for(ComplexPattern s : pattList)
-			str += GrammarStringDefinitions.COMMA + "\"" + s + "\"";
+			str.append(FullAlgebraString.COMMA)
+					.append("\"")
+					.append(s)
+					.append("\"");
 		
 		if(additionalProperties == null)
-			return String.format(GrammarStringDefinitions.ADDPATTERNREQUIRED, str.substring(GrammarStringDefinitions.COMMA.length()), "");
+			return FullAlgebraString.ADDPATTERNREQUIRED(str.substring(FullAlgebraString.COMMA.length()), "");
 
-		if(str.isEmpty())
-			return String.format(GrammarStringDefinitions.ADDPATTERNREQUIRED, "", additionalProperties.toGrammarString());
+		if(str.length() == 0)
+			return FullAlgebraString.ADDPATTERNREQUIRED("", additionalProperties.toGrammarString());
 		else
-			return String.format(GrammarStringDefinitions.ADDPATTERNREQUIRED, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+			return FullAlgebraString.ADDPATTERNREQUIRED(str.substring(FullAlgebraString.COMMA.length()), additionalProperties.toGrammarString());
 	}
 
 	@Override

@@ -1,13 +1,12 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
@@ -44,7 +43,7 @@ public class PatternRequired_Assertion implements Assertion{
 	@Override
 	public JsonElement toJSONSchema() {
 		Type_Assertion t = new Type_Assertion();
-		t.add(GrammarStringDefinitions.TYPE_OBJECT);
+		t.add(FullAlgebraString.TYPE_OBJECT);
 		AllOf_Assertion and = new AllOf_Assertion();
 
 		for(Map.Entry<ComplexPattern, Assertion> entry : pattReq.entrySet()) {
@@ -102,12 +101,12 @@ public class PatternRequired_Assertion implements Assertion{
 			for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += GrammarStringDefinitions.COMMA + entry.getKey().getAlgebraString()+":"+ returnedValue;
+					str += FullAlgebraString.COMMA + entry.getKey().getAlgebraString()+":"+ returnedValue;
 			}
 		}
 
 		if(str.isEmpty()) return "";
-		return String.format(GrammarStringDefinitions.PATTERNREQUIRED, str.substring(GrammarStringDefinitions.COMMA.length()), "");
+		return String.format(FullAlgebraString.PATTERNREQUIRED, str.substring(FullAlgebraString.COMMA.length()), "");
 	}
 
 	@Override
@@ -115,7 +114,7 @@ public class PatternRequired_Assertion implements Assertion{
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
-		tmp.add(GrammarStringDefinitions.TYPE_OBJECT);
+		tmp.add(FullAlgebraString.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
 		or.add(type);
 		or.add(and);

@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,13 +24,13 @@ interface JSONSchemaElement extends Cloneable{
 	 * Convert the JSON Schema keyword to the corresponding representation in algebra.
 	 * @return a string containing the representation of the current object
 	 */
-	public String toGrammarString();
+	public Assertion toGrammar();
 	
 	/**
-	 *
+	 * Questo metodo ritorna il numero di asserzioni che verranno stampate da
 	 * @return the number of assertions
 	 */
-	public int numberOfAssertions();
+	public int numberOfTranslatableAssertions();
 	
 	/**
 	 * Collects and deletes all the definitions contained by the object

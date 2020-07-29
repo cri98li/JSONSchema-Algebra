@@ -2,8 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessBet;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet;
 
 public class Bet_Assertion implements Assertion{
 	private Number min;
@@ -44,7 +44,7 @@ public class Bet_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_NUMBER);
+		type.add(FullAlgebraString.TYPE_NUMBER);
 		and.add(type);
 		
 		if(min != null && max != null) {
@@ -71,13 +71,13 @@ public class Bet_Assertion implements Assertion{
 	}
 	
 	public String toGrammarString() {
-		String min = GrammarStringDefinitions.NEG_INF;
-		String max = GrammarStringDefinitions.POS_INF;
+		String min = FullAlgebraString.NEG_INF;
+		String max = FullAlgebraString.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return String.format(GrammarStringDefinitions.BETWEENNUMBER, min, max);
+		return FullAlgebraString.BETWEENNUMBER(min, max);
 	}
 
 	@Override

@@ -2,7 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,7 +15,10 @@ public class Contains implements JSONSchemaElement{
 	private Long minContains;
 	private Long maxContains;
 	
-	public Contains() { }
+	public Contains() {
+		minContains = 0L;
+		maxContains = Long.MAX_VALUE;
+	}
 	
 	public void setContains(JsonElement obj) {
 		contains = new JSONSchema(obj);
@@ -48,15 +52,8 @@ public class Contains implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String min = "0", max = GrammarStringDefinitions.POS_INF;
-		String str_contains = "";
-
-		if(minContains != null) min = minContains+"";
-		if(maxContains != null) max = maxContains+"";
-		if(contains != null) str_contains = contains.toGrammarString();
-
-		return String.format(GrammarStringDefinitions.CONTAINS, min, max, str_contains);
+	public Assertion toGrammar() {
+		return new Exist_Assertion(minContains, maxContains, contains.toGrammar());
 	}
 
 	@Override
@@ -94,9 +91,9 @@ public class Contains implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		if(contains != null)
-			return contains.numberOfAssertions();
+			return contains.numberOfTranslatableAssertions();
 
 		return 0;
 	}
@@ -104,12 +101,9 @@ public class Contains implements JSONSchemaElement{
 	public Contains clone() {
 		Contains clone = new Contains();
 
-		if(contains != null)
-			clone.contains = contains.clone();
-		if(minContains != null)
-			clone.minContains = minContains;
-		if(maxContains != null)
-			clone.maxContains = maxContains;
+		clone.contains = contains.clone();
+		clone.minContains = minContains;
+		clone.maxContains = maxContains;
 		
 		return clone;
 	}

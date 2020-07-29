@@ -4,14 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class Properties implements JSONSchemaElement{
-
 	private HashMap<String, JSONSchema> properties;
 	private HashMap<String, JSONSchema> patternProperties;
 	private JSONSchema additionalProperties;
@@ -114,40 +114,31 @@ public class Properties implements JSONSchemaElement{
 	}
 
 	@Override
-	public String toGrammarString() {
-		String str = "";
-		
-		if(properties != null) {
-			Set<Entry<String, JSONSchema>> entrySet = properties.entrySet();
-			for(Entry<String, JSONSchema> entry : entrySet) {
-				String returnedValue = entry.getValue().toGrammarString();
-				if(!returnedValue.isEmpty()) {
-					String decodedKey = new JsonPrimitive(entry.getKey()).toString();
-					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, decodedKey.substring(1, decodedKey.length() - 1), returnedValue);
+	public Assertion toGrammar() {
+		Properties_Assertion fullAlgebra_properties = new Properties_Assertion();
+
+		if(properties != null){
+			for(Map.Entry<String, JSONSchema> entry : properties.entrySet()){
+				Assertion returnedValue = entry.getValue().toGrammar();
+				if(returnedValue != null)
+					fullAlgebra_properties.addProperties(entry.getKey(), returnedValue); //TODO: check encoding escape
+			}
+		}
+
+		if(patternProperties != null){
+			for(Map.Entry<String, JSONSchema> entry : patternProperties.entrySet()){
+				Assertion returnedValue = entry.getValue().toGrammar();
+				if(returnedValue != null) {
+					String tmp = new JsonPrimitive(entry.getKey()).toString();
+					fullAlgebra_properties.addProperties(tmp.substring(1, tmp.length()-1), returnedValue); //TODO: check encoding escape
 				}
 			}
 		}
-		
-		if(patternProperties != null) {
-			Set<Entry<String, JSONSchema>> entrySet = patternProperties.entrySet();
-			for(Entry<String, JSONSchema> entry : entrySet) {
-				String returnedValue = entry.getValue().toGrammarString();
-				if(!returnedValue.isEmpty()) {
-					String decodedKey = new JsonPrimitive(entry.getKey()).toString();
-					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, decodedKey.substring(1, decodedKey.length() - 1), returnedValue);
-				}
-			}
-				
-		}
-		
-		if(additionalProperties != null) 
-			if(str.isEmpty())
-				return String.format(GrammarStringDefinitions.PROPERTIES, "", additionalProperties.toGrammarString());
-			else
-				return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
-		
-		if(str.isEmpty() && additionalProperties == null) return "";
-		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");
+
+		if(additionalProperties != null)
+			fullAlgebra_properties.setAdditionalProperties(additionalProperties.toGrammar());
+
+		return fullAlgebra_properties;
 	}
 
 	@Override
@@ -159,7 +150,7 @@ public class Properties implements JSONSchemaElement{
 	@Override
 	public Properties assertionSeparation() {
 		Properties obj = new Properties();
-		
+
 		if(properties != null) {
 			obj.properties = new HashMap<>();
 			Iterator<Entry<String, JSONSchema>> it = properties.entrySet().iterator();
@@ -168,7 +159,7 @@ public class Properties implements JSONSchemaElement{
 				obj.properties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
 			}
 		}
-		
+
 		if(patternProperties != null) {
 			obj.patternProperties = new HashMap<>();
 			Iterator<Entry<String, JSONSchema>> it = patternProperties.entrySet().iterator();
@@ -177,9 +168,10 @@ public class Properties implements JSONSchemaElement{
 				obj.patternProperties.put(tmp.getKey(), tmp.getValue().assertionSeparation());
 			}
 		}
-		
-		if(additionalProperties != null)
+
+		if(additionalProperties != null) {
 			obj.additionalProperties = additionalProperties.assertionSeparation();
+		}
 		
 		return obj;
 	}
@@ -264,19 +256,19 @@ public class Properties implements JSONSchemaElement{
 	}
 
 	@Override
-	public int numberOfAssertions() {
+	public int numberOfTranslatableAssertions() {
 		int count = 0;
 
 		if(properties != null)
 			for(Entry<String, JSONSchema> entry : properties.entrySet())
-				count += entry.getValue().numberOfAssertions();
+				count += entry.getValue().numberOfTranslatableAssertions();
 
 		if(patternProperties != null)
 			for(Entry<String, JSONSchema> entry : patternProperties.entrySet())
-				count += entry.getValue().numberOfAssertions();
+				count += entry.getValue().numberOfTranslatableAssertions();
 
 		if(additionalProperties != null)
-			count += additionalProperties.numberOfAssertions();
+			count += additionalProperties.numberOfTranslatableAssertions();
 
 		return count;
 	}

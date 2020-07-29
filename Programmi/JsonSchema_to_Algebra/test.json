@@ -1,41 +1,1119 @@
 {
-  "$ref": "#/definitions/MyObject",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-
-  "definitions": {
-
-    "MyGeneric<number,string>": {
+  "$defs": {
+    "date": {
+      "type": "object",
       "properties": {
-        "field": {
-          "$ref": "#/definitions/MyGeneric<string,number>"
+        "month": {
+          "type": "number"
+        },
+        "year": {
+          "type": "number"
+        },
+        "day": {
+          "type": [
+            "number",
+            "null"
+          ]
         }
       },
-      "required": [
-        "field"
-      ],
-      "type": "object"
+      "additionalProperties": false
     },
-    "MyGeneric<string,number>": {
+    "identifier": {
+      "type": "object",
       "properties": {
-        "field": {
-          "$ref": "#/definitions/MyGeneric<number,string>"
+        "uid": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "identifier_system_code": {
+          "type": "string"
         }
       },
       "required": [
-        "field"
-      ],
-      "type": "object"
+        "uid",
+        "identifier_system_code"
+      ]
     },
-    "MyObject": {
+    "address": {
+      "oneOf": [
+        {
+          "minLength": 2,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "required": [
+                "street_address"
+              ]
+            },
+            {
+              "required": [
+                "postal_code"
+              ]
+            },
+            {
+              "required": [
+                "locality",
+                "country"
+              ]
+            }
+          ],
+          "type": "object",
+          "properties": {
+            "street_address": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "country_code": {
+              "type": "string"
+            },
+            "locality": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            },
+            "postal_code": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "unknown-entity-type": {
+      "type": "object",
       "properties": {
-        "value": {
-          "$ref": "#/definitions/MyGeneric<string,number>"
+        "website": {
+          "oneOf": [
+            {
+              "minLength": 5,
+              "type": "string"
+            },
+            {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "minLength": 5,
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/address-with-type"
+          }
+        },
+        "registered_address": {
+          "ref": "#/definitions/address"
+        },
+        "headquarters_address": {
+          "ref": "#/definitions/address"
+        },
+        "identifiers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "ref": "#/definitions/identifier"
+          }
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "telephone_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "fax_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "alternative_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/alternative-name"
+          }
+        },
+        "industry_codes": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/industry-code"
+          }
+        },
+        "mailing_address": {
+          "ref": "#/definitions/address"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "other_attributes": {
+          "type": "object"
+        },
+        "previous_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/previous-name"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    },
+    "total-shares": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer"
+        },
+        "share_class": {
+          "minLength": 1,
+          "type": "string"
         }
       },
       "required": [
-        "value"
+        "number"
+      ]
+    },
+    "officer": {
+      "type": "object",
+      "properties": {
+        "end_date": {
+          "allOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "uid": {
+          "type": "string"
+        },
+        "name": {
+          "not": {
+            "pattern": "^[\\.\\,\\*\\\\\\-\\s\\{\\}\\(\\)]+$"
+          },
+          "minLength": 1,
+          "type": "string"
+        },
+        "other_attributes": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "ref": "#/definitions/address"
+            },
+            "nationality": {
+              "type": "string"
+            },
+            "date_of_birth": {
+              "format": "date",
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "Person",
+                "Company"
+              ]
+            },
+            "person_uid": {
+              "type": "string"
+            }
+          }
+        },
+        "position": {
+          "type": "string"
+        },
+        "start_date": {
+          "allOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "organisation": {
+      "type": "object",
+      "properties": {
+        "website": {
+          "oneOf": [
+            {
+              "minLength": 5,
+              "type": "string"
+            },
+            {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "minLength": 5,
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/address-with-type"
+          }
+        },
+        "registered_address": {
+          "ref": "#/definitions/address"
+        },
+        "headquarters_address": {
+          "ref": "#/definitions/address"
+        },
+        "identifiers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "ref": "#/definitions/identifier"
+          }
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "telephone_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "fax_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "alternative_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/alternative-name"
+          }
+        },
+        "legal_form": {
+          "type": "string"
+        },
+        "industry_codes": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/industry-code"
+          }
+        },
+        "mailing_address": {
+          "ref": "#/definitions/address"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "other_attributes": {
+          "type": "object"
+        },
+        "previous_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/previous-name"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    },
+    "share-parcel": {
+      "type": "object",
+      "properties": {
+        "end_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "percentage_of_shares_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "percentage_of_shares": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        "voting_percentage": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        "percentage_of_shares_min": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "shareholders": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "identifier": {
+                "type": "string"
+              },
+              "company_number": {
+                "type": "string"
+              },
+              "address": {
+                "ref": "#/definitions/address"
+              },
+              "address_country": {
+                "type": "string"
+              },
+              "jurisdiction": {
+                "type": "string"
+              },
+              "name": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "Company",
+                  "Person"
+                ]
+              }
+            }
+          }
+        },
+        "number_of_shares": {
+          "type": "integer"
+        },
+        "share_class": {
+          "type": "string"
+        },
+        "voting_percentage_min": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "sample_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "voting_percentage_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "start_date": {
+          "format": "date",
+          "type": "string"
+        }
+      }
+    },
+    "company-for-nesting": {
+      "allOf": [
+        {
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "required": [
+            "company_number"
+          ]
+        }
       ],
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "company_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/address-with-type"
+          }
+        },
+        "registered_address": {
+          "ref": "#/definitions/address"
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "telephone_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date",
+          "type": "string"
+        },
+        "alternative_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/alternative-name"
+          }
+        },
+        "share_parcels": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/share-parcel"
+          }
+        },
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "F",
+            "L",
+            null
+          ]
+        },
+        "industry_codes": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/industry-code"
+          }
+        },
+        "filings": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/filing"
+          }
+        },
+        "jurisdiction_code": {
+          "minLength": 2,
+          "maxLength": 5,
+          "type": "string"
+        },
+        "previous_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/previous-name"
+          }
+        },
+        "incorporation_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "officers": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/officer"
+          }
+        },
+        "registry_url": {
+          "type": "string"
+        },
+        "website": {
+          "oneOf": [
+            {
+              "minLength": 5,
+              "type": "string"
+            },
+            {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "minLength": 5,
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "headquarters_address": {
+          "ref": "#/definitions/address"
+        },
+        "identifiers": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/identifier"
+          }
+        },
+        "fax_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "mailing_address": {
+          "ref": "#/definitions/address"
+        },
+        "company_number": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "all_attributes": {
+          "type": "object",
+          "properties": {
+            "merged_into": {
+              "type": "object",
+              "properties": {
+                "effective_date": {
+                  "format": "date",
+                  "type": "string"
+                },
+                "surviving_company": {
+                  "allOf": [
+                    {
+                      "required": [
+                        "name"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "company_number"
+                      ]
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "company_number": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "jurisdiction": {
+                      "minLength": 2,
+                      "type": "string"
+                    },
+                    "name": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "surviving_company"
+              ]
+            },
+            "number_of_employees": {
+              "allOf": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minimum": 0,
+                  "type": "number"
+                }
+              ]
+            },
+            "home_company_number": {
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "home_legal_name": {
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "registered_agent_address": {
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "registered_agent_name": {
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "jurisdiction_of_origin": {
+              "minLength": 1,
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "current_status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "total_shares": {
+          "ref": "#/definitions/total-shares"
+        },
+        "dissolution_date": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "filing": {
+      "allOf": [
+        {
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "required": [
+            "description"
+          ]
+        },
+        {
+          "required": [
+            "filing_type_name"
+          ]
+        }
+      ],
+      "type": "object",
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "other_attributes": {
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "filing_type_name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "filing_type_code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "date"
+      ]
+    },
+    "address-with-type": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "ref": "#/definitions/address"
+        },
+        "type": {
+          "enum": [
+            "registered",
+            "headquarters",
+            "mailing",
+            "trading",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "address",
+        "type"
+      ]
+    },
+    "alternative-name": {
+      "type": "object",
+      "properties": {
+        "end_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "company_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "language": {
+          "minLength": 2,
+          "maxLength": 2,
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "trading",
+            "abbreviation",
+            "legal",
+            "unknown",
+            "alias"
+          ]
+        },
+        "start_date": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "company_name",
+        "type"
+      ]
+    },
+    "industry-code": {
+      "type": "object",
+      "properties": {
+        "end_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "code_scheme_id": {
+          "type": "string"
+        },
+        "start_date": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "code_scheme_id"
+      ]
+    },
+    "person": {
+      "type": "object",
+      "properties": {
+        "website": {
+          "oneOf": [
+            {
+              "minLength": 5,
+              "type": "string"
+            },
+            {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "minLength": 5,
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/address-with-type"
+          }
+        },
+        "registered_address": {
+          "ref": "#/definitions/address"
+        },
+        "headquarters_address": {
+          "ref": "#/definitions/address"
+        },
+        "country_of_residence": {
+          "format": "non-blank",
+          "type": "string"
+        },
+        "date_of_birth": {
+          "allOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "ref": "#/definitions/date"
+            }
+          ]
+        },
+        "identifiers": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "ref": "#/definitions/identifier"
+          }
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "telephone_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "fax_number": {
+          "minLength": 4,
+          "type": "string"
+        },
+        "alternative_names": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/alternative-name"
+          }
+        },
+        "industry_codes": {
+          "type": "array",
+          "items": {
+            "ref": "#/definitions/industry-code"
+          }
+        },
+        "relationship_with_company": {
+          "enum": [
+            "employee",
+            "director",
+            "shareholder",
+            null
+          ]
+        },
+        "mailing_address": {
+          "ref": "#/definitions/address"
+        },
+        "uid": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "nationality": {
+          "format": "non-blank",
+          "type": "string"
+        },
+        "name": {
+          "ref": "#/definitions/person-name"
+        },
+        "other_attributes": {
+          "type": "object"
+        },
+        "company": {
+          "ref": "#/definitions/company-for-nesting"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    },
+    "previous-name": {
+      "type": "object",
+      "properties": {
+        "company_name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "con_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "start_date": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "company_name"
+      ]
+    },
+    "person-name": {
+      "oneOf": [
+        {
+          "format": "non-blank",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "suffixes": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "last_name": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "given_name": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "middle_name": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "family_name": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "first_name": {
+              "format": "non-blank",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "required": [
+        "start_date"
+      ]
+    },
+    {
+      "required": [
+        "sample_date"
+      ]
+    },
+    {
+      "required": [
+        "end_date"
+      ]
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "start_date_type": {
+      "enum": [
+        "at",
+        "before",
+        "after"
+      ]
+    },
+    "end_date": {
+      "format": "date",
+      "type": "string"
+    },
+    "supplier": {
+      "ref": "#/definitions/entity"
+    },
+    "confidence": {
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ]
+    },
+    "data_type": {
+      "enum": [
+        "supplier-relationship"
+      ]
+    },
+    "sample_date": {
+      "format": "date",
+      "type": "string"
+    },
+    "retrieved_at": {
+      "format": "date",
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "customer": {
+      "ref": "#/definitions/entity"
+    },
+    "start_date": {
+      "format": "date",
+      "type": "string"
+    },
+    "end_date_type": {
+      "enum": [
+        "at",
+        "before",
+        "after"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "data_type",
+    "supplier",
+    "customer",
+    "retrieved_at",
+    "confidence"
+  ]
 }

@@ -1,12 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import org.junit.Ignore;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import org.junit.Test;
-import patterns.Pattern;
 import patterns.REException;
-
-import static org.junit.Assert.*;
 
 public class Pattern_AssertionTest {
 

@@ -1,19 +1,17 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import patterns.Pattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessProperty;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessProperty;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.CompletionException;
 
 public class Properties_Assertion implements Assertion{
 	private HashMap<String, Assertion> properties;
@@ -88,7 +86,7 @@ public class Properties_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		AddPatternRequired_Assertion addPattRequired = new AddPatternRequired_Assertion();
 		AnyOf_Assertion or = new AnyOf_Assertion();
-		type.add(GrammarStringDefinitions.TYPE_OBJECT);
+		type.add(FullAlgebraString.TYPE_OBJECT);
 		and.add(type);
 		and.add(or);
 		
@@ -154,14 +152,15 @@ public class Properties_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 
 		if(properties != null) {
 			Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 			for(Entry<String, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += GrammarStringDefinitions.COMMA + String.format(GrammarStringDefinitions.SINGLEPROPERTIES, entry.getKey(), returnedValue);
+					str.append(FullAlgebraString.COMMA)
+							.append(FullAlgebraString.SINGLEPROPERTIES(entry.getKey(), returnedValue));
 			}
 		}
 
@@ -170,18 +169,21 @@ public class Properties_Assertion implements Assertion{
 			for(Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += GrammarStringDefinitions.COMMA + entry.getKey().getAlgebraString() +" : " + returnedValue;
+					str.append(FullAlgebraString.COMMA)
+							.append(entry.getKey().getAlgebraString())
+							.append(" : ")
+							.append(returnedValue);
 			}
 		}
 
 		if(additionalProperties != null)
-			if(str.isEmpty())
-				return String.format(GrammarStringDefinitions.PROPERTIES, "", additionalProperties.toGrammarString());
+			if(str.length() == 0)
+				return FullAlgebraString.PROPERTIES("", additionalProperties.toGrammarString());
 			else
-				return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), additionalProperties.toGrammarString());
+				return FullAlgebraString.PROPERTIES(str.substring(FullAlgebraString.COMMA.length()), additionalProperties.toGrammarString());
 
-		if(str.isEmpty() && additionalProperties == null) return "";
-		return String.format(GrammarStringDefinitions.PROPERTIES, str.substring(GrammarStringDefinitions.COMMA.length()), "");
+		if(str.length() == 0 && additionalProperties == null) return "";
+		return FullAlgebraString.PROPERTIES(str.substring(FullAlgebraString.COMMA.length()), "");
 	}
 
 	@Override
@@ -212,6 +214,6 @@ public class Properties_Assertion implements Assertion{
 			and.add(addProp);
 		}
 
-		return (and.isUnitaryAnd() != null) ? and.isUnitaryAnd() : and;
+		return (and.getIfUnitaryAnd() != null) ? and.getIfUnitaryAnd() : and;
 	}
 }

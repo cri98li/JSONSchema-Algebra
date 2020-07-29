@@ -2,10 +2,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import patterns.REException;
 
 public class IfThenElse_Assertion implements Assertion{
@@ -88,9 +88,9 @@ public class IfThenElse_Assertion implements Assertion{
 		if(elseStatement != null)
 			else_str = elseStatement.toGrammarString();
 		else
-			return String.format(GrammarStringDefinitions.IF_THEN, if_str, then_str);
+			return FullAlgebraString.IF_THEN(if_str, then_str);
 		
-		return String.format(GrammarStringDefinitions.IF_THEN_ELSE, if_str, then_str, else_str);
+		return FullAlgebraString.IF_THEN(if_str, then_str, else_str);
 	}
 
 	@Override

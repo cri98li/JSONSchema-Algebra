@@ -3,9 +3,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.GrammarStringDefinitions;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -32,6 +35,7 @@ public class AllOf_Assertion implements Assertion{
 	}
 	
 	public void add(Assertion assertion) {
+		if(assertion == null) return;
 		duplicates |= contains(assertion);
 		containsFalseBooleanAssertion |= (Boolean_Assertion.class == assertion.getClass());
 		andList.add(assertion);
@@ -118,7 +122,7 @@ public class AllOf_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		
 		Iterator<Assertion> it = andList.iterator();
 			
@@ -126,21 +130,30 @@ public class AllOf_Assertion implements Assertion{
 			String returnedValue = it.next().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += GrammarStringDefinitions.COMMA + returnedValue;
+			str.append(FullAlgebraString.COMMA)
+					.append(returnedValue);
 		}
 		
-		if(str.isEmpty()) return "";
-		if(andList.size() == 1) return str.substring(GrammarStringDefinitions.COMMA.length());
-		if(!duplicates) return "{\r\n" + str.substring(GrammarStringDefinitions.COMMA.length()) +"\r\n}";
-		return String.format(GrammarStringDefinitions.ALLOF, str.substring(GrammarStringDefinitions.COMMA.length()));
+		if(str.length() == 0) return "";
+		if(andList.size() == 1) return str.delete(0, FullAlgebraString.COMMA.length()).toString();
+		if(!duplicates) {
+			str = str.delete(0, FullAlgebraString.COMMA.length()); //TODO: CHECK
+			return str.append("\r\n}").insert(0, "{\r\n").toString();
+		}
+
+		return FullAlgebraString.ALLOF(str.substring(FullAlgebraString.COMMA.length()));
 	}
 
 	@Override
-	public WitnessAnd toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
 
 		for(Assertion a : andList)
-			and.add(a.toWitnessAlgebra());
+			try {
+				and.add(a.toWitnessAlgebra());
+			}catch (UnsenseAssertion e){
+				return new WitnessBoolean(false);
+			}
 
 		return and;
 	}
