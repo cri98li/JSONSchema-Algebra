@@ -2,7 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import patterns.REException;
 
@@ -87,7 +89,12 @@ public class Enum_Assertion implements Assertion{
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		for(JsonElement element : _enum)
-			or.add(new Const_Assertion(element).toWitnessAlgebra());
+			try {
+				or.add(new Const_Assertion(element).toWitnessAlgebra());
+			}catch (WitnessTrueAssertionException e){
+				return new WitnessBoolean(true);
+			}
+
 
 		return or;
 	}

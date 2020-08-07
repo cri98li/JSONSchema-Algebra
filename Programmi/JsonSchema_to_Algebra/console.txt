@@ -1,2 +1,486 @@
-Error: Could not find or load main class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.MainWitness
-Caused by: java.lang.ClassNotFoundException: it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness.MainWitness
+rootdef "root" = allOf[
+	type[
+		obj
+	],
+	anyOf[
+		type[
+			str,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattReq[
+			^a:mof(2.0)
+		]
+	],
+	anyOf[
+		type[
+			str,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattReq[
+			^aa:mof(3.0)
+		]
+	]
+],
+def "not_root" = anyOf[
+	type[
+		str,
+		num,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			obj
+		],
+		{
+			type[
+				obj
+			],
+			props[
+				^a : {
+					type[
+						num
+					],
+					notMof(2.0)
+				};
+				
+			]
+		}
+	},
+	{
+		type[
+			obj
+		],
+		{
+			type[
+				obj
+			],
+			props[
+				^aa : {
+					type[
+						num
+					],
+					notMof(3.0)
+				};
+				
+			]
+		}
+	}
+]
+
+
+ Merge: 
+
+
+
+ Groupize: 
+
+
+
+ DNF: 
+
+
+
+ Separation: 
+
+
+
+ Expansion: 
+
+def "WitnessAnd_3" = {
+	type[
+		num
+	],
+	notMof(3.0)
+},
+def "WitnessAnd_2" = {
+	type[
+		num
+	],
+	notMof(2.0)
+},
+def "not_WitnessOr_0" = {
+	type[
+		num
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			notMof(2.0)
+		}
+	]
+},
+def "WitnessOr_0" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	}
+],
+def "WitnessOr_1" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			num
+		],
+		mof(3.0)
+	}
+],
+rootdef "root" = allOf[
+	pattReq[
+		^a:ref("WitnessOr_0")
+	],
+	pattReq[
+		^aa:ref("WitnessOr_1")
+	],
+	type[
+		obj
+	]
+],
+def "not_WitnessOr_1" = {
+	type[
+		num
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			notMof(3.0)
+		}
+	]
+},
+def "not_root" = anyOf[
+	type[
+		str
+	],
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	{
+		props[
+			^a : ref("WitnessAnd_2");
+			
+		],
+		type[
+			obj
+		]
+	},
+	{
+		props[
+			^aa : ref("WitnessAnd_3");
+			
+		],
+		type[
+			obj
+		]
+	}
+],
+def "not_WitnessAnd_3" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		mof(3.0)
+	}
+],
+def "not_WitnessAnd_2" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	}
+]
+
+
+ objectPrepare: 
+
+def "not_WitnessOr_0" = {
+	type[
+		num
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			notMof(2.0)
+		}
+	]
+},
+def "WitnessOr_0" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	}
+],
+def "WitnessOr_1" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			num
+		],
+		mof(3.0)
+	}
+],
+def "not_WitnessOr_1" = {
+	type[
+		num
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			notMof(3.0)
+		}
+	]
+},
+def "not_WitnessAnd_3" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		mof(3.0)
+	}
+],
+def "not_WitnessAnd_4" = anyOf[
+	ref("not_WitnessOr_1"),
+	ref("not_WitnessOr_0")
+],
+def "not_WitnessAnd_2" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	}
+],
+def "WitnessAnd_4" = allOf[
+	ref("WitnessOr_1"),
+	ref("WitnessOr_0")
+],
+def "WitnessAnd_3" = {
+	type[
+		num
+	],
+	notMof(3.0)
+},
+def "WitnessAnd_2" = {
+	type[
+		num
+	],
+	notMof(2.0)
+},
+def "not_WitnessAnd_5" = anyOf[
+	ref("not_WitnessOr_0"),
+	ref("WitnessOr_1")
+],
+rootdef "root" = allOf[
+	type[
+		obj
+	],
+	orPattReq[
+		pAllOf[.*, ^aa, .*, ^a]:anyOf[
+			ref("WitnessAnd_4"),
+			ref("WitnessAnd_4")
+		]
+	],
+	orPattReq[
+		pAllOf[.*, ^aa, .*, ^a]:anyOf[
+			anyOf[
+				ref("WitnessAnd_4"),
+				ref("WitnessAnd_4")
+			],
+			ref("WitnessAnd_5")
+		],
+		pAllOf[.*, ^a, pNot(pAllOf[.*, ^aa])]:ref("WitnessOr_0")
+	]
+],
+def "WitnessAnd_5" = allOf[
+	ref("WitnessOr_0"),
+	ref("not_WitnessOr_1")
+],
+def "not_root" = anyOf[
+	type[
+		str
+	],
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			^a : ref("WitnessAnd_2");
+			
+		],
+		props[
+			pNot(^a) : true;
+			
+		]
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			^aa : ref("WitnessAnd_3");
+			
+		],
+		props[
+			pNot(^aa) : true;
+			
+		]
+	]
+]
+
+
+ FINE! 
+

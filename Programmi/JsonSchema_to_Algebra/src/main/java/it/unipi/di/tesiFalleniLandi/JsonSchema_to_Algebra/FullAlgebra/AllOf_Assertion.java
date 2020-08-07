@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
@@ -151,7 +152,7 @@ public class AllOf_Assertion implements Assertion{
 		for(Assertion a : andList)
 			try {
 				and.add(a.toWitnessAlgebra());
-			}catch (UnsenseAssertion e){
+			}catch (WitnessFalseAssertionException e){
 				return new WitnessBoolean(false);
 			}
 

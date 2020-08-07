@@ -1,9 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
 import java.util.*;
@@ -58,8 +59,12 @@ public class WitnessItems implements WitnessAssertion{
                 return additionalItems;
             else {
                 WitnessAnd and = new WitnessAnd();
-                and.add(a);
-                and.add(new WitnessContains(0l,0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+                try {
+                    and.add(a);
+                    and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+                }catch(WitnessFalseAssertionException ex){
+                    return new WitnessBoolean(false);
+                }
                 return and;
             }
 
@@ -88,14 +93,20 @@ public class WitnessItems implements WitnessAssertion{
         return newWitnessItems;
     }
 
-    public WitnessAssertion mergeElement(WitnessItems a) throws REException {
+    public WitnessAssertion mergeElement(WitnessItems a) throws REException{
         if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
             if (((WitnessBoolean) a.additionalItems).getValue())
                 return a.additionalItems;
             else {
                 WitnessAnd and = new WitnessAnd();
-                and.add(a);
-                and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+
+                try {
+                    and.add(a);
+                    and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+                } catch (WitnessFalseAssertionException e) {
+                    return new WitnessBoolean(false);
+                }
+
                 return and;
             }
 
@@ -124,8 +135,13 @@ public class WitnessItems implements WitnessAssertion{
                 ite.addItems(tmp);
             else{
                 WitnessAnd and = new WitnessAnd();
-                and.add(items.get(i));
-                and.add(a.items.get(i));
+                try {
+                    and.add(items.get(i));
+                    and.add(a.items.get(i));
+                } catch (WitnessFalseAssertionException e) {
+                    ite.addItems(new WitnessBoolean(false));
+                    continue;
+                }
                 ite.addItems(and);
             }
         }
@@ -186,13 +202,75 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+        //only additionaItems
+        if(additionalItems != null && items == null) {
+            addItems(additionalItems);
+            additionalItems = null;
+        }
+
+        WitnessAnd rootAnd = new WitnessAnd();
+        WitnessOr rootOr = new WitnessOr();
+        WitnessType typeArray = new WitnessType();
+        typeArray.add("arr");
+        rootAnd.add(typeArray);
+        rootAnd.add(rootOr);
+
+        //ITEMS
+        for(int i = 0; i < items.size(); i++) {
+            WitnessAnd itemAndAssertion = new WitnessAnd();
+            WitnessItems itemAssertion = new WitnessItems();
+            rootOr.add(itemAndAssertion);
+            itemAndAssertion.add(itemAssertion);
+
+            itemAndAssertion.add(new WitnessContains(i+1., Double.POSITIVE_INFINITY, new WitnessBoolean(true)));
+
+            for(int j = 0; j < items.size(); j++)
+                itemAssertion.addItems((i == j && items.get(i).not(env) != null) ? items.get(i).not(env): new WitnessBoolean(true));
+        }
+
+        if(additionalItems == null) return rootAnd;
+
+        //ADDITIONAL ITEMS
+        Boolean[] bm = new Boolean[items.size()];
+        Arrays.fill(bm, false);
+        WitnessAssertion notAdditionalItems = additionalItems.not(env);
+
+        do {
+            WitnessAnd andAdditionalItems = new WitnessAnd();
+            rootOr.add(andAdditionalItems);
+            andAdditionalItems.add(new WitnessContains((long) sumbit(bm) + 1, null, notAdditionalItems));
+            WitnessItems itemsAdditionalItems = new WitnessItems();
+            andAdditionalItems.add(itemsAdditionalItems);
+
+            for(int i = 0; i < bm.length; i++)
+                itemsAdditionalItems.addItems( (bm[i] == false) ? additionalItems : notAdditionalItems );
+
+        }while(addbit(bm, 0));
+
+
+        return rootAnd;
     }
 
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
+    private Boolean addbit(Boolean[] bm, int position) {
+        if(bm.length == position) return false;
+
+        if(!bm[position]) {
+            bm[position] = true;
+            return true;
+        }
+
+        bm[position] = false;
+        return addbit(bm, position+1);
+    }
+
+    private int sumbit(Boolean[] bm) {
+        int count = 0;
+
+        for(int i = 0; i < bm.length; i++)
+            if(bm[i]) count++;
+
+        return count;
     }
 
     @Override
@@ -204,7 +282,7 @@ public class WitnessItems implements WitnessAssertion{
                 WitnessAnd and = new WitnessAnd();
                 try {
                     and.add(additionalItems);
-                }catch (UnsenseAssertion e){
+                }catch (WitnessFalseAssertionException e){
                     additionalItems = new WitnessBoolean(false);
                 }
                 items.additionalItems = and.groupize();
@@ -216,7 +294,7 @@ public class WitnessItems implements WitnessAssertion{
                     WitnessAnd and = new WitnessAnd();
                     try{
                         and.add(assertion);
-                    }catch(UnsenseAssertion e){
+                    }catch(WitnessFalseAssertionException e){
                         items.addItems(new WitnessBoolean(false));
                     }
                     items.addItems(and.groupize());
@@ -224,6 +302,21 @@ public class WitnessItems implements WitnessAssertion{
                     items.addItems(assertion.groupize());
 
         return items;
+    }
+
+    @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        Float count = 0f;
+        if(items != null){
+            for(int i = 0; i < items.size(); i++){
+                count += items.get(i).countVarWithoutBDD(env, visitedVar);
+            }
+        }
+
+        if(additionalItems != null)
+            count += additionalItems.countVarWithoutBDD(env, visitedVar);
+
+        return count;
     }
 
     @Override
@@ -235,29 +328,23 @@ public class WitnessItems implements WitnessAssertion{
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
         if(items != null){
             for(int i = 0; i < items.size(); i++){
-                if(items.get(i).getClass() != WitnessBoolean.class) {
+                if(items.get(i).getClass() != WitnessBoolean.class && items.get(i).getClass() != WitnessVar.class) {
                     items.get(i).varNormalization_separation(env);
-                    WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(items.get(i)));
-                    env.add(var, items.get(i));
 
-                    WitnessVar notVar = new WitnessVar(FullAlgebraString.NOT_DEFS + var.getValue());
-                    env.add(notVar, items.get(i).not());
+                    Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(items.get(i));
 
-                    items.set(i, var);
+                    items.set(i, result.getKey());
                 }
             }
         }
 
         if(additionalItems != null){
-            if(additionalItems.getClass() != WitnessBoolean.class) {
+            if(additionalItems.getClass() != WitnessBoolean.class && additionalItems.getClass() != WitnessVar.class) {
                 additionalItems.varNormalization_separation(env);
-                WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(additionalItems));
-                env.add(var, additionalItems);
 
-                WitnessVar notVar = new WitnessVar(FullAlgebraString.NOT_DEFS + var.getValue());
-                env.add(notVar, additionalItems.not());
+                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(additionalItems);
 
-                additionalItems = var;
+                additionalItems = result.getKey();
             }
         }
     }
@@ -295,7 +382,30 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+        for(int i = 0; i < items.size(); i++)
+            items.set(i, items.get(i).toOrPattReq());
+
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
+        return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
+        if(items != null){
+            for(int i = 0; i < items.size(); i++){
+                if(items.get(i).isRecursive(env, visitedVar))
+                    return true;
+            }
+        }
+
+        if(additionalItems != null && additionalItems.isRecursive(env, visitedVar))
+            return true;
+
         return false;
     }
 

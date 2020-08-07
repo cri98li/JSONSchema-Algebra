@@ -3,6 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import org.junit.Test;
 import patterns.REException;
 
@@ -15,7 +17,7 @@ public class WitnessAndTest {
 
     //Test and appiattito
     @Test
-    public void testAddAnd() throws REException {
+    public void testAddAnd() throws REException, WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
         a1.add(new WitnessBoolean(true));
         a1.add(new WitnessMof(3.0));
@@ -35,7 +37,7 @@ public class WitnessAndTest {
     }
 
     @Test
-    public void mergeFalse() throws REException {
+    public void mergeFalse() throws REException, WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
         a1.add(new WitnessMof(3.0));
         a1.add(new WitnessBoolean(false));
@@ -143,7 +145,7 @@ public class WitnessAndTest {
     }
 
     @Test
-    public void testEquals(){
+    public void testEquals() throws WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
         a1.add(new WitnessMof(3.0));
         a1.add(new WitnessMof(4.0));

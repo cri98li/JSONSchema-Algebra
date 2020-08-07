@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -99,15 +101,24 @@ public class Required_Assertion implements Assertion{
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(FullAlgebraString.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
-		or.add(type);
+
 
 		for(String str : reqList) {
 			ComplexPattern p = ComplexPattern.createFromName(str);
 			WitnessPattReq pattReq = WitnessPattReq.build(p, new WitnessBoolean(true));
-			and.add(pattReq);
+			try {
+				and.add(pattReq);
+			} catch (WitnessFalseAssertionException e) {
+				throw new RuntimeException(e); //impossible
+			}
 		}
 
-		or.add(and);
+		try {
+			or.add(type);
+			or.add(and);
+		}catch (WitnessTrueAssertionException e){
+			throw new RuntimeException(e); //impossible
+		}
 
 		return or;
 	}

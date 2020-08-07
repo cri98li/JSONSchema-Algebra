@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import patterns.REException;
 
 import java.io.IOException;
@@ -19,7 +20,12 @@ public class MainWitness {
 
         //WitnessEnv env = (WitnessEnv) schema.toWitnessAlgebra();
 
+
+        //env.notCompletition();
+        env.notElimination();
+
         env.checkLoopRef(null, null);
+
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
@@ -60,6 +66,7 @@ public class MainWitness {
 
         env = (WitnessEnv) env.merge();
 
+        env.toOrPattReq();
         env.objectPrepare();
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));

@@ -3,8 +3,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessProperty;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
@@ -189,29 +191,41 @@ public class Properties_Assertion implements Assertion{
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessAnd and = new WitnessAnd();
-		ComplexPattern addPatt = ComplexPattern.createFromRegexp(".*"); //TODO: ask
+		ComplexPattern usedPatt = null;//= ComplexPattern.createFromRegexp(".*").complement();//TODO: correggere
 
 		Set<Entry<String, Assertion>> entrySet = properties.entrySet();
 
-		for(Entry<String, Assertion> entry : entrySet) {
-			ComplexPattern p = ComplexPattern.createFromName(entry.getKey());
-			WitnessProperty prop = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
-			and.add(prop);
-			addPatt = addPatt.intersect(p);
-		}
+		try {
+			for (Entry<String, Assertion> entry : entrySet) {
+				ComplexPattern p = ComplexPattern.createFromName(entry.getKey());
+				WitnessProperty prop = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
+				and.add(prop);
+				if(usedPatt == null) usedPatt = p;
+				else usedPatt = usedPatt.union(p);
+			}
 
-		Set<Entry<ComplexPattern, Assertion>> entrySetPatt = patternProperties.entrySet();
+			Set<Entry<ComplexPattern, Assertion>> entrySetPatt = patternProperties.entrySet();
 
-		for(Entry<ComplexPattern, Assertion> entry : entrySetPatt) {
-			ComplexPattern p = entry.getKey().clone();
-			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
-			and.add(pattProp);
-			addPatt = addPatt.intersect(p);
-		}
+			for (Entry<ComplexPattern, Assertion> entry : entrySetPatt) {
+				ComplexPattern p = entry.getKey().clone();
+				WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
+				and.add(pattProp);
+				if(usedPatt == null) usedPatt = p;
+				else usedPatt = usedPatt.union(p);
+			}
 
-		if(additionalProperties != null) {
-			WitnessProperty addProp = new WitnessProperty(addPatt.complement(), additionalProperties.toWitnessAlgebra());
-			and.add(addProp);
+			if (additionalProperties != null) {
+				WitnessProperty addProp;
+				if(usedPatt == null){
+					addProp = new WitnessProperty(ComplexPattern.createFromRegexp(".*"), additionalProperties.toWitnessAlgebra());
+				}
+				else {
+					addProp = new WitnessProperty(usedPatt.complement(), additionalProperties.toWitnessAlgebra());
+				}
+				and.add(addProp);
+			}
+		}catch (WitnessFalseAssertionException e){
+			return new WitnessBoolean(false);
 		}
 
 		return (and.getIfUnitaryAnd() != null) ? and.getIfUnitaryAnd() : and;

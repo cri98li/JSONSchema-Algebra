@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -114,10 +115,23 @@ public class Defs_Assertion implements Assertion{
 		WitnessEnv env = new WitnessEnv();
 
 		for(Entry<String, Assertion> entry : defs.entrySet())
-			if(entry.getKey().equals(rootDef))
-				env.setRootVar(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
-			else
+			if(entry.getKey().equals(rootDef)) {
+				try {
+					env.setRootVar(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
+				} catch (WitnessException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			else {
 				env.add(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
+			}
+
+		env.buildOBDD();
+		try {
+			env.notElimination();
+		} catch (WitnessException e) {
+			e.printStackTrace();
+		}
 
 		return env;
 	}

@@ -4,9 +4,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import patterns.REException;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class WitnessBet implements WitnessAssertion{
@@ -92,21 +96,25 @@ public class WitnessBet implements WitnessAssertion{
         if(a.getMax() > max && a.getMin() < min)
             return new WitnessBet(min, max);
 
-        //caso non vittoria assoluta
-        if(a.getMax() > max)
-            and.add(new WitnessBet(null, max));
-        else
-            and.add(new WitnessXBet(null, a.getMax()));
-
-        if(a.getMin() < min)
-            and.add(new WitnessBet(min, null));
-        else
-            and.add(new WitnessXBet(a.getMin(), null));
-
-        //check if the output is the same as the input
         WitnessAnd andTmp = new WitnessAnd();
-        andTmp.add(this);
-        andTmp.add(a);
+        try {
+            //caso non vittoria assoluta
+            if (a.getMax() > max)
+                and.add(new WitnessBet(null, max));
+            else
+                and.add(new WitnessXBet(null, a.getMax()));
+
+            if (a.getMin() < min)
+                and.add(new WitnessBet(min, null));
+            else
+                and.add(new WitnessXBet(a.getMin(), null));
+
+            //check if the output is the same as the input
+            andTmp.add(this);
+            andTmp.add(a);
+        }catch (WitnessFalseAssertionException e){
+            throw  new RuntimeException(e); //impossible
+        }
 
         return and.equals(andTmp) ? null : and;
 
@@ -128,18 +136,18 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws REException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
-    }
-
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
     public WitnessAssertion groupize() {
         return this;
+    }
+
+    @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        return 0f;
     }
 
     @Override
@@ -162,7 +170,17 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException {
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
+        return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
         return false;
     }
 

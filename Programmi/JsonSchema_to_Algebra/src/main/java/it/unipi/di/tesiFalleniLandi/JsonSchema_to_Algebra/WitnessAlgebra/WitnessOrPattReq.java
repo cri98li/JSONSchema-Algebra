@@ -2,6 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.OrPattReq_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
 import java.util.Collection;
@@ -89,12 +92,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws WitnessException, REException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public WitnessAssertion notElimination() throws WitnessException, REException {
+    public WitnessAssertion not(WitnessEnv env) throws WitnessException, REException {
         throw new UnsupportedOperationException();
     }
 
@@ -104,13 +102,20 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int countVarToBeExp(WitnessEnv env) {
         return 0;
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) {
-        return;
+    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        for(WitnessPattReq el : ORP){
+            el.varNormalization_separation(env);
+        }
     }
 
     @Override
@@ -120,7 +125,12 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion DNF() throws WitnessException {
-        throw new UnsupportedOperationException();
+        return this;
+    }
+
+    @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+        return this;
     }
 
     @Override
@@ -129,7 +139,20 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
+        for(WitnessPattReq el : ORP){
+            if(el.isRecursive(env, visitedVar)) return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public WitnessVar buildOBDD(WitnessEnv env) {
         throw new UnsupportedOperationException();
+    }
+
+    public void setORP(List<WitnessPattReq> ORP) {
+        this.ORP = ORP;
     }
 }

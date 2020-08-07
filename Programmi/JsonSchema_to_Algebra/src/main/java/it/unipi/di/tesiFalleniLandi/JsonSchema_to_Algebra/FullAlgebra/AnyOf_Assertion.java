@@ -3,6 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import patterns.REException;
 
@@ -95,10 +98,14 @@ public class AnyOf_Assertion implements Assertion{
 		return FullAlgebraString.ANYOF(str.substring(FullAlgebraString.COMMA.length()));
 	}
 
-	public WitnessOr toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		for(Assertion a : orList)
-			or.add(a.toWitnessAlgebra());
+			try {
+				or.add(a.toWitnessAlgebra());
+			}catch (WitnessTrueAssertionException e){
+				return new WitnessBoolean(true);
+			}
 
 		return or;
 	}

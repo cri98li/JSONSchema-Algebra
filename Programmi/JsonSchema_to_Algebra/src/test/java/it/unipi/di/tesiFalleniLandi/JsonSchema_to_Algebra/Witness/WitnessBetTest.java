@@ -68,7 +68,7 @@ public class WitnessBetTest {
         WitnessBet b2 = new WitnessBet(6.0, null);
         WitnessType t = new WitnessType("num");
 
-        assertEquals(b1.mergeElement(b2), t.not());
+        assertEquals(b1.mergeElement(b2), t.not(null));
     }
 
     //bet(-inf, 3), xbet(3, +inf)
@@ -78,6 +78,6 @@ public class WitnessBetTest {
         WitnessXBet b2 = new WitnessXBet(3.0, null);
         WitnessType t = new WitnessType("num");
 
-        assertEquals(b1.mergeElement(b2), t.not());
+        assertEquals(b1.mergeElement(b2), t.not(null));
     }
 }

@@ -2,13 +2,14 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 public class WitnessProperty implements WitnessAssertion{
     private ComplexPattern key;
@@ -124,13 +125,14 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
-    }
+    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+        WitnessAnd and = new WitnessAnd();
+        WitnessType type = new WitnessType();
+        type.add(FullAlgebraString.TYPE_OBJECT);
+        and.add(type);
+        and.add(WitnessPattReq.build(key.clone(), value.not(env)));
 
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
+        return and;
     }
 
     @Override
@@ -143,7 +145,7 @@ public class WitnessProperty implements WitnessAssertion{
                 WitnessAnd and = new WitnessAnd();
                 try {
                     and.add(value);
-                }catch (UnsenseAssertion e){
+                }catch (WitnessFalseAssertionException e){
                     prop.value = new WitnessBoolean(false);
                 }
                 prop.value = and.groupize();
@@ -152,6 +154,11 @@ public class WitnessProperty implements WitnessAssertion{
         }
 
         return prop;
+    }
+
+    @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        return value.countVarWithoutBDD(env, visitedVar);
     }
 
     @Override
@@ -166,19 +173,24 @@ public class WitnessProperty implements WitnessAssertion{
             //TODO: true <--> allOf[true] ?
             if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
                 value.varNormalization_separation(env);
+
+                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
+                /*
                 WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(value));
                 env.add(var, value);
 
                 WitnessVar notVar = new WitnessVar(FullAlgebraString.NOT_DEFS + var.getValue());
                 env.add(notVar, value.not());
 
-                value = var;
+                 */
+
+                value = result.getKey();
             }
         }
     }
 
     @Override
-    public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
+    public WitnessAssertion varNormalization_expansion(WitnessEnv env) {
         /*
         WitnessProperty prop = new WitnessProperty();
         prop.key = this.key;
@@ -198,8 +210,20 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+        value = value.toOrPattReq();
+
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
         return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
+        return value.isRecursive(env, visitedVar);
     }
 
     @Override

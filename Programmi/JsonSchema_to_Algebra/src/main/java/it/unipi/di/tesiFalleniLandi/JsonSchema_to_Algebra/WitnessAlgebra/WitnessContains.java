@@ -1,14 +1,13 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 public class WitnessContains implements WitnessAssertion{
     private Double min, max;
@@ -19,6 +18,12 @@ public class WitnessContains implements WitnessAssertion{
         this.min = 0.0;
         this.max = Double.POSITIVE_INFINITY;
         isAnArray = false;
+    }
+
+    public WitnessContains(double min, double max, WitnessAssertion contains) {
+        this.min = min;
+        this.max = max;
+        this.contains = contains;
     }
 
     public WitnessContains(Long min, Long max, WitnessAssertion contains) {
@@ -139,28 +144,52 @@ public class WitnessContains implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion not() throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
-    }
+    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessFalseAssertionException, WitnessTrueAssertionException {
+        WitnessAnd and = new WitnessAnd();
 
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
+        if(min == 0 && max == null){
+            and.add(new WitnessBoolean(false));
+            return and;
+        }
+
+        WitnessType type = new WitnessType();
+        type.add("arr");
+        and.add(type);
+
+        if(min != null && max != null) {
+            WitnessOr or = new WitnessOr();
+            if(min > 0)
+                or.add(new WitnessContains(0., min - 1, contains));
+            or.add(new WitnessContains(max + 1, Double.POSITIVE_INFINITY, contains));
+            and.add(or);
+            return and;
+        }
+
+        if(min != null && min > 0) {
+            and.add(new WitnessContains(0., min - 1, contains));
+            return and;
+        }
+
+        if(max != null) {
+            and.add(new WitnessContains(max + 1, Double.POSITIVE_INFINITY, contains));
+        }
+
+        return and;
     }
 
     @Override
     public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessContains contains = new WitnessContains();
-
         contains.min = min;
         contains.max = max;
         contains.isAnArray = isAnArray;
+
         if(contains != null) {
             if (this.contains.getClass() != WitnessAnd.class) {
                 WitnessAnd and = new WitnessAnd();
                 try {
                     and.add(this.contains);
-                }catch(UnsenseAssertion e){
+                }catch(WitnessFalseAssertionException e){
                     contains.contains = new WitnessBoolean(false);
                 }
                 contains.contains = and.groupize();
@@ -172,6 +201,11 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        return contains.countVarWithoutBDD(env, visitedVar);
+    }
+
+    @Override
     public int countVarToBeExp(WitnessEnv env) {
         return 0;
     }
@@ -179,16 +213,12 @@ public class WitnessContains implements WitnessAssertion{
     @Override
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
         if(contains != null || !isAnArray) {
-            if(contains != null && contains.getClass() != WitnessBoolean.class) {
+            if(contains != null && contains.getClass() != WitnessBoolean.class && contains.getClass() != WitnessVar.class) {
                 contains.varNormalization_separation(env);
-                WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(contains));
-                env.add(var, contains);
 
-                //aggiungo anche il negato
-                WitnessVar notVar = new WitnessVar(FullAlgebraString.NOT_DEFS + var.getValue());
-                env.add(notVar, contains.not());
+                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(contains);
 
-                contains = var;
+                contains = result.getKey();
             }
         }
     }
@@ -214,8 +244,19 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+        contains = contains.toOrPattReq();
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
         return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
+        return contains.isRecursive(env, visitedVar);
     }
 
     @Override

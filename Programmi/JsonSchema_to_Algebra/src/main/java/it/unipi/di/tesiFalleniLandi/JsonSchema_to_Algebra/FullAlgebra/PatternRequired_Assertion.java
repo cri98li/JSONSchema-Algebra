@@ -3,10 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import patterns.REException;
 
@@ -116,15 +115,22 @@ public class PatternRequired_Assertion implements Assertion{
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(FullAlgebraString.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
-		or.add(type);
-		or.add(and);
 
 		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 
 		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 			ComplexPattern p = entry.getKey().clone();
 			WitnessPattReq pattReq = WitnessPattReq.build(p, entry.getValue().toWitnessAlgebra());
-			and.add(pattReq);
+			try {
+				and.add(pattReq);
+			}catch (WitnessFalseAssertionException ex){ return or;}
+		}
+
+		try {
+			or.add(type);
+			or.add(and);
+		}catch (WitnessTrueAssertionException e){
+			throw new RuntimeException(e); //impossible
 		}
 
 		return or;

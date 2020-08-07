@@ -4,9 +4,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfBoolThen_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import patterns.REException;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WitnessIfBoolThen implements WitnessAssertion{
     private boolean value;
@@ -81,18 +85,18 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws REException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
-    }
-
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
     public WitnessAssertion groupize() {
         return this;
+    }
+
+    @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        return 0f;
     }
 
     @Override
@@ -102,7 +106,6 @@ public class WitnessIfBoolThen implements WitnessAssertion{
 
     @Override
     public void varNormalization_separation(WitnessEnv env) {
-
     }
 
     @Override
@@ -116,7 +119,17 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException {
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
+        return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
         return false;
     }
 

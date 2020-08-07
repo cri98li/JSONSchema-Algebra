@@ -1,12 +1,15 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.XBet_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WitnessXBet implements WitnessAssertion{
     Double min, max;
@@ -114,13 +117,8 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not() throws REException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         return getFullAlgebra().not().toWitnessAlgebra();
-    }
-
-    @Override
-    public WitnessAssertion notElimination() throws REException {
-        return getFullAlgebra().notElimination().toWitnessAlgebra();
     }
 
     @Override
@@ -131,6 +129,11 @@ public class WitnessXBet implements WitnessAssertion{
     @Override
     public int countVarToBeExp(WitnessEnv env) {
         return 0;
+    }
+
+    @Override
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar) {
+        return 0f;
     }
 
     @Override
@@ -148,7 +151,17 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+        return this;
+    }
+
+    @Override
     public boolean isBooleanExp() {
+        return false;
+    }
+
+    @Override
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
         return false;
     }
 

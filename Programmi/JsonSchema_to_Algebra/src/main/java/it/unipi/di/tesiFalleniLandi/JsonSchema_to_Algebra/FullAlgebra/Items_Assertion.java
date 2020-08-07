@@ -59,7 +59,6 @@ public class Items_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() {
-		
 		//only additionaItems
 		if(additionalItems != null && itemsArray == null) {
 			add(additionalItems);

@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 
 
 import java.util.Iterator;
@@ -146,8 +148,12 @@ public class Type_Assertion implements Assertion{
 		if(types.size() == 1) {
 			if(types.get(0).equals(FullAlgebraString.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();
-				and.add(new WitnessMof(1.0));
-				and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+				try {
+					and.add(new WitnessMof(1.0));
+					and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+				}catch (WitnessFalseAssertionException e){
+					return new WitnessBoolean(false);
+				}
 				return and;
 			}
 			return new WitnessType(types.get(0));
@@ -156,11 +162,19 @@ public class Type_Assertion implements Assertion{
 		if(types.contains(FullAlgebraString.TYPE_INTEGER)){
 			types.remove(FullAlgebraString.TYPE_INTEGER);
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessMof(1.0));
-			and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+			try {
+				and.add(new WitnessMof(1.0));
+				and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+			}catch (WitnessFalseAssertionException e){
+				return new WitnessBoolean(false);
+			}
 			WitnessOr or = new WitnessOr();
-			or.add(new WitnessType(types));
-			or.add(and);
+			try {
+				or.add(new WitnessType(types));
+				or.add(and);
+			}catch (WitnessTrueAssertionException e){
+				return new WitnessBoolean(true);
+			}
 
 			return or;
 		}

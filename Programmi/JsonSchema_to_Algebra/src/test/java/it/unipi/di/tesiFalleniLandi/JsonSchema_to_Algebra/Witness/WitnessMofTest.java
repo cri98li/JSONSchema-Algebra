@@ -25,7 +25,7 @@ public class WitnessMofTest {
         WitnessNotMof m2 = new WitnessNotMof(3.0);
         WitnessType t = new WitnessType("num");
 
-        assertEquals(m1.mergeElement(m2), t.not());
+        assertEquals(m1.mergeElement(m2), t.not(null));
     }
 
     @Test

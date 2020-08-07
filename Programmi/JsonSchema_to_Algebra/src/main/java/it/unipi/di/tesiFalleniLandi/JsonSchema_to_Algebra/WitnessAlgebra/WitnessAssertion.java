@@ -1,9 +1,14 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import patterns.REException;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public interface WitnessAssertion extends Cloneable{
     /**
@@ -49,15 +54,7 @@ public interface WitnessAssertion extends Cloneable{
      *
      * @return return the complement of the current object
      */
-    public WitnessAssertion not() throws WitnessException, REException;
-
-    /**
-     *
-     * @return apply the not-elimination/not-pushing step as described in the paper, then return the new instance
-     */
-    public WitnessAssertion notElimination() throws WitnessException, REException;
-
-    //Se and, ritorna and sottoforma di gruppo, altrimenti propaga. se terminal node ritorna this
+    public WitnessAssertion not(WitnessEnv env) throws WitnessException, REException;
 
     /**
      * If this is and andAssertion, the method return a new andAssertion canonicalized
@@ -68,7 +65,16 @@ public interface WitnessAssertion extends Cloneable{
     public WitnessAssertion groupize() throws WitnessException, REException;
 
     /**
-     * count the variable number contained in the assertion
+     * count all variables in this
+     * @return
+     * @param env
+     * @param visitedVar
+     */
+    public Float countVarWithoutBDD(WitnessEnv env, List<WitnessVar> visitedVar);
+
+
+    /**
+     * count all the unguarded variables ref in this
      * @return
      * @param env
      */
@@ -96,7 +102,11 @@ public interface WitnessAssertion extends Cloneable{
      */
     public WitnessAssertion DNF() throws WitnessException;
 
+    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException;
+
     public boolean isBooleanExp();
+
+    public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar);
 
     public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException;
 }

@@ -1,50 +1,48 @@
-rootdef "root" = {
-	allOf[
-		{
-			anyOf[
-				req["start_date"],
-				req["sample_date"],
-				req["end_date"]
-			]
-		},
-		type[obj],
-		{
-			props[
-				"start_date_type": {
-					{
-						enum["at", "before", "after"]
-					}
-				},
-				"end_date": allOf[
-					type[str]
-				],
-				"confidence": {
-					{
-						enum["HIGH", "MEDIUM", "LOW"]
-					}
-				},
-				"data_type": enum["supplier-relationship"],
-				"sample_date": allOf[
-					type[str]
-				],
-				"retrieved_at": allOf[
-					type[str]
-				],
-				"source_url": type[str],
-				"start_date": allOf[
-					type[str]
-				],
-				"end_date_type": {
-					{
-						enum["at", "before", "after"]
-					}
-				}
-				;false]
-		},
-		req["data_type",
-			"supplier",
-			"customer",
-			"retrieved_at",
-			"confidence"]
-	]
+{
+    type[obj],
+    pattReq["^a": mof(2)],
+    pattReq["^aa": mof(3)]
+
+
+    //pattReq["^a": {type[int], mof(1)}],
+    //pattReq["^.d": true],
+    /*props[
+        "^.*a": {type[int], mof(2)},
+        "^.*b": {type[int], mof(3)},
+        "^.*c": {type[int], mof(5)}
+    ;mof(7)]*/
 }
+
+
+
+
+/*{
+    type[obj],
+    pattReq["^a": {type[int], mof(1)}],
+    pattReq["^.d": true],
+    props[
+        "^a": {type[int], mof(1)},
+        "^.b" : {type[int], bet(1,100)}
+    ;]
+}*/
+
+/*rootdef "x" = { //lui o "i" se ne va e il suo negato è non_x
+    ref("y"),
+    ref("z")
+},
+def "y" = mof(12),
+def "z" = mof(3),
+def "not_y" = notMof(12),
+def "not_z" = notMof(3),
+def "i" = {
+    ref("y"),
+    ref("z")
+},
+def "base" = {ref("i"),mof(12)},
+def "non_x" = anyOf[
+	ref("not_y"),
+	ref("not_z")
+]*/
+
+/*def "x" = props["a": ref("y");],
+def "y" = ref("x")*/
