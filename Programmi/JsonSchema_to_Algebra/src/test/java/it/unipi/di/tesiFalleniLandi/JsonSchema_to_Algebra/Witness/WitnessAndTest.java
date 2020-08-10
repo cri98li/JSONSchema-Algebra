@@ -158,4 +158,23 @@ public class WitnessAndTest {
 
     }
 
+
+
+
+
+
+
+    //----------------------------------TEST OBJECT PREPARATION--------------------------------------
+
+    @Test
+    public void testObjPrep1() throws WitnessException, IOException, REException {
+        Assertion in = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/input_1.algebra");
+        Assertion out = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/output_1.algebra");
+        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
+        WitnessAssertion output = out.toWitnessAlgebra();
+
+        input.groupize().DNF().objectPrepare();
+
+        assertEquals(input, output);
+    }
 }
