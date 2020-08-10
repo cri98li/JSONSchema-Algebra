@@ -125,7 +125,8 @@ function sendRequest(){
                     && action != "notEliminationWitness" 
                     && action != "Canonicalization"
                     && action != "variableNormalization"
-                    && action != "DNF")
+                    && action != "DNF"
+                    && action != "objPrepare")
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
                 $("#outputTextarea").val(data);
