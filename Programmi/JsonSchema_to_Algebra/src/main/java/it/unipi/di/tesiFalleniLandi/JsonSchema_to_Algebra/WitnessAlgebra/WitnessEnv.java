@@ -9,12 +9,16 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Excepti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import jdd.bdd.BDD;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WitnessEnv implements WitnessAssertion {
+    private static Logger logger = LogManager.getLogger(WitnessEnv.class);
+
     private ConcurrentHashMap<WitnessVar, WitnessAssertion> varList;
     private WitnessVar rootVar;
 
@@ -23,13 +27,16 @@ public class WitnessEnv implements WitnessAssertion {
     public WitnessEnv(){
         varList = new ConcurrentHashMap<>();
         coVar = HashBiMap.create(); //init BiMap
+        logger.trace("Creating an empty WitnessEnv");
     }
 
     public Map.Entry<WitnessVar, WitnessVar> addWithComplement(WitnessAssertion value) throws WitnessException, REException {
+        logger.trace("Adding with complement {}", value);
         WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(value));
         add(var, value);
         notElimination();//lo completo subito
 
+        logger.trace("Added {} and its complement {}", var, getCoVarName(var));
         return new AbstractMap.SimpleEntry<>(var, getCoVarName(var));
     }
 
@@ -60,6 +67,7 @@ public class WitnessEnv implements WitnessAssertion {
      * @return
      */
     public void add(WitnessVar key, WitnessAssertion value){
+        logger.trace("Adding to env <{}, {}>", key, value);
         if(WitnessAnd.class == value.getClass()){
             add(key, (WitnessAnd) value);
             return;
@@ -68,10 +76,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     public void add(WitnessVar key, WitnessAnd value){
-        if(value.getIfUnitaryAnd() == null)
-            varList.put(key, value);
-        else
-            varList.put(key, value.getIfUnitaryAnd());
+        varList.put(key, value);
     }
 
     /**
@@ -86,8 +91,19 @@ public class WitnessEnv implements WitnessAssertion {
      *      diminuire la dimensione), forzo la creazione di una variabile
      */
     public void buildOBDD() {
-        //LinkedList<Map.Entry<WitnessVar, WitnessAssertion>> notBooleanExpression = new LinkedList<>(); non mi serve realmente. posso eseguire subito le azioni
+        logger.trace("Building obdd");
         LinkedList<Map.Entry<WitnessVar, Float>> booleanExpression = new LinkedList<>();
+
+        //Caso base, creo le 2 asserzioni vere e false
+        /*if(!WitnessBDD.contains(WitnessBDD.getFalseVar()) || !WitnessBDD.contains(WitnessBDD.getTrueVar())){
+            WitnessAssertion trueAssertion = new WitnessBoolean(true);
+            WitnessAssertion falseAssertion = new WitnessBoolean(false);
+            WitnessBDD.createVar(WitnessBDD.getTrueVar());
+            WitnessBDD.createVar(WitnessBDD.getFalseVar());
+            this.add(WitnessBDD.getFalseVar(), falseAssertion);
+            this.add(WitnessBDD.getTrueVar(), trueAssertion);
+            coVar.forcePut(WitnessBDD.getTrueVar(), WitnessBDD.getFalseVar());
+        }*/
 
         for (Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet()) {
             //caso base: esiste già un obdd associato
@@ -112,6 +128,7 @@ public class WitnessEnv implements WitnessAssertion {
 
         int iterazioniSenzaDiminuzione = 0;
         while (booleanExpression.size() != 0) {
+            logger.trace("booleanExpression.size = {}; itWithoutDec= {}", booleanExpression.size(), iterazioniSenzaDiminuzione);
             if (iterazioniSenzaDiminuzione == booleanExpression.size()) {
                 //se sono qui vuol dire che non posso creare piú obdd se non "forzo" la creazione di una variabile
                 // (forzo quella corrente?)
@@ -119,6 +136,7 @@ public class WitnessEnv implements WitnessAssertion {
                 first.getKey().forceOBDD();
                 booleanExpression.addLast(first);
                 iterazioniSenzaDiminuzione = 0;
+                logger.debug("Forcing new obdd {}", first.getKey());
                 continue;
             }
 
@@ -127,17 +145,23 @@ public class WitnessEnv implements WitnessAssertion {
             try {
                 WitnessVar obddName = varList.get(first.getKey()).buildOBDD(this);
 
+
                 if(varList.containsKey(obddName)){ //è una variabile che posso rinominare
+                    logger.trace("Rinomino variabile (esiste già con stessa semantica) da {} a {}", first.getKey(), obddName);
                     varList.remove(first.getKey());
                     coVar.replace(first.getKey(), obddName);
                     WitnessVar.rename(first.getKey(), obddName);
-                }else
+                }else {
                     WitnessBDD.rename(obddName, first.getKey());
+                    logger.trace("Rinomino la stringa associata all'obdd con il nome della variabile. Da {} a {}", obddName, first.getKey());
+                }
 
                 iterazioniSenzaDiminuzione = 0;
             } catch (WitnessException ex) {
+                logger.catching(ex);
                 //se sono qui vuol dire che ho cercato di creare un obdd di un'espressione che contiene variabili che non hanno ancora un obdd associato
                 booleanExpression.addLast(first);
+                logger.trace("ref to a var without obdd in {}", first.getKey());
                 iterazioniSenzaDiminuzione++;
             }
         }
@@ -199,6 +223,7 @@ public class WitnessEnv implements WitnessAssertion {
      * @throws REException
      */
     public void notElimination() throws WitnessException, REException {
+        logger.trace("Performing notElimination");
         buildOBDD();
 
         HashSet<WitnessVar> completed = new HashSet<>();
@@ -212,7 +237,7 @@ public class WitnessEnv implements WitnessAssertion {
 
         int iterazioniSenzaDiminuzione = 0;
         while (tmp.size() != 0){
-
+            logger.trace("notElimination: list.size = {}; itWithoutDec= {}", tmp.size(), iterazioniSenzaDiminuzione);
             /**
              * Caso: ****
              * def "x" = props["a": ref("y");],
@@ -230,14 +255,14 @@ public class WitnessEnv implements WitnessAssertion {
 
                     coVar.put(first, complementVarName);
                     daSistemare.add(complementVarName);
+                    logger.debug("notElimination: Forcing new var {}", complementVarName);
                 }
                 tmp.addLast(first);
                 iterazioniSenzaDiminuzione = 0;
                 continue;
             }
 
-
-
+            //PER STAMPARE LISTA
             //System.out.println("ToBeCompl: "+tmp.size()+"\r\n\t");
             //tmp.forEach(System.out::println);
 
@@ -283,6 +308,7 @@ public class WitnessEnv implements WitnessAssertion {
                     newVar.add(new AbstractMap.SimpleEntry(complementVarName, not));
                 }
             }catch (Exception ex){
+                logger.catching(ex);
                 completed.remove(nome);
                 tmp.addLast(nome);
                 iterazioniSenzaDiminuzione++;
@@ -356,6 +382,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     @Override
     public WitnessEnv clone() {
+        logger.debug("Cloning WitnessEnv");
         WitnessEnv clone = new WitnessEnv();
 
         clone.rootVar = rootVar;
@@ -449,12 +476,7 @@ public class WitnessEnv implements WitnessAssertion {
             orderList.add(new AbstractMap.SimpleEntry(entry.getKey(), nVarToBeExp));
         }
 
-        Collections.sort(orderList, new Comparator<Map.Entry<WitnessVar, Integer>>() {
-            @Override
-            public int compare(Map.Entry<WitnessVar, Integer> witnessVarIntegerEntry, Map.Entry<WitnessVar, Integer> t1) {
-                return witnessVarIntegerEntry.getValue() - t1.getValue();
-            }
-        });
+        Collections.sort(orderList, Comparator.comparingInt(Map.Entry::getValue));
 
         if(rootVar != null)
             newEnv.rootVar = rootVar;
@@ -471,6 +493,8 @@ public class WitnessEnv implements WitnessAssertion {
             return newEnv.variableNormalization_expansion(null);*/
 
         newEnv.coVar = coVar;
+        newEnv.buildOBDD();
+
         return newEnv;
     }
 
@@ -512,11 +536,12 @@ public class WitnessEnv implements WitnessAssertion {
 
     public void objectPrepare() throws REException, WitnessException {
         //call object prepare only for and assertion, or assertion
-        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
-            if(entry.getValue().getClass() == WitnessAnd.class)
+        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet()) {
+            if (entry.getValue().getClass() == WitnessAnd.class)
                 ((WitnessAnd) entry.getValue()).objectPrepare(this);
-            else if(entry.getValue().getClass() == WitnessOr.class)
+            else if (entry.getValue().getClass() == WitnessOr.class)
                 ((WitnessOr) entry.getValue()).objectPrepare(this);
+        }
     }
 
 

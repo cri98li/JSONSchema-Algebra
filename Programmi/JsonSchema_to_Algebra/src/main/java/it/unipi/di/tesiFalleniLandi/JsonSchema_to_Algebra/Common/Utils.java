@@ -27,11 +27,11 @@ public class Utils {
 					output.append((c1 != null && (c1 == '}' || c1 == ']')) ? c+tabs(tab-1) : c+tabs(tab));
 					continue;
 
-				case '[': case '{':
+				case '[': case '{': case '(': //<-- TODO: vedere come stampa con questo ultimo caso
 					tab++;
 					break;
 
-				case ']': case '}':
+				case ']': case '}': case ')': //<-- TODO: vedere come stampa con questo ultimo caso
 					tab--;
 					break;
 

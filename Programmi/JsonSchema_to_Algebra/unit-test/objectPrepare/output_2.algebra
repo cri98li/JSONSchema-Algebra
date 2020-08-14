@@ -1,0 +1,144 @@
+def "WitnessAnd_1" = {
+	type[
+		num
+	],
+	notMof(2.0)
+},
+def "not_WitnessOr_0" = allOf[
+	type[
+		obj,
+		num,
+		arr,
+		bool,
+		null
+	],
+	anyOf[
+		{
+			type[
+				num
+			],
+			notMof(2.0)
+		},
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		]
+	],
+	type[
+		str,
+		obj,
+		num,
+		arr,
+		bool
+	],
+	type[
+		str,
+		num,
+		arr,
+		bool,
+		null
+	],
+	type[
+		str,
+		obj,
+		num,
+		arr,
+		null
+	],
+	type[
+		str,
+		obj,
+		num,
+		bool,
+		null
+	]
+],
+def "WitnessOr_0" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	},
+	type[
+		null
+	],
+	{
+		type[
+			obj
+		],
+		props[
+			".*" : true;
+
+		]
+	},
+	type[
+		bool
+	]
+],
+rootdef "root" = allOf[
+	type[
+		obj
+	],
+	props[
+		"^.*a" : ref("WitnessOr_0");
+
+	],
+	props[
+		pNot("^.*a") : true;
+
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		orPattReq[
+			pAllOf[".*", "^.*a"]:ref("WitnessAnd_1")
+		],
+		props[
+			".*" : true;
+
+		]
+	},
+	type[
+		str
+	],
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	]
+],
+def "not_WitnessAnd_1" = anyOf[
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	},
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	]
+]

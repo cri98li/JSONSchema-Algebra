@@ -6,32 +6,35 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOrPattReq;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class OrPattReq_Assertion implements Assertion{
-    private HashMap<ComplexPattern, Assertion> ORP;
+    List<Map.Entry<ComplexPattern, Assertion>> reqList;
+
+    private static Logger logger = LogManager.getLogger(OrPattReq_Assertion.class);
 
     public OrPattReq_Assertion() {
-        ORP = new HashMap<>();
-    }
-
-    public OrPattReq_Assertion(ComplexPattern name, Assertion assertion) {
-        ORP = new HashMap<>();
-        ORP.put(name, assertion);
+        reqList = new LinkedList<>();
+        logger.trace("Creating an empty OrPAttReq_Assertion");
     }
 
     public void add(ComplexPattern key, Assertion value) {
-        if(ORP.containsKey(key)) {
+        logger.trace("Adding <{}, {}> to {}", key, value, this);
+
+        /*if(ORP.containsKey(key)) {
+            logger.trace("Same ORP contains {} --> generating value as AnyOf", key);
             AnyOf_Assertion or = new AnyOf_Assertion(); //TODO: se hanno la stessa chiave in ORP cosa faccio?
             or.add(ORP.get(key));
             or.add(value);
             ORP.put(key, or);
             return;
-        }
+        }*/
 
-        ORP.put(key, value);
+        reqList.add(new AbstractMap.SimpleEntry(key, value));
     }
 
     @Override
@@ -53,9 +56,8 @@ public class OrPattReq_Assertion implements Assertion{
     public String toGrammarString() {
         StringBuilder str = new StringBuilder();
 
-        if(ORP != null) {
-            Set<Map.Entry<ComplexPattern, Assertion>> entrySet = ORP.entrySet();
-            for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
+        if(reqList != null) {
+            for(Map.Entry<ComplexPattern, Assertion> entry : reqList) {
                 String returnedValue = entry.getValue().toGrammarString();
                 if(!returnedValue.isEmpty())
                     str.append(FullAlgebraString.COMMA)
@@ -72,7 +74,7 @@ public class OrPattReq_Assertion implements Assertion{
     @Override
     public WitnessAssertion toWitnessAlgebra() throws REException {
         WitnessOrPattReq witnessOrPattReq = new WitnessOrPattReq();
-        for (Map.Entry<ComplexPattern, Assertion> entry : this.ORP.entrySet())
+        for (Map.Entry<ComplexPattern, Assertion> entry : this.reqList)
             witnessOrPattReq.add(WitnessPattReq.build(entry.getKey(), entry.getValue().toWitnessAlgebra()));
 
         return witnessOrPattReq;

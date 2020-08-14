@@ -4,6 +4,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -11,10 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WitnessBoolean implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessBoolean.class);
+
     private boolean value;
 
     public WitnessBoolean(boolean val){
         this.value = val;
+        logger.debug("Created a new WitnessBoolean: {}", this);
     }
 
     @Override
@@ -132,6 +137,6 @@ public class WitnessBoolean implements WitnessAssertion{
 
     @Override
     public WitnessVar buildOBDD(WitnessEnv env) {
-        return value ? WitnessBDD.trueVar : WitnessBDD.falseVar;
+        return value ? WitnessBDD.getTrueVar() : WitnessBDD.getFalseVar();
     }
 }

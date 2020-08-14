@@ -2,8 +2,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessBDDException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import jdd.bdd.BDD;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WitnessBDD {
     private static final int NODESIZE = 1000;
@@ -12,8 +15,18 @@ public class WitnessBDD {
     private static BiMap<WitnessVar, Integer> indexNode;
     private static BDD bdd;
 
-    public static final WitnessVar trueVar;
-    public static final WitnessVar falseVar;
+    private static WitnessVar trueVar;
+    private static WitnessVar falseVar;
+
+    public static WitnessVar getTrueVar(){
+        return trueVar.clone();
+    }
+
+    public static WitnessVar getFalseVar(){
+        return falseVar.clone();
+    }
+
+    private static Logger logger = LogManager.getLogger(WitnessBDD.class);
 
     static {
         indexNode = HashBiMap.create();
@@ -90,6 +103,10 @@ public class WitnessBDD {
         if(!indexNode.containsKey(oldName))
             throw new RuntimeException("WitnessBDD rename variabile non presente");
 
+        /*if(oldName.equals(falseVar))
+            falseVar = newName;
+        if(oldName.equals(trueVar))
+            trueVar = newName;*/
 
         indexNode.put(newName, indexNode.remove(oldName));
     }
@@ -97,27 +114,6 @@ public class WitnessBDD {
 
     public static boolean contains(WitnessVar var){
         return indexNode.containsKey(var);
-    }
-}
-
-class WitnessBDDException extends WitnessException{
-    public WitnessBDDException() {
-    }
-
-    public WitnessBDDException(String message) {
-        super(message);
-    }
-
-    public WitnessBDDException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public WitnessBDDException(Throwable cause) {
-        super(cause);
-    }
-
-    public WitnessBDDException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
 

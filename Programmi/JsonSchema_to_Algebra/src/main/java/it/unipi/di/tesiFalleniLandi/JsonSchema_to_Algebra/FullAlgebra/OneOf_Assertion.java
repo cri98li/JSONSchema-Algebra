@@ -2,8 +2,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.LinkedList;
@@ -11,13 +14,17 @@ import java.util.List;
 
 public class OneOf_Assertion implements Assertion{
 	private List<Assertion> xorList;
+
+	private static Logger logger = LogManager.getLogger(OneOf_Assertion.class);
 	
 	public OneOf_Assertion() {
+		logger.trace("Creating an empty OneOf_Assertion");
 		this.xorList = new LinkedList<>();
 	}
 	
 	public void add(Assertion assertion) {
 		if(assertion == null) return;
+		logger.trace("Adding {} to {}", assertion, this);
 		xorList.add(assertion);
 	}
 	
@@ -26,6 +33,7 @@ public class OneOf_Assertion implements Assertion{
 	}
 	
 	public void addAll(List<Assertion> list) {
+		logger.trace("Adding all {} to {}", list, this);
 		xorList.addAll(list);
 	}
 

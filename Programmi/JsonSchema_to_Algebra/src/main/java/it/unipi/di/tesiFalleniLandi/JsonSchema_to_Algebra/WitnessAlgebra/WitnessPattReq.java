@@ -7,25 +7,30 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternReq
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessPattReq implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessPattReq.class);
+
     private static HashMap<Object, WitnessPattReq> instances;
 
     public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
         if(instances == null) instances = new HashMap<>();
 
-        if(assertion.getClass() == WitnessAnd.class && ((WitnessAnd) assertion).getIfUnitaryAnd() != null)
-            assertion = ((WitnessAnd)assertion).getIfUnitaryAnd();
-
         WitnessPattReq tmp = new WitnessPattReq(key, assertion);
 
-        if(instances.containsKey(tmp.toString()))
+        if(instances.containsKey(tmp.toString())) {
+            logger.trace("WitnessPattReq returning an OLD instance: ", instances.get(tmp.toString()));
+
             return instances.get(tmp.toString());
+        }
 
         instances.put(tmp.toString(), tmp);
+        logger.trace("WitnessPattReq returning a NEW instance: ", instances.get(tmp.toString()));
         return tmp;
     }
 
@@ -36,6 +41,7 @@ public class WitnessPattReq implements WitnessAssertion{
     private List<WitnessOrPattReq> orpList;
 
     private WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
+        logger.trace("Creating a new WitnessPattReq with key: {} and value: {}", key, assertion);
         this.key = key;
         value = assertion;
         orpList = new LinkedList<>();
@@ -43,6 +49,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     public void fullConnect(WitnessOrPattReq orp){
         //if(orpList.contains(orp)) return;
+
+        logger.debug("Connecting {} to {}", orp, this);
 
         orpList.add(orp);
         orp.halfConnect(this);
@@ -55,6 +63,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     public void deConnect(WitnessOrPattReq orp){
         if(!orpList.contains(orp)) return;
+
+        logger.debug("De-Connecting {} to {}", orp, this);
 
         if(orpList.remove(orp))
             orp.deConnect(this);
@@ -83,14 +93,29 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     public void setPattern(ComplexPattern key) {
+        logger.trace("Setting {} as pattern in {}", key, this);
         this.key = key;
     }
 
-    @Override
+    public void setValue(WitnessAssertion value) {
+        logger.trace("Setting {} as value in {}", value, this);
+        this.value = value;
+    }
+
+    /*@Override
     public String toString() {
         return "WitnessPattReq{" +
                 "pattern=" + key +
                 ", value=" + value +
+                '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return "WitnessPattReq{" +
+                "key=" + key +
+                ", value=" + value +
+                ", orpList=" + orpList +
                 '}';
     }
 
@@ -101,6 +126,8 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) {
+        logger.trace("Merging {} with {}", a, this);
+
         if(a.getClass() == this.getClass())
             return this.mergeElement((WitnessPattReq) a);
 
@@ -122,10 +149,12 @@ public class WitnessPattReq implements WitnessAssertion{
 
     public WitnessAssertion mergeElement(WitnessPattReq a) {
         if(this.key.isSubsetOf(a.key) && this.value.equals(a.value)){
+            logger.trace("Merge result {}", this);
             return this;
         }
 
         if(a.key.isSubsetOf(this.key) && a.value.equals(this.value)){
+            logger.trace("Merge result {}", a);
             return a;
         }
 
@@ -146,6 +175,7 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public WitnessPattReq clone() {
+        logger.trace("Cloning WitnessPattReq: {}", this);
         WitnessPattReq clone = new WitnessPattReq();
 
         clone.key = key.clone();

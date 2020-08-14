@@ -1,17 +1,24 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 public class Not_Assertion implements Assertion{
 	
 	private Assertion not;
+
+	private static Logger logger = LogManager.getLogger(Not_Assertion.class);
 	
 	public Not_Assertion(Assertion not) {
 		this.not = not;
+		logger.trace("Created a new Not_Assertion: {}", this);
+
 	}
 
 	@Override

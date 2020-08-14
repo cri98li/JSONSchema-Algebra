@@ -5,12 +5,17 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NotPattern_Assertion implements Assertion{
 	private ComplexPattern notPattern;
 
+	private static Logger logger = LogManager.getLogger(NotPattern_Assertion.class);
+
 	public NotPattern_Assertion(ComplexPattern pattern) {
 		this.notPattern = pattern;
+		logger.trace("Created a new NotPatternAssertion: {}", this);
 	}
 
 	@Override

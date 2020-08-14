@@ -6,6 +6,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -14,9 +16,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class WitnessBet implements WitnessAssertion{
-    private Double min, max;
+    private static Logger logger = LogManager.getLogger(WitnessBet.class);
 
-    protected WitnessBet(){ }
+    private Double min, max;
 
     public WitnessBet(Double min, Double max) {
         if(min == null)
@@ -28,6 +30,8 @@ public class WitnessBet implements WitnessAssertion{
             this.max = Double.POSITIVE_INFINITY;
         else
             this.max = max;
+
+        logger.trace("Creating a new WitnessBet {}", this);
     }
 
     @Override
@@ -50,6 +54,8 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
+        logger.trace("Merging {} with {}", a, this);
+
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(FullAlgebraString.TYPE_NUMBER);

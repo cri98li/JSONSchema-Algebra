@@ -5,11 +5,15 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessItems implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessItems.class);
+
     private List<WitnessAssertion> items;
     private boolean blocked;
     private WitnessAssertion additionalItems;
@@ -17,26 +21,32 @@ public class WitnessItems implements WitnessAssertion{
     public WitnessItems() {
         blocked = false;
         items = new LinkedList<>();
+        logger.trace("Creating an empty WitnessItems");
     }
 
     public void setAdditionalItems(WitnessAssertion addItem){
+        logger.trace("Setting {} as AdditionalItems in {}", addItem, this);
         if(!blocked)
             additionalItems = addItem;
+        else
+            logger.warn("Items is blocked --> no action ");
     }
 
     public void addItems(WitnessAssertion item){
+        logger.trace("Adding {} into Items in {}", item, this);
         try{
             if(!((WitnessBoolean)item).getValue()) {
                 blocked = true;
                 additionalItems = item;
+                logger.warn("Setting blocked=true because toAdd={}", item);
                 return;
-            }else{
-                items.add(item);
             }
-        }catch (ClassCastException e) {
-            if (!blocked)
-                items.add(item);
-        }
+        }catch (ClassCastException e) { }
+
+        if (!blocked)
+            items.add(item);
+        else
+            logger.warn("Items is blocked --> no action ");
     }
 
     @Override
@@ -54,29 +64,34 @@ public class WitnessItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        WitnessAssertion result = null;
+
         if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
             if(((WitnessBoolean)additionalItems).getValue())
-                return additionalItems;
+                result = additionalItems;
             else {
                 WitnessAnd and = new WitnessAnd();
                 try {
                     and.add(a);
                     and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
+                    result = and;
                 }catch(WitnessFalseAssertionException ex){
-                    return new WitnessBoolean(false);
+                    result = new WitnessBoolean(false);
                 }
-                return and;
             }
+        else {
+            for (int i = items.size() - 1; i >= 0; i--)
+                if (additionalItems != null && additionalItems.equals(items.get(i)))
+                    items.remove(i);
+                else
+                    break;
 
-        for(int i = items.size()-1; i >= 0; i--)
-            if( additionalItems!= null && additionalItems.equals(items.get(i)))
-                items.remove(i);
-            else
-                break;
+            if (a.getClass() == this.getClass()) result = this.mergeElement((WitnessItems) a);
 
-        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessItems) a);
+        }
 
-        return null;
+        logger.warn("Merge result: {}", result);
+        return result;
     }
 
     @Override
@@ -94,19 +109,24 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessItems a) throws REException{
+        logger.trace("Merging {} with {}", a, this);
+
         if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
-            if (((WitnessBoolean) a.additionalItems).getValue())
+            if (((WitnessBoolean) a.additionalItems).getValue()) {
+                logger.trace("Merge result: {}", a.additionalItems);
                 return a.additionalItems;
-            else {
+            }else {
                 WitnessAnd and = new WitnessAnd();
 
                 try {
                     and.add(a);
                     and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
                 } catch (WitnessFalseAssertionException e) {
+                    logger.trace("Merge result: false");
                     return new WitnessBoolean(false);
                 }
 
+                logger.trace("Merge result: {}", and);
                 return and;
             }
 
@@ -166,6 +186,7 @@ public class WitnessItems implements WitnessAssertion{
         }
 
 
+        logger.trace("Merge result: {}", ite);
         return ite;
     }
 
@@ -189,6 +210,7 @@ public class WitnessItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning WitnessItems: {}", this);
         WitnessItems clone = new WitnessItems();
         for(WitnessAssertion assertion : items)
             clone.items.add(assertion.clone());

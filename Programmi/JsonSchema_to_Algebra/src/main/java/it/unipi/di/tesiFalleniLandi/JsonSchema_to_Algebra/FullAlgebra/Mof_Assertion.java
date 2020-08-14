@@ -2,14 +2,20 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessMof;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Mof_Assertion implements Assertion{
 	private Number mof;
+
+	private static Logger logger = LogManager.getLogger(Mof_Assertion.class);
 	
 	public Mof_Assertion(Object mof) {
 		this.mof = (Number) mof;
+		logger.trace("Created a new Mof_Assertion: {}", this);
 	}
 
 	@Override

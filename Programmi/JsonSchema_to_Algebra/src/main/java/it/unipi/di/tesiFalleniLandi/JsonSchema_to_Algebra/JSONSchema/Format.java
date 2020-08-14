@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,12 +14,16 @@ import java.util.Map.Entry;
 
 public class Format implements JSONSchemaElement{
 	private String format;
+
+	private static Logger logger = LogManager.getLogger(Format.class);
 	
 	public Format(JsonElement obj) {
+		logger.trace("Creating a new Format by parsing {}", obj);
 		format = obj.getAsString();
 	}
 
 	public Format() {
+		logger.trace("Creating an empty format");
 	}
 
 	@Override
@@ -55,6 +61,7 @@ public class Format implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

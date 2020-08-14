@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Asser
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class WitnessPro implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessPro.class);
+
     private Double min, max;
 
     public WitnessPro(Double min, Double max) {
@@ -27,6 +31,8 @@ public class WitnessPro implements WitnessAssertion{
             this.max = Double.POSITIVE_INFINITY;
         else
             this.max = max;
+
+        logger.trace("Created a new WitnessPro: ", this);
     }
 
     public WitnessPro(){
@@ -56,6 +62,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) {
             return this.mergeElement((WitnessPro) a);
         }
@@ -70,6 +77,7 @@ public class WitnessPro implements WitnessAssertion{
 
     public WitnessAssertion mergeElement(WitnessPro a) throws REException {
         WitnessPro pro = new WitnessPro();
+        WitnessAssertion result;
 
         pro.min = (this.min < a.min) ? a.min : min;
 
@@ -79,10 +87,12 @@ public class WitnessPro implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(FullAlgebraString.TYPE_OBJECT);
 
-            return type.not().toWitnessAlgebra();
+            result = type.not().toWitnessAlgebra();
         }else
-            //return (pro.equals(this) || pro.equals(a)) ? null : pro; ???
-            return pro;
+            result = pro;
+
+        logger.trace("Merge result: ", result);
+        return result;
     }
 
     @Override
@@ -97,6 +107,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning WitnessPro {}", this);
         return new WitnessPro(min, max);
     }
 

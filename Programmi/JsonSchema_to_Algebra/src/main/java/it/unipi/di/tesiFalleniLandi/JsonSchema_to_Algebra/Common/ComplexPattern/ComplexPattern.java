@@ -1,6 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 
 import com.google.gson.JsonElement;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.MainClass;
 import patterns.Pattern;
 import patterns.REException;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.logging.log4j.*;
 
 /**
  * Estensione della classe Pattern di stefanie. Ci consente di fare ottimizzazioni e aggiungere funzionalità
@@ -24,6 +26,8 @@ public class ComplexPattern implements ComplexPatternElement {
     private String originalPattern;
     private Pattern stefaniePattern;
 
+    private static Logger logger = LogManager.getLogger(ComplexPattern.class);
+
     protected ComplexPattern(Pattern stefaniePattern, String originalPattern) {
         this.stefaniePattern = stefaniePattern;
         this.originalPattern = originalPattern;
@@ -34,12 +38,15 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
     public ComplexPattern intersect(ComplexPattern p) {
+
         ComplexPattern cp = new ComplexPattern(this.stefaniePattern.intersect(p.stefaniePattern));
 
         pAllOf and = new pAllOf();
         and.add(this.assertion == null ? this : this.assertion);
         and.add(p.assertion == null ? p : p.assertion);
         cp.assertion = and;
+
+        logger.trace("Intersection between {} and {} = {}", this, p, cp);
 
         return cp;
     }
@@ -49,9 +56,11 @@ public class ComplexPattern implements ComplexPatternElement {
 
         pAllOf and = new pAllOf();
         and.add(this.assertion == null ? this : this.assertion);
-        and.add(p.assertion == null ? new pNot(p) : new pNot(p.assertion));
+        and.add(p.assertion == null ? pNot.createPNot(p) : pNot.createPNot(p.assertion));
 
         cp.assertion = and;
+
+        logger.trace("Minus between {} and {} = {}", this, p, cp);
 
         return cp;
     }
@@ -73,9 +82,11 @@ public class ComplexPattern implements ComplexPatternElement {
         }
 
         ComplexPattern cp = new ComplexPattern(this.stefaniePattern.complement());
-        cp.assertion = new pNot(this);
+        cp.assertion = pNot.createPNot(this);
 
         complementCache.put(this.toString(), cp);
+
+        logger.trace("Complement {} = {}", this, cp);
 
         return cp;
     }
@@ -86,6 +97,8 @@ public class ComplexPattern implements ComplexPatternElement {
         ComplexPattern tmp = new ComplexPattern(Pattern.createFromName(patternName), "^"+patternName+"$");
         patternCache.put(patternName, tmp);
 
+        logger.trace("Creating a ComplexPattern from Name: {}", tmp);
+
         return tmp;
     }
 
@@ -95,29 +108,46 @@ public class ComplexPattern implements ComplexPatternElement {
         ComplexPattern tmp = new ComplexPattern(Pattern.createFromRegexp(ecmaRegex), ecmaRegex);
         patternCache.put(ecmaRegex, tmp);
 
+        logger.trace("Creating a ComplexPattern from RegExp: {}", tmp);
+
         return tmp;
     }
 
     public boolean isSubsetOf(ComplexPattern p) {
-        return this.stefaniePattern.isSubsetOf(p.stefaniePattern);
+        boolean result = this.stefaniePattern.isSubsetOf(p.stefaniePattern);
+
+        logger.trace("isSubsetOf={}, between {} and {}", result, this, p);
+
+        return result;
     }
 
     public boolean isEquivalent(ComplexPattern p) {
-        return this.stefaniePattern.isEquivalent(p.stefaniePattern);
+        boolean result = this.stefaniePattern.isEquivalent(p.stefaniePattern);
+
+        logger.trace("isEquivalent={}, between {} and {}", result, this, p);
+
+        return result;
     }
 
 
     public Float domainSize() {
-        if(this.stefaniePattern.domainSize() == null)
-            return Float.POSITIVE_INFINITY;
-        return Float.valueOf(this.stefaniePattern.domainSize());
+        Float result = Float.POSITIVE_INFINITY;
+        if(this.stefaniePattern.domainSize() != null)
+             result = Float.valueOf(this.stefaniePattern.domainSize());
+
+        logger.trace("domainSize of {} = {}", this, result);
+
+        return result;
     }
 
     public Collection<String> generateWords() {
-        return this.stefaniePattern.generateWords();
+        Collection<String> collection = this.stefaniePattern.generateWords();
+        logger.trace("generateWords = {}", collection);
+        return collection;
     }
 
     public ComplexPattern clone() {
+        logger.trace("cloning ComplexPattern = {}", this);
         ComplexPattern clone = new ComplexPattern(stefaniePattern.clone());
         if(assertion != null)
             clone.assertion = assertion.clone(); //TODO: check
@@ -141,7 +171,11 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
     public static boolean overlaps(ComplexPattern left, ComplexPattern right) {
-        return Pattern.overlaps(left.stefaniePattern, right.stefaniePattern);
+        boolean result = Pattern.overlaps(left.stefaniePattern, right.stefaniePattern);
+
+        logger.trace("overlaps={} between {} and {}", result, left, right);
+
+        return result;
     }
 
     public static boolean overlaps(Collection<ComplexPattern> patterns) {
@@ -155,7 +189,7 @@ public class ComplexPattern implements ComplexPatternElement {
 
     @Override
     public String toString() {
-        return (originalPattern == null) ? assertion.toString() : originalPattern; //"\"" + ... + "\""
+        return (originalPattern == null) ? assertion.toString() : "\""+originalPattern+"\"";
     }
 
     @Override

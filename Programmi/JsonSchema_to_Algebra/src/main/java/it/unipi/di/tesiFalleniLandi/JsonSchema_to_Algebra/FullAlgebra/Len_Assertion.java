@@ -5,24 +5,29 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 public class Len_Assertion implements Assertion{
 	private Long min, max;
-	
-	public Len_Assertion() {
-	}
+
+	private static Logger logger = LogManager.getLogger(Len_Assertion.class);
 	
 	public Len_Assertion(Long min, Long max) {
 		this.min = min;
 		this.max = max;
+
+		logger.trace("Created a new Len_Assertion: {}", this);
 	}
 
 	public void setMin(Long min) {
+		logger.trace("Setting {} as min in {}", min, this);
 		this.min = min;
 	}
 	
 	public void setMax(Long max) {
+		logger.trace("Setting {} as max in {}", max, this);
 		this.max = max;
 	}
 

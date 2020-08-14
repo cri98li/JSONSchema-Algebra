@@ -1,27 +1,36 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Enum;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 public class Enum_Assertion implements Assertion{
 
 	//private List<JsonElement> _enum;
 	private JsonArray _enum;
+
+	private static Logger logger = LogManager.getLogger(Enum_Assertion.class);
 	
 	public Enum_Assertion(JsonArray _enum) {
+		logger.trace("Creating an Enum_Assertion: {}", _enum);
 		this._enum = _enum;
 	}
 
 	public Enum_Assertion() {
+		logger.trace("Creating an empty Enum_Assertion");
 		_enum = new JsonArray();
 	}
 	
 	public void add(JsonElement obj) {
+		logger.trace("Adding {} to ", obj, this);
 		_enum.add(obj);
 	}
 
@@ -98,30 +107,5 @@ public class Enum_Assertion implements Assertion{
 
 		return or;
 	}
-
-	/*
-	private String toGrammarString(List<Object> list){
-		String str = "";
-
-		for(Object obj : list) {
-			if(obj == null)
-				str += GrammarStringDefinitions.COMMA + "null";
-			else if (obj.getClass() == String.class)
-				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
-			else if(obj.getClass() == Long.class
-				|| obj.getClass() == Double.class
-				|| obj.getClass() == Boolean.class)
-				str += GrammarStringDefinitions.COMMA + obj;
-			else if (obj.getClass() == JsonObject.class)
-				str += GrammarStringDefinitions.COMMA + ((JsonObject) obj).toString();
-			else
-				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
-		}
-
-
-		return str.substring(GrammarStringDefinitions.COMMA.length());
-	}
-	*/
-	
 	
 }

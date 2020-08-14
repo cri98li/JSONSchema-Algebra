@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,12 +14,18 @@ import java.util.Map.Entry;
 
 public class AllOf implements JSONSchemaElement{
 	private List<JSONSchema> allOf;
-	
+
+	private static Logger logger = LogManager.getLogger(AllOf.class);
+
 	public AllOf() {
+		logger.trace("Creating an empty allOf");
+
 		allOf = new LinkedList<>();
 	}
 	
 	public AllOf(JsonElement obj) {
+		logger.trace("Creating a new AllOf by parsing {}", obj);
+
 		JsonArray array = obj.getAsJsonArray();
 		allOf = new LinkedList<>();
 		
@@ -30,6 +38,9 @@ public class AllOf implements JSONSchemaElement{
 	
 	public void addElement(JSONSchema schema) {
 		if(allOf == null) allOf = new LinkedList<>();
+
+		logger.trace("Adding {} to {}", schema, this);
+
 		allOf.add(schema);
 	}
 	
@@ -98,6 +109,7 @@ public class AllOf implements JSONSchemaElement{
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		try {
 			int i = Integer.parseInt(URIIterator.next());
+			logger.debug("searchDef: searching for index {} in allOf[{}]. URIIterator: {}", i, allOf.size(), URIIterator);
 			if(i < allOf.size()){
 				URIIterator.remove();
 				return allOf.get(i).searchDef(URIIterator);

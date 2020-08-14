@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class pAnyOf implements ComplexPatternElement {
     private List<ComplexPatternElement> pAnyOf;
@@ -10,11 +12,20 @@ public class pAnyOf implements ComplexPatternElement {
         this.pAnyOf = new LinkedList<>();
     }
 
-    public void add(ComplexPatternElement el){
-        if (el.getClass() == this.getClass())
-            pAnyOf.addAll(((pAnyOf) el).pAnyOf);
+    public void add(ComplexPatternElement toAdd){
+        if (toAdd.getClass() == this.getClass())
+            for(ComplexPatternElement el : ((pAnyOf) toAdd).pAnyOf)
+                add(el);
         else
-            pAnyOf.add(el);
+            if(!contains(toAdd))
+                pAnyOf.add(toAdd);
+    }
+
+    private boolean contains(ComplexPatternElement el){
+        for(ComplexPatternElement a : pAnyOf)
+            if(el.toString().equals(a.toString())) return true;
+
+        return false;
     }
 
     @Override

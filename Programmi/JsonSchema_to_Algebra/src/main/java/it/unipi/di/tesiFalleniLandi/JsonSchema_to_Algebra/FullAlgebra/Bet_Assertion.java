@@ -2,25 +2,36 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Bet_Assertion implements Assertion{
 	private Number min;
 	private Number max;
+
+	private static Logger logger = LogManager.getLogger(Bet_Assertion.class);
 	
-	public Bet_Assertion() {	}
+	public Bet_Assertion() {
+		logger.trace("Creating an empty Bet_Assertion");
+	}
 	
 	public Bet_Assertion(Number min, Number max) {
 		this.min = min;
 		this.max = max;
+
+		logger.trace("Created a Bet_Assertion: {}", this);
 	}
 	
 	public void setMin(Number min) {
+		logger.trace("Setting {} as min in {}", min, this);
 		this.min = min;
 	}
 	
 	public void setMax(Number max) {
+		logger.trace("Setting {} as max in {}", max, this);
 		this.max = max;
 	}
 

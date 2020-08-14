@@ -2,11 +2,14 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.HashMap;
@@ -18,23 +21,30 @@ public class Defs_Assertion implements Assertion{
 	private HashMap<String, Assertion> defs; // all the definitions
 	private String rootDef; // name of the main definition
 	protected static Defs_Assertion env = null; //used by pattOfS
-	
+
+	private static Logger logger = LogManager.getLogger(Defs_Assertion.class);
+
 	public Defs_Assertion() {
+		logger.trace("Creating an empty Defs_Assertion");
 		env = this;
 		defs = new HashMap<>();
 	}
 	
 	public void add(String key, Assertion value) throws ParseCancellationException {
-		if(defs.containsKey(key)) throw new ParseCancellationException("Detected 2 defs with the same name");
+		if(defs.containsKey(key)) {
+			throw new ParseCancellationException("Detected 2 defs with the same name");
+		}
 		defs.put(key, value);
 	}
 	
 	public void setRootDef(String rootDefName, Assertion rootDef) {
+		logger.trace("Setting {}={} as rootdef", rootDefName);
 		add(rootDefName, rootDef);
 		this.rootDef = rootDefName;
 	}
 
 	public void addAll(Defs_Assertion defs){
+		logger.trace("Adding {} as defs", defs);
 		this.defs.putAll(defs.defs);
 	}
 
@@ -128,9 +138,10 @@ public class Defs_Assertion implements Assertion{
 
 		env.buildOBDD();
 		try {
+			logger.trace("Trying to notEliminate {}", env);
 			env.notElimination();
 		} catch (WitnessException e) {
-			e.printStackTrace();
+			logger.catching(e);
 		}
 
 		return env;

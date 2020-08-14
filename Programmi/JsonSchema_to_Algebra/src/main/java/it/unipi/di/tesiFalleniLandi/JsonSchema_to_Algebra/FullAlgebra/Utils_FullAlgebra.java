@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
@@ -13,6 +14,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.io.File;
@@ -21,6 +24,8 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class Utils_FullAlgebra {
+    private static Logger logger = LogManager.getLogger(Utils_FullAlgebra.class);
+
     /**
      * Legge il file (sintassi full-algebra) indicato da path e ne restituisce la rappresentazione come insieme di definizioni
      * @param path path del file da parsare
@@ -28,6 +33,7 @@ public class Utils_FullAlgebra {
      * @throws IOException errori nell'accesso al file
      */
     public static Defs_Assertion parseFile(String path) throws IOException {
+        logger.trace("Parsing file {}", path);
         if(new File(path).length() <= 2) throw new ParseCancellationException("Empty File");
 
         Reader reader = new FileReader(path);
@@ -57,6 +63,7 @@ public class Utils_FullAlgebra {
      * * @return ritorna un'istanza di Defs_Assertion
      */
     public static Defs_Assertion parseString(String toParse) {
+        logger.trace("Parsing string");
         if(toParse.length() <= 2) throw new ParseCancellationException("Empty String");
         GrammaticaLexer lexer = new GrammaticaLexer(CharStreams.fromString(toParse));
         lexer.removeErrorListeners();

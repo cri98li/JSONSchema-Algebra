@@ -7,6 +7,8 @@ import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -15,10 +17,16 @@ public class Properties implements JSONSchemaElement{
 	private HashMap<String, JSONSchema> properties;
 	private HashMap<String, JSONSchema> patternProperties;
 	private JSONSchema additionalProperties;
+
+	private static Logger logger = LogManager.getLogger(Properties.class);
 	
-	public Properties() { }
+	public Properties() {
+		logger.trace("Creating an empty Properties");
+	}
 	
 	public void setProperties(JsonElement obj) {
+		logger.trace("Parsing properties from JsonElement {}", obj);
+
 		JsonObject object = null;
 
 		try{
@@ -47,6 +55,8 @@ public class Properties implements JSONSchemaElement{
 	}
 	
 	public void setPatternProperties(JsonElement obj) {
+		logger.trace("Parsing PatternProperties from JsonElement {}", obj);
+
 		JsonObject object = null;
 
 		try{
@@ -75,6 +85,8 @@ public class Properties implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalProperties(JsonElement obj) {
+		logger.trace("Parsing additionalProperties from JsonElement {}", obj);
+
 		if(!obj.isJsonObject() && !obj.isJsonPrimitive()) // TODO: trovare modo per controllare i tipi primitivi
 			throw new ParseCancellationException("Error: Expected JsonObject in additionalProperties!\r\n");
 
@@ -225,12 +237,14 @@ public class Properties implements JSONSchemaElement{
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		if(!URIIterator.hasNext())
 			return null;
-		
-		
+
+		logger.debug("searchDef: searching for {} in Properties.java. URIIterator: {}", URIIterator.next(), URIIterator);
+
 		switch(URIIterator.next()) {
 		case "properties":
 			URIIterator.remove();
 			String next = URIIterator.next();
+			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", next, properties, URIIterator);
 			if(properties.containsKey(next)) {
 				URIIterator.remove();
 				return properties.get(next).searchDef(URIIterator);
@@ -240,6 +254,7 @@ public class Properties implements JSONSchemaElement{
 		case "patternProperties":
 			URIIterator.remove();
 			next = URIIterator.next();
+			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", next, patternProperties, URIIterator);
 			if(patternProperties.containsKey(next)) {
 				URIIterator.remove();
 				return patternProperties.get(next).searchDef(URIIterator);
@@ -248,7 +263,7 @@ public class Properties implements JSONSchemaElement{
 			
 		case "additionalProperties":
 			URIIterator.remove();
-			next = URIIterator.next();
+			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), additionalProperties, URIIterator);
 			return additionalProperties.searchDef(URIIterator);
 		}
 		
@@ -279,6 +294,7 @@ public class Properties implements JSONSchemaElement{
 
 	@Override
 	public Properties clone() {
+		logger.trace("Cloning {}", this);
 		Properties newProperties = new Properties();
 		
 		if(properties != null) {

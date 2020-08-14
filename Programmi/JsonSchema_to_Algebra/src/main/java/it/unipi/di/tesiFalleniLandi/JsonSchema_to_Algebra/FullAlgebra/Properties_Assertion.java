@@ -9,6 +9,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessProperty;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.HashMap;
@@ -19,23 +21,29 @@ public class Properties_Assertion implements Assertion{
 	private HashMap<String, Assertion> properties;
 	private HashMap<ComplexPattern, Assertion> patternProperties;
 	private Assertion additionalProperties;
+
+	private static Logger logger = LogManager.getLogger(Properties_Assertion.class);
 	
 	public Properties_Assertion() {
 		properties = new HashMap<>();
 		patternProperties = new HashMap<>();
+		logger.trace("Created a new Properties_Assertion: {}", this);
 	}
 	
 	public void addProperties(String key, Assertion value) {
 		if(properties.containsKey(key)) throw new ParseCancellationException("Detected 2 properties with the same name");
+		logger.trace("Adding as Properties <{}, {}> to {}", key, value, this);
 		properties.put(key, value);
 	}
 	
 	public void addPatternProperties(ComplexPattern key, Assertion value) {
 		if(patternProperties.containsKey(key)) throw new ParseCancellationException("Detected 2 patternProperties with the same pattern");
+		logger.trace("Adding as PatternProperties <{}, {}> to {}", key, value, this);
 		patternProperties.put(key, value);
 	}
 	
 	public void setAdditionalProperties(Assertion additionalProperties) {
+		logger.trace("Adding as AdditionalProperties {} to {}", additionalProperties, this);
 		this.additionalProperties = additionalProperties;
 	}
 
@@ -172,9 +180,8 @@ public class Properties_Assertion implements Assertion{
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
 					str.append(FullAlgebraString.COMMA)
-							.append(entry.getKey().getAlgebraString())
-							.append(" : ")
-							.append(returnedValue);
+							.append(FullAlgebraString.SINGLEPATTERNPROPERTIES(entry.getKey().getAlgebraString(), returnedValue));
+
 			}
 		}
 
@@ -228,6 +235,6 @@ public class Properties_Assertion implements Assertion{
 			return new WitnessBoolean(false);
 		}
 
-		return (and.getIfUnitaryAnd() != null) ? and.getIfUnitaryAnd() : and;
+		return and;
 	}
 }

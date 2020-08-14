@@ -2,9 +2,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessItems;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Arrays;
@@ -15,21 +18,21 @@ import java.util.List;
 public class Items_Assertion implements Assertion{
 	private List<Assertion> itemsArray;
 	private Assertion additionalItems;
+
+	private static Logger logger = LogManager.getLogger(Items_Assertion.class);
 	
 	public Items_Assertion() {
-	}
-
-	public Items_Assertion(List<Assertion> itemsArray, Assertion additionalItems) {
-		this.itemsArray = itemsArray;
-		this.additionalItems = additionalItems;
+		logger.trace("Created an empty Items_Assertion");
 	}
 
 	public void add(Assertion assertion) {
 		if(itemsArray == null) itemsArray = new LinkedList<>();
+		logger.trace("Adding {} to {}", assertion, this);
 		itemsArray.add(assertion);
 	}
 
 	public void setAdditionalItems(Assertion additionalItems) {
+		logger.trace("Setting {} as AdditionalItems in {}", additionalItems, this);
 		this.additionalItems = additionalItems;
 	}
 

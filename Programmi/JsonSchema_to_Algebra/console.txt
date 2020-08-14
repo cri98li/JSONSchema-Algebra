@@ -1,33 +1,137 @@
-rootdef "root" = allOf[
+[DEBUG] 2020-08-12 16:51:00.950 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-12 16:51:00.970 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+rootdef "root" = {
 	type[
 		obj
 	],
-	anyOf[
-		type[
-			str,
-			num,
-			arr,
-			bool,
-			null
-		],
-		pattReq[
-			^a:mof(2.0)
-		]
+	props[
+		"^.*$": true;
+
 	],
 	anyOf[
+		pattReq[
+			"^.*a":mof(2.0)
+		],
 		type[
 			str,
 			num,
 			arr,
 			bool,
 			null
-		],
-		pattReq[
-			^aa:mof(3.0)
 		]
 	]
-],
+},
 def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"^.*$":false
+		]
+	},
+	{
+		{
+			type[
+				obj
+			],
+			props[
+				"^.*a": {
+					type[
+						num
+					],
+					notMof(2.0)
+				};
+
+			]
+		},
+		type[
+			obj
+		]
+	},
+	type[
+		str,
+		num,
+		arr,
+		bool,
+		null
+	]
+]
+[DEBUG] 2020-08-12 16:51:00.977 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.977 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+
+
+ Merge:
+
+
+
+ Groupize:
+
+
+
+ DNF:
+
+[DEBUG] 2020-08-12 16:51:00.978 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+
+
+ Separation:
+
+
+
+ Expansion:
+
+def "WitnessAnd_1" = {
+	type[
+		num
+	],
+	notMof(2.0)
+},
+def "not_WitnessOr_0" = allOf[
+	type[
+		str,
+		obj,
+		num,
+		bool,
+		null
+	],
+	type[
+		obj,
+		num,
+		arr,
+		bool,
+		null
+	],
+	anyOf[
+		{
+			type[
+				num
+			],
+			notMof(2.0)
+		},
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		]
+	],
+	type[
+		str,
+		obj,
+		num,
+		arr,
+		bool
+	],
 	type[
 		str,
 		num,
@@ -35,97 +139,14 @@ def "not_root" = anyOf[
 		bool,
 		null
 	],
-	{
-		type[
-			obj
-		],
-		{
-			type[
-				obj
-			],
-			props[
-				^a : {
-					type[
-						num
-					],
-					notMof(2.0)
-				};
-				
-			]
-		}
-	},
-	{
-		type[
-			obj
-		],
-		{
-			type[
-				obj
-			],
-			props[
-				^aa : {
-					type[
-						num
-					],
-					notMof(3.0)
-				};
-				
-			]
-		}
-	}
-]
-
-
- Merge: 
-
-
-
- Groupize: 
-
-
-
- DNF: 
-
-
-
- Separation: 
-
-
-
- Expansion: 
-
-def "WitnessAnd_3" = {
 	type[
-		num
-	],
-	notMof(3.0)
-},
-def "WitnessAnd_2" = {
-	type[
-		num
-	],
-	notMof(2.0)
-},
-def "not_WitnessOr_0" = {
-	type[
-		num
-	],
-	anyOf[
-		type[
-			str,
-			obj,
-			arr,
-			bool,
-			null
-		],
-		{
-			type[
-				num
-			],
-			notMof(2.0)
-		}
+		str,
+		obj,
+		num,
+		arr,
+		null
 	]
-},
+],
 def "WitnessOr_0" = anyOf[
 	type[
 		arr
@@ -133,29 +154,12 @@ def "WitnessOr_0" = anyOf[
 	type[
 		str
 	],
-	type[
-		null
-	],
-	type[
-		obj
-	],
-	type[
-		bool
-	],
 	{
 		type[
 			num
 		],
 		mof(2.0)
-	}
-],
-def "WitnessOr_1" = anyOf[
-	type[
-		arr
-	],
-	type[
-		str
-	],
+	},
 	type[
 		null
 	],
@@ -164,134 +168,152 @@ def "WitnessOr_1" = anyOf[
 	],
 	type[
 		bool
-	],
-	{
-		type[
-			num
-		],
-		mof(3.0)
-	}
+	]
 ],
-rootdef "root" = allOf[
+rootdef "root" = {
 	pattReq[
-		^a:ref("WitnessOr_0")
-	],
-	pattReq[
-		^aa:ref("WitnessOr_1")
+		"^.*a":ref("WitnessOr_0")
 	],
 	type[
 		obj
-	]
-],
-def "not_WitnessOr_1" = {
-	type[
-		num
 	],
-	anyOf[
-		type[
-			str,
-			obj,
-			arr,
-			bool,
-			null
-		],
-		{
-			type[
-				num
-			],
-			notMof(3.0)
-		}
-	]
+	true
 },
 def "not_root" = anyOf[
-	type[
-		str
-	],
-	type[
-		arr
-	],
-	type[
-		num
-	],
-	type[
-		null
-	],
-	type[
-		bool
-	],
+	{
+		type[
+			obj
+		],
+		false
+	},
 	{
 		props[
-			^a : ref("WitnessAnd_2");
-			
+			"^.*a": ref("WitnessAnd_1");
+
 		],
 		type[
 			obj
 		]
 	},
-	{
-		props[
-			^aa : ref("WitnessAnd_3");
-			
-		],
-		type[
-			obj
-		]
-	}
-],
-def "not_WitnessAnd_3" = anyOf[
 	type[
-		str,
-		obj,
-		arr,
-		bool,
+		str
+	],
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
 		null
 	],
-	{
-		type[
-			num
-		],
-		mof(3.0)
-	}
-],
-def "not_WitnessAnd_2" = anyOf[
 	type[
-		str,
-		obj,
-		arr,
-		bool,
-		null
-	],
+		bool
+	]
+],
+def "not_WitnessAnd_1" = anyOf[
 	{
 		type[
 			num
 		],
 		mof(2.0)
-	}
+	},
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	]
 ]
 
 
- objectPrepare: 
+ objectPrepare:
 
-def "not_WitnessOr_0" = {
+[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type specified
+[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Complete empty CPart
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Complete empty CPart
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - [CP-RP] Computing intersection between "^.*$" and "^.*a"
+[DEBUG] 2020-08-12 16:51:00.996 [main] WitnessAnd - Old ORP size:
+[DEBUG] 2020-08-12 16:51:00.996 [main] WitnessAnd - Old Pattern Requests size:
+[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessAnd - Complete empty CPart
+[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessAnd - Complete non-empty CPart
+[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-12 16:51:00.998 [main] WitnessAnd - Reducing subProperty WitnessProperty{key="^.*a", value=WitnessVar{name='WitnessAnd_1'}} with reduceT
+[DEBUG] 2020-08-12 16:51:00.999 [main] WitnessAnd - Adding completed property in CPart with key: pNot("^.*a")
+[DEBUG] 2020-08-12 16:51:00.999 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:01.001 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
+def "WitnessAnd_1" = {
 	type[
 		num
 	],
+	notMof(2.0)
+},
+def "not_WitnessOr_0" = allOf[
+	type[
+		obj,
+		num,
+		arr,
+		bool,
+		null
+	],
 	anyOf[
+		{
+			type[
+				num
+			],
+			notMof(2.0)
+		},
 		type[
 			str,
 			obj,
 			arr,
 			bool,
 			null
-		],
-		{
-			type[
-				num
-			],
-			notMof(2.0)
-		}
+		]
+	],
+	type[
+		str,
+		obj,
+		num,
+		arr,
+		bool
+	],
+	type[
+		str,
+		num,
+		arr,
+		bool,
+		null
+	],
+	type[
+		str,
+		obj,
+		num,
+		arr,
+		null
+	],
+	type[
+		str,
+		obj,
+		num,
+		bool,
+		null
 	]
-},
+],
 def "WitnessOr_0" = anyOf[
 	type[
 		arr
@@ -299,145 +321,62 @@ def "WitnessOr_0" = anyOf[
 	type[
 		str
 	],
-	type[
-		null
-	],
-	type[
-		obj
-	],
-	type[
-		bool
-	],
 	{
 		type[
 			num
 		],
 		mof(2.0)
-	}
-],
-def "WitnessOr_1" = anyOf[
+	},
 	type[
-		arr
-	],
-	type[
-		str
-	],
-	type[
-		null
-	],
-	type[
-		obj
-	],
-	type[
-		bool
-	],
-	{
-		type[
-			num
-		],
-		mof(3.0)
-	}
-],
-def "not_WitnessOr_1" = {
-	type[
-		num
-	],
-	anyOf[
-		type[
-			str,
-			obj,
-			arr,
-			bool,
-			null
-		],
-		{
-			type[
-				num
-			],
-			notMof(3.0)
-		}
-	]
-},
-def "not_WitnessAnd_3" = anyOf[
-	type[
-		str,
-		obj,
-		arr,
-		bool,
 		null
 	],
 	{
 		type[
-			num
+			obj
 		],
-		mof(3.0)
-	}
-],
-def "not_WitnessAnd_4" = anyOf[
-	ref("not_WitnessOr_1"),
-	ref("not_WitnessOr_0")
-],
-def "not_WitnessAnd_2" = anyOf[
-	type[
-		str,
-		obj,
-		arr,
-		bool,
-		null
-	],
-	{
-		type[
-			num
-		],
-		mof(2.0)
-	}
-],
-def "WitnessAnd_4" = allOf[
-	ref("WitnessOr_1"),
-	ref("WitnessOr_0")
-],
-def "WitnessAnd_3" = {
-	type[
-		num
-	],
-	notMof(3.0)
-},
-def "WitnessAnd_2" = {
-	type[
-		num
-	],
-	notMof(2.0)
-},
-def "not_WitnessAnd_5" = anyOf[
-	ref("not_WitnessOr_0"),
-	ref("WitnessOr_1")
-],
-rootdef "root" = allOf[
-	type[
-		obj
-	],
-	orPattReq[
-		pAllOf[.*, ^aa, .*, ^a]:anyOf[
-			ref("WitnessAnd_4"),
-			ref("WitnessAnd_4")
+		props[
+			"^.*$": true;
+
 		]
-	],
-	orPattReq[
-		pAllOf[.*, ^aa, .*, ^a]:anyOf[
-			anyOf[
-				ref("WitnessAnd_4"),
-				ref("WitnessAnd_4")
-			],
-			ref("WitnessAnd_5")
-		],
-		pAllOf[.*, ^a, pNot(pAllOf[.*, ^aa])]:ref("WitnessOr_0")
+	},
+	type[
+		bool
 	]
 ],
-def "WitnessAnd_5" = allOf[
-	ref("WitnessOr_0"),
-	ref("not_WitnessOr_1")
-],
+rootdef "root" = {
+	type[
+		obj
+	],
+	true,
+	props[
+		"^.*$": true;
+
+	]
+},
 def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		false,
+		props[
+			"^.*$": true;
+
+		]
+	},
+	allOf[
+		type[
+			obj
+		],
+		props[
+			"^.*a": ref("WitnessAnd_1");
+
+		],
+		props[
+			pNot("^.*a"): true;
+
+		]
+	],
 	type[
 		str
 	],
@@ -452,35 +391,24 @@ def "not_root" = anyOf[
 	],
 	type[
 		bool
-	],
-	allOf[
+	]
+],
+def "not_WitnessAnd_1" = anyOf[
+	{
 		type[
-			obj
+			num
 		],
-		props[
-			^a : ref("WitnessAnd_2");
-			
-		],
-		props[
-			pNot(^a) : true;
-			
-		]
-	],
-	allOf[
-		type[
-			obj
-		],
-		props[
-			^aa : ref("WitnessAnd_3");
-			
-		],
-		props[
-			pNot(^aa) : true;
-			
-		]
+		mof(2.0)
+	},
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
 	]
 ]
 
 
- FINE! 
+ FINE!
 

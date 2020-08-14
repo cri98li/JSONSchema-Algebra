@@ -3,6 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Names_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,11 +12,16 @@ import java.util.Map.Entry;
 
 public class PropertyNames implements JSONSchemaElement{
 	private JSONSchema propertyNames;
+
+	private static Logger logger = LogManager.getLogger(PropertyNames.class);
 	
-	public PropertyNames() { }
+	public PropertyNames() {
+		logger.trace("Created a new  Type: {}", this);
+	}
 	
 	public PropertyNames(JsonElement obj) {
 		this.propertyNames = new JSONSchema(obj);
+		logger.trace("Created a new PropertyNames: {}", this);
 	}
 
 	@Override
@@ -55,6 +62,7 @@ public class PropertyNames implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), this, URIIterator);
 		return propertyNames.searchDef(URIIterator);
 	}
 

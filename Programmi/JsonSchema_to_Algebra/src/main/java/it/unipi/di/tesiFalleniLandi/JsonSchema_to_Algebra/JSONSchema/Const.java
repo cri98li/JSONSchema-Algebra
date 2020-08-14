@@ -5,6 +5,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Const_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,10 +16,10 @@ import java.util.Map;
 public class Const implements JSONSchemaElement{
 	JsonElement _const;
 
-	private Const() {
-	}
+	private static Logger logger = LogManager.getLogger(Const.class);
 	
 	public Const(JsonElement value) {
+		logger.trace("Creating Const by parsing {}", value);
 		this._const = value;
 	}
 
@@ -78,6 +80,7 @@ public class Const implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

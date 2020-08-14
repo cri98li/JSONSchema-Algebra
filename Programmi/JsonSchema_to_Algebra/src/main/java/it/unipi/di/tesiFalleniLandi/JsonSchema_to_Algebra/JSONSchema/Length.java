@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Len_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,14 +15,20 @@ import java.util.Map.Entry;
 public class Length implements JSONSchemaElement{
 	private Long minLength;
 	private Long maxLength;
+
+	private static Logger logger = LogManager.getLogger(Length.class);
 	
-	public Length () { }
+	public Length () {
+		logger.trace("Creating an empty Length");
+	}
 	
 	public void setMinLength(JsonElement obj) {
+		logger.trace("Setting {} as min in {}", obj, this);
 		minLength = obj.getAsLong();
 	}
 	
 	public void setMaxLength(JsonElement obj) {
+		logger.trace("Setting {} as max in {}", obj, this);
 		maxLength = obj.getAsLong();
 	}
 	
@@ -67,6 +75,7 @@ public class Length implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

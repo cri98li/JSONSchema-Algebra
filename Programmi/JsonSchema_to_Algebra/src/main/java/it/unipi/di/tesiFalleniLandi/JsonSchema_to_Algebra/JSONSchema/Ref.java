@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,6 +15,8 @@ import java.util.Map.Entry;
 
 public class Ref implements JSONSchemaElement{
 	private URI_JS uri;
+
+	private static Logger logger = LogManager.getLogger(Ref.class);
 	
 	protected Ref() {}
 	
@@ -22,6 +26,8 @@ public class Ref implements JSONSchemaElement{
 		}catch(ClassCastException ex) {
 			throw new ParseCancellationException("Error: $ref must be string!");
 		}
+
+		logger.trace("Created a new Ref: {}", this);
 	}
 
 	@Override
@@ -58,6 +64,7 @@ public class Ref implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

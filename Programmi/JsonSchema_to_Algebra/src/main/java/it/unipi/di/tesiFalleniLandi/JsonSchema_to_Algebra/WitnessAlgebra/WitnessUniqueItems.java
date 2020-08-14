@@ -5,6 +5,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -12,8 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WitnessUniqueItems implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessUniqueItems.class);
 
-    public WitnessUniqueItems() { }
+    public WitnessUniqueItems() {
+        logger.trace("Creating a new WitnessUniqueItems");
+    }
 
     @Override
     public String toString() {
@@ -27,6 +32,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) return mergeElement((WitnessUniqueItems) a);
         if(a.getClass() == WitnessRepeateditems.class) return mergeElement((WitnessRepeateditems) a);
 
@@ -47,6 +53,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
         t.add(FullAlgebraString.TYPE_ARRAY);
 
         //return new IfThenElse_Assertion(t, new Boolean_Assertion(false), null).toWitnessAlgebra();
+        logger.trace("Merge returning {} ", t.not());
         return t.not().toWitnessAlgebra();
     }
 
@@ -62,6 +69,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning {}", this);
         return new WitnessUniqueItems();
     }
 

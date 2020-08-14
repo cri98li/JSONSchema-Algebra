@@ -151,6 +151,7 @@ public class FullAlgebraString {
 	//PROPERTIES
 	public static String PROPERTIES(String p, String addProp){ return quadre("props", p, addProp); }
 	public static String SINGLEPROPERTIES(String s1, String s2) {return new StringBuilder().append("\"").append(s1).append("\": ").append(s2).toString(); }
+	public static String SINGLEPATTERNPROPERTIES(String s1, String s2) {return new StringBuilder().append(s1).append(": ").append(s2).toString(); }
 
 	//PATTREQ
 	public static  String PATTERNREQUIRED = "pattReq[\r\n%s\r\n]";

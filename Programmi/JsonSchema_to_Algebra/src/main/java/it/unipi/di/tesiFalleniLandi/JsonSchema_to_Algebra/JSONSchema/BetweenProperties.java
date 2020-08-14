@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,12 +15,18 @@ import java.util.Map.Entry;
 public class BetweenProperties implements JSONSchemaElement{
 	private Long minProperties;
 	private Long maxProperties;
+
+	private static Logger logger = LogManager.getLogger(BetweenProperties.class);
 	
-	public BetweenProperties() { }
+	public BetweenProperties() {
+		logger.trace("Create an empty BetweenProperties");
+	}
 	
 	public void setMinProperties(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of minProperties");
+
+		logger.trace("Setting minProperties by parsing {}", obj);
 
 		minProperties = obj.getAsLong();
 	}
@@ -26,6 +34,8 @@ public class BetweenProperties implements JSONSchemaElement{
 	public void setMaxProperties(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of maxProperties");
+
+		logger.trace("Setting maxProperties by parsing {}", obj);
 
 		maxProperties = obj.getAsLong();
 	}
@@ -69,6 +79,7 @@ public class BetweenProperties implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

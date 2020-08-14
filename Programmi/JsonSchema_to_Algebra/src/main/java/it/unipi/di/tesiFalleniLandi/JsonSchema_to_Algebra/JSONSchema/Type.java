@@ -7,6 +7,8 @@ import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,8 +17,11 @@ import java.util.Map.Entry;
 
 public class Type implements JSONSchemaElement {
 	protected List<String> type_array;
+
+	private static Logger logger = LogManager.getLogger(Type.class);
 	
 	public Type(JsonElement obj){
+		logger.trace("Creating a new Type by parsing {}", obj);
 		if(obj.isJsonNull())
 			throw new ParseCancellationException("Error: Expected JsonArray or Sting in type!\r\n");
 
@@ -41,10 +46,11 @@ public class Type implements JSONSchemaElement {
 				jsonTypeToGrammar(type_str);
 				type_array = new LinkedList<>();
 				type_array.add(type_str);
-				return;
 			} else
 				throw new ParseCancellationException("Error: Expected JsonArray or Sting in type but was "+ obj);
 		}
+
+		logger.trace("Created a new  Type: {}", this);
 	}
 	
 	public Type() { }
@@ -119,6 +125,8 @@ public class Type implements JSONSchemaElement {
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
+
 		return null;
 	}
 

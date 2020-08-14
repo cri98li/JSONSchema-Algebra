@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Required_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,7 +16,10 @@ import java.util.Map.Entry;
 public class Required implements JSONSchemaElement{
 	private List<String> required;
 
+	private static Logger logger = LogManager.getLogger(Required.class);
+
 	public Required(JsonElement obj) {
+		logger.trace("Creating a new Required by parsing {}", obj);
 		if(obj.isJsonArray()){
 			JsonArray array = obj.getAsJsonArray();
 			required = new LinkedList<>();
@@ -33,6 +38,8 @@ public class Required implements JSONSchemaElement{
 				throw new UnsenseAssertion(ex.getMessage());
 			}
 		}
+
+		logger.trace("Created a new  Required: {}", this);
 	}
 
 	public Required() {
@@ -84,6 +91,7 @@ public class Required implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

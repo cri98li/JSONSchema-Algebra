@@ -3,6 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.UniqueItems_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,16 +14,16 @@ import java.util.Map.Entry;
 public class UniqueItems implements JSONSchemaElement{
 	private boolean uniqueItems;
 
+	private static Logger logger = LogManager.getLogger(UniqueItems.class);
+
 	public UniqueItems(JsonElement obj){
 		uniqueItems = obj.getAsBoolean();
+		logger.trace("Created a new UniqueItems: {}", this);
 	}
 
 	private UniqueItems(boolean obj){
 		uniqueItems = obj;
-	}
-	
-	public UniqueItems() {
-		uniqueItems = false;
+		logger.trace("Created a new UniqueItems: {}", this);
 	}
 
 	@Override
@@ -61,6 +63,8 @@ public class UniqueItems implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
+
 		return null;
 	}
 

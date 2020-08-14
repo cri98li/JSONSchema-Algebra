@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,10 +20,16 @@ public class Items implements JSONSchemaElement{
 	private JSONSchema items;
 	private JSONSchema additionalItems;
 	private JSONSchema unevaluatedItems_array;
+
+	private static Logger logger = LogManager.getLogger(Items.class);
 	
-	public Items() { }
+	public Items() {
+		logger.trace("Creating an empty Items");
+	}
 	
 	public void setItems(JsonElement obj) {
+		logger.trace("Setting {} as Items in {}", obj, this);
+
 		JsonArray array;
 		
 		try{
@@ -40,10 +49,12 @@ public class Items implements JSONSchemaElement{
 	}
 	
 	public void setAdditionalItems(JsonElement obj) {
+		logger.trace("Setting {} as additionalItems in {}", obj, this);
 		additionalItems = new JSONSchema(obj);
 	}
 	
 	public void setUnevaluatedItems(JsonElement obj) {
+		logger.trace("Setting {} as unevaluatedItems in {}", obj, this);
 		unevaluatedItems_array = new JSONSchema(obj);
 	}
 	
@@ -126,19 +137,27 @@ public class Items implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		if(URIIterator.hasNext())
-			switch(URIIterator.next()) {
-			case "items":
-				URIIterator.remove();
-				return items.searchDef(URIIterator);
-			case "additionalItems":
-				URIIterator.remove();
-				return additionalItems.searchDef(URIIterator);
-			case "unevaluatedItems":
-				URIIterator.remove();
-				return unevaluatedItems_array.searchDef(URIIterator);
+		if (URIIterator.hasNext()) {
+			logger.debug("searchDef: searching for {}. URIIterator: {}", URIIterator.next(), URIIterator);
+
+			switch (URIIterator.next()) {
+				case "items":
+					URIIterator.remove();
+					try {
+						int index = Integer.parseInt(URIIterator.next());
+						URIIterator.remove();
+						return items_array.get(index).searchDef(URIIterator);
+					} catch (Exception e) {
+					}
+					return items.searchDef(URIIterator);
+				case "additionalItems":
+					URIIterator.remove();
+					return additionalItems.searchDef(URIIterator);
+				case "unevaluatedItems":
+					URIIterator.remove();
+					return unevaluatedItems_array.searchDef(URIIterator);
 			}
-		
+		}
 		return null;
 	}
 
@@ -147,7 +166,8 @@ public class Items implements JSONSchemaElement{
 		List<Entry<String,Defs>> returnList = new LinkedList<>();
 		
 		if(items_array != null) {
-			//qui non lo posso trovare: come lo indicherei altrimenti?
+			for(int i = 0; i < items_array.size(); i++)
+				returnList.addAll(Utils_JSONSchema.addPathElement("items/"+i, items_array.get(i).collectDef()));
 		}
 		
 		if(items != null) returnList.addAll(Utils_JSONSchema.addPathElement("items",items.collectDef()));

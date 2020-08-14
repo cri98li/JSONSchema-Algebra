@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.HashMap;
@@ -16,20 +18,22 @@ import java.util.Set;
 public class PatternRequired_Assertion implements Assertion{
 	private HashMap<ComplexPattern, Assertion> pattReq;
 
+	private static Logger logger = LogManager.getLogger(PatternRequired_Assertion.class);
+
 	public PatternRequired_Assertion() {
+		logger.trace("Creating an empty PatternRequired_Assertion");
 		pattReq = new HashMap<>();
 	}
-	
-	public PatternRequired_Assertion(HashMap<ComplexPattern, Assertion> pattReq) {
-		this.pattReq = pattReq;
-	}
-	
+
 	public PatternRequired_Assertion(ComplexPattern name, Assertion assertion) {
 		pattReq = new HashMap<>();
 		pattReq.put(name, assertion);
+
+		logger.trace("Created a new PatternRequired_Assertion: {}", this);
 	}
 
 	public void add(ComplexPattern key, Assertion value) {
+		logger.trace("Adding <{}, {}> to {}", key, value, this);
 		if(pattReq.containsKey(key)) throw new ParseCancellationException("Detected 2 patternRequired with the same name");
 		pattReq.put(key, value);
 	}

@@ -1,19 +1,22 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPro;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Pro_Assertion implements Assertion{
 	private Long min, max;
+
+	private static Logger logger = LogManager.getLogger(Pro_Assertion.class);
 	
 	public Pro_Assertion(Long min, Long max) {
 		this.min = min;
 		this.max = max;
-	}
-	
-	public Pro_Assertion() {
+		logger.trace("Created a new Pro_Assertion: {}", this);
 	}
 
 	@Override

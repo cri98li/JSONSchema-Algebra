@@ -2,26 +2,35 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AnyOf;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AnyOf_Assertion implements Assertion{
 	private List<Assertion> orList;
+
+	private static Logger logger = LogManager.getLogger(AnyOf_Assertion.class);
 	
 	public AnyOf_Assertion() {
+		logger.trace("Creating an empty AnyOf_Assertion");
 		this.orList = new LinkedList<>();
 	}
 	
 	public void add(Assertion assertion) {
 		if(assertion == null) return;
+		logger.trace("Adding {} to {}", assertion, this);
 		orList.add(assertion);
 	}
 	
@@ -30,6 +39,7 @@ public class AnyOf_Assertion implements Assertion{
 	}
 	
 	public void addAll(List<Assertion> list) {
+		logger.trace("Adding {} to {}", list, this);
 		orList.addAll(list);
 	}
 

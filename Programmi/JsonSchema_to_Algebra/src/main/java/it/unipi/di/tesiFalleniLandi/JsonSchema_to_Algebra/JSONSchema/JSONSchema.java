@@ -9,22 +9,26 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Asse
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class JSONSchema implements JSONSchemaElement{
-	
 	private Boolean booleanAsJSONSchema; //To handle boolean value
-	
 	private HashMap<String, JSONSchemaElement> jsonSchema; //Dictionary of keywords in the schema
 
+	private static Logger logger = LogManager.getLogger(JSONSchema.class);
+
 	public JSONSchema(JsonElement obj) {
+		logger.trace("Creating JSONSchema by parsing {}", obj);
 		jsonSchema = new HashMap<>();
 		JsonObject object = null;
 
 		if(obj.isJsonPrimitive() && obj.getAsJsonPrimitive().isBoolean()){
 			booleanAsJSONSchema = obj.getAsBoolean();
+			logger.trace("JSONSchema is boolean[{}]", booleanAsJSONSchema);
 			return;
 		}else if(obj.isJsonObject())
 			object = obj.getAsJsonObject();
@@ -244,8 +248,8 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 			
 			default:
-				jsonSchema.putIfAbsent("unknow", new UnknowElement());
-				((UnknowElement) jsonSchema.get("unknow")).add(key, object.get(key));
+				jsonSchema.putIfAbsent("unknow", new UnknownElement());
+				((UnknownElement) jsonSchema.get("unknow")).add(key, object.get(key));
 				break;
 			}
 		}
@@ -334,7 +338,7 @@ public class JSONSchema implements JSONSchemaElement{
 
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries){
-			if(entry.getValue().getClass() == UnknowElement.class) continue;
+			if(entry.getValue().getClass() == UnknownElement.class) continue;
 			allOf.add(entry.getValue().toGrammar());
 		}
 
@@ -376,7 +380,8 @@ public class JSONSchema implements JSONSchemaElement{
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
 		if(!URIIterator.hasNext())
 			return this;
-		
+		logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), this, URIIterator);
+
 		String nextElement = URIIterator.next();
 
 		//dato un nome di definizione cerca di risolverlo

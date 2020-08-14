@@ -6,32 +6,42 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_As
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessOr implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessOr.class);
 
     private Map<Object, List<WitnessAssertion>> orList;
 
     public WitnessOr() {
         this.orList = new HashMap<>();
+        logger.trace("Creating an empty WitnessOr");
     }
 
     public boolean add(WitnessAssertion el) throws WitnessTrueAssertionException {
-
-        if(el.getClass() == WitnessOr.class) //flat OR
+        if(el.getClass() == WitnessOr.class) { //flat OR
+            logger.trace("Adding flat {} in {}", el, this);
             return add((WitnessOr) el);
+        }
 
-        else if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class)
+        else if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class) {
+            logger.trace("Adding unique {} in {}", el, this);
             return addUni_Rep(el);
+        }
 
         else if(el.getClass() == WitnessBoolean.class) { //Add boolean
+            logger.trace("Adding boolean {} in {}", el, this);
+
             if (((WitnessBoolean) el).getValue() == false) //Add false
                 return false;
             else
                 throw new WitnessTrueAssertionException("or.add(true)");
         } else {
+            logger.trace("Adding {} in {}", el, this);
             if(orList.containsKey(el.getClass())) { //if orList already contains the key
 
                 if (el.getClass() == WitnessType.class){ //Optimization: add type
@@ -75,6 +85,8 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     public boolean remove(WitnessAssertion assertion){
+        logger.trace("Removing {} from {}", assertion, this);
+
         if(orList.containsKey(assertion.getClass()))
             return orList.get(assertion.getClass()).remove(assertion);
 
@@ -117,7 +129,8 @@ public class WitnessOr implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a) {
+        logger.trace("Merging {} with {}", a, this);
         if(a != null && a.getClass() == this.getClass())
             return null;
 
@@ -187,17 +200,20 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        int count = 0;
         WitnessOr clone = new WitnessOr();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
                 try {
                     clone.add(assertion.clone());
+                    count++;
                 } catch (WitnessTrueAssertionException e) {
                     throw new RuntimeException(e);
                 }
             }
 
+        logger.trace("Cloning WitnessOr of size {}", count);
         return clone;
     }
 
@@ -375,6 +391,9 @@ public class WitnessOr implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
         WitnessVar obbdVarName = null;
+
+        if(orList.size() == 0)
+            logger.fatal("WitnessOr vuoto");
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet()) {
             for(WitnessAssertion assertion : entry.getValue()) {

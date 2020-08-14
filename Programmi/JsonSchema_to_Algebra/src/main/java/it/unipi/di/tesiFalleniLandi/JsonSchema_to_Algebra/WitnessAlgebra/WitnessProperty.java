@@ -7,17 +7,24 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessProperty implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessProperty.class);
+
     private ComplexPattern key;
     private WitnessAssertion value;
 
-    protected WitnessProperty() { }
+    protected WitnessProperty() {
+        logger.trace("Creating an empty WitnessProperty");
+    }
 
     public WitnessProperty(ComplexPattern key, WitnessAssertion assertion){
+        logger.trace("Creating a new WitnessPropertiy with key: {} and value: {}", key, assertion);
         this.key = key;
         value = assertion;
     }
@@ -31,6 +38,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     public void setKey(ComplexPattern key) {
+        logger.trace("Set {} as key of {}", key, this);
         this.key = key;
     }
 
@@ -49,6 +57,7 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        logger.trace("Merging {} with {}", a, this);
         if(value.getClass() == WitnessBoolean.class && !((WitnessBoolean)value).getValue()) return value;
         if(a.getClass() == this.getClass())
             return this.mergeElement((WitnessProperty) a);
@@ -69,18 +78,17 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessProperty a) throws REException {
-        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value) != null){
-            /*WitnessAnd and = new WitnessAnd();
-            and.add(a.value);
-            and.add(this.value);*/
-            return new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value));
-        }
+        WitnessProperty result = null;
 
-        if(a.value.equals(this.value)){
-            return new WitnessProperty(a.key.union(this.key), this.value);
-        }
+        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value) != null)
+            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value));
 
-        return null;
+        if(a.value.equals(this.value))
+            result =  new WitnessProperty(a.key.union(this.key), this.value);
+
+        logger.trace("Merge result: ", result);
+
+        return result;
     }
 
     @Override

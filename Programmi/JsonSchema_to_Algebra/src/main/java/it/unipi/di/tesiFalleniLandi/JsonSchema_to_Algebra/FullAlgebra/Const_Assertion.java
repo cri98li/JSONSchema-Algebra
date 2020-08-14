@@ -8,6 +8,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Map;
@@ -17,8 +19,11 @@ import java.util.Set;
 public class Const_Assertion implements Assertion{
 	private JsonElement value;
 
+	private static Logger logger = LogManager.getLogger(Const_Assertion.class);
+
 	public Const_Assertion(JsonElement value) {
 		this.value = value;
+		logger.trace("Created a Const_Assertion with value {}", value);
 	}
 
 	@Override
@@ -55,11 +60,13 @@ public class Const_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		
 		if(value.isJsonNull()) {
+			logger.trace("Applying not elimination to {} as null value", value);
 			type.add(FullAlgebraString.TYPE_NULL);
 			return type.not();
 		}
 
 		if(value.isJsonObject()) {
+			logger.trace("Applying not elimination to {} as JsonObject", value);
 			JsonObject object = value.getAsJsonObject();
 			AllOf_Assertion and = new AllOf_Assertion();
 			Properties_Assertion properties = new Properties_Assertion();
@@ -86,7 +93,7 @@ public class Const_Assertion implements Assertion{
 
 		//array
 		if(value.isJsonArray()) {
-			@SuppressWarnings("unchecked")
+			logger.trace("Applying not elimination to {} as JsonArray", value);
 			JsonArray array = value.getAsJsonArray();
 			Items_Assertion items = new Items_Assertion();
 			type.add("arr");
@@ -104,6 +111,7 @@ public class Const_Assertion implements Assertion{
 		}
 
 		if(value.getAsJsonPrimitive().isBoolean()) {
+			logger.trace("Applying not elimination to {} as Boolean", value);
 			AnyOf_Assertion or = new AnyOf_Assertion();
 			type.add("bool");
 			or.add(type.not());
@@ -113,6 +121,7 @@ public class Const_Assertion implements Assertion{
 		}
 		
 		if(value.getAsJsonPrimitive().isNumber()) {
+			logger.trace("Applying not elimination to {} as Number", value);
 			AnyOf_Assertion or = new AnyOf_Assertion();
 			Bet_Assertion bet = new Bet_Assertion(value.getAsNumber(), value.getAsNumber());
 			type.add("num");
@@ -123,6 +132,7 @@ public class Const_Assertion implements Assertion{
 		}
 
 		//String
+		logger.trace("Applying not elimination to {} as String", value);
 		AnyOf_Assertion or = new AnyOf_Assertion();
 		Pattern_Assertion pattern = new Pattern_Assertion(ComplexPattern.createFromName(value.getAsString())); //TODO: getAsString or toString?
 
@@ -152,39 +162,13 @@ public class Const_Assertion implements Assertion{
 		return FullAlgebraString.CONST(value.getAsString());
 	}
 
-	/*
-	private String toGrammarString(List<Object> list){
-		String str = "";
-
-		for(Object obj : list) {
-
-			if(obj == null)
-				str += GrammarStringDefinitions.COMMA + "null";
-			else if (obj.getClass() == String.class)
-				str += GrammarStringDefinitions.COMMA + "\"" +obj + "\"";
-			else if(obj.getClass() == Long.class
-					|| obj.getClass() == Double.class
-					|| obj.getClass() == Boolean.class)
-				str += GrammarStringDefinitions.COMMA + obj;
-
-			else if (obj.getClass() == JsonObject.class)
-				str += GrammarStringDefinitions.COMMA + "\"" + ((JsonObject) obj).toString() + "\"";
-
-			else
-				str += GrammarStringDefinitions.COMMA + toGrammarString((List<Object>) obj);
-		}
-
-		if(str.isEmpty()) return "";
-		return str.substring(GrammarStringDefinitions.COMMA.length());
-	}*/
-
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		if (value.isJsonNull()) return new WitnessType(FullAlgebraString.TYPE_NULL);
 
 		try {
 			if (value.isJsonObject()) {
-
+				logger.trace("Translating {} to WitnessAlgebra as JsonObject", value);
 				WitnessAnd and = new WitnessAnd();
 				and.add(new WitnessType(FullAlgebraString.TYPE_OBJECT));
 				Set<Map.Entry<String, JsonElement>> entrySet = ((JsonObject) value).entrySet();
@@ -200,6 +184,7 @@ public class Const_Assertion implements Assertion{
 			}
 
 			if (value.isJsonArray()) {
+				logger.trace("Translating {} to WitnessAlgebra as JsonArray", value);
 				WitnessAnd and = new WitnessAnd();
 				and.add(new WitnessType(FullAlgebraString.TYPE_ARRAY));
 				WitnessItems items = new WitnessItems();
@@ -213,6 +198,7 @@ public class Const_Assertion implements Assertion{
 			}
 
 			if (value.getAsJsonPrimitive().isString()) {
+				logger.trace("Translating {} to WitnessAlgebra as String", value);
 				WitnessAnd and = new WitnessAnd();
 				and.add(new WitnessType(FullAlgebraString.TYPE_STRING));
 				and.add(new WitnessPattern(ComplexPattern.createFromName(value.getAsString())));
@@ -220,12 +206,14 @@ public class Const_Assertion implements Assertion{
 			}
 
 			if (value.getAsJsonPrimitive().isBoolean()) {
+				logger.trace("Translating {} to WitnessAlgebra as Boolean", value);
 				WitnessAnd and = new WitnessAnd();
 				and.add(new WitnessType(FullAlgebraString.TYPE_BOOLEAN));
 				and.add(new WitnessIfBoolThen(value.getAsBoolean()));
 				return and;
 			}
 
+			logger.trace("Translating {} to WitnessAlgebra as Number", value);
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
 			and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));

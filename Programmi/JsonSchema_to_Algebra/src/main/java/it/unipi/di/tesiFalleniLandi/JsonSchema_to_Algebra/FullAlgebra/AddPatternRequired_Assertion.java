@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.LinkedList;
@@ -13,13 +15,12 @@ public class AddPatternRequired_Assertion implements Assertion{
 	private List<ComplexPattern> pattList;
 	private Assertion additionalProperties;
 
+	private static Logger logger = LogManager.getLogger(AddPatternRequired_Assertion.class);
+
 	public AddPatternRequired_Assertion() {
+		logger.trace("Creating an AddPatternRequired_Assertion");
+
 		pattList = new LinkedList<>();
-	}
-	
-	public AddPatternRequired_Assertion(List<ComplexPattern> pattList, Assertion additionalProperties) {
-		this.pattList = pattList;
-		this.additionalProperties = additionalProperties;
 	}
 
 	@Override
@@ -29,14 +30,17 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 
 	public void setPattList(List<ComplexPattern> pattList) {
+		logger.trace("Setting {} as pattList to {}", pattList, this);
 		this.pattList = pattList;
 	}
 
 	public void setAdditionalProperties(Assertion additionalProperties) {
+		logger.trace("Setting {} as additionalProperties to {}", additionalProperties, this);
 		this.additionalProperties = additionalProperties;
 	}
 	
 	public void addName(ComplexPattern name) {
+		logger.trace("Adding {} in as pattList in {}", name, this);
 		pattList.add(name);
 	}
 

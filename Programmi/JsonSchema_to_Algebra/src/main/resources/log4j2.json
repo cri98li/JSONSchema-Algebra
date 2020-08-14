@@ -1,0 +1,24 @@
+{
+    "configuration": {
+        "status": "info",
+        "ThresholdFilter": {
+            "level": "debug"
+        },
+        "appenders": {
+            "Console": {
+                "name": "console",
+                "PatternLayout": {
+                    "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %.-100m%n"
+                }
+            }
+        },
+        "loggers": {
+            "root": {
+                "level": "all",
+                "AppenderRef": {
+                    "ref": "console"
+                }
+            }
+        }
+    }
+}

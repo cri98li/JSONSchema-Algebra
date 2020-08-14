@@ -3,7 +3,16 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern
 public class pNot implements ComplexPatternElement {
     ComplexPatternElement not;
 
-    public pNot(ComplexPatternElement not) {
+    public static ComplexPatternElement createPNot(ComplexPatternElement not){
+        ComplexPatternElement returnValue = new pNot(not);
+
+        if(not.getClass() == pNot.class)
+            return ((pNot) not).not;
+
+        return returnValue;
+    }
+
+    private pNot(ComplexPatternElement not) {
         this.not = not;
     }
 

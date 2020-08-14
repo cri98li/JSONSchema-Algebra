@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.OneOf_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,8 +15,12 @@ import java.util.Map.Entry;
 
 public class OneOf implements JSONSchemaElement{
 	private List<JSONSchema> oneOf;
+
+	private static Logger logger = LogManager.getLogger(OneOf.class);
 	
 	public OneOf(JsonElement obj) {
+		logger.trace("Creating pattern by parsing {}", obj);
+
 		JsonArray array = obj.getAsJsonArray();
 		oneOf = new LinkedList<>();
 		
@@ -27,10 +33,12 @@ public class OneOf implements JSONSchemaElement{
 	
 	public OneOf() {
 		oneOf = new LinkedList<>();
+		logger.trace("Creating an empty OneOf");
 	}
 	
 	public void addElement(JSONSchema schema) {
 		if(oneOf == null) oneOf = new LinkedList<>();
+		logger.trace("Adding {} to {}", schema, this);
 		oneOf.add(schema);
 	}
 	
@@ -100,6 +108,16 @@ public class OneOf implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		try {
+			int i = Integer.parseInt(URIIterator.next());
+			logger.debug("searchDef: searching for index {} in oneOf[{}]. URIIterator: {}", i, oneOf.size(), URIIterator);
+			if(i < oneOf.size()){
+				URIIterator.remove();
+				return oneOf.get(i).searchDef(URIIterator);
+			}
+		}catch (ClassCastException e){
+		}
+
 		return null;
 	}
 

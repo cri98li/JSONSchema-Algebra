@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.XBet_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,12 +22,18 @@ public class BetweenNumber implements JSONSchemaElement{
 	private Number exclusiveMinimum;
 	private Boolean booleanExclusiveMaximum;
 	private Boolean booleanExclusiveMinimum;
+
+	private static Logger logger = LogManager.getLogger(BetweenNumber.class);
 	
-	public BetweenNumber() { }
+	public BetweenNumber() {
+		logger.trace("Creating an empty BetweenNumber");
+	}
 	
 	public void setMax(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected number as value of maximum got " + obj);
+
+		logger.trace("Setting max by parsing {}", obj);
 
 		if(booleanExclusiveMaximum != null && booleanExclusiveMaximum)
 			this.exclusiveMaximum = obj.getAsNumber();
@@ -37,6 +45,8 @@ public class BetweenNumber implements JSONSchemaElement{
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected number as value of minimum got "+ obj);
 
+		logger.trace("Setting min by parsing {}", obj);
+
 		if(booleanExclusiveMinimum != null && booleanExclusiveMinimum)
 			this.exclusiveMaximum = obj.getAsNumber();
 		else
@@ -47,6 +57,8 @@ public class BetweenNumber implements JSONSchemaElement{
 	public void setExclusiveMax(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || (!obj.getAsJsonPrimitive().isBoolean() && !obj.getAsJsonPrimitive().isNumber()))
 			throw new ParseCancellationException("expected number or boolean as value of exclusiveMaximum got "+obj);
+
+		logger.trace("Setting ExclusiveMax by parsing {}", obj);
 
 		try {
 			booleanExclusiveMaximum = obj.getAsBoolean();
@@ -62,6 +74,9 @@ public class BetweenNumber implements JSONSchemaElement{
 	public void setExclusiveMin(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || (!obj.getAsJsonPrimitive().isBoolean() && !obj.getAsJsonPrimitive().isNumber()))
 			throw new ParseCancellationException("expected number or boolean as value of exclusiveMinimum got "+obj);
+
+		logger.trace("Setting ExclusiveMin by parsing {}", obj);
+
 		try {
 			booleanExclusiveMinimum = obj.getAsBoolean();
 			if(booleanExclusiveMinimum && minimum != null) {
@@ -175,12 +190,12 @@ public class BetweenNumber implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 
 	@Override
 	public List<Entry<String,Defs>> collectDef() {
-		
 		return new LinkedList<>();
 	}
 

@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -14,8 +16,12 @@ import java.util.Map.Entry;
 public class Defs implements JSONSchemaElement {
 	private LinkedHashMap<String, JSONSchema> schemaDefs;
 	private JSONSchema rootDef;
+
+	private static Logger logger = LogManager.getLogger(Defs.class);
 	
 	public Defs(JsonElement obj) {
+		logger.trace("Creating a new Defs by parsing {}", obj);
+
 		JsonObject jsonObject;
 		try {
 			jsonObject = obj.getAsJsonObject();
@@ -44,19 +50,23 @@ public class Defs implements JSONSchemaElement {
 	}
 	
 	public void addDef(String key, JSONSchema element) {
+		logger.trace("Adding def <{}, {}>", key, element);
 		schemaDefs.put(key, element);
 	}
 	
 	public void setRootDef(JSONSchema root) {
+		logger.trace("Setting rootdef {}", root);
 		rootDef = root;
 	}
 
 	public void addDef(Defs defs) {
+		logger.trace("Adding def {}", defs);
 		schemaDefs.putAll(defs.schemaDefs);
 	}
 	
 	public Defs() {	
 		schemaDefs = new LinkedHashMap<>();
+		logger.trace("Creating an empty Defs");
 	}
 
 	@SuppressWarnings("unchecked")

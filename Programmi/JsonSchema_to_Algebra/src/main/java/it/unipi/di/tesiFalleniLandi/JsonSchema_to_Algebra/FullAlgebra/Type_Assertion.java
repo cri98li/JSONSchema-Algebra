@@ -3,10 +3,13 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.Iterator;
@@ -16,16 +19,21 @@ import java.util.List;
 public class Type_Assertion implements Assertion{
 	private List<String> types;
 
+	private static Logger logger = LogManager.getLogger(Type_Assertion.class);
+
 	public Type_Assertion() {
+		logger.trace("Creating an empty Type_Assertion");
 		types = new LinkedList<>();
 	}
 
 	public Type_Assertion(String type) {
 		this();
 		types.add(type);
+		logger.trace("Created a new Type_Assertion: {}", this);
 	}
 	
 	public void add(String toAdd) {
+		logger.trace("Adding {} to {}", toAdd, this);
 		types.add(toAdd);
 	}
 

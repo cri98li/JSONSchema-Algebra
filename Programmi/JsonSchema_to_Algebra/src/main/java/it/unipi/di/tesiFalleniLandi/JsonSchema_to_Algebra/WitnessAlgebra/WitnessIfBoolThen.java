@@ -6,6 +6,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfBoolThen
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -13,10 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WitnessIfBoolThen implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessIfBoolThen.class);
+
     private boolean value;
 
     public WitnessIfBoolThen(boolean value) {
         this.value = value;
+        logger.trace("Created a new WitnessIfBoolThen: {}", this);
     }
 
     @Override
@@ -27,7 +32,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
         return;
     }
 

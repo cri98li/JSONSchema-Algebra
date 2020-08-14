@@ -6,28 +6,36 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Asser
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessType implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessType.class);
+
     private List<String> type;
 
     protected WitnessType(){
         type = new LinkedList<>();
+        logger.trace("Creating an empty WitnessType");
     }
 
     public WitnessType(String str){
         type = new LinkedList<>();
         type.add(str);
+        logger.trace("Created a new WitnessType: ", this);
     }
 
     public WitnessType(List<String> list){
         type = new LinkedList<>();
-        type.addAll(list);
+        for(String s : list)
+            add(s);
     }
 
     public void add(String type){
+        logger.trace("Adding {} to {}", type, this);
         this.type.add(type);
     }
 
@@ -36,6 +44,8 @@ public class WitnessType implements WitnessAssertion{
 
         for(String str : type)
             returnList.add(new WitnessType(str));
+
+        logger.trace("Splitting {} in {}", this, returnList);
 
         return returnList;
     }
@@ -69,6 +79,8 @@ public class WitnessType implements WitnessAssertion{
 
 
     public WitnessAssertion mergeElement(WitnessType a) {
+        logger.trace("Merging {} with {}", a, this);
+
         WitnessType newType = new WitnessType();
 
         //same type
@@ -113,6 +125,7 @@ public class WitnessType implements WitnessAssertion{
 
     @Override
     public WitnessType clone() {
+        logger.trace("Cloning {}", this);
         return new WitnessType(type);
     }
 

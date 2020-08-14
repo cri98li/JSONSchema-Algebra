@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
@@ -10,6 +11,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Excepti
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -19,18 +22,22 @@ import java.util.List;
 public class AllOf_Assertion implements Assertion{
 	private List<Assertion> andList;
 	private boolean duplicates, //used to replace allOf[...] keyword with { ... } when possible
-			containsFalseBooleanAssertion; //allOf false - we return allOf: false (TODO: correct?? can we throw an exception instead???)
+			containsFalseBooleanAssertion;
+
+	private static Logger logger = LogManager.getLogger(AllOf_Assertion.class);
 	
 	public AllOf_Assertion() {
 		this.andList = new LinkedList<>();
 		duplicates = false;
 		containsFalseBooleanAssertion = false;
+		logger.trace("Creating an empty AllOf_Assertion");
 	}
 
 	public void addAll(List<Assertion> list) {
 		for(Assertion assertion : list) {
 			duplicates |= contains(assertion);
 			containsFalseBooleanAssertion |= (Boolean_Assertion.class == assertion.getClass());
+			logger.trace("Added {} to {}", assertion, this);
 		}
 		andList.addAll(list);
 	}
@@ -40,6 +47,8 @@ public class AllOf_Assertion implements Assertion{
 		duplicates |= contains(assertion);
 		containsFalseBooleanAssertion |= (Boolean_Assertion.class == assertion.getClass());
 		andList.add(assertion);
+
+		logger.trace("Added {} to {}", assertion, this);
 	}
 
 	private boolean contains(Assertion assertion){

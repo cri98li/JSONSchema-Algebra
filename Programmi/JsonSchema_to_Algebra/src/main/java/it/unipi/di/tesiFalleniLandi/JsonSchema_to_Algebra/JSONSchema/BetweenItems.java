@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,12 +16,18 @@ import java.util.Map.Entry;
 public class BetweenItems implements JSONSchemaElement{
 	private Long minItems;
 	private Long maxItems;
-	
-	public BetweenItems() { }
+
+	private static Logger logger = LogManager.getLogger(BetweenItems.class);
+
+	public BetweenItems() {
+		logger.trace("Creating an empty BetweenItems");
+	}
 	
 	public void setMinItems(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of minItems got "+obj);
+
+		logger.trace("Setting minItems by parsing {}", obj);
 
 		minItems = obj.getAsLong();
 	}
@@ -27,6 +35,9 @@ public class BetweenItems implements JSONSchemaElement{
 	public void setMaxItems(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
 			throw new ParseCancellationException("expected integer as value of maxItems got "+obj);
+
+		logger.trace("Setting maxItems by parsing {}", obj);
+
 		maxItems = obj.getAsLong();
 	}
 	

@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_As
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -14,13 +16,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WitnessPattern implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessPattern.class);
+
     private ComplexPattern pattern;
 
     public WitnessPattern(ComplexPattern pattern){
         this.pattern = pattern;
+        logger.trace("Created a new WitnessPattern {}", this);
     }
 
-    protected WitnessPattern() { }
+    private WitnessPattern() { }
 
     @Override
     public String toString() {
@@ -36,6 +41,7 @@ public class WitnessPattern implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) {
+        logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass())
             return mergeElement((WitnessPattern) a);
 
@@ -48,7 +54,11 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessPattern a) {
-        return new WitnessPattern(pattern.intersect(a.pattern));
+        WitnessPattern result = new WitnessPattern(pattern.intersect(a.pattern));
+
+        logger.trace("Merge result {}", this);
+
+        return result;
     }
 
     @Override
@@ -63,6 +73,7 @@ public class WitnessPattern implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning WitnessPattern {}", this);
         WitnessPattern clone = new WitnessPattern();
         clone.pattern = pattern.clone();
 

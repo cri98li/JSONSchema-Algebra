@@ -1,14 +1,20 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessNotMof;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NotMof_Assertion implements Assertion {
 	private Object notMof;
+
+	private static Logger logger = LogManager.getLogger(NotMof_Assertion.class);
 	
 	public NotMof_Assertion(Object notMof) {
 		this.notMof = notMof;
+		logger.trace("Created a new NotMof_Assertion: {}", this);
 	}
 
 	@Override

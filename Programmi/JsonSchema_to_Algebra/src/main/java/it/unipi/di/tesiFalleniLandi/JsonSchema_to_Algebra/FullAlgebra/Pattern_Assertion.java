@@ -6,12 +6,17 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Pattern_Assertion implements Assertion{
 	private ComplexPattern pattern;
 
+	private static Logger logger = LogManager.getLogger(Pattern_Assertion.class);
+
 	public Pattern_Assertion(ComplexPattern pattern) {
 		this.pattern = pattern;
+		logger.trace("Created a new Pattern_Assertion: {}", this);
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.NotMof_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -13,10 +15,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class WitnessNotMof implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessNotMof.class);
+
     private Double value;
 
     public WitnessNotMof(Double value) {
         this.value = value;
+        logger.trace("Created a new WitnessNotMof: {}", this);
     }
 
     public Double getValue() {
@@ -37,6 +42,8 @@ public class WitnessNotMof implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
+        logger.trace("Merging {} with {}", a, this);
+
         if(a.getClass() == this.getClass())
             return this.mergeElement((WitnessNotMof) a);
 
@@ -49,15 +56,18 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessNotMof notMof) {
+        WitnessNotMof result = null;
+
         Double val1 = notMof.value;
         Double val2 = this.value;
 
         if(val1 % val2 == 0)
-            return new WitnessNotMof(val2);
+            result = new WitnessNotMof(val2);
         else if(val2 % val1 == 0)
-            return new WitnessNotMof(val1);
-        else
-            return null;
+            result = new WitnessNotMof(val1);
+
+        logger.trace("Merge result: {}", result);
+        return result;
     }
 
     @Override

@@ -5,21 +5,27 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class Dependencies implements JSONSchemaElement{
-	
 	private HashMap<String, List<String>> dependentRequired;
 	private HashMap<String, JSONSchema> dependentSchemas;
+
+	private static Logger logger = LogManager.getLogger(Dependencies.class);
 	
 	public Dependencies() {
+		logger.trace("Creating an empty Dependencies");
 		dependentSchemas = new HashMap<>();
 		dependentRequired = new HashMap<>();
 	}
 	
 	public void setDependencies(JsonElement obj) {
+		logger.trace("Parsing {}", obj);
 		JsonObject object = obj.getAsJsonObject();
 
 		
@@ -27,22 +33,25 @@ public class Dependencies implements JSONSchemaElement{
 			try {
 				JSONSchema js = new JSONSchema(entry.getValue());
 				dependentSchemas.put((String)entry.getKey(), js);
-			}catch(ClassCastException ex) {
+				logger.trace("Parsed as dependentSchema {}", dependentSchemas);
+			}catch(ParseCancellationException | ClassCastException ex) {
 				LinkedList<String> list = new LinkedList<>();
 				JsonArray array = (JsonArray) entry.getValue();
 				
-				Iterator<?> it_array = array.iterator();
+				Iterator<JsonElement> it_array = array.iterator();
 				
 				while(it_array.hasNext()) {
-					list.add(((String) it_array.next()));
+					list.add(it_array.next().getAsString());
 				}
 				
 				dependentRequired.put((String) entry.getKey(), list);
+				logger.trace("Parsed as dependentRequired {}", dependentRequired);
 			}
 		}
 	}
 
 	public void setDependentRequired(JsonElement obj) {
+		logger.trace("Setting dependentRequired by parsing {}", obj);
 		JsonObject object = obj.getAsJsonObject();
 		
 		dependentRequired = new HashMap<>();
@@ -60,6 +69,8 @@ public class Dependencies implements JSONSchemaElement{
 	}
 	
 	public void setDependentSchemas(JsonElement obj){
+		logger.trace("Setting dependentSchema by parsing {}", obj);
+
 		JsonObject object = obj.getAsJsonObject();
 		dependentSchemas = new HashMap<>();
 
@@ -212,13 +223,14 @@ public class Dependencies implements JSONSchemaElement{
 			return null;
 		
 		URIIterator.remove();
+		logger.debug("searchDef: searching for {} in allOf[{}]. URIIterator: {}", URIIterator.next(), this, URIIterator);
 		if(dependentSchemas.containsKey(URIIterator.next())) {
 			JSONSchema tmp = dependentSchemas.get(URIIterator.next());
 			URIIterator.remove();
 			return tmp.searchDef(URIIterator);
 		}
 		
-		return null;
+		return null; //TODO: check
 	}
 
 	@Override

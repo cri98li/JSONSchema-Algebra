@@ -5,48 +5,56 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.OrPattReq_
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class WitnessOrPattReq implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessOrPattReq.class);
 
-    List<WitnessPattReq> ORP;  // AnyOf[ req1, ..., reqN ]
+    List<WitnessPattReq> reqList;  // AnyOf[ req1, ..., reqN ]
 
     public WitnessOrPattReq() {
-        ORP = new LinkedList<>();
+        reqList = new LinkedList<>();
     }
 
     public boolean add(WitnessPattReq toAdd) {
-        return ORP.add(toAdd);
+        logger.trace("Adding {} as  in {}", toAdd, this);
+        return reqList.add(toAdd);
     }
 
     public void fullConnect(WitnessPattReq req){
-        if(ORP == null) ORP = new LinkedList<>();
+        if(reqList == null) reqList = new LinkedList<>();
 
         //if(ORP.contains(req)) return;
+        logger.trace("Connecting {} to {}", req, this);
 
-        ORP.add(req);
+        reqList.add(req);
         req.halfConnect(this);
     }
 
     public void halfConnect(WitnessPattReq req){
-        if(ORP == null) ORP = new LinkedList<>();
+        if(reqList == null) reqList = new LinkedList<>();
 
-        ORP.add(req);
+        reqList.add(req);
     }
 
     public void deConnect(WitnessPattReq req){
-        if(!ORP.contains(req)) return;
+        if(!reqList.contains(req)) return;
 
-        if(ORP.remove(req))
+        logger.trace("De-Connecting {} to {}", req, this);
+
+        if(reqList.remove(req))
             req.deConnect(this);
     }
 
     public void remove(WitnessPattReq req){
-        ORP.remove(req);
+        reqList.remove(req);
     }
 
     @Override
@@ -73,7 +81,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
     public Assertion getFullAlgebra() {
         OrPattReq_Assertion opr_a = new OrPattReq_Assertion();
 
-        for(WitnessPattReq el : ORP ){
+        for(WitnessPattReq el : reqList){
             opr_a.add(el.getPattern(), el.getValue().getFullAlgebra());
         }
 
@@ -82,9 +90,10 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning WitnessOrPattReq: {}", this);
         WitnessOrPattReq clone = new WitnessOrPattReq();
 
-        for(WitnessPattReq el : ORP){
+        for(WitnessPattReq el : reqList){
             clone.add(WitnessPattReq.build(el.getPattern().clone(), el.getValue().clone()));
         }
 
@@ -113,7 +122,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
-        for(WitnessPattReq el : ORP){
+        for(WitnessPattReq el : reqList){
             el.varNormalization_separation(env);
         }
     }
@@ -140,7 +149,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar) {
-        for(WitnessPattReq el : ORP){
+        for(WitnessPattReq el : reqList){
             if(el.isRecursive(env, visitedVar)) return true;
         }
 
@@ -152,7 +161,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
         throw new UnsupportedOperationException();
     }
 
-    public void setORP(List<WitnessPattReq> ORP) {
-        this.ORP = ORP;
+    public void setReqList(List<WitnessPattReq> reqList) {
+        this.reqList = reqList;
     }
 }

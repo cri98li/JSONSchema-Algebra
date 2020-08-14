@@ -1,14 +1,21 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessRepeateditems;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class RepeatedItems_Assertion implements Assertion{
 
-	public RepeatedItems_Assertion() { }
+	private static Logger logger = LogManager.getLogger(RepeatedItems_Assertion.class);
+
+	public RepeatedItems_Assertion() {
+		logger.trace("Created a new RepeatedItems_Assertion");
+	}
 
 	@Override
 	public String toString() {

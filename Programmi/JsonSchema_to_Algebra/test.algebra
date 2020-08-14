@@ -1,19 +1,137 @@
-{
+allOf[
+  type[obj],
+  props["^.*a" : mof(2); true],
+  pattReq["^.*a" : mof(2)]
+]
+
+
+/*allOf[
+  type[obj],
+  props["^a" : mof(2); true],
+  pattReq["^b" : mof(3)]
+]*/
+
+
+/*allOf[
+  type[obj],
+  props[
+        "^a" : mof(2),
+        "^aa" : mof(3),
+	      "^aaa" : mof(5) ; true
+  ]
+]*/
+
+/*{
     type[obj],
     pattReq["^a": mof(2)],
     pattReq["^aa": mof(3)]
 
-
     //pattReq["^a": {type[int], mof(1)}],
-    //pattReq["^.d": true],
+    //pattReq["^.d": true]
+
     /*props[
         "^.*a": {type[int], mof(2)},
         "^.*b": {type[int], mof(3)},
         "^.*c": {type[int], mof(5)}
     ;mof(7)]*/
-}
+}*/
 
 
+/*
+// object completion:
+
+  props[
+        pAnd["^a",pNot("^aa"),pNot("^aaa")] : mof(2),
+        pAnd["^aa",pNot("^aaa"),"a"] : mof(6),
+	    pAnd["^aaa","^aa","^a"] : mof(30),
+        pNot(pAnyOf["^a","^aa","^aaa"]) :  true
+      ]
+*/
+
+
+
+
+
+
+
+
+
+
+/*
+allOf[
+  type[obj],
+  props[
+        "^a" : mof(2),
+        "^aa" : mof(3),
+	    "^aaa" : mof(5)
+	    ;true
+  ]
+]
+*/
+
+/*
+allOf[
+  type[obj],
+  props["^a$" : mof(2),
+        "^b$" : mof(3),
+	"^c$" : mof(5) ; true
+  ]
+]
+*/
+
+/*
+allOf[
+  type[obj],
+  props["^.*a" : mof(2),                 // it is just the pattern "a"
+        "^.*b" : mof(3),
+	"^.*c" : mof(5) ; true
+  ]
+]
+*/
+
+/*
+allOf[
+  type[obj],
+  props["^a" : mof(2); true],
+  pattReq["^b" : mof(3)]
+]
+*/
+
+/*
+allOf[
+  type[obj],
+  props[
+        "^.*a" : mof(2)
+        ;true
+        ],
+  pattReq["^.*a" : mof(2)]
+]
+*/
+
+/*allOf[
+  type[obj],
+  pattReq["^.*a" : mof(2)]
+]*/
+
+
+
+
+
+
+
+/*{
+    type[obj],
+    pattReq["^a": mof(2)],
+    pattReq["^aa": mof(3)]
+
+    pattReq["^a": {type[int], mof(1)}],
+    pattReq["^.d": true],
+    /*props[
+        "^.*a": {type[int], mof(2)},
+        "^.*b": {type[int], mof(3)},
+        "^.*c": {type[int], mof(5)}
+    ;mof(7)]*/
+}*/
 
 
 /*{

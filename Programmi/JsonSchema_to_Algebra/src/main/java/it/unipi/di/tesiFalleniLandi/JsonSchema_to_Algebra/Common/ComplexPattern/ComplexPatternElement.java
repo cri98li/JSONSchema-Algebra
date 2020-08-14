@@ -5,4 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AlgebraPar
 public interface ComplexPatternElement extends AlgebraParserElement {
 
     public ComplexPatternElement clone();
+
+
 }

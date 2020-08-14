@@ -6,12 +6,16 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class WitnessVar implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessVar.class);
+
     private static HashMap<String, String> rename;
     private static HashMap<String, LinkedList<WeakReference<WitnessVar>>> instances;
 
@@ -26,6 +30,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     public static void rename(String oldName, String newName){
+        logger.trace("Renaming {} (old) to {} (new)", oldName, newName);
         newName = resolveName(newName); //mi assicuro che non sia un "rename intermedio"
         rename.put(oldName, newName); //aggiungo la ridenominazione
 
@@ -75,6 +80,8 @@ public class WitnessVar implements WitnessAssertion{
             tmp.add(new WeakReference<>(this));
             instances.put(newName, tmp);
         }
+
+        logger.trace("Created a new WitnessVar with name=({}=resolveName({}))", newName, name);
     }
 
     public String getName(){
@@ -130,6 +137,7 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public WitnessVar clone() {
+        logger.trace("Cloning {}", this);
         return new WitnessVar(name);
     }
 
@@ -150,20 +158,6 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
-        /*try{
-            return env.getCoVarName(this); //find the complement variable
-        }catch (RuntimeException e){
-            if(isRecursive(env, new LinkedList<>())){       //forzo la creazione di una variabile (sto cercando la negazione di una variabile che non esiste ancora)
-                System.out.println("cercami");
-                String newVarName = FullAlgebraString.NOT_DEFS + name;
-                if(name.startsWith(FullAlgebraString.NOT_DEFS)) newVarName = name.substring(FullAlgebraString.NOT_DEFS.length());
-
-                WitnessVar var = new WitnessVar(newVarName);
-                WitnessBDD.createVar(var);
-                return var;
-            }
-            else throw new RuntimeException(e);
-        }*/
         return env.getCoVarName(this);
     }
 

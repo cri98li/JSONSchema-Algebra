@@ -8,6 +8,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Iterator;
@@ -16,16 +18,21 @@ import java.util.List;
 
 public class Required_Assertion implements Assertion{
 	private List<String> reqList;
+
+	private static Logger logger = LogManager.getLogger(Required_Assertion.class);
 	
 	public Required_Assertion() {
+		logger.trace("Creating an empty Required_Assertion");
 		reqList = new LinkedList<>();
 	}
 	
 	public Required_Assertion(List<String> list) {
 		this.reqList = list;
+		logger.trace("Created a new Required_Assertion: {}", this);
 	}
 	
 	public void add(String str) {
+		logger.trace("Adding {} to {}", str, this);
 		reqList.add(str);
 	}
 

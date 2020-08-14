@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Utils_JSONSchema {
+	private static Logger logger = LogManager.getLogger(Utils_JSONSchema.class);
 
 	public static JSONSchema parse(String path) throws IOException {
 		Gson gson = new Gson();
@@ -33,16 +36,23 @@ public class Utils_JSONSchema {
 	}
 
 	public static JSONSchema referenceNormalization(JSONSchema root) {
+		logger.trace("Performing referenceNormalizzation");
+
 		JSONSchema newRoot = new JSONSchema();
 		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef()); //Raccolgo tutte le definizioni
+		logger.trace("List of defs under $defs or defionitions: {}", defsList);
 
 		List<URI_JS> refList = root.getRef(); //Raccolgo tutti i riferimenti
+		logger.trace("List of ref: {}", refList);
 
 		Defs finalDefs = new Defs();
 
 		for(URI_JS ref : refList) {
 			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#') //non risolvo i riferimenti a me stesso e quelli a file esterni
+			{
+				logger.trace("Cannot resolve ref: {}", ref);
 				continue;
+			}
 			boolean found = false;
 			for(Entry<String, Defs> entry : defsList) {
 				JSONSchema s = compareDefsRefs(entry, ref);
@@ -50,6 +60,7 @@ public class Utils_JSONSchema {
 					ref.found();
 					finalDefs.addDef(ref.getNormalizedName(), s);
 					found = true;
+					logger.trace("Def found: ref {} match {}. \r\n\tBody: {}", ref, entry, s);
 					break;
 				}
 			}
@@ -57,6 +68,7 @@ public class Utils_JSONSchema {
 				continue;
 			}
 
+			logger.trace("Trying to search {} across the document", ref);
 			//ref non trovata in defsList, provo a risolverla navigando nel documento
 			JSONSchema newDef = root.searchDef(ref.iterator());
 			if(newDef != null) {
@@ -107,7 +119,6 @@ public class Utils_JSONSchema {
 
 
 	public static String toGrammarString(JSONSchema root) {
-
 		return Utils.beauty(root.toGrammar().toGrammarString());
 	}
 

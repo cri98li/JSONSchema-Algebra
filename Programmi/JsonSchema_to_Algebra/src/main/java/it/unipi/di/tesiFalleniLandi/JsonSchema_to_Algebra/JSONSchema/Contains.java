@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,22 +16,28 @@ public class Contains implements JSONSchemaElement{
 	private JSONSchema contains;
 	private Long minContains;
 	private Long maxContains;
+
+	private static Logger logger = LogManager.getLogger(Contains.class);
 	
 	public Contains() {
 		minContains = 0L;
 		maxContains = Long.MAX_VALUE;
+		logger.trace("Creating an empty Contains");
 	}
 	
 	public void setContains(JsonElement obj) {
+		logger.trace("Setting contains by parsing {}", obj);
 		contains = new JSONSchema(obj);
 	}
 	
 	public void setMinContains(JsonElement obj) {
+		logger.trace("Setting minContains by parsing {}", obj);
 		Long value = obj.getAsLong();
 		minContains = value;
 	}
 	
 	public void setMaxContains(JsonElement obj) {
+		logger.trace("Setting maxContains by parsing {}", obj);
 		Long value = obj.getAsLong();
 		maxContains = value;
 	}
@@ -77,7 +85,13 @@ public class Contains implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		return null; //non posso cercare cose qui dentro
+		if(contains != null){
+			logger.debug("searchDef: searching in contains. URIIterator: {}", URIIterator);
+			return contains.searchDef(URIIterator);
+		}
+
+		logger.debug("searchDef: End node --> returning null");
+		return null;
 	}
 
 	@Override

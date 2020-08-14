@@ -2,15 +2,22 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 public class Names_Assertion implements Assertion{
 	private Assertion names;
+
+	private static Logger logger = LogManager.getLogger(Names_Assertion.class);
 	
 	public Names_Assertion(Assertion names) {
 		this.names = names;
+		logger.trace("Created a new Names_Assertion: {}", this);
+
 	}
 
 	@Override

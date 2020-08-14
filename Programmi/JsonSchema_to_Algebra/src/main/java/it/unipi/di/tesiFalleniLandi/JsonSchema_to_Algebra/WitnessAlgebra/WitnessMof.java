@@ -6,6 +6,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Mof_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -14,10 +16,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge con notMof
+    private static Logger logger = LogManager.getLogger(WitnessMof.class);
+
     private Double value;
 
     public WitnessMof(Double value) {
         this.value = value;
+        logger.trace("Created a new WitnessMof: {}", this);
     }
 
     public Double getValue() {
@@ -38,6 +43,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == WitnessMof.class)
             return this.mergeElement((WitnessMof) a);
@@ -48,21 +54,27 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     public WitnessAssertion mergeElement(WitnessMof a) {
-        return new WitnessMof(a.value * (value / gcd(a.value, value)));
+        WitnessMof result = new WitnessMof(a.value * (value / gcd(a.value, value)));
+        logger.trace("Merge result: {}", result);
+        return result;
     }
 
     public WitnessAssertion mergeElement(WitnessNotMof a) throws REException {
-            WitnessNotMof notMof = a;
-            Double val1 = notMof.getValue();
-            Double val2 = this.value;
 
-            if(val2 % val1 == 0) {
-                Type_Assertion type = new Type_Assertion();
-                type.add(FullAlgebraString.TYPE_NUMBER);
+        WitnessNotMof notMof = a;
+        Double val1 = notMof.getValue();
+        Double val2 = this.value;
 
-                return type.not().toWitnessAlgebra();
-            }else
-                return null;
+        if(val2 % val1 == 0) {
+            Type_Assertion type = new Type_Assertion();
+            type.add(FullAlgebraString.TYPE_NUMBER);
+
+            logger.trace("Merge result: {}", type.not());
+            return type.not().toWitnessAlgebra();
+        }else {
+            logger.trace("Merge result: null");
+            return null;
+        }
     }
 
     @Override

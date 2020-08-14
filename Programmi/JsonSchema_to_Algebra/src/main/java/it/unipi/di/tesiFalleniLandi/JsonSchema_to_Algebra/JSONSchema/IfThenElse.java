@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfThenElse_Assertion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,18 +16,25 @@ public class IfThenElse implements JSONSchemaElement {
 	private JSONSchema ifStatement;
 	private JSONSchema thenStatement;
 	private JSONSchema elseStatement;
+
+	private static Logger logger = LogManager.getLogger(IfThenElse.class);
 	
-	public IfThenElse(){ }
+	public IfThenElse(){
+		logger.trace("Creating an empty IfThenElse");
+	}
 	
 	public void setIf(JsonElement obj) {
+		logger.trace("Setting {} as If in {}", obj, this);
 		ifStatement = new JSONSchema(obj);
 	}
 	
 	public void setThen(JsonElement obj) {
+		logger.trace("Setting {} as Then in {}", obj, this);
 		thenStatement = new JSONSchema(obj);
 	}
 	
 	public void setElse(JsonElement obj) {
+		logger.trace("Setting {} as Else in {}", obj, this);
 		elseStatement = new JSONSchema(obj);
 	}
 
@@ -85,18 +94,20 @@ public class IfThenElse implements JSONSchemaElement {
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		if(URIIterator.hasNext())
-			switch(URIIterator.next()) {
-			case "if":
-				URIIterator.remove();
-				return ifStatement.searchDef(URIIterator);
-			case "then":
-				URIIterator.remove();
-				return thenStatement.searchDef(URIIterator);
-			case "else":
-				URIIterator.remove();
-				return elseStatement.searchDef(URIIterator);
+		if(URIIterator.hasNext()) {
+			logger.debug("Searching for {} in {}", URIIterator.next(), this);
+			switch (URIIterator.next()) {
+				case "if":
+					URIIterator.remove();
+					return ifStatement.searchDef(URIIterator);
+				case "then":
+					URIIterator.remove();
+					return thenStatement.searchDef(URIIterator);
+				case "else":
+					URIIterator.remove();
+					return elseStatement.searchDef(URIIterator);
 			}
+		}
 		
 		return null;
 	}

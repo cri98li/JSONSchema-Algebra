@@ -4,6 +4,8 @@ import com.google.gson.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Enum_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,9 +15,11 @@ import java.util.Map.Entry;
 public class Enum implements JSONSchemaElement{
 	JsonArray _enum;
 
-	public Enum() { }
+	private static Logger logger = LogManager.getLogger(Enum.class);
 
 	public Enum(JsonElement array) {
+		logger.trace("Creating a new Format by parsing {}", array);
+
 		try {
 			_enum = (JsonArray) array;
 		}catch(ClassCastException e) {
@@ -104,6 +108,7 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

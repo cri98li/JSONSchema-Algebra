@@ -7,6 +7,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
@@ -15,7 +17,11 @@ import java.util.Map.Entry;
 public class Pattern implements JSONSchemaElement{
 	private String pattern;
 
+	private static Logger logger = LogManager.getLogger(Pattern.class);
+
 	public Pattern(JsonElement str) {
+		logger.trace("Creating pattern by parsing {}", str);
+
 		try{
 			str.getAsString();
 		}catch (Exception e) {
@@ -27,9 +33,8 @@ public class Pattern implements JSONSchemaElement{
 
 	private Pattern(String pattern) {
 		this.pattern = pattern;
+		logger.trace("Created a new Pattern: {}", this);
 	}
-	
-	public Pattern() { }
 
 	@Override
 	public String toString() {
@@ -72,6 +77,7 @@ public class Pattern implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
+		logger.debug("searchDef: End node --> returning null");
 		return null;
 	}
 

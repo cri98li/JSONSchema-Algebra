@@ -5,6 +5,8 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.Collection;
@@ -12,9 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WitnessXBet implements WitnessAssertion{
-    Double min, max;
+    private static Logger logger = LogManager.getLogger(WitnessXBet.class);
 
-    public WitnessXBet(){}
+    Double min, max;
 
     public WitnessXBet(Double min, Double max) {
         if(min == null)
@@ -26,6 +28,8 @@ public class WitnessXBet implements WitnessAssertion{
             this.max = Double.POSITIVE_INFINITY;
         else
             this.max = max;
+
+        logger.trace("Created a new WitnessXBet : {}", this);
     }
 
     @Override
@@ -70,6 +74,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessXBet a) throws REException {
+        logger.trace("Merging {} with {}", a, this);
         Double m = (min < a.min) ? a.min : min;
         Double M = (max > a.max) ? a.max : max;
 
@@ -77,10 +82,12 @@ public class WitnessXBet implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(FullAlgebraString.TYPE_NUMBER);
 
+            logger.trace("Merge result: ", type.not());
             return type.not().toWitnessAlgebra();
         }
 
         WitnessXBet newXBet = new WitnessXBet(m, M);
+        logger.trace("Merge result: ", newXBet);
         return (this.equals(newXBet) && a.equals(newXBet)) ? null : newXBet;
     }
 
@@ -113,6 +120,7 @@ public class WitnessXBet implements WitnessAssertion{
 
     @Override
     public WitnessAssertion clone() {
+        logger.trace("Cloning WitenssXBet {}", this);
         return new WitnessXBet(min, max);
     }
 
@@ -151,7 +159,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         return this;
     }
 

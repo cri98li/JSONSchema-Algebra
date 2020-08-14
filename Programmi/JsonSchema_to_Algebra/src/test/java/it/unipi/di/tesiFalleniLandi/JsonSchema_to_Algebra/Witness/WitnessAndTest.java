@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_Full
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
+import org.junit.Ignore;
 import org.junit.Test;
 import patterns.REException;
 
@@ -16,6 +17,7 @@ public class WitnessAndTest {
 
 
     //Test and appiattito
+    @Ignore
     @Test
     public void testAddAnd() throws REException, WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
@@ -36,6 +38,7 @@ public class WitnessAndTest {
         assertEquals(a1, output);
     }
 
+    @Ignore
     @Test
     public void mergeFalse() throws REException, WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
@@ -48,6 +51,7 @@ public class WitnessAndTest {
         assertEquals(a1.mergeWith(a2), new WitnessBoolean(false));
     }
 
+    @Ignore
     @Test
     public void testMerge1() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_1.algebra");
@@ -58,6 +62,7 @@ public class WitnessAndTest {
         assertEquals(input.merge(), output);
     }
 
+    @Ignore
     @Test
     public void testMerge2() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_2.algebra");
@@ -68,6 +73,7 @@ public class WitnessAndTest {
         assertEquals(input.merge(), output);
     }
 
+    @Ignore
     @Test
     public void testMerge3() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_3.algebra");
@@ -78,6 +84,7 @@ public class WitnessAndTest {
         assertEquals(input.merge(), output);
     }
 
+    @Ignore
     @Test
     public void testMerge4() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_4.algebra");
@@ -88,11 +95,13 @@ public class WitnessAndTest {
         assertEquals(input.merge(), output);
     }
 
+    @Ignore
     @Test
     public void testCanonicalization1() throws REException, WitnessException {
     }
 
 
+    @Ignore
     @Test
     public void testDNF1() throws IOException, REException, WitnessException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_1.algebra");
@@ -104,6 +113,7 @@ public class WitnessAndTest {
 
     }
 
+    @Ignore
     @Test
     public void testDNF2() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_2.algebra");
@@ -114,6 +124,7 @@ public class WitnessAndTest {
         assertEquals(input.DNF(), output);
     }
 
+    @Ignore
     @Test
     public void testDNF3() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_3.algebra");
@@ -124,6 +135,7 @@ public class WitnessAndTest {
         assertEquals(input.DNF(), output);
     }
 
+    @Ignore
     @Test
     public void testDNF4() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_4.algebra");
@@ -134,6 +146,7 @@ public class WitnessAndTest {
         assertEquals(input.DNF(), output);
     }
 
+    @Ignore
     @Test
     public void testDNF5() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_5.algebra");
@@ -144,6 +157,7 @@ public class WitnessAndTest {
         assertEquals(input.DNF(), output);
     }
 
+    @Ignore
     @Test
     public void testEquals() throws WitnessFalseAssertionException {
         WitnessAnd a1 = new WitnessAnd();
@@ -173,7 +187,29 @@ public class WitnessAndTest {
         WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
         WitnessAssertion output = out.toWitnessAlgebra();
 
-        input.groupize().DNF().objectPrepare();
+        input.notElimination();
+        input = input.groupize();
+        input = input.DNF();
+        input.varNormalization_separation(null);
+        input.varNormalization_expansion(null);
+        input.objectPrepare();
+
+        assertEquals(input, output);
+    }
+
+    @Test
+    public void testObjPrep2() throws WitnessException, IOException, REException {
+        Assertion in = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/input_2.algebra");
+        Assertion out = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/output_2.algebra");
+        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
+        WitnessAssertion output = out.toWitnessAlgebra();
+
+        input.notElimination();
+        input = input.groupize();
+        input = input.DNF();
+        input.varNormalization_separation(null);
+        input.varNormalization_expansion(null);
+        input.objectPrepare();
 
         assertEquals(input, output);
     }

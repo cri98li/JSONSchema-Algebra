@@ -5,11 +5,15 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 import java.util.*;
 
 public class WitnessContains implements WitnessAssertion{
+    private static Logger logger = LogManager.getLogger(WitnessContains.class);
+
     private Double min, max;
     private WitnessAssertion contains;
     private boolean isAnArray;
@@ -18,12 +22,14 @@ public class WitnessContains implements WitnessAssertion{
         this.min = 0.0;
         this.max = Double.POSITIVE_INFINITY;
         isAnArray = false;
+        logger.debug("Created a new WitnessContains: {}", this);
     }
 
     public WitnessContains(double min, double max, WitnessAssertion contains) {
         this.min = min;
         this.max = max;
         this.contains = contains;
+        logger.debug("Created a new WitnessContains: {}", this);
     }
 
     public WitnessContains(Long min, Long max, WitnessAssertion contains) {
@@ -40,6 +46,7 @@ public class WitnessContains implements WitnessAssertion{
         this.contains = contains;
 
         isAnArray = contains.getClass() == WitnessBoolean.class;
+        logger.debug("Created a new WitnessContains: {}", this);
     }
 
     @Override
@@ -58,6 +65,7 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+        logger.debug("Merging {} with {}", a, this);
         if(this.contains != null && this.contains.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.contains).getValue())
                 return new WitnessBoolean(false);
@@ -79,8 +87,10 @@ public class WitnessContains implements WitnessAssertion{
 
     public WitnessAssertion mergeElement(WitnessContains a) throws REException {
         if(a.contains.getClass() == WitnessBoolean.class || isAnArray) {
-            if (!((WitnessBoolean)a.contains).getValue())
+            if (!((WitnessBoolean)a.contains).getValue()) {
+                logger.debug("Merge result: false");
                 return new WitnessBoolean(false);
+            }
         }
 
         WitnessContains contains = new WitnessContains();
@@ -98,9 +108,12 @@ public class WitnessContains implements WitnessAssertion{
             else
                 type.add(FullAlgebraString.TYPE_ARRAY);
 
+            logger.debug("Merge result: {}", type.not());
             return type.not().toWitnessAlgebra();
-        }else
+        }else {
+            logger.debug("Merge result: {}", contains);
             return contains;
+        }
     }
 
     @Override
@@ -119,6 +132,7 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessContains clone() {
+        logger.debug("MCloning WitnessContains: {}", this);
         WitnessContains clone = new WitnessContains();
         clone.max = max;
         clone.min = min;

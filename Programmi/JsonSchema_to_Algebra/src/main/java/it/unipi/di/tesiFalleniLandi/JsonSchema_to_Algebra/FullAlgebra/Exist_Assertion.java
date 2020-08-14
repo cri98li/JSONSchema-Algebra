@@ -1,34 +1,43 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessContains;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
 public class Exist_Assertion implements Assertion{
 	private Long min;
 	private Long max;
 	private Assertion contains;
-	
-	public Exist_Assertion() {	}
-	
+
+	private static Logger logger = LogManager.getLogger(Exist_Assertion.class);
+
 	public Exist_Assertion(Long min, Long max, Assertion schema) {
 		this.min = min;
 		this.max = max;
 		if(schema == null) this.contains = new Boolean_Assertion(true);
 		else this.contains = schema;
+
+		logger.trace("Created a new Exist_Assertion: {}", this);
+
 	}
 
 	public void setMin(Long min) {
+		logger.trace("Setting {} as min in {}", min, this);
 		this.min = min;
 	}
 	
 	public void setMax(Long max) {
+		logger.trace("Setting {} as max in {}", max, this);
 		this.max = max;
 	}
 	
 	public void setContains(Assertion schema) {
+		logger.trace("Setting {} as contains in {}", schema, this);
 		this.contains = schema;
 	}
 

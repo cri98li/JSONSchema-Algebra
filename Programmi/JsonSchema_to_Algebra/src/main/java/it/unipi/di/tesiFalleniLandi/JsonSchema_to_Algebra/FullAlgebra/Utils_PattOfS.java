@@ -3,6 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AllOf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.Pattern;
 import patterns.REException;
 
@@ -10,8 +12,11 @@ import java.util.List;
 
 public class Utils_PattOfS {
     //Vedi definizione sul documento
-
     private static ComplexPattern truePattern;
+    private static ComplexPattern falsePattern;
+
+    private static Logger logger = LogManager.getLogger(Utils_PattOfS.class);
+
 
     static {
         try {
@@ -20,11 +25,7 @@ public class Utils_PattOfS {
             e.printStackTrace();
             System.exit(-1);
         }
-    }
 
-    private static ComplexPattern falsePattern;
-
-    static {
         try {
             falsePattern = ComplexPattern.createFromRegexp("#");
         } catch (REException e) {
@@ -34,28 +35,32 @@ public class Utils_PattOfS {
     }
 
     public static ComplexPattern pattOfS(Assertion a){
+        ComplexPattern returnPattern = truePattern.clone();
+
         if(a.getClass() == Type_Assertion.class)
-            return pattOfS((Type_Assertion) a);
+            returnPattern = pattOfS((Type_Assertion) a);
 
         if(a.getClass() == Const_Assertion.class)
-            return pattOfS((Const_Assertion) a);
+            returnPattern = pattOfS((Const_Assertion) a);
 
         if(a.getClass() == AllOf_Assertion.class)
-            return pattOfS((AllOf_Assertion) a);
+            returnPattern = pattOfS((AllOf_Assertion) a);
 
         if(a.getClass() == AnyOf_Assertion.class)
-            return pattOfS((AnyOf_Assertion) a);
+            returnPattern = pattOfS((AnyOf_Assertion) a);
 
         if(a.getClass() == Not_Assertion.class)
-            return pattOfS((Not_Assertion) a);
+            returnPattern = pattOfS((Not_Assertion) a);
 
         if(a.getClass() == Pattern_Assertion.class)
-            return pattOfS((Pattern_Assertion) a);
+            returnPattern = pattOfS((Pattern_Assertion) a);
 
         if(a.getClass() == Ref_Assertion.class)
-            return pattOfS((Ref_Assertion) a);
+            returnPattern = pattOfS((Ref_Assertion) a);
 
-        return truePattern.clone();
+        logger.trace("PattOfS({}) returning {}", a, returnPattern);
+
+        return returnPattern;
     }
 
     public static ComplexPattern pattOfS(Type_Assertion a){
