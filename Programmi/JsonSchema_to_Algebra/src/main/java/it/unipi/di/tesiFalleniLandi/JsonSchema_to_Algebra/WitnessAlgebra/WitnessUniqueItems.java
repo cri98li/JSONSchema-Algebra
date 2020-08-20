@@ -1,10 +1,10 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.UniqueItems_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -52,7 +52,6 @@ public class WitnessUniqueItems implements WitnessAssertion{
         Type_Assertion t = new Type_Assertion();
         t.add(FullAlgebraString.TYPE_ARRAY);
 
-        //return new IfThenElse_Assertion(t, new Boolean_Assertion(false), null).toWitnessAlgebra();
         logger.trace("Merge returning {} ", t.not());
         return t.not().toWitnessAlgebra();
     }
@@ -108,7 +107,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         return this;
     }
 

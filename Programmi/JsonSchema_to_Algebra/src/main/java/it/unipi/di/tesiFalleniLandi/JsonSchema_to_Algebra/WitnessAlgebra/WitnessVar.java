@@ -1,11 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -16,41 +13,55 @@ import java.util.*;
 public class WitnessVar implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessVar.class);
 
-    private static HashMap<String, String> rename;
-    private static HashMap<String, LinkedList<WeakReference<WitnessVar>>> instances;
+    private static HashMap<String, String> renamed; //map oldName --> newName
+    private static HashMap<String, LinkedList<WeakReference<WitnessVar>>> instances; //map of all instances of WitnessVar
 
+    //We use WeakReference to avoid memory leaks. An object stored in WeakReference do not increment the numbers of pointer
+    //that refer to that object, so if the object is pointed only by a WeakReference, the garbage collector can delete it
 
     static {
-        rename = new HashMap<>();
+        renamed = new HashMap<>();
         instances = new HashMap<>();
     }
 
-    public static void rename(WitnessVar oldName, WitnessVar newName){
-        rename(oldName.getName(), newName.getName());
+    public static void rename(WitnessVar oldName, WitnessVar newName) {
+            rename(oldName.getName(), newName.getName());
     }
 
+    //rename all the instances of ref(oldName) into ref(newName)
     public static void rename(String oldName, String newName){
-        logger.trace("Renaming {} (old) to {} (new)", oldName, newName);
-        newName = resolveName(newName); //mi assicuro che non sia un "rename intermedio"
-        rename.put(oldName, newName); //aggiungo la ridenominazione
+        if(oldName.equals(newName)) return;
 
-        //rinomino i vecchi
+        logger.trace("Renaming {} (old) to {} (new)", oldName, newName);
+
+        newName = resolveName(newName); //get the "real" name to be renamed.
+        renamed.put(oldName, newName); //save the rename operation.
+
+        //rename instances
         renameInstances(newName, oldName);
     }
 
 
     /**
-     * b,a --> add(a, bodya);           add(b, bodya) non creo b, scrivo su quelli giá istanziati a, e mi ricordo di cambiare nome alle nuove istanze nel costruttore
-     * c,b
+     * example
+     * if b=a --> add(a, body_a);        add(b, body_a) do not create b,
+     *                                   rewrite all instances of ref(b) as ref(a),
+     *                                   remember that if someone want to create ref(b), we must instead return ref(a)
+     * c=b
      *
-     * resolve(c) --> resove(b) --> a
+     * resolve(c) --> resolve(b) --> a
      */
     private static String resolveName(String oldName){
-        if(rename.containsKey(oldName))    return resolveName(rename.get(oldName));
+        if(renamed.containsKey(oldName))    return resolveName(renamed.get(oldName));
 
         return oldName;
     }
 
+    /**
+     * Rename all the instances of oldName with newName
+     * @param newName
+     * @param oldName
+     */
     private static void renameInstances(String newName, String oldName){
         List<WeakReference<WitnessVar>> instancesToBeRenamed = instances.remove(oldName);
         List<WeakReference<WitnessVar>> newNameInstances = instances.get(newName);
@@ -73,6 +84,7 @@ public class WitnessVar implements WitnessAssertion{
         String newName = resolveName(name);
         this.name = newName;
 
+        //Add the new instace to the list of all the instaces
         if(instances.containsKey(name))
             instances.get(newName).add(new WeakReference<>(this));
         else {
@@ -157,7 +169,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) {
         return env.getCoVarName(this);
     }
 
@@ -176,7 +188,7 @@ public class WitnessVar implements WitnessAssertion{
         if(visitedVar.contains(this))
             return Float.POSITIVE_INFINITY;
 
-        if(WitnessBDD.contains(this))//se ha un obdd associato sono ok
+        if(WitnessBDD.contains(this))//if there is an obdd with the same name i can return 0;
             return 0f;
 
         visitedVar.add(this);
@@ -206,7 +218,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         return this;
     }
 
@@ -222,11 +234,13 @@ public class WitnessVar implements WitnessAssertion{
 
         if(!WitnessBDD.contains(this))
             throw new WitnessException("buildOBDD richiamato su variabile senza obdd associato (ne forzato): "+name);
+
         return this;
     }
 
 
     protected void forceOBDD(){
+        logger.warn("forced the creation of {}, that is not ok", new WitnessVar("forced_"+name));
         WitnessBDD.createVar(new WitnessVar("forced_"+name));
     }
 }

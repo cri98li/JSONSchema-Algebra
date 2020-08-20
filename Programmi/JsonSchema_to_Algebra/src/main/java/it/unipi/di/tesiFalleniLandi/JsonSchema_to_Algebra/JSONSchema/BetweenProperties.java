@@ -51,7 +51,6 @@ public class BetweenProperties implements JSONSchemaElement{
 		JsonObject obj = new JsonObject();
 		
 		if(minProperties != null) obj.addProperty("minProperties", minProperties);
-		
 		if(maxProperties != null) obj.addProperty("maxProperties", maxProperties);
 
 		return obj;

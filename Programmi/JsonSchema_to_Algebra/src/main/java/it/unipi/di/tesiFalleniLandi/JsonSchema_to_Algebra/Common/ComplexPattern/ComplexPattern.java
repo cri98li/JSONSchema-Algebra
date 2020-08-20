@@ -1,7 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.MainClass;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import patterns.Pattern;
 import patterns.REException;
 
@@ -9,7 +10,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.logging.log4j.*;
 
 /**
  * Estensione della classe Pattern di stefanie. Ci consente di fare ottimizzazioni e aggiungere funzionalità
@@ -92,10 +92,10 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
     public static ComplexPattern createFromName(String patternName) {
-        if(patternCache.containsKey(patternName)) return patternCache.get(patternName);
+        if(patternCache.containsKey("name: "+patternName)) return patternCache.get("name: "+patternName);
 
         ComplexPattern tmp = new ComplexPattern(Pattern.createFromName(patternName), "^"+patternName+"$");
-        patternCache.put(patternName, tmp);
+        patternCache.put("name: "+patternName, tmp);
 
         logger.trace("Creating a ComplexPattern from Name: {}", tmp);
 
@@ -103,10 +103,10 @@ public class ComplexPattern implements ComplexPatternElement {
     }
 
     public static ComplexPattern createFromRegexp(String ecmaRegex) throws REException {
-        if(patternCache.containsKey(ecmaRegex))
-            return patternCache.get(ecmaRegex);
+        if(patternCache.containsKey("regexp: "+ecmaRegex))
+            return patternCache.get("regexp: "+ecmaRegex);
         ComplexPattern tmp = new ComplexPattern(Pattern.createFromRegexp(ecmaRegex), ecmaRegex);
-        patternCache.put(ecmaRegex, tmp);
+        patternCache.put("regexp: "+ecmaRegex, tmp);
 
         logger.trace("Creating a ComplexPattern from RegExp: {}", tmp);
 

@@ -85,7 +85,8 @@ public class Contains implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		if(contains != null){
+		if(URIIterator.hasNext() && URIIterator.next().equals("contains")){
+			URIIterator.remove();
 			logger.debug("searchDef: searching in contains. URIIterator: {}", URIIterator);
 			return contains.searchDef(URIIterator);
 		}

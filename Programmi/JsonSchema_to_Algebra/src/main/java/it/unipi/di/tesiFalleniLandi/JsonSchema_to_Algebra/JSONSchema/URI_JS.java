@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -12,9 +13,9 @@ import java.util.NoSuchElementException;
  * Classe di utilità per rappresentare URI
  */
 public class URI_JS {
-	private String uri;				//URI originale 		es: properties/aaa/properties/bbb
-	private String normalizedURI;	//URI nomalizzato 		es: /$defs/
-	private String normalizedName;	//Nome dell'elemento 	es: aaa_properties_bbb
+	private String uri;				//ex: properties/aaa/properties/bbb
+	private String normalizedURI;	//ex: /$defs/
+	private String normalizedName;	//: aaa_properties_bbb
 
 	private static Logger logger = LogManager.getLogger(URI_JS.class);
 
@@ -50,7 +51,6 @@ public class URI_JS {
 		this.normalizedName = normalizedName;
 	}
 
-	//Tenta di normalizzare un URI
 	private void normalizeURI() {
 		logger.trace("Trying to normalizing {}", this.uri);
 
@@ -61,7 +61,7 @@ public class URI_JS {
 		normalizedName = "";
 		normalizedURI = "";
 		
-		//caso #
+		//case #
 		if(uri.equals("#")) {
 			normalizedURI = "";
 			normalizedName = FullAlgebraString.ROOTDEF_DEFAULTNAME;
@@ -137,7 +137,15 @@ public class URI_JS {
             public void remove() {
             	currentIndex++;
             }
-        };
+
+			@Override
+			public String toString() {
+				return "$classname{" +
+						"currentIndex=" + currentIndex +
+						", splittedURI=" + Arrays.toString(splittedURI) +
+						'}';
+			}
+		};
         return it;
     }
 }

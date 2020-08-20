@@ -9,6 +9,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -36,6 +37,8 @@ public class Properties implements JSONSchemaElement{
 				throw new ParseCancellationException("Error: properties value must be JsonObject, not JsonArray!\r\n");
 		}
 
+		if(object.size() == 0) return;
+
 		properties = new HashMap<>();
 		
 		Iterator<?> it = object.keySet().iterator();
@@ -58,6 +61,8 @@ public class Properties implements JSONSchemaElement{
 		logger.trace("Parsing PatternProperties from JsonElement {}", obj);
 
 		JsonObject object = null;
+
+		if(object.size() == 0) return;
 
 		try{
 			object = obj.getAsJsonObject();
@@ -98,22 +103,20 @@ public class Properties implements JSONSchemaElement{
 	public JsonElement toJSON() {
 		JsonObject obj = new JsonObject();
 		
-		if(properties != null && !properties.isEmpty()){
+		if(properties != null){
 			JsonObject tmp = new JsonObject();
-			Set<String> keys = properties.keySet();
-				
-			for(String key : keys)
-				tmp.add(key, properties.get(key).toJSON());
+
+			for(Entry<String, JSONSchema> entry : properties.entrySet())
+				tmp.add(entry.getKey(), entry.getValue().toJSON());
 				
 			obj.add("properties", tmp);
 		}
 		
-		if(patternProperties != null && !patternProperties.isEmpty()){
+		if(patternProperties != null){
 			JsonObject tmp = new JsonObject();
-			Set<String> keys = patternProperties.keySet();
-				
-			for(String key : keys)
-				tmp.add(key, patternProperties.get(key).toJSON());
+
+			for(Entry<String, JSONSchema> entry : patternProperties.entrySet())
+				tmp.add(entry.getKey(), entry.getValue().toJSON());
 				
 			obj.add("patternProperties", tmp);
 		}
@@ -142,7 +145,12 @@ public class Properties implements JSONSchemaElement{
 				Assertion returnedValue = entry.getValue().toGrammar();
 				if(returnedValue != null) {
 					String tmp = new JsonPrimitive(entry.getKey()).toString();
-					fullAlgebra_properties.addProperties(tmp.substring(1, tmp.length()-1), returnedValue); //TODO: check encoding escape
+					try {
+						fullAlgebra_properties.addPatternProperties(tmp.substring(1, tmp.length()-1), returnedValue); //TODO: check encoding escape
+					} catch (REException e) {
+						logger.catching(e);
+						throw new RuntimeException(e);
+					}
 				}
 			}
 		}
@@ -263,7 +271,7 @@ public class Properties implements JSONSchemaElement{
 			
 		case "additionalProperties":
 			URIIterator.remove();
-			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), additionalProperties, URIIterator);
+			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.hasNext() ? URIIterator.next() : null, additionalProperties, URIIterator);
 			return additionalProperties.searchDef(URIIterator);
 		}
 		

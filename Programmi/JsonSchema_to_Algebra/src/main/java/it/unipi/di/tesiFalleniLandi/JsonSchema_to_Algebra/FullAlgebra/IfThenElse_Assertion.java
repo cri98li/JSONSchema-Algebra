@@ -2,13 +2,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,36 +103,22 @@ public class IfThenElse_Assertion implements Assertion{
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		WitnessOr or = new WitnessOr();
 		if(elseStatement == null){
-			try {
-				or.add(ifStatement.not().toWitnessAlgebra());
-				or.add(thenStatement.toWitnessAlgebra());
-			}catch(WitnessTrueAssertionException ex){
-				return new WitnessBoolean(true);
-			}
+			or.add(ifStatement.not().toWitnessAlgebra());
+			or.add(thenStatement.toWitnessAlgebra());
+
 			return or;
 		}
 
 		WitnessAnd and = new WitnessAnd();
 
-		try{
-			and.add(ifStatement.toWitnessAlgebra());
-			and.add(thenStatement.toWitnessAlgebra());
-			or.add(and);
-		}
-		catch (WitnessFalseAssertionException ex){ }	//and
-		catch (WitnessTrueAssertionException ex){		//or
-			return new WitnessBoolean(true);
-		}
+		and.add(ifStatement.toWitnessAlgebra());
+		and.add(thenStatement.toWitnessAlgebra());
+		or.add(and);
 
 		WitnessAnd and2 = new WitnessAnd();
-		try{
-			and2.add(ifStatement.not().toWitnessAlgebra());
-			and2.add(elseStatement.toWitnessAlgebra());
-			or.add(and2);
-		}catch (WitnessFalseAssertionException ex){ }	//and
-		catch (WitnessTrueAssertionException ex){		//or
-			return new WitnessBoolean(true);
-		}
+		and2.add(ifStatement.not().toWitnessAlgebra());
+		and2.add(elseStatement.toWitnessAlgebra());
+		or.add(and2);
 
 		return or;
 	}

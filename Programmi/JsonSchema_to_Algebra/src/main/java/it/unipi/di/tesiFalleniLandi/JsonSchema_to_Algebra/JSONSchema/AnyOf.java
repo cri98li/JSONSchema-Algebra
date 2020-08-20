@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AnyOf_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,7 +62,9 @@ public class AnyOf implements JSONSchemaElement{
 		return obj;
 	}
 
-	public AnyOf_Assertion toGrammar() {
+	public Assertion toGrammar() {
+		if(anyOf.size() == 1) return anyOf.get(0).toGrammar();
+
 		AnyOf_Assertion newAnyOf = new AnyOf_Assertion();
 
 		for(JSONSchemaElement el : anyOf)
@@ -104,14 +107,18 @@ public class AnyOf implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		try {
-			int i = Integer.parseInt(URIIterator.next());
-			logger.debug("searchDef: searching for index {} in anyOf[{}]. URIIterator: {}", i, anyOf.size(), URIIterator);
-			if(i < anyOf.size()){
-				URIIterator.remove();
-				return anyOf.get(i).searchDef(URIIterator);
+		if(URIIterator.hasNext() && URIIterator.next().equals("anyOf")) {
+			URIIterator.remove();
+			try {
+				int i = Integer.parseInt(URIIterator.next());
+				logger.debug("searchDef: searching for index {} in anyOf[{}]. URIIterator: {}", i, anyOf.size(), URIIterator);
+				if (i < anyOf.size()) {
+					URIIterator.remove();
+					return anyOf.get(i).searchDef(URIIterator);
+				}
+			} catch (ClassCastException | NumberFormatException e) {
+				logger.catching(e); //error in the ref URI
 			}
-		}catch (ClassCastException e){
 		}
 
 		return null;

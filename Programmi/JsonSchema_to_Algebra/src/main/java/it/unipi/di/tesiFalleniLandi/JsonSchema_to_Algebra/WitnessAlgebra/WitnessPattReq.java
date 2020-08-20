@@ -5,8 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.PatternRequired_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -16,7 +14,7 @@ import java.util.*;
 public class WitnessPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessPattReq.class);
 
-    private static HashMap<Object, WitnessPattReq> instances;
+    private static HashMap<Object, WitnessPattReq> instances; //TODO: WeakRef as in WitnessVar??
 
     public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
         if(instances == null) instances = new HashMap<>();
@@ -34,13 +32,14 @@ public class WitnessPattReq implements WitnessAssertion{
         return tmp;
     }
 
-
     private ComplexPattern key;
     private WitnessAssertion value;
 
     private List<WitnessOrPattReq> orpList;
 
     private WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
+        if(assertion != null && assertion.getClass() == WitnessAnd.class && ((WitnessAnd) assertion).getIfUnitaryAnd() != null)
+            assertion = ((WitnessAnd) assertion).getIfUnitaryAnd();
         logger.trace("Creating a new WitnessPattReq with key: {} and value: {}", key, assertion);
         this.key = key;
         value = assertion;
@@ -102,20 +101,12 @@ public class WitnessPattReq implements WitnessAssertion{
         this.value = value;
     }
 
-    /*@Override
-    public String toString() {
-        return "WitnessPattReq{" +
-                "pattern=" + key +
-                ", value=" + value +
-                '}';
-    }*/
-
     @Override
     public String toString() {
         return "WitnessPattReq{" +
                 "key=" + key +
                 ", value=" + value +
-                ", orpList=" + orpList +
+                ", orpList=" + //orpList +
                 '}';
     }
 
@@ -219,14 +210,10 @@ public class WitnessPattReq implements WitnessAssertion{
         WitnessPattReq pattReq = new WitnessPattReq();
         pattReq.key = key;
 
-        if(pattReq != null){
+        if(value != null){
             if(value.getClass() != WitnessAnd.class) {
                 WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(value);
-                }catch (WitnessFalseAssertionException e){
-                    pattReq.value = new WitnessBoolean(false);
-                }
+                and.add(value);
                 pattReq.value = and.groupize();
             } else pattReq.value = value.groupize();
         }
@@ -246,25 +233,18 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
-        if (value != null) {
-            if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
+        if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
 
-                value.varNormalization_separation(env);
+            value.varNormalization_separation(env);
 
-                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
+            Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
 
-                value = result.getKey();
-            }
+            value = result.getKey();
         }
     }
 
     @Override
-    public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
-        /*WitnessPattReq pattReq = new WitnessPattReq();
-        pattReq.key = this.key;
-        if(value != null) pattReq.value = this.value.variableNormalization_expansion(env);
-
-        return pattReq;*/
+    public WitnessAssertion varNormalization_expansion(WitnessEnv env) {
         return this;
     }
 
@@ -272,13 +252,14 @@ public class WitnessPattReq implements WitnessAssertion{
     public WitnessAssertion DNF() {
         WitnessPattReq pattReq = new WitnessPattReq();
         pattReq.key = this.key;
+
         if(value != null) pattReq.value = this.value.clone();
 
         return pattReq;
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         WitnessOrPattReq orPattReq = new WitnessOrPattReq();
         orPattReq.add(this);
         return orPattReq;

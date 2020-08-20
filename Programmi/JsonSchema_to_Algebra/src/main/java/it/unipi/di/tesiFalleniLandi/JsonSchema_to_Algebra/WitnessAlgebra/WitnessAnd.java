@@ -3,10 +3,9 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,37 +25,53 @@ public class WitnessAnd implements WitnessAssertion{
      *      ...
      */
     private LinkedHashMap<Object, List<WitnessAssertion>> andList;
+    private boolean block; // flag that indicates if the AND contains false (we check this instead of searching into andList)
 
     public WitnessAnd() {
         this.andList = new LinkedHashMap<>();
-        //caso base AND
-        //List list = new LinkedList<>();
-        //list.add(new WitnessBoolean(true));
-        //this.andList.put(WitnessBoolean.class, list);
+
+        //base case AND
+        List list = new LinkedList<>();
+        list.add(new WitnessBoolean(true));
+        this.andList.put(WitnessBoolean.class, list);
+        block = false;
         logger.trace("Created a new and: {}", this);
     }
 
     /**
      * Add an assertion - el - to the andList.
+     * if this is blocked we do not add el
+     * if el is boolean true we do not add el
      * if el is an instance of WitnessAnd, we add every element of el.andList in this.andList
      * if el is an instance of uniqueItems or repeatedItems, we check if andList do not contain it, then we add it
      * if el is “false” or is a type assertion that is not compatible with the type assertion that is present, we raise the exception WitnessFalseAssertionException
-     * @param el
-     * @return
+     * @param el element to add
+     * @return true if the collection has changed, false otherwise
      */
-    public boolean add(WitnessAssertion el) throws WitnessFalseAssertionException {
+    public boolean add(WitnessAssertion el) {
+        if(block)
+            return false; //if block is true we do not add any other assertion (this and contains false)
 
-        if(el.getClass() == WitnessBoolean.class) //add boolean
-            if(((WitnessBoolean) el).getValue()) //add true
+        if(el.getClass() == WitnessBoolean.class) { //add boolean
+            if (((WitnessBoolean) el).getValue() == true) //add true
                 return false;
-            else
-                throw new WitnessFalseAssertionException("and.add(false)");
+            else {
+                andList = new LinkedHashMap<>(); //if false, remove all and set block to true
+                block = true;
+                //we do not return because we want to add false to the empty and
+            }
+
+        }
+
+        if(andList.get(WitnessBoolean.class) != null)
+            andList.remove(WitnessBoolean.class); //if we reach this, the boolean inside this is the boolean that we add with the constructor.
+                                                    //we can remove it because we are going to add a new element (we "absorb" it)
 
         if(el.getClass() == WitnessAnd.class) { //Flat and
             return add((WitnessAnd) el);
         }
 
-        //Optimization: add uniqueItems or repeatedItems
+        //Optimization: add uniqueItems or repeatedItems only once
         if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class)
             if(!andList.containsKey(el.getClass())){
                 List<WitnessAssertion> list = new LinkedList<>();
@@ -81,7 +96,7 @@ public class WitnessAnd implements WitnessAssertion{
             WitnessAssertion merged = ((WitnessType) el).mergeElement((WitnessType) typeList.get(0));
 
             if(merged.getClass() == WitnessBoolean.class && ((WitnessBoolean)merged).getValue() == false) //incompatible types
-                throw new WitnessFalseAssertionException("add di 2 and incompatibili");
+                return add(new WitnessBoolean(false));
             else{ //compatible types
                 List<WitnessAssertion> list = new LinkedList<>();
                 list.add(merged);
@@ -90,10 +105,10 @@ public class WitnessAnd implements WitnessAssertion{
             }
         }
 
-        if(andList.containsKey(el.getClass())) { //if andList already contains the key
-            //if(andList.get(el.getClass()).contains(el)) return false; --> slow
-            andList.get(el.getClass()).add(el); //insert the assertion in the respective list
-        }else {
+        if(andList.containsKey(el.getClass())) //if andList already contains the key
+            andList.get(el.getClass()).add(el); //insert the assertion in the right list
+        else {
+            //create a new list with el, then put it in the hashMap
             List<WitnessAssertion> list = new LinkedList<>();
             list.add(el);
             andList.put(el.getClass(), list);
@@ -102,7 +117,7 @@ public class WitnessAnd implements WitnessAssertion{
         return true;
     }
 
-    public boolean add(WitnessAnd and) throws WitnessFalseAssertionException {
+    public boolean add(WitnessAnd and) {
         boolean b = false;
 
         for (Map.Entry<Object, List<WitnessAssertion>> entry : and.andList.entrySet())
@@ -131,112 +146,102 @@ public class WitnessAnd implements WitnessAssertion{
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         logger.trace("Merging {} with {}", a, this);
-        try{
-            if(this.add(a)) //if the list has been modified --> apply merge again
-                return this.merge();
-        }catch (WitnessFalseAssertionException e){
-            return new WitnessBoolean(false);
-        }
+
+        if(this.add(a)) //if the list has been modified then apply merge again TODO: can we optimize that?
+            return this.merge();
+
         return this;
     }
 
 
     @Override
     public WitnessAssertion merge() throws REException {
+        if(block) return new WitnessBoolean(false);
+
+        if(getIfUnitaryAnd() != null) return getIfUnitaryAnd();
+
         WitnessAnd newAnd = new WitnessAnd();
         boolean modified = false;
 
-        try {
-            for (Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet()) {
-                int size = sameTypeAssertion.getValue().size();
-                WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge();
+        //this loop merge only element of the same Class
+        for (Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet()) {
+            int size = sameTypeAssertion.getValue().size();
+            WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge();
 
-                for (int i = 1; i < size; i++) {
-                    WitnessAssertion oldMerge = merged;
-                    merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge());
-                    if (merged != null) {
-                        modified = true;
-                        if (merged.getClass() == WitnessBoolean.class) {
-                            WitnessBoolean b = (WitnessBoolean) merged;
-                            if (!b.getValue())
-                                return b;
-                        }
-                    } else {
-                        newAnd.add(sameTypeAssertion.getValue().get(i));
-                        merged = oldMerge;
+            for (int i = 1; i < size; i++) {
+                WitnessAssertion oldMerge = merged;
+                merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge());
+
+                if (merged != null) { //the result has been merged
+                    modified = true;
+                    if (merged.getClass() == WitnessBoolean.class) {
+                        WitnessBoolean b = (WitnessBoolean) merged;
+                        if (b.getValue() == false) //if the merge result is a false boolean, we return false (AND(..., false, ...) is always false)
+                            return b;
                     }
-                }
-
-                if (merged != null) {
-                    newAnd.add(merged);
+                } else { //if the element cannot be merged
+                    newAnd.add(sameTypeAssertion.getValue().get(i));
+                    merged = oldMerge;
                 }
             }
 
-            //CASI SPECIALI
-            if (newAnd.andList.containsKey(WitnessBet.class) && newAnd.andList.containsKey(WitnessXBet.class)) {
-                WitnessBet bet = (WitnessBet) newAnd.andList.remove(WitnessBet.class).get(0);
-                WitnessXBet xBet = (WitnessXBet) newAnd.andList.remove(WitnessXBet.class).get(0);
-                WitnessAssertion assertion = bet.mergeElement(xBet);
+            if (merged != null) {
+                newAnd.add(merged);
+            }
+        }
+
+        //SPECIAL CASES
+        //merge between bet and xbet
+        if (newAnd.andList.containsKey(WitnessBet.class) && newAnd.andList.containsKey(WitnessXBet.class)) {
+            WitnessBet bet = (WitnessBet) newAnd.andList.remove(WitnessBet.class).get(0);
+            WitnessXBet xBet = (WitnessXBet) newAnd.andList.remove(WitnessXBet.class).get(0);
+            WitnessAssertion assertion = bet.mergeElement(xBet);
+            if (assertion == null) {
+                newAnd.add(bet);
+                newAnd.add(xBet);
+            } else {
+                newAnd.add(assertion);
+                modified = true;
+            }
+        }
+
+        //merge between mulOf and notMulOf
+        if (newAnd.andList.containsKey(WitnessMof.class) && newAnd.andList.containsKey(WitnessNotMof.class)) {
+            WitnessMof mof = (WitnessMof) newAnd.andList.remove(WitnessMof.class).get(0);
+            List<WitnessAssertion> notMofList = newAnd.andList.remove(WitnessNotMof.class);
+
+            for (WitnessAssertion tmp : notMofList) {
+                WitnessAssertion assertion = mof.mergeWith(tmp);
                 if (assertion == null) {
-                    newAnd.add(bet);
-                    newAnd.add(xBet);
+                    newAnd.add(mof);
+                    newAnd.add(tmp);
                 } else {
                     newAnd.add(assertion);
                     modified = true;
+                    break;
                 }
             }
 
-            if (newAnd.andList.containsKey(WitnessMof.class) && newAnd.andList.containsKey(WitnessNotMof.class)) {
-                WitnessMof mof = (WitnessMof) newAnd.andList.remove(WitnessMof.class).get(0);
-                List<WitnessAssertion> notMofList = newAnd.andList.remove(WitnessNotMof.class);
-
-                for (WitnessAssertion tmp : notMofList) {
-                    WitnessAssertion assertion = mof.mergeWith(tmp);
-                    if (assertion == null) {
-                        newAnd.add(mof);
-                        newAnd.add(tmp);
-                    } else {
-                        newAnd.add(assertion);
-                        modified = true;
-                        break;
-                    }
-                }
-
-            }
-
-            if (newAnd.andList.containsKey(WitnessUniqueItems.class) && newAnd.andList.containsKey(WitnessRepeateditems.class)) {
-                WitnessUniqueItems uni = (WitnessUniqueItems) newAnd.andList.remove(WitnessUniqueItems.class).get(0);
-                WitnessRepeateditems rep = (WitnessRepeateditems) newAnd.andList.remove(WitnessRepeateditems.class).get(0);
-                WitnessAssertion assertion = uni.mergeElement(rep);
-                if (assertion == null) {
-                    newAnd.add(uni);
-                    newAnd.add(rep);
-                } else {
-                    newAnd.add(assertion);
-                    modified = true;
-                }
-            }
-
-            //TOFIX: newAnd.andList.get(WitnessOr.class).remove(or); de la lista è una sola bisogna rimuovere anche l'elemento dentro l'hashmap
-        /*
-        if(newAnd.andList.containsKey(WitnessOr.class)){
-            for(Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet())
-                if(sameTypeAssertion.getKey() != WitnessOr.class)
-                    for(WitnessAssertion assertion : sameTypeAssertion.getValue()) {
-                        for (WitnessAssertion or : newAnd.clone().andList.get(WitnessOr.class)) {
-                            WitnessAssertion returnedAssertion = or.mergeElement(assertion);
-                            if (returnedAssertion.getClass() == WitnessBoolean.class)
-                                if (((WitnessBoolean) returnedAssertion).getValue() == true);
-                                    newAnd.andList.get(WitnessOr.class).remove(or);
-                                else
-                                    return returnedAssertion; //WitnessBoolean false
-                        }
-                    }
         }
-        */
-        }catch (WitnessFalseAssertionException e){
-            return new WitnessBoolean(false);
+
+        //merge between uniqueItems and repeatedItems
+        if (newAnd.andList.containsKey(WitnessUniqueItems.class) && newAnd.andList.containsKey(WitnessRepeateditems.class)) {
+            WitnessUniqueItems uni = (WitnessUniqueItems) newAnd.andList.remove(WitnessUniqueItems.class).get(0);
+            WitnessRepeateditems rep = (WitnessRepeateditems) newAnd.andList.remove(WitnessRepeateditems.class).get(0);
+            WitnessAssertion assertion = uni.mergeElement(rep);
+            if (assertion == null) {
+                newAnd.add(uni);
+                newAnd.add(rep);
+            } else {
+                newAnd.add(assertion);
+                modified = true;
+            }
         }
+
+        //if is unitary and, return only the value
+        WitnessAssertion value = getIfUnitaryAnd();
+        if (value != null)
+            return value;
 
         if (modified)
             return newAnd.merge();
@@ -248,9 +253,11 @@ public class WitnessAnd implements WitnessAssertion{
      * if and contains only one assertion, return that assertion
      * else return null
      */
-    /*
     public WitnessAssertion getIfUnitaryAnd(){
-        if(andList.size() == 0) return new WitnessBoolean(true);
+        if(andList.size() == 0){
+            logger.warn("empty WitnessAnd, that should not have happened");
+            return new WitnessBoolean(true);
+        }
         if(andList.size() == 1) {
             Iterator<Map.Entry<Object, List<WitnessAssertion>>> entry = andList.entrySet().iterator();
             Object key = entry.next().getKey();
@@ -259,7 +266,7 @@ public class WitnessAnd implements WitnessAssertion{
         }
 
         return null;
-    }*/
+    }
 
 
     @Override
@@ -269,9 +276,8 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
-        //Contiene solo 1 booleano
-        if(andList.size() == 0)
-            return new Boolean_Assertion(true);
+        if(getIfUnitaryAnd() != null)
+            return getIfUnitaryAnd().getFullAlgebra();
 
         AllOf_Assertion allOf = new AllOf_Assertion();
 
@@ -284,20 +290,18 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public WitnessAnd clone() {
-        int debug = 0;
         WitnessAnd clone = new WitnessAnd();
+        int debug = 0;
+        clone.block = block;
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
-                try {
-                    clone.add(assertion.clone());
-                    debug++;
-                } catch (WitnessFalseAssertionException e) {
-                    throw new RuntimeException(e); //impossible
-                }
+                clone.add(assertion.clone());
+                debug++;
             }
 
-        logger.trace("Cloned WitnessAnd of size debug");
+        logger.trace("Cloned WitnessAnd of size {}", debug);
+
         return clone;
     }
 
@@ -306,16 +310,8 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessOr or = new WitnessOr();
 
         for(Map.Entry<?, List<WitnessAssertion>> entry : andList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue()){
-                WitnessAssertion not = assertion.not(env);
-                if(not != null) {
-                    try {
-                        or.add(not);
-                    } catch (WitnessTrueAssertionException e) {
-                        return new WitnessBoolean(true);
-                    }
-                }
-        }
+            for(WitnessAssertion assertion : entry.getValue())
+                or.add(assertion.not(env));
 
         return or;
     }
@@ -324,7 +320,7 @@ public class WitnessAnd implements WitnessAssertion{
     public WitnessAssertion groupize() throws WitnessException, REException {
         //caso base: se and vuoto --> and[true] --> ritorno true
         if(andList.size() == 0){
-            logger.warn("Groupize on an empty WitnessAnd. Returning WitnessBoolean(true)");
+            logger.warn("Groupize on an empty WitnessAnd. Returning WitnessBoolean(true). that should not have happened");
             return new WitnessBoolean(true);
         }
 
@@ -339,13 +335,13 @@ public class WitnessAnd implements WitnessAssertion{
                 return type;
 
             //One type
-            if (((WitnessType)type).separeTypes().size() == 1) return oneType((WitnessType) type);
+            if (((WitnessType)type).separeTypes().size() == 1) return groupize_oneType((WitnessType) type);
 
             //More than one type
-            else return multipleTypes((WitnessType) type);
+            else return groupize_multipleTypes((WitnessType) type);
 
         } else  //No type specified
-            return noType();
+            return groupize_noType();
     }
 
     @Override
@@ -361,7 +357,7 @@ public class WitnessAnd implements WitnessAssertion{
         return count;
     }
 
-    public WitnessAssertion oneType(WitnessType type) throws WitnessException, REException {
+    public WitnessAssertion groupize_oneType(WitnessType type) throws WitnessException, REException {
         WitnessAnd and = new WitnessAnd();
         and.add(type);
 
@@ -379,7 +375,7 @@ public class WitnessAnd implements WitnessAssertion{
         return and;
     }
 
-    public WitnessAssertion multipleTypes(WitnessType type) throws WitnessException, REException {
+    public WitnessAssertion groupize_multipleTypes(WitnessType type) throws WitnessException, REException {
         WitnessOr or = new WitnessOr();
         HashMap<WitnessType, WitnessAnd> groups = new HashMap<>();
 
@@ -409,7 +405,7 @@ public class WitnessAnd implements WitnessAssertion{
         return or;
     }
 
-    public WitnessAssertion noType() throws WitnessException, REException {
+    public WitnessAssertion groupize_noType() throws WitnessException, REException {
         WitnessOr or = new WitnessOr();
         WitnessAnd and = new WitnessAnd();
         HashMap<WitnessType, WitnessAnd> groups = new HashMap<>();
@@ -456,10 +452,8 @@ public class WitnessAnd implements WitnessAssertion{
             }
         }
 
-        //Optimization: unitary and
         for(Map.Entry<?, WitnessAnd> ands: groups.entrySet()){
-            or.add(ands.getValue());
-
+            or.add(ands.getValue().getIfUnitaryAnd() != null ? ands.getValue().getIfUnitaryAnd() : ands.getValue());
         }
 
         return or;
@@ -487,9 +481,8 @@ public class WitnessAnd implements WitnessAssertion{
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue()){
+            for(WitnessAssertion assertion : entry.getValue())
                 assertion.varNormalization_separation(env);
-            }
     }
 
     @Override
@@ -502,19 +495,11 @@ public class WitnessAnd implements WitnessAssertion{
                     WitnessAssertion resolvedAssertion = env.getDefinition((WitnessVar) assertion);
 
                     if(resolvedAssertion != null)
-                        try {
-                            and.add(env.getDefinition((WitnessVar) assertion));
-                        }catch(WitnessFalseAssertionException e){
-                            return new WitnessBoolean(false);
-                        }
+                        and.add(env.getDefinition((WitnessVar) assertion));
                     else
                         throw new ParseCancellationException("Definition not found: "+assertion.toString());
                 }else
-                    try {
-                        and.add(assertion.varNormalization_expansion(env));
-                    }catch (UnsenseAssertion e){
-                        return new WitnessBoolean(false);
-                    }
+                    and.add(assertion.varNormalization_expansion(env));
             }
 
         return and;
@@ -523,17 +508,10 @@ public class WitnessAnd implements WitnessAssertion{
     //TODO: check
     @Override
     public WitnessAssertion DNF() throws WitnessException {
-        WitnessOr or = null;
+        if(!andList.containsKey(WitnessOr.class))
+            return this;
 
-        if(!andList.containsKey(WitnessOr.class)) {
-            return this;  //TODO: faccio così sennò creo or unitario e poi nella separation mi trovi WitnessOr_2132131 invece di WitnessAnd... ma non cambia nulla
-            //Se non contiene un OR, creo un OR unitario contenente la lista in and --> mantengo l'invariante
-            //or.add(this.clone());
-            //or.add(this);
-            //return or;
-        }
-
-        or = (WitnessOr) andList.get(WitnessOr.class).remove(0);
+        WitnessOr or = (WitnessOr) andList.get(WitnessOr.class).remove(0);
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
             for(WitnessAssertion assertion : entry.getValue()) {
@@ -545,18 +523,18 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
-        WitnessAnd newElem = new WitnessAnd(); //to avoid ConcurrentModificationException
+    public WitnessAssertion toOrPattReq() {
+        WitnessAnd newAnd = new WitnessAnd(); //to avoid ConcurrentModificationException
 
         for (Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for (WitnessAssertion assertion : entry.getValue())
                 if (entry.getKey() == WitnessPattReq.class)
-                    newElem.add(assertion.toOrPattReq());
+                    newAnd.add(assertion.toOrPattReq());
                 else
                     assertion.toOrPattReq();
 
         andList.remove(WitnessPattReq.class);
-        this.add(newElem);
+        this.add(newAnd);
 
         return this;
     }
@@ -649,13 +627,6 @@ public class WitnessAnd implements WitnessAssertion{
         }
 
         List<WitnessAssertion> CPart = andList.remove(WitnessProperty.class); //List<WitnessProperty>
-        /*WitnessPro minMax = null;
-
-        if (andList.get(WitnessPro.class) != null)
-            minMax = (WitnessPro) andList.get(WitnessPro.class).get(0);
-        else
-            minMax = new WitnessPro();
-        */
 
         //complete and splitCPart --> da ottimizzare in una seconda fase
         if (CPart == null) {//vuota
@@ -692,14 +663,11 @@ public class WitnessAnd implements WitnessAssertion{
         for (WitnessAssertion c_assertion : CPart)
             coReqs.put(c_assertion, new LinkedList<>());
 
-        //List<WitnessOrPattReq> newORList = new LinkedList<>(); //espandiamo tutte le R_Assertion che troviamo
-
         if (ORPart != null) {
 
             for (WitnessAssertion OR_assertion : ORPart) { //WitnessOrPattReq
 
                 List<WitnessPattReq> newRList = new LinkedList<>();
-                //newORList.add(newRList);
 
                 for (WitnessPattReq R_Assertion : ((WitnessOrPattReq) OR_assertion).reqList) {
                     for (WitnessAssertion C_assertion : CPart) {
@@ -729,11 +697,9 @@ public class WitnessAnd implements WitnessAssertion{
                     }
                 }
 
-                //((WitnessOrPattReq) OR_assertion).setORP(newRList);
                 ((WitnessOrPattReq) OR_assertion).setReqList(new LinkedList<>());
 
                 //if ORP empty --> unsatisfiable object
-                /*WitnessOrPattReq ORP = new WitnessOrPattReq();*/
 
                 for (WitnessPattReq req : new LinkedList<>(newRList))   //concurrentModificationException
                     ((WitnessOrPattReq) OR_assertion).fullConnect(req);
@@ -764,10 +730,8 @@ public class WitnessAnd implements WitnessAssertion{
             //reduceCompatiblePairs(CoMatrix); //old version
 
             //variable saparation
-            this.varNormalization_separation(env); //da indagare
+            this.varNormalization_separation(env); //TODO: super-check
         }
-        /*for (WitnessAssertion a : CPart)
-            this.add(a);*/
     }
 
     public boolean notObviouslyEmpty(){
@@ -780,19 +744,6 @@ public class WitnessAnd implements WitnessAssertion{
      * patterns are disjoint
      */
     private List<WitnessAssertion> splitClist(List<WitnessAssertion> list) throws WitnessException {
-        //ITERATIVE
-        /*LinkedList<WitnessAssertion> expandedCList = new LinkedList<>();
-        for(int i = list.size() -1; i >= 0; i++){
-            Map.Entry<WitnessProperty, LinkedList<WitnessAssertion>> subHead_reducedExpandedTail = reduceElemWithList((WitnessProperty) list.get(i), expandedCList);
-            WitnessProperty subHead = subHead_reducedExpandedTail.getKey();
-            LinkedList<WitnessAssertion> reducedExpandedTail = subHead_reducedExpandedTail.getValue();
-            expandedCList = reducedExpandedTail;
-            if(!subHead.getPattern().isEmptyDomain())
-                expandedCList.addFirst(subHead);
-        }
-
-        return expandedCList;*/
-
         //RECURSIVE
         if(list.isEmpty()) return list;
         List expandedTail = splitClist(list.subList(1, list.size()));
@@ -840,12 +791,8 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessProperty newSubProp = new WitnessProperty(propMinHead, subProp.getValue());
 
         WitnessAnd and = new WitnessAnd();
-        try {
-            and.add(subProp.getValue());
-            and.add(head.getValue());
-        }catch (WitnessFalseAssertionException e){
-            throw new  RuntimeException(e); //impossibile o no??
-        }
+        and.add(subProp.getValue());
+        and.add(head.getValue());
         LinkedList<WitnessAssertion> newReducedList = new LinkedList<>(reducedTail);
         newReducedList.addFirst(new WitnessProperty(intersection, and));
 
@@ -1074,24 +1021,12 @@ public class WitnessAnd implements WitnessAssertion{
             List <WitnessPattReq> coSubset = new LinkedList<>(reqList);
             coSubset.removeAll(subset);
 
-            for (WitnessPattReq oldReq : new LinkedList<>(subset) ) {
-                try {
-                    ((WitnessAnd) schema).add(oldReq.getValue());
-                }catch (WitnessFalseAssertionException e){
-                    schema = new WitnessBoolean(false);
-                    break;
-                }
-            }//  schema = schema and schemaOf(oldReq)
+            for (WitnessPattReq oldReq : new LinkedList<>(subset) )
+                ((WitnessAnd) schema).add(oldReq.getValue());//  schema = schema and schemaOf(oldReq)
 
             if(schema.getClass() == WitnessAnd.class)
-                for (WitnessPattReq oldReq : coSubset ) {
-                    try {
-                        ((WitnessAnd) schema).add(oldReq.getValue().not(env));
-                    }catch (WitnessFalseAssertionException e){
-                        schema = new WitnessBoolean(false);
-                        break;
-                    }
-                } //  schema = schema and not schemaOf(oldReq)
+                for (WitnessPattReq oldReq : coSubset )
+                    ((WitnessAnd) schema).add(oldReq.getValue().not(env)); //  schema = schema and not schemaOf(oldReq)
 
             WitnessPattReq fragment = WitnessPattReq.build(patt, schema);
             //fragment: satisfies subset and fails all assertions in coSubset
@@ -1101,7 +1036,7 @@ public class WitnessAnd implements WitnessAssertion{
                     fragment.fullConnect(orp); //gli orp non sono i soliti TODO: INDAGARE
                 }
             }
-            //fermati
+            //stop
         }
     }
 
@@ -1241,8 +1176,8 @@ public class WitnessAnd implements WitnessAssertion{
 }
 
 /**
- * Coppia <pattern, lista antenati>
- *
+ * pair <pattern, ancestors list>
+ * used during ObjectPreparation
  */
 class PatternReqs{
     public ComplexPattern complexPattern;

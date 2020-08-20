@@ -3,14 +3,10 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -156,12 +152,9 @@ public class Type_Assertion implements Assertion{
 		if(types.size() == 1) {
 			if(types.get(0).equals(FullAlgebraString.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();
-				try {
-					and.add(new WitnessMof(1.0));
-					and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
-				}catch (WitnessFalseAssertionException e){
-					return new WitnessBoolean(false);
-				}
+				and.add(new WitnessMof(1.0));
+				and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+
 				return and;
 			}
 			return new WitnessType(types.get(0));
@@ -170,19 +163,13 @@ public class Type_Assertion implements Assertion{
 		if(types.contains(FullAlgebraString.TYPE_INTEGER)){
 			types.remove(FullAlgebraString.TYPE_INTEGER);
 			WitnessAnd and = new WitnessAnd();
-			try {
-				and.add(new WitnessMof(1.0));
-				and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
-			}catch (WitnessFalseAssertionException e){
-				return new WitnessBoolean(false);
-			}
+			and.add(new WitnessMof(1.0));
+			and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+
 			WitnessOr or = new WitnessOr();
-			try {
-				or.add(new WitnessType(types));
-				or.add(and);
-			}catch (WitnessTrueAssertionException e){
-				return new WitnessBoolean(true);
-			}
+			or.add(new WitnessType(types));
+			or.add(and);
+
 
 			return or;
 		}

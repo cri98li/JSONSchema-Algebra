@@ -1,6 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Enum_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -67,32 +70,6 @@ public class Enum implements JSONSchemaElement{
 	@Override
 	public Assertion toGrammar() {
 		return new Enum_Assertion(_enum.deepCopy());
-		/*
-		String str = ""; String separator = ", ";
-		
-		Iterator <?> it = enumArray_str.iterator();
-		while(it.hasNext()){
-			String decodedKey = new JsonPrimitive((String) it.next()).toString();
-			str += (separator + decodedKey);
-		}
-		
-		it = enumArray_bool.iterator();
-		while(it.hasNext()) str += (separator + it.next());
-		
-		it = enumArray_num.iterator();
-		while(it.hasNext()) str += (separator + it.next());
-		
-		Iterator<? extends JsonObject> it_JSO = enumArray_obj.iterator();
-		while(it_JSO.hasNext()) str += (separator + it_JSO.next().toString());
-		
-		Iterator<? extends JsonArray> it_JSE = enumArray_array.iterator();
-		while(it_JSE.hasNext()) str += (separator + it_JSE.next().toString());
-		
-		if(thereIsNull) str += (separator + "null");
-
-		return String.format(GrammarStringDefinitions.ENUM, str.subSequence(separator.length(), str.length()));
-
-		 */
 	}
 
 
@@ -119,7 +96,7 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public int numberOfTranslatableAssertions() {
-		return _enum.size(); //TODO: giusto ritornare enum.size?
+		return _enum.size(); //TODO: 1 or _enum.size?
 	}
 	
 	public Enum clone() {

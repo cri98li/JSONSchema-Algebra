@@ -250,6 +250,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewIfBoolThen(GrammaticaParser.NewIfBoolThenContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code NewOrPattReq}
+	 * labeled alternative in {@link GrammaticaParser#assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewOrPattReq(GrammaticaParser.NewOrPattReqContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ParseTypeAssertion}
 	 * labeled alternative in {@link GrammaticaParser#type_assertion}.
 	 * @param ctx the parse tree
@@ -375,6 +382,13 @@ public interface GrammaticaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParseRepeatedItems(GrammaticaParser.ParseRepeatedItemsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParseOrPattReq}
+	 * labeled alternative in {@link GrammaticaParser#orPattReq_assertion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParseOrPattReq(GrammaticaParser.ParseOrPattReqContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ParsePAllOf}
 	 * labeled alternative in {@link GrammaticaParser#pAllOf}.

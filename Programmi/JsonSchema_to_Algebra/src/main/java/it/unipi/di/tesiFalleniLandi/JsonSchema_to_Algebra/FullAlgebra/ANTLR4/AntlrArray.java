@@ -3,10 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class AntlrArray implements AntlrValue{
 	private JsonArray list;

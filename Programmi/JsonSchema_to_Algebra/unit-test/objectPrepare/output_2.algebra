@@ -1,17 +1,67 @@
-def "WitnessAnd_1" = {
+def "WitnessAnd_2" = {
 	type[
 		num
 	],
 	notMof(2.0)
 },
-def "not_WitnessOr_0" = allOf[
+def "OBDD_true" = true,
+def "WitnessOr_0" = anyOf[
 	type[
-		obj,
-		num,
-		arr,
-		bool,
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
 		null
 	],
+	type[
+		obj
+	],
+	type[
+		bool
+	]
+],
+def "WitnessOr_1" = anyOf[
+	{
+		type[
+			num
+		],
+		mof(2.0)
+	},
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	]
+],
+rootdef "root" = allOf[
+	type[
+		obj
+	],
+	props[
+		"^.*a": ref("WitnessOr_1");
+
+	],
+	props[
+		pNot("^.*a"): ref("WitnessOr_0");
+
+	]
+],
+def "not_WitnessOr_1" = {
 	anyOf[
 		{
 			type[
@@ -28,86 +78,19 @@ def "not_WitnessOr_0" = allOf[
 		]
 	],
 	type[
-		str,
-		obj,
-		num,
-		arr,
-		bool
-	],
-	type[
-		str,
-		num,
-		arr,
-		bool,
-		null
-	],
-	type[
-		str,
-		obj,
-		num,
-		arr,
-		null
-	],
-	type[
-		str,
-		obj,
-		num,
-		bool,
-		null
+		num
 	]
-],
-def "WitnessOr_0" = anyOf[
-	type[
-		arr
-	],
-	type[
-		str
-	],
-	{
-		type[
-			num
-		],
-		mof(2.0)
-	},
-	type[
-		null
-	],
-	{
-		type[
-			obj
-		],
-		props[
-			".*" : true;
-
-		]
-	},
-	type[
-		bool
-	]
-],
-rootdef "root" = allOf[
-	type[
-		obj
-	],
-	props[
-		"^.*a" : ref("WitnessOr_0");
-
-	],
-	props[
-		pNot("^.*a") : true;
-
-	]
-],
+},
 def "not_root" = anyOf[
 	{
 		type[
 			obj
 		],
 		orPattReq[
-			pAllOf[".*", "^.*a"]:ref("WitnessAnd_1")
+			pAllOf[".*", "^.*a"]:ref("WitnessAnd_2")
 		],
 		props[
-			".*" : true;
+			".*": true;
 
 		]
 	},
@@ -127,7 +110,8 @@ def "not_root" = anyOf[
 		bool
 	]
 ],
-def "not_WitnessAnd_1" = anyOf[
+def "OBDD_false" = false,
+def "not_WitnessAnd_2" = anyOf[
 	{
 		type[
 			num

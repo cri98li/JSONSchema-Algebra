@@ -1,385 +1,1396 @@
-[DEBUG] 2020-08-12 16:51:00.950 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[DEBUG] 2020-08-12 16:51:00.970 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-rootdef "root" = {
-	type[
-		obj
+def "OBDD_true" = true,
+rootdef "root" = allOf[
+	props[
+		"bbb": pattern("^.{0,100}$");
+		
 	],
 	props[
-		"^.*$": true;
+		"aaa": {
+			type[
+				num
+			],
+			mof(2.0)
+		};
+		
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"bbb":pattern(pNot("^.{0,100}$"))
+		]
+	},
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					notMof(2.0)
+				}
+			]
+		]
+	}
+],
+def "OBDD_false" = false
 
+
+ Merge: 
+
+def "OBDD_true" = true,
+rootdef "root" = allOf[
+	props[
+		"aaa": {
+			type[
+				num
+			],
+			mof(2.0)
+		};
+		
+	],
+	props[
+		"bbb": pattern("^.{0,100}$");
+		
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"bbb":pattern(pNot("^.{0,100}$"))
+		]
+	},
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					notMof(2.0)
+				}
+			]
+		]
+	}
+],
+def "OBDD_false" = false
+
+
+ Groupize: 
+
+def "OBDD_true" = true,
+rootdef "root" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			"aaa": {
+				type[
+					num
+				],
+				mof(2.0)
+			};
+			
+		],
+		props[
+			"bbb": anyOf[
+				type[
+					arr
+				],
+				type[
+					num
+				],
+				type[
+					null
+				],
+				type[
+					obj
+				],
+				type[
+					bool
+				],
+				{
+					type[
+						str
+					],
+					pattern("^.{0,100}$")
+				}
+			];
+			
+		]
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"bbb":anyOf[
+				type[
+					arr
+				],
+				type[
+					num
+				],
+				type[
+					null
+				],
+				type[
+					obj
+				],
+				type[
+					bool
+				],
+				{
+					type[
+						str
+					],
+					pattern(pNot("^.{0,100}$"))
+				}
+			]
+		]
+	},
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":anyOf[
+				{
+					type[
+						arr
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						str
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						num
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						null
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						obj
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						bool
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				}
+			]
+		]
+	}
+],
+def "OBDD_false" = false
+
+
+ DNF: 
+
+def "OBDD_true" = true,
+rootdef "root" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			"aaa": {
+				type[
+					num
+				],
+				mof(2.0)
+			};
+			
+		],
+		props[
+			"bbb": anyOf[
+				type[
+					arr
+				],
+				type[
+					num
+				],
+				type[
+					null
+				],
+				type[
+					obj
+				],
+				type[
+					bool
+				],
+				{
+					type[
+						str
+					],
+					pattern("^.{0,100}$")
+				}
+			];
+			
+		]
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"bbb":anyOf[
+				type[
+					arr
+				],
+				type[
+					num
+				],
+				type[
+					null
+				],
+				type[
+					obj
+				],
+				type[
+					bool
+				],
+				{
+					type[
+						str
+					],
+					pattern(pNot("^.{0,100}$"))
+				}
+			]
+		]
+	},
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":anyOf[
+				{
+					type[
+						arr
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						str
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						num
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						null
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						obj
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				},
+				{
+					type[
+						bool
+					],
+					anyOf[
+						type[
+							str
+						],
+						type[
+							arr
+						],
+						type[
+							null
+						],
+						type[
+							obj
+						],
+						type[
+							bool
+						],
+						{
+							type[
+								num
+							],
+							notMof(2.0)
+						}
+					]
+				}
+			]
+		]
+	}
+],
+def "OBDD_false" = false
+
+
+ Separation: 
+
+def "not_WitnessOr_3" = allOf[
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
 	],
 	anyOf[
-		pattReq[
-			"^.*a":mof(2.0)
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
 		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			arr,
+			bool
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
 		type[
 			str,
 			num,
 			arr,
 			bool,
 			null
-		]
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			arr,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	]
+],
+def "OBDD_true" = true,
+def "WitnessOr_1" = anyOf[
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			str
+		],
+		pattern("^.{0,100}$")
+	}
+],
+def "not_WitnessOr_2" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot(pNot("^.{0,100}$")))
 	]
 },
+rootdef "root" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			"aaa": ref("WitnessAnd_0");
+			
+		],
+		props[
+			"bbb": ref("WitnessOr_1");
+			
+		]
+	]
+],
+def "not_WitnessOr_1" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot("^.{0,100}$"))
+	]
+},
+def "WitnessOr_2" = anyOf[
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			str
+		],
+		pattern(pNot("^.{0,100}$"))
+	}
+],
+def "WitnessOr_3" = anyOf[
+	{
+		type[
+			arr
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			str
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			num
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			null
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			obj
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			bool
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	}
+],
+def "not_WitnessAnd_0" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		notMof(2.0)
+	}
+],
 def "not_root" = anyOf[
 	{
 		type[
 			obj
 		],
 		pattReq[
-			"^.*$":false
+			"bbb":ref("WitnessOr_2")
 		]
 	},
 	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":ref("WitnessOr_3")
+		]
+	}
+],
+def "OBDD_false" = false,
+def "WitnessAnd_0" = {
+	type[
+		num
+	],
+	mof(2.0)
+}
+
+
+ Expansion: 
+
+def "not_WitnessOr_3" = allOf[
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			bool,
+			null
+		],
 		{
 			type[
-				obj
+				num
 			],
-			props[
-				"^.*a": {
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
 					type[
 						num
 					],
-					notMof(2.0)
-				};
-
+					mof(2.0)
+				}
 			]
-		},
-		type[
-			obj
-		]
-	},
-	type[
-		str,
-		num,
-		arr,
-		bool,
-		null
-	]
-]
-[DEBUG] 2020-08-12 16:51:00.977 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.977 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-
-
- Merge:
-
-
-
- Groupize:
-
-
-
- DNF:
-
-[DEBUG] 2020-08-12 16:51:00.978 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[DEBUG] 2020-08-12 16:51:00.979 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-
-
- Separation:
-
-
-
- Expansion:
-
-def "WitnessAnd_1" = {
-	type[
-		num
-	],
-	notMof(2.0)
-},
-def "not_WitnessOr_0" = allOf[
-	type[
-		str,
-		obj,
-		num,
-		bool,
-		null
-	],
-	type[
-		obj,
-		num,
-		arr,
-		bool,
-		null
+		}
 	],
 	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
 		{
 			type[
 				num
 			],
-			notMof(2.0)
-		},
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
 		type[
 			str,
 			obj,
 			arr,
 			bool,
 			null
-		]
-	],
-	type[
-		str,
-		obj,
-		num,
-		arr,
-		bool
-	],
-	type[
-		str,
-		num,
-		arr,
-		bool,
-		null
-	],
-	type[
-		str,
-		obj,
-		num,
-		arr,
-		null
-	]
-],
-def "WitnessOr_0" = anyOf[
-	type[
-		arr
-	],
-	type[
-		str
-	],
-	{
-		type[
-			num
 		],
-		mof(2.0)
-	},
-	type[
-		null
-	],
-	type[
-		obj
-	],
-	type[
-		bool
-	]
-],
-rootdef "root" = {
-	pattReq[
-		"^.*a":ref("WitnessOr_0")
-	],
-	type[
-		obj
-	],
-	true
-},
-def "not_root" = anyOf[
-	{
-		type[
-			obj
-		],
-		false
-	},
-	{
-		props[
-			"^.*a": ref("WitnessAnd_1");
-
-		],
-		type[
-			obj
-		]
-	},
-	type[
-		str
-	],
-	type[
-		arr
-	],
-	type[
-		num
-	],
-	type[
-		null
-	],
-	type[
-		bool
-	]
-],
-def "not_WitnessAnd_1" = anyOf[
-	{
-		type[
-			num
-		],
-		mof(2.0)
-	},
-	type[
-		str,
-		obj,
-		arr,
-		bool,
-		null
-	]
-]
-
-
- objectPrepare:
-
-[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type specified
-[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.993 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Complete empty CPart
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - Complete empty CPart
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[DEBUG] 2020-08-12 16:51:00.994 [main] WitnessAnd - [CP-RP] Computing intersection between "^.*$" and "^.*a"
-[DEBUG] 2020-08-12 16:51:00.996 [main] WitnessAnd - Old ORP size:
-[DEBUG] 2020-08-12 16:51:00.996 [main] WitnessAnd - Old Pattern Requests size:
-[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessAnd - Complete empty CPart
-[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessAnd - Complete non-empty CPart
-[DEBUG] 2020-08-12 16:51:00.997 [main] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[DEBUG] 2020-08-12 16:51:00.998 [main] WitnessAnd - Reducing subProperty WitnessProperty{key="^.*a", value=WitnessVar{name='WitnessAnd_1'}} with reduceT
-[DEBUG] 2020-08-12 16:51:00.999 [main] WitnessAnd - Adding completed property in CPart with key: pNot("^.*a")
-[DEBUG] 2020-08-12 16:51:00.999 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:01.001 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-[DEBUG] 2020-08-12 16:51:01.002 [main] WitnessAnd - Preparing WitnessAnd without type object assertion
-def "WitnessAnd_1" = {
-	type[
-		num
-	],
-	notMof(2.0)
-},
-def "not_WitnessOr_0" = allOf[
-	type[
-		obj,
-		num,
-		arr,
-		bool,
-		null
-	],
-	anyOf[
 		{
 			type[
 				num
 			],
-			notMof(2.0)
-		},
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
 		type[
 			str,
 			obj,
+			num,
+			arr,
+			bool
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			num,
 			arr,
 			bool,
 			null
-		]
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
 	],
-	type[
-		str,
-		obj,
-		num,
-		arr,
-		bool
-	],
-	type[
-		str,
-		num,
-		arr,
-		bool,
-		null
-	],
-	type[
-		str,
-		obj,
-		num,
-		arr,
-		null
-	],
-	type[
-		str,
-		obj,
-		num,
-		bool,
-		null
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			arr,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
 	]
 ],
-def "WitnessOr_0" = anyOf[
+def "OBDD_true" = true,
+def "WitnessOr_1" = anyOf[
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			str
+		],
+		pattern("^.{0,100}$")
+	}
+],
+def "not_WitnessOr_2" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot(pNot("^.{0,100}$")))
+	]
+},
+rootdef "root" = anyOf[
 	type[
 		arr
 	],
 	type[
 		str
 	],
-	{
-		type[
-			num
-		],
-		mof(2.0)
-	},
+	type[
+		num
+	],
 	type[
 		null
 	],
-	{
-		type[
-			obj
-		],
-		props[
-			"^.*$": true;
-
-		]
-	},
 	type[
 		bool
-	]
-],
-rootdef "root" = {
-	type[
-		obj
 	],
-	true,
-	props[
-		"^.*$": true;
-
-	]
-},
-def "not_root" = anyOf[
-	{
-		type[
-			obj
-		],
-		false,
-		props[
-			"^.*$": true;
-
-		]
-	},
 	allOf[
 		type[
 			obj
 		],
 		props[
-			"^.*a": ref("WitnessAnd_1");
-
+			"aaa": ref("WitnessAnd_0");
+			
 		],
 		props[
-			pNot("^.*a"): true;
-
+			"bbb": ref("WitnessOr_1");
+			
 		]
-	],
-	type[
-		str
-	],
+	]
+],
+def "WitnessOr_2" = anyOf[
 	type[
 		arr
 	],
@@ -390,25 +1401,764 @@ def "not_root" = anyOf[
 		null
 	],
 	type[
+		obj
+	],
+	type[
 		bool
-	]
+	],
+	{
+		type[
+			str
+		],
+		pattern(pNot("^.{0,100}$"))
+	}
 ],
-def "not_WitnessAnd_1" = anyOf[
+def "not_WitnessOr_1" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot("^.{0,100}$"))
+	]
+},
+def "WitnessOr_3" = anyOf[
+	{
+		type[
+			arr
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			str
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
 	{
 		type[
 			num
 		],
-		mof(2.0)
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
 	},
+	{
+		type[
+			null
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			obj
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			bool
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	}
+],
+def "not_WitnessAnd_0" = anyOf[
 	type[
 		str,
 		obj,
 		arr,
 		bool,
 		null
+	],
+	{
+		type[
+			num
+		],
+		notMof(2.0)
+	}
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"bbb":ref("WitnessOr_2")
+		]
+	},
+	{
+		type[
+			obj
+		],
+		pattReq[
+			"aaa":ref("WitnessOr_3")
+		]
+	}
+],
+def "OBDD_false" = false,
+def "WitnessAnd_0" = {
+	type[
+		num
+	],
+	mof(2.0)
+}
+
+
+ objectPrepare: 
+
+def "not_WitnessOr_3" = allOf[
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			arr,
+			bool
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			num,
+			arr,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			arr,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
+	],
+	anyOf[
+		type[
+			str,
+			obj,
+			num,
+			bool,
+			null
+		],
+		{
+			type[
+				num
+			],
+			anyOf[
+				type[
+					str,
+					obj,
+					arr,
+					bool,
+					null
+				],
+				{
+					type[
+						num
+					],
+					mof(2.0)
+				}
+			]
+		}
 	]
-]
+],
+def "OBDD_true" = true,
+def "WitnessOr_1" = anyOf[
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			str
+		],
+		pattern("^.{0,100}$")
+	}
+],
+def "not_WitnessOr_2" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot(pNot("^.{0,100}$")))
+	]
+},
+rootdef "root" = anyOf[
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		bool
+	],
+	allOf[
+		type[
+			obj
+		],
+		props[
+			pAllOf["bbb", pNot("aaa")]: ref("WitnessOr_1");
+			
+		],
+		props[
+			pAllOf["bbb", "aaa"]: allOf[
+				ref("WitnessOr_1"),
+				ref("WitnessAnd_0")
+			];
+			
+		],
+		props[
+			pNot(pAnyOf["bbb", "aaa"]): true;
+			
+		],
+		props[
+			pAllOf["aaa", pNot("bbb")]: ref("WitnessAnd_0");
+			
+		]
+	]
+],
+def "not_WitnessOr_1" = {
+	type[
+		str
+	],
+	anyOf[
+		type[
+			obj,
+			num,
+			arr,
+			bool,
+			null
+		],
+		pattern(pNot("^.{0,100}$"))
+	]
+},
+def "WitnessOr_2" = anyOf[
+	type[
+		arr
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			str
+		],
+		pattern(pNot("^.{0,100}$"))
+	}
+],
+def "WitnessOr_3" = anyOf[
+	{
+		type[
+			arr
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			str
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			num
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			null
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	},
+	{
+		type[
+			obj
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		],
+		props[
+			".*": true;
+			
+		]
+	},
+	{
+		type[
+			bool
+		],
+		anyOf[
+			type[
+				str
+			],
+			type[
+				arr
+			],
+			type[
+				null
+			],
+			type[
+				obj
+			],
+			type[
+				bool
+			],
+			{
+				type[
+					num
+				],
+				notMof(2.0)
+			}
+		]
+	}
+],
+def "not_WitnessAnd_0" = anyOf[
+	type[
+		str,
+		obj,
+		arr,
+		bool,
+		null
+	],
+	{
+		type[
+			num
+		],
+		notMof(2.0)
+	}
+],
+def "not_root" = anyOf[
+	{
+		type[
+			obj
+		],
+		orPattReq[
+			pAllOf[".*", "bbb"]:ref("WitnessOr_2")
+		],
+		props[
+			".*": true;
+			
+		]
+	},
+	{
+		type[
+			obj
+		],
+		orPattReq[
+			pAllOf[".*", "aaa"]:ref("WitnessOr_3")
+		],
+		props[
+			".*": true;
+			
+		]
+	}
+],
+def "OBDD_false" = false,
+def "WitnessAnd_0" = {
+	type[
+		num
+	],
+	mof(2.0)
+}
 
 
- FINE!
+ FINE! 
 

@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
@@ -59,16 +60,16 @@ public class BetweenNumber implements JSONSchemaElement{
 			throw new ParseCancellationException("expected number or boolean as value of exclusiveMaximum got "+obj);
 
 		logger.trace("Setting ExclusiveMax by parsing {}", obj);
-
-		try {
-			booleanExclusiveMaximum = obj.getAsBoolean();
+		JsonPrimitive jsonPrimitive = obj.getAsJsonPrimitive();
+		if(jsonPrimitive.isBoolean()) {
+			booleanExclusiveMaximum = jsonPrimitive.getAsBoolean();
 			if(booleanExclusiveMaximum && maximum != null) {
 				exclusiveMaximum = maximum;
 				maximum = null;
 			}
-		}catch(ClassCastException e) {
+		}else
 			this.exclusiveMaximum = obj.getAsNumber();
-		}
+
 	}
 	
 	public void setExclusiveMin(JsonElement obj) {
@@ -77,15 +78,15 @@ public class BetweenNumber implements JSONSchemaElement{
 
 		logger.trace("Setting ExclusiveMin by parsing {}", obj);
 
-		try {
-			booleanExclusiveMinimum = obj.getAsBoolean();
+		JsonPrimitive jsonPrimitive = obj.getAsJsonPrimitive();
+		if(jsonPrimitive.isBoolean()) {
+			booleanExclusiveMaximum = jsonPrimitive.getAsBoolean();
 			if(booleanExclusiveMinimum && minimum != null) {
 				exclusiveMinimum = minimum;
 				minimum = null;
 			}
-		}catch(ClassCastException e) {
+		}else
 			this.exclusiveMinimum = obj.getAsNumber();
-		}
 	}
 
 	@Override
@@ -127,11 +128,6 @@ public class BetweenNumber implements JSONSchemaElement{
 			bet.setMax(maximum);
 		}
 
-		if(minimum != null || maximum != null){
-
-		}
-
-
 		if(exclusiveMinimum != null) {
 			xbet.setMin(exclusiveMinimum);
 		}
@@ -140,31 +136,6 @@ public class BetweenNumber implements JSONSchemaElement{
 		}
 
 		return allOf;
-		/*
-		String str1 = ""; //bet
-		String str2 = ""; //xbet
-
-		String min = FullAlgebraString.NEG_INF, max = FullAlgebraString.POS_INF;
-		if(minimum != null) min = minimum+"";
-		if(maximum != null) max = maximum+"";
-		
-		if(minimum != null || maximum != null)
-			str1 = String.format(FullAlgebraString.BETWEENNUMBER, min, max);
-		
-		if(exclusiveMinimum != null) min = exclusiveMinimum+"";
-		if(exclusiveMaximum != null) max = exclusiveMaximum+"";
-		
-		if(exclusiveMinimum != null || exclusiveMaximum != null)
-			str2 = String.format(FullAlgebraString.BETWEENNUMBER_EXCL, min, max);
-		
-		
-		if(str1.isEmpty() && str1 != null)
-			return str2;
-		if(str2.isEmpty() && str2 != null)
-			return str1;
-		
-		return str1 + FullAlgebraString.COMMA + str2;
-		 */
 	}
 
 	@Override

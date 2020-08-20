@@ -30,7 +30,7 @@ public class MainClass_JSONSchema {
 		}
 
 		System.out.println(gson.toJson(root.toJSON()));
-		//System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
+		System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
 		System.out.println("NORMALIZZATO algebra: " + (Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root))));
 
 		FileWriter fw = new FileWriter("output.json");

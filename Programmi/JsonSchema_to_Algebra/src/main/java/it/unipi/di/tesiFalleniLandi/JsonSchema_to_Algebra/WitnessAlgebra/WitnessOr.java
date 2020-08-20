@@ -2,10 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AnyOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -16,54 +13,92 @@ public class WitnessOr implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessOr.class);
 
     private Map<Object, List<WitnessAssertion>> orList;
+    private boolean block;
 
     public WitnessOr() {
         this.orList = new HashMap<>();
+        //base case OR
+        List list = new LinkedList<>();
+        list.add(new WitnessBoolean(false)); //TODO: true??
+        this.orList.put(WitnessBoolean.class, list);
+        block = false;
+
         logger.trace("Creating an empty WitnessOr");
     }
 
-    public boolean add(WitnessAssertion el) throws WitnessTrueAssertionException {
+    public boolean add(WitnessAssertion el) {
+        if(block) return false;
+
+        if(el.getClass() == WitnessBoolean.class) { //Add boolean
+            logger.trace("Adding boolean {} in {}", el, this);
+
+            if (((WitnessBoolean) el).getValue() == false) //Add false
+                return false;
+            else {
+                orList = new HashMap<>();
+                block = true;
+            }
+        }
+
+        if(orList.get(WitnessBoolean.class) != null)
+            orList.remove(WitnessBoolean.class);
+
         if(el.getClass() == WitnessOr.class) { //flat OR
             logger.trace("Adding flat {} in {}", el, this);
             return add((WitnessOr) el);
         }
 
-        else if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class) {
+        //Optimization: add uniqueItems or repeatedItems once
+        if(el.getClass() == WitnessUniqueItems.class || el.getClass() == WitnessRepeateditems.class) {
             logger.trace("Adding unique {} in {}", el, this);
-            return addUni_Rep(el);
-        }
-
-        else if(el.getClass() == WitnessBoolean.class) { //Add boolean
-            logger.trace("Adding boolean {} in {}", el, this);
-
-            if (((WitnessBoolean) el).getValue() == false) //Add false
-                return false;
-            else
-                throw new WitnessTrueAssertionException("or.add(true)");
-        } else {
-            logger.trace("Adding {} in {}", el, this);
-            if(orList.containsKey(el.getClass())) { //if orList already contains the key
-
-                if (el.getClass() == WitnessType.class){ //Optimization: add type
-                    if (orList.get(el.getClass()).contains(el))
-                        return false;
-
-                    orList.get(el.getClass()).add(el);
-                    return true;
-                } else {
-                    orList.get(el.getClass()).add(el); //insert the assertion in the respective list
-                    return true;
-                }
-            }else{
+            if(!orList.containsKey(el.getClass())) {
                 List<WitnessAssertion> list = new LinkedList<>();
                 list.add(el);
                 orList.put(el.getClass(), list);
                 return true;
-            }
+            }else
+                return false;
         }
+
+        //
+        if(el.getClass() == WitnessAnd.class)
+            return add((WitnessAnd) el);
+
+        logger.trace("Adding {} in {}", el, this);
+        if(orList.containsKey(el.getClass())) { //if orList already contains the key
+
+            if (el.getClass() == WitnessType.class){ //Optimization: add type
+                if (orList.get(el.getClass()).contains(el))
+                    return false;
+
+                orList.get(el.getClass()).add(el);
+                return true;
+            } else {
+                orList.get(el.getClass()).add(el); //insert the assertion in the respective list
+                return true;
+            }
+        }else{
+            List<WitnessAssertion> list = new LinkedList<>();
+            list.add(el);
+            orList.put(el.getClass(), list);
+            return true;
+        }
+
     }
 
-    public boolean add(WitnessOr or) throws WitnessTrueAssertionException {
+    private boolean add(WitnessAnd el){
+        if(el.getIfUnitaryAnd() != null) //se è un and unitario aggiungo il suo contenuto
+            return add(el.getIfUnitaryAnd());
+        else {
+            if (!orList.containsKey(WitnessAnd.class))
+                orList.put(WitnessAnd.class, new LinkedList<>());
+            orList.get(el.getClass()).add(el); //insert the assertion in the respective list
+        }
+        return true;
+    }
+
+
+    public boolean add(WitnessOr or) {
         boolean b = false;
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : or.orList.entrySet())
@@ -71,17 +106,6 @@ public class WitnessOr implements WitnessAssertion{
                 b |= add(assertion);
 
         return b;
-    }
-
-    public boolean addUni_Rep(WitnessAssertion el){
-        if(!orList.containsKey(el.getClass())) {
-            List<WitnessAssertion> list = new LinkedList<>();
-            list.add(el);
-            orList.put(el.getClass(), list);
-            return true;
-        }
-
-        return false;
     }
 
     public boolean remove(WitnessAssertion assertion){
@@ -103,19 +127,31 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public WitnessAssertion merge() throws REException {
-        List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
+        /*List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
 
-        //propagate merge only below and assertion
         if(tmp != null) {
             for (WitnessAssertion and : tmp) {
-                try {
-                    WitnessAssertion returnedValue = and.merge();
-                    this.add((returnedValue == null) ? and : returnedValue);
-                }catch (WitnessTrueAssertionException e){
-                    return new WitnessBoolean(true);
-                }
+                WitnessAssertion returnedValue = and.merge();
+                this.add((returnedValue == null) ? and : returnedValue);
             }
         }
+
+        return this;*/
+        WitnessOr newOr = new WitnessOr();
+
+        for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
+            for(WitnessAssertion assertion : entry.getValue())
+                newOr.add(assertion.merge());
+
+        return newOr;
+    }
+
+    @Override
+    public WitnessAssertion mergeWith(WitnessAssertion a) {
+        logger.trace("Merging {} with {}", a, this);
+
+        if(a != null && a.getClass() == this.getClass())
+            return null;
 
         return this;
     }
@@ -127,58 +163,6 @@ public class WitnessOr implements WitnessAssertion{
                 assertion.checkLoopRef(env, varList);
     }
 
-
-    @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) {
-        logger.trace("Merging {} with {}", a, this);
-        if(a != null && a.getClass() == this.getClass())
-            return null;
-
-        return this;
-
-        /*
-        a può essere un oggetto di un qualsiasi tipo,
-            foreach( b = orList.get(a.class)[i])
-                if(b.merge(a).equals(a)
-                    when a is satisfied, b is also satisfied so the entire orAssertion is true
-
-        if a.class = or?
-         //this.size = n and a.size = m --> return size O(n*m)
-        //Assorb
-        if(a != null) {
-            //List<WitnessAssertion> newList = new LinkedList<>();
-            int notFalseElement = 0;
-
-            for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet()) {
-                notFalseElement += entry.getValue().size();
-
-                for (WitnessAssertion assertion : entry.getValue()) {
-                    WitnessAssertion merged = a.mergeElement(assertion);
-
-                    if (merged == null) continue;
-
-                    if (merged.getClass() == WitnessBoolean.class)
-                        if (((WitnessBoolean) merged).getValue())
-                            return new WitnessBoolean((true));
-                        else {
-                            notFalseElement--;
-                            continue;
-                        }
-
-                    if (!merged.equals(a))
-                        //newList.add(assertion);
-                        this.add(assertion);
-                    else return new WitnessBoolean(true);
-                }
-            }
-            if(notFalseElement == 0)//all false
-                return new WitnessBoolean(false);
-
-            //orList.put(a.getClass(), newList);
-        }
-         */
-    }
-
     @Override
     public WitnessType getGroupType() {
         return null;
@@ -186,9 +170,8 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
-        //caso solo 1 false
-        if(orList.size() == 0)
-            return new Boolean_Assertion(false);
+        if(orList.containsKey(WitnessBoolean.class) && orList.size() == 1)
+            return orList.get(WitnessBoolean.class).get(0).getFullAlgebra();
 
         AnyOf_Assertion anyOf = new AnyOf_Assertion();
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
@@ -203,14 +186,12 @@ public class WitnessOr implements WitnessAssertion{
         int count = 0;
         WitnessOr clone = new WitnessOr();
 
+        clone.block = block;
+
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
-                try {
-                    clone.add(assertion.clone());
-                    count++;
-                } catch (WitnessTrueAssertionException e) {
-                    throw new RuntimeException(e);
-                }
+                clone.add(assertion.clone());
+                count++;
             }
 
         logger.trace("Cloning WitnessOr of size {}", count);
@@ -253,13 +234,7 @@ public class WitnessOr implements WitnessAssertion{
         for(Map.Entry<?, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()){
                 WitnessAssertion not = assertion.not(env);
-                if(not != null) {
-                    try {
-                        and.add(not);
-                    }catch(WitnessFalseAssertionException e){
-                        return new WitnessBoolean(false);
-                    }
-                }
+                and.add(not);
             }
 
         return and;
@@ -350,7 +325,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         WitnessOr newElem = new WitnessOr(); //to avoid ConcurrentModificationException
 
         for (Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
@@ -413,16 +388,9 @@ public class WitnessOr implements WitnessAssertion{
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue()) {
                 WitnessAnd and = new WitnessAnd();
-
-                try {
-                    and.add(assertion);
-                    and.add(toAdd);
-                }catch (WitnessFalseAssertionException e){
-                    continue;
-                }
-
+                and.add(assertion);
+                and.add(toAdd);
                 or.add(and);
-
             }
 
         return or;

@@ -77,7 +77,7 @@ public class FullAlgebraString {
 	public static String REQUIRED(String s){ return quadre("req", s); };
 
 	//PATTERN
-	public static String PATTERN(String s){ return tonde("pattern", "\"" + s + "\""); }
+	public static String PATTERN(String s){ return tonde("pattern",s ); }
 	public static String NOTPATTERN(String s){ return tonde("notPattern", s); }
 
 	//LENGTH

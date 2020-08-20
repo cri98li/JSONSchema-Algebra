@@ -1,9 +1,11 @@
 rootdef "root" = {
-	type[
-		obj
-	],
-	props[
-		".*" : true;
+    allOf[
+        type[
+            obj
+        ],
+        props[
+            ".*" : true;
+        ]
 	]
 },
 def "not_root" = anyOf[

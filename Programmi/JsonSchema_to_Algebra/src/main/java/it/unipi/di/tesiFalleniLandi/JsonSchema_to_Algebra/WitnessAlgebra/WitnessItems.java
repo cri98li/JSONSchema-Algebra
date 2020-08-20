@@ -1,10 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -15,8 +14,8 @@ public class WitnessItems implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessItems.class);
 
     private List<WitnessAssertion> items;
-    private boolean blocked;
     private WitnessAssertion additionalItems;
+    private boolean blocked;
 
     public WitnessItems() {
         blocked = false;
@@ -26,8 +25,11 @@ public class WitnessItems implements WitnessAssertion{
 
     public void setAdditionalItems(WitnessAssertion addItem){
         logger.trace("Setting {} as AdditionalItems in {}", addItem, this);
-        if(!blocked)
+        if(!blocked) {
+            if(addItem.getClass() == WitnessAnd.class && ((WitnessAnd) addItem).getIfUnitaryAnd() != null)
+                addItem = ((WitnessAnd) addItem).getIfUnitaryAnd();
             additionalItems = addItem;
+        }
         else
             logger.warn("Items is blocked --> no action ");
     }
@@ -43,9 +45,11 @@ public class WitnessItems implements WitnessAssertion{
             }
         }catch (ClassCastException e) { }
 
-        if (!blocked)
+        if (!blocked) {
+            if (item.getClass() == WitnessAnd.class && ((WitnessAnd) item).getIfUnitaryAnd() != null)
+                item = ((WitnessAnd) item).getIfUnitaryAnd();
             items.add(item);
-        else
+        }else
             logger.warn("Items is blocked --> no action ");
     }
 
@@ -58,7 +62,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
         return;
     }
 
@@ -71,13 +75,9 @@ public class WitnessItems implements WitnessAssertion{
                 result = additionalItems;
             else {
                 WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(a);
-                    and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
-                    result = and;
-                }catch(WitnessFalseAssertionException ex){
-                    result = new WitnessBoolean(false);
-                }
+                and.add(a);
+                and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true)));
+                result = and;
             }
         else {
             for (int i = items.size() - 1; i >= 0; i--)
@@ -111,23 +111,20 @@ public class WitnessItems implements WitnessAssertion{
     public WitnessAssertion mergeElement(WitnessItems a) throws REException{
         logger.trace("Merging {} with {}", a, this);
 
+        //items[;bool]
         if (a.items.size() == 0 && a.additionalItems.getClass() == WitnessBoolean.class)
-            if (((WitnessBoolean) a.additionalItems).getValue()) {
+            if (((WitnessBoolean) a.additionalItems).getValue() == true) {
                 logger.trace("Merge result: {}", a.additionalItems);
-                return a.additionalItems;
+                return a.additionalItems; //return true: this items is always true
             }else {
                 WitnessAnd and = new WitnessAnd();
 
-                try {
-                    and.add(a);
-                    and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true))); //TODO: testare se vado in ricorsione
-                } catch (WitnessFalseAssertionException e) {
-                    logger.trace("Merge result: false");
-                    return new WitnessBoolean(false);
-                }
+                and.add(a);
+                and.add(new WitnessContains(0l, 0l, new WitnessBoolean(true)));
+
 
                 logger.trace("Merge result: {}", and);
-                return and;
+                return and; //it is true iff array size is empty
             }
 
         for (int i = items.size() - 1; i >= 0; i--)
@@ -139,6 +136,7 @@ public class WitnessItems implements WitnessAssertion{
 
                 additionalItems = new WitnessBoolean(false);
             }
+
 
         WitnessItems ite = new WitnessItems();
 
@@ -155,13 +153,8 @@ public class WitnessItems implements WitnessAssertion{
                 ite.addItems(tmp);
             else{
                 WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(items.get(i));
-                    and.add(a.items.get(i));
-                } catch (WitnessFalseAssertionException e) {
-                    ite.addItems(new WitnessBoolean(false));
-                    continue;
-                }
+                and.add(items.get(i));
+                and.add(a.items.get(i));
                 ite.addItems(and);
             }
         }
@@ -302,11 +295,7 @@ public class WitnessItems implements WitnessAssertion{
         if(additionalItems != null)
             if(additionalItems.getClass() != WitnessAnd.class){
                 WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(additionalItems);
-                }catch (WitnessFalseAssertionException e){
-                    additionalItems = new WitnessBoolean(false);
-                }
+                and.add(additionalItems);
                 items.additionalItems = and.groupize();
             }else
                 items.additionalItems = additionalItems.groupize();
@@ -314,11 +303,7 @@ public class WitnessItems implements WitnessAssertion{
         for(WitnessAssertion assertion : this.items)
                 if(assertion.getClass() != WitnessAnd.class){
                     WitnessAnd and = new WitnessAnd();
-                    try{
-                        and.add(assertion);
-                    }catch(WitnessFalseAssertionException e){
-                        items.addItems(new WitnessBoolean(false));
-                    }
+                    and.add(assertion);
                     items.addItems(and.groupize());
                 }else
                     items.addItems(assertion.groupize());
@@ -372,19 +357,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
-        /*WitnessItems newItems = new WitnessItems();
-
-        if(items != null){
-            for(WitnessAssertion assertion : items)
-                newItems.addItems(assertion.variableNormalization_expansion(env));
-        }
-
-        if(additionalItems != null)
-            newItems.setAdditionalItems(additionalItems.variableNormalization_expansion(env));
-
-        return newItems;*/
-
+    public WitnessAssertion varNormalization_expansion(WitnessEnv env) {
         return this;
     }
 
@@ -404,7 +377,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         for(int i = 0; i < items.size(); i++)
             items.set(i, items.get(i).toOrPattReq());
 
@@ -432,7 +405,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env) {
         throw new UnsupportedOperationException();
     }
 

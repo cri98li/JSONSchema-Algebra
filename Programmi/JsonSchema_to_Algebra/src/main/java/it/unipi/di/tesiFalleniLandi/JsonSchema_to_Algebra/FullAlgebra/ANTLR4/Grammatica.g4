@@ -38,6 +38,7 @@ assertion : 		type_assertion																					#NewTypeAssertion
 				|	additional_pattern_required																		#NewAdditionalPatternRequired
 				|	pattern_required																				#NewPatternRequired
 				|   ifBoolThen_assertion                                                                            #NewIfBoolThen
+				|   orPattReq_assertion                                                                             #NewOrPattReq
 	;
 
 	
@@ -77,6 +78,7 @@ unique_items_assertion : 'uniqueItems'																				#ParseUniqueItems;
 
 repeated_items_assertion : 'repeatedItems'																			#ParseRepeatedItems;
 
+orPattReq_assertion : 'orPattReq[' pAssertion ':' assertion (',' pAssertion ':' assertion)* ']'             #ParseOrPattReq;
 
 pAllOf : 'pAllOf''[' pAssertion (',' pAssertion)* ']'														#ParsePAllOf;
 

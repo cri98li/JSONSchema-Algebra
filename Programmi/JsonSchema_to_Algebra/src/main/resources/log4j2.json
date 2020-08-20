@@ -2,7 +2,7 @@
     "configuration": {
         "status": "info",
         "ThresholdFilter": {
-            "level": "debug"
+            "level": "off"
         },
         "appenders": {
             "Console": {
@@ -15,6 +15,7 @@
         "loggers": {
             "root": {
                 "level": "all",
+                "includeLocation": "true",
                 "AppenderRef": {
                     "ref": "console"
                 }

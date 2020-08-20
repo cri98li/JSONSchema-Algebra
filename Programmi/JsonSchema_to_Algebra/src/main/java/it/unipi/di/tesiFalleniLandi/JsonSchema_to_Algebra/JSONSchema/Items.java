@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +15,8 @@ import java.util.Map.Entry;
 
 
 public class Items implements JSONSchemaElement{
-	private List<JSONSchema> items_array;
-	private JSONSchema items;
+	private List<JSONSchema> items_array; 		//"items" : []
+	private JSONSchema items; 					//"items" : {}
 	private JSONSchema additionalItems;
 	private JSONSchema unevaluatedItems_array;
 
@@ -81,7 +80,6 @@ public class Items implements JSONSchemaElement{
 		if(unevaluatedItems_array != null) obj.add("unevaluatedItems", unevaluatedItems_array.toJSON());
 		
 		if(items != null) obj.add("items", items.toJSON());
-				
 		
 		return obj;
 	}
@@ -144,18 +142,25 @@ public class Items implements JSONSchemaElement{
 				case "items":
 					URIIterator.remove();
 					try {
-						int index = Integer.parseInt(URIIterator.next());
-						URIIterator.remove();
-						return items_array.get(index).searchDef(URIIterator);
-					} catch (Exception e) {
+						if(URIIterator.hasNext()) {
+							int index = Integer.parseInt(URIIterator.next());
+							URIIterator.remove();
+							if(items_array != null || index < items_array.size())
+								return items_array.get(index).searchDef(URIIterator); //items array case
+						}
+					} catch (NumberFormatException e) {
+						logger.catching(e);
 					}
-					return items.searchDef(URIIterator);
+					if(items != null)
+						return items.searchDef(URIIterator);  //single item case
 				case "additionalItems":
 					URIIterator.remove();
-					return additionalItems.searchDef(URIIterator);
+					if(additionalItems != null)
+						return additionalItems.searchDef(URIIterator);
 				case "unevaluatedItems":
 					URIIterator.remove();
-					return unevaluatedItems_array.searchDef(URIIterator);
+					if(unevaluatedItems_array != null)
+						return unevaluatedItems_array.searchDef(URIIterator);
 			}
 		}
 		return null;

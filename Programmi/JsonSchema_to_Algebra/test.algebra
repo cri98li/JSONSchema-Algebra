@@ -1,15 +1,27 @@
 allOf[
-  type[obj],
-  props["^.*a" : mof(2); true],
-  pattReq["^.*a" : mof(2)]
+    props[
+        "aaa":{
+            type[num],
+            mof(2)
+        },
+        "bbb" : length(0,100)
+    ;]
 ]
 
+/*
+allOf[
+  type[obj],
+  props["^.*a" : mof(2); true],
+  pattReq["^.*a" : anyOf[type[int], mof(2), false]]
+]*/
 
-/*allOf[
+/*
+allOf[
   type[obj],
   props["^a" : mof(2); true],
   pattReq["^b" : mof(3)]
-]*/
+]
+*/
 
 
 /*allOf[

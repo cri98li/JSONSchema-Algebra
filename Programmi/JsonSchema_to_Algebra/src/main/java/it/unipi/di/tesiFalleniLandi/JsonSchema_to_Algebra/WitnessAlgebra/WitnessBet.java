@@ -5,7 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -89,7 +88,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     public WitnessAssertion mergeElement(WitnessXBet a) throws REException { //TODO: check
-        if(a.min >= max || a.max <= min){
+        if (a.min >= max || a.max <= min) {
             Type_Assertion type = new Type_Assertion();
             type.add(FullAlgebraString.TYPE_NUMBER);
 
@@ -97,30 +96,26 @@ public class WitnessBet implements WitnessAssertion{
         }
         WitnessAnd and = new WitnessAnd();
 
-        if(a.getMax() <= max && a.getMin() >= min)
+        if (a.getMax() <= max && a.getMin() >= min)
             return new WitnessXBet(a.getMin(), a.getMax());
-        if(a.getMax() > max && a.getMin() < min)
+        if (a.getMax() > max && a.getMin() < min)
             return new WitnessBet(min, max);
 
         WitnessAnd andTmp = new WitnessAnd();
-        try {
-            //caso non vittoria assoluta
-            if (a.getMax() > max)
-                and.add(new WitnessBet(null, max));
-            else
-                and.add(new WitnessXBet(null, a.getMax()));
+        //caso non vittoria assoluta
+        if (a.getMax() > max)
+            and.add(new WitnessBet(null, max));
+        else
+            and.add(new WitnessXBet(null, a.getMax()));
 
-            if (a.getMin() < min)
-                and.add(new WitnessBet(min, null));
-            else
-                and.add(new WitnessXBet(a.getMin(), null));
+        if (a.getMin() < min)
+            and.add(new WitnessBet(min, null));
+        else
+            and.add(new WitnessXBet(a.getMin(), null));
 
-            //check if the output is the same as the input
-            andTmp.add(this);
-            andTmp.add(a);
-        }catch (WitnessFalseAssertionException e){
-            throw  new RuntimeException(e); //impossible
-        }
+        //check if the output is the same as the input
+        andTmp.add(this);
+        andTmp.add(a);
 
         return and.equals(andTmp) ? null : and;
 
@@ -176,7 +171,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException {
+    public WitnessAssertion toOrPattReq() {
         return this;
     }
 
@@ -191,7 +186,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env) {
         throw new UnsupportedOperationException();
     }
 

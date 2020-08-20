@@ -5,8 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -24,6 +22,9 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     public WitnessProperty(ComplexPattern key, WitnessAssertion assertion){
+        if(assertion != null && assertion.getClass() == WitnessAnd.class && ((WitnessAnd) assertion).getIfUnitaryAnd() != null)
+            assertion = ((WitnessAnd) assertion).getIfUnitaryAnd();
+
         logger.trace("Creating a new WitnessPropertiy with key: {} and value: {}", key, assertion);
         this.key = key;
         value = assertion;
@@ -37,7 +38,7 @@ public class WitnessProperty implements WitnessAssertion{
         return key;
     }
 
-    public void setKey(ComplexPattern key) {
+    public void setPattern(ComplexPattern key) {
         logger.trace("Set {} as key of {}", key, this);
         this.key = key;
     }
@@ -51,7 +52,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
         return;
     }
 
@@ -71,7 +72,6 @@ public class WitnessProperty implements WitnessAssertion{
         if(value.getClass() == WitnessBoolean.class && ((WitnessBoolean) value).getValue()) return value;
 
         WitnessProperty newProp = this.clone();
-
         newProp.value = value.merge();
 
         return newProp;
@@ -146,20 +146,14 @@ public class WitnessProperty implements WitnessAssertion{
     @Override
     public WitnessAssertion groupize() throws WitnessException, REException {
         WitnessProperty prop = new WitnessProperty();
-
         prop.key = key;
-        if(value != null ){
-            if(value.getClass() != WitnessAnd.class) {
-                WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(value);
-                }catch (WitnessFalseAssertionException e){
-                    prop.value = new WitnessBoolean(false);
-                }
-                prop.value = and.groupize();
-            }else
-                prop.value = value.groupize();
-        }
+
+        if(value.getClass() != WitnessAnd.class) {
+            WitnessAnd and = new WitnessAnd();
+            and.add(value);
+            prop.value = and.groupize();
+        }else
+            prop.value = value.groupize();
 
         return prop;
     }
@@ -177,34 +171,18 @@ public class WitnessProperty implements WitnessAssertion{
     @Override
     public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
 
-        if (value != null) {
-            //TODO: true <--> allOf[true] ?
-            if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
-                value.varNormalization_separation(env);
+        if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
+            value.varNormalization_separation(env);
 
-                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
-                /*
-                WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(value));
-                env.add(var, value);
+            Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
 
-                WitnessVar notVar = new WitnessVar(FullAlgebraString.NOT_DEFS + var.getValue());
-                env.add(notVar, value.not());
-
-                 */
-
-                value = result.getKey();
-            }
+            value = result.getKey();
         }
+
     }
 
     @Override
     public WitnessAssertion varNormalization_expansion(WitnessEnv env) {
-        /*
-        WitnessProperty prop = new WitnessProperty();
-        prop.key = this.key;
-        if(value != null)   prop.value = this.value.variableNormalization_expansion(env);
-        */
-
         return this;
     }
 
@@ -218,7 +196,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         value = value.toOrPattReq();
 
         return this;

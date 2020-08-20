@@ -62,8 +62,13 @@ public class PropertyNames implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), this, URIIterator);
-		return propertyNames.searchDef(URIIterator);
+		if(URIIterator.hasNext() && URIIterator.next().equals("propertyNames")) {
+			logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.hasNext() ? URIIterator.next() : null, this, URIIterator);
+			URIIterator.remove();
+			return propertyNames.searchDef(URIIterator);
+		}
+
+		return null;
 	}
 
 	@Override

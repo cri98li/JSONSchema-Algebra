@@ -30,7 +30,7 @@ public class Utils_JSONSchema {
 		}
 	}
 
-	//esegue prima la reference normalization, poi l'assertion separation
+	//We first execute the reference normalization operation, then the assertion separation op.
 	public static JSONSchema normalize(JSONSchema root) {
 		return referenceNormalization(root.clone()).assertionSeparation();
 	}
@@ -39,16 +39,17 @@ public class Utils_JSONSchema {
 		logger.trace("Performing referenceNormalizzation");
 
 		JSONSchema newRoot = new JSONSchema();
-		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef()); //Raccolgo tutte le definizioni
+		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef()); //collect all defs
 		logger.trace("List of defs under $defs or defionitions: {}", defsList);
 
-		List<URI_JS> refList = root.getRef(); //Raccolgo tutti i riferimenti
+		List<URI_JS> refList = root.getRef(); //collect all refs
 		logger.trace("List of ref: {}", refList);
 
 		Defs finalDefs = new Defs();
 
 		for(URI_JS ref : refList) {
-			if(ref.toString().equals("#") || ref.toString().charAt(0) != '#') //non risolvo i riferimenti a me stesso e quelli a file esterni
+			if(ref.toString().equals("#")    ||    ref.toString().charAt(0) != '#') //I cannot resolve (in this phase)
+				//ref to the entire file     or    ref to external files
 			{
 				logger.trace("Cannot resolve ref: {}", ref);
 				continue;
@@ -76,7 +77,7 @@ public class Utils_JSONSchema {
 				finalDefs.addDef(ref.getNormalizedName(), newDef);
 			}
 			else
-				throw new ParseCancellationException("ref not resolved!");
+				throw new ParseCancellationException("ref not resolved: "+ref);
 		}
 
 		//add all defs defined but not used
@@ -94,8 +95,6 @@ public class Utils_JSONSchema {
 	}
 
 	private static JSONSchema compareDefsRefs(Entry<String, Defs> entry, URI_JS ref) {
-		//System.out.println("CONFRONTO: "+entry.getKey()+"\r\n\t"+ref.toString().replace("definitions", "$defs"));
-
 		String[] defUriSplitted = entry.getKey().split("/");
 		String[] refUriSplitted = ref.toString().replace("definitions", "$defs").split("/");
 
@@ -130,8 +129,6 @@ public class Utils_JSONSchema {
 
 		for(Entry<String, JsonElement> p : b.entrySet())
 			obj.add(p.getKey(), p.getValue());
-
-
 
 		return obj;
 	}

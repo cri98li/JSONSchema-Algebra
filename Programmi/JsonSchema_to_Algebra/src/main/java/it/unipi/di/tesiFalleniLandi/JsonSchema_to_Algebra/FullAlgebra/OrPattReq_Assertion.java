@@ -3,14 +3,17 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOrPattReq;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOrPattReq;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class OrPattReq_Assertion implements Assertion{
     List<Map.Entry<ComplexPattern, Assertion>> reqList;
@@ -27,7 +30,7 @@ public class OrPattReq_Assertion implements Assertion{
 
         /*if(ORP.containsKey(key)) {
             logger.trace("Same ORP contains {} --> generating value as AnyOf", key);
-            AnyOf_Assertion or = new AnyOf_Assertion(); //TODO: se hanno la stessa chiave in ORP cosa faccio?
+            AnyOf_Assertion or = new AnyOf_Assertion(); //TODO: what if ORP already contains an entry with the same key?
             or.add(ORP.get(key));
             or.add(value);
             ORP.put(key, or);
@@ -44,12 +47,21 @@ public class OrPattReq_Assertion implements Assertion{
 
     @Override
     public Assertion not() {
-        throw new UnsupportedOperationException("OrPattReq.not");
+        AllOf_Assertion and = new AllOf_Assertion();
+        for(Map.Entry<ComplexPattern, Assertion> entry : this.reqList) {
+            PatternRequired_Assertion tmp = new PatternRequired_Assertion(entry.getKey(), entry.getValue().notElimination());
+            and.add(tmp.not());
+        }
+        return and;
+        //throw new UnsupportedOperationException("OrPattReq.not");
     }
 
     @Override
     public Assertion notElimination() {
-        return this; //TODO: da chiedere notElimination in ORP
+        OrPattReq_Assertion returnValue = new OrPattReq_Assertion();
+        for(Map.Entry<ComplexPattern, Assertion> entry : this.reqList)
+            returnValue.add(entry.getKey(), entry.getValue().notElimination());
+        return returnValue; //TODO: ask Ghelli
     }
 
     @Override

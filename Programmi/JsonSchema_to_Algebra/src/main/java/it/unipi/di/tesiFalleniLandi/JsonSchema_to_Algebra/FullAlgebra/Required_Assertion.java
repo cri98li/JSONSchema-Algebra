@@ -6,8 +6,6 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -113,19 +111,12 @@ public class Required_Assertion implements Assertion{
 		for(String str : reqList) {
 			ComplexPattern p = ComplexPattern.createFromName(str);
 			WitnessPattReq pattReq = WitnessPattReq.build(p, new WitnessBoolean(true));
-			try {
 				and.add(pattReq);
-			} catch (WitnessFalseAssertionException e) {
-				throw new RuntimeException(e); //impossible
-			}
 		}
 
-		try {
-			or.add(type);
-			or.add(and);
-		}catch (WitnessTrueAssertionException e){
-			throw new RuntimeException(e); //impossible
-		}
+		or.add(type);
+		or.add(and);
+
 
 		return or;
 	}

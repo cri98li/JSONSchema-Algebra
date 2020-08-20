@@ -524,8 +524,14 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 						} catch (java.lang.IllegalArgumentException | REException e) {
 							throw new ParseCancellationException("REException: " + e.getMessage());
 						}
-					} else
-						prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString(), (Assertion) visit(list.get(i)));
+					} else {
+						//prop.addProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString(), (Assertion) visit(list.get(i)));
+						try {
+							prop.addPatternProperties(idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString(), (Assertion) visit(list.get(i)));
+						} catch (java.lang.IllegalArgumentException | REException e) {
+							throw new ParseCancellationException("REException: " + e.getMessage());
+						}
+					}
 				}else{
 					prop.addPatternProperties((ComplexPattern) visit(idList.get(i)), (Assertion) visit(list.get(i)));
 				}
@@ -590,6 +596,33 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		addPattReq.setAdditionalProperties(assertion);
 
 		return addPattReq;
+	}
+
+	@Override
+	public OrPattReq_Assertion visitParseOrPattReq(GrammaticaParser.ParseOrPattReqContext ctx) {
+		OrPattReq_Assertion orPattReq = new OrPattReq_Assertion();
+
+		List<AssertionContext> list = ctx.assertion();
+		List<GrammaticaParser.PAssertionContext> idList = ctx.pAssertion();
+
+		for(int i = 0; i < idList.size(); i++) {
+			if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) {
+				try {
+					orPattReq.add(ComplexPattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())), (Assertion) list.get(i));
+				} catch (java.lang.IllegalArgumentException | REException e) {
+					throw new ParseCancellationException("REException: "+e.getMessage());
+				}
+			}else{
+				orPattReq.add((ComplexPattern) visit(idList.get(i)), (Assertion) visit(list.get(i)));
+			}
+		}
+
+		return orPattReq;
+	}
+
+	@Override
+	public OrPattReq_Assertion visitNewOrPattReq(GrammaticaParser.NewOrPattReqContext ctx) {
+		return (OrPattReq_Assertion) visit(ctx.orPattReq_assertion());
 	}
 
 	@Override

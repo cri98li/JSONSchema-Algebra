@@ -45,9 +45,9 @@ interface JSONSchemaElement extends Cloneable{
 	public List<URI_JS> getRef();
 	
 	/**
-	 * Try to find the JSONSchema associated with a particular URI
+	 * Tries to find the JSONSchema associated with a particular URI
 	 * @param URIIterator iterator on the components of the URI
-	 * @return an instance of Defs that contains all the definitions found
+	 * @return an instance of Defs that contains all the definitions found, null otherwise
 	 */
 	public JSONSchema searchDef(Iterator<String> URIIterator);
 	

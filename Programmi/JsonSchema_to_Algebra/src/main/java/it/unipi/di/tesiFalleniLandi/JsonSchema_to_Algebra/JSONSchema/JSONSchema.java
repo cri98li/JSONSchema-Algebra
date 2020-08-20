@@ -167,7 +167,7 @@ public class JSONSchema implements JSONSchemaElement{
 				((Contains) jsonSchema.get("contains")).setMaxContains(object.get(key));
 				break;
 				
-			//Iminimum, maximum, exclusiveMinimum and exclusiveMaximum grouped in BetweenNumber.
+			//minimum, maximum, exclusiveMinimum and exclusiveMaximum grouped in BetweenNumber.
 			case "minimum":
 				jsonSchema.putIfAbsent("betweenNumber", new BetweenNumber());
 				((BetweenNumber) jsonSchema.get("betweenNumber")).setMin(object.get(key));
@@ -187,11 +187,12 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.putIfAbsent("betweenNumber", new BetweenNumber());
 				((BetweenNumber) jsonSchema.get("betweenNumber")).setExclusiveMax(object.get(key));
 				break;
-				
+
 			case "required":
 				try {
 					jsonSchema.put("required", new Required(object.get(key)));
 				}catch(UnsenseAssertion e){
+					logger.catching(e);
 					//TODO: required : true
 				}
 				break;
@@ -223,20 +224,12 @@ public class JSONSchema implements JSONSchemaElement{
 				jsonSchema.put("const", new Const(object.get(key)));
 				break;
 				
-			case "$ref":
+			case "$ref": case "ref":
 				jsonSchema.put("$ref", new Ref(object.get(key)));
 				break;
 				
-			case "ref":
-				jsonSchema.put("$ref", new Ref(object.get(key)));
-				break;
-				
-			case "$defs":
-				jsonSchema.put("$defs", new Defs(object.get(key)));
-				break;
-				
-			case "definitions": 
-				jsonSchema.put("$defs", new Defs(object.get(key)));
+			case "$defs": case "definitions":
+					jsonSchema.put("$defs", new Defs(object.get(key)));
 				break;
 				
 			case "format":
@@ -248,8 +241,8 @@ public class JSONSchema implements JSONSchemaElement{
 				break;
 			
 			default:
-				jsonSchema.putIfAbsent("unknow", new UnknownElement());
-				((UnknownElement) jsonSchema.get("unknow")).add(key, object.get(key));
+				jsonSchema.putIfAbsent("unknown", new UnknownElement());
+				((UnknownElement) jsonSchema.get("unknown")).add(key, object.get(key));
 				break;
 			}
 		}
@@ -336,6 +329,9 @@ public class JSONSchema implements JSONSchemaElement{
 		if(booleanAsJSONSchema != null)
 			return new Boolean_Assertion(booleanAsJSONSchema);
 
+		if(jsonSchema.size() == 1)
+			return jsonSchema.entrySet().iterator().next().getValue().toGrammar();
+
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries){
 			if(entry.getValue().getClass() == UnknownElement.class) continue;
@@ -383,12 +379,41 @@ public class JSONSchema implements JSONSchemaElement{
 		logger.debug("searchDef: searching for {} in {}. URIIterator: {}", URIIterator.next(), this, URIIterator);
 
 		String nextElement = URIIterator.next();
+		//URIIterator.remove(); <-- Only assertion classes must perform .remove (think about patternProperties)
 
-		//dato un nome di definizione cerca di risolverlo
-		if(jsonSchema.containsKey(nextElement))
-			return jsonSchema.get(nextElement).searchDef(URIIterator);
+		if(jsonSchema.containsKey(getGroupName(nextElement))) //here we don't care about calling searchDef on assertion like between***** or similar (because cannot be ref, right??)
+			return jsonSchema.get(getGroupName(nextElement)).searchDef(URIIterator);
 		
 		return null;
+	}
+
+	//We use this method to get, from a keyword, its "semantic group"
+	private String getGroupName(String s){
+		switch (s){
+			case "patternProperties": case "additionalProperties": return "properties";
+
+			case "dependentSchemas": case "dependentRequired": return "dependencies";
+
+			case "additionalItems": return "items";
+
+			case "if": case "then": case "else": return "ifThenElse";
+
+			case "minItems": case "maxItems": return "betweenItems";
+
+			case "minumum": case "maximum": case "exclusiveMaximum": case "exclusiveMinimum": return "betweenNumber";
+
+			case "minProperties": case "maxProperties": return "betweenProperties";
+
+			case "minLength": case "maxLength": return "length";
+
+			case "minContains": case "maxContains": return "contains";
+
+			case "ref": return "$ref";
+
+			case "definitions": return "$defs";
+		}
+
+		return s;
 	}
 
 

@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AllOf;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.Pattern;
@@ -11,7 +10,6 @@ import patterns.REException;
 import java.util.List;
 
 public class Utils_PattOfS {
-    //Vedi definizione sul documento
     private static ComplexPattern truePattern;
     private static ComplexPattern falsePattern;
 
@@ -26,12 +24,7 @@ public class Utils_PattOfS {
             System.exit(-1);
         }
 
-        try {
-            falsePattern = ComplexPattern.createFromRegexp("#");
-        } catch (REException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        falsePattern = truePattern.complement();
     }
 
     public static ComplexPattern pattOfS(Assertion a){

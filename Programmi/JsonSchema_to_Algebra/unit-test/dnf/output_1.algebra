@@ -1,1 +1,54 @@
-anyOf[allOf[mof(1), mof(2)], allOf[mof(1), mof(3)]]
+/*anyOf[
+    allOf[
+        mof(1), mof(2)
+    ],
+    allOf[
+        mof(1), mof(3)
+    ]
+]*/
+rootdef "root" = anyOf[
+	allOf[
+		mof(2.0),
+		mof(1.0),
+		type[
+			num
+		]
+	],
+	allOf[
+		mof(3.0),
+		mof(1.0),
+		type[
+			num
+		]
+	],
+	type[
+		arr
+	],
+	type[
+		str
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	]
+],
+def "not_root" = anyOf[
+	{
+		type[
+			num
+		],
+		notMof(1.0)
+	},
+	allOf[
+		type[
+			num
+		],
+		notMof(3.0),
+		notMof(2.0)
+	]
+]

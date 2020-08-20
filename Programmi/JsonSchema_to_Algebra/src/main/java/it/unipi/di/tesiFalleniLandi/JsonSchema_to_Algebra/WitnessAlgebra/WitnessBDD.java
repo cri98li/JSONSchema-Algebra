@@ -30,7 +30,7 @@ public class WitnessBDD {
 
     static {
         indexNode = HashBiMap.create();
-        //creo il nuovo obdd, ma uso l'ordinamento già definito
+        //create new obdd, using the defined ordering
         bdd = new BDD(NODESIZE, CACHESIZE);
 
 
@@ -54,7 +54,7 @@ public class WitnessBDD {
         indexNode.put(var, i);
     }
 
-    public static WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessBDDException, WitnessException {
+    public static WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
         Integer i1 = indexNode.get(u1);
         Integer i2 = indexNode.get(u2);
 
@@ -70,7 +70,9 @@ public class WitnessBDD {
         and.add(u1);
         and.add(u2);
 
-         //and = (WitnessAnd) and.varNormalization_expansion(env); //TODO: CHECK su alcuni esempi viene fatta l'espansione prima che siano state create tutte le variabili dentro ai ref. Questo metodo viene richiamato dalla add a tempo di costruzione dell'env
+        //and = (WitnessAnd) and.varNormalization_expansion(env); //TODO: CHECK su alcuni esempi viene fatta l'espansione prima che
+                                                                    // siano state create tutte le variabili dentro ai ref.
+                                                                    // Questo metodo viene richiamato dalla add a tempo di costruzione dell'env
 
         indexNode.put(var, newI);
 
@@ -101,12 +103,7 @@ public class WitnessBDD {
 
     public static void rename(WitnessVar oldName, WitnessVar newName){
         if(!indexNode.containsKey(oldName))
-            throw new RuntimeException("WitnessBDD rename variabile non presente");
-
-        /*if(oldName.equals(falseVar))
-            falseVar = newName;
-        if(oldName.equals(trueVar))
-            trueVar = newName;*/
+            throw new RuntimeException("WitnessBDD rename element not in indexNode");
 
         indexNode.put(newName, indexNode.remove(oldName));
     }

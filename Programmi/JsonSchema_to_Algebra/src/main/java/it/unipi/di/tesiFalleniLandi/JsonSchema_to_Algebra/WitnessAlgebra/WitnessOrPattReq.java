@@ -3,8 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.OrPattReq_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -12,7 +10,6 @@ import patterns.REException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class WitnessOrPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessOrPattReq.class);
@@ -59,7 +56,8 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
-        throw new UnsupportedOperationException();
+        for(WitnessAssertion assertion : reqList)
+            assertion.checkLoopRef(env, varList);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
@@ -102,12 +100,22 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws WitnessException, REException {
-        throw new UnsupportedOperationException();
+        WitnessAnd and = new WitnessAnd();
+
+        for(WitnessPattReq req : reqList)
+            and.add(req.not(env));
+
+        return and;
     }
 
     @Override
     public WitnessAssertion groupize() throws WitnessException, REException {
-        throw new UnsupportedOperationException();
+        WitnessOrPattReq orp = new WitnessOrPattReq();
+
+        for(WitnessPattReq req : reqList)
+            orp.add((WitnessPattReq) req.groupize());
+
+        return orp;
     }
 
     @Override
@@ -138,7 +146,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq() {
         return this;
     }
 
@@ -163,5 +171,30 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     public void setReqList(List<WitnessPattReq> reqList) {
         this.reqList = reqList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WitnessOrPattReq that = (WitnessOrPattReq) o;
+
+        List<WitnessPattReq> check = new LinkedList<>(that.reqList);
+        check.removeAll(this.reqList);
+
+        return check.size() == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "WitnessOrPattReq{" +
+                "reqList=" + reqList +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return reqList != null ? reqList.hashCode() : 0;
     }
 }

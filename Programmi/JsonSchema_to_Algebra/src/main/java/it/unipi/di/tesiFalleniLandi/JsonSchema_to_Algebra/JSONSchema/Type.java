@@ -65,11 +65,13 @@ public class Type implements JSONSchemaElement {
 	public JsonElement toJSON() {
 		JsonObject obj = new JsonObject();
 
+		//creating "type": "..."
 		if(type_array.size() == 1) {
 			obj.addProperty("type", type_array.get(0));
 			return obj;
 		}
-		
+
+		//creating "type": ["...", "...", ...]
 		JsonArray array = new JsonArray();
 		for(String s : type_array)
 			array.add(s);

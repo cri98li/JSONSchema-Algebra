@@ -108,14 +108,18 @@ public class OneOf implements JSONSchemaElement{
 
 	@Override
 	public JSONSchema searchDef(Iterator<String> URIIterator) {
-		try {
-			int i = Integer.parseInt(URIIterator.next());
-			logger.debug("searchDef: searching for index {} in oneOf[{}]. URIIterator: {}", i, oneOf.size(), URIIterator);
-			if(i < oneOf.size()){
-				URIIterator.remove();
-				return oneOf.get(i).searchDef(URIIterator);
+		if(URIIterator.hasNext() && URIIterator.next().equals("oneOf")) {
+			URIIterator.remove();
+			try {
+				int i = Integer.parseInt(URIIterator.next());
+				logger.debug("searchDef: searching for index {} in oneOf[{}]. URIIterator: {}", i, oneOf.size(), URIIterator);
+				if (i < oneOf.size()) {
+					URIIterator.remove();
+					return oneOf.get(i).searchDef(URIIterator);
+				}
+			} catch (ClassCastException | NumberFormatException e) {
+				logger.catching(e); //error in the ref URI
 			}
-		}catch (ClassCastException e){
 		}
 
 		return null;

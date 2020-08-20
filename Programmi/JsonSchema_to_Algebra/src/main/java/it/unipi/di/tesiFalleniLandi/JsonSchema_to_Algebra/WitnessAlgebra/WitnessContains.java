@@ -1,7 +1,9 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
@@ -28,6 +30,8 @@ public class WitnessContains implements WitnessAssertion{
     public WitnessContains(double min, double max, WitnessAssertion contains) {
         this.min = min;
         this.max = max;
+        if(contains != null && contains.getClass() == WitnessAnd.class && ((WitnessAnd) contains).getIfUnitaryAnd() != null)
+            contains = ((WitnessAnd) contains).getIfUnitaryAnd();
         this.contains = contains;
         logger.debug("Created a new WitnessContains: {}", this);
     }
@@ -43,6 +47,8 @@ public class WitnessContains implements WitnessAssertion{
         else
             this.max = Double.parseDouble(max.toString());
 
+        if(contains != null && contains.getClass() == WitnessAnd.class && ((WitnessAnd) contains).getIfUnitaryAnd() != null)
+            contains = ((WitnessAnd) contains).getIfUnitaryAnd();
         this.contains = contains;
 
         isAnArray = contains.getClass() == WitnessBoolean.class;
@@ -59,7 +65,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
         return;
     }
 
@@ -158,7 +164,7 @@ public class WitnessContains implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion not(WitnessEnv env) {
         WitnessAnd and = new WitnessAnd();
 
         if(min == 0 && max == null){
@@ -201,11 +207,7 @@ public class WitnessContains implements WitnessAssertion{
         if(contains != null) {
             if (this.contains.getClass() != WitnessAnd.class) {
                 WitnessAnd and = new WitnessAnd();
-                try {
-                    and.add(this.contains);
-                }catch(WitnessFalseAssertionException e){
-                    contains.contains = new WitnessBoolean(false);
-                }
+                and.add(this.contains);
                 contains.contains = and.groupize();
             } else
                 contains.contains = this.contains.groupize();
@@ -239,12 +241,6 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
-        /*WitnessContains contains = clone();
-
-        contains.contains = this.contains.variableNormalization_expansion(env);
-
-        return contains;*/
-
         return this;
     }
 
@@ -258,7 +254,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion toOrPattReq() throws WitnessFalseAssertionException, WitnessTrueAssertionException {
+    public WitnessAssertion toOrPattReq()  {
         contains = contains.toOrPattReq();
         return this;
     }
@@ -274,7 +270,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env) {
         throw new UnsupportedOperationException();
     }
 
