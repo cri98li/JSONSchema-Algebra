@@ -5,7 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import patterns.REException;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -170,7 +169,7 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) {
-        return env.getCoVarName(this);
+        return env.getCoVar(this);
     }
 
     @Override
@@ -192,14 +191,18 @@ public class WitnessVar implements WitnessAssertion{
             return 0f;
 
         visitedVar.add(this);
-        return 1f + env.getDefinition(this).countVarWithoutBDD(env, visitedVar);
+        Float count = env.getDefinition(this).countVarWithoutBDD(env, visitedVar);
+        visitedVar.remove(this);
+        return 1f + count;
     }
 
     public boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar){
         if(visitedVar.contains(this)) return true;
 
         visitedVar.add(this);
-        return env.getDefinition(this).isRecursive(env, visitedVar);
+        boolean tmp = env.getDefinition(this).isRecursive(env, visitedVar);
+        visitedVar.remove(this);
+        return tmp;
     }
 
     @Override

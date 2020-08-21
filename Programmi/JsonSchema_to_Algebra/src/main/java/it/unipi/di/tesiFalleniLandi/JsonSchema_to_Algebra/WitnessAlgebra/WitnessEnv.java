@@ -6,7 +6,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import jdd.bdd.BDD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -40,9 +39,9 @@ public class WitnessEnv implements WitnessAssertion {
         add(var, value);
         notElimination(); //complete the variable
 
-        logger.trace("Added {} and its complement {}", var, getCoVarName(var));
+        logger.trace("Added {} and its complement {}", var, getCoVar(var));
 
-        return new AbstractMap.SimpleEntry<>(var, getCoVarName(var));
+        return new AbstractMap.SimpleEntry<>(var, getCoVar(var));
     }
 
     /**
@@ -53,11 +52,10 @@ public class WitnessEnv implements WitnessAssertion {
      */
     public void add(WitnessVar key, WitnessAssertion value){
         logger.trace("Adding to env <{}, {}>", key, value);
-        if(WitnessAnd.class == value.getClass()){
+        if(WitnessAnd.class == value.getClass())
             add(key, (WitnessAnd) value);
-            return;
-        }
-        varList.put(key, value);
+        else
+            varList.put(key, value);
     }
 
     public void add(WitnessVar key, WitnessAnd value){
@@ -92,7 +90,7 @@ public class WitnessEnv implements WitnessAssertion {
         LinkedList<Map.Entry<WitnessVar, Float>> booleanExpressions = new LinkedList<>(); // list of pair <variable, number of variable without BDD associated>
 
         for (Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet()) {
-            //the variable have already a BDD associated
+            //the variable has already a BDD associated
             if (WitnessBDD.contains(entry.getKey())) continue;
 
             //the variable is not a boolean expression --> we build a trivial bdd
@@ -175,7 +173,7 @@ public class WitnessEnv implements WitnessAssertion {
         return varList.get(var);
     }
 
-    public WitnessVar getCoVarName(WitnessVar name){
+    public WitnessVar getCoVar(WitnessVar name){
         if(coVar.containsKey(name)){
             return coVar.get(name);
         }else if(coVar.inverse().containsKey(name)){
@@ -318,7 +316,7 @@ public class WitnessEnv implements WitnessAssertion {
         //compute a body for the "temp" var created by ****
         for(WitnessVar var : tempVariables) {
             try {
-                varList.put(var, varList.get(getCoVarName(var)).not(this));
+                varList.put(var, varList.get(getCoVar(var)).not(this));
             } catch (WitnessException | REException e) {
                 logger.catching(e);
                 e.printStackTrace();
