@@ -15,8 +15,8 @@ public class WitnessBDD {
     private static BiMap<WitnessVar, Integer> indexNode;
     private static BDD bdd;
 
-    private static WitnessVar trueVar;
-    private static WitnessVar falseVar;
+    private static final WitnessVar trueVar;
+    private static final WitnessVar falseVar;
 
     public static WitnessVar getTrueVar(){
         return trueVar.clone();
@@ -36,8 +36,8 @@ public class WitnessBDD {
 
         trueVar = new WitnessVar("OBDD_true");
         falseVar = new WitnessVar("OBDD_false");
-        indexNode.put(trueVar, bdd.createVar());
-        indexNode.put(falseVar, bdd.createVar());
+        indexNode.put(trueVar, bdd.getOne());
+        indexNode.put(falseVar, bdd.getZero());
     }
 
     public static WitnessVar createVar(){
@@ -66,13 +66,6 @@ public class WitnessBDD {
         WitnessVar var = indexNode.inverse().get(newI);
         if(var == null)
             var = new WitnessVar("OBDD_"+newI);
-        WitnessAnd and = new WitnessAnd();
-        and.add(u1);
-        and.add(u2);
-
-        //and = (WitnessAnd) and.varNormalization_expansion(env); //TODO: CHECK su alcuni esempi viene fatta l'espansione prima che
-                                                                    // siano state create tutte le variabili dentro ai ref.
-                                                                    // Questo metodo viene richiamato dalla add a tempo di costruzione dell'env
 
         indexNode.put(var, newI);
 
@@ -91,11 +84,6 @@ public class WitnessBDD {
         WitnessVar var = indexNode.inverse().get(newI);
         if(var == null)
             var = new WitnessVar("OBDD_"+newI);
-        WitnessOr or = new WitnessOr();
-        or.add(u1);
-        or.add(u2);
-
-        //or = (WitnessOr) or.varNormalization_expansion(env); //TODO: CHECK
 
         indexNode.put(var, newI);
         return var;

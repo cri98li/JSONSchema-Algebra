@@ -95,7 +95,8 @@ public class WitnessEnv implements WitnessAssertion {
 
             //the variable is not a boolean expression --> we build a trivial bdd
             if (!entry.getValue().isBooleanExp()) {
-                WitnessBDD.createVar(entry.getKey());
+                if(!WitnessBDD.contains(entry.getKey()))
+                    WitnessBDD.createVar(entry.getKey());
             } else {
                 booleanExpressions.add(new AbstractMap.SimpleEntry(entry.getKey(), entry.getValue().countVarWithoutBDD(this, new LinkedList<>())));
             }
@@ -184,7 +185,6 @@ public class WitnessEnv implements WitnessAssertion {
 
     public void setRootVar(WitnessVar key, WitnessAssertion value) {
         add(key, value);
-        notElimination();
         rootVar = key;
     }
 
