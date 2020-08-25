@@ -24,7 +24,7 @@ public class MainWitness {
 
         //WitnessEnv env = (WitnessEnv) schema.toWitnessAlgebra();
 
-        env.buildOBDD_notElimination();
+        //env.buildOBDD_notElimination();
 
         env.checkLoopRef(null, null);
 
@@ -42,12 +42,6 @@ public class MainWitness {
         env = env.groupize();
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
-        System.out.println("\r\n\r\n DNF: \r\n");
-        System.out.flush();
-
-        env = env.DNF();
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
-
         System.out.println("\r\n\r\n Separation: \r\n");
         System.out.flush();
 
@@ -60,6 +54,12 @@ public class MainWitness {
 
         env = env.varNormalization_expansion(null);
 
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+
+        System.out.println("\r\n\r\n DNF: \r\n");
+        System.out.flush();
+
+        env = env.DNF();
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n objectPrepare: \r\n");

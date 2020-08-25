@@ -493,11 +493,11 @@ public class WitnessEnv implements WitnessAssertion {
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet()) {
             if(entry.getValue().getClass() == WitnessAnd.class || entry.getValue().getClass() == WitnessBoolean.class)
-                env.add(entry.getKey(), entry.getValue().groupize());
+                env.varList.put(entry.getKey(), entry.getValue().groupize());
             else {   //TODO: chiedere al prof se a noi va bene che dopo la groupize ci possano essere variabili del tipo a = type(obj) mon racchiuse nell'and (gruppo)
                 WitnessAnd and = new WitnessAnd();
                 and.add(entry.getValue());
-                env.add(entry.getKey(), and.groupize());
+                env.varList.put(entry.getKey(), and.groupize());
             }
         }
 
@@ -553,9 +553,9 @@ public class WitnessEnv implements WitnessAssertion {
         //due to sorting, each variable is only expanded with the previous
         for(Map.Entry<WitnessVar, Integer> entry : orderedList) {
             if(entry.getValue() == 0)
-                newEnv.add(entry.getKey(), varList.get(entry.getKey()));
+                newEnv.varList.put(entry.getKey(), varList.get(entry.getKey()));
             else
-                newEnv.add(entry.getKey(), varList.get(entry.getKey()).varNormalization_expansion(newEnv));
+                newEnv.varList.put(entry.getKey(), varList.get(entry.getKey()).varNormalization_expansion(newEnv));
         }
 
         newEnv.varToBeElaborated = new LinkedList<>(varToBeElaborated); //TODO: da fare meglio
@@ -564,14 +564,14 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     public WitnessEnv DNF() throws WitnessException {
-        WitnessEnv dnf = new WitnessEnv();
-        dnf.coVar=coVar;
-        dnf.rootVar = rootVar;
+        WitnessEnv newEnv = new WitnessEnv();
+        newEnv.coVar=coVar;
+        newEnv.rootVar = rootVar;
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
-            dnf.varList.put(entry.getKey(), (entry.getValue()).DNF());
+            newEnv.varList.put(entry.getKey(), (entry.getValue()).DNF());
 
-        return dnf;
+        return newEnv;
     }
 
     @Override
