@@ -332,28 +332,32 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         if(items != null){
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).getClass() != WitnessBoolean.class && items.get(i).getClass() != WitnessVar.class) {
-                    items.get(i).varNormalization_separation(env);
+                    newDefinitions.addAll(items.get(i).varNormalization_separation(env));
 
-                    Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(items.get(i));
-
-                    items.set(i, result.getKey());
+                    WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(items.get(i)));
+                    newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, items.get(i)));
+                    items.set(i, newVar);
                 }
             }
         }
 
         if(additionalItems != null){
             if(additionalItems.getClass() != WitnessBoolean.class && additionalItems.getClass() != WitnessVar.class) {
-                additionalItems.varNormalization_separation(env);
+                newDefinitions.addAll(additionalItems.varNormalization_separation(env));
 
-                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(additionalItems);
-
-                additionalItems = result.getKey();
+                WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(additionalItems));
+                newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, additionalItems));
+                additionalItems = newVar;
             }
         }
+
+        return newDefinitions;
     }
 
     @Override

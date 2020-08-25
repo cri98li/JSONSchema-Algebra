@@ -12,6 +12,7 @@ import patterns.REException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class WitnessPattern implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessPattern.class);
@@ -94,8 +95,13 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException {
-        return new WitnessPattern(pattern.complement());
+    public WitnessAssertion not(WitnessEnv env) {
+        WitnessAnd and = new WitnessAnd();
+
+        and.add(new WitnessType(FullAlgebraString.TYPE_STRING));
+        and.add(new WitnessPattern(pattern.complement()));
+
+        return and;
     }
 
     @Override
@@ -114,7 +120,8 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+        return new LinkedList<>();
     }
 
     @Override

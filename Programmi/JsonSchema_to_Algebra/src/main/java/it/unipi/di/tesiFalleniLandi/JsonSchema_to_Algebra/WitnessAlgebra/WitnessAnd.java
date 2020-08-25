@@ -2,7 +2,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -478,11 +477,14 @@ public class WitnessAnd implements WitnessAssertion{
 
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
-                assertion.varNormalization_separation(env);
+                newDefinitions.addAll(assertion.varNormalization_separation(env));
+
+        return newDefinitions;
     }
 
     @Override
@@ -612,7 +614,7 @@ public class WitnessAnd implements WitnessAssertion{
      */
     public void objectPrepare(WitnessEnv env) throws REException, WitnessException {
 
-        //check if is and object group
+        //checking if it's an object group
         if (andList.get(WitnessType.class) == null) { //and without type specified
             logger.debug("Preparing WitnessAnd without type specified");
             return;
@@ -622,8 +624,15 @@ public class WitnessAnd implements WitnessAssertion{
             return;
         }
         if (andList.get(WitnessType.class).size() > 1) {//if contains more than one type
-            logger.debug("Preparing WitnessAnd with more than one type specified");
+            logger.error("Preparing WitnessAnd with more than one type specified");
             return;
+        }
+
+        //check the presence of WitnessPattReq --> if present ERROR!
+        if(andList.containsKey(WitnessPattReq.class)) {
+            String s = "Preparing WitnessAnd with more than one type specified";
+            logger.error(s);
+            throw new WitnessException(s);
         }
 
         List<WitnessAssertion> CPart = andList.remove(WitnessProperty.class); //List<WitnessProperty>
@@ -635,7 +644,7 @@ public class WitnessAnd implements WitnessAssertion{
             CPart.add(new WitnessProperty(ComplexPattern.createFromRegexp(".*"), new WitnessBoolean(true)));
             this.add(CPart.get(0));
         } else {
-            logger.debug("Complete non-empty CPart");
+            logger.debug("Completing non-empty CPart");
             ComplexPattern p = ((WitnessProperty) CPart.get(0)).getPattern();
 
             for (int i = 1; i < CPart.size(); i++)
@@ -665,11 +674,11 @@ public class WitnessAnd implements WitnessAssertion{
 
         if (ORPart != null) {
 
-            for (WitnessAssertion OR_assertion : ORPart) { //WitnessOrPattReq
+            for (WitnessAssertion ORP_assertion : ORPart) { //WitnessOrPattReq
 
                 List<WitnessPattReq> newRList = new LinkedList<>();
 
-                for (WitnessPattReq R_Assertion : ((WitnessOrPattReq) OR_assertion).reqList) {
+                for (WitnessPattReq R_Assertion : ((WitnessOrPattReq) ORP_assertion).reqList) {
                     for (WitnessAssertion C_assertion : CPart) {
 
                         logger.debug("[CP-RP] Computing intersection between {} and {}", ((WitnessProperty) C_assertion).getPattern(), R_Assertion.getPattern());
@@ -697,12 +706,12 @@ public class WitnessAnd implements WitnessAssertion{
                     }
                 }
 
-                ((WitnessOrPattReq) OR_assertion).setReqList(new LinkedList<>());
+                ((WitnessOrPattReq) ORP_assertion).setReqList(new LinkedList<>());
 
                 //if ORP empty --> unsatisfiable object
 
-                for (WitnessPattReq req : new LinkedList<>(newRList))   //concurrentModificationException
-                    ((WitnessOrPattReq) OR_assertion).fullConnect(req);
+                for (WitnessPattReq req : new LinkedList<>(newRList))   //to avoid concurrentModificationException
+                    ((WitnessOrPattReq) ORP_assertion).fullConnect(req);
             }
 
 
@@ -722,15 +731,16 @@ public class WitnessAnd implements WitnessAssertion{
             }
 
             //variable saparation
-            this.varNormalization_separation(env); //da indagare
+            env.varNormalization_separation(env); //TODO: meglio raccogliere le newDef e poi aggiungerle
+
 
             splitOriginalRList(ORPart, CoMatrix, env);
 
             //Reduce compatible pairs
             //reduceCompatiblePairs(CoMatrix); //old version
 
-            //variable saparation
-            this.varNormalization_separation(env); //TODO: super-check
+            //variable separation
+            //env.varNormalization_separation(env); //TODO: super-check
         }
     }
 
@@ -781,7 +791,7 @@ public class WitnessAnd implements WitnessAssertion{
 
         ComplexPattern intersection = subProp.getPattern().intersect(head.getPattern());
         if(intersection.isEmptyDomain()) {
-            reducedTail.addFirst(head);
+            reducedTail.addFirst(head); //TODO: bisogna clonare? a regola no...
             return new AbstractMap.SimpleEntry<>(subProp, reducedTail);
         }
 
@@ -793,7 +803,7 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessAnd and = new WitnessAnd();
         and.add(subProp.getValue());
         and.add(head.getValue());
-        LinkedList<WitnessAssertion> newReducedList = new LinkedList<>(reducedTail);
+        LinkedList<WitnessAssertion> newReducedList = new LinkedList<>(reducedTail); //non penso vada clonata
         newReducedList.addFirst(new WitnessProperty(intersection, and));
 
         if(!headMinProp.isEmptyDomain()){
@@ -975,7 +985,7 @@ public class WitnessAnd implements WitnessAssertion{
     private void rewritePatternReqsList (List<PatternReqs> list, WitnessEnv env) throws WitnessException, REException {
         List<WitnessAssertion> oldOrPattRequests = this.andList.get(WitnessOrPattReq.class); //getAllOldRequests
 
-        logger.debug("Old ORP size:", oldOrPattRequests.size());
+        logger.debug("Old ORP size: ", oldOrPattRequests.size());
 
         Set<WitnessPattReq> oldPattRequests = new HashSet<>();
 
@@ -1005,7 +1015,7 @@ public class WitnessAnd implements WitnessAssertion{
         if (reqList.size() == 0) { throw new UnsupportedOperationException("impossibile: reqList.size() == 0");}  // impossible case
         if (reqList.size() == 1 ) {
             WitnessPattReq clone = reqList.get(0).clone();
-            clone.setPattern(reqs.complexPattern);
+            clone.setPattern(patt);
 
             for(WitnessOrPattReq orp : reqList.get(0).getOrpList())
                 clone.fullConnect(orp);
@@ -1027,13 +1037,18 @@ public class WitnessAnd implements WitnessAssertion{
             if(schema.getClass() == WitnessAnd.class)
                 for (WitnessPattReq oldReq : coSubset )
                     ((WitnessAnd) schema).add(oldReq.getValue().not(env)); //  schema = schema and not schemaOf(oldReq)
+            else{
+                String s = "schema is not a WitnessAnd";
+                logger.error(s);
+                throw new WitnessException(s);
+            }
 
             WitnessPattReq fragment = WitnessPattReq.build(patt, schema);
             //fragment: satisfies subset and fails all assertions in coSubset
             for (WitnessPattReq compAncestor : subset ) {            //we put the fragment in all and only the ORPs that contain
                 //this.add(fragment);
                 for (WitnessOrPattReq orp : compAncestor.getOrpList() ) {   //one req that is satisfied
-                    fragment.fullConnect(orp); //gli orp non sono i soliti TODO: INDAGARE
+                    fragment.fullConnect(orp);
                 }
             }
             //stop
@@ -1055,111 +1070,6 @@ public class WitnessAnd implements WitnessAssertion{
         returnList.add(creaSingoletto(head)); // subsetsNoHead does not contain the empty set, hence we must add this singleton
         return returnList;
     }
-
-    /** coMatrix contain all maybe-compatible pairs
-       for each maybe-compatible pair left-right, if it is really compatible,
-       we split left into three fragments, right into three fragments, and
-       we substitute left and right with their fragments both in the orp
-       to which they belong and in the coMatrix.
-       The intersection fragment will belong to both orps
-       RList contains all requests of the object. It is just the union of all
-       orp's after DISTINCT elimination.
-    */
-    /*
-    private void reduceCompatiblePairs(LinkedList<Map.Entry<WitnessPattReq, WitnessPattReq>> coMatrix) throws REException, WitnessException {
-        while(!coMatrix.isEmpty()){
-            WitnessPattReq left = coMatrix.getFirst().getKey();
-            WitnessPattReq right = coMatrix.getFirst().getValue();
-            coMatrix.removeFirst();
-
-            ComplexPattern intersection = left.getPattern().intersect(right.getPattern());
-
-            if(intersection.domainSize() == 0) continue;
-
-            ComplexPattern leftMinRight = left.getPattern().minus(right.getPattern());
-            ComplexPattern rightMinLeft = right.getPattern().minus(left.getPattern());
-
-            WitnessAnd leftMinRightSchema = new WitnessAnd();
-            leftMinRightSchema.add(left.getValue());
-            leftMinRightSchema.add(right.getValue().not());
-
-            WitnessAnd rightMinLeftSchema = new WitnessAnd();
-            rightMinLeftSchema.add(right.getValue());
-            rightMinLeftSchema.add(left.getValue().not());
-
-            WitnessAnd intSchema = new WitnessAnd();
-            intSchema.add(left.getValue());
-            intSchema.add(right.getValue());
-
-            List<WitnessPattReq> leftFragments = new LinkedList<>();
-            List<WitnessPattReq> rightFragments = new LinkedList<>();
-
-            if(intSchema.notObviouslyEmpty()){
-                WitnessPattReq newRequest = WitnessPattReq.build(intersection, intSchema);
-                leftFragments.add(newRequest);
-                rightFragments.add(newRequest);
-            }
-            if(leftMinRightSchema.notObviouslyEmpty()){
-                leftFragments.add(WitnessPattReq.build(intersection, leftMinRightSchema.getIfUnitaryAnd() != null ?
-                        leftMinRightSchema.getIfUnitaryAnd() : leftMinRightSchema));
-            }
-            if(leftMinRight.domainSize() != 0){
-                leftFragments.add(WitnessPattReq.build(leftMinRight, left.getValue()));
-            }
-            if(rightMinLeftSchema.notObviouslyEmpty()){
-                rightFragments.add(WitnessPattReq.build(intersection, rightMinLeftSchema.getIfUnitaryAnd() != null ?
-                        rightMinLeftSchema.getIfUnitaryAnd() : rightMinLeftSchema));
-            }
-            if(rightMinLeft.domainSize() != 0){
-                rightFragments.add(WitnessPattReq.build(rightMinLeft, right.getValue()));
-            }
-
-            for(WitnessOrPattReq lOrp : new LinkedList<>(left.getOrpList())) { //to avoid concurrentModificationException
-                for (WitnessPattReq lF : leftFragments)
-                    lOrp.fullConnect(lF);
-
-                lOrp.deConnect(left);
-            }
-
-            for(WitnessOrPattReq rOrp : new LinkedList<>(right.getOrpList())) {
-                for (WitnessPattReq rF : rightFragments)
-                    rOrp.fullConnect(rF);
-
-                rOrp.deConnect(right);
-            }
-
-            //substitute left
-            for(int i = coMatrix.size() -1; i >= 0 ; i--){
-                WitnessPattReq coMatrix_i_key = coMatrix.get(i).getKey();
-                WitnessPattReq coMatrix_i_value = coMatrix.get(i).getValue();
-
-                if(coMatrix_i_key.equals(left)) {
-                    coMatrix.remove(i);
-                    for(WitnessPattReq tmp : leftFragments)
-                        coMatrix.add(new AbstractMap.SimpleEntry<>(tmp, coMatrix_i_value));
-                }
-                if(coMatrix_i_value.equals(left)){
-                    coMatrix.remove(i);
-                    for(WitnessPattReq tmp : leftFragments)
-                        coMatrix.add(new AbstractMap.SimpleEntry<>(tmp, coMatrix_i_key));
-                }
-
-                if (coMatrix_i_key.equals(right)) {
-                    coMatrix.remove(i);
-                    for (WitnessPattReq tmp : rightFragments)
-                        coMatrix.add(new AbstractMap.SimpleEntry<>(tmp, coMatrix_i_value));
-                }
-                if (coMatrix_i_value.equals(right)) {
-                    coMatrix.remove(i);
-                    for (WitnessPattReq tmp : rightFragments)
-                        coMatrix.add(new AbstractMap.SimpleEntry<>(tmp, coMatrix_i_key));
-                }
-            }
-
-            System.out.println("CoMatrix size: " + coMatrix.size());
-        }
-    }
-    */
 
 
     @Override

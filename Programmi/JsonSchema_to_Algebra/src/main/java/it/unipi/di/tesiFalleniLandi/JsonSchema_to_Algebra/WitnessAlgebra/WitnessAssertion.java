@@ -7,6 +7,7 @@ import patterns.REException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public interface WitnessAssertion extends Cloneable{
     /**
@@ -82,8 +83,9 @@ public interface WitnessAssertion extends Cloneable{
      * Collect and save all the definition to create in the variable normalization phase,
      * the name of the variable is: ClassName + hash of the value.
      * @param env collection of (variableName, variableContent) where the method add all the new variables
+     * @return return the list of new variable that we need to add to the env
      */
-    void varNormalization_separation(WitnessEnv env) throws WitnessException, REException;
+    List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException;
 
     /**
      * Expands all the unguarded variables with their respective definition

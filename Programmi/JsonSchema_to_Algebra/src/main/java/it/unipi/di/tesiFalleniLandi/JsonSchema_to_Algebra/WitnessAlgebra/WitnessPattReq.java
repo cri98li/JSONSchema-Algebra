@@ -232,15 +232,22 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
 
-            value.varNormalization_separation(env);
+            newDefinitions.addAll(value.varNormalization_separation(env));
 
-            Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
+            //Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
+            WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(value));
 
-            value = result.getKey();
+            newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, value));
+
+            value = newVar;
         }
+
+        return newDefinitions;
     }
 
     @Override

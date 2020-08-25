@@ -290,11 +290,14 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue()) {
-                assertion.varNormalization_separation(env);
-            }
+            for(WitnessAssertion assertion : entry.getValue())
+                newDefinitions.addAll(assertion.varNormalization_separation(env));
+
+        return newDefinitions;
     }
 
     @Override

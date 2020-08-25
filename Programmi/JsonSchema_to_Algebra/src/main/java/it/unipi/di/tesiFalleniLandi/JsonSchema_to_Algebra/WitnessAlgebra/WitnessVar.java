@@ -24,7 +24,10 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     public static void rename(WitnessVar oldName, WitnessVar newName) {
-            rename(oldName.getName(), newName.getName());
+        if(oldName == null || newName == null)
+            System.out.println("QUI");
+
+        rename(oldName.getName(), newName.getName());
     }
 
     //rename all the instances of ref(oldName) into ref(newName)
@@ -206,8 +209,8 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) {
-        return;
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+        return new LinkedList<>();
     }
 
     @Override

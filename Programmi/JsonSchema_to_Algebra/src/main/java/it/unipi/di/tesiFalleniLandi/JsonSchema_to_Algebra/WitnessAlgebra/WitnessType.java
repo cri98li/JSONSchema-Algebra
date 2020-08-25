@@ -11,6 +11,7 @@ import patterns.REException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class WitnessType implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessType.class);
@@ -175,7 +176,8 @@ public class WitnessType implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+        return new LinkedList<>();
     }
 
     @Override

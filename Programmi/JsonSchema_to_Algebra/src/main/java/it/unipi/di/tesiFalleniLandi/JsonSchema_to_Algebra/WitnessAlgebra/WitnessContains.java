@@ -5,8 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessFalseAssertionException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessTrueAssertionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -227,16 +225,22 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         if(contains != null || !isAnArray) {
             if(contains != null && contains.getClass() != WitnessBoolean.class && contains.getClass() != WitnessVar.class) {
-                contains.varNormalization_separation(env);
+                newDefinitions.addAll(contains.varNormalization_separation(env));
 
-                Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(contains);
+                WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(contains));
 
-                contains = result.getKey();
+                newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, contains));
+
+                contains = newVar;
             }
         }
+
+        return newDefinitions;
     }
 
     @Override

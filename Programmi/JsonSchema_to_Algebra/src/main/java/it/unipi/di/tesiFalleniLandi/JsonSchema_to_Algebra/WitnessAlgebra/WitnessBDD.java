@@ -61,12 +61,12 @@ public class WitnessBDD {
 
         int newI = bdd.and(i1, i2);
 
-
         WitnessVar var = indexNode.inverse().get(newI);
-        if(var == null)
-            var = new WitnessVar("OBDD_"+newI);
 
-        indexNode.put(var, newI);
+        if(var == null) {
+            var = new WitnessVar("OBDD_" + newI);
+            indexNode.put(var, newI);
+        }
 
         return var;
     }
@@ -81,10 +81,12 @@ public class WitnessBDD {
         int newI = bdd.or(i1, i2);
 
         WitnessVar var = indexNode.inverse().get(newI);
-        if(var == null)
-            var = new WitnessVar("OBDD_"+newI);
 
-        indexNode.put(var, newI);
+        if(var == null) {
+            var = new WitnessVar("OBDD_" + newI);
+            indexNode.put(var, newI);
+        }
+
         return var;
     }
 

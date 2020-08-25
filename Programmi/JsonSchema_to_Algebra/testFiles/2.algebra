@@ -1,0 +1,33 @@
+{
+	type[
+		obj
+	],
+	props[
+		"^authors$": {
+			type[
+				arr
+			],
+			items[
+				{
+					type[
+						obj
+					],
+					props[
+						"^homepage$": type[
+							str
+						],
+						"^email$": {
+							true,
+							type[
+								str
+							]
+						};
+						false
+					]
+				};
+				
+			]
+		};
+		
+	]
+}

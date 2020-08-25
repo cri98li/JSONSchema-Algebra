@@ -10,6 +10,7 @@ import patterns.REException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class WitnessOrPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessOrPattReq.class);
@@ -129,10 +130,14 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public void varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         for(WitnessPattReq el : reqList){
-            el.varNormalization_separation(env);
+            newDefinitions.addAll(el.varNormalization_separation(env));
         }
+
+        return newDefinitions;
     }
 
     @Override
