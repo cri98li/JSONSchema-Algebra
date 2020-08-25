@@ -24,7 +24,7 @@ public class ObjectPreparationTest {
         WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
         WitnessAssertion output = out.toWitnessAlgebra();
 
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null);
@@ -42,7 +42,7 @@ public class ObjectPreparationTest {
         WitnessEnv input = Utils_FullAlgebra.getWitnessAlgebra(in);
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = (WitnessEnv) input.merge();
         input = input.groupize();
         input = input.DNF();
@@ -63,7 +63,7 @@ public class ObjectPreparationTest {
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
         input.checkLoopRef(null, null);
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = (WitnessEnv) input.merge();
         input = input.groupize();
         input = input.DNF();
@@ -84,7 +84,7 @@ public class ObjectPreparationTest {
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
         input.checkLoopRef(null, null);
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = (WitnessEnv) input.merge();
         input = input.groupize();
         input = input.DNF();
@@ -105,7 +105,7 @@ public class ObjectPreparationTest {
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
         input.checkLoopRef(null, null);
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = (WitnessEnv) input.merge();
         input = input.groupize();
         input = input.DNF();

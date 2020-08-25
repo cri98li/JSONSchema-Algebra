@@ -1,12 +1,11 @@
-allOf[
+rootdef "x" = {
+    type[obj],
     props[
-        "aaa":{
-            type[num],
-            mof(2)
-        },
-        "bbb" : length(0,100)
-    ;]
-]
+        "^.a":mof(123),
+        "^b":bet(1,12)
+    ;],
+    pattReq["^.a":true, "^b":bet(1,12)]
+}
 
 /*
 allOf[

@@ -187,7 +187,7 @@ public class WitnessVar implements WitnessAssertion{
         if(visitedVar.contains(this))
             return Float.POSITIVE_INFINITY;
 
-        if(WitnessBDD.contains(this))//if there is an obdd with the same name i can return 0;
+        if(env.bdd.contains(this))//if there is an obdd with the same name i can return 0;
             return 0f;
 
         visitedVar.add(this);
@@ -232,18 +232,19 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
-        if(WitnessBDD.contains(new WitnessVar("forced_"+name)))
+        if(env.bdd.contains(new WitnessVar("forced_"+name)))
             return new WitnessVar("forced_"+name);
 
-        if(!WitnessBDD.contains(this))
-            throw new WitnessException("buildOBDD richiamato su variabile senza obdd associato (ne forzato): "+name);
+        if(!env.bdd.contains(this)) {
+            throw new WitnessException("buildOBDD richiamato su variabile senza obdd associato (ne forzato): " + name);
+        }
 
         return this;
     }
 
 
-    protected void forceOBDD(){
+    protected void forceOBDD(WitnessEnv env){
         logger.warn("forced the creation of {}, that is not ok", new WitnessVar("forced_"+name));
-        WitnessBDD.createVar(new WitnessVar("forced_"+name));
+        env.bdd.createVar(new WitnessVar("forced_"+name));
     }
 }

@@ -9,26 +9,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class WitnessBDD {
+    private static Logger logger = LogManager.getLogger(WitnessBDD.class);
     private static final int NODESIZE = 1000;
     private static final int CACHESIZE = 1000;
 
-    private static BiMap<WitnessVar, Integer> indexNode;
-    private static BDD bdd;
+    private BiMap<WitnessVar, Integer> indexNode;
+    private BDD bdd;
 
-    private static final WitnessVar trueVar;
-    private static final WitnessVar falseVar;
+    private final WitnessVar trueVar;
+    private final WitnessVar falseVar;
 
-    public static WitnessVar getTrueVar(){
+
+    public WitnessVar getTrueVar(){
         return trueVar.clone();
     }
-
-    public static WitnessVar getFalseVar(){
+    public WitnessVar getFalseVar(){
         return falseVar.clone();
     }
 
-    private static Logger logger = LogManager.getLogger(WitnessBDD.class);
-
-    static {
+    public WitnessBDD() {
         indexNode = HashBiMap.create();
         //create new obdd, using the defined ordering
         bdd = new BDD(NODESIZE, CACHESIZE);
@@ -40,7 +39,7 @@ public class WitnessBDD {
         indexNode.put(falseVar, bdd.getZero());
     }
 
-    public static WitnessVar createVar(){
+    public WitnessVar createVar(){
         int i = bdd.createVar();
         WitnessVar var = new WitnessVar("OBDD_"+i);
         indexNode.put(var, i);
@@ -48,13 +47,13 @@ public class WitnessBDD {
         return var;
     }
 
-    public static void createVar(WitnessVar var){
+    public void createVar(WitnessVar var){
         if(indexNode.containsKey(var)) return;
         int i = bdd.createVar();
         indexNode.put(var, i);
     }
 
-    public static WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
+    public WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
         Integer i1 = indexNode.get(u1);
         Integer i2 = indexNode.get(u2);
 
@@ -73,7 +72,7 @@ public class WitnessBDD {
     }
 
 
-    public static WitnessVar or(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessBDDException, WitnessException {
+    public WitnessVar or(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessBDDException, WitnessException {
         Integer i1 = indexNode.get(u1);
         Integer i2 = indexNode.get(u2);
 
@@ -89,7 +88,7 @@ public class WitnessBDD {
         return var;
     }
 
-    public static void rename(WitnessVar oldName, WitnessVar newName){
+    public void rename(WitnessVar oldName, WitnessVar newName){
         if(!indexNode.containsKey(oldName))
             throw new RuntimeException("WitnessBDD rename element not in indexNode");
 
@@ -97,7 +96,7 @@ public class WitnessBDD {
     }
 
 
-    public static boolean contains(WitnessVar var){
+    public boolean contains(WitnessVar var){
         return indexNode.containsKey(var);
     }
 }

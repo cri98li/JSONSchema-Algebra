@@ -2,13 +2,13 @@
     "configuration": {
         "status": "info",
         "ThresholdFilter": {
-            "level": "off"
+            "level": "all"
         },
         "appenders": {
             "Console": {
                 "name": "console",
                 "PatternLayout": {
-                    "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %.-100m%n"
+                    "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t-%tid] %c{1} - %.-200m%n"
                 }
             }
         },

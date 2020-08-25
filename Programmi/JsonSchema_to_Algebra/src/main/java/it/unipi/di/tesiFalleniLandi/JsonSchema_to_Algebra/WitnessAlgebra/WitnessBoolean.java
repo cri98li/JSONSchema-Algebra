@@ -136,6 +136,6 @@ public class WitnessBoolean implements WitnessAssertion{
 
     @Override
     public WitnessVar buildOBDD(WitnessEnv env) {
-        return value ? WitnessBDD.getTrueVar() : WitnessBDD.getFalseVar();
+        return value ? env.bdd.getTrueVar() : env.bdd.getFalseVar();
     }
 }

@@ -129,9 +129,7 @@ public class Defs_Assertion implements Assertion{
 			else
 				env.add(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
 
-		env.buildOBDD();
-		logger.trace("Trying to notEliminate {}", env);
-		env.notElimination();
+		env.buildOBDD_notElimination();
 
 		return env;
 	}

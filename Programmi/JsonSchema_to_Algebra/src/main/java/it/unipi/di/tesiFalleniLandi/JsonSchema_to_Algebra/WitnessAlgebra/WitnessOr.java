@@ -375,7 +375,7 @@ public class WitnessOr implements WitnessAssertion{
                 if(obbdVarName == null)
                     obbdVarName = assertion.buildOBDD(env);
                 else
-                    obbdVarName = WitnessBDD.and(env, obbdVarName, assertion.buildOBDD(env));
+                    obbdVarName = env.bdd.and(env, obbdVarName, assertion.buildOBDD(env));
             }
         }
 

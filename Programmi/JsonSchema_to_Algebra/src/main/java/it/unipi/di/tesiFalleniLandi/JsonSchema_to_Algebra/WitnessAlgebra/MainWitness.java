@@ -24,7 +24,7 @@ public class MainWitness {
 
         //WitnessEnv env = (WitnessEnv) schema.toWitnessAlgebra();
 
-        env.notElimination();
+        env.buildOBDD_notElimination();
 
         env.checkLoopRef(null, null);
 

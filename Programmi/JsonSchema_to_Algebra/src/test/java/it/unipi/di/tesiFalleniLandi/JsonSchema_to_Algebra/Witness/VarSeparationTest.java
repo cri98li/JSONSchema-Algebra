@@ -24,7 +24,7 @@ public class VarSeparationTest {
         WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
         WitnessAssertion output = out.toWitnessAlgebra();
 
-        input.notElimination();
+        input.buildOBDD_notElimination();
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null);
