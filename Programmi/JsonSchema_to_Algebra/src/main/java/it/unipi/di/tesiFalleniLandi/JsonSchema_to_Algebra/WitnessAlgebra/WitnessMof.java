@@ -33,7 +33,12 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
+        return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
         return;
     }
 

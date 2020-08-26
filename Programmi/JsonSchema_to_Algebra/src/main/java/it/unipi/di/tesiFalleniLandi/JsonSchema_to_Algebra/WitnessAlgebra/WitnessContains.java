@@ -63,8 +63,14 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        if(contains != null)
+            reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -136,7 +142,7 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessContains clone() {
-        logger.debug("MCloning WitnessContains: {}", this);
+        logger.debug("Cloning WitnessContains: {}", this);
         WitnessContains clone = new WitnessContains();
         clone.max = max;
         clone.min = min;
@@ -162,7 +168,7 @@ public class WitnessContains implements WitnessAssertion{
 
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
 
         if(min == 0 && max == null){

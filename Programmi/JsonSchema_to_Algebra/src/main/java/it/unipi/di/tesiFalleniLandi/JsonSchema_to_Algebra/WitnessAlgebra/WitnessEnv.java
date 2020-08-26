@@ -221,6 +221,10 @@ public class WitnessEnv implements WitnessAssertion {
         rootVar = key;
     }
 
+    public boolean containsVar(WitnessVar var){
+        return varList.containsKey(var);
+    }
+
     @Override
     public String toString() {
         return "WitnessEnv{" +
@@ -230,12 +234,20 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet()) {
             varList = new HashSet<>();
             varList.add(entry.getKey());
             entry.getValue().checkLoopRef(this, varList);
         }
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        Set<WitnessVar> visitedVar = new HashSet<>();
+        for(Map.Entry<WitnessVar, WitnessAssertion> var : varList.entrySet())
+            if(!visitedVar.contains(var.getKey())) //We skip all the variable that we already visit
+                var.getValue().reachableRefs(visitedVar, this);
     }
 
     private void notElimination_dumb() throws WitnessException, REException {
@@ -379,7 +391,7 @@ public class WitnessEnv implements WitnessAssertion {
         for(WitnessVar var : tempVariables) {
             try {
                 varList.put(var, varList.get(getCoVar(var)).not(this));
-            } catch (WitnessException | REException e) {
+            } catch (REException e) {
                 logger.catching(e);
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -390,7 +402,7 @@ public class WitnessEnv implements WitnessAssertion {
 
 
     @Override
-    public WitnessEnv mergeWith(WitnessAssertion a) {
+    public WitnessEnv mergeWith(WitnessAssertion a) throws REException {
         throw new UnsupportedOperationException();
     }
 
@@ -475,7 +487,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         this.notElimination();
 
         WitnessEnv clone = this.clone();

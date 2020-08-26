@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class Bet_Assertion implements Assertion{
 	private Number min;
@@ -91,7 +92,7 @@ public class Bet_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessBet toWitnessAlgebra() {
+	public WitnessBet toWitnessAlgebra() throws REException {
 		Double min = null;
 		Double max = null;
 

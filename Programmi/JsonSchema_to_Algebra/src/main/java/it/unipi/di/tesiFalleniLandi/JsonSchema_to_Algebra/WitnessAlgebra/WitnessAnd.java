@@ -136,10 +136,17 @@ public class WitnessAnd implements WitnessAssertion{
 
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
                 assertion.checkLoopRef(env, varList);
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
+            for(WitnessAssertion assertion : entry.getValue())
+                assertion.reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -305,7 +312,7 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessOr or = new WitnessOr();
 
         for(Map.Entry<?, List<WitnessAssertion>> entry : andList.entrySet())
@@ -315,14 +322,42 @@ public class WitnessAnd implements WitnessAssertion{
         return or;
     }
 
+    public boolean isAGroup(){
+        if(isBooleanExp()) //contains only WitnessBoolean/Or/And/Var
+            return true;
+
+        List<WitnessAssertion> typeList = andList.get(WitnessType.class);
+        if(typeList == null || typeList.size() != 1 || ((WitnessType)typeList.get(0)).separeTypes().size() != 1)
+            return false;
+
+        WitnessType groupType = (WitnessType) typeList.get(0);
+
+        for(Map.Entry<?, List<WitnessAssertion>> entry : andList.entrySet())
+            if(entry.getKey() == WitnessType.class) continue;
+            else
+                for(WitnessAssertion assertion : entry.getValue())
+                    if(assertion.getGroupType() != null && assertion.getGroupType() != groupType)
+                        return false;
+
+        return true;
+    }
+
     @Override
     public WitnessAssertion groupize() throws WitnessException, REException {
-        //caso base: se and vuoto --> and[true] --> ritorno true
-        if(andList.size() == 0){
-            logger.warn("Groupize on an empty WitnessAnd. Returning WitnessBoolean(true). that should not have happened");
-            return new WitnessBoolean(true);
+        //BASE CASES
+        //WitnessAnd is already a group
+        if(isAGroup()){
+            return this;
         }
 
+        //is an empty and (contains only true/false)
+        if(andList.size() == 1 && andList.get(WitnessBoolean.class) != null){
+            WitnessBoolean b = (WitnessBoolean) andList.get(WitnessBoolean.class).get(0);
+            logger.debug("Groupize on an empty WitnessAnd. Returning {}", b);
+            return b;
+        }
+
+        WitnessAssertion result;
         if (andList.containsKey(WitnessType.class)) {
             List<WitnessAssertion> types = andList.remove(WitnessType.class);
             WitnessAssertion type = types.remove(0);
@@ -334,13 +369,28 @@ public class WitnessAnd implements WitnessAssertion{
                 return type;
 
             //One type
-            if (((WitnessType)type).separeTypes().size() == 1) return groupize_oneType((WitnessType) type);
+            if (((WitnessType)type).separeTypes().size() == 1)
+                result = groupize_oneType((WitnessType) type);
 
             //More than one type
-            else return groupize_multipleTypes((WitnessType) type);
+            else
+                result = groupize_multipleTypes((WitnessType) type);
 
         } else  //No type specified
-            return groupize_noType();
+            result = groupize_noType();
+
+
+        //check var
+        if(andList.containsKey(WitnessVar.class)) {
+            WitnessAnd and = new WitnessAnd();
+            and.add(result);
+            for (WitnessAssertion var : andList.get(WitnessVar.class))
+                and.add(var);
+            result = and;
+        }
+
+        logger.debug("Groupize {} from {}", result, this);
+        return result;
     }
 
     @Override
@@ -389,7 +439,7 @@ public class WitnessAnd implements WitnessAssertion{
                 if (assertion.getGroupType() != null) {
                     if (groups.containsKey(assertion.getGroupType()))
                         groups.get(assertion.getGroupType()).add(assertion.groupize());
-                } else if (assertion.getGroupType() == null) {
+                } else if (assertion.getGroupType() == null && assertion.getClass() != WitnessVar.class) {
                     WitnessAssertion groupizeResult = assertion.groupize();
                     for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
                         e.getValue().add(groupizeResult);
@@ -443,7 +493,7 @@ public class WitnessAnd implements WitnessAssertion{
                 if (assertion.getGroupType() != null) {
                     if (groups.containsKey(assertion.getGroupType()))
                         groups.get(assertion.getGroupType()).add(assertion.groupize());
-                } else if (assertion.getGroupType() == null) {
+                } else if (assertion.getGroupType() == null && assertion.getClass() != WitnessVar.class) {
                     WitnessAssertion groupizeResult = assertion.groupize();
                     for (Map.Entry<?, WitnessAnd> e : groups.entrySet())
                         e.getValue().add(groupizeResult);
@@ -514,6 +564,8 @@ public class WitnessAnd implements WitnessAssertion{
             return this;
 
         WitnessOr or = (WitnessOr) andList.get(WitnessOr.class).remove(0);
+        if(andList.get(WitnessOr.class).size() == 0)
+            andList.remove(WitnessOr.class);
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
             for(WitnessAssertion assertion : entry.getValue()) {

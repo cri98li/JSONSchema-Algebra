@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -148,7 +149,7 @@ public class Type_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		if(types.size() == 1) {
 			if(types.get(0).equals(FullAlgebraString.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();

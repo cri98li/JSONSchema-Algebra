@@ -16,7 +16,7 @@ public class Endpoint {
 
     public static void main(String[] args) throws IOException, WitnessException, REException {
         String path = System.getProperty("user.dir")+ "/JsonSchema_to_Algebra/testFiles/";
-        String file = "example_4-5"//"canon"
+        String file = "test"//"canon1" //"example_4-5"//
                 ;
         String extension = ".algebra";
         String inputFileName = path+file+extension;

@@ -12,7 +12,8 @@ public class Endpoint {
 
 
 		String path = System.getProperty("user.dir")+ "/JsonSchema_to_Algebra/testFiles/";
-		String file = "example_4-5";
+		String file = "test"//"example_4-5"
+				;
 		String extension = ".algebra";
 		String inputFileName = path+file+extension;
 

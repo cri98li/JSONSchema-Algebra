@@ -7,10 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WitnessOrPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessOrPattReq.class);
@@ -56,9 +53,15 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         for(WitnessAssertion assertion : reqList)
             assertion.checkLoopRef(env, varList);
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        for(WitnessAssertion req : reqList)
+            req.reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -100,7 +103,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws WitnessException, REException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
 
         for(WitnessPattReq req : reqList)

@@ -32,12 +32,17 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) { //caso base: tipi diversi => non dovrebbe mai succedere
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        return;
+    }
+
+    @Override
+    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())

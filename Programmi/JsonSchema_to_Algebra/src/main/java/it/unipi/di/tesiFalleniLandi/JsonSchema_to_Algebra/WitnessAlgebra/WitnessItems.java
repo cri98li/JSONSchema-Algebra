@@ -62,8 +62,17 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        for(WitnessAssertion item : items)
+            item.reachableRefs(collectedVar, env);
+
+        if(additionalItems != null)
+            additionalItems.reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -217,7 +226,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         //only additionaItems
         if(additionalItems != null && items == null) {
             addItems(additionalItems);

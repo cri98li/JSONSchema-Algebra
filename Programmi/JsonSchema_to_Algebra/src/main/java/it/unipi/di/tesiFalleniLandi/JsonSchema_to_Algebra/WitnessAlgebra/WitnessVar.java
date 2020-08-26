@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assert
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -115,9 +116,9 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         if(varList.contains(this)){
-            throw new WitnessException("Recursive definition!");
+            throw new RuntimeException("Recursive definition: " + name);
         }else{
             varList.add(this);
             env.getDefinition(this).checkLoopRef(env, varList);
@@ -126,7 +127,18 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) {
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        if(!env.containsVar(this))
+            throw new RuntimeException("Unreachable ref: " + name);
+        else{
+            if(collectedVar.contains(this)) return;//loop
+            collectedVar.add(this);
+            env.getDefinition(this).reachableRefs(collectedVar, env);
+        }
+    }
+
+    @Override
+    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         if(a.getClass() == WitnessVar.class)
             return mergeElement((WitnessVar) a);
 
@@ -171,7 +183,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         return env.getCoVar(this);
     }
 

@@ -111,12 +111,17 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) {
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        value.reachableRefs(collectedVar, env);
+    }
+
+    @Override
+    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())
@@ -197,7 +202,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
         and.add(new WitnessType(FullAlgebraString.TYPE_OBJECT));
         and.add(new WitnessProperty(key.clone(), value.not(env)));

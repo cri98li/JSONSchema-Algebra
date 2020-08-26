@@ -3,7 +3,6 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -129,6 +128,8 @@ public class Defs_Assertion implements Assertion{
 			else
 				env.add(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
 
+		env.reachableRefs(null, null);
+		env.checkLoopRef(null, null);
 		env.buildOBDD_notElimination();
 
 		return env;
