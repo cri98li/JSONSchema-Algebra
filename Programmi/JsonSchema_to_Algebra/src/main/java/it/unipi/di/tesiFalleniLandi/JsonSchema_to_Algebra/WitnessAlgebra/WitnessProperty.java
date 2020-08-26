@@ -52,8 +52,13 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        value.reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -133,7 +138,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
         WitnessType type = new WitnessType();
         type.add(FullAlgebraString.TYPE_OBJECT);

@@ -3,15 +3,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WitnessType implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessType.class);
@@ -59,7 +55,12 @@ public class WitnessType implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
+        return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
         return;
     }
 

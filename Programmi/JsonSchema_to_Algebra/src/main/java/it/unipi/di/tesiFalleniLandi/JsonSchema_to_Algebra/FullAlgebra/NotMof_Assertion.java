@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessNotMof;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class NotMof_Assertion implements Assertion {
 	private Object notMof;
@@ -48,7 +49,7 @@ public class NotMof_Assertion implements Assertion {
 	}
 
 	@Override
-	public WitnessNotMof toWitnessAlgebra() {
+	public WitnessNotMof toWitnessAlgebra() throws REException {
 		return new WitnessNotMof(Double.parseDouble(notMof.toString()));
 	}
 }

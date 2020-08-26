@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessIfBoolThen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class IfBoolThen_Assertion implements Assertion {
     private boolean value;
@@ -40,7 +41,7 @@ public class IfBoolThen_Assertion implements Assertion {
     }
 
     @Override
-    public WitnessIfBoolThen toWitnessAlgebra() {
+    public WitnessIfBoolThen toWitnessAlgebra() throws REException {
         return new WitnessIfBoolThen(value);
     }
 }

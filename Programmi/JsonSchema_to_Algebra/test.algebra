@@ -1,15 +1,14 @@
-pattern("aa")
+rootdef "y" = ref("x")
 
-/*
-rootdef "x" = {
+/*rootdef "x" = {
     type[obj],
     props[
         "^.a":mof(123),
         "^b":bet(1,12)
     ;],
     pattReq["^.a":true, "^b":bet(1,12)]
-}
-*/
+}*/
+
 
 /*
 rootdef "x" = allOf[ref("y") ,ref("z")],

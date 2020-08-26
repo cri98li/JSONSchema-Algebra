@@ -4,10 +4,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface WitnessAssertion extends Cloneable{
     /**
@@ -15,7 +12,9 @@ public interface WitnessAssertion extends Cloneable{
      * @param env
      * @param varList
      */
-    void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException;
+    void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException;
+
+    void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException;
 
     /**
      * Perform the and-merging as described in the paper plus other little simplifications
@@ -53,7 +52,7 @@ public interface WitnessAssertion extends Cloneable{
      *
      * @return return the complement of the current object
      */
-    WitnessAssertion not(WitnessEnv env) throws WitnessException, REException;
+    WitnessAssertion not(WitnessEnv env) throws REException;
 
     /**
      * If this is and andAssertion, the method return a new andAssertion canonicalized

@@ -147,7 +147,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) {
+    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a != null && a.getClass() == this.getClass())
@@ -157,10 +157,17 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
                 assertion.checkLoopRef(env, varList);
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+        for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
+            for(WitnessAssertion assertion : entry.getValue())
+                assertion.reachableRefs(collectedVar, env);
     }
 
     @Override
@@ -228,7 +235,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) throws REException, WitnessException {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
 
         for(Map.Entry<?, List<WitnessAssertion>> entry : orList.entrySet())

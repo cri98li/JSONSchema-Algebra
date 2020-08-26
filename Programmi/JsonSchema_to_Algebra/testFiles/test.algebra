@@ -1,0 +1,3 @@
+rootdef "x" = allOf[ref("y") ,ref("z")],
+def "y" = mof(2),
+def "z" = mof(3)

@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class ExName_Assertion implements Assertion{
 	private Assertion names;
@@ -51,7 +52,7 @@ public class ExName_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		return WitnessPattReq.build(Utils_PattOfS.pattOfS(names), new WitnessBoolean(true));
 	}
 }

@@ -4,15 +4,11 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WitnessPattern implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessPattern.class);
@@ -34,12 +30,17 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
         return;
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) {
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
+
+    }
+
+    @Override
+    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass())
             return mergeElement((WitnessPattern) a);
@@ -95,7 +96,7 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion not(WitnessEnv env) {
+    public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
 
         and.add(new WitnessType(FullAlgebraString.TYPE_STRING));

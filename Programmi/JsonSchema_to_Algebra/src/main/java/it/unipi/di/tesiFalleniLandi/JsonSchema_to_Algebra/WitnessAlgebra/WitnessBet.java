@@ -4,7 +4,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -44,7 +43,12 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws WitnessException {
+    public void checkLoopRef(WitnessEnv env, Collection<WitnessVar> varList) throws RuntimeException {
+        return;
+    }
+
+    @Override
+    public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
         return;
     }
 

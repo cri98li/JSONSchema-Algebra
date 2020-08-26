@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPro;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class Pro_Assertion implements Assertion{
 	private Long min, max;
@@ -80,7 +81,7 @@ public class Pro_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		return new WitnessPro(min == null ? null : Double.parseDouble(min.toString()), max == null ? null : Double.parseDouble(max.toString()));
 	}
 }

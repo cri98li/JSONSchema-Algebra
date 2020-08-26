@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessUniqueItems;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class UniqueItems_Assertion implements Assertion{
 	private static Logger logger = LogManager.getLogger(UniqueItems_Assertion.class);
@@ -50,7 +51,7 @@ public class UniqueItems_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() {
+	public WitnessAssertion toWitnessAlgebra() throws REException {
 		return new WitnessUniqueItems();
 	}
 

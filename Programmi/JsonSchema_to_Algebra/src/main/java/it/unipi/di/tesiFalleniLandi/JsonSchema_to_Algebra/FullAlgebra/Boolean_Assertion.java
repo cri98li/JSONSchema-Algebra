@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class Boolean_Assertion implements Assertion{
 	private boolean value;
@@ -42,7 +43,7 @@ public class Boolean_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessBoolean toWitnessAlgebra() {
+	public WitnessBoolean toWitnessAlgebra() throws REException {
 		return new WitnessBoolean(value);
 	}
 

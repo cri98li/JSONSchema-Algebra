@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraStri
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessMof;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import patterns.REException;
 
 public class Mof_Assertion implements Assertion{
 	private Number mof;
@@ -51,7 +52,7 @@ public class Mof_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessMof toWitnessAlgebra() {
+	public WitnessMof toWitnessAlgebra() throws REException {
 		return new WitnessMof(Double.parseDouble(mof.toString()));
 	}
 
