@@ -20,6 +20,8 @@ public class MainWitness {
 
         WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(schema);
 
+        env.buildOBDD_notElimination();
+
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         env = (WitnessEnv) env.merge();

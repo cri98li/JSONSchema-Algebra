@@ -244,10 +244,10 @@ public class WitnessItems implements WitnessAssertion{
         for(int i = 0; i < items.size(); i++) {
             WitnessAnd itemAndAssertion = new WitnessAnd();
             WitnessItems itemAssertion = new WitnessItems();
-            rootOr.add(itemAndAssertion);
             itemAndAssertion.add(itemAssertion);
 
             itemAndAssertion.add(new WitnessContains(i+1., Double.POSITIVE_INFINITY, new WitnessBoolean(true)));
+            rootOr.add(itemAndAssertion);
 
             for(int j = 0; j < items.size(); j++)
                 itemAssertion.addItems((i == j && items.get(i).not(env) != null) ? items.get(i).not(env): new WitnessBoolean(true));
