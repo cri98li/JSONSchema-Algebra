@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessContains;
 import org.apache.logging.log4j.LogManager;
@@ -109,12 +109,12 @@ public class Exist_Assertion implements Assertion{
 	@Override
 	public String toGrammarString() {
 		String min = "0";
-		String max = FullAlgebraString.POS_INF;
+		String max = AlgebraStrings.POS_INF;
 
 		if (this.min != null) min = this.min + "";
 		if (this.max != null) max = this.max + "";
 
-		return FullAlgebraString.CONTAINS(min, max, contains.toGrammarString());
+		return AlgebraStrings.CONTAINS(min, max, contains.toGrammarString());
 	}
 
 	@Override

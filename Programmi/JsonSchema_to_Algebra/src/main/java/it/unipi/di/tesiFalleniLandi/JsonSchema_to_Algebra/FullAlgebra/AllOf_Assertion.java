@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
@@ -136,18 +136,18 @@ public class AllOf_Assertion implements Assertion{
 			String returnedValue = it.next().toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str.append(FullAlgebraString.COMMA)
+			str.append(AlgebraStrings.COMMA)
 					.append(returnedValue);
 		}
 		
 		if(str.length() == 0) return "";
-		if(andList.size() == 1) return str.delete(0, FullAlgebraString.COMMA.length()).toString();
+		if(andList.size() == 1) return str.delete(0, AlgebraStrings.COMMA.length()).toString();
 		if(!duplicates) {
-			str = str.delete(0, FullAlgebraString.COMMA.length()); //TODO: CHECK
+			str = str.delete(0, AlgebraStrings.COMMA.length()); //TODO: CHECK
 			return str.append("\r\n}").insert(0, "{\r\n").toString();
 		}
 
-		return FullAlgebraString.ALLOF(str.substring(FullAlgebraString.COMMA.length()));
+		return AlgebraStrings.ALLOF(str.substring(AlgebraStrings.COMMA.length()));
 	}
 
 	@Override

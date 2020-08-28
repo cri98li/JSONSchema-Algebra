@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.IfBoolThen_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
@@ -53,7 +53,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
         if(a.value == value) return this;
         else{
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_BOOLEAN);
+            type.add(AlgebraStrings.TYPE_BOOLEAN);
 
             return type.not().toWitnessAlgebra();
         }
@@ -61,7 +61,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_BOOLEAN); //??
+        return new WitnessType(AlgebraStrings.TYPE_BOOLEAN); //??
     }
 
     @Override

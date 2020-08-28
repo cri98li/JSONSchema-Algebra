@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import org.apache.logging.log4j.LogManager;
@@ -95,12 +95,12 @@ public class AnyOf_Assertion implements Assertion{
 			String returnedValue = next.toGrammarString();
 			if(returnedValue.isEmpty())
 				continue;
-			str += FullAlgebraString.COMMA + returnedValue;
+			str += AlgebraStrings.COMMA + returnedValue;
 		}
 		
 		if(str.isEmpty()) return "";
-		if(orList.size() == 1) return str.substring(FullAlgebraString.COMMA.length());
-		return FullAlgebraString.ANYOF(str.substring(FullAlgebraString.COMMA.length()));
+		if(orList.size() == 1) return str.substring(AlgebraStrings.COMMA.length());
+		return AlgebraStrings.ANYOF(str.substring(AlgebraStrings.COMMA.length()));
 	}
 
 	public WitnessAssertion toWitnessAlgebra() throws REException {

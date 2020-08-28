@@ -3,8 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +58,7 @@ public class Required_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		AnyOf_Assertion or = new AnyOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_OBJECT);
+		type.add(AlgebraStrings.TYPE_OBJECT);
 		and.add(type);
 
 		for(String key : reqList){
@@ -90,13 +90,13 @@ public class Required_Assertion implements Assertion{
 					.append("\"");
 		
 		while(it.hasNext()) {
-			str.append(FullAlgebraString.COMMA)
+			str.append(AlgebraStrings.COMMA)
 					.append("\"")
 					.append(it.next())
 					.append("\"");
 		}
 		
-		return FullAlgebraString.REQUIRED(str.toString());
+		return AlgebraStrings.REQUIRED(str.toString());
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class Required_Assertion implements Assertion{
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
-		tmp.add(FullAlgebraString.TYPE_OBJECT);
+		tmp.add(AlgebraStrings.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
 
 

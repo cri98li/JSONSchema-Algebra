@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,21 +44,21 @@ public class Type_Assertion implements Assertion{
 	public JsonElement toJSONSchema() {
 		JsonObject obj = new JsonObject();
 
-		if(types.contains(FullAlgebraString.TYPE_NUMNOTINT)){
+		if(types.contains(AlgebraStrings.TYPE_NUMNOTINT)){
 			AnyOf_Assertion or = new AnyOf_Assertion();
 			if(types.size() == 1){
 				Type_Assertion type = new Type_Assertion();
-				type.add(FullAlgebraString.TYPE_INTEGER);
+				type.add(AlgebraStrings.TYPE_INTEGER);
 				return new Not_Assertion(type).toJSONSchema();
 			}
 
 			Type_Assertion type = new Type_Assertion();
 			Type_Assertion typeNumNot = new Type_Assertion();
-			typeNumNot.add(FullAlgebraString.TYPE_INTEGER);
+			typeNumNot.add(AlgebraStrings.TYPE_INTEGER);
 			or.add(new Not_Assertion(typeNumNot));
 			or.add(type);
 			for(String str : types)
-				if(!str.equals(FullAlgebraString.TYPE_NUMNOTINT))
+				if(!str.equals(AlgebraStrings.TYPE_NUMNOTINT))
 					type.add(str);
 
 			return or.toJSONSchema();
@@ -83,38 +83,38 @@ public class Type_Assertion implements Assertion{
 	public Assertion not() {
 		// add all types
 		Type_Assertion notType = new Type_Assertion();
-		notType.add(FullAlgebraString.TYPE_STRING);
-		notType.add(FullAlgebraString.TYPE_OBJECT);
-		notType.add(FullAlgebraString.TYPE_NUMBER);
-		notType.add(FullAlgebraString.TYPE_ARRAY);
-		notType.add(FullAlgebraString.TYPE_BOOLEAN);
-		notType.add(FullAlgebraString.TYPE_NULL);
+		notType.add(AlgebraStrings.TYPE_STRING);
+		notType.add(AlgebraStrings.TYPE_OBJECT);
+		notType.add(AlgebraStrings.TYPE_NUMBER);
+		notType.add(AlgebraStrings.TYPE_ARRAY);
+		notType.add(AlgebraStrings.TYPE_BOOLEAN);
+		notType.add(AlgebraStrings.TYPE_NULL);
 
 		// remove the type contained in this
 		for(String type : types) {
 			notType.types.remove(type);
 		}
 
-		if(types.contains(FullAlgebraString.TYPE_INTEGER) && !types.contains(FullAlgebraString.TYPE_NUMNOTINT)){
-			notType.types.remove(FullAlgebraString.TYPE_NUMBER);
-			notType.types.add(FullAlgebraString.TYPE_NUMNOTINT);
+		if(types.contains(AlgebraStrings.TYPE_INTEGER) && !types.contains(AlgebraStrings.TYPE_NUMNOTINT)){
+			notType.types.remove(AlgebraStrings.TYPE_NUMBER);
+			notType.types.add(AlgebraStrings.TYPE_NUMNOTINT);
 		}
-		if(types.contains(FullAlgebraString.TYPE_NUMNOTINT) && !types.contains(FullAlgebraString.TYPE_INTEGER)) {
-			notType.types.remove(FullAlgebraString.TYPE_NUMBER);
-			notType.types.add(FullAlgebraString.TYPE_INTEGER);
-		}
-
-		if(types.contains(FullAlgebraString.TYPE_NUMBER)) {
-			notType.types.remove(FullAlgebraString.TYPE_NUMNOTINT);
-			notType.types.remove(FullAlgebraString.TYPE_INTEGER);
+		if(types.contains(AlgebraStrings.TYPE_NUMNOTINT) && !types.contains(AlgebraStrings.TYPE_INTEGER)) {
+			notType.types.remove(AlgebraStrings.TYPE_NUMBER);
+			notType.types.add(AlgebraStrings.TYPE_INTEGER);
 		}
 
-		if(notType.types.contains(FullAlgebraString.TYPE_NUMBER)) {
-			notType.types.remove(FullAlgebraString.TYPE_INTEGER);
+		if(types.contains(AlgebraStrings.TYPE_NUMBER)) {
+			notType.types.remove(AlgebraStrings.TYPE_NUMNOTINT);
+			notType.types.remove(AlgebraStrings.TYPE_INTEGER);
 		}
 
-		if(types.contains(FullAlgebraString.TYPE_NUMNOTINT) && types.contains(FullAlgebraString.TYPE_INTEGER))
-			notType.types.remove(FullAlgebraString.TYPE_NUMBER);
+		if(notType.types.contains(AlgebraStrings.TYPE_NUMBER)) {
+			notType.types.remove(AlgebraStrings.TYPE_INTEGER);
+		}
+
+		if(types.contains(AlgebraStrings.TYPE_NUMNOTINT) && types.contains(AlgebraStrings.TYPE_INTEGER))
+			notType.types.remove(AlgebraStrings.TYPE_NUMBER);
 
 		// not of a type with all possibile types
 		if(notType.types.isEmpty()) {
@@ -141,31 +141,31 @@ public class Type_Assertion implements Assertion{
 		Iterator <String> it = types.iterator();
 		
 		while(it.hasNext()) {
-			str.append(FullAlgebraString.COMMA)
+			str.append(AlgebraStrings.COMMA)
 					.append(it.next());
 		}
 		
-		return FullAlgebraString.TYPE(str.substring(FullAlgebraString.COMMA.length()));
+		return AlgebraStrings.TYPE(str.substring(AlgebraStrings.COMMA.length()));
 	}
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
 		if(types.size() == 1) {
-			if(types.get(0).equals(FullAlgebraString.TYPE_INTEGER)){
+			if(types.get(0).equals(AlgebraStrings.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();
 				and.add(new WitnessMof(1.0));
-				and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+				and.add(new WitnessType(AlgebraStrings.TYPE_NUMBER));
 
 				return and;
 			}
 			return new WitnessType(types.get(0));
 		}
 
-		if(types.contains(FullAlgebraString.TYPE_INTEGER)){
-			types.remove(FullAlgebraString.TYPE_INTEGER);
+		if(types.contains(AlgebraStrings.TYPE_INTEGER)){
+			types.remove(AlgebraStrings.TYPE_INTEGER);
 			WitnessAnd and = new WitnessAnd();
 			and.add(new WitnessMof(1.0));
-			and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+			and.add(new WitnessType(AlgebraStrings.TYPE_NUMBER));
 
 			WitnessOr or = new WitnessOr();
 			or.add(new WitnessType(types));

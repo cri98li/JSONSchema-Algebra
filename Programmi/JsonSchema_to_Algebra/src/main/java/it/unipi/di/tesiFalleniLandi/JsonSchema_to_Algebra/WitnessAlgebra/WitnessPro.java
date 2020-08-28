@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
@@ -84,7 +84,7 @@ public class WitnessPro implements WitnessAssertion{
 
         if(pro.min > pro.max){
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_OBJECT);
+            type.add(AlgebraStrings.TYPE_OBJECT);
 
             result = type.not().toWitnessAlgebra();
         }else
@@ -96,7 +96,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_OBJECT);
+        return new WitnessType(AlgebraStrings.TYPE_OBJECT);
     }
 
     @Override

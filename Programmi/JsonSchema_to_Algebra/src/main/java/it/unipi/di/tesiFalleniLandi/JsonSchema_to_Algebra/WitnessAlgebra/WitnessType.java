@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import org.apache.logging.log4j.LogManager;
@@ -100,13 +100,13 @@ public class WitnessType implements WitnessAssertion{
                 continue;
             }
 
-            if(a.type.contains(FullAlgebraString.TYPE_INTEGER) && str.equals(FullAlgebraString.TYPE_NUMBER)
-                || a.type.contains(FullAlgebraString.TYPE_NUMBER) && str.equals(FullAlgebraString.TYPE_INTEGER))
-                newType.add(FullAlgebraString.TYPE_INTEGER);
+            if(a.type.contains(AlgebraStrings.TYPE_INTEGER) && str.equals(AlgebraStrings.TYPE_NUMBER)
+                || a.type.contains(AlgebraStrings.TYPE_NUMBER) && str.equals(AlgebraStrings.TYPE_INTEGER))
+                newType.add(AlgebraStrings.TYPE_INTEGER);
 
-            if(a.type.contains(FullAlgebraString.TYPE_NUMBER) && str.equals(FullAlgebraString.TYPE_NUMNOTINT)
-                    || a.type.contains(FullAlgebraString.TYPE_NUMNOTINT) && str.equals(FullAlgebraString.TYPE_NUMBER))
-                newType.add(FullAlgebraString.TYPE_NUMNOTINT);
+            if(a.type.contains(AlgebraStrings.TYPE_NUMBER) && str.equals(AlgebraStrings.TYPE_NUMNOTINT)
+                    || a.type.contains(AlgebraStrings.TYPE_NUMNOTINT) && str.equals(AlgebraStrings.TYPE_NUMBER))
+                newType.add(AlgebraStrings.TYPE_NUMNOTINT);
         }
 
         if(newType.type.isEmpty())

@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
@@ -94,9 +94,9 @@ public class IfThenElse_Assertion implements Assertion{
 		if(elseStatement != null)
 			else_str = elseStatement.toGrammarString();
 		else
-			return FullAlgebraString.IF_THEN(if_str, then_str);
+			return AlgebraStrings.IF_THEN(if_str, then_str);
 		
-		return FullAlgebraString.IF_THEN(if_str, then_str, else_str);
+		return AlgebraStrings.IF_THEN(if_str, then_str, else_str);
 	}
 
 	@Override

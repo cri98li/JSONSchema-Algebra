@@ -1,11 +1,19 @@
 allOf[
+
   type[obj],
-  props["^a" : mof(2),
-        "^.b" : mof(3);
-        true
-	],
-  pattReq["^.c" : mof(5)],
-  pattReq["^a" : true]
+
+  props["^a$" : mof(2),
+
+        "^b$" : mof(3),
+
+              ".*": true;
+
+              ],
+
+  pattReq["^.c" : mof(5)],    // OR1
+
+  pattReq["^.d" : mof(7)]
+
 ]
 
 

@@ -1,4 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons;
 
 /**
  * Eccezione lanciata quando vengono trovati nel documento asserzioni del tipo required(true)

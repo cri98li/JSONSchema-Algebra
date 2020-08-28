@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessMof;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ public class Mof_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion notMof = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_NUMBER);
+		type.add(AlgebraStrings.TYPE_NUMBER);
 		notMof.add(type);
 		notMof.add(new NotMof_Assertion(mof));
 		return notMof;
@@ -48,7 +48,7 @@ public class Mof_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return FullAlgebraString.MULTIPLEOF(mof.toString());
+		return AlgebraStrings.MULTIPLEOF(mof.toString());
 	}
 
 	@Override

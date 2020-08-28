@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.XBet_Assertion;
@@ -63,7 +63,7 @@ public class WitnessXBet implements WitnessAssertion{
     public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_NUMBER);
+            type.add(AlgebraStrings.TYPE_NUMBER);
 
             return type.not().toWitnessAlgebra();
         }
@@ -81,7 +81,7 @@ public class WitnessXBet implements WitnessAssertion{
 
         if(a.min > max || a.max < min || m.equals(M)){
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_NUMBER);
+            type.add(AlgebraStrings.TYPE_NUMBER);
 
             logger.trace("Merge result: ", type.not());
             return type.not().toWitnessAlgebra();
@@ -94,7 +94,7 @@ public class WitnessXBet implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_NUMBER);
+        return new WitnessType(AlgebraStrings.TYPE_NUMBER);
     }
 
     @Override

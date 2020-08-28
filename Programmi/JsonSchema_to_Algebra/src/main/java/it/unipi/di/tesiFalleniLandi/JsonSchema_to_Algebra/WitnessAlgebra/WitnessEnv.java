@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.*;
 
 public class WitnessEnv implements WitnessAssertion {
@@ -263,10 +262,10 @@ public class WitnessEnv implements WitnessAssertion {
         List<WitnessVar> tmp = new LinkedList<>();
 
         for(WitnessVar var : varToBeElaborated){
-            String complementName = FullAlgebraString.NOT_DEFS + var.getName();
+            String complementName = AlgebraStrings.NOT_DEFS + var.getName();
 
-            if (var.getName().startsWith(FullAlgebraString.NOT_DEFS))
-                complementName = var.getName().substring(FullAlgebraString.NOT_DEFS.length());
+            if (var.getName().startsWith(AlgebraStrings.NOT_DEFS))
+                complementName = var.getName().substring(AlgebraStrings.NOT_DEFS.length());
 
             WitnessVar complementVarName = new WitnessVar(complementName);
 
@@ -312,10 +311,10 @@ public class WitnessEnv implements WitnessAssertion {
 
                 assert(first.isRecursive(this, new LinkedList<>()));
 
-                String complementName = FullAlgebraString.NOT_DEFS + first.getName();
+                String complementName = AlgebraStrings.NOT_DEFS + first.getName();
 
-                if (first.getName().startsWith(FullAlgebraString.NOT_DEFS))
-                    complementName = first.getName().substring(FullAlgebraString.NOT_DEFS.length());
+                if (first.getName().startsWith(AlgebraStrings.NOT_DEFS))
+                    complementName = first.getName().substring(AlgebraStrings.NOT_DEFS.length());
 
                 WitnessVar complementVarName = new WitnessVar(complementName);
 
@@ -347,10 +346,10 @@ public class WitnessEnv implements WitnessAssertion {
                 completed.add(key);
 
                 //compute the name of the complement
-                String complementName = FullAlgebraString.NOT_DEFS + key.getName();
+                String complementName = AlgebraStrings.NOT_DEFS + key.getName();
 
-                if (key.getName().startsWith(FullAlgebraString.NOT_DEFS))
-                    complementName = key.getName().substring(FullAlgebraString.NOT_DEFS.length());
+                if (key.getName().startsWith(AlgebraStrings.NOT_DEFS))
+                    complementName = key.getName().substring(AlgebraStrings.NOT_DEFS.length());
                 WitnessVar complementVarName = new WitnessVar(complementName);
 
                 //does the complement already exist?

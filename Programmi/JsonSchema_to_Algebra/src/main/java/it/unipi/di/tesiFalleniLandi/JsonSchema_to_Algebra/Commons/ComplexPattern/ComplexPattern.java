@@ -1,4 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern;
 
 import com.google.gson.JsonElement;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons;
 
 public class Utils {
 

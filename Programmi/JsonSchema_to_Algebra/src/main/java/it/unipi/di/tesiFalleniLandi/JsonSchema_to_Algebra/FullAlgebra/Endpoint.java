@@ -1,8 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 
 import java.io.FileWriter;
 import java.io.IOException;

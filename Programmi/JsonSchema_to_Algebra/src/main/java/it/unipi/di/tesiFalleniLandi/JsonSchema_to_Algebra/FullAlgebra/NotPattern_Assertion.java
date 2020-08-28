@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +27,7 @@ public class NotPattern_Assertion implements Assertion{
 	@Override
 	public JsonElement toJSONSchema() {
 		Type_Assertion t = new Type_Assertion();
-		t.add(FullAlgebraString.TYPE_STRING);
+		t.add(AlgebraStrings.TYPE_STRING);
 		return new IfThenElse_Assertion(t, new Not_Assertion(new Pattern_Assertion(notPattern)), null).toJSONSchema();
 
 	}
@@ -36,7 +36,7 @@ public class NotPattern_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_STRING);
+		type.add(AlgebraStrings.TYPE_STRING);
 		and.add(type);
 		and.add(new Pattern_Assertion(notPattern));
 
@@ -50,7 +50,7 @@ public class NotPattern_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		return FullAlgebraString.NOTPATTERN(notPattern.getAlgebraString());
+		return AlgebraStrings.NOTPATTERN(notPattern.getAlgebraString());
 	}
 
 	@Override

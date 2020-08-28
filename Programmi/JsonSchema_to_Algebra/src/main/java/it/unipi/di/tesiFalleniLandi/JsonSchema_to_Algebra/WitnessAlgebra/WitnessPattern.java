@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
 import org.apache.logging.log4j.LogManager;
@@ -63,7 +63,7 @@ public class WitnessPattern implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_STRING);
+        return new WitnessType(AlgebraStrings.TYPE_STRING);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class WitnessPattern implements WitnessAssertion{
     public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
 
-        and.add(new WitnessType(FullAlgebraString.TYPE_STRING));
+        and.add(new WitnessType(AlgebraStrings.TYPE_STRING));
         and.add(new WitnessPattern(pattern.complement()));
 
         return and;

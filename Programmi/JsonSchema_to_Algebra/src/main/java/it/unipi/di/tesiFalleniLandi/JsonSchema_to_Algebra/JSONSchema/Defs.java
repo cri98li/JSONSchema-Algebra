@@ -3,8 +3,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
@@ -107,7 +107,7 @@ public class Defs implements JSONSchemaElement {
 		Defs_Assertion defs_assertion = new Defs_Assertion();
 		String tmp = "";
 
-		if(rootDef != null) defs_assertion.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, rootDef.toGrammar());
+		if(rootDef != null) defs_assertion.setRootDef(AlgebraStrings.ROOTDEF_DEFAULTNAME, rootDef.toGrammar());
 
 		for(Entry<String, JSONSchema> entry : schemaDefs.entrySet()) {
 			tmp = new JsonPrimitive(entry.getKey()).toString();

@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOrPattReq;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
@@ -72,7 +72,7 @@ public class OrPattReq_Assertion implements Assertion{
             for(Map.Entry<ComplexPattern, Assertion> entry : reqList) {
                 String returnedValue = entry.getValue().toGrammarString();
                 if(!returnedValue.isEmpty())
-                    str.append(FullAlgebraString.COMMA)
+                    str.append(AlgebraStrings.COMMA)
                             .append(entry.getKey().getAlgebraString())
                             .append(":")
                             .append(returnedValue);
@@ -80,7 +80,7 @@ public class OrPattReq_Assertion implements Assertion{
         }
 
         if(str.length() == 0) return "";
-        return FullAlgebraString.ORPATTREQ(str.substring(FullAlgebraString.COMMA.length()));
+        return AlgebraStrings.ORPATTREQ(str.substring(AlgebraStrings.COMMA.length()));
     }
 
     @Override

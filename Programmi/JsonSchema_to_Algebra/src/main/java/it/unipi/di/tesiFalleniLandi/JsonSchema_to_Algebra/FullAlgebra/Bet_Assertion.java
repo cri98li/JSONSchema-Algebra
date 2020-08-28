@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +55,7 @@ public class Bet_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_NUMBER);
+		type.add(AlgebraStrings.TYPE_NUMBER);
 		and.add(type);
 		
 		if(min != null && max != null) {
@@ -82,13 +82,13 @@ public class Bet_Assertion implements Assertion{
 	}
 	
 	public String toGrammarString() {
-		String min = FullAlgebraString.NEG_INF;
-		String max = FullAlgebraString.POS_INF;
+		String min = AlgebraStrings.NEG_INF;
+		String max = AlgebraStrings.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return FullAlgebraString.BETWEENNUMBER(min, max);
+		return AlgebraStrings.BETWEENNUMBER(min, max);
 	}
 
 	@Override

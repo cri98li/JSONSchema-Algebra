@@ -1,9 +1,9 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons;
 
 /**
  * Metodi e classi utilizzati per costruire l'output in grammatica.
  */
-public class FullAlgebraString {
+public class AlgebraStrings {
 	//LOGIC OP
 	public static final String COMMA = ",\r\n";
 

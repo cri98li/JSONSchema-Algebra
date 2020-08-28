@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
@@ -114,9 +114,9 @@ public class WitnessContains implements WitnessAssertion{
         if(contains.min > contains.max){
             Type_Assertion type = new Type_Assertion();
             if(!contains.contains.equals(new WitnessBoolean(true)))
-                type.add(FullAlgebraString.TYPE_OBJECT);
+                type.add(AlgebraStrings.TYPE_OBJECT);
             else
-                type.add(FullAlgebraString.TYPE_ARRAY);
+                type.add(AlgebraStrings.TYPE_ARRAY);
 
             logger.debug("Merge result: {}", type.not());
             return type.not().toWitnessAlgebra();
@@ -129,8 +129,8 @@ public class WitnessContains implements WitnessAssertion{
     @Override
     public WitnessType getGroupType() {
         if(contains.getClass() == WitnessBoolean.class || isAnArray)
-            return new WitnessType(FullAlgebraString.TYPE_ARRAY);
-        return new WitnessType(FullAlgebraString.TYPE_OBJECT);
+            return new WitnessType(AlgebraStrings.TYPE_ARRAY);
+        return new WitnessType(AlgebraStrings.TYPE_OBJECT);
     }
 
     @Override

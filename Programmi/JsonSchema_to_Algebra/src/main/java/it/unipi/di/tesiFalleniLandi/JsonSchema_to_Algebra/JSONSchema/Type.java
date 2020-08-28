@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
@@ -98,13 +98,13 @@ public class Type implements JSONSchemaElement {
 	
 	private String jsonTypeToGrammar(String type) {
 		switch(type) {
-		case "array": return FullAlgebraString.TYPE_ARRAY;
-		case "integer": return FullAlgebraString.TYPE_INTEGER;
-		case "number": return FullAlgebraString.TYPE_NUMBER;
-		case "string": return FullAlgebraString.TYPE_STRING;
-		case "object": return FullAlgebraString.TYPE_OBJECT;
-		case "boolean": return FullAlgebraString.TYPE_BOOLEAN;
-		case "null": return FullAlgebraString.TYPE_NULL;
+		case "array": return AlgebraStrings.TYPE_ARRAY;
+		case "integer": return AlgebraStrings.TYPE_INTEGER;
+		case "number": return AlgebraStrings.TYPE_NUMBER;
+		case "string": return AlgebraStrings.TYPE_STRING;
+		case "object": return AlgebraStrings.TYPE_OBJECT;
+		case "boolean": return AlgebraStrings.TYPE_BOOLEAN;
+		case "null": return AlgebraStrings.TYPE_NULL;
 			default:
 				throw new ParseCancellationException("Error: type '"+type+"' is not allowed!\r\n");
 		}

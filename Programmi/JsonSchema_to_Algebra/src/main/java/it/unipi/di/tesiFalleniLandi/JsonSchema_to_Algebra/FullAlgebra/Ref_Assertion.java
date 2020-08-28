@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.apache.logging.log4j.LogManager;
@@ -39,9 +39,9 @@ public class Ref_Assertion implements Assertion{
 
 	@Override
 	public Assertion not() { //le definizioni sono not completate, mi basta cambiare il nome TODO: check in witness
-		if(ref.startsWith(FullAlgebraString.NOT_DEFS))
-			return new Ref_Assertion(ref.substring(FullAlgebraString.NOT_DEFS.length()));
-		else return new Ref_Assertion(FullAlgebraString.NOT_DEFS+ref);
+		if(ref.startsWith(AlgebraStrings.NOT_DEFS))
+			return new Ref_Assertion(ref.substring(AlgebraStrings.NOT_DEFS.length()));
+		else return new Ref_Assertion(AlgebraStrings.NOT_DEFS+ref);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class Ref_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		return FullAlgebraString.REF(ref);
+		return AlgebraStrings.REF(ref);
 	}
 
 	@Override

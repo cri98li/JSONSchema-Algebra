@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.Pattern;
@@ -57,7 +57,7 @@ public class Utils_PattOfS {
     }
 
     public static ComplexPattern pattOfS(Type_Assertion a){
-        if(a.contains(FullAlgebraString.TYPE_STRING)) return truePattern.clone();
+        if(a.contains(AlgebraStrings.TYPE_STRING)) return truePattern.clone();
 
         return falsePattern.clone();
     }

@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
 import org.apache.logging.log4j.LogManager;
@@ -89,7 +89,7 @@ public class Enum_Assertion implements Assertion{
 
 		String tmp = _enum.toString();
 		tmp = tmp.substring(1, tmp.length()-1);
-		return FullAlgebraString.ENUM(tmp);
+		return AlgebraStrings.ENUM(tmp);
 	}
 
 	@Override

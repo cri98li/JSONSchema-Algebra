@@ -2,8 +2,8 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +43,7 @@ public class Pattern_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		and.add(new NotPattern_Assertion(pattern));
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_STRING);
+		type.add(AlgebraStrings.TYPE_STRING);
 		and.add(type);
 		return and;
 	}
@@ -55,7 +55,7 @@ public class Pattern_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return FullAlgebraString.PATTERN(pattern.getAlgebraString());
+		return AlgebraStrings.PATTERN(pattern.getAlgebraString());
 	}
 
 	@Override

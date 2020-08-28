@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -98,7 +98,7 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_OBJECT);
+        return new WitnessType(AlgebraStrings.TYPE_OBJECT);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class WitnessProperty implements WitnessAssertion{
     public WitnessAssertion not(WitnessEnv env) throws REException {
         WitnessAnd and = new WitnessAnd();
         WitnessType type = new WitnessType();
-        type.add(FullAlgebraString.TYPE_OBJECT);
+        type.add(AlgebraStrings.TYPE_OBJECT);
         and.add(type);
         and.add(WitnessPattReq.build(key.clone(), value.not(env)));
 

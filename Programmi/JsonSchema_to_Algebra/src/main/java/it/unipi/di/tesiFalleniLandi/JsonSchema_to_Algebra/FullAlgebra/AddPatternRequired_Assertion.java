@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +47,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	@Override
 	public JsonElement toJSONSchema() {
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_OBJECT);
+		type.add(AlgebraStrings.TYPE_OBJECT);
 		Properties_Assertion prop = new  Properties_Assertion();
 
 		for(ComplexPattern p : pattList)
@@ -65,7 +65,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 		AllOf_Assertion and = new AllOf_Assertion();
 		Properties_Assertion properties = new Properties_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_OBJECT);
+		type.add(AlgebraStrings.TYPE_OBJECT);
 		
 		for(ComplexPattern name : pattList) {
 			properties.addPatternProperties(name, new Boolean_Assertion(true));
@@ -93,18 +93,18 @@ public class AddPatternRequired_Assertion implements Assertion{
 		StringBuilder str = new StringBuilder();
 		
 		for(ComplexPattern s : pattList)
-			str.append(FullAlgebraString.COMMA)
+			str.append(AlgebraStrings.COMMA)
 					.append("\"")
 					.append(s)
 					.append("\"");
 		
 		if(additionalProperties == null)
-			return FullAlgebraString.ADDPATTERNREQUIRED(str.substring(FullAlgebraString.COMMA.length()), "");
+			return AlgebraStrings.ADDPATTERNREQUIRED(str.substring(AlgebraStrings.COMMA.length()), "");
 
 		if(str.length() == 0)
-			return FullAlgebraString.ADDPATTERNREQUIRED("", additionalProperties.toGrammarString());
+			return AlgebraStrings.ADDPATTERNREQUIRED("", additionalProperties.toGrammarString());
 		else
-			return FullAlgebraString.ADDPATTERNREQUIRED(str.substring(FullAlgebraString.COMMA.length()), additionalProperties.toGrammarString());
+			return AlgebraStrings.ADDPATTERNREQUIRED(str.substring(AlgebraStrings.COMMA.length()), additionalProperties.toGrammarString());
 	}
 
 	@Override

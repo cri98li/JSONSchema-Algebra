@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +64,7 @@ public class URI_JS {
 		//case #
 		if(uri.equals("#")) {
 			normalizedURI = "";
-			normalizedName = FullAlgebraString.ROOTDEF_DEFAULTNAME;
+			normalizedName = AlgebraStrings.ROOTDEF_DEFAULTNAME;
 			logger.trace("Uri[{}] equals # --> returning {} ", uri, this);
 			return;
 		}

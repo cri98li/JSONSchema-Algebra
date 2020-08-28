@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessUniqueItems;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +33,7 @@ public class UniqueItems_Assertion implements Assertion{
 	public Assertion not() {
 		AllOf_Assertion and = new AllOf_Assertion();
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_ARRAY);
+		type.add(AlgebraStrings.TYPE_ARRAY);
 		and.add(type);
 		and.add(new RepeatedItems_Assertion());
 
@@ -47,7 +47,7 @@ public class UniqueItems_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		return FullAlgebraString.UNIQUEITEMS;
+		return AlgebraStrings.UNIQUEITEMS;
 	}
 
 	@Override

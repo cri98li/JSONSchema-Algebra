@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPro;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +45,7 @@ public class Pro_Assertion implements Assertion{
 		}
 
 		Type_Assertion type = new Type_Assertion();
-		type.add(FullAlgebraString.TYPE_OBJECT);
+		type.add(AlgebraStrings.TYPE_OBJECT);
 		and.add(type);
 
 		if(min != null && max != null) {
@@ -72,12 +72,12 @@ public class Pro_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = "0", max = FullAlgebraString.POS_INF;
+		String min = "0", max = AlgebraStrings.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return FullAlgebraString.BETWEENPROPERTIES(min, max);
+		return AlgebraStrings.BETWEENPROPERTIES(min, max);
 	}
 
 	@Override

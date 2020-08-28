@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessItems;
 import org.apache.logging.log4j.LogManager;
@@ -154,7 +154,7 @@ public class Items_Assertion implements Assertion{
 			if (itemsArray.size() == 1 && additionalItems == null) {
 				String tmp = itemsArray.get(0).toGrammarString();
 				if(tmp.isEmpty()) return "";
-				return FullAlgebraString.ITEMS(tmp, "");
+				return AlgebraStrings.ITEMS(tmp, "");
 			}
 
 			Iterator<Assertion> it = itemsArray.iterator();
@@ -167,7 +167,7 @@ public class Items_Assertion implements Assertion{
 			while (it.hasNext()) {
 				tmp = it.next().toGrammarString();
 				if(tmp.isEmpty()) continue;
-				str.append(FullAlgebraString.COMMA)
+				str.append(AlgebraStrings.COMMA)
 						.append(tmp);
 			}
 		}
@@ -179,7 +179,7 @@ public class Items_Assertion implements Assertion{
 		if(str2.isEmpty() && str.length() == 0)
 			return "";
 
-		return FullAlgebraString.ITEMS(str.toString(), str2);
+		return AlgebraStrings.ITEMS(str.toString(), str2);
 	}
 
 	@Override

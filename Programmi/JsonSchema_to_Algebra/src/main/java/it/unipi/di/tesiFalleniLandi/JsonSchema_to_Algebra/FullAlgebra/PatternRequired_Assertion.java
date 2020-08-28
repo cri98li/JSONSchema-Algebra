@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
@@ -47,7 +47,7 @@ public class PatternRequired_Assertion implements Assertion{
 	@Override
 	public JsonElement toJSONSchema() {
 		Type_Assertion t = new Type_Assertion();
-		t.add(FullAlgebraString.TYPE_OBJECT);
+		t.add(AlgebraStrings.TYPE_OBJECT);
 		AllOf_Assertion and = new AllOf_Assertion();
 
 		for(Map.Entry<ComplexPattern, Assertion> entry : pattReq.entrySet()) {
@@ -105,12 +105,12 @@ public class PatternRequired_Assertion implements Assertion{
 			for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str += FullAlgebraString.COMMA + entry.getKey().getAlgebraString()+":"+ returnedValue;
+					str += AlgebraStrings.COMMA + entry.getKey().getAlgebraString()+":"+ returnedValue;
 			}
 		}
 
 		if(str.isEmpty()) return "";
-		return String.format(FullAlgebraString.PATTERNREQUIRED, str.substring(FullAlgebraString.COMMA.length()), "");
+		return String.format(AlgebraStrings.PATTERNREQUIRED, str.substring(AlgebraStrings.COMMA.length()), "");
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class PatternRequired_Assertion implements Assertion{
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
-		tmp.add(FullAlgebraString.TYPE_OBJECT);
+		tmp.add(AlgebraStrings.TYPE_OBJECT);
 		WitnessAssertion type = tmp.not().toWitnessAlgebra();
 
 		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();

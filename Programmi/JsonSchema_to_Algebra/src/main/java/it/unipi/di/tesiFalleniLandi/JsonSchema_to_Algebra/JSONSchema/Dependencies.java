@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
@@ -121,7 +121,7 @@ public class Dependencies implements JSONSchemaElement{
 
 	@Override
 	public Assertion toGrammar() {
-		Type_Assertion typeObj = new Type_Assertion(FullAlgebraString.TYPE_OBJECT);
+		Type_Assertion typeObj = new Type_Assertion(AlgebraStrings.TYPE_OBJECT);
 		IfThenElse_Assertion ds = null;
 		IfThenElse_Assertion dr = null;
 		

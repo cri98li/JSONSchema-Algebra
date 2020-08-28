@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

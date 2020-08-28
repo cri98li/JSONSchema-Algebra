@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,7 +60,7 @@ public class Const_Assertion implements Assertion{
 		
 		if(value.isJsonNull()) {
 			logger.trace("Applying not elimination to {} as null value", value);
-			type.add(FullAlgebraString.TYPE_NULL);
+			type.add(AlgebraStrings.TYPE_NULL);
 			return type.not();
 		}
 
@@ -150,25 +150,25 @@ public class Const_Assertion implements Assertion{
 	
 	@Override
 	public String toGrammarString() {
-		if(value.isJsonNull()) return FullAlgebraString.CONST("null");
+		if(value.isJsonNull()) return AlgebraStrings.CONST("null");
 
 		if(value.isJsonObject() || value.isJsonArray())
-			return FullAlgebraString.CONST(value.toString());
+			return AlgebraStrings.CONST(value.toString());
 
 		if(value.getAsJsonPrimitive().isString())
-			return FullAlgebraString.CONST("\"" + value.getAsString() + "\""  );
+			return AlgebraStrings.CONST("\"" + value.getAsString() + "\""  );
 
-		return FullAlgebraString.CONST(value.getAsString());
+		return AlgebraStrings.CONST(value.getAsString());
 	}
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra() throws REException {
-		if (value.isJsonNull()) return new WitnessType(FullAlgebraString.TYPE_NULL);
+		if (value.isJsonNull()) return new WitnessType(AlgebraStrings.TYPE_NULL);
 
 		if (value.isJsonObject()) {
 			logger.trace("Translating {} to WitnessAlgebra as JsonObject", value);
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(FullAlgebraString.TYPE_OBJECT));
+			and.add(new WitnessType(AlgebraStrings.TYPE_OBJECT));
 			Set<Map.Entry<String, JsonElement>> entrySet = ((JsonObject) value).entrySet();
 			Required_Assertion req = new Required_Assertion();
 
@@ -184,7 +184,7 @@ public class Const_Assertion implements Assertion{
 		if (value.isJsonArray()) {
 			logger.trace("Translating {} to WitnessAlgebra as JsonArray", value);
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(FullAlgebraString.TYPE_ARRAY));
+			and.add(new WitnessType(AlgebraStrings.TYPE_ARRAY));
 			WitnessItems items = new WitnessItems();
 			JsonArray array = value.getAsJsonArray();
 			for (JsonElement element : array)
@@ -198,7 +198,7 @@ public class Const_Assertion implements Assertion{
 		if (value.getAsJsonPrimitive().isString()) {
 			logger.trace("Translating {} to WitnessAlgebra as String", value);
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(FullAlgebraString.TYPE_STRING));
+			and.add(new WitnessType(AlgebraStrings.TYPE_STRING));
 			and.add(new WitnessPattern(ComplexPattern.createFromName(value.getAsString())));
 			return and;
 		}
@@ -206,14 +206,14 @@ public class Const_Assertion implements Assertion{
 		if (value.getAsJsonPrimitive().isBoolean()) {
 			logger.trace("Translating {} to WitnessAlgebra as Boolean", value);
 			WitnessAnd and = new WitnessAnd();
-			and.add(new WitnessType(FullAlgebraString.TYPE_BOOLEAN));
+			and.add(new WitnessType(AlgebraStrings.TYPE_BOOLEAN));
 			and.add(new WitnessIfBoolThen(value.getAsBoolean()));
 			return and;
 		}
 
 		logger.trace("Translating {} to WitnessAlgebra as Number", value);
 		WitnessAnd and = new WitnessAnd();
-		and.add(new WitnessType(FullAlgebraString.TYPE_NUMBER));
+		and.add(new WitnessType(AlgebraStrings.TYPE_NUMBER));
 		and.add(new WitnessBet(Double.parseDouble(value.toString()), Double.parseDouble(value.toString())));
 
 		return and;

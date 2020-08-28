@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet;
 import org.apache.logging.log4j.LogManager;
@@ -81,12 +81,12 @@ public class XBet_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String min = FullAlgebraString.NEG_INF, max = FullAlgebraString.POS_INF;
+		String min = AlgebraStrings.NEG_INF, max = AlgebraStrings.POS_INF;
 
 		if(this.min != null) min = this.min+"";
 		if(this.max != null) max = this.max+"";
 
-		return FullAlgebraString.BETWEENNUMBER_EXCLUSIVE(min, max);
+		return AlgebraStrings.BETWEENNUMBER_EXCLUSIVE(min, max);
 	}
 
 	@Override

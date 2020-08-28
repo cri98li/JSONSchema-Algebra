@@ -2,7 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -65,7 +65,7 @@ public class Defs_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		Defs_Assertion not = this.notElimination();
-		not.rootDef = FullAlgebraString.NOT_DEFS + not.rootDef;
+		not.rootDef = AlgebraStrings.NOT_DEFS + not.rootDef;
 
 		return not;
 	}
@@ -79,11 +79,11 @@ public class Defs_Assertion implements Assertion{
 			returnDef.defs.put(entry.getKey(), entry.getValue().notElimination());
 
 			//case negation of not_x --> x
-			if(entry.getKey().startsWith(FullAlgebraString.NOT_DEFS))
+			if(entry.getKey().startsWith(AlgebraStrings.NOT_DEFS))
 				continue;
 
-			if (!defs.containsKey(FullAlgebraString.NOT_DEFS+entry.getKey()))
-				returnDef.defs.put(FullAlgebraString.NOT_DEFS+entry.getKey(), entry.getValue().notElimination().not());
+			if (!defs.containsKey(AlgebraStrings.NOT_DEFS+entry.getKey()))
+				returnDef.defs.put(AlgebraStrings.NOT_DEFS+entry.getKey(), entry.getValue().notElimination().not());
 		}
 
 		returnDef.rootDef = rootDef;
@@ -103,19 +103,19 @@ public class Defs_Assertion implements Assertion{
 				if(tmp.isEmpty()) continue;
 
 				if (!Objects.equals(entry.getKey(), rootDef)) {
-					def.append(FullAlgebraString.COMMA)
-							.append(FullAlgebraString.DEFS(entry.getKey(), tmp));
+					def.append(AlgebraStrings.COMMA)
+							.append(AlgebraStrings.DEFS(entry.getKey(), tmp));
 				} else if (rootDef != null)
-					def.append(FullAlgebraString.COMMA)
-							.append(FullAlgebraString.ROOTDEF("\"" + rootDef + "\"", tmp));
+					def.append(AlgebraStrings.COMMA)
+							.append(AlgebraStrings.ROOTDEF("\"" + rootDef + "\"", tmp));
 				else
-					def.append(FullAlgebraString.COMMA)
-							.append(FullAlgebraString.ROOTDEF("\"" + FullAlgebraString.ROOTDEF_DEFAULTNAME + "\"", ""));
+					def.append(AlgebraStrings.COMMA)
+							.append(AlgebraStrings.ROOTDEF("\"" + AlgebraStrings.ROOTDEF_DEFAULTNAME + "\"", ""));
 			}
 		}
 
 		if(def.length() == 0) return "";
-		return def.substring(FullAlgebraString.COMMA.length());
+		return def.substring(AlgebraStrings.COMMA.length());
 	}
 
 	@Override

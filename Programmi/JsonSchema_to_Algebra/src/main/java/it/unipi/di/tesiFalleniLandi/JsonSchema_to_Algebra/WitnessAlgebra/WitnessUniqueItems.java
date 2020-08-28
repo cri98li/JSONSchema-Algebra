@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.UniqueItems_Assertion;
@@ -52,7 +52,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     public WitnessAssertion mergeElement(WitnessRepeateditems a) throws REException {
         Type_Assertion t = new Type_Assertion();
-        t.add(FullAlgebraString.TYPE_ARRAY);
+        t.add(AlgebraStrings.TYPE_ARRAY);
 
         logger.trace("Merge returning {} ", t.not());
         return t.not().toWitnessAlgebra();
@@ -60,7 +60,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_ARRAY);
+        return new WitnessType(AlgebraStrings.TYPE_ARRAY);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessProperty;
@@ -101,7 +101,7 @@ public class Properties_Assertion implements Assertion{
 		Type_Assertion type = new Type_Assertion();
 		AddPatternRequired_Assertion addPattRequired = new AddPatternRequired_Assertion();
 		AnyOf_Assertion or = new AnyOf_Assertion();
-		type.add(FullAlgebraString.TYPE_OBJECT);
+		type.add(AlgebraStrings.TYPE_OBJECT);
 		and.add(type);
 		and.add(or);
 		
@@ -190,20 +190,20 @@ public class Properties_Assertion implements Assertion{
 			for(Entry<ComplexPattern, Assertion> entry : entrySet) {
 				String returnedValue = entry.getValue().toGrammarString();
 				if(!returnedValue.isEmpty())
-					str.append(FullAlgebraString.COMMA)
-							.append(FullAlgebraString.SINGLEPATTERNPROPERTIES(entry.getKey().getAlgebraString(), returnedValue));
+					str.append(AlgebraStrings.COMMA)
+							.append(AlgebraStrings.SINGLEPATTERNPROPERTIES(entry.getKey().getAlgebraString(), returnedValue));
 
 			}
 		}
 
 		if(additionalProperties != null)
 			if(str.length() == 0)
-				return FullAlgebraString.PROPERTIES("", additionalProperties.toGrammarString());
+				return AlgebraStrings.PROPERTIES("", additionalProperties.toGrammarString());
 			else
-				return FullAlgebraString.PROPERTIES(str.substring(FullAlgebraString.COMMA.length()), additionalProperties.toGrammarString());
+				return AlgebraStrings.PROPERTIES(str.substring(AlgebraStrings.COMMA.length()), additionalProperties.toGrammarString());
 
 		if(str.length() == 0 && additionalProperties == null) return "";
-		return FullAlgebraString.PROPERTIES(str.substring(FullAlgebraString.COMMA.length()), "");
+		return AlgebraStrings.PROPERTIES(str.substring(AlgebraStrings.COMMA.length()), "");
 	}
 
 	@Override

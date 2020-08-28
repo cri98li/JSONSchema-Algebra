@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -464,32 +464,32 @@ public class WitnessAnd implements WitnessAssertion{
         WitnessAnd tmpAnd = new WitnessAnd();
         HashMap<WitnessType, WitnessAnd> groups = new HashMap<>();
 
-        WitnessType type = new WitnessType(FullAlgebraString.TYPE_NUMBER);
+        WitnessType type = new WitnessType(AlgebraStrings.TYPE_NUMBER);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
         tmpAnd = new WitnessAnd();
-        type = new WitnessType(FullAlgebraString.TYPE_OBJECT);
+        type = new WitnessType(AlgebraStrings.TYPE_OBJECT);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
         tmpAnd = new WitnessAnd();
-        type = new WitnessType(FullAlgebraString.TYPE_ARRAY);
+        type = new WitnessType(AlgebraStrings.TYPE_ARRAY);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
         tmpAnd = new WitnessAnd();
-        type = new WitnessType(FullAlgebraString.TYPE_STRING);
+        type = new WitnessType(AlgebraStrings.TYPE_STRING);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
         tmpAnd = new WitnessAnd();
-        type = new WitnessType(FullAlgebraString.TYPE_BOOLEAN);
+        type = new WitnessType(AlgebraStrings.TYPE_BOOLEAN);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
         tmpAnd = new WitnessAnd();
-        type = new WitnessType(FullAlgebraString.TYPE_NULL);
+        type = new WitnessType(AlgebraStrings.TYPE_NULL);
         tmpAnd.add(type);
         groups.put(type, tmpAnd);
 
@@ -673,7 +673,7 @@ public class WitnessAnd implements WitnessAssertion{
             logger.debug("Preparing WitnessAnd without type specified");
             return new LinkedList<>();
         }
-        if (andList.get(WitnessType.class) != null && !andList.get(WitnessType.class).contains(new WitnessType(FullAlgebraString.TYPE_OBJECT))) { //if is not an object type
+        if (andList.get(WitnessType.class) != null && !andList.get(WitnessType.class).contains(new WitnessType(AlgebraStrings.TYPE_OBJECT))) { //if is not an object type
             logger.debug("Preparing WitnessAnd without type object assertion");
             return new LinkedList<>();
         }

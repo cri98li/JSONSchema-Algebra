@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 interface JSONSchemaElement extends Cloneable{	
 	/**
-	 * Exports the class as a json object (using json simple).
+	 * Exports the java object as a json object (using GSON).
 	 * @return an object that represent the schema, see implementations for more details
 	 */
 	public JsonElement toJSON();

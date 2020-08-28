@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Bet_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
@@ -58,7 +58,7 @@ public class WitnessBet implements WitnessAssertion{
 
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_NUMBER);
+            type.add(AlgebraStrings.TYPE_NUMBER);
 
             return type.not().toWitnessAlgebra();
         }
@@ -76,7 +76,7 @@ public class WitnessBet implements WitnessAssertion{
     public WitnessAssertion mergeElement(WitnessBet a) throws REException {
         if(a.min > max || a.max < min){
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_NUMBER);
+            type.add(AlgebraStrings.TYPE_NUMBER);
 
             return type.not().toWitnessAlgebra();
         }
@@ -91,7 +91,7 @@ public class WitnessBet implements WitnessAssertion{
     public WitnessAssertion mergeElement(WitnessXBet a) throws REException {
         if (a.min >= max || a.max <= min) {
             Type_Assertion type = new Type_Assertion();
-            type.add(FullAlgebraString.TYPE_NUMBER);
+            type.add(AlgebraStrings.TYPE_NUMBER);
 
             return type.not().toWitnessAlgebra();
         }
@@ -124,7 +124,7 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        return new WitnessType(FullAlgebraString.TYPE_NUMBER);
+        return new WitnessType(AlgebraStrings.TYPE_NUMBER);
     }
 
     @Override

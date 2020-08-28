@@ -3,7 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.UnsenseAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.UnsenseAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Required_Assertion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

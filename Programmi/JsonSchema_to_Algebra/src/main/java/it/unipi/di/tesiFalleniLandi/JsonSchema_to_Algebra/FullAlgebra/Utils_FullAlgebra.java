@@ -1,6 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.FullAlgebraString;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaLexer;
@@ -48,7 +48,7 @@ public class Utils_FullAlgebra {
         Assertion schema = (Assertion) p.visit(tree);
         if (schema.getClass() != Defs_Assertion.class) {
             Defs_Assertion tmp = new Defs_Assertion();
-            tmp.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, schema);
+            tmp.setRootDef(AlgebraStrings.ROOTDEF_DEFAULTNAME, schema);
             schema = tmp;
         }
 
@@ -76,7 +76,7 @@ public class Utils_FullAlgebra {
         Assertion schema = (Assertion) p.visit(tree);
         if (schema.getClass() != Defs_Assertion.class) {
             Defs_Assertion tmp = new Defs_Assertion();
-            tmp.setRootDef(FullAlgebraString.ROOTDEF_DEFAULTNAME, schema);
+            tmp.setRootDef(AlgebraStrings.ROOTDEF_DEFAULTNAME, schema);
             schema = tmp;
         }
 
@@ -96,7 +96,7 @@ public class Utils_FullAlgebra {
         WitnessAssertion returnedValue = root.toWitnessAlgebra();
         if(returnedValue.getClass() != WitnessEnv.class){
             WitnessEnv env = new WitnessEnv();
-            env.setRootVar(new WitnessVar(FullAlgebraString.ROOTDEF_DEFAULTNAME), returnedValue);
+            env.setRootVar(new WitnessVar(AlgebraStrings.ROOTDEF_DEFAULTNAME), returnedValue);
             return env;
         }
         return (WitnessEnv) returnedValue;

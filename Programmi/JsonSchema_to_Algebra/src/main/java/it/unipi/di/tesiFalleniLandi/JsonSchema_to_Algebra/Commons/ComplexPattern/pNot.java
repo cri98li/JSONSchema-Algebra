@@ -1,4 +1,4 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern;
 
 public class pNot implements ComplexPatternElement {
     ComplexPatternElement not;
