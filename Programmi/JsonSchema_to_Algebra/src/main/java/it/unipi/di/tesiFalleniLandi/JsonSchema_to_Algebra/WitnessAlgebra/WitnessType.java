@@ -12,21 +12,21 @@ import java.util.*;
 public class WitnessType implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessType.class);
 
-    private List<String> type;
+    private Set<String> type;
 
     protected WitnessType(){
-        type = new LinkedList<>();
+        type = new HashSet<>();
         logger.trace("Creating an empty WitnessType");
     }
 
     public WitnessType(String str){
-        type = new LinkedList<>();
+        type = new HashSet<>();
         type.add(str);
         logger.trace("Created a new WitnessType: ", this);
     }
 
-    public WitnessType(List<String> list){
-        type = new LinkedList<>();
+    public WitnessType(Collection<String> list){
+        type = new HashSet<>();
         for(String s : list)
             add(s);
     }
@@ -34,6 +34,11 @@ public class WitnessType implements WitnessAssertion{
     public void add(String type){
         logger.trace("Adding {} to {}", type, this);
         this.type.add(type);
+    }
+
+    public void add(WitnessType type){
+        logger.trace("Adding {} to {}", type, this);
+        this.type.addAll(type.type);
     }
 
     public List<WitnessType> separeTypes(){

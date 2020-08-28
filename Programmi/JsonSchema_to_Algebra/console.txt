@@ -1,27 +1,1672 @@
-[TRACE] 2020-08-26 15:32:52.289 [main-1] Utils_FullAlgebra - Parsing file test.algebra
-[TRACE] 2020-08-26 15:32:52.368 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
-[TRACE] 2020-08-26 15:32:52.369 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
-[TRACE] 2020-08-26 15:32:52.370 [main-1] Defs_Assertion - Setting y={} as rootdef
-[TRACE] 2020-08-26 15:32:52.380 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
-[TRACE] 2020-08-26 15:32:52.380 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
-[TRACE] 2020-08-26 15:32:52.381 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
-[TRACE] 2020-08-26 15:32:52.381 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
-[DEBUG] 2020-08-26 15:32:52.382 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
-[DEBUG] 2020-08-26 15:32:52.382 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
-[TRACE] 2020-08-26 15:32:52.382 [main-1] WitnessEnv - Creating an empty WitnessEnv
-[TRACE] 2020-08-26 15:32:52.383 [main-1] WitnessVar - Created a new WitnessVar with name=(y=resolveName(y))
-[TRACE] 2020-08-26 15:32:52.383 [main-1] WitnessVar - Created a new WitnessVar with name=(x=resolveName(x))
-[TRACE] 2020-08-26 15:32:52.383 [main-1] WitnessEnv - Adding to env <WitnessVar{name='y'}, WitnessVar{name='x'}>
-Exception in thread "main" java.lang.RuntimeException: Unreachable ref: x
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar.reachableRefs(WitnessVar.java:132)
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv.reachableRefs(WitnessEnv.java:250)
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion.toWitnessAlgebra(Defs_Assertion.java:131)
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion.toWitnessAlgebra(Defs_Assertion.java:18)
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra.getWitnessAlgebra(Utils_FullAlgebra.java:96)
-	at it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.MainWitness.main(MainWitness.java:21)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[TRACE] 2020-08-26 14:29:33.511 [main-1] Utils_FullAlgebra - Parsing file test.algebra
+[TRACE] 2020-08-26 14:29:33.614 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.615 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.616 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.617 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1, 2]
+[TRACE] 2020-08-26 14:29:33.618 [main-1] AllOf_Assertion - Added Bet_Assertion [1, 2] to And_Assertion [[Bet_Assertion [1, 2]]]
+[TRACE] 2020-08-26 14:29:33.619 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
+[TRACE] 2020-08-26 14:29:33.619 [main-1] AllOf_Assertion - Added Ref_Assertion [x] to And_Assertion [[Bet_Assertion [1, 2], Ref_Assertion [x]]]
+[TRACE] 2020-08-26 14:29:33.619 [main-1] Items_Assertion - Adding And_Assertion [[Bet_Assertion [1, 2], Ref_Assertion [x]]] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.619 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.647 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.647 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.647 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.647 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[DEBUG] 2020-08-26 14:29:33.648 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[DEBUG] 2020-08-26 14:29:33.649 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessEnv - Creating an empty WitnessEnv
+[TRACE] 2020-08-26 14:29:33.649 [main-1] WitnessVar - Created a new WitnessVar with name=(x=resolveName(x))
+[TRACE] 2020-08-26 14:29:33.650 [main-1] WitnessItems - Creating an empty WitnessItems
+[DEBUG] 2020-08-26 14:29:33.662 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.662 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.665 [main-1] WitnessBet - Creating a new WitnessBet WitnessBet{min=1.0, max=2.0}
+[TRACE] 2020-08-26 14:29:33.666 [main-1] WitnessVar - Created a new WitnessVar with name=(x=resolveName(x))
+[TRACE] 2020-08-26 14:29:33.667 [main-1] WitnessItems - Adding WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet=[WitnessBet{min=1.0, max=2.0}], class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra
+[TRACE] 2020-08-26 14:29:33.667 [main-1] WitnessEnv - Adding to env <WitnessVar{name='x'}, WitnessItems{items=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet=[WitnessBet{min=1.0, max=2.0}], class 
+[TRACE] 2020-08-26 14:29:33.667 [main-1] WitnessVar - Created a new WitnessVar with name=(not_x=resolveName(not_x))
+[DEBUG] 2020-08-26 14:29:33.673 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.673 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.674 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.674 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.674 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:33.675 [main-1] WitnessType - Adding arr to WitnessType{type=[]}
+[DEBUG] 2020-08-26 14:29:33.675 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.675 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.675 [main-1] WitnessItems - Creating an empty WitnessItems
+[TRACE] 2020-08-26 14:29:33.675 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=true} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.676 [main-1] WitnessOr - Adding WitnessBoolean{value=true} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:33.676 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-26 14:29:33.681 [main-1] WitnessContains - Created a new WitnessContains: WitnessContains{min=1.0, max=Infinity, contains=WitnessBoolean{value=true}}
+[DEBUG] 2020-08-26 14:29:33.681 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.681 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.681 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.681 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.682 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.682 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.683 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.683 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.685 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=null, max=1.0]
+[TRACE] 2020-08-26 14:29:33.685 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=null, max=1.0] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.685 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=2.0, max=null]
+[TRACE] 2020-08-26 14:29:33.685 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=2.0, max=null] to Or_Assertion [[XBet_Assertion [min=null, max=1.0]]]
+[TRACE] 2020-08-26 14:29:33.686 [main-1] AllOf_Assertion - Added Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]] to And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Asserti
+[DEBUG] 2020-08-26 14:29:33.686 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.686 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.686 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.686 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.686 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.687 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=-Infinity, max=1.0}
+[TRACE] 2020-08-26 14:29:33.688 [main-1] WitnessOr - Adding WitnessXBet{min=-Infinity, max=1.0} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.688 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=2.0, max=Infinity}
+[TRACE] 2020-08-26 14:29:33.688 [main-1] WitnessOr - Adding WitnessXBet{min=2.0, max=Infinity} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet=[WitnessXBet{min=-Infinity, max=1.0}]}
+}
+[TRACE] 2020-08-26 14:29:33.688 [main-1] WitnessOr - Adding WitnessVar{name='not_x'} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.Json
+[DEBUG] 2020-08-26 14:29:33.688 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.688 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.688 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.688 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.688 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.689 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.689 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=null, max=1.0]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=null, max=1.0] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=2.0, max=null]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=2.0, max=null] to Or_Assertion [[XBet_Assertion [min=null, max=1.0]]]
+[TRACE] 2020-08-26 14:29:33.689 [main-1] AllOf_Assertion - Added Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]] to And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Asserti
+[DEBUG] 2020-08-26 14:29:33.689 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.689 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.689 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.689 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=-Infinity, max=1.0}
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessOr - Adding WitnessXBet{min=-Infinity, max=1.0} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=2.0, max=Infinity}
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessOr - Adding WitnessXBet{min=2.0, max=Infinity} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet=[WitnessXBet{min=-Infinity, max=1.0}]}
+}
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessOr - Adding WitnessVar{name='not_x'} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.Json
+[TRACE] 2020-08-26 14:29:33.690 [main-1] WitnessItems - Adding WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar=[WitnessVar{name='not_x'}], class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witne
+[TRACE] 2020-08-26 14:29:33.691 [main-1] WitnessEnv - Building obdd
+[TRACE] 2020-08-26 14:29:33.692 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.692 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.692 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.692 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.692 [main-1] AllOf_Assertion - Added Bet_Assertion [1.0, 2.0] to And_Assertion [[Bet_Assertion [1.0, 2.0]]]
+[TRACE] 2020-08-26 14:29:33.692 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
+[TRACE] 2020-08-26 14:29:33.692 [main-1] AllOf_Assertion - Added Ref_Assertion [x] to And_Assertion [[Bet_Assertion [1.0, 2.0], Ref_Assertion [x]]]
+[TRACE] 2020-08-26 14:29:33.693 [main-1] Items_Assertion - Adding And_Assertion [[Bet_Assertion [1.0, 2.0], Ref_Assertion [x]]] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.693 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.693 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.693 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value false
+[TRACE] 2020-08-26 14:29:33.693 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.693 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.694 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.694 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.694 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.694 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+def "OBDD_true" = true,
+rootdef "x" = items[
+	{
+		bet(1.0,2.0),
+		ref("x")
+	};
+	
+],
+def "OBDD_false" = false,
+def "not_x" = {
+	type[
+		arr
+	],
+	true
+}
+[TRACE] 2020-08-26 14:29:33.699 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.699 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.699 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.699 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[DEBUG] 2020-08-26 14:29:33.699 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[DEBUG] 2020-08-26 14:29:33.700 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessEnv - Creating an empty WitnessEnv
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessEnv - Adding to env <WitnessVar{name='OBDD_true'}, WitnessBoolean{value=true}>
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessItems - Creating an empty WitnessItems
+[DEBUG] 2020-08-26 14:29:33.700 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.700 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.701 [main-1] WitnessItems - Adding WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet=[WitnessBet{min=1.0, max=2.0}], class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra
+[TRACE] 2020-08-26 14:29:33.701 [main-1] WitnessEnv - Adding to env <WitnessVar{name='x'}, WitnessItems{items=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet=[WitnessBet{min=1.0, max=2.0}], class 
+[TRACE] 2020-08-26 14:29:33.701 [main-1] WitnessEnv - Adding to env <WitnessVar{name='OBDD_false'}, WitnessBoolean{value=false}>
+[DEBUG] 2020-08-26 14:29:33.701 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.701 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.701 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.702 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.702 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=true} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[TRACE] 2020-08-26 14:29:33.702 [main-1] WitnessOr - Adding WitnessBoolean{value=true} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.702 [main-1] WitnessEnv - Adding to env <WitnessVar{name='not_x'}, WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}], class it.unipi.di.tesiFall
+
+
+ Merge: 
+
+[TRACE] 2020-08-26 14:29:33.702 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.702 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.702 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.702 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.702 [main-1] AllOf_Assertion - Added Bet_Assertion [1.0, 2.0] to And_Assertion [[Bet_Assertion [1.0, 2.0]]]
+[TRACE] 2020-08-26 14:29:33.702 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
+[TRACE] 2020-08-26 14:29:33.702 [main-1] AllOf_Assertion - Added Ref_Assertion [x] to And_Assertion [[Bet_Assertion [1.0, 2.0], Ref_Assertion [x]]]
+[TRACE] 2020-08-26 14:29:33.702 [main-1] Items_Assertion - Adding And_Assertion [[Bet_Assertion [1.0, 2.0], Ref_Assertion [x]]] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value false
+[TRACE] 2020-08-26 14:29:33.703 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.703 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.703 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.703 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+def "OBDD_true" = true,
+rootdef "x" = items[
+	{
+		bet(1.0,2.0),
+		ref("x")
+	};
+	
+],
+def "OBDD_false" = false,
+def "not_x" = {
+	type[
+		arr
+	],
+	true
+}
+
+
+ Groupize: 
+
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[DEBUG] 2020-08-26 14:29:33.704 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[DEBUG] 2020-08-26 14:29:33.704 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessEnv - Creating an empty WitnessEnv
+[DEBUG] 2020-08-26 14:29:33.704 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.704 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.704 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:33.705 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.705 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.705 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.705 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.705 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.705 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.706 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessItems - Creating an empty WitnessItems
+[DEBUG] 2020-08-26 14:29:33.706 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:33.706 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.706 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.706 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.707 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.707 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.707 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.707 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.707 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessOr - Adding WitnessType{type=[arr]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}]}
+}
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}], class it.
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}, WitnessType
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}, WitnessTyp
+[DEBUG] 2020-08-26 14:29:33.708 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.708 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.708 [main-1] WitnessAnd - Groupize WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr=[WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAl
+[TRACE] 2020-08-26 14:29:33.709 [main-1] WitnessItems - Adding WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr=[WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlge
+[TRACE] 2020-08-26 14:29:33.709 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonS
+[TRACE] 2020-08-26 14:29:33.709 [main-1] WitnessOr - Adding WitnessType{type=[num]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}], class it.unipi.di.tesiFalleniLandi.
+[TRACE] 2020-08-26 14:29:33.709 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}], class it.
+[TRACE] 2020-08-26 14:29:33.710 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}, WitnessType
+[TRACE] 2020-08-26 14:29:33.710 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}, WitnessTyp
+[DEBUG] 2020-08-26 14:29:33.710 [main-1] WitnessAnd - Groupize WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}, WitnessType{type=[null]}, WitnessTyp
+[TRACE] 2020-08-26 14:29:33.710 [main-1] WitnessType - Created a new WitnessType: 
+[TRACE] 2020-08-26 14:29:33.710 [main-1] WitnessType - Splitting WitnessType{type=[arr]} in [WitnessType{type=[arr]}]
+[TRACE] 2020-08-26 14:29:33.710 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.710 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.710 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.710 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AnyOf_Assertion - Adding Type_Assertion [[num]] to Or_Assertion [[Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.711 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.711 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AnyOf_Assertion - Adding Type_Assertion [[arr]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.712 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Added Bet_Assertion [1.0, 2.0] to And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assert
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Added Ref_Assertion [x] to And_Assertion [[Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type
+[TRACE] 2020-08-26 14:29:33.713 [main-1] Items_Assertion - Adding And_Assertion [[Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type_Assertion [[num]], 
+[TRACE] 2020-08-26 14:29:33.713 [main-1] AllOf_Assertion - Added Items_Assertion [itemsArray=[And_Assertion [[Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertio
+[TRACE] 2020-08-26 14:29:33.714 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[And_Assertion [[Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value false
+[TRACE] 2020-08-26 14:29:33.714 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.714 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.714 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.714 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+def "OBDD_true" = true,
+rootdef "x" = anyOf[
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			arr
+		],
+		items[
+			{
+				anyOf[
+					type[
+						arr
+					],
+					type[
+						str
+					],
+					type[
+						null
+					],
+					type[
+						obj
+					],
+					type[
+						bool
+					],
+					{
+						type[
+							num
+						],
+						bet(1.0,2.0)
+					}
+				],
+				ref("x")
+			};
+			
+		]
+	}
+],
+def "OBDD_false" = false,
+def "not_x" = {
+	type[
+		arr
+	],
+	true
+}
+
+
+ Separation: 
+
+[TRACE] 2020-08-26 14:29:33.719 [main-1] WitnessVar - Created a new WitnessVar with name=(WitnessAnd_1=resolveName(WitnessAnd_1))
+[TRACE] 2020-08-26 14:29:33.719 [main-1] WitnessEnv - Adding to env <WitnessVar{name='WitnessAnd_1'}, WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr=[WitnessOr{
+orList={class it.unipi.di.tesiFalle
+[TRACE] 2020-08-26 14:29:33.719 [main-1] WitnessVar - Created a new WitnessVar with name=(not_WitnessAnd_1=resolveName(not_WitnessAnd_1))
+[DEBUG] 2020-08-26 14:29:33.719 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.719 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:33.720 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessType - Adding obj to WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessType - Adding num to WitnessType{type=[str, obj]}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessType - Adding bool to WitnessType{type=[str, obj, num]}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] WitnessType - Adding null to WitnessType{type=[str, obj, num, bool]}
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.720 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding obj to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding num to WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding arr to WitnessType{type=[obj, num]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding bool to WitnessType{type=[obj, num, arr]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding null to WitnessType{type=[obj, num, arr, bool]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Merging WitnessType{type=[str, obj, num, bool, null]} with WitnessType{type=[obj, num, arr, bool, null]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding obj to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding num to WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:33.721 [main-1] WitnessType - Adding bool to WitnessType{type=[obj, num]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding null to WitnessType{type=[obj, num, bool]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding obj to WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding num to WitnessType{type=[str, obj]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding arr to WitnessType{type=[str, obj, num]}
+[TRACE] 2020-08-26 14:29:33.722 [main-1] WitnessType - Adding bool to WitnessType{type=[str, obj, num, arr]}
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Merging WitnessType{type=[obj, num, bool, null]} with WitnessType{type=[str, obj, num, arr, bool]}
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Adding obj to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Adding num to WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Adding bool to WitnessType{type=[obj, num]}
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.723 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding num to WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding arr to WitnessType{type=[str, num]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding bool to WitnessType{type=[str, num, arr]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding null to WitnessType{type=[str, num, arr, bool]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Merging WitnessType{type=[obj, num, bool]} with WitnessType{type=[str, num, arr, bool, null]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding num to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] WitnessType - Adding bool to WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.724 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.725 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.725 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.725 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding obj to WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding num to WitnessType{type=[str, obj]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding arr to WitnessType{type=[str, obj, num]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding null to WitnessType{type=[str, obj, num, arr]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Merging WitnessType{type=[num, bool]} with WitnessType{type=[str, obj, num, arr, null]}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessType - Adding num to WitnessType{type=[]}
+[DEBUG] 2020-08-26 14:29:33.725 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.725 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.725 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding num to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj, num]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, num, arr]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, num, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessType - Adding obj to WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessType - Adding arr to WitnessType{type=[str, obj]}
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessType - Adding bool to WitnessType{type=[str, obj, arr]}
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessType - Adding null to WitnessType{type=[str, obj, arr, bool]}
+[TRACE] 2020-08-26 14:29:33.726 [main-1] WitnessOr - Adding WitnessType{type=[str, obj, arr, bool, null]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.727 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.727 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.727 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.727 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=null, max=1.0]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=null, max=1.0] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=2.0, max=null]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=2.0, max=null] to Or_Assertion [[XBet_Assertion [min=null, max=1.0]]]
+[TRACE] 2020-08-26 14:29:33.727 [main-1] AllOf_Assertion - Added Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]] to And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Asserti
+[DEBUG] 2020-08-26 14:29:33.727 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.727 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.727 [main-1] WitnessType - Created a new WitnessType: 
+[DEBUG] 2020-08-26 14:29:33.727 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.727 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.727 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=-Infinity, max=1.0}
+[TRACE] 2020-08-26 14:29:33.727 [main-1] WitnessOr - Adding WitnessXBet{min=-Infinity, max=1.0} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.728 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=2.0, max=Infinity}
+[TRACE] 2020-08-26 14:29:33.728 [main-1] WitnessOr - Adding WitnessXBet{min=2.0, max=Infinity} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet=[WitnessXBet{min=-Infinity, max=1.0}]}
+}
+[TRACE] 2020-08-26 14:29:33.728 [main-1] WitnessOr - Adding WitnessVar{name='not_x'} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.Json
+[TRACE] 2020-08-26 14:29:33.728 [main-1] WitnessEnv - Building obdd
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] AnyOf_Assertion - Adding Type_Assertion [[num]] to Or_Assertion [[Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.728 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [WitnessAnd_1]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Items_Assertion - Adding Ref_Assertion [WitnessAnd_1] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AllOf_Assertion - Added Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null] to And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additiona
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null]]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Typ
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Adding Type_Assertion [[arr]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.729 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.729 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AllOf_Assertion - Added Bet_Assertion [1.0, 2.0] to And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]]
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assert
+[TRACE] 2020-08-26 14:29:33.730 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.
+[TRACE] 2020-08-26 14:29:33.730 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [x]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Added Ref_Assertion [x] to And_Assertion [[Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value false
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [not_x]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AnyOf_Assertion - Adding Ref_Assertion [not_x] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.731 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, arr]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str, obj, arr, bool, null]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.732 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.732 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.732 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=null, max=1.0]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=null, max=1.0] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=2.0, max=null]
+[TRACE] 2020-08-26 14:29:33.732 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=2.0, max=null] to Or_Assertion [[XBet_Assertion [min=null, max=1.0]]]
+[TRACE] 2020-08-26 14:29:33.733 [main-1] AllOf_Assertion - Added Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]] to And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Asserti
+[TRACE] 2020-08-26 14:29:33.733 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]]]] to Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]]]
+[TRACE] 2020-08-26 14:29:33.733 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]], And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]]]]]] t
+[TRACE] 2020-08-26 14:29:33.733 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]], And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], X
+def "WitnessAnd_1" = {
+	anyOf[
+		type[
+			arr
+		],
+		type[
+			str
+		],
+		type[
+			null
+		],
+		type[
+			obj
+		],
+		type[
+			bool
+		],
+		{
+			type[
+				num
+			],
+			bet(1.0,2.0)
+		}
+	],
+	ref("x")
+},
+def "OBDD_true" = true,
+rootdef "x" = anyOf[
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			arr
+		],
+		items[
+			ref("WitnessAnd_1");
+			
+		]
+	}
+],
+def "OBDD_false" = false,
+def "not_x" = {
+	type[
+		arr
+	],
+	true
+},
+def "not_WitnessAnd_1" = anyOf[
+	ref("not_x"),
+	{
+		type[
+			num
+		],
+		anyOf[
+			type[
+				str,
+				obj,
+				arr,
+				bool,
+				null
+			],
+			{
+				type[
+					num
+				],
+				anyOf[
+					xbet(-inf,1.0),
+					xbet(2.0,+inf)
+				]
+			}
+		]
+	}
+]
+
+
+ Expansion: 
+
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[DEBUG] 2020-08-26 14:29:33.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[DEBUG] 2020-08-26 14:29:33.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.734 [main-1] WitnessEnv - Creating an empty WitnessEnv
+[DEBUG] 2020-08-26 14:29:33.735 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.735 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.736 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Adding WitnessType{type=[arr]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}]}
+}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}]}
+}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}, WitnessType
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[arr]}, WitnessType{type=[str]}, WitnessTyp
+[DEBUG] 2020-08-26 14:29:33.736 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:33.736 [main-1] WitnessBet - Creating a new WitnessBet WitnessBet{min=1.0, max=2.0}
+[DEBUG] 2020-08-26 14:29:33.736 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:33.737 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.737 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Adding WitnessType{type=[str, obj, arr, bool, null]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:33.737 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:33.737 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessXBet - Cloning WitenssXBet WitnessXBet{min=-Infinity, max=1.0}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=-Infinity, max=1.0}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Adding WitnessXBet{min=-Infinity, max=1.0} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessXBet - Cloning WitenssXBet WitnessXBet{min=2.0, max=Infinity}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessXBet - Created a new WitnessXBet : WitnessXBet{min=2.0, max=Infinity}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] WitnessOr - Adding WitnessXBet{min=2.0, max=Infinity} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessXBet=[WitnessXBet{min=-Infinity, max=1.0}]}
+}
+[TRACE] 2020-08-26 14:29:33.737 [main-1] Defs_Assertion - Creating an empty Defs_Assertion
+[TRACE] 2020-08-26 14:29:33.737 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AnyOf_Assertion - Adding Type_Assertion [[num]] to Or_Assertion [[Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.738 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [WitnessAnd_1]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Items_Assertion - Adding Ref_Assertion [WitnessAnd_1] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AllOf_Assertion - Added Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null] to And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additiona
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null]]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Typ
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Defs_Assertion - Setting x={} as rootdef
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding Type_Assertion [[arr]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.739 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.739 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Bet_Assertion - Created a Bet_Assertion: Bet_Assertion [1.0, 2.0]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AllOf_Assertion - Added Bet_Assertion [1.0, 2.0] to And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.0, 2.0]]] to Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assert
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[arr]], Type_Assertion [[str]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type_Assertion [[num]], Bet_Assertion [1.
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Adding Type_Assertion [[num]] to Or_Assertion [[Type_Assertion [[str]]]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding null to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Adding Type_Assertion [[null]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding obj to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] AnyOf_Assertion - Adding Type_Assertion [[obj]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]]]]
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.740 [main-1] Type_Assertion - Adding bool to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AnyOf_Assertion - Adding Type_Assertion [[bool]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]], Type_Assertion [[obj]]]]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Items_Assertion - Created an empty Items_Assertion
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Ref_Assertion - Created a new Ref_Assertion: Ref_Assertion [WitnessAnd_1]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Items_Assertion - Adding Ref_Assertion [WitnessAnd_1] to Items_Assertion [itemsArray=[], additionalItems=null]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Added Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null] to And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additiona
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[arr]], Items_Assertion [itemsArray=[Ref_Assertion [WitnessAnd_1]], additionalItems=null]]] to Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Typ
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[str]], Type_Assertion [[num]], Type_Assertion [[null]], Type_Assertion [[obj]], Type_Assertion [[bool]], And_Assertion [[Type_Assertion [[arr]], Items_Assertion [
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value false
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.741 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.741 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Adding arr to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Added Type_Assertion [[arr]] to And_Assertion [[Type_Assertion [[arr]]]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Boolean_Assertion - Creating a Boolean_Assertion with value true
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Added Boolean_Assertion [value=true] to And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[arr]], Boolean_Assertion [value=true]]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.742 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.742 [main-1] Type_Assertion - Adding str to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Adding obj to Type_Assertion [[str]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Adding arr to Type_Assertion [[str, obj]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Adding bool to Type_Assertion [[str, obj, arr]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Adding null to Type_Assertion [[str, obj, arr, bool]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AnyOf_Assertion - Adding Type_Assertion [[str, obj, arr, bool, null]] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AllOf_Assertion - Creating an empty AllOf_Assertion
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Creating an empty Type_Assertion
+[TRACE] 2020-08-26 14:29:33.743 [main-1] Type_Assertion - Adding num to Type_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AllOf_Assertion - Added Type_Assertion [[num]] to And_Assertion [[Type_Assertion [[num]]]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AnyOf_Assertion - Creating an empty AnyOf_Assertion
+[TRACE] 2020-08-26 14:29:33.743 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=null, max=1.0]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=null, max=1.0] to Or_Assertion [[]]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] XBet_Assertion - Created a new XBet_Assertion: XBet_Assertion [min=2.0, max=null]
+[TRACE] 2020-08-26 14:29:33.743 [main-1] AnyOf_Assertion - Adding XBet_Assertion [min=2.0, max=null] to Or_Assertion [[XBet_Assertion [min=null, max=1.0]]]
+[TRACE] 2020-08-26 14:29:33.744 [main-1] AllOf_Assertion - Added Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]] to And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Asserti
+[TRACE] 2020-08-26 14:29:33.744 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]]]] to Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]]]
+[TRACE] 2020-08-26 14:29:33.744 [main-1] AllOf_Assertion - Added Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]], And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], XBet_Assertion [min=2.0, max=null]]]]]]] t
+[TRACE] 2020-08-26 14:29:33.744 [main-1] AnyOf_Assertion - Adding And_Assertion [[Type_Assertion [[num]], Or_Assertion [[Type_Assertion [[str, obj, arr, bool, null]], And_Assertion [[Type_Assertion [[num]], Or_Assertion [[XBet_Assertion [min=null, max=1.0], X
+def "WitnessAnd_1" = allOf[
+	anyOf[
+		type[
+			arr
+		],
+		type[
+			str
+		],
+		type[
+			null
+		],
+		type[
+			obj
+		],
+		type[
+			bool
+		],
+		{
+			type[
+				num
+			],
+			bet(1.0,2.0)
+		}
+	],
+	anyOf[
+		type[
+			str
+		],
+		type[
+			num
+		],
+		type[
+			null
+		],
+		type[
+			obj
+		],
+		type[
+			bool
+		],
+		{
+			type[
+				arr
+			],
+			items[
+				ref("WitnessAnd_1");
+				
+			]
+		}
+	]
+],
+def "OBDD_true" = true,
+rootdef "x" = anyOf[
+	type[
+		str
+	],
+	type[
+		num
+	],
+	type[
+		null
+	],
+	type[
+		obj
+	],
+	type[
+		bool
+	],
+	{
+		type[
+			arr
+		],
+		items[
+			ref("WitnessAnd_1");
+			
+		]
+	}
+],
+def "OBDD_false" = false,
+def "not_x" = {
+	type[
+		arr
+	],
+	true
+},
+def "not_WitnessAnd_1" = anyOf[
+	{
+		type[
+			arr
+		],
+		true
+	},
+	{
+		type[
+			num
+		],
+		anyOf[
+			type[
+				str,
+				obj,
+				arr,
+				bool,
+				null
+			],
+			{
+				type[
+					num
+				],
+				anyOf[
+					xbet(-inf,1.0),
+					xbet(2.0,+inf)
+				]
+			}
+		]
+	}
+]
+
+
+ DNF: 
+
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[DEBUG] 2020-08-26 14:29:33.745 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[DEBUG] 2020-08-26 14:29:33.745 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_false'}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_false=resolveName(OBDD_false))
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Cloning WitnessVar{name='OBDD_true'}
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessVar - Created a new WitnessVar with name=(OBDD_true=resolveName(OBDD_true))
+[TRACE] 2020-08-26 14:29:33.745 [main-1] WitnessEnv - Creating an empty WitnessEnv
+[DEBUG] 2020-08-26 14:29:51.292 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:51.292 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:51.292 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.292 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.292 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.293 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.293 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.293 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.293 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:51.293 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:51.293 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:52.788 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.789 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:52.789 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.789 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.790 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.790 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.790 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:52.790 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.790 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:52.790 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.791 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.791 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.791 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.791 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:52.791 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.791 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:52.792 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.792 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.792 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.792 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.792 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:52.792 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.793 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:52.793 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.793 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.793 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.793 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.793 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:52.793 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.794 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:52.794 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.794 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.794 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.794 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.794 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:52.794 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.795 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:52.795 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:52.795 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:52.795 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:52.795 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:52.795 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.796 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:52.796 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:52.796 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFallen
+[TRACE] 2020-08-26 14:29:52.796 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witne
+[DEBUG] 2020-08-26 14:29:53.465 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:53.465 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:53.465 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.465 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:53.466 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:53.466 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[DEBUG] 2020-08-26 14:29:53.466 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.466 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:53.466 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[DEBUG] 2020-08-26 14:29:53.467 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Cloning WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:53.467 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:53.468 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:53.468 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLa
+[TRACE] 2020-08-26 14:29:53.468 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonS
+[DEBUG] 2020-08-26 14:29:54.117 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.117 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:54.117 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.117 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.117 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:54.118 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:54.118 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[null]}]}
+}
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[null]}]}
+}
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.119 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.119 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.120 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[null]}]}
+}
+[DEBUG] 2020-08-26 14:29:54.120 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessType - Cloning WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessType - Adding null to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[null]}]}
+} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniL
+[TRACE] 2020-08-26 14:29:54.120 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}], class it.unipi.di.tesiFalleniLandi
+[DEBUG] 2020-08-26 14:29:54.732 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.732 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:54.732 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.732 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.733 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.733 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[obj]}]}
+}
+[DEBUG] 2020-08-26 14:29:54.734 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:54.734 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:54.735 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:54.735 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[obj]}]}
+}
+[DEBUG] 2020-08-26 14:29:54.735 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessType - Cloning WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessType - Adding obj to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[obj]}]}
+} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLa
+[TRACE] 2020-08-26 14:29:54.735 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[null]}], class it.
+[DEBUG] 2020-08-26 14:29:55.317 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.318 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:55.318 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.318 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.318 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.318 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:55.319 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:55.319 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.319 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:55.319 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.319 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.319 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.319 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:55.320 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:55.320 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.320 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:55.320 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.320 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.320 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.320 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:55.320 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:55.321 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.321 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:55.321 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.321 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.321 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.321 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:55.321 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:55.321 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:55.322 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:55.322 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:55.322 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:55.323 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.323 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:55.323 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:55.323 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.323 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[bool]}]}
+}
+[DEBUG] 2020-08-26 14:29:55.323 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:55.323 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:55.323 [main-1] WitnessType - Cloning WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:55.324 [main-1] WitnessType - Adding bool to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:55.324 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:55.324 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[bool]}]}
+} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniL
+[TRACE] 2020-08-26 14:29:55.324 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[null]}, WitnessTy
+[DEBUG] 2020-08-26 14:29:56.125 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.125 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:56.125 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessType - Merging WitnessType{type=[str]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:56.126 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.126 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=false}]}
+}
+[DEBUG] 2020-08-26 14:29:56.126 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.126 [main-1] WitnessType - Merging WitnessType{type=[num]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessType - Creating an empty WitnessType
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessOr - Adding WitnessType{type=[num]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:56.127 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessType - Merging WitnessType{type=[null]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:56.127 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.127 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[num]}]}
+}
+[DEBUG] 2020-08-26 14:29:56.127 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.127 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.128 [main-1] WitnessType - Merging WitnessType{type=[obj]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.128 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:56.128 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.128 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.128 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[num]}]}
+}
+[DEBUG] 2020-08-26 14:29:56.128 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.129 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.129 [main-1] WitnessType - Merging WitnessType{type=[bool]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.129 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:56.129 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.129 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.129 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[num]}]}
+}
+[DEBUG] 2020-08-26 14:29:56.129 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.129 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessType - Merging WitnessType{type=[arr]} with WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessType - Creating an empty WitnessType
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[num]}]}
+}
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.130 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:56.130 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.131 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFallen
+[TRACE] 2020-08-26 14:29:56.131 [main-1] WitnessOr - Adding flat WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd=[WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witne
+[DEBUG] 2020-08-26 14:29:56.131 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.131 [main-1] WitnessOr - Adding boolean WitnessBoolean{value=false} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[null]}
+[DEBUG] 2020-08-26 14:29:56.131 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[DEBUG] 2020-08-26 14:29:56.131 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.131 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Cloning WitnessType{type=[str]}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Adding str to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessOr - Adding WitnessType{type=[str]} in WitnessOr{
+orList={}
+}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Cloning WitnessType{type=[num]}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Adding num to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessOr - Adding WitnessType{type=[num]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}]}
+}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Cloning WitnessType{type=[null]}
+[TRACE] 2020-08-26 14:29:56.132 [main-1] WitnessType - Adding null to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.133 [main-1] WitnessOr - Adding WitnessType{type=[null]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}]}
+}
+[TRACE] 2020-08-26 14:29:56.133 [main-1] WitnessType - Cloning WitnessType{type=[obj]}
+[TRACE] 2020-08-26 14:29:56.133 [main-1] WitnessType - Adding obj to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.133 [main-1] WitnessOr - Adding WitnessType{type=[obj]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}, WitnessType
+[TRACE] 2020-08-26 14:29:56.134 [main-1] WitnessType - Cloning WitnessType{type=[bool]}
+[TRACE] 2020-08-26 14:29:56.134 [main-1] WitnessType - Adding bool to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.134 [main-1] WitnessOr - Adding WitnessType{type=[bool]} in WitnessOr{
+orList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType=[WitnessType{type=[str]}, WitnessType{type=[num]}, WitnessTyp
+[DEBUG] 2020-08-26 14:29:56.134 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[DEBUG] 2020-08-26 14:29:56.753 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.753 [main-1] WitnessOr - Creating an empty WitnessOr
+[DEBUG] 2020-08-26 14:29:56.753 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=true}
+[TRACE] 2020-08-26 14:29:56.753 [main-1] WitnessAnd - Created a new and: WitnessAnd{
+andList={class it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean=[WitnessBoolean{value=true}]}
+}
+[TRACE] 2020-08-26 14:29:56.753 [main-1] WitnessOr - Adding WitnessType{type=[arr]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:56.754 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.754 [main-1] WitnessOr - Creating an empty WitnessOr
+[TRACE] 2020-08-26 14:29:56.754 [main-1] WitnessType - Cloning WitnessType{type=[arr]}
+[TRACE] 2020-08-26 14:29:56.754 [main-1] WitnessType - Adding arr to WitnessType{type=[]}
+[TRACE] 2020-08-26 14:29:56.754 [main-1] WitnessOr - Adding WitnessType{type=[arr]} in WitnessOr{
+orList={}
+}
+[DEBUG] 2020-08-26 14:29:56.754 [main-1] WitnessBoolean - Created a new WitnessBoolean: WitnessBoolean{value=false}
+[TRACE] 2020-08-26 14:29:56.754 [main-1] WitnessOr - Creating an empty WitnessOr

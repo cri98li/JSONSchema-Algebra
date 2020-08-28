@@ -54,7 +54,7 @@ public class WitnessVar implements WitnessAssertion{
      *
      * resolve(c) --> resolve(b) --> a
      */
-    private static String resolveName(String oldName){
+    protected static String resolveName(String oldName){
         if(renamed.containsKey(oldName))    return resolveName(renamed.get(oldName));
 
         return oldName;

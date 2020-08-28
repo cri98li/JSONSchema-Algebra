@@ -177,6 +177,9 @@ public class WitnessProperty implements WitnessAssertion{
     public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
+        if(value.getClass() == WitnessAnd.class && ((WitnessAnd) value).getIfUnitaryAnd() != null) //to avoid AND[ref(x)]
+            value = ((WitnessAnd) value).getIfUnitaryAnd();
+
         if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
             newDefinitions.addAll(value.varNormalization_separation(env));
 

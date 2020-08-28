@@ -182,7 +182,6 @@ public class Dependencies implements JSONSchemaElement{
 			for(Entry<String, JSONSchema> entry : dependentSchemas.entrySet())
 				count += entry.getValue().numberOfTranslatableAssertions();
 
-		//TODO: check
 		if(dependentRequired != null)
 			count += dependentRequired.size();
 

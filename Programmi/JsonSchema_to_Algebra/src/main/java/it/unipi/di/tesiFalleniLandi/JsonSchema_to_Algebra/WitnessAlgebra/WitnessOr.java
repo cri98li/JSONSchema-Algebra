@@ -19,7 +19,7 @@ public class WitnessOr implements WitnessAssertion{
         this.orList = new HashMap<>();
         //base case OR
         List list = new LinkedList<>();
-        list.add(new WitnessBoolean(false)); //TODO: true??
+        list.add(new WitnessBoolean(false));
         this.orList.put(WitnessBoolean.class, list);
         block = false;
 
@@ -66,17 +66,18 @@ public class WitnessOr implements WitnessAssertion{
 
         logger.trace("Adding {} in {}", el, this);
         if(orList.containsKey(el.getClass())) { //if orList already contains the key
+            /*if (el.getClass() == WitnessType.class){ //Optimization: add type
+                WitnessType unionType = (WitnessType) orList.get(el.getClass()).get(0);
+                unionType.add((WitnessType) el);
 
-            if (el.getClass() == WitnessType.class){ //Optimization: add type
-                if (orList.get(el.getClass()).contains(el))
-                    return false;
+                if(unionType.separeTypes().size() == 6) //all possible types
+                    return this.add(new WitnessBoolean(true));
 
-                orList.get(el.getClass()).add(el);
                 return true;
-            } else {
+            } else {*/
                 orList.get(el.getClass()).add(el); //insert the assertion in the respective list
                 return true;
-            }
+            //}
         }else{
             List<WitnessAssertion> list = new LinkedList<>();
             list.add(el);
@@ -87,7 +88,9 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     private boolean add(WitnessAnd el){
-        if(el.getIfUnitaryAnd() != null) //se è un and unitario aggiungo il suo contenuto
+        if(el.isAGroup() && orList.containsKey(WitnessAnd.class) && orList.get(WitnessAnd.class).contains(el)) return false; //TODO: we can maybe use a Hashmap of <Obj, SET<>>
+
+        if(el.getIfUnitaryAnd() != null) //se è un and unitario e non è un gruppo aggiungo il suo contenuto
             return add(el.getIfUnitaryAnd());
         else {
             if (!orList.containsKey(WitnessAnd.class))
@@ -256,7 +259,7 @@ public class WitnessOr implements WitnessAssertion{
                 WitnessAnd tmp = null;
 
                 //new and to create the group
-                if (assertion.getClass() != WitnessAnd.class) { //TODO: top_groupize su singole asserzioni???
+                if (assertion.getClass() != WitnessAnd.class) {
                     tmp = new WitnessAnd();
                     tmp.add(assertion);
                 }else
@@ -354,10 +357,9 @@ public class WitnessOr implements WitnessAssertion{
     @Override
     public boolean isBooleanExp() {
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
-            for(WitnessAssertion assertion : entry.getValue()) {
+            for(WitnessAssertion assertion : entry.getValue())
                 if(!assertion.isBooleanExp())
                     return false;
-            }
 
         return true;
     }
@@ -406,13 +408,17 @@ public class WitnessOr implements WitnessAssertion{
         return or;
     }
 
-    public void objectPrepare(WitnessEnv env) throws REException, WitnessException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env) throws REException, WitnessException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
         if(orList.containsKey(WitnessAnd.class)){ //call object prepare only for AND assertion
             List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
             for(WitnessAssertion assertion : ands) {
-                ((WitnessAnd)assertion).objectPrepare(env);
+                newDefinitions.addAll(((WitnessAnd)assertion).objectPrepare(env));
             }
         }
+
+        return newDefinitions;
     }
 
     @Override

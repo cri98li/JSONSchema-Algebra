@@ -1,14 +1,27 @@
-rootdef "y" = ref("x")
+allOf[
+  type[obj],
+  props["^a" : mof(2),
+        "^.b" : mof(3);
+        true
+	],
+  pattReq["^.c" : mof(5)],
+  pattReq["^a" : true]
+]
 
-/*rootdef "x" = {
+
+/*
+rootdef "x" = {
     type[obj],
     props[
-        "^.a":mof(123),
-        "^b":bet(1,12)
+        "^.a":ref("x1"),
+        "^b":ref("x2")
     ;],
-    pattReq["^.a":true, "^b":bet(1,12)]
-}*/
-
+    pattReq["^.a":true, "^b":ref("x3")]
+},
+def "x1" = mof(123),
+def "x2" = bet(1,12),
+def "x3" = bet(1,12)
+*/
 
 /*
 rootdef "x" = allOf[ref("y") ,ref("z")],

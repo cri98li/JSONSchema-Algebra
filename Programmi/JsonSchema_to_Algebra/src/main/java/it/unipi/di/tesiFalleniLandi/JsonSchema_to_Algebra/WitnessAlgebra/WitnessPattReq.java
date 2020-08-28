@@ -9,25 +9,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class WitnessPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessPattReq.class);
 
-    private static HashMap<Object, WitnessPattReq> instances; //TODO: WeakRef as in WitnessVar??
+    private static HashMap<Object, WeakReference<WitnessPattReq>> instances;
 
     public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
         if(instances == null) instances = new HashMap<>();
 
         WitnessPattReq tmp = new WitnessPattReq(key, assertion);
 
-        if(instances.containsKey(tmp.toString())) {
-            logger.trace("WitnessPattReq returning an OLD instance: ", instances.get(tmp.toString()));
+        if(instances.containsKey(tmp.toString()))
+            if(instances.get(tmp.toString()).get() != null) {
+                logger.trace("WitnessPattReq returning an OLD instance: ", instances.get(tmp.toString()).get());
 
-            return instances.get(tmp.toString());
-        }
+                return instances.get(tmp.toString()).get();
+            }else
+                instances.remove(tmp.toString());
 
-        instances.put(tmp.toString(), tmp);
+        instances.put(tmp.toString(), new WeakReference<>(tmp));
         logger.trace("WitnessPattReq returning a NEW instance: ", instances.get(tmp.toString()));
         return tmp;
     }
@@ -239,6 +242,9 @@ public class WitnessPattReq implements WitnessAssertion{
     @Override
     public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
+        if(value.getClass() == WitnessAnd.class && ((WitnessAnd) value).getIfUnitaryAnd() != null)
+            value = ((WitnessAnd) value).getIfUnitaryAnd();
 
         if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
 

@@ -1,7 +1,5 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

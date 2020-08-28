@@ -57,9 +57,6 @@ public class MainWitness {
         System.out.println("\r\n\r\n objectPrepare: \r\n");
         System.out.flush();
 
-        env = (WitnessEnv) env.merge();
-
-        env.toOrPattReq();
         env.objectPrepare();
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));

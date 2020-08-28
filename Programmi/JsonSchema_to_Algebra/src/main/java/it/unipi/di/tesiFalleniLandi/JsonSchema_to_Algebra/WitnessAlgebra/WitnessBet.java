@@ -88,7 +88,7 @@ public class WitnessBet implements WitnessAssertion{
         return (this.equals(newBet) && a.equals(newBet)) ? null : newBet;
     }
 
-    public WitnessAssertion mergeElement(WitnessXBet a) throws REException { //TODO: check
+    public WitnessAssertion mergeElement(WitnessXBet a) throws REException {
         if (a.min >= max || a.max <= min) {
             Type_Assertion type = new Type_Assertion();
             type.add(FullAlgebraString.TYPE_NUMBER);

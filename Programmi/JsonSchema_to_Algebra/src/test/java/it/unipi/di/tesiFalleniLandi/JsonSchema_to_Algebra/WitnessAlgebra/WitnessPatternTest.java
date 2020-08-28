@@ -1,9 +1,9 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Witness;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 import org.junit.Ignore;
 import org.junit.Test;
+import patterns.Pattern;
 import patterns.REException;
 
 import static org.junit.Assert.*;
@@ -45,5 +45,26 @@ public class WitnessPatternTest {
         WitnessPattern output = new WitnessPattern(ComplexPattern.createFromRegexp("^(?:\\S+\\s+){80,99}\\S+$"));
 
         assertEquals(p1.mergeElement(p2), output);
+    }
+
+    @Test
+    public void testMergePattern5() throws REException {
+        Pattern a = Pattern.createFromRegexp("^.a");
+        Pattern b = Pattern.createFromRegexp("^b");
+
+        Pattern AminusB = a.intersect(b.complement());
+        Pattern BminusA = b.intersect(a.complement());
+        Pattern AandB = a.intersect(b);
+
+        Pattern r1 = BminusA.intersect(AminusB);
+        Pattern r2 = BminusA.intersect(AandB);
+        Pattern r3 = AminusB.intersect(AandB);
+        Pattern r4 = AandB.intersect(AandB); //banale
+
+        System.out.println("R1: " + r1.domainSize());
+        System.out.println("R2: " + r2.domainSize());
+        System.out.println("R3: " + r3.domainSize());
+        System.out.println("R4: " + r4.domainSize());
+
     }
 }

@@ -145,7 +145,13 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
-        return this;
+        WitnessOrPattReq newOrp = new WitnessOrPattReq();
+
+        for(WitnessPattReq el : reqList){
+            newOrp.add(WitnessPattReq.build(el.getPattern(), el.getValue().varNormalization_expansion(env)));
+        }
+
+        return newOrp;
     }
 
     @Override

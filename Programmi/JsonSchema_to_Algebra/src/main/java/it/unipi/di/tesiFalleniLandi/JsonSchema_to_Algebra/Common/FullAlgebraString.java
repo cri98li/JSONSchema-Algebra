@@ -1,7 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Common;
 
 /**
- * Metodi e classi utilizzati per costruire l'output in grammatica. TODO: da spostare in fullAlgebra?
+ * Metodi e classi utilizzati per costruire l'output in grammatica.
  */
 public class FullAlgebraString {
 	//LOGIC OP

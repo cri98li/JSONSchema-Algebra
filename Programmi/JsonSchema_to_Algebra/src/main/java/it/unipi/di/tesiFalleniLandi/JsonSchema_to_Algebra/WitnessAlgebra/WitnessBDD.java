@@ -91,8 +91,10 @@ public class WitnessBDD {
     }
 
     public void rename(WitnessVar oldName, WitnessVar newName){
-        if(!indexNode.containsKey(oldName))
-            throw new RuntimeException("WitnessBDD rename element not in indexNode");
+        if(!indexNode.containsKey(oldName)) {
+            logger.warn("Renaming in BDD oldName: {} with newName: {}", oldName, newName);
+            return;
+        }
 
         indexNode.put(newName, indexNode.remove(oldName));
     }
