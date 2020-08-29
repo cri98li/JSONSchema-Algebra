@@ -19,6 +19,8 @@ public class WitnessBDD {
     private final WitnessVar trueVar;
     private final WitnessVar falseVar;
 
+    private WitnessVarManager varManager;
+
 
     public WitnessVar getTrueVar(){
         return trueVar.clone();
@@ -27,21 +29,21 @@ public class WitnessBDD {
         return falseVar.clone();
     }
 
-    public WitnessBDD() {
+    public WitnessBDD(WitnessVarManager varManager) {
         indexNode = HashBiMap.create();
         //create new obdd, using the defined ordering
         bdd = new BDD(NODESIZE, CACHESIZE);
 
-
-        trueVar = new WitnessVar("OBDD_true");
-        falseVar = new WitnessVar("OBDD_false");
+        this.varManager = varManager;
+        trueVar = varManager.buildVar("OBDD_true");
+        falseVar = varManager.buildVar("OBDD_false");
         indexNode.put(trueVar, bdd.getOne());
         indexNode.put(falseVar, bdd.getZero());
     }
 
     public WitnessVar createVar(){
         int i = bdd.createVar();
-        WitnessVar var = new WitnessVar("OBDD_"+i);
+        WitnessVar var = varManager.buildVar("OBDD_"+i);
         indexNode.put(var, i);
 
         return var;
@@ -64,7 +66,7 @@ public class WitnessBDD {
         WitnessVar var = indexNode.inverse().get(newI);
 
         if(var == null) {
-            var = new WitnessVar("OBDD_" + newI);
+            var = varManager.buildVar("OBDD_" + newI);
             indexNode.put(var, newI);
         }
 
@@ -83,7 +85,7 @@ public class WitnessBDD {
         WitnessVar var = indexNode.inverse().get(newI);
 
         if(var == null) {
-            var = new WitnessVar("OBDD_" + newI);
+            var = varManager.buildVar("OBDD_" + newI);
             indexNode.put(var, newI);
         }
 

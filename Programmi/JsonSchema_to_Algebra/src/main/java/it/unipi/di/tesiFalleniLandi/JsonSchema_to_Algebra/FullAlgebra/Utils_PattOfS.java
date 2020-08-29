@@ -95,7 +95,7 @@ public class Utils_PattOfS {
         return a.getValue();
     }
 
-    public static ComplexPattern pattOfS(Ref_Assertion a){
-        return pattOfS(Defs_Assertion.env.getDef(a.getRef()));
+    public static ComplexPattern pattOfS(Ref_Assertion a, Defs_Assertion env){
+        return pattOfS(env.getDef(a.getRef()));
     }
 }

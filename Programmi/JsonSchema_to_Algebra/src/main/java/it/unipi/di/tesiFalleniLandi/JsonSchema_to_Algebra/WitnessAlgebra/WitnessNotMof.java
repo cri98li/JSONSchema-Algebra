@@ -42,7 +42,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())
@@ -52,7 +52,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -103,7 +103,7 @@ public class WitnessNotMof implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -152,7 +152,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         throw new UnsupportedOperationException();
     }
 }

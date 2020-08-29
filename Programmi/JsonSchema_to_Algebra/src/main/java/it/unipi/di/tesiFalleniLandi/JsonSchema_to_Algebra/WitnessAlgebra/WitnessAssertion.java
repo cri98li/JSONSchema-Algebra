@@ -19,16 +19,18 @@ public interface WitnessAssertion extends Cloneable{
     /**
      * Perform the and-merging as described in the paper plus other little simplifications
      * @param a
+     * @param varManager
      * @return null if the objects cannot be merged, otherwise it returns the merged object
      *              (if the object cannot be unified within a single assertion, it returns a WitnessAnd)
      */
-    WitnessAssertion mergeWith(WitnessAssertion a) throws REException;
+    WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException;
 
     /**
      * propagates merge over the schema
      * @return
+     * @param varManager
      */
-    WitnessAssertion merge() throws REException;
+    WitnessAssertion merge(WitnessVarManager varManager) throws REException;
 
     /**
      * Return the relative Type of an assertion
@@ -82,13 +84,15 @@ public interface WitnessAssertion extends Cloneable{
      * Collect and save all the definition to create in the variable normalization phase,
      * the name of the variable is: ClassName + hash of the value.
      * @param env collection of (variableName, variableContent) where the method add all the new variables
+     * @param varManager
      * @return return the list of new variable that we need to add to the env
      */
-    List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException;
+    List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException;
 
     /**
      * Expands all the unguarded variables with their respective definition
-     * @param env collection of (variableName, variableContent)*
+     * @param env collection of (variableName, variableContent)
+     *
      * @return  return this.clone if the assertion do not contain any unguarded variables, otherwise return a new assertion as described before
      * @throws WitnessException
      */
@@ -107,5 +111,5 @@ public interface WitnessAssertion extends Cloneable{
 
     boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar);
 
-    WitnessVar buildOBDD(WitnessEnv env) throws WitnessException;
+    WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException;
 }

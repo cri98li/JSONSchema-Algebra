@@ -46,7 +46,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -60,12 +60,12 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(varManager, null);
         }
 
         if(a.getClass() == this.getClass())
@@ -84,7 +84,7 @@ public class WitnessXBet implements WitnessAssertion{
             type.add(AlgebraStrings.TYPE_NUMBER);
 
             logger.trace("Merge result: ", type.not());
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(null, null);
         }
 
         WitnessXBet newXBet = new WitnessXBet(m, M);
@@ -127,7 +127,7 @@ public class WitnessXBet implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env){
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager){
         return new LinkedList<>();
     }
 
@@ -176,7 +176,7 @@ public class WitnessXBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 }

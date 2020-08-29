@@ -64,7 +64,7 @@ public class MainClass
 							schema = (Assertion) p.visit(tree);
 						}
 
-						JsonObject JSON = (JsonObject)schema.toJSONSchema();
+						JsonObject JSON = (JsonObject)schema.toJSONSchema(null);
 						System.out.println(JSON.toString());
 						break;
 
@@ -103,7 +103,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra().mergeWith(null).getFullAlgebra().toGrammarString()));
+						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra(null, null).mergeWith(null, null).getFullAlgebra().toGrammarString()));
 						break;
 
 					default:

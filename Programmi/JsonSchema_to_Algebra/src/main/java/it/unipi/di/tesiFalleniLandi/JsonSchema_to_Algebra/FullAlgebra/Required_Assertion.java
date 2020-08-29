@@ -41,7 +41,7 @@ public class Required_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonArray array = new JsonArray();
 		JsonObject obj = new JsonObject();
 
@@ -100,12 +100,12 @@ public class Required_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(AlgebraStrings.TYPE_OBJECT);
-		WitnessAssertion type = tmp.not().toWitnessAlgebra();
+		WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager, env);
 
 
 		for(String str : reqList) {

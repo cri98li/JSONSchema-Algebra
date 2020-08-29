@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +18,8 @@ import java.util.Set;
 public class Defs_Assertion implements Assertion{
 	private HashMap<String, Assertion> defs; // all the definitions
 	private String rootDef; // name of the main definition
-	protected static Defs_Assertion env = null; //used by pattOfS
+	private Defs_Assertion env = null; //used by pattOfS //TODO: Attenzione!!!!!!!!!!!
+	private WitnessVarManager varManager;
 
 	private static Logger logger = LogManager.getLogger(Defs_Assertion.class);
 
@@ -26,6 +27,7 @@ public class Defs_Assertion implements Assertion{
 		logger.trace("Creating an empty Defs_Assertion");
 		env = this;
 		defs = new HashMap<>();
+		varManager = new WitnessVarManager();
 	}
 	
 	public void add(String key, Assertion value) throws ParseCancellationException {
@@ -47,15 +49,15 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		if(rootDef != null)
-			obj = defs.get(rootDef).toJSONSchema().getAsJsonObject();
+			obj = defs.get(rootDef).toJSONSchema(varManager).getAsJsonObject();
 
 		JsonObject jsonDefs = new JsonObject();
 		for(Entry<String, Assertion> a : defs.entrySet())
 			if(!a.getKey().equals(rootDef))
-				jsonDefs.add(a.getKey(), a.getValue().toJSONSchema().getAsJsonObject());
+				jsonDefs.add(a.getKey(), a.getValue().toJSONSchema(varManager).getAsJsonObject());
 
 		obj.add("$defs", jsonDefs);
 
@@ -119,20 +121,20 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessEnv toWitnessAlgebra() throws REException {
-		WitnessEnv env = new WitnessEnv();
+	public WitnessEnv toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+		WitnessEnv newEnv = new WitnessEnv(this.varManager);
 
 		for(Entry<String, Assertion> entry : defs.entrySet())
 			if(entry.getKey().equals(rootDef))
-				env.setRootVar(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
+				newEnv.setRootVar(entry.getKey(), entry.getValue().toWitnessAlgebra(this.varManager, this));
 			else
-				env.add(new WitnessVar(entry.getKey()), entry.getValue().toWitnessAlgebra());
+				newEnv.add(this.varManager.buildVar(entry.getKey()), entry.getValue().toWitnessAlgebra(this.varManager, this));
 
-		env.reachableRefs(null, null);
-		env.checkLoopRef(null, null);
-		env.buildOBDD_notElimination();
+		newEnv.reachableRefs(null, null);
+		newEnv.checkLoopRef(null, null);
+		newEnv.buildOBDD_notElimination();
 
-		return env;
+		return newEnv;
 	}
 
 	public Assertion getDef(String ref){

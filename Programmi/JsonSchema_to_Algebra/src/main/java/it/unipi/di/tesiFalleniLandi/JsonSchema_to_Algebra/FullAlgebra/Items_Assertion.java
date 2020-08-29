@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessItems;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -42,19 +43,19 @@ public class Items_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonObject toJSONSchema() {
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
 		JsonArray array = new JsonArray();
 		JsonObject obj = new JsonObject();
 
 		if(itemsArray != null) {
 			for (Assertion assertion : itemsArray)
-				array.add(assertion.toJSONSchema());
+				array.add(assertion.toJSONSchema(rootVar));
 
 			obj.add("items", array);
 		}
 
 		if(additionalItems != null)
-			obj.add("additionalItems", additionalItems.toJSONSchema());
+			obj.add("additionalItems", additionalItems.toJSONSchema(rootVar));
 	
 		return obj;
 	}
@@ -183,14 +184,14 @@ public class Items_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessItems witIte = new WitnessItems();
 
-		if(additionalItems != null) witIte.setAdditionalItems(additionalItems.toWitnessAlgebra());
+		if(additionalItems != null) witIte.setAdditionalItems(additionalItems.toWitnessAlgebra(varManager, env));
 
 		if(itemsArray != null)
 			for(Assertion a : itemsArray)
-				witIte.addItems(a.toWitnessAlgebra());
+				witIte.addItems(a.toWitnessAlgebra(varManager, env));
 
 		return witIte;
 	}

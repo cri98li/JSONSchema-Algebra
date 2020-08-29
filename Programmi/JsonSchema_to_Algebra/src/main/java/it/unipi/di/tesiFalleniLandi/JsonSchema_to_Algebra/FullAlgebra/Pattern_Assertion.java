@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -30,7 +31,7 @@ public class Pattern_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		if(pattern.isComplex()) return pattern.toJSONSchema(); //TODO: devo forse chiuderlo dentro un allOf? come evito i duplicati?
 		else obj.addProperty("pattern", pattern.getOriginalPattern());
@@ -59,7 +60,7 @@ public class Pattern_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		return new WitnessPattern(pattern);
 	}
 }

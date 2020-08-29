@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -45,12 +46,12 @@ public class AnyOf_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonObject toJSONSchema() {
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		JsonArray array = new JsonArray();
 
 		for(Assertion assertion : orList) {
-			array.add(assertion.toJSONSchema());
+			array.add(assertion.toJSONSchema(rootVar));
 		}
 
 		obj.add("anyOf", array);
@@ -103,10 +104,10 @@ public class AnyOf_Assertion implements Assertion{
 		return AlgebraStrings.ANYOF(str.substring(AlgebraStrings.COMMA.length()));
 	}
 
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessOr or = new WitnessOr();
 		for(Assertion a : orList)
-			or.add(a.toWitnessAlgebra());
+			or.add(a.toWitnessAlgebra(varManager, env));
 
 		return or;
 	}

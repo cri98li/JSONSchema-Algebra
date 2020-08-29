@@ -3,9 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -31,17 +29,17 @@ public class IfThenElse_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 
 		if(ifStatement != null)
-			obj.add("if", ifStatement.toJSONSchema());
+			obj.add("if", ifStatement.toJSONSchema(rootVar));
 
 		if(thenStatement != null)
-			obj.add("then", thenStatement.toJSONSchema());
+			obj.add("then", thenStatement.toJSONSchema(rootVar));
 
 		if(elseStatement != null)
-			obj.add("else", elseStatement.toJSONSchema());
+			obj.add("else", elseStatement.toJSONSchema(rootVar));
 
 		return obj;
 	}
@@ -100,24 +98,24 @@ public class IfThenElse_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessOr or = new WitnessOr();
 		if(elseStatement == null){
-			or.add(ifStatement.not().toWitnessAlgebra());
-			or.add(thenStatement.toWitnessAlgebra());
+			or.add(ifStatement.not().toWitnessAlgebra(varManager, env));
+			or.add(thenStatement.toWitnessAlgebra(varManager, env));
 
 			return or;
 		}
 
 		WitnessAnd and = new WitnessAnd();
 
-		and.add(ifStatement.toWitnessAlgebra());
-		and.add(thenStatement.toWitnessAlgebra());
+		and.add(ifStatement.toWitnessAlgebra(varManager, env));
+		and.add(thenStatement.toWitnessAlgebra(varManager, env));
 		or.add(and);
 
 		WitnessAnd and2 = new WitnessAnd();
-		and2.add(ifStatement.not().toWitnessAlgebra());
-		and2.add(elseStatement.toWitnessAlgebra());
+		and2.add(ifStatement.not().toWitnessAlgebra(varManager, env));
+		and2.add(elseStatement.toWitnessAlgebra(varManager, env));
 		or.add(and2);
 
 		return or;

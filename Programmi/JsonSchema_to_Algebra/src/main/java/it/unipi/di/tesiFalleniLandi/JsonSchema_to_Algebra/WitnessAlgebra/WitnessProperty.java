@@ -62,31 +62,31 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(value.getClass() == WitnessBoolean.class && !((WitnessBoolean)value).getValue()) return value;
         if(a.getClass() == this.getClass())
-            return this.mergeElement((WitnessProperty) a);
+            return this.mergeElement((WitnessProperty) a, varManager);
 
         return null;
     }
 
     @Override
-    public WitnessAssertion merge() throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
         //Boolean Rewritings
         if(value.getClass() == WitnessBoolean.class && ((WitnessBoolean) value).getValue()) return value;
 
         WitnessProperty newProp = this.clone();
-        newProp.value = value.merge();
+        newProp.value = value.merge(varManager);
 
         return newProp;
     }
 
-    public WitnessAssertion mergeElement(WitnessProperty a) throws REException {
+    public WitnessAssertion mergeElement(WitnessProperty a, WitnessVarManager varManager) throws REException {
         WitnessProperty result = null;
 
-        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value) != null)
-            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value));
+        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value, varManager) != null)
+            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value, varManager));
 
         if(a.value.equals(this.value))
             result =  new WitnessProperty(a.key.union(this.key), this.value);
@@ -174,16 +174,16 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         if(value.getClass() == WitnessAnd.class && ((WitnessAnd) value).getIfUnitaryAnd() != null) //to avoid AND[ref(x)]
             value = ((WitnessAnd) value).getIfUnitaryAnd();
 
         if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
-            newDefinitions.addAll(value.varNormalization_separation(env));
+            newDefinitions.addAll(value.varNormalization_separation(env, varManager));
 
-            WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(value));
+            WitnessVar newVar = varManager.buildVar(varManager.getName(value));
 
             newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, value));
 
@@ -225,7 +225,7 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 }

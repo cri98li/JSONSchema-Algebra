@@ -2,9 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -25,8 +23,8 @@ public class ExName_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
-		return new Not_Assertion(new Names_Assertion(names)).toJSONSchema();
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
+		return new Not_Assertion(new Names_Assertion(names)).toJSONSchema(rootVar);
 	}
 	
 	@Override
@@ -52,7 +50,7 @@ public class ExName_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		return WitnessPattReq.build(Utils_PattOfS.pattOfS(names), new WitnessBoolean(true));
 	}
 }

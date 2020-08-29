@@ -3,9 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessProperty;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,7 +60,7 @@ public class Properties_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonObject toJSONSchema() {
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		
 		if(properties_patternProperties != null && !properties_patternProperties.isEmpty()){
@@ -72,9 +70,9 @@ public class Properties_Assertion implements Assertion{
 
 			for(ComplexPattern key : keys) {
 				if(key.domainSize() == 1 && !key.isComplex()) //TODO: verificare
-					tmpProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema());
+					tmpProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema(rootVar));
 				else
-					tmpPattProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema());
+					tmpPattProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema(rootVar));
 			}
 
 			if(tmpPattProps.size() > 0)
@@ -84,7 +82,7 @@ public class Properties_Assertion implements Assertion{
 		}
 		
 		if(additionalProperties != null)
-			obj.add("additionalProperties", additionalProperties.toJSONSchema());
+			obj.add("additionalProperties", additionalProperties.toJSONSchema(rootVar));
 		
 		return obj;
 	}
@@ -207,7 +205,7 @@ public class Properties_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessAnd and = new WitnessAnd();
 		ComplexPattern usedPatt = null;//= ComplexPattern.createFromRegexp(".*").complement();//TODO: correggere
 
@@ -228,7 +226,7 @@ public class Properties_Assertion implements Assertion{
 
 		for (Entry<ComplexPattern, Assertion> entry : entrySetPatt) {
 			ComplexPattern p = entry.getKey().clone();
-			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra());
+			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra(varManager, env));
 			and.add(pattProp);
 			if(usedPatt == null) usedPatt = p;
 			else usedPatt = usedPatt.union(p);
@@ -236,12 +234,11 @@ public class Properties_Assertion implements Assertion{
 
 		if (additionalProperties != null) {
 			WitnessProperty addProp;
-			if(usedPatt == null){
-				addProp = new WitnessProperty(ComplexPattern.createFromRegexp(".*"), additionalProperties.toWitnessAlgebra());
-			}
-			else {
-				addProp = new WitnessProperty(usedPatt.complement(), additionalProperties.toWitnessAlgebra());
-			}
+			if(usedPatt == null)
+				addProp = new WitnessProperty(ComplexPattern.createFromRegexp(".*"), additionalProperties.toWitnessAlgebra(varManager, env));
+			else
+				addProp = new WitnessProperty(usedPatt.complement(), additionalProperties.toWitnessAlgebra(varManager, env));
+
 			and.add(addProp);
 		}
 

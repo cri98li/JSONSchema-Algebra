@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessIfBoolThen;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -19,10 +20,10 @@ public class IfBoolThen_Assertion implements Assertion {
     }
 
     @Override
-    public JsonElement toJSONSchema() {
+    public JsonElement toJSONSchema(WitnessVarManager rootVar) {
         Type_Assertion t = new Type_Assertion();
         t.add("bool");
-        return new IfThenElse_Assertion(t, new Const_Assertion(new JsonPrimitive(value)), null).toJSONSchema();
+        return new IfThenElse_Assertion(t, new Const_Assertion(new JsonPrimitive(value)), null).toJSONSchema(rootVar);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class IfBoolThen_Assertion implements Assertion {
     }
 
     @Override
-    public WitnessIfBoolThen toWitnessAlgebra() throws REException {
+    public WitnessIfBoolThen toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
         return new WitnessIfBoolThen(value);
     }
 }

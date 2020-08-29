@@ -32,7 +32,7 @@ public class Const_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 
 		if(value.isJsonNull()) {
@@ -162,7 +162,7 @@ public class Const_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		if (value.isJsonNull()) return new WitnessType(AlgebraStrings.TYPE_NULL);
 
 		if (value.isJsonObject()) {
@@ -174,9 +174,9 @@ public class Const_Assertion implements Assertion{
 
 			for (Map.Entry<String, JsonElement> entry : entrySet) {
 				req.add(entry.getKey());
-				and.add(new WitnessProperty(ComplexPattern.createFromName(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra()));
+				and.add(new WitnessProperty(ComplexPattern.createFromName(entry.getKey()), new Const_Assertion(entry.getValue()).toWitnessAlgebra(varManager, env)));
 			}
-			and.add(req.toWitnessAlgebra());
+			and.add(req.toWitnessAlgebra(varManager, env));
 			and.add(new WitnessPro(Double.parseDouble("" + entrySet.size()), Double.parseDouble("" + entrySet.size())));
 			return and;
 		}
@@ -188,7 +188,7 @@ public class Const_Assertion implements Assertion{
 			WitnessItems items = new WitnessItems();
 			JsonArray array = value.getAsJsonArray();
 			for (JsonElement element : array)
-				items.addItems(new Const_Assertion(element).toWitnessAlgebra());
+				items.addItems(new Const_Assertion(element).toWitnessAlgebra(varManager, env));
 
 			and.add(new WitnessContains(Long.parseLong("" + array.size()), Long.parseLong("" + array.size()), new WitnessBoolean(true)));
 			and.add(items);

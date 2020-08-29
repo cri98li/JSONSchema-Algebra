@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBet;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -42,7 +43,7 @@ public class Bet_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		
 		if(min != null) obj.addProperty("minimum", min);
@@ -92,7 +93,7 @@ public class Bet_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessBet toWitnessAlgebra() throws REException {
+	public WitnessBet toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		Double min = null;
 		Double max = null;
 

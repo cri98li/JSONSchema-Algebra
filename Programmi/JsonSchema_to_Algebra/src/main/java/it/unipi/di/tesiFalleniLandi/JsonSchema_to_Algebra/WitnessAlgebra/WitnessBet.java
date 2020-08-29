@@ -38,7 +38,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -53,32 +53,32 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         logger.trace("Merging {} with {}", a, this);
 
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(varManager, null);
         }
 
         if(a.getClass() == this.getClass())
-            return this.mergeElement((WitnessBet) a);
+            return this.mergeElement((WitnessBet) a, varManager);
         if(a.getClass() == WitnessXBet.class)
-            return this.mergeElement((WitnessXBet) a);
+            return this.mergeElement((WitnessXBet) a, varManager);
 
         return null;
     }
 
 
 
-    public WitnessAssertion mergeElement(WitnessBet a) throws REException {
+    public WitnessAssertion mergeElement(WitnessBet a,WitnessVarManager varManager) throws REException {
         if(a.min > max || a.max < min){
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(varManager, null);
         }
 
         Double m = (min < a.min) ? a.min : min;
@@ -88,12 +88,12 @@ public class WitnessBet implements WitnessAssertion{
         return (this.equals(newBet) && a.equals(newBet)) ? null : newBet;
     }
 
-    public WitnessAssertion mergeElement(WitnessXBet a) throws REException {
+    public WitnessAssertion mergeElement(WitnessXBet a, WitnessVarManager varManager) throws REException {
         if (a.min >= max || a.max <= min) {
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(null, null);
         }
         WitnessAnd and = new WitnessAnd();
 
@@ -139,7 +139,7 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -188,7 +188,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 

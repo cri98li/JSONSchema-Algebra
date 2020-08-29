@@ -3,10 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOr;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +42,7 @@ public class PatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		Type_Assertion t = new Type_Assertion();
 		t.add(AlgebraStrings.TYPE_OBJECT);
 		AllOf_Assertion and = new AllOf_Assertion();
@@ -56,7 +53,7 @@ public class PatternRequired_Assertion implements Assertion{
 			and.add(new Not_Assertion(pro));
 		}
 
-		return new IfThenElse_Assertion(t, and, null).toJSONSchema();
+		return new IfThenElse_Assertion(t, and, null).toJSONSchema(rootVar);
 	}
 	
 	@Override
@@ -114,18 +111,18 @@ public class PatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(AlgebraStrings.TYPE_OBJECT);
-		WitnessAssertion type = tmp.not().toWitnessAlgebra();
+		WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager, env);
 
 		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 
 		for(Map.Entry<ComplexPattern, Assertion> entry : entrySet) {
 			ComplexPattern p = entry.getKey().clone();
-			WitnessPattReq pattReq = WitnessPattReq.build(p, entry.getValue().toWitnessAlgebra());
+			WitnessPattReq pattReq = WitnessPattReq.build(p, entry.getValue().toWitnessAlgebra(varManager, env));
 			and.add(pattReq);
 		}
 

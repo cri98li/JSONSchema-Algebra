@@ -11,13 +11,13 @@ public class MainClass_Algebra {
 		
         Assertion schema = Utils_FullAlgebra.parseFile(path);
 
-		JsonObject JSON = (JsonObject) schema.toJSONSchema();
+		JsonObject JSON = (JsonObject) schema.toJSONSchema(null);
 		System.out.println(JSON.toString());
 
 		schema = schema.notElimination();
 		System.out.println(Utils.beauty(schema.toGrammarString()));
 
-		JSON = (JsonObject) schema.toJSONSchema();
+		JSON = (JsonObject) schema.toJSONSchema(null);
 		System.out.println(JSON.toString());
 	}
 }

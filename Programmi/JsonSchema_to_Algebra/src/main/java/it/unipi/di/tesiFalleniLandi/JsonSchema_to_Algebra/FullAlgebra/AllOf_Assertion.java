@@ -7,6 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAnd;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -66,7 +67,7 @@ public class AllOf_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		// allOf containing false
 		if(containsFalseBooleanAssertion){
 			JsonArray array = new JsonArray();
@@ -81,7 +82,7 @@ public class AllOf_Assertion implements Assertion{
 			JsonArray array = new JsonArray();
 			
 			for(Assertion assertion : andList)
-				array.add(assertion.toJSONSchema());
+				array.add(assertion.toJSONSchema(rootVar));
 
 			JsonObject obj = new JsonObject();
 			obj.add("allOf", array);
@@ -93,7 +94,7 @@ public class AllOf_Assertion implements Assertion{
 
 			for (Assertion assertion : andList)
 				if (assertion.getClass() != Boolean_Assertion.class) {
-					obj = Utils_JSONSchema.mergeJsonObject(obj, assertion.toJSONSchema().getAsJsonObject());
+					obj = Utils_JSONSchema.mergeJsonObject(obj, assertion.toJSONSchema(rootVar).getAsJsonObject());
 				}
 
 			return obj;
@@ -151,11 +152,11 @@ public class AllOf_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		WitnessAnd and = new WitnessAnd();
 
 		for(Assertion a : andList)
-			and.add(a.toWitnessAlgebra());
+			and.add(a.toWitnessAlgebra(varManager, env));
 
 		return and;
 	}

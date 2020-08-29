@@ -19,17 +19,26 @@ public class WitnessEnv implements WitnessAssertion {
     private BiMap<WitnessVar, WitnessVar> coVar; //maintain the relation between the variables and the complement variables
     private WitnessVar rootVar; //indicate the root variable
     protected WitnessBDD bdd;
+    protected WitnessVarManager variableNamingSystem;
 
     private LinkedList<WitnessVar> varToBeElaborated; // notElimination + buildOBDD
 
-    public WitnessEnv(){
+    private WitnessEnv(){
         varList = new HashMap<>();
-        bdd = new WitnessBDD();
+        coVar = HashBiMap.create();
+        varToBeElaborated = new LinkedList<>();
+    }
+
+    public WitnessEnv(WitnessVarManager manager){
+        varList = new HashMap<>();
+        coVar = HashBiMap.create(); //init BiMap
+        varToBeElaborated = new LinkedList<>();
+        variableNamingSystem = manager;
+        bdd = new WitnessBDD(variableNamingSystem);
         varList.put(bdd.getFalseVar(), new WitnessBoolean(false));
         varList.put(bdd.getTrueVar(), new WitnessBoolean(true));
-        coVar = HashBiMap.create(); //init BiMap
         coVar.put(bdd.getFalseVar(), bdd.getTrueVar());
-        varToBeElaborated = new LinkedList<>();
+
         logger.trace("Creating an empty WitnessEnv");
     }
 
@@ -39,7 +48,7 @@ public class WitnessEnv implements WitnessAssertion {
 
         logger.trace("Adding with complement {}", value);
 
-        WitnessVar var = new WitnessVar(Utils_WitnessAlgebra.getName(value));
+        WitnessVar var = variableNamingSystem.buildVar(variableNamingSystem.getName(value));
         add(var, value);
 
         buildOBDD_notElimination(); //complete the variable and build obdd
@@ -149,7 +158,7 @@ public class WitnessEnv implements WitnessAssertion {
             if (iterazioniSenzaDiminuzione == booleanExpressions.size()) {
                 // (forcing the current??)
                 Map.Entry<WitnessVar, Float> first = booleanExpressions.removeFirst();
-                first.getKey().forceOBDD(this);
+                first.getKey().forceOBDD(this, variableNamingSystem);
                 booleanExpressions.addLast(first);
                 iterazioniSenzaDiminuzione = 0;
                 logger.warn("Forcing new obdd {}, that should not have happened", first.getKey());
@@ -159,7 +168,7 @@ public class WitnessEnv implements WitnessAssertion {
             WitnessVar first = booleanExpressionsTemp.removeFirst();
 
             try {
-                WitnessVar obddName = varList.get(first).buildOBDD(this);
+                WitnessVar obddName = varList.get(first).buildOBDD(this, variableNamingSystem);
 
                 //the variable already exists -- > it can be renamed
                 if(varList.containsKey(obddName)){
@@ -175,14 +184,14 @@ public class WitnessEnv implements WitnessAssertion {
                         complName = coVar.inverse().remove(first); //QUI
 
                     bdd.rename(first, obddName);
-                    WitnessVar.rename(first, obddName);
+                    variableNamingSystem.rename(first, obddName);
 
                     //same for the complement
                     varList.remove(complName);
                     bdd.rename(complName, getCoVar(obddName));
                     booleanExpressionsTemp.remove(complName);
                     booleanExpressionsTemp.remove(getCoVar(obddName));
-                    WitnessVar.rename(complName, getCoVar(obddName));
+                    variableNamingSystem.rename(complName, getCoVar(obddName));
 
 
                 }else {
@@ -204,7 +213,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     public WitnessAssertion getDefinition(WitnessVar var){
         if(!varList.containsKey(var))
-            throw new RuntimeException("Schema with definition-reference not completed. that should not have happened");
+            throw new RuntimeException("Schema with definition-reference not completed: "+var.getName()+". that should not have happened");
         return varList.get(var);
     }
 
@@ -222,9 +231,10 @@ public class WitnessEnv implements WitnessAssertion {
         }
     }
 
-    public void setRootVar(WitnessVar key, WitnessAssertion value) {
-        add(key, value);
-        rootVar = key;
+    public void setRootVar(String key, WitnessAssertion value) {
+        WitnessVar var = variableNamingSystem.buildVar(key);
+        add(var, value);
+        rootVar = var;
     }
 
     public boolean containsVar(WitnessVar var){
@@ -267,7 +277,7 @@ public class WitnessEnv implements WitnessAssertion {
             if (var.getName().startsWith(AlgebraStrings.NOT_DEFS))
                 complementName = var.getName().substring(AlgebraStrings.NOT_DEFS.length());
 
-            WitnessVar complementVarName = new WitnessVar(complementName);
+            WitnessVar complementVarName = variableNamingSystem.buildVar(complementName);
 
             coVar.put(var, complementVarName);
             tmp.add(complementVarName);
@@ -316,11 +326,11 @@ public class WitnessEnv implements WitnessAssertion {
                 if (first.getName().startsWith(AlgebraStrings.NOT_DEFS))
                     complementName = first.getName().substring(AlgebraStrings.NOT_DEFS.length());
 
-                WitnessVar complementVarName = new WitnessVar(complementName);
+                WitnessVar complementVarName = variableNamingSystem.buildVar(complementName);
 
                 if(coVar.containsValue(complementVarName)){ //type[all].not() == false --> so type[all] == true, i can remove it
                     varList.remove(first);
-                    WitnessVar.rename(first, coVar.inverse().get(complementVarName));
+                    variableNamingSystem.rename(first, coVar.inverse().get(complementVarName));
                     continue;
                 }
                 coVar.put(first, complementVarName);
@@ -350,25 +360,25 @@ public class WitnessEnv implements WitnessAssertion {
 
                 if (key.getName().startsWith(AlgebraStrings.NOT_DEFS))
                     complementName = key.getName().substring(AlgebraStrings.NOT_DEFS.length());
-                WitnessVar complementVarName = new WitnessVar(complementName);
+                WitnessVar complementVarName = variableNamingSystem.buildVar(complementName);
 
                 //does the complement already exist?
                 WitnessAssertion not = value.not(this);
                 WitnessVar obddName = null;
 
                 if(not.isBooleanExp())
-                    obddName = not.buildOBDD(this);
+                    obddName = not.buildOBDD(this, variableNamingSystem);
                 else
                     obddName = bdd.createVar(); //create a variable that represents it
 
                 if (varList.containsKey(obddName)) {
                     if(coVar.containsValue(obddName)) {
                         varList.remove(key);
-                        WitnessVar.rename(key, coVar.inverse().get(obddName));
+                        variableNamingSystem.rename(key, coVar.inverse().get(obddName));
                     }else
                         coVar.put(key, obddName);
                     completed.add(obddName);
-                    WitnessVar.rename(complementVarName.getName(), obddName.getName());
+                    variableNamingSystem.rename(complementVarName.getName(), obddName.getName());
                     iterazioniSenzaDiminuzione = 0;
                     continue;
                 }
@@ -409,20 +419,19 @@ public class WitnessEnv implements WitnessAssertion {
 
 
     @Override
-    public WitnessEnv mergeWith(WitnessAssertion a) throws REException {
+    public WitnessEnv mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public WitnessAssertion merge() throws REException {
-        WitnessEnv newEnv = new WitnessEnv();
-        newEnv.coVar = coVar;
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+        WitnessEnv newEnv = cloneNoWitnessVar();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
             if(entry.getKey().equals(rootVar))
-                newEnv.setRootVar(entry.getKey(), entry.getValue().merge());
+                newEnv.setRootVar(entry.getKey().getName(), entry.getValue().merge(varManager));
             else
-                newEnv.add(entry.getKey(), entry.getValue().merge());
+                newEnv.add(entry.getKey(), entry.getValue().merge(varManager));
 
         newEnv.varToBeElaborated = new LinkedList<>(varToBeElaborated);
 
@@ -452,14 +461,23 @@ public class WitnessEnv implements WitnessAssertion {
     @Override
     public WitnessEnv clone() {
         logger.debug("Cloning WitnessEnv");
+
+        WitnessEnv clone = cloneNoWitnessVar();
+
+        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
+            clone.varList.put(entry.getKey(), entry.getValue().clone());
+
+        return clone;
+    }
+
+    private WitnessEnv cloneNoWitnessVar(){
         WitnessEnv clone = new WitnessEnv();
+
         clone.rootVar = rootVar;
         clone.coVar = coVar;
         clone.bdd = bdd;
         clone.varToBeElaborated = new LinkedList<>(varToBeElaborated);
-
-        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
-            clone.varList.put(entry.getKey(), entry.getValue().clone());
+        clone.variableNamingSystem = variableNamingSystem;
 
         return clone;
     }
@@ -506,11 +524,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     @Override
     public WitnessEnv groupize() throws WitnessException, REException {
-        WitnessEnv env = new WitnessEnv();
-        env.coVar = coVar;
-        env.rootVar = rootVar;
-        env.bdd = bdd;
-        env.varToBeElaborated = varToBeElaborated;
+        WitnessEnv env = cloneNoWitnessVar();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet()) {
             if(entry.getValue().getClass() == WitnessAnd.class || entry.getValue().getClass() == WitnessBoolean.class)
@@ -541,11 +555,11 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet())
-            newDefinitions.addAll(entry.getValue().varNormalization_separation(this));
+            newDefinitions.addAll(entry.getValue().varNormalization_separation(this, this.variableNamingSystem));
 
         //update the environment with the new definitions
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : newDefinitions){
@@ -564,10 +578,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     @Override
     public WitnessEnv varNormalization_expansion(WitnessEnv env) throws WitnessException {
-        WitnessEnv newEnv = new WitnessEnv();
-        newEnv.coVar = coVar;
-        newEnv.rootVar = rootVar;
-        newEnv.bdd = bdd;
+        WitnessEnv newEnv = cloneNoWitnessVar();
         LinkedList<Map.Entry<WitnessVar, Integer>> orderedList = new LinkedList(); //orderList: pair list <varName, #varToBeExpanded>
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet()) {
@@ -591,11 +602,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     public WitnessEnv DNF() throws WitnessException {
-        WitnessEnv newEnv = new WitnessEnv();
-        newEnv.coVar=coVar;
-        newEnv.rootVar = rootVar;
-        newEnv.bdd = bdd;
-        newEnv.varToBeElaborated = varToBeElaborated;
+        WitnessEnv newEnv = cloneNoWitnessVar();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
             newEnv.varList.put(entry.getKey(), (entry.getValue()).DNF());
@@ -622,7 +629,7 @@ public class WitnessEnv implements WitnessAssertion {
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException("buildOBDD on WitnessEnv");
     }
 
@@ -639,9 +646,9 @@ public class WitnessEnv implements WitnessAssertion {
             for (Map.Entry<WitnessVar, WitnessAssertion> entry : entrySet) {
 
                 if (entry.getValue().getClass() == WitnessAnd.class)
-                    newDefinitions.addAll(((WitnessAnd) entry.getValue()).objectPrepare(this));
+                    newDefinitions.addAll(((WitnessAnd) entry.getValue()).objectPrepare(this, variableNamingSystem));
                 else if (entry.getValue().getClass() == WitnessOr.class)
-                    newDefinitions.addAll(((WitnessOr) entry.getValue()).objectPrepare(this));
+                    newDefinitions.addAll(((WitnessOr) entry.getValue()).objectPrepare(this, variableNamingSystem));
                     //else if(entry.getValue().getClass() == WitnessType.class && entry.getValue().equals(new WitnessType("obj"))){ //only type object
                 else {
                     // in case of definitions likes:
@@ -649,7 +656,7 @@ public class WitnessEnv implements WitnessAssertion {
                     // we have to prepare that definition but the assertion type[obj] is not contained in boolean operator (AND, OR)
                     WitnessAnd tmp = new WitnessAnd();
                     tmp.add(entry.getValue());
-                    newDefinitions.addAll(tmp.objectPrepare(this)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
+                    newDefinitions.addAll(tmp.objectPrepare(this, variableNamingSystem)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
                     /*if (tmp.getIfUnitaryAnd() != null)
                         varList.put(entry.getKey(), tmp.getIfUnitaryAnd());
                     else
@@ -671,7 +678,7 @@ public class WitnessEnv implements WitnessAssertion {
             newDefinitions = new LinkedList<>();
             for(Map.Entry<String, Integer> newDef : tmp) {
                 String name = newDef.getKey();
-                WitnessVar varName = new WitnessVar(name);
+                WitnessVar varName = variableNamingSystem.buildVar(name);
                 if (name.equals(varName.getName())) {//se NON è stata rinominata è una variabile nuova
                     newDefinitions.add(new AbstractMap.SimpleEntry<>(varName, getDefinition(varName)));
 
@@ -687,7 +694,7 @@ public class WitnessEnv implements WitnessAssertion {
                 WitnessAssertion normalizedValue = newDef.getValue();
 
                 normalizedValue = normalizedValue.varNormalization_expansion(this);
-                normalizedValue = normalizedValue.merge();
+                normalizedValue = normalizedValue.merge(variableNamingSystem);
                 normalizedValue = normalizedValue.groupize();
                 normalizedValue = normalizedValue.DNF();
 

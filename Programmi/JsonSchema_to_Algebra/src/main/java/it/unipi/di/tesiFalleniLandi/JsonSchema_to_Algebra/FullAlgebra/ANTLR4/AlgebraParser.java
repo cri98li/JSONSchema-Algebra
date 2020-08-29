@@ -608,7 +608,7 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		for(int i = 0; i < idList.size(); i++) {
 			if(idList.get(i).getClass() == GrammaticaParser.NewComplexPatternStringContext.class) {
 				try {
-					orPattReq.add(ComplexPattern.createFromRegexp((idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString())), (Assertion) list.get(i));
+					orPattReq.add(ComplexPattern.createFromRegexp(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString()), (Assertion) visit(list.get(i)));
 				} catch (java.lang.IllegalArgumentException | REException e) {
 					throw new ParseCancellationException("REException: "+e.getMessage());
 				}

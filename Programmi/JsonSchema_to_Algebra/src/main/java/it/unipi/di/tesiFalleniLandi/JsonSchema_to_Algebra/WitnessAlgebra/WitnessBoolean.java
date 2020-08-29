@@ -36,7 +36,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         if(a.getClass() == this.getClass()) return this.mergeElement((WitnessBoolean) a);
 
         if(this.value) return a; // S AND true = S
@@ -44,7 +44,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -88,7 +88,7 @@ public class WitnessBoolean implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -137,7 +137,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         return value ? env.bdd.getTrueVar() : env.bdd.getFalseVar();
     }
 }

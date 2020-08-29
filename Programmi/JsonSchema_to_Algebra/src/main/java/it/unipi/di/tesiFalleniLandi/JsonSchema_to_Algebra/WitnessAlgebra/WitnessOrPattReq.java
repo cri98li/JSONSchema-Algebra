@@ -65,12 +65,12 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         return null;
     }
 
     @Override
-    public WitnessAssertion merge() throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
         return this;
     }
 
@@ -133,11 +133,11 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         for(WitnessPattReq el : reqList){
-            newDefinitions.addAll(el.varNormalization_separation(env));
+            newDefinitions.addAll(el.varNormalization_separation(env, varManager));
         }
 
         return newDefinitions;
@@ -179,7 +179,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 

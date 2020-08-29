@@ -76,7 +76,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         WitnessAssertion result = null;
 
         if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
@@ -95,7 +95,7 @@ public class WitnessItems implements WitnessAssertion{
                 else
                     break;
 
-            if (a.getClass() == this.getClass()) result = this.mergeElement((WitnessItems) a);
+            if (a.getClass() == this.getClass()) result = this.mergeElement((WitnessItems) a, varManager);
 
         }
 
@@ -104,20 +104,20 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
         WitnessItems newWitnessItems = new WitnessItems();
         for(WitnessAssertion item : items)
-            newWitnessItems.addItems(item.merge());
+            newWitnessItems.addItems(item.merge(varManager));
 
         if(additionalItems != null)
-            newWitnessItems.setAdditionalItems(additionalItems.merge());
+            newWitnessItems.setAdditionalItems(additionalItems.merge(varManager));
 
         newWitnessItems.blocked = blocked;
 
         return newWitnessItems;
     }
 
-    public WitnessAssertion mergeElement(WitnessItems a) throws REException{
+    public WitnessAssertion mergeElement(WitnessItems a, WitnessVarManager varManager) throws REException{
         logger.trace("Merging {} with {}", a, this);
 
         //items[;bool]
@@ -152,12 +152,12 @@ public class WitnessItems implements WitnessAssertion{
         ite.additionalItems = a.additionalItems;
         if (a.additionalItems == null) ite.additionalItems = additionalItems;
         if (a.additionalItems != null && this.additionalItems != null)
-            ite.additionalItems = a.additionalItems.clone().mergeWith(this.additionalItems);
+            ite.additionalItems = a.additionalItems.clone().mergeWith(this.additionalItems, varManager);
 
         int i;
         int min = (a.items.size() < items.size()) ? a.items.size() : items.size();
         for (i = 0; i < min; i++) {
-            WitnessAssertion tmp = items.get(i).mergeWith(a.items.get(i));
+            WitnessAssertion tmp = items.get(i).mergeWith(a.items.get(i), varManager);
             if(tmp != null)
                 ite.addItems(tmp);
             else{
@@ -171,7 +171,7 @@ public class WitnessItems implements WitnessAssertion{
 
 
         for(; i < a.items.size(); i++) {
-            WitnessAssertion tmp = a.items.get(i).mergeWith(this.additionalItems);
+            WitnessAssertion tmp = a.items.get(i).mergeWith(this.additionalItems, varManager);
             if(tmp != null)
                 ite.addItems(tmp);
             else
@@ -180,7 +180,7 @@ public class WitnessItems implements WitnessAssertion{
 
 
         for(; i < items.size(); i++) {
-            WitnessAssertion tmp = items.get(i).mergeWith(a.additionalItems);
+            WitnessAssertion tmp = items.get(i).mergeWith(a.additionalItems, varManager);
             if(tmp != null)
                 ite.addItems(tmp);
             else
@@ -341,15 +341,15 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         if(items != null){
             for(int i = 0; i < items.size(); i++){
                 if(items.get(i).getClass() != WitnessBoolean.class && items.get(i).getClass() != WitnessVar.class) {
-                    newDefinitions.addAll(items.get(i).varNormalization_separation(env));
+                    newDefinitions.addAll(items.get(i).varNormalization_separation(env, varManager));
 
-                    WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(items.get(i)));
+                    WitnessVar newVar = varManager.buildVar(varManager.getName(items.get(i)));
                     newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, items.get(i)));
                     items.set(i, newVar);
                 }
@@ -358,9 +358,9 @@ public class WitnessItems implements WitnessAssertion{
 
         if(additionalItems != null){
             if(additionalItems.getClass() != WitnessBoolean.class && additionalItems.getClass() != WitnessVar.class) {
-                newDefinitions.addAll(additionalItems.varNormalization_separation(env));
+                newDefinitions.addAll(additionalItems.varNormalization_separation(env, varManager));
 
-                WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(additionalItems));
+                WitnessVar newVar = varManager.buildVar(varManager.getName(additionalItems));
                 newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, additionalItems));
                 additionalItems = newVar;
             }
@@ -418,7 +418,7 @@ public class WitnessItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 

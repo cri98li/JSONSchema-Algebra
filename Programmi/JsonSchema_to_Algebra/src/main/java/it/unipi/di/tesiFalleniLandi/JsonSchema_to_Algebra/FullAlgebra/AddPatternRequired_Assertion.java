@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -45,7 +46,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		Type_Assertion type = new Type_Assertion();
 		type.add(AlgebraStrings.TYPE_OBJECT);
 		Properties_Assertion prop = new  Properties_Assertion();
@@ -57,7 +58,7 @@ public class AddPatternRequired_Assertion implements Assertion{
 
 		IfThenElse_Assertion ifThen = new IfThenElse_Assertion(type, new Not_Assertion(prop), null);
 
-		return ifThen.toJSONSchema();
+		return ifThen.toJSONSchema(rootVar);
 	}
 
 	@Override
@@ -108,12 +109,12 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessPattReq toWitnessAlgebra() throws REException {
+	public WitnessPattReq toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		ComplexPattern p = ComplexPattern.createFromRegexp(".*");
 
 		for(ComplexPattern pattern : pattList)
 			p = p.intersect(pattern);
 
-		return WitnessPattReq.build(p.complement(), additionalProperties.toWitnessAlgebra());
+		return WitnessPattReq.build(p.complement(), additionalProperties.toWitnessAlgebra(varManager, env));
 	}
 }

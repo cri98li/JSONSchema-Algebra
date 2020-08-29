@@ -60,7 +60,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) {
             return this.mergeElement((WitnessPro) a);
@@ -70,7 +70,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -86,7 +86,7 @@ public class WitnessPro implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_OBJECT);
 
-            result = type.not().toWitnessAlgebra();
+            result = type.not().toWitnessAlgebra(null, null);
         }else
             result = pro;
 
@@ -130,7 +130,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -179,7 +179,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 }

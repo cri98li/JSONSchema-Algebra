@@ -41,7 +41,7 @@ public class Type_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 
 		if(types.contains(AlgebraStrings.TYPE_NUMNOTINT)){
@@ -49,7 +49,7 @@ public class Type_Assertion implements Assertion{
 			if(types.size() == 1){
 				Type_Assertion type = new Type_Assertion();
 				type.add(AlgebraStrings.TYPE_INTEGER);
-				return new Not_Assertion(type).toJSONSchema();
+				return new Not_Assertion(type).toJSONSchema(rootVar);
 			}
 
 			Type_Assertion type = new Type_Assertion();
@@ -61,7 +61,7 @@ public class Type_Assertion implements Assertion{
 				if(!str.equals(AlgebraStrings.TYPE_NUMNOTINT))
 					type.add(str);
 
-			return or.toJSONSchema();
+			return or.toJSONSchema(rootVar);
 		}
 
 
@@ -149,7 +149,7 @@ public class Type_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		if(types.size() == 1) {
 			if(types.get(0).equals(AlgebraStrings.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();

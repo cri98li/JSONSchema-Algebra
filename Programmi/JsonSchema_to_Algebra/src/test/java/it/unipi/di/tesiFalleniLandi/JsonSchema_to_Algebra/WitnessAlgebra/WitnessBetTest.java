@@ -15,7 +15,7 @@ public class WitnessBetTest {
         WitnessBet b2 = new WitnessBet(12.0, null);
         WitnessBet output = new WitnessBet(12.0, null);
 
-        assertEquals(b1.mergeElement(b2), output);
+        assertEquals(b1.mergeElement(b2, null), output);
     }
 
     //bet(10, +inf), xbet(10, +inf)
@@ -25,7 +25,7 @@ public class WitnessBetTest {
         WitnessXBet b2 = new WitnessXBet(10.0, null);
         WitnessXBet output = new WitnessXBet(10.0, null);
 
-        assertEquals(b1.mergeElement(b2), output);
+        assertEquals(b1.mergeElement(b2, null), output);
     }
 
     //bet(-inf, 10), bet(-inf, 12)
@@ -35,7 +35,7 @@ public class WitnessBetTest {
         WitnessBet b2 = new WitnessBet(null, 12.0);
         WitnessBet output = new WitnessBet(null, 10.0);
 
-        assertEquals(b1.mergeElement(b2), output);
+        assertEquals(b1.mergeElement(b2, null), output);
     }
 
     //bet(-inf, 10), xbet(-inf, 10)
@@ -45,7 +45,7 @@ public class WitnessBetTest {
         WitnessXBet b2 = new WitnessXBet(null, 10.0);
         WitnessXBet output = new WitnessXBet(null, 10.0);
 
-        assertEquals(b1.mergeElement(b2), output);
+        assertEquals(b1.mergeElement(b2, null), output);
     }
 
     //bet(20, 50), bet(21, 49)
@@ -55,7 +55,7 @@ public class WitnessBetTest {
         WitnessBet b2 = new WitnessBet(21.0, 49.0);
         WitnessBet output = new WitnessBet(21.0, 49.0);
 
-        assertEquals(b1.mergeElement(b2), output);
+        assertEquals(b1.mergeElement(b2, null), output);
     }
 
     //bet(-inf, 3), bet(6, +inf)
@@ -65,7 +65,7 @@ public class WitnessBetTest {
         WitnessBet b2 = new WitnessBet(6.0, null);
         WitnessType t = new WitnessType("num");
 
-        assertEquals(b1.mergeElement(b2), t.not(null));
+        assertEquals(b1.mergeElement(b2, null), t.not(null));
     }
 
     //bet(-inf, 3), xbet(3, +inf)
@@ -75,6 +75,6 @@ public class WitnessBetTest {
         WitnessXBet b2 = new WitnessXBet(3.0, null);
         WitnessType t = new WitnessType("num");
 
-        assertEquals(b1.mergeElement(b2), t.not(null));
+        assertEquals(b1.mergeElement(b2, null), t.not(null));
     }
 }

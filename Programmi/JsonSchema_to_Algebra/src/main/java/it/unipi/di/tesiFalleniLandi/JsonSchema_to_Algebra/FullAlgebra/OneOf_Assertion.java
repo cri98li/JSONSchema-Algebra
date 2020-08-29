@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -43,12 +44,12 @@ public class OneOf_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonObject toJSONSchema() {
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		JsonArray array = new JsonArray();
 		
 		for(Assertion assertion : xorList) {
-			array.add(assertion.toJSONSchema());
+			array.add(assertion.toJSONSchema(rootVar));
 		}
 
 		obj.add("oneOf", array);
@@ -109,7 +110,7 @@ public class OneOf_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
-		return this.not().not().toWitnessAlgebra();
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+		return this.not().not().toWitnessAlgebra(varManager, env);
 	}
 }

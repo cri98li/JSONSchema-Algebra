@@ -3,9 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessOrPattReq;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -41,7 +39,7 @@ public class OrPattReq_Assertion implements Assertion{
     }
 
     @Override
-    public JsonElement toJSONSchema() {
+    public JsonElement toJSONSchema(WitnessVarManager rootVar) {
         throw new UnsupportedOperationException("OrPattReq.toJSONSchema");
     }
 
@@ -84,10 +82,10 @@ public class OrPattReq_Assertion implements Assertion{
     }
 
     @Override
-    public WitnessAssertion toWitnessAlgebra() throws REException {
+    public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
         WitnessOrPattReq witnessOrPattReq = new WitnessOrPattReq();
         for (Map.Entry<ComplexPattern, Assertion> entry : this.reqList)
-            witnessOrPattReq.add(WitnessPattReq.build(entry.getKey(), entry.getValue().toWitnessAlgebra()));
+            witnessOrPattReq.add(WitnessPattReq.build(entry.getKey(), entry.getValue().toWitnessAlgebra(varManager, env)));
 
         return witnessOrPattReq;
     }

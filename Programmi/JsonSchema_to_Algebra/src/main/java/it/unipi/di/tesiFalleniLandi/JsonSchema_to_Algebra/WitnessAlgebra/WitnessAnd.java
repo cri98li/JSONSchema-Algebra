@@ -150,18 +150,18 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(this.add(a)) //if the list has been modified then apply merge again TODO: can we optimize that?
-            return this.merge();
+            return this.merge(varManager);
 
         return this;
     }
 
 
     @Override
-    public WitnessAssertion merge() throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
         if(block) return new WitnessBoolean(false);
 
         if(getIfUnitaryAnd() != null) return getIfUnitaryAnd();
@@ -172,11 +172,11 @@ public class WitnessAnd implements WitnessAssertion{
         //this loop merge only element of the same Class
         for (Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet()) {
             int size = sameTypeAssertion.getValue().size();
-            WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge();
+            WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge(varManager);
 
             for (int i = 1; i < size; i++) {
                 WitnessAssertion oldMerge = merged;
-                merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge());
+                merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge(varManager), varManager);
 
                 if (merged != null) { //the result has been merged
                     modified = true;
@@ -201,7 +201,7 @@ public class WitnessAnd implements WitnessAssertion{
         if (newAnd.andList.containsKey(WitnessBet.class) && newAnd.andList.containsKey(WitnessXBet.class)) {
             WitnessBet bet = (WitnessBet) newAnd.andList.remove(WitnessBet.class).get(0);
             WitnessXBet xBet = (WitnessXBet) newAnd.andList.remove(WitnessXBet.class).get(0);
-            WitnessAssertion assertion = bet.mergeElement(xBet);
+            WitnessAssertion assertion = bet.mergeElement(xBet, varManager);
             if (assertion == null) {
                 newAnd.add(bet);
                 newAnd.add(xBet);
@@ -217,7 +217,7 @@ public class WitnessAnd implements WitnessAssertion{
             List<WitnessAssertion> notMofList = newAnd.andList.remove(WitnessNotMof.class);
 
             for (WitnessAssertion tmp : notMofList) {
-                WitnessAssertion assertion = mof.mergeWith(tmp);
+                WitnessAssertion assertion = mof.mergeWith(tmp, varManager);
                 if (assertion == null) {
                     newAnd.add(mof);
                     newAnd.add(tmp);
@@ -250,7 +250,7 @@ public class WitnessAnd implements WitnessAssertion{
             return value;
 
         if (modified)
-            return newAnd.merge();
+            return newAnd.merge(varManager);
 
         return newAnd;
     }
@@ -366,7 +366,7 @@ public class WitnessAnd implements WitnessAssertion{
             WitnessAssertion type = types.remove(0);
 
             for (WitnessAssertion t : types)
-                type = type.mergeWith(t);
+                type = type.mergeWith(t, null);
 
             if(type.getClass() == WitnessBoolean.class)
                 return type;
@@ -531,12 +531,12 @@ public class WitnessAnd implements WitnessAssertion{
 
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
-                newDefinitions.addAll(assertion.varNormalization_separation(env));
+                newDefinitions.addAll(assertion.varNormalization_separation(env, varManager));
 
         return newDefinitions;
     }
@@ -619,15 +619,15 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         WitnessVar obbdVarName = null;
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
             for(WitnessAssertion assertion : entry.getValue()) {
                 if(obbdVarName == null)
-                    obbdVarName = assertion.buildOBDD(env);
+                    obbdVarName = assertion.buildOBDD(env, varManager);
                 else
-                    obbdVarName = env.bdd.and(env, obbdVarName, assertion.buildOBDD(env));
+                    obbdVarName = env.bdd.and(env, obbdVarName, assertion.buildOBDD(env, varManager));
             }
         }
 
@@ -667,7 +667,7 @@ public class WitnessAnd implements WitnessAssertion{
      * Assuming that before was executed and-merging, groupize, separation, expansione, dnf
      *
      */
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env) throws REException, WitnessException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env, WitnessVarManager varManager) throws REException, WitnessException {
         //checking if it's an object group
         if (andList.get(WitnessType.class) == null) { //and without type specified
             logger.debug("Preparing WitnessAnd without type specified");
@@ -786,12 +786,12 @@ public class WitnessAnd implements WitnessAssertion{
 
             List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
-            newDefinitions.addAll(env.varNormalization_separation(env));
+            newDefinitions.addAll(env.varNormalization_separation(env, varManager));
             env.buildOBDD_notElimination();
 
             splitOriginalRList(ORPart, CoMatrix, env);
 
-            newDefinitions.addAll(this.varNormalization_separation(env));
+            newDefinitions.addAll(this.varNormalization_separation(env, varManager));
             env.buildOBDD_notElimination();
 
             return newDefinitions;

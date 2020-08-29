@@ -19,13 +19,13 @@ public class ObjectPreparationTest {
     public void testObjPrep1() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/input_1.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/output_1.algebra");
-        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra();
-        WitnessAssertion output = out.toWitnessAlgebra();
+        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra(null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null, null);
 
         input.buildOBDD_notElimination();
         input = input.groupize();
         input = input.DNF();
-        input.varNormalization_separation(null);
+        input.varNormalization_separation(null, null);
         input = input.varNormalization_expansion(null);
         input.toOrPattReq();
         input.objectPrepare();
@@ -41,10 +41,10 @@ public class ObjectPreparationTest {
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge();
+        input = (WitnessEnv) input.merge(null);
         input = input.groupize();
         input = input.DNF();
-        input.varNormalization_separation(null);
+        input.varNormalization_separation(null, null);
         input = input.varNormalization_expansion(null);
         input.toOrPattReq();
         input.objectPrepare();
@@ -62,10 +62,10 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge();
+        input = (WitnessEnv) input.merge(null);
         input = input.groupize();
         input = input.DNF();
-        input.varNormalization_separation(null);
+        input.varNormalization_separation(null, null);
         input = input.varNormalization_expansion(null);
         input.toOrPattReq();
         input.objectPrepare();
@@ -83,10 +83,10 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge();
+        input = (WitnessEnv) input.merge(null);
         input = input.groupize();
         input = input.DNF();
-        input.varNormalization_separation(null);
+        input.varNormalization_separation(null, null);
         input = input.varNormalization_expansion(null);
         input.toOrPattReq();
         input.objectPrepare();
@@ -104,10 +104,10 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge();
+        input = (WitnessEnv) input.merge(null);
         input = input.groupize();
         input = input.DNF();
-        input.varNormalization_separation(null);
+        input.varNormalization_separation(null, null);
         input = input.varNormalization_expansion(null);
         input.toOrPattReq();
         input.objectPrepare();

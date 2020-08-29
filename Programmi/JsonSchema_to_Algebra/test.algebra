@@ -1,4 +1,12 @@
-rootdef "x" = items[allOf[ref ("x")];]
+allOf[
+  type[obj],
+  props["^a" : mof(2),
+        "^aa" : mof(3); mof(5)
+  ],
+  orPattReq["^a" : mof(2),
+        "^aa" : mof(3)
+  ]
+]
 
 /*
 rootdef "x" = {

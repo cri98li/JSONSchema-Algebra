@@ -7,7 +7,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.Gra
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -93,10 +93,10 @@ public class Utils_FullAlgebra {
      * @return ritorna WitnessEnv costruito come indicato sopra
      */
     public static WitnessEnv getWitnessAlgebra(Assertion root) throws REException {
-        WitnessAssertion returnedValue = root.toWitnessAlgebra();
+        WitnessAssertion returnedValue = root.toWitnessAlgebra(null, null);
         if(returnedValue.getClass() != WitnessEnv.class){
-            WitnessEnv env = new WitnessEnv();
-            env.setRootVar(new WitnessVar(AlgebraStrings.ROOTDEF_DEFAULTNAME), returnedValue);
+            WitnessEnv env = new WitnessEnv(new WitnessVarManager());
+            env.setRootVar(AlgebraStrings.ROOTDEF_DEFAULTNAME, returnedValue);
             return env;
         }
         return (WitnessEnv) returnedValue;

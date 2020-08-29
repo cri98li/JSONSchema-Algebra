@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessNotMof;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -23,8 +24,8 @@ public class NotMof_Assertion implements Assertion {
 	}
 
 	@Override
-	public JsonObject toJSONSchema() {
-		return new Not_Assertion(new Mof_Assertion(notMof)).toJSONSchema();
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
+		return new Not_Assertion(new Mof_Assertion(notMof)).toJSONSchema(rootVar);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class NotMof_Assertion implements Assertion {
 	}
 
 	@Override
-	public WitnessNotMof toWitnessAlgebra() throws REException {
+	public WitnessNotMof toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		return new WitnessNotMof(Double.parseDouble(notMof.toString()));
 	}
 }

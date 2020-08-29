@@ -43,7 +43,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == WitnessMof.class)
@@ -71,7 +71,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
             type.add(AlgebraStrings.TYPE_NUMBER);
 
             logger.trace("Merge result: {}", type.not());
-            return type.not().toWitnessAlgebra();
+            return type.not().toWitnessAlgebra(null, null);
         }else {
             logger.trace("Merge result: null");
             return null;
@@ -79,7 +79,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -134,7 +134,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -183,7 +183,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         throw new UnsupportedOperationException();
     }
 }

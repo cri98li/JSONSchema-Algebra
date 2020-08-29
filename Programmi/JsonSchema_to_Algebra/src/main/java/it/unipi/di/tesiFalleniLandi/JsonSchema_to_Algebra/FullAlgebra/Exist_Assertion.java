@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessContains;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -47,7 +48,7 @@ public class Exist_Assertion implements Assertion{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JsonObject toJSONSchema() {
+	public JsonObject toJSONSchema(WitnessVarManager rootVar) {
 		JsonObject obj = new JsonObject();
 		if(contains.getClass() == Boolean_Assertion.class && ((Boolean_Assertion) contains).getValue()){
 
@@ -58,7 +59,7 @@ public class Exist_Assertion implements Assertion{
 		}
 
 		if(contains != null)
-			obj.add("contains", contains.toJSONSchema());
+			obj.add("contains", contains.toJSONSchema(rootVar));
 		
 		if(min != null) obj.addProperty("minContains", min);
 		if(max != null) obj.addProperty("maxContains", max);
@@ -118,7 +119,7 @@ public class Exist_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra() throws REException {
-		return new WitnessContains(min, max, contains.toWitnessAlgebra());
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+		return new WitnessContains(min, max, contains.toWitnessAlgebra(varManager, env));
 	}
 }

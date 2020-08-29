@@ -33,7 +33,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) return mergeElement((WitnessUniqueItems) a);
         if(a.getClass() == WitnessRepeateditems.class) return mergeElement((WitnessRepeateditems) a);
@@ -42,7 +42,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -55,7 +55,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
         t.add(AlgebraStrings.TYPE_ARRAY);
 
         logger.trace("Merge returning {} ", t.not());
-        return t.not().toWitnessAlgebra();
+        return t.not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra();
+        return getFullAlgebra().not().toWitnessAlgebra(null, null);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -125,7 +125,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 

@@ -24,7 +24,7 @@ public class MainWitness {
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
-        env = (WitnessEnv) env.merge();
+        env = (WitnessEnv) env.merge(null);
 
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.flush();
@@ -39,7 +39,7 @@ public class MainWitness {
         System.out.println("\r\n\r\n Separation: \r\n");
         System.out.flush();
 
-        env.varNormalization_separation(null);
+        env.varNormalization_separation(null, null);
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 

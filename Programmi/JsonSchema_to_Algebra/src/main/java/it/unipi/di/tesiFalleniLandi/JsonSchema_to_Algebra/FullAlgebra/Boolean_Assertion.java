@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -23,7 +24,7 @@ public class Boolean_Assertion implements Assertion{
 	}
 
 	@Override
-	public JsonElement toJSONSchema() {
+	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
 		return new JsonPrimitive(value);
 	}
 
@@ -43,7 +44,7 @@ public class Boolean_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessBoolean toWitnessAlgebra() throws REException {
+	public WitnessBoolean toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
 		return new WitnessBoolean(value);
 	}
 

@@ -16,7 +16,7 @@ public class WitnessPropertyTest {
 
         WitnessProperty output = new WitnessProperty(ComplexPattern.createFromName("a"), new WitnessMof(10.0));
 
-        assertEquals(p1.mergeElement(p2), output);
+        assertEquals(p1.mergeElement(p2, null), output);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class WitnessPropertyTest {
 
         WitnessProperty output = new WitnessProperty(ComplexPattern.createFromName("a").union(ComplexPattern.createFromName("b")), new WitnessMof(2.0));
 
-        assertEquals(p1.mergeElement(p2), output);
+        assertEquals(p1.mergeElement(p2, null), output);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class WitnessPropertyTest {
         WitnessProperty output = new WitnessProperty((ComplexPattern.createFromName("a").union(ComplexPattern.createFromName("b"))).union(ComplexPattern.createFromName("c")),
                 new WitnessMof(2.0));
 
-        assertEquals((p1.mergeElement(p2)).mergeWith(p3), output);
+        assertEquals((p1.mergeElement(p2, null)).mergeWith(p3, null), output);
     }
 
 }

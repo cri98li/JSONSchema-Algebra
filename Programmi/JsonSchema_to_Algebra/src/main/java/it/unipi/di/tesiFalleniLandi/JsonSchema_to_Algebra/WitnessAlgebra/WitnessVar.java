@@ -7,100 +7,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class WitnessVar implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessVar.class);
 
-    private static HashMap<String, String> renamed; //map oldName --> newName
-    private static HashMap<String, LinkedList<WeakReference<WitnessVar>>> instances; //map of all instances of WitnessVar
-
-    //We use WeakReference to avoid memory leaks. An object stored in WeakReference do not increment the numbers of pointer
-    //that refer to that object, so if the object is pointed only by a WeakReference, the garbage collector can delete it
-
-    static {
-        renamed = new HashMap<>();
-        instances = new HashMap<>();
-    }
-
-    public static void rename(WitnessVar oldName, WitnessVar newName) {
-        if(oldName == null || newName == null)
-            System.out.println("QUI");
-
-        rename(oldName.getName(), newName.getName());
-    }
-
-    //rename all the instances of ref(oldName) into ref(newName)
-    public static void rename(String oldName, String newName){
-        if(oldName.equals(newName)) return;
-
-        logger.trace("Renaming {} (old) to {} (new)", oldName, newName);
-
-        newName = resolveName(newName); //get the "real" name to be renamed.
-        renamed.put(oldName, newName); //save the rename operation.
-
-        //rename instances
-        renameInstances(newName, oldName);
-    }
-
-
-    /**
-     * example
-     * if b=a --> add(a, body_a);        add(b, body_a) do not create b,
-     *                                   rewrite all instances of ref(b) as ref(a),
-     *                                   remember that if someone want to create ref(b), we must instead return ref(a)
-     * c=b
-     *
-     * resolve(c) --> resolve(b) --> a
-     */
-    protected static String resolveName(String oldName){
-        if(renamed.containsKey(oldName))    return resolveName(renamed.get(oldName));
-
-        return oldName;
-    }
-
-    /**
-     * Rename all the instances of oldName with newName
-     * @param newName
-     * @param oldName
-     */
-    private static void renameInstances(String newName, String oldName){
-        List<WeakReference<WitnessVar>> instancesToBeRenamed = instances.remove(oldName);
-        List<WeakReference<WitnessVar>> newNameInstances = instances.get(newName);
-
-        if(instancesToBeRenamed == null) return;
-
-        for(WeakReference<WitnessVar> weakReference : instancesToBeRenamed) {
-            if(weakReference.get() == null) continue; //garbage collector
-
-            weakReference.get().name = newName;
-            newNameInstances.add(weakReference);
-        }
-    }
-
-
-
     private String name;
 
-    public WitnessVar(String name) {
-        String newName = resolveName(name);
-        this.name = newName;
-
-        //Add the new instace to the list of all the instaces
-        if(instances.containsKey(name))
-            instances.get(newName).add(new WeakReference<>(this));
-        else {
-            LinkedList<WeakReference<WitnessVar>> tmp = new LinkedList<>();
-            tmp.add(new WeakReference<>(this));
-            instances.put(newName, tmp);
-        }
-
-        logger.trace("Created a new WitnessVar with name=({}=resolveName({}))", newName, name);
+    protected WitnessVar(String name) {
+        this.name = name;
     }
 
     public String getName(){
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -111,7 +34,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() {
+    public WitnessAssertion merge(WitnessVarManager varManager) {
         return this;
     }
 
@@ -138,7 +61,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         if(a.getClass() == WitnessVar.class)
             return mergeElement((WitnessVar) a);
 
@@ -164,7 +87,7 @@ public class WitnessVar implements WitnessAssertion{
     @Override
     public WitnessVar clone() {
         logger.trace("Cloning {}", this);
-        return new WitnessVar(name);
+        return this; //TODO: WitnessVarmanager
     }
 
     @Override
@@ -221,7 +144,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) {
         return new LinkedList<>();
     }
 
@@ -246,9 +169,9 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) throws WitnessException {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         if(env.bdd.contains(new WitnessVar("forced_"+name)))
-            return new WitnessVar("forced_"+name);
+            return varManager.buildVar("forced_"+name);
 
         if(!env.bdd.contains(this)) {
             throw new WitnessException("buildOBDD richiamato su variabile senza obdd associato (ne forzato): " + name);
@@ -258,8 +181,8 @@ public class WitnessVar implements WitnessAssertion{
     }
 
 
-    protected void forceOBDD(WitnessEnv env){
+    protected void forceOBDD(WitnessEnv env, WitnessVarManager varManager){
         logger.warn("forced the creation of {}, that is not ok", new WitnessVar("forced_"+name));
-        env.bdd.createVar(new WitnessVar("forced_"+name));
+        env.bdd.createVar(varManager.buildVar("forced_"+name));
     }
 }

@@ -124,7 +124,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())
@@ -134,14 +134,14 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge() throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
         WitnessPattReq clone = this.clone();
 
         //Boolean rewritings
         if((this.value.getClass() == WitnessBoolean.class) && (!((WitnessBoolean)this.value).getValue()))
             return new WitnessBoolean(false);
 
-        clone.value = value.merge();
+        clone.value = value.merge(varManager);
 
         return clone;
     }
@@ -240,7 +240,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env) throws WitnessException, REException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         if(value.getClass() == WitnessAnd.class && ((WitnessAnd) value).getIfUnitaryAnd() != null)
@@ -248,10 +248,10 @@ public class WitnessPattReq implements WitnessAssertion{
 
         if (value.getClass() != WitnessBoolean.class && value.getClass() != WitnessVar.class) {
 
-            newDefinitions.addAll(value.varNormalization_separation(env));
+            newDefinitions.addAll(value.varNormalization_separation(env, varManager));
 
             //Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
-            WitnessVar newVar = new WitnessVar(Utils_WitnessAlgebra.getName(value));
+            WitnessVar newVar = varManager.buildVar(varManager.getName(value));
 
             newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, value));
 
@@ -294,7 +294,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessVar buildOBDD(WitnessEnv env) {
+    public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
     }
 
