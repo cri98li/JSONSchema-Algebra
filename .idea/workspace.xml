@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3e1d8620-5f82-4d0c-9920-b8cedeff646a" name="Default Changelist" comment="" />
+    <list default="true" id="3e1d8620-5f82-4d0c-9920-b8cedeff646a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
   <component name="ProjectId" id="1aaBWf8vzevUa5YO84HiuNvjYuk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -21,7 +30,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -38,5 +52,23 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="415" y="216" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598871435570">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="415" y="216" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1598871435570" />
+    <state x="544" y="292" key="IDE.errors.dialog" timestamp="1598876902330">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="544" y="292" key="IDE.errors.dialog/0.23.1920.1057@0.23.1920.1057" timestamp="1598876902330" />
+    <state x="438" y="135" key="SettingsEditor" timestamp="1598877035808">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="438" y="135" key="SettingsEditor/0.23.1920.1057@0.23.1920.1057" timestamp="1598877035808" />
+    <state x="621" y="264" key="search.everywhere.popup" timestamp="1598876611078">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="621" y="264" key="search.everywhere.popup/0.23.1920.1057@0.23.1920.1057" timestamp="1598876611078" />
   </component>
 </project>
