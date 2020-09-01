@@ -5,6 +5,7 @@ import com.google.gson.JsonNull;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 
 public class GenNull implements GenAssertion{
+
     @Override
     public JsonElement generate() {
         return new JsonNull();

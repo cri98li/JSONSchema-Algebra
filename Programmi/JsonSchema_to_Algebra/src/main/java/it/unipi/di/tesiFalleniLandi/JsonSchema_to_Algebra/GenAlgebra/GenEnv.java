@@ -4,14 +4,16 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-public class GenEnv implements GenAssertion{
+public class GenEnv {
 
-    private HashMap<GenEnv, List<GenAssertion>> varList;
+    private HashMap<GenVar, List<GenAssertion>> varList;
     private BiMap<GenVar,GenVar> coVar;
     private GenVar rootVar;
     private List<GenVar> openVars, sleepingVars, emptyVars, popVars;
@@ -25,26 +27,25 @@ public class GenEnv implements GenAssertion{
         popVars = new LinkedList<>();
     }
 
+    public GenEnv(WitnessEnv env){
+        varList = new HashMap<>();
+//        for(Map.Entry me: env.getV)
+
+    }
+
     /**
      * enforce invariant through setters
      * @param varList
      */
     public void setVarList(HashMap<GenEnv, List<GenAssertion>> varList) {
-        this.varList = varList;
+
     }
 
-    @Override
     public JsonElement generate() {
         return null;
     }
 
-    @Override
-    public JsonElement generateNext() {
-        return null;
-    }
 
-    @Override
-    public WitnessAssertion toWitnessAlgebra() {
-        return null;
-    }
+
+
 }

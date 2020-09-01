@@ -20,6 +20,10 @@ public class WitnessPattern implements WitnessAssertion{
         logger.trace("Created a new WitnessPattern {}", this);
     }
 
+    public ComplexPattern getPattern() {
+        return pattern;
+    }
+
     private WitnessPattern() { }
 
     @Override

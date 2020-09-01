@@ -29,6 +29,14 @@ public class WitnessBet implements WitnessAssertion{
         logger.trace("Creating a new WitnessBet {}", this);
     }
 
+    public Double getMin() {
+        return min;
+    }
+
+    public Double getMax() {
+        return max;
+    }
+
     @Override
     public String toString() {
         return "WitnessBet{" +
