@@ -68,15 +68,29 @@ public class GenNum implements GenAssertion {
 
     }
 
+    /**
+     * Auxiliary functions
+     * */
+
+    /**
+     *
+     * @param list must be sorted
+     * @param num
+     * @return
+     */
     private Double containsMultiple(List<Double> list, Double num){
         Double res = 0d;
-        //list is sorted
         for(Double el:list)
             if(el%num==0)
                 res = el;
         return res;
     }
 
+    /**
+     *
+     * @param list must be sorted
+     * @return
+     */
     private boolean containsPairMultiple(List<Double> list) {
     //expect list size >1
         Double[] arr = new Double[list.size()];

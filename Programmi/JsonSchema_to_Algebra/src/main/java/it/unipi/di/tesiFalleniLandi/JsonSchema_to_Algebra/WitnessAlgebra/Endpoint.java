@@ -15,7 +15,7 @@ public class Endpoint {
     private static Logger logger = LogManager.getLogger(Endpoint.class);
 
     public static void main(String[] args) throws IOException, WitnessException, REException {
-        String path = System.getProperty("user.dir")+ "/JsonSchema_to_Algebra/testFiles/";
+        String path = System.getProperty("user.dir")+ "/testFiles/";
         String file = "test"//"canon1" //"example_4-5"//
                 ;
         String extension = ".algebra";

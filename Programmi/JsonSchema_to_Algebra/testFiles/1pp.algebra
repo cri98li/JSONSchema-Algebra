@@ -1,0 +1,527 @@
+rootdef "root" = {
+	type[
+		obj
+	],
+	props[
+		"^provide$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^keywords$": {
+			type[
+				arr
+			],
+			items[
+				type[
+					str
+				];
+				
+			]
+		},
+		"^type$": type[
+			str
+		],
+		"^target-dir$": type[
+			str
+		],
+		"^prefer-stable$": type[
+			bool
+		],
+		"^autoload$": {
+			type[
+				obj
+			],
+			props[
+				"^psr-4$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^classmap$": type[
+					arr
+				],
+				"^files$": type[
+					arr
+				],
+				"^psr-0$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				};
+				
+			]
+		},
+		"^archive$": {
+			type[
+				obj
+			],
+			props[
+				"^exclude$": type[
+					arr
+				];
+				
+			]
+		},
+		"^homepage$": {
+			true,
+			type[
+				str
+			]
+		},
+		"^description$": type[
+			str
+		],
+		"^extra$": {
+			type[
+				obj,
+				arr
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^suggest$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^require$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^time$": type[
+			str
+		],
+		"^authors$": {
+			type[
+				arr
+			],
+			items[
+				{
+					type[
+						obj
+					],
+					props[
+						"^email$": {
+							true,
+							type[
+								str
+							]
+						},
+						"^name$": type[
+							str
+						],
+						"^role$": type[
+							str
+						],
+						"^homepage$": {
+							true,
+							type[
+								str
+							]
+						};
+						false
+					],
+					req[
+						"name"
+					]
+				};
+				
+			]
+		},
+		"^minimum-stability$": {
+			pattern("^dev|alpha|beta|rc|RC|stable$"),
+			type[
+				str
+			]
+		},
+		"^autoload-dev$": {
+			type[
+				obj
+			],
+			props[
+				"^psr-4$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^classmap$": type[
+					arr
+				],
+				"^files$": type[
+					arr
+				],
+				"^psr-0$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				};
+				
+			]
+		},
+		"^scripts$": {
+			type[
+				obj
+			],
+			props[
+				"^post-package-update$": type[
+					arr,
+					str
+				],
+				"^post-create-project-cmd$": type[
+					arr,
+					str
+				],
+				"^post-autoload-dump$": type[
+					arr,
+					str
+				],
+				"^pre-update-cmd$": type[
+					arr,
+					str
+				],
+				"^post-package-install$": type[
+					arr,
+					str
+				],
+				"^post-status-cmd$": type[
+					arr,
+					str
+				],
+				"^pre-install-cmd$": type[
+					arr,
+					str
+				],
+				"^post-root-package-install$": type[
+					arr,
+					str
+				],
+				"^post-install-cmd$": type[
+					arr,
+					str
+				],
+				"^post-update-cmd$": type[
+					arr,
+					str
+				],
+				"^pre-package-update$": type[
+					arr,
+					str
+				],
+				"^pre-autoload-dump$": type[
+					arr,
+					str
+				],
+				"^pre-package-uninstall$": type[
+					arr,
+					str
+				],
+				"^pre-status-cmd$": type[
+					arr,
+					str
+				],
+				"^post-package-uninstall$": type[
+					arr,
+					str
+				],
+				"^pre-package-install$": type[
+					arr,
+					str
+				];
+				
+			]
+		},
+		"^include-path$": {
+			type[
+				arr
+			],
+			items[
+				type[
+					str
+				];
+				
+			]
+		},
+		"^support$": {
+			type[
+				obj
+			],
+			props[
+				"^forum$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^source$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^email$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^irc$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^docs$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^wiki$": {
+					true,
+					type[
+						str
+					]
+				},
+				"^issues$": {
+					true,
+					type[
+						str
+					]
+				};
+				
+			]
+		},
+		"^repositories$": {
+			type[
+				obj,
+				arr
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^replace$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^config$": {
+			type[
+				obj
+			],
+			props[
+				"^optimize-autoloader$": type[
+					bool
+				],
+				"^github-protocols$": {
+					type[
+						arr
+					],
+					items[
+						type[
+							str
+						];
+						
+					]
+				},
+				"^cache-files-ttl$": type[
+					int
+				],
+				"^cache-files-maxsize$": type[
+					str,
+					int
+				],
+				"^classmap-authoritative$": type[
+					bool
+				],
+				"^platform$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^preferred-install$": type[
+					str
+				],
+				"^notify-on-install$": type[
+					bool
+				],
+				"^discard-changes$": type[
+					str,
+					bool
+				],
+				"^use-include-path$": type[
+					bool
+				],
+				"^cache-vcs-dir$": type[
+					str
+				],
+				"^http-basic$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^vendor-dir$": type[
+					str
+				],
+				"^prepend-autoloader$": type[
+					bool
+				],
+				"^autoloader-suffix$": type[
+					str
+				],
+				"^github-expose-hostname$": type[
+					bool
+				],
+				"^cache-repo-dir$": type[
+					str
+				],
+				"^github-domains$": {
+					type[
+						arr
+					],
+					items[
+						type[
+							str
+						];
+						
+					]
+				},
+				"^github-oauth$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^bin-dir$": type[
+					str
+				],
+				"^archive-format$": type[
+					str
+				],
+				"^cache-ttl$": type[
+					int
+				],
+				"^store-auths$": type[
+					str,
+					bool
+				],
+				"^cache-files-dir$": type[
+					str
+				],
+				"^cache-dir$": type[
+					str
+				],
+				"^process-timeout$": type[
+					int
+				],
+				"^archive-dir$": type[
+					str
+				];
+				
+			]
+		},
+		"^version$": type[
+			str
+		],
+		"^bin$": {
+			type[
+				arr
+			],
+			items[
+				type[
+					str
+				];
+				
+			]
+		},
+		"^name$": type[
+			str
+		],
+		"^conflict$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^license$": type[
+			str,
+			arr
+		],
+		"^non-feature-branches$": {
+			type[
+				arr
+			],
+			items[
+				type[
+					str
+				];
+				
+			]
+		},
+		"^require-dev$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
+			]
+		};
+		false
+	],
+	req[
+		"name",
+		"description"
+	]
+}

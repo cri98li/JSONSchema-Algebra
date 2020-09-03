@@ -21,8 +21,8 @@ public class Endpoint {
 //		PropertyConfigurator.configure("log4j.properties");
 
 		logger.debug("JSONSchema endpoint");
-		String path = System.getProperty("user.dir")+ "/JsonSchema_to_Algebra/testFiles/";
-		String file = "8";
+		String path = System.getProperty("user.dir")+ "/testFiles/";
+		String file = "1pp";
 		String extension = ".json";
 		String inputFileName = path+file+extension;
 

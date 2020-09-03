@@ -1,0 +1,6 @@
+rootdef "root" = {type[obj], props["^a":ref("x1"), "^.b":ref("x2");true],
+                        pattReq[ "^.d":true, "^a":ref("x3")]
+                },
+def "x1" = mof(2),
+def "x2" = pattern("abc"),
+def "x3" = mof(3)
