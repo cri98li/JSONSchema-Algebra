@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
 
 import java.util.List;
 
@@ -10,6 +11,9 @@ public class GenVar implements GenAssertion{
     private String name ;
     private List<GenVar> uses;
     private List<GenVar> isUsedBy;
+
+//    public GenVar(WitnessVar wv) {
+//    }
 
     public boolean isOpen() {
         return false; //TODO implement
@@ -43,8 +47,5 @@ public class GenVar implements GenAssertion{
         return null;
     }
 
-    @Override
-    public GenAssertion fromWitness(WitnessAssertion w) {
-        return null;
-    }
+
 }

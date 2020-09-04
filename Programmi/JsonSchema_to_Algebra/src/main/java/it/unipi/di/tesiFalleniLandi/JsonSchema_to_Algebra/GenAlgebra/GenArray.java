@@ -28,8 +28,5 @@ public class GenArray implements GenAssertion {
         return null;
     }
 
-    @Override
-    public GenAssertion fromWitness(WitnessAssertion w) {
-        return null;
-    }
+
 }

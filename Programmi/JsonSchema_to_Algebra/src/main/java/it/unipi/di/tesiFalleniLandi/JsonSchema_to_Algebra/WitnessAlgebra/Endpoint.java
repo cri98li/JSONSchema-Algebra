@@ -79,8 +79,8 @@ public class Endpoint {
         env.toOrPattReq();
         env.objectPrepare();
 
-        //another round of normalization
-        env = env.varNormalization_expansion(null);
+//        //another round of normalization
+//        env = env.varNormalization_expansion(null);
 
         String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
 

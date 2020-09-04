@@ -21,8 +21,5 @@ public class GenNull implements GenAssertion{
         return null;
     }
 
-    @Override
-    public GenAssertion fromWitness(WitnessAssertion w) {
-        return null;
-    }
+
 }
