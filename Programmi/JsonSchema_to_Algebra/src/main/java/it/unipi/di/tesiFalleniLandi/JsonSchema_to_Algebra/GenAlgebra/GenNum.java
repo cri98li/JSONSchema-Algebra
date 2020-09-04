@@ -117,4 +117,9 @@ public class GenNum implements GenAssertion {
     public WitnessAssertion toWitnessAlgebra() {
         return null;
     }
+
+    @Override
+    public GenAssertion fromWitness(WitnessAssertion w) {
+        return null;
+    }
 }

@@ -20,4 +20,9 @@ public class GenBool implements GenAssertion{
     public WitnessAssertion toWitnessAlgebra() {
         return null;
     }
+
+    @Override
+    public GenAssertion fromWitness(WitnessAssertion w) {
+        return null;
+    }
 }

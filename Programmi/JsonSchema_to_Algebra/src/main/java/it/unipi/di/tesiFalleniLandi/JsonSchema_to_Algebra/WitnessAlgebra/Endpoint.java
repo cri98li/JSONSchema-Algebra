@@ -79,9 +79,12 @@ public class Endpoint {
         env.toOrPattReq();
         env.objectPrepare();
 
+        //another round of normalization
+        env = env.varNormalization_expansion(null);
+
         String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
 
-        String outputFileName = path+"prep_"+file+extension;
+        String outputFileName = path+"fullprep_"+file+extension;
         FileWriter fw = new FileWriter(outputFileName);
         fw.write(result);
         fw.close();

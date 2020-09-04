@@ -12,7 +12,7 @@ public class GenArray implements GenAssertion {
     private List<GenVar> items;
     private GenVar additionalItems;
 
-    
+
     @Override
     public JsonElement generate() {
         return null;
@@ -25,6 +25,11 @@ public class GenArray implements GenAssertion {
 
     @Override
     public WitnessAssertion toWitnessAlgebra() {
+        return null;
+    }
+
+    @Override
+    public GenAssertion fromWitness(WitnessAssertion w) {
         return null;
     }
 }

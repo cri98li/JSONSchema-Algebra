@@ -14,6 +14,10 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     List<WitnessPattReq> reqList;  // AnyOf[ req1, ..., reqN ]
 
+    public List<WitnessPattReq> getReqList() {
+        return reqList;
+    }
+
     public WitnessOrPattReq() {
         reqList = new LinkedList<>();
     }
