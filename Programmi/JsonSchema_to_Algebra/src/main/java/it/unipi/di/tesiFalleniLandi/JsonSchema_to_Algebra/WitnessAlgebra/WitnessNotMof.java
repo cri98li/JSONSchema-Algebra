@@ -42,7 +42,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())
@@ -52,7 +52,7 @@ public class WitnessNotMof implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -103,7 +103,7 @@ public class WitnessNotMof implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null, null, null);
     }
 
     @Override
@@ -154,5 +154,10 @@ public class WitnessNotMof implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+
     }
 }

@@ -84,7 +84,7 @@ public class IfThenElse_Assertion implements Assertion{
 
 	@Override
 	public String toGrammarString() {
-		String if_str = "", then_str = "", else_str = "";
+		String if_str = "true", then_str = "true", else_str = "true";
 		if(ifStatement != null) { 
 			if_str = ifStatement.toGrammarString();
 			then_str = thenStatement.toGrammarString();
@@ -93,29 +93,29 @@ public class IfThenElse_Assertion implements Assertion{
 			else_str = elseStatement.toGrammarString();
 		else
 			return AlgebraStrings.IF_THEN(if_str, then_str);
-		
+
 		return AlgebraStrings.IF_THEN(if_str, then_str, else_str);
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		WitnessOr or = new WitnessOr();
 		if(elseStatement == null){
-			or.add(ifStatement.not().toWitnessAlgebra(varManager, env));
-			or.add(thenStatement.toWitnessAlgebra(varManager, env));
+			or.add(ifStatement.not().toWitnessAlgebra(varManager,env, pattReqManager));
+			or.add(thenStatement.toWitnessAlgebra(varManager,env, pattReqManager));
 
 			return or;
 		}
 
 		WitnessAnd and = new WitnessAnd();
 
-		and.add(ifStatement.toWitnessAlgebra(varManager, env));
-		and.add(thenStatement.toWitnessAlgebra(varManager, env));
+		and.add(ifStatement.toWitnessAlgebra(varManager,env, pattReqManager));
+		and.add(thenStatement.toWitnessAlgebra(varManager,env, pattReqManager));
 		or.add(and);
 
 		WitnessAnd and2 = new WitnessAnd();
-		and2.add(ifStatement.not().toWitnessAlgebra(varManager, env));
-		and2.add(elseStatement.toWitnessAlgebra(varManager, env));
+		and2.add(ifStatement.not().toWitnessAlgebra(varManager,env, pattReqManager));
+		and2.add(elseStatement.toWitnessAlgebra(varManager,env, pattReqManager));
 		or.add(and2);
 
 		return or;

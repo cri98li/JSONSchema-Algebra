@@ -34,7 +34,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -61,7 +61,7 @@ public class WitnessVar implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(a.getClass() == WitnessVar.class)
             return mergeElement((WitnessVar) a);
 
@@ -178,6 +178,11 @@ public class WitnessVar implements WitnessAssertion{
         }
 
         return this;
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 
 

@@ -11,10 +11,11 @@ public class WitnessPattReqTest {
 
     @Test
     public void testPattReqMerge1() throws REException {
-        WitnessPattReq p1 = WitnessPattReq.build(ComplexPattern.createFromRegexp(".*"), new WitnessBoolean(true));
-        WitnessPattReq p2 = WitnessPattReq.build(ComplexPattern.createFromName("aaa"), new WitnessBoolean(true));
+        WitnessPattReqManager pattReqManager = new WitnessPattReqManager();
+        WitnessPattReq p1 = pattReqManager.build(ComplexPattern.createFromRegexp(".*"), new WitnessBoolean(true));
+        WitnessPattReq p2 = pattReqManager.build(ComplexPattern.createFromName("aaa"), new WitnessBoolean(true));
 
-        WitnessPattReq output = WitnessPattReq.build(ComplexPattern.createFromName("aaa"), new WitnessBoolean(true));
+        WitnessPattReq output = pattReqManager.build(ComplexPattern.createFromName("aaa"), new WitnessBoolean(true));
 
         assertEquals(p1.mergeElement(p2), output);
     }
@@ -22,8 +23,9 @@ public class WitnessPattReqTest {
     @Test
     @Ignore
     public void testPattReqMerge2() throws REException {
-        WitnessPattReq p1 = WitnessPattReq.build(ComplexPattern.createFromRegexp(".*"), new WitnessBoolean(true));
-        WitnessPattReq p2 = WitnessPattReq.build(ComplexPattern.createFromRegexp("#"), new WitnessBoolean(true));
+        WitnessPattReqManager pattReqManager = new WitnessPattReqManager();
+        WitnessPattReq p1 = pattReqManager.build(ComplexPattern.createFromRegexp(".*"), new WitnessBoolean(true));
+        WitnessPattReq p2 = pattReqManager.build(ComplexPattern.createFromRegexp("#"), new WitnessBoolean(true));
 
         assertEquals(p1.mergeElement(p2), null);
     }

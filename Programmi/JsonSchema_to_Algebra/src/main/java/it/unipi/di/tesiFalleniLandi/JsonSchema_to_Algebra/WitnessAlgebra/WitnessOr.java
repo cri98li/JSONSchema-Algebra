@@ -129,7 +129,7 @@ public class WitnessOr implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         /*List<WitnessAssertion> tmp = orList.remove(WitnessAnd.class);
 
         if(tmp != null) {
@@ -144,13 +144,13 @@ public class WitnessOr implements WitnessAssertion{
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet())
             for(WitnessAssertion assertion : entry.getValue())
-                newOr.add(assertion.merge(varManager));
+                newOr.add(assertion.merge(varManager, pattReqManager));
 
         return newOr;
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a != null && a.getClass() == this.getClass())
@@ -387,11 +387,21 @@ public class WitnessOr implements WitnessAssertion{
                 if(obbdVarName == null)
                     obbdVarName = assertion.buildOBDD(env, varManager);
                 else
-                    obbdVarName = env.bdd.and(env, obbdVarName, assertion.buildOBDD(env, varManager));
+                    obbdVarName = env.bdd.or(env, obbdVarName, assertion.buildOBDD(env, varManager));
             }
         }
 
         return obbdVarName;
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        for (Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet()) {
+            for (WitnessAssertion assertion : entry.getValue()) {
+                reportResults.increaseNumOfElementInAnyOf();
+                assertion.getReport(reportResults);
+            }
+        }
     }
 
     protected WitnessOr DNF(WitnessAssertion toAdd) throws WitnessException {
@@ -408,13 +418,13 @@ public class WitnessOr implements WitnessAssertion{
         return or;
     }
 
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env, WitnessVarManager varManager) throws REException, WitnessException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env) throws REException, WitnessException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
         if(orList.containsKey(WitnessAnd.class)){ //call object prepare only for AND assertion
             List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
             for(WitnessAssertion assertion : ands) {
-                newDefinitions.addAll(((WitnessAnd)assertion).objectPrepare(env, varManager));
+                newDefinitions.addAll(((WitnessAnd)assertion).objectPrepare(env));
             }
         }
 

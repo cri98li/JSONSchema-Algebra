@@ -18,8 +18,8 @@ public class VarSeparationTest {
     public void varSepTest1() throws IOException, REException, WitnessException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/varSeparation/input_1.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/varSeparation/output_1.algebra");
-        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         input.buildOBDD_notElimination();
         input = input.groupize();

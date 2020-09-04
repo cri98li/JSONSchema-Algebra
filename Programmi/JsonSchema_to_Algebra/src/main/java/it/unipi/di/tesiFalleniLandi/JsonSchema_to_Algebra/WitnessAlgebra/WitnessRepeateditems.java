@@ -30,12 +30,12 @@ public class WitnessRepeateditems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         return null;
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -56,7 +56,7 @@ public class WitnessRepeateditems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -107,6 +107,11 @@ public class WitnessRepeateditems implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 
     @Override

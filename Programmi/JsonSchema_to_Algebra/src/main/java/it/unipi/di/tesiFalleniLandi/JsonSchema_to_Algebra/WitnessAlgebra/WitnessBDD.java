@@ -74,7 +74,7 @@ public class WitnessBDD {
     }
 
 
-    public WitnessVar or(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessBDDException, WitnessException {
+    public WitnessVar or(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
         Integer i1 = indexNode.get(u1);
         Integer i2 = indexNode.get(u2);
 

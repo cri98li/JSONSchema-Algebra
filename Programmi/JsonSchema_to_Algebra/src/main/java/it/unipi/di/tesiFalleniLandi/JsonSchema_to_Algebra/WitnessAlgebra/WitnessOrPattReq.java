@@ -69,12 +69,12 @@ public class WitnessOrPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         return null;
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         return this;
     }
 
@@ -100,7 +100,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
         WitnessOrPattReq clone = new WitnessOrPattReq();
 
         for(WitnessPattReq el : reqList){
-            clone.add(WitnessPattReq.build(el.getPattern().clone(), el.getValue().clone()));
+            clone.add(el);
         }
 
         return clone;
@@ -152,7 +152,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
         WitnessOrPattReq newOrp = new WitnessOrPattReq();
 
         for(WitnessPattReq el : reqList){
-            newOrp.add(WitnessPattReq.build(el.getPattern(), el.getValue().varNormalization_expansion(env)));
+            newOrp.add(env.pattReqManager.build(el.getPattern(), el.getValue().varNormalization_expansion(env)));
         }
 
         return newOrp;
@@ -185,6 +185,12 @@ public class WitnessOrPattReq implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        for(WitnessPattReq req : reqList)
+            req.getReport(reportResults);
     }
 
     public void setReqList(List<WitnessPattReq> reqList) {

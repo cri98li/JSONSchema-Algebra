@@ -6,6 +6,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Enum_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,7 @@ public class Enum implements JSONSchemaElement{
 		try {
 			_enum = (JsonArray) array;
 		}catch(ClassCastException e) {
-			throw new ParseCancellationException("Expected array as value of \"enum\"");
+			throw new SyntaxErrorRuntimeException("Expected array as value of \"enum\"");
 		}
 	}
 
@@ -96,7 +97,7 @@ public class Enum implements JSONSchemaElement{
 
 	@Override
 	public int numberOfTranslatableAssertions() {
-		return _enum.size(); //TODO: 1 or _enum.size?
+		return 1; //TODO: 1 or _enum.size?
 	}
 	
 	public Enum clone() {

@@ -20,17 +20,19 @@ public interface WitnessAssertion extends Cloneable{
      * Perform the and-merging as described in the paper plus other little simplifications
      * @param a
      * @param varManager
+     * @param pattReqManager
      * @return null if the objects cannot be merged, otherwise it returns the merged object
      *              (if the object cannot be unified within a single assertion, it returns a WitnessAnd)
      */
-    WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException;
+    WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException;
 
     /**
      * propagates merge over the schema
      * @return
      * @param varManager
+     * @param pattReqManager
      */
-    WitnessAssertion merge(WitnessVarManager varManager) throws REException;
+    WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException;
 
     /**
      * Return the relative Type of an assertion
@@ -112,4 +114,6 @@ public interface WitnessAssertion extends Cloneable{
     boolean isRecursive(WitnessEnv env, LinkedList<WitnessVar> visitedVar);
 
     WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException;
+
+    void getReport(ReportResults reportResults);
 }

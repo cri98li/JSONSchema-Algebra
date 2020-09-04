@@ -2,12 +2,13 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReqManager;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import patterns.REException;
 
 public interface Assertion extends AlgebraParserElement{
 	/**
-	 * Exports the class as a json object (using json simple).
+	 * Exports the class as a json object (using GSON).
 	 * @return return an object that represent the schema, see implementations for more details
 	 * @param rootVar
 	 */
@@ -34,8 +35,9 @@ public interface Assertion extends AlgebraParserElement{
 	/**
 	 * Translate the object from the full-algebra representation to the witness-algebra (core-algebra plus some useful operators)
 	 * @return return a WitnessAlgebra object
-	 * @param varManager
-	 * @param env
-	 */
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException;
+     * @param varManager
+     * @param env
+     * @param pattReqManager
+     */
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException;
 }

@@ -19,8 +19,8 @@ public class ObjectPreparationTest {
     public void testObjPrep1() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/input_1.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/objectPrepare/output_1.algebra");
-        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessEnv input = (WitnessEnv) in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         input.buildOBDD_notElimination();
         input = input.groupize();
@@ -41,7 +41,7 @@ public class ObjectPreparationTest {
         WitnessEnv output = Utils_FullAlgebra.getWitnessAlgebra(out);
 
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge(null);
+        input = (WitnessEnv) input.merge(null, null);
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null, null);
@@ -62,7 +62,7 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge(null);
+        input = (WitnessEnv) input.merge(null, null);
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null, null);
@@ -83,7 +83,7 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge(null);
+        input = (WitnessEnv) input.merge(null, null);
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null, null);
@@ -104,7 +104,7 @@ public class ObjectPreparationTest {
 
         input.checkLoopRef(null, null);
         input.buildOBDD_notElimination();
-        input = (WitnessEnv) input.merge(null);
+        input = (WitnessEnv) input.merge(null, null);
         input = input.groupize();
         input = input.DNF();
         input.varNormalization_separation(null, null);

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ public class Ref implements JSONSchemaElement{
 		try {
 			this.uri = new URI_JS(uri.getAsString());
 		}catch(ClassCastException ex) {
-			throw new ParseCancellationException("Error: $ref must be string!");
+			throw new SyntaxErrorRuntimeException("Error: $ref must be string!");
 		}
 
 		logger.trace("Created a new Ref: {}", this);

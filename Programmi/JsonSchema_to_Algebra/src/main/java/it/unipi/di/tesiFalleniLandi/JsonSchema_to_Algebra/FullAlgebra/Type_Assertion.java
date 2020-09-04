@@ -149,7 +149,7 @@ public class Type_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		if(types.size() == 1) {
 			if(types.get(0).equals(AlgebraStrings.TYPE_INTEGER)){
 				WitnessAnd and = new WitnessAnd();

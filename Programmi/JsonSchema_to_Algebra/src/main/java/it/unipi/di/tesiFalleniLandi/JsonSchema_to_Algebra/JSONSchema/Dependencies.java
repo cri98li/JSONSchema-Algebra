@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,17 +27,22 @@ public class Dependencies implements JSONSchemaElement{
 	
 	public void setDependencies(JsonElement obj) {
 		logger.trace("Parsing {}", obj);
-		JsonObject object = obj.getAsJsonObject();
 
+		if(!obj.isJsonObject()){ //TODO: check tipi dependencies, nel caso dai errore
+			throw new SyntaxErrorRuntimeException("Error: Expected JsonObject in dependencies!");
+		}
+
+		JsonObject object = obj.getAsJsonObject();
 		
 		for(Entry<String,JsonElement> entry : object.entrySet()) {
+
 			try {
 				JSONSchema js = new JSONSchema(entry.getValue());
 				dependentSchemas.put((String)entry.getKey(), js);
 				logger.trace("Parsed as dependentSchema {}", dependentSchemas);
-			}catch(ParseCancellationException | ClassCastException ex) {
+			}catch(SyntaxErrorRuntimeException | ClassCastException ex) {
 				LinkedList<String> list = new LinkedList<>();
-				JsonArray array = (JsonArray) entry.getValue();
+				JsonArray array = entry.getValue().getAsJsonArray();
 				
 				Iterator<JsonElement> it_array = array.iterator();
 				
@@ -134,7 +140,7 @@ public class Dependencies implements JSONSchemaElement{
 			for(Entry<String, JSONSchema> entry : entrySet) {
 				required = new Required_Assertion();
 				required.add(entry.getKey());
-				ifThenElse = new IfThenElse_Assertion(required, entry.getValue().toGrammar(), null);
+				ifThenElse = new IfThenElse_Assertion(required, entry.getValue().numberOfTranslatableAssertions() != 0 ? entry.getValue().toGrammar() : new Boolean_Assertion(true), null); //TODO: attenzione (f22116)!!!
 				allOf.add(ifThenElse);
 			}
 			ds = new IfThenElse_Assertion(typeObj, allOf, null);

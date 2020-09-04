@@ -82,10 +82,10 @@ public class OrPattReq_Assertion implements Assertion{
     }
 
     @Override
-    public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+    public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
         WitnessOrPattReq witnessOrPattReq = new WitnessOrPattReq();
         for (Map.Entry<ComplexPattern, Assertion> entry : this.reqList)
-            witnessOrPattReq.add(WitnessPattReq.build(entry.getKey(), entry.getValue().toWitnessAlgebra(varManager, env)));
+            witnessOrPattReq.add(pattReqManager.build(entry.getKey(), entry.getValue().toWitnessAlgebra(varManager,env,pattReqManager)));
 
         return witnessOrPattReq;
     }

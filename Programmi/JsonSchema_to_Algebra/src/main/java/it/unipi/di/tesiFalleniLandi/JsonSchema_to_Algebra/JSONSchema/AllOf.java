@@ -65,12 +65,14 @@ public class AllOf implements JSONSchemaElement{
 
 	@Override
 	public Assertion toGrammar() {
-		if(allOf.size() == 1) return allOf.get(0).toGrammar();
+		if(allOf.size() == 1)
+			allOf.get(0).toGrammar();
 
 		AllOf_Assertion newAllOf = new AllOf_Assertion();
 
 		for(JSONSchemaElement el : allOf)
-			newAllOf.add(el.toGrammar());
+			if(el.numberOfTranslatableAssertions() != 0)
+				newAllOf.add(el.toGrammar());
 
 		return newAllOf;
 	}

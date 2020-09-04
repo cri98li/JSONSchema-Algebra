@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReqManager;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -109,12 +110,12 @@ public class AddPatternRequired_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessPattReq toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessPattReq toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		ComplexPattern p = ComplexPattern.createFromRegexp(".*");
 
 		for(ComplexPattern pattern : pattList)
 			p = p.intersect(pattern);
 
-		return WitnessPattReq.build(p.complement(), additionalProperties.toWitnessAlgebra(varManager, env));
+		return pattReqManager.build(p.complement(), additionalProperties.toWitnessAlgebra(varManager, env, pattReqManager));
 	}
 }

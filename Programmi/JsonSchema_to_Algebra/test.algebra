@@ -1,199 +1,612 @@
-allOf[
-  type[obj],
-  props["^a" : mof(2),
-        "^aa" : mof(3); mof(5)
-  ],
-  orPattReq["^a" : mof(2),
-        "^aa" : mof(3)
-  ]
-]
-
-/*
-rootdef "x" = {
-    type[obj],
-    props[
-        "^.a":ref("x1"),
-        "^b":ref("x2")
-    ;],
-    pattReq["^.a":true, "^b":ref("x3")]
+def "snippet" = {
+	req[
+		"snippet"
+	],
+	props[
+		"^title$": type[
+			str
+		],
+		"^snippet$": type[
+			str
+		];
+		false
+	]
 },
-def "x1" = mof(123),
-def "x2" = bet(1,12),
-def "x3" = bet(1,12)
-*/
+def "method" = {
+	type[
+		obj
+	],
+	props[
+		"^docs_only$": type[
+			bool
+		],
+		"^provisional$": type[
+			bool
+		],
+		"^ts_only$": type[
+			bool
+		],
+		"^generics$": ref("genericsDef"),
+		"^returns$": ref("typeReference"),
+		"^description$": type[
+			str
+		],
+		"^links$": ref("links"),
+		"^parameters$": {
+			type[
+				arr
+			],
+			items[
+				ref("parameter");
 
-/*
-rootdef "x" = allOf[ref("y") ,ref("z")],
-def "y" = mof(2),
-def "z" = mof(3)
-*/
-
-/*
-allOf[
-  type[obj],
-  props["^.*a" : mof(2); true],
-  pattReq["^.*a" : anyOf[type[int], mof(2), false]]
-]
-*/
-
-/*
-allOf[
-  type[obj],
-  props["^a" : mof(2); true],
-  pattReq["^b" : mof(3)]
-]
-*/
-
-
-/*allOf[
-  type[obj],
-  props[
-        "^a" : mof(2),
-        "^aa" : mof(3),
-	      "^aaa" : mof(5) ; true
-  ]
-]*/
-
-/*{
-    type[obj],
-    pattReq["^a": mof(2)],
-    pattReq["^aa": mof(3)]
-
-    //pattReq["^a": {type[int], mof(1)}],
-    //pattReq["^.d": true]
-
-    /*props[
-        "^.*a": {type[int], mof(2)},
-        "^.*b": {type[int], mof(3)},
-        "^.*c": {type[int], mof(5)}
-    ;mof(7)]*/
-}*/
-
-
-/*
-// object completion:
-
-  props[
-        pAnd["^a",pNot("^aa"),pNot("^aaa")] : mof(2),
-        pAnd["^aa",pNot("^aaa"),"a"] : mof(6),
-	    pAnd["^aaa","^aa","^a"] : mof(30),
-        pNot(pAnyOf["^a","^aa","^aaa"]) :  true
-      ]
-*/
-
-
-
-
-
-
-
-
-
-
-/*
-allOf[
-  type[obj],
-  props[
-        "^a" : mof(2),
-        "^aa" : mof(3),
-	    "^aaa" : mof(5)
-	    ;true
-  ]
-]
-*/
-
-/*
-allOf[
-  type[obj],
-  props["^a$" : mof(2),
-        "^b$" : mof(3),
-	"^c$" : mof(5) ; true
-  ]
-]
-*/
-
-/*
-allOf[
-  type[obj],
-  props["^.*a" : mof(2),                 // it is just the pattern "a"
-        "^.*b" : mof(3),
-	"^.*c" : mof(5) ; true
-  ]
-]
-*/
-
-/*
-allOf[
-  type[obj],
-  props["^a" : mof(2); true],
-  pattReq["^b" : mof(3)]
-]
-*/
-
-/*
-allOf[
-  type[obj],
-  props[
-        "^.*a" : mof(2)
-        ;true
-        ],
-  pattReq["^.*a" : mof(2)]
-]
-*/
-
-/*allOf[
-  type[obj],
-  pattReq["^.*a" : mof(2)]
-]*/
-
-
-
-
-
-
-
-/*{
-    type[obj],
-    pattReq["^a": mof(2)],
-    pattReq["^aa": mof(3)]
-
-    pattReq["^a": {type[int], mof(1)}],
-    pattReq["^.d": true],
-    /*props[
-        "^.*a": {type[int], mof(2)},
-        "^.*b": {type[int], mof(3)},
-        "^.*c": {type[int], mof(5)}
-    ;mof(7)]*/
-}*/
-
-
-/*{
-    type[obj],
-    pattReq["^a": {type[int], mof(1)}],
-    pattReq["^.d": true],
-    props[
-        "^a": {type[int], mof(1)},
-        "^.b" : {type[int], bet(1,100)}
-    ;]
-}*/
-
-/*rootdef "x" = { //lui o "i" se ne va e il suo negato è non_x
-    ref("y"),
-    ref("z")
+			]
+		},
+		"^ts_returns$": ref("typeReference"),
+		"^protected$": type[
+			bool
+		],
+		"^platforms$": ref("platforms"),
+		"^private$": type[
+			bool
+		];
+		false
+	]
 },
-def "y" = mof(12),
-def "z" = mof(3),
-def "not_y" = notMof(12),
-def "not_z" = notMof(3),
-def "i" = {
-    ref("y"),
-    ref("z")
+def "link" = {
+	req[
+		"title",
+		"path"
+	],
+	props[
+		"^title$": type[
+			str
+		],
+		"^path$": type[
+			str
+		];
+		false
+	]
 },
-def "base" = {ref("i"),mof(12)},
-def "non_x" = anyOf[
-	ref("not_y"),
-	ref("not_z")
-]*/
+def "statics" = {
+	type[
+		obj
+	],
+	props[
+		"^properties$": {
+			type[
+				obj
+			],
+			props[
+				"(^_?[a-z]\\w+$)|(^\\[.*\\]$)": ref("property");
+				false
+			]
+		},
+		"^methods$": {
+			type[
+				obj
+			],
+			props[
+				"(^_?[a-z]\\w+$)|(^\\[.*\\]$)": anyOf[
+					ref("method"),
+					{
+						type[
+							arr
+						],
+						items[
+							ref("method");
 
-/*def "x" = props["a": ref("y");],
-def "y" = ref("x")*/
+						]
+					}
+				];
+				false
+			]
+		};
+
+	]
+},
+def "platforms" = {
+	type[
+		obj
+	],
+	props[
+		"^ios$": type[
+			bool
+		],
+		"^android$": type[
+			bool
+		];
+		false
+	]
+},
+def "generics" = {
+	contains(1,+inf;true),
+	type[
+		arr
+	],
+	items[
+		ref("typeReference");
+
+	]
+},
+rootdef "root" = ref("api"),
+def "parameter" = {
+	type[
+		obj
+	],
+	props[
+		"^ts_type$": ref("typeReference"),
+		"^optional$": type[
+			bool
+		],
+		"^name$": type[
+			str
+		],
+		"^description$": type[
+			str
+		],
+		"^type$": ref("typeReference");
+		false
+	],
+	req[
+		"name",
+		"type"
+	]
+},
+def "property" = {
+	type[
+		obj
+	],
+	props[
+		"^noChangeEvent$": type[
+			bool
+		],
+		"^optional$": type[
+			bool
+		],
+		"^type$": ref("typeReference"),
+		"^links$": ref("links"),
+		"^const$": type[
+			bool
+		],
+		"^protected$": type[
+			bool
+		],
+		"^ts_only$": type[
+			bool
+		],
+		"^ts_type$": ref("typeReference"),
+		"^readonly$": type[
+			bool
+		],
+		"^jsxContentProperty$": type[
+			bool
+		],
+		"^changeEventDescription$": type[
+			str
+		],
+		"^description$": type[
+			str
+		],
+		"^values$": {
+			type[
+				arr
+			],
+			items[
+				oneOf[
+					type[
+						str
+					],
+					type[
+						num
+					],
+					type[
+						bool
+					]
+				];
+
+			]
+		},
+		"^platforms$": ref("platforms"),
+		"^private$": type[
+			bool
+		];
+		false
+	],
+	req[
+		"type"
+	]
+},
+def "typeReference" = anyOf[
+	type[
+		str
+	],
+	{
+		type[
+			obj
+		],
+		props[
+			"^generics$": ref("generics"),
+			"^interface$": type[
+				str
+			];
+			false
+		],
+		req[
+			"interface",
+			"generics"
+		]
+	},
+	{
+		type[
+			obj
+		],
+		props[
+			"^union$": {
+				type[
+					arr
+				],
+				items[
+					ref("typeReference");
+
+				]
+			};
+			false
+		],
+		req[
+			"union"
+		]
+	},
+	{
+		type[
+			obj
+		],
+		props[
+			"^tuple$": {
+				type[
+					arr
+				],
+				items[
+					ref("typeReference");
+
+				]
+			};
+			false
+		],
+		req[
+			"tuple"
+		]
+	},
+	{
+		type[
+			obj
+		],
+		props[
+			"^map$": {
+				type[
+					obj
+				],
+				props[
+					"^[a-zA-Z]*$": ref("property");
+					false
+				],
+				pro(1,+inf)
+			};
+			false
+		],
+		req[
+			"map"
+		]
+	},
+	{
+		type[
+			obj
+		],
+		props[
+			"^indexType$": enum[
+				"string","number","SelectorString"
+			],
+			"^map$": {
+				type[
+					obj
+				],
+				props[
+					"^[a-z]\\w+$": ref("typeReference");
+					false
+				],
+				pro(1,1)
+			};
+			false
+		],
+		req[
+			"map",
+			"indexType"
+		]
+	},
+	{
+		type[
+			obj
+		],
+		props[
+			"^returns$": {
+				type[
+					obj
+				],
+				props[
+					"^name$": type[
+						str
+					],
+					"^type$": ref("typeReference");
+					false
+				],
+				req[
+					"type"
+				]
+			},
+			"^callback$": {
+				type[
+					arr
+				],
+				items[
+					{
+						type[
+							obj
+						],
+						props[
+							"^name$": type[
+								str
+							],
+							"^type$": ref("typeReference");
+							false
+						],
+						req[
+							"type",
+							"name"
+						]
+					};
+
+				]
+			};
+			false
+		],
+		req[
+			"callback"
+		]
+	}
+],
+def "links" = {
+	type[
+		arr
+	],
+	items[
+		oneOf[
+			ref("link"),
+			ref("snippet")
+		];
+
+	]
+},
+def "api" = {
+	allOf[
+		anyOf[
+			req[
+				"type"
+			],
+			req[
+				"object"
+			],
+			req[
+				"namespace"
+			]
+		],
+		anyOf[
+			req[
+				"title"
+			],
+			req[
+				"object"
+			],
+			req[
+				"type"
+			]
+		]
+	],
+	not({
+			anyOf[
+				req[
+					"constructor"
+				],
+				req[
+					"statics"
+				]
+			],
+			props[
+				"^interface$": enum[
+					true
+				];
+
+			],
+			req[
+				"interface"
+			]
+		}),
+	type[
+		obj
+	],
+	props[
+		"^extends$": ref("typeReference"),
+		"^title$": type[
+			str
+		],
+		"^generics$": ref("genericsDef"),
+		"^constructor$": {
+			props[
+				"^parameters$": {
+					type[
+						arr
+					],
+					items[
+						ref("parameter");
+
+					]
+				},
+				"^access$": enum[
+					"public","protected","private"
+				];
+				false
+			],
+			req[
+				"access"
+			]
+		},
+		"^properties$": {
+			type[
+				obj
+			],
+			props[
+				"(^[_\\$]?[a-z]\\w+$)|(^\\[.*\\]$)": ref("property");
+				false
+			]
+		},
+		"^type$": type[
+			str
+		],
+		"^methods$": {
+			type[
+				obj
+			],
+			props[
+				"(^[_\\$]?[a-z]\\w+$)|(^\\[.*\\]$|^\\$$)": anyOf[
+					ref("method"),
+					{
+						type[
+							arr
+						],
+						items[
+							ref("method");
+
+						]
+					}
+				];
+				false
+			]
+		},
+		"^links$": ref("links"),
+		"^statics$": ref("statics"),
+		"^category$": enum[
+			"core","service","widget","popup","net","data"
+		],
+		"^events$": {
+			type[
+				obj
+			],
+			props[
+				"^[a-z]\\w+$": ref("event");
+				false
+			]
+		},
+		"^interface$": type[
+			bool
+		],
+		"^namespace$": enum[
+			"global","tabris"
+		],
+		"^object$": type[
+			str
+		],
+		"^description$": type[
+			str
+		];
+		false
+	],
+	req[
+		"category"
+	],
+	ifThen(type[
+			obj
+		];
+		allOf[
+			ifThen(req[
+					"extends"
+				];
+				req[
+					"type"
+				]),
+			ifThen(req[
+					"generics"
+				];
+				req[
+					"type"
+				]),
+			ifThen(req[
+					"constructor"
+				];
+				req[
+					"type"
+				]),
+			ifThen(req[
+					"events"
+				];
+				req[
+					"type"
+				]),
+			ifThen(req[
+					"object"
+				];
+				req[
+					"type"
+				])
+		])
+},
+def "event" = {
+	type[
+		obj
+	],
+	props[
+		"^eventObject$": type[
+			str
+		],
+		"^description$": type[
+			str
+		],
+		"^links$": ref("links"),
+		"^parameters$": {
+			type[
+				obj
+			],
+			props[
+				"^_?[a-z]\\w+$": ref("property");
+
+			]
+		},
+		"^platforms$": ref("platforms");
+		false
+	]
+},
+def "genericsDef" = {
+	contains(1,+inf;true),
+	type[
+		arr
+	],
+	items[
+		{
+			type[
+				obj
+			],
+			props[
+				"^extends$": ref("typeReference"),
+				"^default$": ref("typeReference"),
+				"^name$": type[
+					str
+				],
+				"^description$": type[
+					str
+				];
+				false
+			],
+			req[
+				"name"
+			]
+		};
+
+	]
+}

@@ -103,7 +103,7 @@ public class MainClass
 							_schema = (Assertion) p.visit(tree);
 						}
 
-						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra(null, null).mergeWith(null, null).getFullAlgebra().toGrammarString()));
+						System.out.println(Utils.beauty(_schema.notElimination().toWitnessAlgebra(null,null, null).mergeWith(null, null, null).getFullAlgebra().toGrammarString()));
 						break;
 
 					default:

@@ -1,0 +1,438 @@
+def "mm-offset" = type[
+	num
+],
+def "pipette-model" = {
+	type[
+		str
+	],
+	enum[
+		"p10_single_v1","p10_multi_v1","p50_single_v1","p50_multi_v1","p300_single_v1","p300_multi_v1","p1000_single_v1","p1000_multi_v1","p10_single_v1.3","p10_multi_v1.3","p50_single_v1.3","p50_multi_v1.3","p300_single_v1.3","p300_multi_v1.3","p1000_single_v1.3","p1000_multi_v1.3"
+	]
+},
+def "pipette-access-params" = {
+	req[
+		"pipette",
+		"labware",
+		"well"
+	],
+	props[
+		"^labware$": type[
+			str
+		],
+		"^pipette$": type[
+			str
+		],
+		"^well$": type[
+			str
+		];
+		
+	]
+},
+def "offsetFromBottomMm" = props[
+	"^offsetFromBottomMm$": ref("mm-offset");
+	
+],
+rootdef "root" = {
+	type[
+		obj
+	],
+	props[
+		"^metadata$": {
+			type[
+				obj
+			],
+			props[
+				"^subcategory$": type[
+					str,
+					null
+				],
+				"^last-modified$": type[
+					num,
+					null
+				],
+				"^description$": type[
+					str,
+					null
+				],
+				"^category$": type[
+					str,
+					null
+				],
+				"^protocol-name$": type[
+					str
+				],
+				"^tags$": {
+					type[
+						arr
+					],
+					items[
+						type[
+							str
+						];
+						
+					]
+				},
+				"^author$": type[
+					str
+				],
+				"^created$": type[
+					num
+				];
+				
+			]
+		},
+		"^designer-application$": {
+			type[
+				obj
+			],
+			props[
+				"^data$": type[
+					obj
+				],
+				"^application-name$": type[
+					str
+				],
+				"^application-version$": type[
+					str
+				];
+				
+			]
+		},
+		"^pipettes$": props[
+			".+": {
+				type[
+					obj
+				],
+				req[
+					"mount",
+					"model"
+				],
+				props[
+					"^model$": ref("pipette-model"),
+					"^name$": ref("pipetteName"),
+					"^mount$": {
+						type[
+							str
+						],
+						enum[
+							"left","right"
+						]
+					};
+					
+				]
+			};
+			false
+		],
+		"^procedure$": {
+			type[
+				arr
+			],
+			items[
+				{
+					type[
+						obj
+					],
+					req[
+						"subprocedure"
+					],
+					props[
+						"^subprocedure$": {
+							type[
+								arr
+							],
+							items[
+								anyOf[
+									{
+										type[
+											obj
+										],
+										req[
+											"command",
+											"params"
+										],
+										props[
+											"^params$": allOf[
+												ref("flow-rate-params"),
+												ref("pipette-access-params"),
+												ref("volume-params"),
+												ref("offsetFromBottomMm")
+											],
+											"^command$": enum[
+												"aspirate","dispense","air-gap"
+											];
+											false
+										]
+									},
+									{
+										type[
+											obj
+										],
+										req[
+											"command",
+											"params"
+										],
+										props[
+											"^params$": allOf[
+												ref("pipette-access-params"),
+												ref("offsetFromBottomMm")
+											],
+											"^command$": enum[
+												"touch-tip"
+											];
+											false
+										]
+									},
+									{
+										type[
+											obj
+										],
+										req[
+											"command",
+											"params"
+										],
+										props[
+											"^params$": ref("pipette-access-params"),
+											"^command$": enum[
+												"pick-up-tip","drop-tip","blowout"
+											];
+											false
+										]
+									},
+									{
+										type[
+											obj
+										],
+										req[
+											"command",
+											"params"
+										],
+										props[
+											"^params$": {
+												type[
+													obj
+												],
+												req[
+													"pipette",
+													"slot"
+												],
+												props[
+													"^offset$": {
+														type[
+															obj
+														],
+														req[
+															"x",
+															"y",
+															"z"
+														],
+														props[
+															"^x$": type[
+																num
+															],
+															"^y$": type[
+																num
+															],
+															"^z$": type[
+																num
+															];
+															
+														]
+													},
+													"^minimum-z-height$": {
+														{
+															bet(0,+inf),
+															xbet(-inf,+inf)
+														},
+														type[
+															num
+														]
+													},
+													"^slot$": ref("slot"),
+													"^pipette$": type[
+														str
+													],
+													"^force-direct$": type[
+														bool
+													];
+													false
+												]
+											},
+											"^command$": enum[
+												"move-to-slot"
+											];
+											false
+										]
+									},
+									{
+										type[
+											obj
+										],
+										req[
+											"command",
+											"params"
+										],
+										props[
+											"^params$": {
+												type[
+													obj
+												],
+												props[
+													"^wait$": anyOf[
+														type[
+															num
+														],
+														enum[
+															true
+														]
+													];
+													false
+												],
+												req[
+													"wait"
+												]
+											},
+											"^command$": enum[
+												"delay"
+											];
+											false
+										]
+									}
+								];
+								
+							]
+						},
+						"^annotation$": {
+							type[
+								obj
+							],
+							req[
+								"name",
+								"description"
+							],
+							props[
+								"^description$": type[
+									str,
+									null
+								],
+								"^name$": type[
+									str,
+									null
+								];
+								
+							]
+						};
+						
+					]
+				};
+				
+			]
+		},
+		"^labware$": props[
+			".+": {
+				type[
+					obj
+				],
+				req[
+					"slot",
+					"model"
+				],
+				props[
+					"^model$": type[
+						str
+					],
+					"^display-name$": type[
+						str
+					],
+					"^slot$": ref("slot");
+					
+				]
+			};
+			
+		],
+		"^robot$": {
+			req[
+				"model"
+			],
+			props[
+				"^model$": {
+					type[
+						str
+					],
+					enum[
+						"OT-2 Standard"
+					]
+				};
+				
+			]
+		},
+		"^default-values$": {
+			type[
+				obj
+			],
+			req[
+				"aspirate-flow-rate",
+				"dispense-flow-rate",
+				"aspirate-mm-from-bottom",
+				"dispense-mm-from-bottom"
+			],
+			props[
+				"^touch-tip-mm-from-top$": ref("mm-offset"),
+				"^dispense-mm-from-bottom$": ref("mm-offset"),
+				"^aspirate-flow-rate$": ref("flow-rate-for-pipettes"),
+				"^aspirate-mm-from-bottom$": ref("mm-offset"),
+				"^dispense-flow-rate$": ref("flow-rate-for-pipettes");
+				
+			]
+		},
+		"^protocol-schema$": type[
+			str
+		];
+		false
+	],
+	req[
+		"protocol-schema",
+		"default-values",
+		"metadata",
+		"robot",
+		"pipettes",
+		"labware",
+		"procedure"
+	]
+},
+def "flow-rate-params" = props[
+	"^flow-rate$": type[
+		num
+	];
+	
+],
+def "flow-rate-for-pipettes" = {
+	names(ref("pipetteName")),
+	type[
+		obj
+	],
+	props[
+		".*": type[
+			num
+		];
+		false
+	]
+},
+def "slot" = {
+	type[
+		str
+	],
+	enum[
+		"1","2","3","4","5","6","7","8","9","10","11","12"
+	]
+},
+def "pipetteName" = {
+	type[
+		str
+	],
+	enum[
+		"p10_single","p10_multi","p50_single","p50_multi","p300_single","p300_multi","p1000_single","p1000_multi"
+	]
+},
+def "volume-params" = req[
+	"volume"
+]

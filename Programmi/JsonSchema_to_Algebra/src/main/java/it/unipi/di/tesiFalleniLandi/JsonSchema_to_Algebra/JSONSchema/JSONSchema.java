@@ -8,6 +8,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ public class JSONSchema implements JSONSchemaElement{
 		}else if(obj.isJsonObject())
 			object = obj.getAsJsonObject();
 		else
-			throw new ParseCancellationException("Expected Object or boolean but was "+obj.getClass());
+			throw new SyntaxErrorRuntimeException("Expected Object or boolean but was "+obj.getClass());
 		
 		Iterator<?> it = object.keySet().iterator();
 		
@@ -271,7 +272,7 @@ public class JSONSchema implements JSONSchemaElement{
 			Set<String> subSchemaKeySet = toAdd.keySet();
 			for (String key : subSchemaKeySet){
 				if(key.equals(Utils.ROOTDEF_FOR_JSONSCHEMA))
-					Utils_JSONSchema.mergeJsonObject(schema, (JsonObject) toAdd.get(key));
+					schema = Utils_JSONSchema.mergeJsonObject(schema, (JsonObject) toAdd.get(key));
 				else
 					schema.add(key, toAdd.get(key));
 			}
@@ -291,7 +292,7 @@ public class JSONSchema implements JSONSchemaElement{
 		}
 		
 		schema.jsonSchema.putIfAbsent("allOf", new AllOf());
-		
+
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		
 		for(Entry<String, JSONSchemaElement> entry : entries) {
@@ -304,11 +305,12 @@ public class JSONSchema implements JSONSchemaElement{
 				schema.jsonSchema.put(entry.getKey(), entry.getValue());
 				continue;
 			}
-			
+
 			JSONSchema tmp = new JSONSchema();
 			tmp.jsonSchema = new HashMap<>();
 			tmp.jsonSchema.put(entry.getKey(), entry.getValue().assertionSeparation());
 			((AllOf) schema.jsonSchema.get("allOf")).addElement(tmp);
+
 		}
 		
 		return schema;
@@ -335,7 +337,9 @@ public class JSONSchema implements JSONSchemaElement{
 		Set<Entry<String, JSONSchemaElement>> entries = jsonSchema.entrySet();
 		for(Entry<String, JSONSchemaElement> entry : entries){
 			if(entry.getValue().getClass() == UnknownElement.class) continue;
-			allOf.add(entry.getValue().toGrammar());
+
+			if(entry.getValue().numberOfTranslatableAssertions() != 0)
+				allOf.add(entry.getValue().toGrammar());
 		}
 
 		return allOf;

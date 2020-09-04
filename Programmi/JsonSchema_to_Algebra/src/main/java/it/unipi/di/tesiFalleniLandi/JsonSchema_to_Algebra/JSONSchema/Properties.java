@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Properties_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class Properties implements JSONSchemaElement{
 			object = obj.getAsJsonObject();
 		}catch(ClassCastException ex){
 			if(obj.isJsonArray())
-				throw new ParseCancellationException("Error: properties value must be JsonObject, not JsonArray!\r\n");
+				throw new SyntaxErrorRuntimeException("Error: properties value must be JsonObject, not JsonArray!\r\n");
 		}
 
 		if(object.size() == 0) return;
@@ -50,7 +51,7 @@ public class Properties implements JSONSchemaElement{
 			if((object.get(key).isJsonPrimitive() && object.get(key).getAsJsonPrimitive().isBoolean()) || object.get(key).isJsonObject())
 				value = new JSONSchema(object.get(key));
 			else{
-				throw new ParseCancellationException("Error: the value in properties must be String: JsonObject or Boolean!\r\n");
+				throw new SyntaxErrorRuntimeException("Error: the value in properties must be String: JsonObject or Boolean!\r\n");
 			}
 			
 			properties.put(key, value);
@@ -62,13 +63,13 @@ public class Properties implements JSONSchemaElement{
 
 		JsonObject object = null;
 
-		if(object.size() == 0) return;
+		if(((JsonObject)obj).size() == 0) return;
 
 		try{
 			object = obj.getAsJsonObject();
 		}catch(ClassCastException ex){
 			if(obj.getClass() == JsonArray.class)
-				throw new ParseCancellationException("Error: patterProperties value must be JsonObject, not JsonArray!\r\n");
+				throw new SyntaxErrorRuntimeException("Error: patterProperties value must be JsonObject, not JsonArray!\r\n");
 		}
 
 		patternProperties = new HashMap<>();
@@ -82,7 +83,7 @@ public class Properties implements JSONSchemaElement{
 			try {
 				value = new JSONSchema(object.get(key));
 			}catch (ClassCastException ex){
-				throw new ParseCancellationException("Error: the value in patterProperties must be String: JsonObject!\r\n");
+				throw new SyntaxErrorRuntimeException("Error: the value in patterProperties must be String: JsonObject!\r\n");
 			}
 			
 			patternProperties.put(key, value);
@@ -93,7 +94,7 @@ public class Properties implements JSONSchemaElement{
 		logger.trace("Parsing additionalProperties from JsonElement {}", obj);
 
 		if(!obj.isJsonObject() && !obj.isJsonPrimitive()) // TODO: trovare modo per controllare i tipi primitivi
-			throw new ParseCancellationException("Error: Expected JsonObject in additionalProperties!\r\n");
+			throw new SyntaxErrorRuntimeException("Error: Expected JsonObject in additionalProperties!\r\n");
 
 		additionalProperties = new JSONSchema(obj);
 	}

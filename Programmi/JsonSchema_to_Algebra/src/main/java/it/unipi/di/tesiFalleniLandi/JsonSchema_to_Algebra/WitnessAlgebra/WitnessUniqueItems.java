@@ -33,7 +33,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) return mergeElement((WitnessUniqueItems) a);
         if(a.getClass() == WitnessRepeateditems.class) return mergeElement((WitnessRepeateditems) a);
@@ -42,7 +42,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -55,7 +55,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
         t.add(AlgebraStrings.TYPE_ARRAY);
 
         logger.trace("Merge returning {} ", t.not());
-        return t.not().toWitnessAlgebra(null, null);
+        return t.not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -127,6 +127,11 @@ public class WitnessUniqueItems implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 
     @Override

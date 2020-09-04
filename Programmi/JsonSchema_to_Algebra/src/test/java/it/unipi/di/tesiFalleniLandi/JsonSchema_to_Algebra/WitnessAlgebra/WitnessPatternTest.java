@@ -47,24 +47,31 @@ public class WitnessPatternTest {
         assertEquals(p1.mergeElement(p2), output);
     }
 
+    //esempio della tesi
     @Test
     public void testMergePattern5() throws REException {
-        Pattern a = Pattern.createFromRegexp("^.a");
-        Pattern b = Pattern.createFromRegexp("^b");
+        Pattern a = Pattern.createFromRegexp("^a");
+        Pattern b = Pattern.createFromRegexp("^.b");
+        Pattern c = Pattern.createFromRegexp("^.c");
 
         Pattern AminusB = a.intersect(b.complement());
         Pattern BminusA = b.intersect(a.complement());
         Pattern AandB = a.intersect(b);
 
-        Pattern r1 = BminusA.intersect(AminusB);
-        Pattern r2 = BminusA.intersect(AandB);
-        Pattern r3 = AminusB.intersect(AandB);
-        Pattern r4 = AandB.intersect(AandB); //banale
+        Pattern AminusBandC = AminusB.intersect(c);
+        Pattern notAorBancC = c.intersect(a.union(b).complement());
+
+        Pattern r1 = notAorBancC.intersect(AandB);
+        Pattern r2 = notAorBancC.intersect(AminusB.intersect(a));
+        Pattern r3 = AminusBandC.intersect(AandB);
+        Pattern r4 = AminusBandC.intersect(AminusB.intersect(a));
 
         System.out.println("R1: " + r1.domainSize());
         System.out.println("R2: " + r2.domainSize());
         System.out.println("R3: " + r3.domainSize());
         System.out.println("R4: " + r4.domainSize());
 
+        System.out.println("check 1:" + AminusBandC.intersect(AminusB.intersect(a).complement()).domainSize());
+        System.out.println("check 2:" + AminusB.intersect(a).intersect(AminusBandC.complement()).domainSize());
     }
 }

@@ -24,7 +24,7 @@ public class WitnessItemsTest {
         output.addItems(new WitnessMof(12.0));
         output.setAdditionalItems(new WitnessMof(21.0));
 
-        assertEquals(items1.mergeElement(items2, null), output);
+        assertEquals(items1.mergeElement(items2, null, null), output);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class WitnessItemsTest {
         output.addItems(new WitnessMof(28.0));
         output.setAdditionalItems(new WitnessMof(21.0));
 
-        assertEquals(items1.mergeElement(items2, null), output);
+        assertEquals(items1.mergeElement(items2, null, null), output);
     }
 
 }

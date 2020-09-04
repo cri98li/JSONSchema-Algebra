@@ -1,6 +1,8 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.UnsupportedURIRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +22,9 @@ public class URI_JS {
 	private static Logger logger = LogManager.getLogger(URI_JS.class);
 
 	public URI_JS(String uri) {
+		if(uri.toLowerCase().contains(".json") || !uri.startsWith("#/"))
+			throw new UnsupportedURIRuntimeException("Unsupported URI");
+
 		this.uri = uri;
 		logger.trace("Created a new URI_JS: {}", this);
 	}
@@ -53,9 +58,6 @@ public class URI_JS {
 
 	private void normalizeURI() {
 		logger.trace("Trying to normalizing {}", this.uri);
-
-		if(uri.toLowerCase().contains(".json") || !uri.startsWith("#"))
-			throw new ParseCancellationException("Unsupported URI");
 
 		//start: uri --> #/$defs/a/b/foo
 		normalizedName = "";

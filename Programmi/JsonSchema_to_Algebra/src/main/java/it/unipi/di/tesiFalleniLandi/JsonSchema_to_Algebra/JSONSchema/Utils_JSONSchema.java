@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.UnsupportedURIRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +28,7 @@ public class Utils_JSONSchema {
 			JsonObject object = gson.fromJson(reader, JsonObject.class);
 			return new JSONSchema(object);
 		}catch (JsonSyntaxException ex){
-			throw new JsonSyntaxException("Expected JsonObject but was JsonArray");
+			throw new SyntaxErrorRuntimeException(ex);
 		}
 	}
 
@@ -38,11 +40,12 @@ public class Utils_JSONSchema {
 	public static JSONSchema referenceNormalization(JSONSchema root) {
 		logger.trace("Performing referenceNormalizzation");
 
+		List<URI_JS> refList = root.getRef(); //collect all refs
+
 		JSONSchema newRoot = new JSONSchema();
 		List<Entry<String, Defs>> defsList = addPathElement("#", root.collectDef()); //collect all defs
 		logger.trace("List of defs under $defs or defionitions: {}", defsList);
 
-		List<URI_JS> refList = root.getRef(); //collect all refs
 		logger.trace("List of ref: {}", refList);
 
 		Defs finalDefs = new Defs();
@@ -70,14 +73,14 @@ public class Utils_JSONSchema {
 			}
 
 			logger.trace("Trying to search {} across the document", ref);
-			//ref non trovata in defsList, provo a risolverla navigando nel documento
+			//ref non trovata in defsList, provo a risolverla visitando il documento
 			JSONSchema newDef = root.searchDef(ref.iterator());
 			if(newDef != null) {
 				ref.found();
 				finalDefs.addDef(ref.getNormalizedName(), newDef);
 			}
 			else
-				throw new ParseCancellationException("ref not resolved: "+ref);
+				throw new UnsupportedURIRuntimeException("ref not resolved: "+ref);
 		}
 
 		//add all defs defined but not used
@@ -124,8 +127,10 @@ public class Utils_JSONSchema {
 	public static JsonObject mergeJsonObject(JsonObject a, JsonObject b){
 		JsonObject obj = new JsonObject();
 
+
 		for(Entry<String, JsonElement> p : a.entrySet())
 			obj.add(p.getKey(), p.getValue());
+
 
 		for(Entry<String, JsonElement> p : b.entrySet())
 			obj.add(p.getKey(), p.getValue());

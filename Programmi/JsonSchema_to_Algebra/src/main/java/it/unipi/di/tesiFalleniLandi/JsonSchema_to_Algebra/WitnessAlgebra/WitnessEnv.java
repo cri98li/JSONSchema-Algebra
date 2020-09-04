@@ -20,6 +20,7 @@ public class WitnessEnv implements WitnessAssertion {
     private WitnessVar rootVar; //indicate the root variable
     protected WitnessBDD bdd;
     protected WitnessVarManager variableNamingSystem;
+    protected WitnessPattReqManager pattReqManager;
 
     private LinkedList<WitnessVar> varToBeElaborated; // notElimination + buildOBDD
 
@@ -29,7 +30,7 @@ public class WitnessEnv implements WitnessAssertion {
         varToBeElaborated = new LinkedList<>();
     }
 
-    public WitnessEnv(WitnessVarManager manager){
+    public WitnessEnv(WitnessVarManager manager, WitnessPattReqManager pattReqManager){
         varList = new HashMap<>();
         coVar = HashBiMap.create(); //init BiMap
         varToBeElaborated = new LinkedList<>();
@@ -38,6 +39,7 @@ public class WitnessEnv implements WitnessAssertion {
         varList.put(bdd.getFalseVar(), new WitnessBoolean(false));
         varList.put(bdd.getTrueVar(), new WitnessBoolean(true));
         coVar.put(bdd.getFalseVar(), bdd.getTrueVar());
+        this.pattReqManager = pattReqManager;
 
         logger.trace("Creating an empty WitnessEnv");
     }
@@ -419,19 +421,19 @@ public class WitnessEnv implements WitnessAssertion {
 
 
     @Override
-    public WitnessEnv mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessEnv mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessEnv newEnv = cloneNoWitnessVar();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet())
             if(entry.getKey().equals(rootVar))
-                newEnv.setRootVar(entry.getKey().getName(), entry.getValue().merge(varManager));
+                newEnv.setRootVar(entry.getKey().getName(), entry.getValue().merge(varManager, pattReqManager));
             else
-                newEnv.add(entry.getKey(), entry.getValue().merge(varManager));
+                newEnv.add(entry.getKey(), entry.getValue().merge(varManager, pattReqManager));
 
         newEnv.varToBeElaborated = new LinkedList<>(varToBeElaborated);
 
@@ -478,6 +480,7 @@ public class WitnessEnv implements WitnessAssertion {
         clone.bdd = bdd;
         clone.varToBeElaborated = new LinkedList<>(varToBeElaborated);
         clone.variableNamingSystem = variableNamingSystem;
+        clone.pattReqManager = pattReqManager;
 
         return clone;
     }
@@ -633,6 +636,23 @@ public class WitnessEnv implements WitnessAssertion {
         throw new UnsupportedOperationException("buildOBDD on WitnessEnv");
     }
 
+    @Override
+    public void getReport(ReportResults reportResults) {
+        throw new UnsupportedOperationException();
+    }
+
+    public List<Map.Entry<WitnessVar, ReportResults>> getReport(){
+        List<Map.Entry<WitnessVar, ReportResults>> returnList = new LinkedList<>();
+
+        for(Map.Entry<WitnessVar, WitnessAssertion> entry : varList.entrySet()){
+            ReportResults rr = new ReportResults();
+            entry.getValue().getReport(rr);
+            returnList.add(new AbstractMap.SimpleEntry<>(entry.getKey(), rr));
+        }
+
+        return returnList;
+    }
+
 
     public void objectPrepare() throws REException, WitnessException {
         toOrPattReq();
@@ -646,9 +666,9 @@ public class WitnessEnv implements WitnessAssertion {
             for (Map.Entry<WitnessVar, WitnessAssertion> entry : entrySet) {
 
                 if (entry.getValue().getClass() == WitnessAnd.class)
-                    newDefinitions.addAll(((WitnessAnd) entry.getValue()).objectPrepare(this, variableNamingSystem));
+                    newDefinitions.addAll(((WitnessAnd) entry.getValue()).objectPrepare(this));
                 else if (entry.getValue().getClass() == WitnessOr.class)
-                    newDefinitions.addAll(((WitnessOr) entry.getValue()).objectPrepare(this, variableNamingSystem));
+                    newDefinitions.addAll(((WitnessOr) entry.getValue()).objectPrepare(this));
                     //else if(entry.getValue().getClass() == WitnessType.class && entry.getValue().equals(new WitnessType("obj"))){ //only type object
                 else {
                     // in case of definitions likes:
@@ -656,7 +676,7 @@ public class WitnessEnv implements WitnessAssertion {
                     // we have to prepare that definition but the assertion type[obj] is not contained in boolean operator (AND, OR)
                     WitnessAnd tmp = new WitnessAnd();
                     tmp.add(entry.getValue());
-                    newDefinitions.addAll(tmp.objectPrepare(this, variableNamingSystem)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
+                    newDefinitions.addAll(tmp.objectPrepare(this)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
                     /*if (tmp.getIfUnitaryAnd() != null)
                         varList.put(entry.getKey(), tmp.getIfUnitaryAnd());
                     else
@@ -694,7 +714,7 @@ public class WitnessEnv implements WitnessAssertion {
                 WitnessAssertion normalizedValue = newDef.getValue();
 
                 normalizedValue = normalizedValue.varNormalization_expansion(this);
-                normalizedValue = normalizedValue.merge(variableNamingSystem);
+                normalizedValue = normalizedValue.merge(variableNamingSystem, pattReqManager);
                 normalizedValue = normalizedValue.groupize();
                 normalizedValue = normalizedValue.DNF();
 

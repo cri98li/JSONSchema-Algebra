@@ -9,38 +9,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class WitnessPattReq implements WitnessAssertion{
     private static Logger logger = LogManager.getLogger(WitnessPattReq.class);
-
-    private static HashMap<Object, WeakReference<WitnessPattReq>> instances;
-
-    public static WitnessPattReq build(ComplexPattern key, WitnessAssertion assertion){
-        if(instances == null) instances = new HashMap<>();
-
-        WitnessPattReq tmp = new WitnessPattReq(key, assertion);
-
-        if(instances.containsKey(tmp.toString()))
-            if(instances.get(tmp.toString()).get() != null) {
-                logger.trace("WitnessPattReq returning an OLD instance: ", instances.get(tmp.toString()).get());
-
-                return instances.get(tmp.toString()).get();
-            }else
-                instances.remove(tmp.toString());
-
-        instances.put(tmp.toString(), new WeakReference<>(tmp));
-        logger.trace("WitnessPattReq returning a NEW instance: ", instances.get(tmp.toString()));
-        return tmp;
-    }
 
     private ComplexPattern key;
     private WitnessAssertion value;
 
     private List<WitnessOrPattReq> orpList;
 
-    private WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
+    protected WitnessPattReq(ComplexPattern key, WitnessAssertion assertion){
         if(assertion != null && assertion.getClass() == WitnessAnd.class && ((WitnessAnd) assertion).getIfUnitaryAnd() != null)
             assertion = ((WitnessAnd) assertion).getIfUnitaryAnd();
         logger.trace("Creating a new WitnessPattReq with key: {} and value: {}", key, assertion);
@@ -124,7 +103,7 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == this.getClass())
@@ -134,14 +113,14 @@ public class WitnessPattReq implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessPattReq clone = this.clone();
 
         //Boolean rewritings
         if((this.value.getClass() == WitnessBoolean.class) && (!((WitnessBoolean)this.value).getValue()))
             return new WitnessBoolean(false);
 
-        clone.value = value.merge(varManager);
+        clone.value = value.merge(varManager, pattReqManager);
 
         return clone;
     }
@@ -250,7 +229,6 @@ public class WitnessPattReq implements WitnessAssertion{
 
             newDefinitions.addAll(value.varNormalization_separation(env, varManager));
 
-            //Map.Entry<WitnessVar, WitnessVar> result = env.addWithComplement(value);
             WitnessVar newVar = varManager.buildVar(varManager.getName(value));
 
             newDefinitions.add(new AbstractMap.SimpleEntry<>(newVar, value));
@@ -296,6 +274,11 @@ public class WitnessPattReq implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        value.getReport(reportResults);
     }
 
 }

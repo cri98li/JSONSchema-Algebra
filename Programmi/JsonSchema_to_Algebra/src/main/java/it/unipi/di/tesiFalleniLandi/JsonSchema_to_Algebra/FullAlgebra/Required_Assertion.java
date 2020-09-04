@@ -100,17 +100,17 @@ public class Required_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
 		Type_Assertion tmp = new Type_Assertion();
 		tmp.add(AlgebraStrings.TYPE_OBJECT);
-		WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager, env);
+		WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager,env,pattReqManager);
 
 
 		for(String str : reqList) {
 			ComplexPattern p = ComplexPattern.createFromName(str);
-			WitnessPattReq pattReq = WitnessPattReq.build(p, new WitnessBoolean(true));
+			WitnessPattReq pattReq = pattReqManager.build(p, new WitnessBoolean(true));
 				and.add(pattReq);
 		}
 

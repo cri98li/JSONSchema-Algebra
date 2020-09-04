@@ -39,7 +39,7 @@ public class Endpoint {
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
-        env = (WitnessEnv) env.merge(null);
+        env = (WitnessEnv) env.merge(null, null);
 
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.flush();
@@ -74,7 +74,7 @@ public class Endpoint {
         System.out.println("\r\n\r\n objectPrepare: \r\n");
         System.out.flush();
 
-        env = (WitnessEnv) env.merge(null);
+        env = (WitnessEnv) env.merge(null, null);
 
         env.toOrPattReq();
         env.objectPrepare();

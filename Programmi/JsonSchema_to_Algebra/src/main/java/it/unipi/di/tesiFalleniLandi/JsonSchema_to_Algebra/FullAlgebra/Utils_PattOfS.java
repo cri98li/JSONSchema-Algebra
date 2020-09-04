@@ -27,7 +27,7 @@ public class Utils_PattOfS {
         falsePattern = truePattern.complement();
     }
 
-    public static ComplexPattern pattOfS(Assertion a){
+    public static ComplexPattern pattOfS(Assertion a, Defs_Assertion env){
         ComplexPattern returnPattern = truePattern.clone();
 
         if(a.getClass() == Type_Assertion.class)
@@ -37,19 +37,19 @@ public class Utils_PattOfS {
             returnPattern = pattOfS((Const_Assertion) a);
 
         if(a.getClass() == AllOf_Assertion.class)
-            returnPattern = pattOfS((AllOf_Assertion) a);
+            returnPattern = pattOfS((AllOf_Assertion) a, env);
 
         if(a.getClass() == AnyOf_Assertion.class)
-            returnPattern = pattOfS((AnyOf_Assertion) a);
+            returnPattern = pattOfS((AnyOf_Assertion) a, env);
 
         if(a.getClass() == Not_Assertion.class)
-            returnPattern = pattOfS((Not_Assertion) a);
+            returnPattern = pattOfS((Not_Assertion) a, env);
 
         if(a.getClass() == Pattern_Assertion.class)
             returnPattern = pattOfS((Pattern_Assertion) a);
 
         if(a.getClass() == Ref_Assertion.class)
-            returnPattern = pattOfS((Ref_Assertion) a);
+            returnPattern = pattOfS((Ref_Assertion) a, env);
 
         logger.trace("PattOfS({}) returning {}", a, returnPattern);
 
@@ -69,26 +69,26 @@ public class Utils_PattOfS {
         return falsePattern.clone();
     }
 
-    public static ComplexPattern pattOfS(AllOf_Assertion a){
+    public static ComplexPattern pattOfS(AllOf_Assertion a, Defs_Assertion env){
         List<Assertion> and = a.getAndList();
-        ComplexPattern p = pattOfS(and.get(0));
+        ComplexPattern p = pattOfS(and.get(0), env);
         for(int i = 1; i < and.size(); i++)
-            p = p.intersect(pattOfS(and.get(i)));
+            p = p.intersect(pattOfS(and.get(i), env));
 
         return p;
     }
 
-    public static ComplexPattern pattOfS(AnyOf_Assertion a){
+    public static ComplexPattern pattOfS(AnyOf_Assertion a, Defs_Assertion env){
         List<Assertion> or = a.getOrList();
-        ComplexPattern p = pattOfS(or.get(0));
+        ComplexPattern p = pattOfS(or.get(0), env);
         for(int i = 1; i < or.size(); i++)
-            p = p.union(pattOfS(or.get(i)));
+            p = p.union(pattOfS(or.get(i), env));
 
         return p;
     }
 
-    public static ComplexPattern pattOfS(Not_Assertion a){
-        return pattOfS(a.getValue()).complement();
+    public static ComplexPattern pattOfS(Not_Assertion a, Defs_Assertion env){
+        return pattOfS(a.getValue(), env).complement();
     }
 
     public static ComplexPattern pattOfS(Pattern_Assertion a){
@@ -96,6 +96,6 @@ public class Utils_PattOfS {
     }
 
     public static ComplexPattern pattOfS(Ref_Assertion a, Defs_Assertion env){
-        return pattOfS(env.getDef(a.getRef()));
+        return pattOfS(env.getDef(a.getRef()), env);
     }
 }

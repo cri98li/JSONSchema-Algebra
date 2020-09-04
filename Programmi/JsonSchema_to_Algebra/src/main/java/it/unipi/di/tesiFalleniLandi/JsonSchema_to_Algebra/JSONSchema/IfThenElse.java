@@ -127,9 +127,9 @@ public class IfThenElse implements JSONSchemaElement {
 	public int numberOfTranslatableAssertions() {
 		int count = 0;
 
-		if(ifStatement != null) count=ifStatement.numberOfTranslatableAssertions();
-		if(thenStatement != null) count=thenStatement.numberOfTranslatableAssertions();
-		if(elseStatement != null) count=elseStatement.numberOfTranslatableAssertions();
+		if(ifStatement != null) count+=ifStatement.numberOfTranslatableAssertions();
+		if(thenStatement != null) count+=thenStatement.numberOfTranslatableAssertions();
+		if(elseStatement != null) count+=elseStatement.numberOfTranslatableAssertions();
 
 		return count;
 	}

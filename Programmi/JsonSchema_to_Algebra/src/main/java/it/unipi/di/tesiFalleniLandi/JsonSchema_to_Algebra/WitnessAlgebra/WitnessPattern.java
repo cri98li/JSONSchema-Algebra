@@ -20,10 +20,6 @@ public class WitnessPattern implements WitnessAssertion{
         logger.trace("Created a new WitnessPattern {}", this);
     }
 
-    public ComplexPattern getPattern() {
-        return pattern;
-    }
-
     private WitnessPattern() { }
 
     @Override
@@ -44,7 +40,7 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass())
             return mergeElement((WitnessPattern) a);
@@ -53,7 +49,7 @@ public class WitnessPattern implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -157,5 +153,10 @@ public class WitnessPattern implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 }

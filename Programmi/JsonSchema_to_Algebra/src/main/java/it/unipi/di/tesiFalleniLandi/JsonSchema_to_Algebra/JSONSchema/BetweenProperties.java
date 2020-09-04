@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pro_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ public class BetweenProperties implements JSONSchemaElement{
 	
 	public void setMinProperties(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
-			throw new ParseCancellationException("expected integer as value of minProperties");
+			throw new SyntaxErrorRuntimeException("expected integer as value of minProperties");
 
 		logger.trace("Setting minProperties by parsing {}", obj);
 
@@ -33,7 +34,7 @@ public class BetweenProperties implements JSONSchemaElement{
 	
 	public void setMaxProperties(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
-			throw new ParseCancellationException("expected integer as value of maxProperties");
+			throw new SyntaxErrorRuntimeException("expected integer as value of maxProperties");
 
 		logger.trace("Setting maxProperties by parsing {}", obj);
 

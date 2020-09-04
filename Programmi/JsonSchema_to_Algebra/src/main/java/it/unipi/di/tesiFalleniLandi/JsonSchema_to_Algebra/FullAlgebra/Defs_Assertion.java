@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReq;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReqManager;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +22,7 @@ public class Defs_Assertion implements Assertion{
 	private String rootDef; // name of the main definition
 	private Defs_Assertion env = null; //used by pattOfS //TODO: Attenzione!!!!!!!!!!!
 	private WitnessVarManager varManager;
+	private WitnessPattReqManager pattReqManager;
 
 	private static Logger logger = LogManager.getLogger(Defs_Assertion.class);
 
@@ -28,11 +31,12 @@ public class Defs_Assertion implements Assertion{
 		env = this;
 		defs = new HashMap<>();
 		varManager = new WitnessVarManager();
+		pattReqManager = new WitnessPattReqManager();
 	}
 	
 	public void add(String key, Assertion value) throws ParseCancellationException {
 		if(defs.containsKey(key)) {
-			throw new ParseCancellationException("Detected 2 defs with the same name");
+			throw new ParseCancellationException("Detected 2 defs with the same name :" + key);
 		}
 		defs.put(key, value);
 	}
@@ -121,18 +125,18 @@ public class Defs_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessEnv toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
-		WitnessEnv newEnv = new WitnessEnv(this.varManager);
+	public WitnessEnv toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
+		WitnessEnv newEnv = new WitnessEnv(this.varManager, this.pattReqManager);
 
 		for(Entry<String, Assertion> entry : defs.entrySet())
 			if(entry.getKey().equals(rootDef))
-				newEnv.setRootVar(entry.getKey(), entry.getValue().toWitnessAlgebra(this.varManager, this));
+				newEnv.setRootVar(entry.getKey(), entry.getValue().toWitnessAlgebra(this.varManager, this, this.pattReqManager));
 			else
-				newEnv.add(this.varManager.buildVar(entry.getKey()), entry.getValue().toWitnessAlgebra(this.varManager, this));
+				newEnv.add(this.varManager.buildVar(entry.getKey()), entry.getValue().toWitnessAlgebra(this.varManager, this, this.pattReqManager));
 
-		newEnv.reachableRefs(null, null);
-		newEnv.checkLoopRef(null, null);
 		newEnv.buildOBDD_notElimination();
+		newEnv.checkLoopRef(null, null);
+		newEnv.reachableRefs(null, null);
 
 		return newEnv;
 	}

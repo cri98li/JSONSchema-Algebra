@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Type_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ public class Type implements JSONSchemaElement {
 	public Type(JsonElement obj){
 		logger.trace("Creating a new Type by parsing {}", obj);
 		if(obj.isJsonNull())
-			throw new ParseCancellationException("Error: Expected JsonArray or Sting in type!\r\n");
+			throw new SyntaxErrorRuntimeException("Error: Expected JsonArray or Sting in type!\r\n");
 
 		if(obj.isJsonArray()){
 			JsonArray array = obj.getAsJsonArray();
@@ -35,7 +36,7 @@ public class Type implements JSONSchemaElement {
 				JsonElement str = it.next();
 				////Verify the type string value
 				if(!str.isJsonPrimitive() || !str.getAsJsonPrimitive().isString())
-					throw new ParseCancellationException("Error: Expected JsonArray or Sting in type but was "+ obj);
+					throw new SyntaxErrorRuntimeException("Error: Expected JsonArray or Sting in type but was "+ obj);
 				jsonTypeToGrammar(str.getAsJsonPrimitive().getAsString());
 				type_array.add(str.getAsString());
 			}
@@ -47,7 +48,7 @@ public class Type implements JSONSchemaElement {
 				type_array = new LinkedList<>();
 				type_array.add(type_str);
 			} else
-				throw new ParseCancellationException("Error: Expected JsonArray or Sting in type but was "+ obj);
+				throw new SyntaxErrorRuntimeException("Error: Expected JsonArray or Sting in type but was "+ obj);
 		}
 
 		logger.trace("Created a new  Type: {}", this);
@@ -106,7 +107,7 @@ public class Type implements JSONSchemaElement {
 		case "boolean": return AlgebraStrings.TYPE_BOOLEAN;
 		case "null": return AlgebraStrings.TYPE_NULL;
 			default:
-				throw new ParseCancellationException("Error: type '"+type+"' is not allowed!\r\n");
+				throw new SyntaxErrorRuntimeException("Error: type '"+type+"' is not allowed!\r\n");
 		}
 	}
 

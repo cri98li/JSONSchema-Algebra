@@ -16,8 +16,8 @@ public class DnfTest {
     public void testDNF1() throws IOException, REException, WitnessException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_1.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/dnf/output_1.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null).groupize();
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null).groupize();
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         assertEquals(input.DNF(), output);
 
@@ -28,8 +28,8 @@ public class DnfTest {
     public void testDNF2() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_2.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/dnf/output_2.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null).groupize();
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null).groupize();
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         assertEquals(input.DNF(), output);
     }
@@ -38,8 +38,8 @@ public class DnfTest {
     public void testDNF3() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_3.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/dnf/output_3.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null).merge(null).groupize();
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null).merge(null, null).groupize();
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         assertEquals(input.DNF(), output);
     }
@@ -48,8 +48,8 @@ public class DnfTest {
     public void testDNF4() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_4.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/dnf/output_4.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null).merge(null).groupize();
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null).merge(null, null).groupize();
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         assertEquals(input.DNF(), output);
     }
@@ -58,8 +58,8 @@ public class DnfTest {
     public void testDNF5() throws WitnessException, IOException, REException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/dnf/input_5.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/dnf/output_5.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null).groupize();
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null).groupize();
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
         assertEquals(input.DNF(), output);
     }

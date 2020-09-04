@@ -184,17 +184,25 @@ public class Items implements JSONSchemaElement{
 
 	@Override
 	public int numberOfTranslatableAssertions() {
-		if(items != null) return items.numberOfTranslatableAssertions();
+		int count = 0;
 
+		if(items != null) count = items.numberOfTranslatableAssertions();
+
+		/*
 		if(items_array != null)
 			for(JSONSchema s : items_array)
 				if(s.numberOfTranslatableAssertions() > 0) return 1;
+		*/
 
-		if(additionalItems != null) return additionalItems.numberOfTranslatableAssertions();
+		if(items_array != null)
+			for(JSONSchema s : items_array)
+				count += s.numberOfTranslatableAssertions();
 
-		if(unevaluatedItems_array != null) return unevaluatedItems_array.numberOfTranslatableAssertions();
+		if(additionalItems != null) count += additionalItems.numberOfTranslatableAssertions();
 
-		return 0;
+		if(unevaluatedItems_array != null) count += unevaluatedItems_array.numberOfTranslatableAssertions();
+
+		return count;
 	} 
 	
 	@Override

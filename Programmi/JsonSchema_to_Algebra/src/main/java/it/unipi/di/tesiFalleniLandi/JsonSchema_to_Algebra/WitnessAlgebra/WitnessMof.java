@@ -43,7 +43,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(a.getClass() == WitnessMof.class)
@@ -71,7 +71,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
             type.add(AlgebraStrings.TYPE_NUMBER);
 
             logger.trace("Merge result: {}", type.not());
-            return type.not().toWitnessAlgebra(null, null);
+            return type.not().toWitnessAlgebra(null,null, null);
         }else {
             logger.trace("Merge result: null");
             return null;
@@ -79,7 +79,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -134,7 +134,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -185,5 +185,10 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) throws WitnessException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 }

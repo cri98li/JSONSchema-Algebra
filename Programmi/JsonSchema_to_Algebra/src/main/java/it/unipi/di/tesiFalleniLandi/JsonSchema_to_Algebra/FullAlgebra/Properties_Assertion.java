@@ -205,7 +205,7 @@ public class Properties_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		WitnessAnd and = new WitnessAnd();
 		ComplexPattern usedPatt = null;//= ComplexPattern.createFromRegexp(".*").complement();//TODO: correggere
 
@@ -226,7 +226,7 @@ public class Properties_Assertion implements Assertion{
 
 		for (Entry<ComplexPattern, Assertion> entry : entrySetPatt) {
 			ComplexPattern p = entry.getKey().clone();
-			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra(varManager, env));
+			WitnessProperty pattProp = new WitnessProperty(p, entry.getValue().toWitnessAlgebra(varManager,env,pattReqManager));
 			and.add(pattProp);
 			if(usedPatt == null) usedPatt = p;
 			else usedPatt = usedPatt.union(p);
@@ -235,9 +235,9 @@ public class Properties_Assertion implements Assertion{
 		if (additionalProperties != null) {
 			WitnessProperty addProp;
 			if(usedPatt == null)
-				addProp = new WitnessProperty(ComplexPattern.createFromRegexp(".*"), additionalProperties.toWitnessAlgebra(varManager, env));
+				addProp = new WitnessProperty(ComplexPattern.createFromRegexp(".*"), additionalProperties.toWitnessAlgebra(varManager,env,pattReqManager));
 			else
-				addProp = new WitnessProperty(usedPatt.complement(), additionalProperties.toWitnessAlgebra(varManager, env));
+				addProp = new WitnessProperty(usedPatt.complement(), additionalProperties.toWitnessAlgebra(varManager,env,pattReqManager));
 
 			and.add(addProp);
 		}

@@ -65,7 +65,7 @@ public class Const implements JSONSchemaElement{
 
 	@Override
 	public int numberOfTranslatableAssertions() {
-		return 0;
+		return 1;
 	}
 
 	@Override

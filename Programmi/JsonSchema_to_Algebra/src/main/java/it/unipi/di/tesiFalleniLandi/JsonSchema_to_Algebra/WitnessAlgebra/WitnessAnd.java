@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.AllOf_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -150,18 +151,18 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
 
         if(this.add(a)) //if the list has been modified then apply merge again TODO: can we optimize that?
-            return this.merge(varManager);
+            return this.merge(varManager, pattReqManager);
 
         return this;
     }
 
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(block) return new WitnessBoolean(false);
 
         if(getIfUnitaryAnd() != null) return getIfUnitaryAnd();
@@ -172,11 +173,11 @@ public class WitnessAnd implements WitnessAssertion{
         //this loop merge only element of the same Class
         for (Map.Entry<Object, List<WitnessAssertion>> sameTypeAssertion : andList.entrySet()) {
             int size = sameTypeAssertion.getValue().size();
-            WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge(varManager);
+            WitnessAssertion merged = sameTypeAssertion.getValue().get(0).merge(varManager, pattReqManager);
 
             for (int i = 1; i < size; i++) {
                 WitnessAssertion oldMerge = merged;
-                merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge(varManager), varManager);
+                merged = merged.mergeWith(sameTypeAssertion.getValue().get(i).merge(varManager, pattReqManager), varManager, pattReqManager);
 
                 if (merged != null) { //the result has been merged
                     modified = true;
@@ -217,7 +218,7 @@ public class WitnessAnd implements WitnessAssertion{
             List<WitnessAssertion> notMofList = newAnd.andList.remove(WitnessNotMof.class);
 
             for (WitnessAssertion tmp : notMofList) {
-                WitnessAssertion assertion = mof.mergeWith(tmp, varManager);
+                WitnessAssertion assertion = mof.mergeWith(tmp, varManager, pattReqManager);
                 if (assertion == null) {
                     newAnd.add(mof);
                     newAnd.add(tmp);
@@ -250,7 +251,7 @@ public class WitnessAnd implements WitnessAssertion{
             return value;
 
         if (modified)
-            return newAnd.merge(varManager);
+            return newAnd.merge(varManager, pattReqManager);
 
         return newAnd;
     }
@@ -366,7 +367,7 @@ public class WitnessAnd implements WitnessAssertion{
             WitnessAssertion type = types.remove(0);
 
             for (WitnessAssertion t : types)
-                type = type.mergeWith(t, null);
+                type = type.mergeWith(t, null, null);
 
             if(type.getClass() == WitnessBoolean.class)
                 return type;
@@ -523,8 +524,12 @@ public class WitnessAnd implements WitnessAssertion{
                 count += assertion.countVarToBeExp(env);
 
         if(witnessVar != null)
-            for(WitnessAssertion assertion : witnessVar)
-                count += 1 + env.getDefinition((WitnessVar) assertion).countVarToBeExp(env);
+            for(WitnessAssertion assertion : witnessVar) {
+                logger.warn("Espando: "+assertion.toString());
+                logger.warn(Utils.beauty(env.getDefinition((WitnessVar) assertion).getFullAlgebra().toGrammarString()));
+                //count += 1 + env.getDefinition((WitnessVar) assertion).countVarToBeExp(env);
+                count += 1 + ((WitnessVar) assertion).countVarToBeExp(env);
+            }
 
         return count;
     }
@@ -635,6 +640,16 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     @Override
+    public void getReport(ReportResults reportResults) {
+        for(Map.Entry<Object, List<WitnessAssertion>> entry : andList.entrySet()) {
+            for(WitnessAssertion assertion : entry.getValue()) {
+                reportResults.increaseNumOfElementInAllOf();
+                assertion.getReport(reportResults);
+            }
+        }
+    }
+
+    @Override
     public boolean equals(Object o) {
         boolean b = true;
         if (this == o) return true;
@@ -667,7 +682,7 @@ public class WitnessAnd implements WitnessAssertion{
      * Assuming that before was executed and-merging, groupize, separation, expansione, dnf
      *
      */
-    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env, WitnessVarManager varManager) throws REException, WitnessException {
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> objectPrepare(WitnessEnv env) throws REException, WitnessException {
         //checking if it's an object group
         if (andList.get(WitnessType.class) == null) { //and without type specified
             logger.debug("Preparing WitnessAnd without type specified");
@@ -751,7 +766,7 @@ public class WitnessAnd implements WitnessAssertion{
                             newAnd.add(((WitnessPattReq) R_Assertion).getValue());
 
                             if (newAnd.notObviouslyEmpty()) {
-                                WitnessPattReq newReq = WitnessPattReq.build(pattInt, newAnd);
+                                WitnessPattReq newReq = env.pattReqManager.build(pattInt, newAnd);
 
                                 newRList.add(newReq);
                                 coReqs.get(C_assertion).add(newReq);
@@ -786,12 +801,14 @@ public class WitnessAnd implements WitnessAssertion{
 
             List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
-            newDefinitions.addAll(env.varNormalization_separation(env, varManager));
-            env.buildOBDD_notElimination();
+            newDefinitions.addAll(env.varNormalization_separation(env, env.variableNamingSystem));
+            //env.buildOBDD_notElimination();
+
+            newDefinitions = new LinkedList<>(); //reset the newDefinitions list
 
             splitOriginalRList(ORPart, CoMatrix, env);
 
-            newDefinitions.addAll(this.varNormalization_separation(env, varManager));
+            newDefinitions.addAll(this.varNormalization_separation(env, env.variableNamingSystem));
             env.buildOBDD_notElimination();
 
             return newDefinitions;
@@ -1111,8 +1128,12 @@ public class WitnessAnd implements WitnessAssertion{
             List <WitnessPattReq> coSubset = new LinkedList<>(reqList);
             coSubset.removeAll(subset);
 
+            //removed for optimization
+            /*
             for (WitnessPattReq oldReq : new LinkedList<>(subset) )
                 ((WitnessAnd) schema).add(oldReq.getValue());//  schema = schema and schemaOf(oldReq)
+             */
+
 
             if(schema.getClass() == WitnessAnd.class)
                 for (WitnessPattReq oldReq : coSubset )
@@ -1123,11 +1144,11 @@ public class WitnessAnd implements WitnessAssertion{
                 throw new WitnessException(s);
             }
 
-            WitnessPattReq fragment = WitnessPattReq.build(patt, schema);
+            WitnessPattReq fragment = env.pattReqManager.build(patt, schema);
             //fragment: satisfies subset and fails all assertions in coSubset
             for (WitnessPattReq compAncestor : subset ) {            //we put the fragment in all and only the ORPs that contain
                 //this.add(fragment);
-                for (WitnessOrPattReq orp : compAncestor.getOrpList() ) {   //one req that is satisfied
+                for (WitnessOrPattReq orp : new LinkedList<>(compAncestor.getOrpList() )) {   //one req that is satisfied
                     fragment.fullConnect(orp);
                 }
             }

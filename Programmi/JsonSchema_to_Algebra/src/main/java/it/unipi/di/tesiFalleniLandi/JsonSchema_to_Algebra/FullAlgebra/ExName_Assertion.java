@@ -50,7 +50,7 @@ public class ExName_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
-		return WitnessPattReq.build(Utils_PattOfS.pattOfS(names), new WitnessBoolean(true));
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
+		return pattReqManager.build(Utils_PattOfS.pattOfS(names, env), new WitnessBoolean(true));
 	}
 }

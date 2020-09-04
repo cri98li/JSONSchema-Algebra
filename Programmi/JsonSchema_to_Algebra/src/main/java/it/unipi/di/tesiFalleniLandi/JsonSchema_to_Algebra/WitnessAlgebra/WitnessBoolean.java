@@ -36,7 +36,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(a.getClass() == this.getClass()) return this.mergeElement((WitnessBoolean) a);
 
         if(this.value) return a; // S AND true = S
@@ -44,7 +44,7 @@ public class WitnessBoolean implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -88,7 +88,7 @@ public class WitnessBoolean implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -139,5 +139,10 @@ public class WitnessBoolean implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         return value ? env.bdd.getTrueVar() : env.bdd.getFalseVar();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+
     }
 }

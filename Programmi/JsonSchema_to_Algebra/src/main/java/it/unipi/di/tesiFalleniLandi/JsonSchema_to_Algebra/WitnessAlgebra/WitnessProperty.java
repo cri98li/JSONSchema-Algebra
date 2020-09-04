@@ -62,31 +62,31 @@ public class WitnessProperty implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(value.getClass() == WitnessBoolean.class && !((WitnessBoolean)value).getValue()) return value;
         if(a.getClass() == this.getClass())
-            return this.mergeElement((WitnessProperty) a, varManager);
+            return this.mergeElement((WitnessProperty) a, varManager, pattReqManager);
 
         return null;
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         //Boolean Rewritings
         if(value.getClass() == WitnessBoolean.class && ((WitnessBoolean) value).getValue()) return value;
 
         WitnessProperty newProp = this.clone();
-        newProp.value = value.merge(varManager);
+        newProp.value = value.merge(varManager, pattReqManager);
 
         return newProp;
     }
 
-    public WitnessAssertion mergeElement(WitnessProperty a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeElement(WitnessProperty a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessProperty result = null;
 
-        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value, varManager) != null)
-            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value, varManager));
+        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value, varManager, pattReqManager) != null)
+            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value, varManager, pattReqManager));
 
         if(a.value.equals(this.value))
             result =  new WitnessProperty(a.key.union(this.key), this.value);
@@ -143,7 +143,7 @@ public class WitnessProperty implements WitnessAssertion{
         WitnessType type = new WitnessType();
         type.add(AlgebraStrings.TYPE_OBJECT);
         and.add(type);
-        and.add(WitnessPattReq.build(key.clone(), value.not(env)));
+        and.add(env.pattReqManager.build(key.clone(), value.not(env)));
 
         return and;
     }
@@ -227,5 +227,10 @@ public class WitnessProperty implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        value.getReport(reportResults);
     }
 }

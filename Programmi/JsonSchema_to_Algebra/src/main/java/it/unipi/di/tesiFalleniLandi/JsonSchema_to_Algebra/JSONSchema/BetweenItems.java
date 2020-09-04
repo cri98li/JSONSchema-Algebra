@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Exist_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,7 @@ public class BetweenItems implements JSONSchemaElement{
 	
 	public void setMinItems(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
-			throw new ParseCancellationException("expected integer as value of minItems got "+obj);
+			throw new SyntaxErrorRuntimeException("expected integer as value of minItems got "+obj);
 
 		logger.trace("Setting minItems by parsing {}", obj);
 
@@ -34,7 +35,7 @@ public class BetweenItems implements JSONSchemaElement{
 	
 	public void setMaxItems(JsonElement obj) {
 		if(!obj.isJsonPrimitive() || !obj.getAsJsonPrimitive().isNumber())
-			throw new ParseCancellationException("expected integer as value of maxItems got "+obj);
+			throw new SyntaxErrorRuntimeException("expected integer as value of maxItems got "+obj);
 
 		logger.trace("Setting maxItems by parsing {}", obj);
 

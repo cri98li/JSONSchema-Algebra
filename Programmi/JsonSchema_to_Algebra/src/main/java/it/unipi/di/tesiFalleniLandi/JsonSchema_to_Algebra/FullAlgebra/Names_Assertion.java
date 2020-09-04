@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattReqManager;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVarManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,10 +59,10 @@ public class Names_Assertion implements Assertion{
 	}
 
 	@Override
-	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env) throws REException {
+	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
 		Properties_Assertion pro = new Properties_Assertion();
-		pro.addPatternProperties(names.not().getClass() == Ref_Assertion.class ? Utils_PattOfS.pattOfS((Ref_Assertion) names.not(), env) : Utils_PattOfS.pattOfS(names.not()), new Boolean_Assertion(false));
-		return pro.toWitnessAlgebra(varManager, env);
+		pro.addPatternProperties(Utils_PattOfS.pattOfS(names.not(), env), new Boolean_Assertion(false));
+		return pro.toWitnessAlgebra(varManager, env, pattReqManager);
 	}
 
 }

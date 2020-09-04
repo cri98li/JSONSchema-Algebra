@@ -29,14 +29,6 @@ public class WitnessBet implements WitnessAssertion{
         logger.trace("Creating a new WitnessBet {}", this);
     }
 
-    public Double getMin() {
-        return min;
-    }
-
-    public Double getMax() {
-        return max;
-    }
-
     @Override
     public String toString() {
         return "WitnessBet{" +
@@ -46,7 +38,7 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -61,14 +53,14 @@ public class WitnessBet implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException { //caso base: tipi diversi => non dovrebbe mai succedere
         logger.trace("Merging {} with {}", a, this);
 
         if(min > max) {
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra(varManager, null);
+            return type.not().toWitnessAlgebra(varManager,null, null);
         }
 
         if(a.getClass() == this.getClass())
@@ -86,7 +78,7 @@ public class WitnessBet implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra(varManager, null);
+            return type.not().toWitnessAlgebra(varManager,null, null);
         }
 
         Double m = (min < a.min) ? a.min : min;
@@ -101,7 +93,7 @@ public class WitnessBet implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_NUMBER);
 
-            return type.not().toWitnessAlgebra(null, null);
+            return type.not().toWitnessAlgebra(null,null, null);
         }
         WitnessAnd and = new WitnessAnd();
 
@@ -147,7 +139,7 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -198,6 +190,11 @@ public class WitnessBet implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+
     }
 
 

@@ -60,7 +60,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.trace("Merging {} with {}", a, this);
         if(a.getClass() == this.getClass()) {
             return this.mergeElement((WitnessPro) a);
@@ -70,7 +70,7 @@ public class WitnessPro implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) {
         return this;
     }
 
@@ -86,7 +86,7 @@ public class WitnessPro implements WitnessAssertion{
             Type_Assertion type = new Type_Assertion();
             type.add(AlgebraStrings.TYPE_OBJECT);
 
-            result = type.not().toWitnessAlgebra(null, null);
+            result = type.not().toWitnessAlgebra(null,null, null);
         }else
             result = pro;
 
@@ -130,7 +130,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public WitnessAssertion not(WitnessEnv env) throws REException {
-        return getFullAlgebra().not().toWitnessAlgebra(null, null);
+        return getFullAlgebra().not().toWitnessAlgebra(null,null, null);
     }
 
     @Override
@@ -181,5 +181,10 @@ public class WitnessPro implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        return;
     }
 }

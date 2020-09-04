@@ -20,46 +20,46 @@ public class mergeTest {
         WitnessAnd a2 = new WitnessAnd();
         a2.add(new WitnessBoolean(true));
 
-        assertEquals(((WitnessAnd)a1.mergeWith(a2, null)).getIfUnitaryAnd(), new WitnessBoolean(false));
+        assertEquals(((WitnessAnd)a1.mergeWith(a2, null, null)).getIfUnitaryAnd(), new WitnessBoolean(false));
     }
 
     @Test
     public void testMerge1() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_1.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/merge/output_1.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
-        assertEquals(input.merge(null), output);
+        assertEquals(input.merge(null, null), output);
     }
 
     @Test
     public void testMerge2() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_2.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/merge/output_2.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
-        assertEquals(input.merge(null), output);
+        assertEquals(input.merge(null, null), output);
     }
 
     @Test
     public void testMerge3() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_3.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/merge/output_3.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
-        assertEquals(input.merge(null), output);
+        assertEquals(input.merge(null, null), output);
     }
 
     @Test
     public void testMerge4() throws REException, IOException {
         Assertion in = Utils_FullAlgebra.parseFile("unit-test/merge/input_4.algebra");
         Assertion out = Utils_FullAlgebra.parseFile("unit-test/merge/output_4.algebra");
-        WitnessAssertion input = in.toWitnessAlgebra(null, null);
-        WitnessAssertion output = out.toWitnessAlgebra(null, null);
+        WitnessAssertion input = in.toWitnessAlgebra(null,null, null);
+        WitnessAssertion output = out.toWitnessAlgebra(null,null, null);
 
-        assertEquals(input.merge(null), output);
+        assertEquals(input.merge(null, null), output);
     }
 }

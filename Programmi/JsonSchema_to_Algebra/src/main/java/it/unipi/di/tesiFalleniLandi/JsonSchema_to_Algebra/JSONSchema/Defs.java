@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Exceptions.SyntaxErrorRuntimeException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +28,7 @@ public class Defs implements JSONSchemaElement {
 		try {
 			jsonObject = obj.getAsJsonObject();
 		}catch(ClassCastException ex) {
-			throw new ParseCancellationException("Error: $defs must be valid JSON Object!");
+			throw new SyntaxErrorRuntimeException("Error: $defs must be valid JSON Object!");
 		}
 		
 		schemaDefs = new LinkedHashMap<>();
@@ -38,9 +40,9 @@ public class Defs implements JSONSchemaElement {
 				try{
 					entry.getValue().getAsString();
 				}catch (ClassCastException exx) {
-					throw new ParseCancellationException("Error: no valid Defs Object!\r\n" + entry.toString());
+					throw new SyntaxErrorRuntimeException("Error: no valid Defs Object!\r\n" + entry.toString());
 				}
-				throw new ParseCancellationException("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
+				throw new SyntaxErrorRuntimeException("Error: no valid Defs Object!\r\n"+ex.getLocalizedMessage());
 			}
 		}
 	}
@@ -79,10 +81,11 @@ public class Defs implements JSONSchemaElement {
 		
 		for(Entry<String, JSONSchema> entry : entrySet)
 			def.add(entry.getKey(), entry.getValue().toJSON());
+
 		obj.add("$defs", def);
 
 		if(rootDef != null)
-				obj.add(Utils.ROOTDEF_FOR_JSONSCHEMA, rootDef.toJSON());
+			obj.add(Utils.ROOTDEF_FOR_JSONSCHEMA, rootDef.toJSON());
 
 		return obj;
 	}
@@ -111,7 +114,11 @@ public class Defs implements JSONSchemaElement {
 
 		for(Entry<String, JSONSchema> entry : schemaDefs.entrySet()) {
 			tmp = new JsonPrimitive(entry.getKey()).toString();
-			defs_assertion.add(tmp.substring(1, tmp.length()-1), entry.getValue().toGrammar());
+
+			if(entry.getValue().numberOfTranslatableAssertions() != 0)
+				defs_assertion.add(tmp.substring(1, tmp.length()-1), entry.getValue().toGrammar());
+			else
+				defs_assertion.add(tmp.substring(1, tmp.length()-1), new Boolean_Assertion(true)); //TODO: definizioni con valore "unknown"
 		}
 
 		return defs_assertion;
@@ -150,7 +157,7 @@ public class Defs implements JSONSchemaElement {
 		returnList.add(new AbstractMap.SimpleEntry<>("",this));
 
 		for(Entry<String, JSONSchema> entry : entrySet)
-				returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
+			returnList.addAll(Utils_JSONSchema.addPathElement(entry.getKey(), entry.getValue().collectDef()));
 
 		return returnList;
 	}

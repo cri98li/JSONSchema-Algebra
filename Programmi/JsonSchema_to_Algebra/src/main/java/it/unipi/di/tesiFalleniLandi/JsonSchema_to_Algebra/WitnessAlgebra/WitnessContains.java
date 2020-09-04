@@ -70,32 +70,32 @@ public class WitnessContains implements WitnessAssertion{
     @Override
     public void reachableRefs(Set<WitnessVar> collectedVar, WitnessEnv env) throws RuntimeException {
         if(contains != null)
-            reachableRefs(collectedVar, env);
+            contains.reachableRefs(collectedVar, env);
     }
 
     @Override
-    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         logger.debug("Merging {} with {}", a, this);
         if(this.contains != null && this.contains.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.contains).getValue())
                 return new WitnessBoolean(false);
         }
-        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessContains) a, varManager);
+        if(a.getClass() == this.getClass()) return this.mergeElement((WitnessContains) a, varManager, pattReqManager);
 
         return null;
     }
 
     @Override
-    public WitnessAssertion merge(WitnessVarManager varManager) throws REException {
+    public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessContains newContains = this.clone();
 
         if(contains != null)
-            newContains.contains = contains.merge(varManager);
+            newContains.contains = contains.merge(varManager, pattReqManager);
 
         return newContains;
     }
 
-    public WitnessAssertion mergeElement(WitnessContains a, WitnessVarManager varManager) throws REException {
+    public WitnessAssertion mergeElement(WitnessContains a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(a.contains.getClass() == WitnessBoolean.class || isAnArray) {
             if (!((WitnessBoolean)a.contains).getValue()) {
                 logger.debug("Merge result: false");
@@ -105,7 +105,7 @@ public class WitnessContains implements WitnessAssertion{
 
         WitnessContains contains = new WitnessContains();
 
-        contains.contains = contains.mergeWith(a.contains, varManager);
+        contains.contains = contains.mergeWith(a.contains, varManager, pattReqManager);
 
         contains.min = (min < a.min) ? a.min : min;
 
@@ -119,7 +119,7 @@ public class WitnessContains implements WitnessAssertion{
                 type.add(AlgebraStrings.TYPE_ARRAY);
 
             logger.debug("Merge result: {}", type.not());
-            return type.not().toWitnessAlgebra(varManager, null);
+            return type.not().toWitnessAlgebra(null, null, null);
         }else {
             logger.debug("Merge result: {}", contains);
             return contains;
@@ -236,6 +236,7 @@ public class WitnessContains implements WitnessAssertion{
 
         if(contains != null || !isAnArray) {
             if(contains != null && contains.getClass() != WitnessBoolean.class && contains.getClass() != WitnessVar.class) {
+
                 newDefinitions.addAll(contains.varNormalization_separation(env, varManager));
 
                 WitnessVar newVar = varManager.buildVar(varManager.getName(contains));
@@ -282,6 +283,11 @@ public class WitnessContains implements WitnessAssertion{
     @Override
     public WitnessVar buildOBDD(WitnessEnv env, WitnessVarManager varManager) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void getReport(ReportResults reportResults) {
+        if(contains != null) contains.getReport(reportResults);
     }
 
     @Override
