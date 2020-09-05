@@ -215,4 +215,12 @@ public class WitnessBet implements WitnessAssertion{
         result = 31 * result + (max != null ? max.hashCode() : 0);
         return result;
     }
+
+    public Double getMin() {
+        return min;
+    }
+
+    public Double getMax() {
+        return max;
+    }
 }

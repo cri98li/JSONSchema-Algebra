@@ -159,4 +159,8 @@ public class WitnessPattern implements WitnessAssertion{
     public void getReport(ReportResults reportResults) {
         return;
     }
+
+    public ComplexPattern getPattern() {
+        return pattern;
+    }
 }
