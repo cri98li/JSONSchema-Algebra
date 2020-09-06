@@ -68,9 +68,7 @@ public class GenNum implements GenAssertion {
 
     }
 
-    /**
-     * Auxiliary functions
-     * */
+    /** Auxiliary functions */
 
     /**
      *

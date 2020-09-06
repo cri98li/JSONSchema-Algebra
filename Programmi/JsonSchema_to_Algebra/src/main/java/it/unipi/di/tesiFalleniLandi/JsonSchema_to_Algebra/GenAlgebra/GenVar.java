@@ -12,8 +12,9 @@ public class GenVar implements GenAssertion{
     private List<GenVar> uses;
     private List<GenVar> isUsedBy;
 
-//    public GenVar(WitnessVar wv) {
-//    }
+    public GenVar(String varname) {
+        name=varname;
+    }
 
     public boolean isOpen() {
         return false; //TODO implement

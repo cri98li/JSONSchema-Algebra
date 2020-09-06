@@ -1,9 +1,10 @@
-package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
+package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
@@ -79,16 +80,17 @@ public class Endpoint {
         env.toOrPattReq();
         env.objectPrepare();
 
+        GenEnv genv = new GenEnv(env);
+
 //        //another round of normalization
 //        env = env.varNormalization_expansion(null);
 
-        String result = env.toString();
-//        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
-//
-        String outputFileName = path+"text_"+file+extension;
-        FileWriter fw = new FileWriter(outputFileName);
-        fw.write(result);
-        fw.close();
-        System.out.println("output "+ outputFileName);
+        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
+
+//        String outputFileName = path+"fullprep_"+file+extension;
+//        FileWriter fw = new FileWriter(outputFileName);
+//        fw.write(result);
+//        fw.close();
+//        System.out.println("output "+ outputFileName);
     }
 }

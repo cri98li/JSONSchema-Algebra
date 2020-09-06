@@ -9,4 +9,6 @@ public interface GenAssertion extends Cloneable{
     public String toString();
     public WitnessAssertion toWitnessAlgebra();
 
+
+
 }

@@ -26,6 +26,10 @@ public class WitnessOr implements WitnessAssertion{
         logger.trace("Creating an empty WitnessOr");
     }
 
+    public Map<Object, List<WitnessAssertion>> getOrList() {
+        return orList;
+    }
+
     public boolean add(WitnessAssertion el) {
         if(block) return false;
 
@@ -99,7 +103,6 @@ public class WitnessOr implements WitnessAssertion{
         }
         return true;
     }
-
 
     public boolean add(WitnessOr or) {
         boolean b = false;

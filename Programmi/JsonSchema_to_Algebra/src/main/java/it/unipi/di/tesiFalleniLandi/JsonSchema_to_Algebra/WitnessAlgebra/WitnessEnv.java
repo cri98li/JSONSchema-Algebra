@@ -22,6 +22,18 @@ public class WitnessEnv implements WitnessAssertion {
     protected WitnessVarManager variableNamingSystem;
     protected WitnessPattReqManager pattReqManager;
 
+    public HashMap<WitnessVar, WitnessAssertion> getVarList() {
+        return varList;
+    }
+
+    public BiMap<WitnessVar, WitnessVar> getCoVar() {
+        return coVar;
+    }
+
+    public WitnessVar getRootVar() {
+        return rootVar;
+    }
+
     private LinkedList<WitnessVar> varToBeElaborated; // notElimination + buildOBDD
 
     private WitnessEnv(){

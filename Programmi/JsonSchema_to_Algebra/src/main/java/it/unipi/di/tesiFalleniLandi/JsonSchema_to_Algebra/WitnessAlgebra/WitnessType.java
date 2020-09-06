@@ -19,6 +19,10 @@ public class WitnessType implements WitnessAssertion{
         logger.trace("Creating an empty WitnessType");
     }
 
+    public Set<String> getType() {
+        return type;
+    }
+
     public WitnessType(String str){
         type = new HashSet<>();
         type.add(str);

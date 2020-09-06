@@ -27,6 +27,10 @@ public class WitnessAnd implements WitnessAssertion{
     private LinkedHashMap<Object, List<WitnessAssertion>> andList;
     private boolean block; // flag that indicates if the AND contains false (we check this instead of searching into andList)
 
+    public LinkedHashMap<Object, List<WitnessAssertion>> getAndList() {
+        return andList;
+    }
+
     public WitnessAnd() {
         this.andList = new LinkedHashMap<>();
 
