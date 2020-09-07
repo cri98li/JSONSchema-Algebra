@@ -1,12 +1,11 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
+
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Array;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +18,56 @@ public class GenNum implements GenAssertion {
     private Double min, max;
     private boolean minExclusive, maxExclusive;
     private Double mof;
-    private List<Double> notMofs; //sort while instantiating
+    private List<Double> notMofs; //keep sorted
 
+    public GenNum() {
+    }
+
+    public void setMinMax(WitnessBet WitnessBet){
+        min=WitnessBet.getMin();
+        max=WitnessBet.getMax();
+    }
+
+    public void setMinMax(WitnessXBet witnessXBet){
+        min=witnessXBet.getMin();
+        max=witnessXBet.getMax();
+        minExclusive=maxExclusive=true;
+    }
+
+    /**
+     * checked at two positions: while creating Mof and notMofs constraints since no precedence is enforced
+     * @throws Exception
+     */
+    private void invariant1() throws Exception{
+        if(notMofs!=null){
+            Double mofTest = containsMultiple(notMofs,this.mof);
+            if(mofTest>0)
+            {
+                logger.trace("The number {} in the NotMof List is multiple of {}", mofTest, mof);
+                throw new Exception("NotMof List contains a multiple of Mof");
+            }
+        }
+    }
+    public void setMof(WitnessMof mof) throws Exception {
+        this.mof = mof.getValue();
+        //check invariant1
+        invariant1();
+    }
+
+    public void setNotMofs(List<WitnessNotMof> notMofs) throws Exception{
+        this.notMofs=notMofs.stream()
+                .map(e->e.getValue()).collect(Collectors.toList());
+        this.notMofs.sort(Comparator.naturalOrder());
+        //check invariants
+        invariant1();
+        //invariant2
+        if(containsPairMultiple(this.notMofs))
+            throw new Exception("NotMof List contains a pair of multiples");
+    }
 
     /**
      * constructor with optional arguments
+     * TODO Remove
      * @param minMaxOptional
      * @param XminMaxOptional
      * @param mofOptional

@@ -8,6 +8,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 public class GenString implements GenAssertion{
     private ComplexPattern pattern;
 
+    public GenString() {
+    }
+
+    public void setPattern(ComplexPattern pattern) {
+        this.pattern = pattern;
+    }
+
     public GenString(WitnessPattern wp){
         pattern = wp.getPattern();
     }

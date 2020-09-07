@@ -63,19 +63,27 @@ public class GenObject implements GenAssertion {
 
     /*Methods*/
 
-    public GenObject(List<WitnessProperty> propList,
-                     List<WitnessOrPattReq> orPattReqList,
-                     WitnessPro minMaxPro){
-        minPro=minMaxPro.getMin();
-        maxPro=minMaxPro.getMax();
-
-        CPart=propList.stream().map(p->new GProperty(p)).collect(Collectors.toList());
-        RPart=orPattReqList.stream().map(p->new GOrPattReq(p)).collect(Collectors.toList());
-
-
+    public GenObject() {
     }
 
+    public void setCPart(List<WitnessProperty> propList) {
+        this.CPart = propList.stream().map(p->new GProperty(p)).collect(Collectors.toList());;
+    }
 
+    public void setRPart(List<WitnessOrPattReq> orPattReqList) {
+        this.RPart = orPattReqList.stream().map(p->new GOrPattReq(p)).collect(Collectors.toList());
+    }
+
+    public void setObjectReqList(List<GPattReq> objectReqList) {
+        this.objectReqList = objectReqList;
+    }
+
+    public void setMinMaxPro( WitnessPro minMaxPro){
+        minPro=minMaxPro.getMin();
+        maxPro=minMaxPro.getMax();
+    }
+
+    //TODO invariants
 
     @Override
     public JsonElement generate() {
