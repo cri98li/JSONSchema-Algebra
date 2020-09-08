@@ -45,12 +45,24 @@ public class Endpoint {
 //		System.out.println("NORMALIZZATO: " + (Utils_JSONSchema.normalize(root).toJSON()));
 //		System.out.println("NORMALIZZATO algebra: " + (Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root))));
 
+		boolean outputAlgebra = true; // false ; //
 		//normalized
-		String outputFileName = path+file+".algebra";
-		FileWriter fw = new FileWriter(outputFileName);
-		fw.write(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
-		fw.close();
-		System.out.println("output "+ outputFileName);
+		if(outputAlgebra){
+			String outputFileName = path+file+".algebra";
+			FileWriter fw = new FileWriter(outputFileName);
+			fw.write(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)));
+			fw.close();
+			System.out.println("output "+ outputFileName);
+		}
+		else
+		{
+			String outputFileName = path+file+"_norm"+".json";
+			FileWriter fw = new FileWriter(outputFileName);
+			fw.write(Utils_JSONSchema.normalize(root).toJSON().toString());
+			fw.close();
+			System.out.println("output "+ outputFileName);
+		}
+
 
 //		System.out.println("\nParsing\n" + (Utils_FullAlgebra.parseString(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)))));
 	}

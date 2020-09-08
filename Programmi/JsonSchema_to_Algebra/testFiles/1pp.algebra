@@ -3,7 +3,7 @@ rootdef "root" = {
 		obj
 	],
 	props[
-		"^provide$": {
+		"^conflict$": {
 			type[
 				obj
 			],
@@ -12,40 +12,52 @@ rootdef "root" = {
 				true
 			]
 		},
-		"^keywords$": {
+		"^support$": {
 			type[
-				arr
+				obj
 			],
-			items[
-				type[
+			props[
+				"^irc$": type[
+					str
+				],
+				"^issues$": type[
+					str
+				],
+				"^source$": type[
+					str
+				],
+				"^wiki$": type[
+					str
+				],
+				"^forum$": type[
+					str
+				],
+				"^email$": type[
+					str
+				],
+				"^docs$": type[
 					str
 				];
 				
 			]
 		},
-		"^type$": type[
+		"^target-dir$": type[
 			str
 		],
-		"^target-dir$": type[
+		"^homepage$": type[
+			str
+		],
+		"^version$": type[
 			str
 		],
 		"^prefer-stable$": type[
 			bool
 		],
-		"^autoload$": {
+		"^autoload-dev$": {
 			type[
 				obj
 			],
 			props[
-				"^psr-4$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				},
 				"^classmap$": type[
 					arr
 				],
@@ -60,8 +72,61 @@ rootdef "root" = {
 						;
 						true
 					]
+				},
+				"^psr-4$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
 				};
 				
+			]
+		},
+		"^type$": type[
+			str
+		],
+		"^autoload$": {
+			type[
+				obj
+			],
+			props[
+				"^classmap$": type[
+					arr
+				],
+				"^files$": type[
+					arr
+				],
+				"^psr-0$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^psr-4$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				};
+				
+			]
+		},
+		"^suggest$": {
+			type[
+				obj
+			],
+			props[
+				;
+				true
 			]
 		},
 		"^archive$": {
@@ -75,35 +140,7 @@ rootdef "root" = {
 				
 			]
 		},
-		"^homepage$": {
-			true,
-			type[
-				str
-			]
-		},
-		"^description$": type[
-			str
-		],
-		"^extra$": {
-			type[
-				obj,
-				arr
-			],
-			props[
-				;
-				true
-			]
-		},
-		"^suggest$": {
-			type[
-				obj
-			],
-			props[
-				;
-				true
-			]
-		},
-		"^require$": {
+		"^provide$": {
 			type[
 				obj
 			],
@@ -115,154 +152,7 @@ rootdef "root" = {
 		"^time$": type[
 			str
 		],
-		"^authors$": {
-			type[
-				arr
-			],
-			items[
-				{
-					type[
-						obj
-					],
-					props[
-						"^email$": {
-							true,
-							type[
-								str
-							]
-						},
-						"^name$": type[
-							str
-						],
-						"^role$": type[
-							str
-						],
-						"^homepage$": {
-							true,
-							type[
-								str
-							]
-						};
-						false
-					],
-					req[
-						"name"
-					]
-				};
-				
-			]
-		},
-		"^minimum-stability$": {
-			pattern("^dev|alpha|beta|rc|RC|stable$"),
-			type[
-				str
-			]
-		},
-		"^autoload-dev$": {
-			type[
-				obj
-			],
-			props[
-				"^psr-4$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				},
-				"^classmap$": type[
-					arr
-				],
-				"^files$": type[
-					arr
-				],
-				"^psr-0$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				};
-				
-			]
-		},
-		"^scripts$": {
-			type[
-				obj
-			],
-			props[
-				"^post-package-update$": type[
-					arr,
-					str
-				],
-				"^post-create-project-cmd$": type[
-					arr,
-					str
-				],
-				"^post-autoload-dump$": type[
-					arr,
-					str
-				],
-				"^pre-update-cmd$": type[
-					arr,
-					str
-				],
-				"^post-package-install$": type[
-					arr,
-					str
-				],
-				"^post-status-cmd$": type[
-					arr,
-					str
-				],
-				"^pre-install-cmd$": type[
-					arr,
-					str
-				],
-				"^post-root-package-install$": type[
-					arr,
-					str
-				],
-				"^post-install-cmd$": type[
-					arr,
-					str
-				],
-				"^post-update-cmd$": type[
-					arr,
-					str
-				],
-				"^pre-package-update$": type[
-					arr,
-					str
-				],
-				"^pre-autoload-dump$": type[
-					arr,
-					str
-				],
-				"^pre-package-uninstall$": type[
-					arr,
-					str
-				],
-				"^pre-status-cmd$": type[
-					arr,
-					str
-				],
-				"^post-package-uninstall$": type[
-					arr,
-					str
-				],
-				"^pre-package-install$": type[
-					arr,
-					str
-				];
-				
-			]
-		},
-		"^include-path$": {
+		"^non-feature-branches$": {
 			type[
 				arr
 			],
@@ -273,60 +163,19 @@ rootdef "root" = {
 				
 			]
 		},
-		"^support$": {
-			type[
-				obj
-			],
-			props[
-				"^forum$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^source$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^email$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^irc$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^docs$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^wiki$": {
-					true,
-					type[
-						str
-					]
-				},
-				"^issues$": {
-					true,
-					type[
-						str
-					]
-				};
-				
-			]
-		},
 		"^repositories$": {
 			type[
 				obj,
 				arr
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^require-dev$": {
+			type[
+				obj
 			],
 			props[
 				;
@@ -347,8 +196,98 @@ rootdef "root" = {
 				obj
 			],
 			props[
+				"^cache-files-maxsize$": type[
+					str,
+					int
+				],
+				"^preferred-install$": type[
+					str
+				],
+				"^platform$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^cache-vcs-dir$": type[
+					str
+				],
+				"^cache-dir$": type[
+					str
+				],
+				"^github-oauth$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^notify-on-install$": type[
+					bool
+				],
+				"^vendor-dir$": type[
+					str
+				],
+				"^store-auths$": type[
+					str,
+					bool
+				],
+				"^archive-format$": type[
+					str
+				],
+				"^cache-ttl$": type[
+					int
+				],
+				"^prepend-autoloader$": type[
+					bool
+				],
+				"^autoloader-suffix$": type[
+					str
+				],
+				"^process-timeout$": type[
+					int
+				],
+				"^archive-dir$": type[
+					str
+				],
+				"^http-basic$": {
+					type[
+						obj
+					],
+					props[
+						;
+						true
+					]
+				},
+				"^classmap-authoritative$": type[
+					bool
+				],
+				"^discard-changes$": type[
+					str,
+					bool
+				],
+				"^bin-dir$": type[
+					str
+				],
 				"^optimize-autoloader$": type[
 					bool
+				],
+				"^github-expose-hostname$": type[
+					bool
+				],
+				"^cache-files-dir$": type[
+					str
+				],
+				"^cache-files-ttl$": type[
+					int
+				],
+				"^cache-repo-dir$": type[
+					str
 				],
 				"^github-protocols$": {
 					type[
@@ -361,64 +300,8 @@ rootdef "root" = {
 						
 					]
 				},
-				"^cache-files-ttl$": type[
-					int
-				],
-				"^cache-files-maxsize$": type[
-					str,
-					int
-				],
-				"^classmap-authoritative$": type[
-					bool
-				],
-				"^platform$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				},
-				"^preferred-install$": type[
-					str
-				],
-				"^notify-on-install$": type[
-					bool
-				],
-				"^discard-changes$": type[
-					str,
-					bool
-				],
 				"^use-include-path$": type[
 					bool
-				],
-				"^cache-vcs-dir$": type[
-					str
-				],
-				"^http-basic$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				},
-				"^vendor-dir$": type[
-					str
-				],
-				"^prepend-autoloader$": type[
-					bool
-				],
-				"^autoloader-suffix$": type[
-					str
-				],
-				"^github-expose-hostname$": type[
-					bool
-				],
-				"^cache-repo-dir$": type[
-					str
 				],
 				"^github-domains$": {
 					type[
@@ -430,47 +313,42 @@ rootdef "root" = {
 						];
 						
 					]
-				},
-				"^github-oauth$": {
-					type[
-						obj
-					],
-					props[
-						;
-						true
-					]
-				},
-				"^bin-dir$": type[
-					str
-				],
-				"^archive-format$": type[
-					str
-				],
-				"^cache-ttl$": type[
-					int
-				],
-				"^store-auths$": type[
-					str,
-					bool
-				],
-				"^cache-files-dir$": type[
-					str
-				],
-				"^cache-dir$": type[
-					str
-				],
-				"^process-timeout$": type[
-					int
-				],
-				"^archive-dir$": type[
+				};
+				
+			]
+		},
+		"^keywords$": {
+			type[
+				arr
+			],
+			items[
+				type[
 					str
 				];
 				
 			]
 		},
-		"^version$": type[
-			str
+		"^minimum-stability$": {
+			pattern("^dev|alpha|beta|rc|RC|stable$"),
+			type[
+				str
+			]
+		},
+		"^license$": type[
+			str,
+			arr
 		],
+		"^include-path$": {
+			type[
+				arr
+			],
+			items[
+				type[
+					str
+				];
+				
+			]
+		},
 		"^bin$": {
 			type[
 				arr
@@ -485,7 +363,20 @@ rootdef "root" = {
 		"^name$": type[
 			str
 		],
-		"^conflict$": {
+		"^extra$": {
+			type[
+				obj,
+				arr
+			],
+			props[
+				;
+				true
+			]
+		},
+		"^description$": type[
+			str
+		],
+		"^require$": {
 			type[
 				obj
 			],
@@ -494,28 +385,107 @@ rootdef "root" = {
 				true
 			]
 		},
-		"^license$": type[
-			str,
-			arr
-		],
-		"^non-feature-branches$": {
+		"^authors$": {
 			type[
 				arr
 			],
 			items[
-				type[
-					str
-				];
+				{
+					type[
+						obj
+					],
+					props[
+						"^name$": type[
+							str
+						],
+						"^homepage$": type[
+							str
+						],
+						"^role$": type[
+							str
+						],
+						"^email$": type[
+							str
+						];
+						false
+					],
+					req[
+						"name"
+					]
+				};
 				
 			]
 		},
-		"^require-dev$": {
+		"^scripts$": {
 			type[
 				obj
 			],
 			props[
-				;
-				true
+				"^post-package-install$": type[
+					arr,
+					str
+				],
+				"^pre-package-uninstall$": type[
+					arr,
+					str
+				],
+				"^post-update-cmd$": type[
+					arr,
+					str
+				],
+				"^post-status-cmd$": type[
+					arr,
+					str
+				],
+				"^pre-autoload-dump$": type[
+					arr,
+					str
+				],
+				"^pre-install-cmd$": type[
+					arr,
+					str
+				],
+				"^post-package-uninstall$": type[
+					arr,
+					str
+				],
+				"^pre-package-install$": type[
+					arr,
+					str
+				],
+				"^post-create-project-cmd$": type[
+					arr,
+					str
+				],
+				"^pre-package-update$": type[
+					arr,
+					str
+				],
+				"^pre-update-cmd$": type[
+					arr,
+					str
+				],
+				"^post-package-update$": type[
+					arr,
+					str
+				],
+				"^post-root-package-install$": type[
+					arr,
+					str
+				],
+				"^post-autoload-dump$": type[
+					arr,
+					str
+				],
+				"^post-install-cmd$": type[
+					arr,
+					str
+				],
+				"^pre-status-cmd$": type[
+					arr,
+					str
+				];
+				
 			]
 		};
 		false
