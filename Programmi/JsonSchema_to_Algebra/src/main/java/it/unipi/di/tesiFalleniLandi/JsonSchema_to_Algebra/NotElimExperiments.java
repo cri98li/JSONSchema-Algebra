@@ -74,7 +74,7 @@ public class NotElimExperiments
 				}
 				break;
 			case 3: //fullAlgebra_notElimination
-				outputSchema = jsonSchema.notElimination().toGrammarString();
+				outputSchema = Utils.beauty(jsonSchema.notElimination().toGrammarString());
 				break;
 			case 4: //witnessAlgebra_notElimination
 				try {
