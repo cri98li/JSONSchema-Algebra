@@ -1,20 +1,65 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import patterns.REException;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 
 public class Endpoint {
     private static Logger logger = LogManager.getLogger(Endpoint.class);
 
     public static void main(String[] args) throws IOException, WitnessException, REException {
+        main2();
+    }
+
+    public static void main2() throws IOException, WitnessException, REException{
+        String path = System.getProperty("user.dir")+ "/testFiles/";
+        String file = "2";
+        String extension = ".json";
+        String inputFileName = path+file+extension;
+
+        JSONSchema root;
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create();
+
+        try (Reader reader = new FileReader(inputFileName)) {
+            JsonObject object = gson.fromJson(reader, JsonObject.class);
+            root = new JSONSchema(object);
+            Assertion jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
+            WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema);
+            /*operations*/
+//            env = (WitnessEnv) env.merge(null, null);
+            /**/
+
+
+            String outputSchema = Utils.beauty(env.getFullAlgebra().toGrammarString());
+
+            String outputFileName = path+file+".walgebra";
+            FileWriter fw = new FileWriter(outputFileName);
+            fw.write(outputSchema);
+            fw.close();
+            System.out.println("output "+ outputFileName);
+
+
+        }
+    }
+    public void main1() throws IOException, WitnessException, REException {
         String path = System.getProperty("user.dir")+ "/testFiles/";
         String file = "test"//"canon1" //"example_4-5"//
                 ;

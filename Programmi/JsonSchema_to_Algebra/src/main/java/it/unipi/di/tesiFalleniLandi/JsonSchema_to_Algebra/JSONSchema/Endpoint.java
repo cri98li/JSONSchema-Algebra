@@ -18,8 +18,6 @@ public class Endpoint {
 	private static Logger logger = LogManager.getLogger(Endpoint.class);
 
 	public static void main(String[] args) throws IOException {
-//		PropertyConfigurator.configure("log4j.properties");
-
 		logger.debug("JSONSchema endpoint");
 		String path = System.getProperty("user.dir")+ "/testFiles/";
 		String file = "1pp";
