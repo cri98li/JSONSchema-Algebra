@@ -19,10 +19,29 @@ public class GenObject implements GenAssertion {
     private List<GPattReq> objectReqList;
 
 
+    @Override
+    public String toString() {
+        return "GenObject{" + _sep +
+                "minPro=" + minPro +_sep +
+                ", maxPro=" + maxPro +_sep +
+                ", CPart=" + CPart +_sep +
+                ", RPart=" + RPart +_sep +
+                ", objectReqList=" + objectReqList +_sep +
+                '}'+ _sep;
+    }
+
     /*local classes*/
     public class GProperty {
         private ComplexPattern key;
         private GenVar schema;
+
+        @Override
+        public String toString() {
+            return "GProperty{" +
+                    "key=" + key +
+                    ", schema=" + schema +
+                    '}';
+        }
 
         public GProperty(WitnessProperty prop){
             WitnessAssertion value = prop.getValue();
@@ -38,6 +57,14 @@ public class GenObject implements GenAssertion {
 
     public class GOrPattReq {
         private List<GPattReq> reqList;
+
+        @Override
+        public String toString() {
+            return "GOrPattReq{" +
+                    "reqList=" + reqList +
+                    '}';
+        }
+
         public GOrPattReq(WitnessOrPattReq wor){
             reqList=wor.getReqList().stream().map(w->new GPattReq(w)).collect(Collectors.toList());
         }
@@ -48,6 +75,16 @@ public class GenObject implements GenAssertion {
         private GenVar schema;
         private List<GOrPattReq> orpList;
 //        private boolean isSimple;
+
+        @Override
+        public String toString() {
+            return "GPattReq{" +
+                    "key=" + key +
+                    ", schema=" + schema +
+                    ", orpList=" + orpList +
+                    '}';
+        }
+
         public GPattReq(WitnessPattReq pattReq){
             WitnessAssertion value = pattReq.getValue();
             if (value.getClass()==WitnessBoolean.class)

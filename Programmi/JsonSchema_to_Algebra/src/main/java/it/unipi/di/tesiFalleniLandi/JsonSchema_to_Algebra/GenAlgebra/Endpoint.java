@@ -24,7 +24,7 @@ public class Endpoint {
 
         Assertion schema = Utils_FullAlgebra.parseFile(inputFileName);
         System.out.println("parsed "+inputFileName);
-        System.out.println(schema.toGrammarString());
+//        System.out.println(schema.toGrammarString());
 
         //System.out.println(schema.toGrammarString());
 
@@ -38,39 +38,39 @@ public class Endpoint {
 
         System.out.println("\r\n\r\n Algebra: \r\n");
 
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         env = (WitnessEnv) env.merge(null, null);
 
         System.out.println("\r\n\r\n Merge: \r\n");
         System.out.flush();
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Groupize: \r\n");
         System.out.flush();
 
         env = env.groupize();
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n DNF: \r\n");
         System.out.flush();
 
         env = env.DNF();
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Separation: \r\n");
         System.out.flush();
 
         env.varNormalization_separation(null, null);
 
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Expansion: \r\n");
         System.out.flush();
 
         env = env.varNormalization_expansion(null);
 
-        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+//        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n objectPrepare: \r\n");
         System.out.flush();
@@ -80,12 +80,22 @@ public class Endpoint {
         env.toOrPattReq();
         env.objectPrepare();
 
+//        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//        System.out.println(result);
+
+
+//        System.out.println(env);
+
+        System.out.println("\r\n\r\n witness generation: \r\n");
+        System.out.flush();
         GenEnv genv = new GenEnv(env);
+
+        System.out.println(genv);
 
 //        //another round of normalization
 //        env = env.varNormalization_expansion(null);
 
-        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
 
 //        String outputFileName = path+"fullprep_"+file+extension;
 //        FileWriter fw = new FileWriter(outputFileName);

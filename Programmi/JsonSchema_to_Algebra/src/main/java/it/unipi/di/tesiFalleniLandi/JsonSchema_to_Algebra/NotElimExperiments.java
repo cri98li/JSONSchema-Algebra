@@ -27,6 +27,7 @@ import java.io.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class NotElimExperiments
 {
@@ -35,6 +36,7 @@ public class NotElimExperiments
 	private static String _size_after = "size_after";
 	private static String _exec_time = "exec_time";
 	private static String _error = "error";
+	private static String _operation = "operation";
 	private static long _error_code = -666l;
 
 
@@ -104,8 +106,9 @@ public class NotElimExperiments
 				break;
 			case 3: //fullAlgebra_notElimination
 				try {
+					String before = Utils.beauty(jsonSchema.toGrammarString());
+					result.put(_size_before, (long) before.length());
 					outputSchema = Utils.beauty(jsonSchema.notElimination().toGrammarString());
-					result.put(_size_before, (long) outputSchema.length());
 
 				} catch (Exception e){
 					System.out.println("skipped file " + file.getName()+" due to  "+e.getCause());
@@ -119,7 +122,6 @@ public class NotElimExperiments
 					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema);
 					env.buildOBDD_notElimination(); //modify in-place
 					outputSchema = Utils.beauty(env.getFullAlgebra().toGrammarString());
-					result.put(_size_before, (long) outputSchema.length());
 				} catch (REException e) {
 					e.printStackTrace();
 				}
@@ -130,6 +132,7 @@ public class NotElimExperiments
 		result.put(_size_after, (long) outputSchema.length());
 		Instant end = Instant.now();
 		result.put(_exec_time, Duration.between(start, end).toMillis());
+		result.put(_operation,(long) code);
 
 		//write the result
 //		FileWriter fw = new FileWriter(path+"_"+operations.get(code)+extension);
@@ -157,16 +160,49 @@ public class NotElimExperiments
 
 		boolean headerOut = false;
 		for (File file : files) {
-			HashMap<String, Long> result = operation(file,op);
-			if(!result.keySet().contains(_error))
+			final HashMap<String, Long>[] result = new HashMap[]{new LinkedHashMap<>()};
+
+			final Runnable stuffToDo = new Thread() {
+				@Override
+				public void run() {
+					try {
+						result[0] = operation(file,op);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+
+			final ExecutorService executor = Executors.newSingleThreadExecutor();
+			final Future future = executor.submit(stuffToDo);
+			executor.shutdown(); // This does not cancel the already-scheduled task.
+
+			try {
+				future.get(1, TimeUnit.MINUTES);
+			}
+			catch (InterruptedException ie) {
+				/* Handle the interruption. Or ignore it. */
+			}
+			catch (ExecutionException ee) {
+				/* Handle the error. Or ignore it. */
+			}
+			catch (TimeoutException te) {
+				/* Handle the timeout. Or ignore it. */
+			}
+			if (!executor.isTerminated())
+				executor.shutdownNow();
+
+
+
+			if(!result[0].keySet().contains(_error))
 			{
 				if(!headerOut){
-					result.forEach((k,v) -> b.append(k).append(","));
+					result[0].forEach((k, v) -> b.append(k).append(","));
 					b.replace(b.length()-1,b.length(),"");
 					b.append("\r\n");
 					headerOut=true;
 				}
-				result.forEach((k,v) -> b.append(v).append(","));
+				result[0].forEach((k, v) -> b.append(v).append(","));
 				b.replace(b.length()-1,b.length(),"");
 				b.append("\r\n");
 			}

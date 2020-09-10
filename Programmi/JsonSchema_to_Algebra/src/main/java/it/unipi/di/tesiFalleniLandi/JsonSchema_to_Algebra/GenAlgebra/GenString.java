@@ -8,6 +8,13 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 public class GenString implements GenAssertion{
     private ComplexPattern pattern;
 
+    @Override
+    public String toString() {
+        return "GenString{" +
+                "pattern=" + pattern +_sep +
+                '}';
+    }
+
     public GenString() {
     }
 

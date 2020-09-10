@@ -16,6 +16,20 @@ public class GenEnv {
     private BiMap<GenVar,GenVar> coVar;
     private GenVar rootVar;
     private List<GenVar> openVars, sleepingVars, emptyVars, popVars;
+    private String _sep = "\r\n";
+
+    @Override
+    public String toString() {
+        return "GenEnv{" + _sep +
+                "varList=" + varList + _sep +
+                ", coVar=" + coVar +  _sep +
+                ", rootVar=" + rootVar + _sep +
+                ", openVars=" + openVars + _sep +
+                ", sleepingVars=" + sleepingVars + _sep +
+                ", emptyVars=" + emptyVars + _sep +
+                ", popVars=" + popVars + _sep +
+                '}'+ _sep;
+    }
 
     /**
      * Default constructor
@@ -35,7 +49,11 @@ public class GenEnv {
      * @return
      */
     private List<GenAssertion> fromWitnessDNF(WitnessAssertion witAssert){
-        ArrayList<GenAssertion> result = new ArrayList<>();
+        List<GenAssertion> result = new LinkedList<GenAssertion>();
+        //testing
+//        LinkedList<GenAssertion> list = new LinkedList();
+//        list.add(new GenBool());
+
 
         if(witAssert instanceof WitnessBoolean){
             result.add(((WitnessBoolean) witAssert).getValue()==true ?
@@ -43,11 +61,16 @@ public class GenEnv {
         }
         else
             if(witAssert instanceof WitnessOr){
-                //collect the typed groups and convert each of them
-                result.addAll(((WitnessOr) witAssert).getOrList().values()
-                        .stream().flatMap(List::stream)
-                        .map(group -> fromWitness(group))
-                        .collect(Collectors.toList()));
+                for(List<WitnessAssertion> listWA: ((WitnessOr) witAssert).getOrList().values())
+                    for(WitnessAssertion WA: listWA) {
+                        try {
+                            result.add(fromWitness(WA));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                System.out.println("result "+ result);
+
             }
             else
                 {
@@ -227,7 +250,7 @@ public class GenEnv {
      * @param typedGroup
      * @return
      */
-    private GenAssertion fromWitness(WitnessAssertion typedGroup){
+    private GenAssertion fromWitness(WitnessAssertion typedGroup) throws Exception {
         GenAssertion result = null;
         if(typedGroup instanceof WitnessType){
             result= fromSingletonTypeOnly((WitnessType) typedGroup);
@@ -244,20 +267,22 @@ public class GenEnv {
                         .collect(Collectors.toList());
 
                 if(wTypeList.size()<1)
-                    new Exception("No type construct in a typed group");
+                    throw new Exception("No type construct in a typed group");
                 else if(wTypeList.size()>1)
-                    new Exception("More than one type construct in a typed group");
+                    throw new Exception("More than one type construct in a typed group");
 
                 WitnessType wType = (WitnessType) wTypeList.get(0); //by default get the first element
                 //check again is type is not a singleton
-
+                result = fromSingletonTypeWithConstraints(wType,wAssertList);
 
         }
-            else new Exception("Typed group must be either And or Type but found "+typedGroup.getClass());
+            else
+                throw new Exception("Typed group must be either And or Type but found "+typedGroup.getClass());
         return result;
     }
 
     public GenEnv(WitnessEnv env){
+
         //rootvar
         rootVar=new GenVar(env.getRootVar().getName());
         //varlist
@@ -283,6 +308,7 @@ public class GenEnv {
     public JsonElement generate() {
         return null;
     }
+
 
 
 

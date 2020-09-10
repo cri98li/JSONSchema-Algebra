@@ -12,6 +12,15 @@ public class GenVar implements GenAssertion{
     private List<GenVar> uses;
     private List<GenVar> isUsedBy;
 
+    @Override
+    public String toString() {
+        return "GenVar{" +
+                "name='" + name + '\'' +
+                ", uses=" + uses +
+                ", isUsedBy=" + isUsedBy +
+                '}'+_sep ;
+    }
+
     public GenVar(String varname) {
         name=varname;
     }

@@ -5,6 +5,10 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBoolean;
 
 public class GenBool implements GenAssertion{
+    @Override
+    public String toString() {
+        return "GenBool";
+    }
 
     @Override
     public JsonElement generate() {

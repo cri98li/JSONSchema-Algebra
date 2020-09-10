@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 
 public interface GenAssertion extends Cloneable{
+    public String _sep = "\r\n";
+
+
     public JsonElement generate();
     public JsonElement generateNext();
     public String toString();

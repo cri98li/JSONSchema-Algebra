@@ -20,6 +20,18 @@ public class GenNum implements GenAssertion {
     private Double mof;
     private List<Double> notMofs; //keep sorted
 
+    @Override
+    public String toString() {
+        return "GenNum{" +
+                "min=" + min +
+                ", max=" + max +
+                ", minExclusive=" + minExclusive +
+                ", maxExclusive=" + maxExclusive +
+                ", mof=" + mof +
+                ", notMofs=" + notMofs +
+                '}';
+    }
+
     public GenNum() {
     }
 
@@ -39,7 +51,7 @@ public class GenNum implements GenAssertion {
      * @throws Exception
      */
     private void invariant1() throws Exception{
-        if(notMofs!=null){
+        if(notMofs!=null&&notMofs.size()>0){
             Double mofTest = containsMultiple(notMofs,this.mof);
             if(mofTest>0)
             {
@@ -59,7 +71,8 @@ public class GenNum implements GenAssertion {
                 .map(e->e.getValue()).collect(Collectors.toList());
         this.notMofs.sort(Comparator.naturalOrder());
         //check invariants
-        invariant1();
+        if(this.mof!=null)
+            invariant1();
         //invariant2
         if(containsPairMultiple(this.notMofs))
             throw new Exception("NotMof List contains a pair of multiples");
@@ -123,8 +136,11 @@ public class GenNum implements GenAssertion {
     private Double containsMultiple(List<Double> list, Double num){
         Double res = 0d;
         for(Double el:list)
-            if(el%num==0)
+            if(el%num==0){
                 res = el;
+                break;
+            }
+
         return res;
     }
 

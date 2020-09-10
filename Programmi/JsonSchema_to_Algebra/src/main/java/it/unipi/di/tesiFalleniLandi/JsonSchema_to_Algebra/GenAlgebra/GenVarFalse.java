@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class GenVarFalse extends GenVar {
+
     public GenVarFalse(String varname) {
         super(varname);
     }
