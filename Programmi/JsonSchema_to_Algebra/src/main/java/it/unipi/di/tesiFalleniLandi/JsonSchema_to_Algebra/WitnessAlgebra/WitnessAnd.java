@@ -1132,13 +1132,14 @@ public class WitnessAnd implements WitnessAssertion{
             List <WitnessPattReq> coSubset = new LinkedList<>(reqList);
             coSubset.removeAll(subset);
 
-            //removed for optimization
-            /*
+
+
             for (WitnessPattReq oldReq : new LinkedList<>(subset) )
                 ((WitnessAnd) schema).add(oldReq.getValue());//  schema = schema and schemaOf(oldReq)
-             */
 
 
+            //removed for optimization
+            /*
             if(schema.getClass() == WitnessAnd.class)
                 for (WitnessPattReq oldReq : coSubset )
                     ((WitnessAnd) schema).add(oldReq.getValue().not(env)); //  schema = schema and not schemaOf(oldReq)
@@ -1147,6 +1148,7 @@ public class WitnessAnd implements WitnessAssertion{
                 logger.error(s);
                 throw new WitnessException(s);
             }
+             */
 
             WitnessPattReq fragment = env.pattReqManager.build(patt, schema);
             //fragment: satisfies subset and fails all assertions in coSubset

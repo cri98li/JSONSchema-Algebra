@@ -62,6 +62,6 @@ public class Not_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
-		return not.notElimination().toWitnessAlgebra(varManager,env, pattReqManager);
+		return not.not().toWitnessAlgebra(varManager, env, pattReqManager);
 	}
 }
