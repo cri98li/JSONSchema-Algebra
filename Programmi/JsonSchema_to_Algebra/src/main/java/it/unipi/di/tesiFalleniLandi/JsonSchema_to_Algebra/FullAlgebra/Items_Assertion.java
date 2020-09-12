@@ -55,8 +55,12 @@ public class Items_Assertion implements Assertion{
 			obj.add("items", array);
 		}
 
-		if(additionalItems != null)
-			obj.add("additionalItems", additionalItems.toJSONSchema(rootVar));
+		if(additionalItems != null) {
+			if (itemsArray != null)
+				obj.add("additionalItems", additionalItems.toJSONSchema(rootVar));
+			else
+				obj.add("items", additionalItems.toJSONSchema(rootVar));
+		}
 	
 		return obj;
 	}

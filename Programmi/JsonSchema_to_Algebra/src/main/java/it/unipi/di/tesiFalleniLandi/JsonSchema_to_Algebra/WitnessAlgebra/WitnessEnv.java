@@ -21,6 +21,7 @@ public class WitnessEnv implements WitnessAssertion {
     protected WitnessBDD bdd;
     protected WitnessVarManager variableNamingSystem;
     protected WitnessPattReqManager pattReqManager;
+    private LinkedList<WitnessVar> varToBeElaborated; // notElimination + buildOBDD
 
     public HashMap<WitnessVar, WitnessAssertion> getVarList() {
         return varList;
@@ -33,8 +34,6 @@ public class WitnessEnv implements WitnessAssertion {
     public WitnessVar getRootVar() {
         return rootVar;
     }
-
-    private LinkedList<WitnessVar> varToBeElaborated; // notElimination + buildOBDD
 
     private WitnessEnv(){
         varList = new HashMap<>();
@@ -294,7 +293,9 @@ public class WitnessEnv implements WitnessAssertion {
             WitnessVar complementVarName = variableNamingSystem.buildVar(complementName);
 
             coVar.put(var, complementVarName);
-            tmp.add(complementVarName);
+
+            if(!varList.containsKey(complementVarName)) //if complementVarName is a new variable
+                tmp.add(complementVarName);
         }
 
         varToBeElaborated = new LinkedList<>();

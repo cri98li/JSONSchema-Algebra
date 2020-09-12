@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessBDDException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import jdd.bdd.BDD;
@@ -49,11 +50,38 @@ public class WitnessBDD {
         return var;
     }
 
+
     public void createVar(WitnessVar var){
         if(indexNode.containsKey(var)) return;
+
+        if(var.getName().startsWith(AlgebraStrings.NOT_DEFS)) {
+            WitnessVar coVar = varManager.buildVar(var.getName().replace(AlgebraStrings.NOT_DEFS, ""));
+            Integer coI = indexNode.get(coVar);
+
+            if(coI == null) {
+                coI = bdd.createVar();
+                indexNode.put(coVar, coI);
+            }
+
+            Integer i = bdd.not(coI);
+            indexNode.put(var, i);
+
+        }else {
+            int i = bdd.createVar();
+            indexNode.put(var, i);
+        }
+    }
+
+
+    /*
+    //Old version, bdd without not
+    public void createVar(WitnessVar var){
+        if(indexNode.containsKey(var)) return;
+
         int i = bdd.createVar();
         indexNode.put(var, i);
     }
+    */
 
     public WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
         Integer i1 = indexNode.get(u1);

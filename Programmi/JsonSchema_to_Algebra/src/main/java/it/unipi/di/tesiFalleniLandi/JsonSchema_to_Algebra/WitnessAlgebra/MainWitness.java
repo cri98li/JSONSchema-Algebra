@@ -27,6 +27,7 @@ public class MainWitness {
         Assertion schema = Utils_FullAlgebra.parseFile(path);
 
         WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(schema);
+        env.buildOBDD_notElimination();
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 

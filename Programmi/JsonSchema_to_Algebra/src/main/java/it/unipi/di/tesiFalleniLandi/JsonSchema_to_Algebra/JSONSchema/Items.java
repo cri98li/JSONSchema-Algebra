@@ -93,7 +93,7 @@ public class Items implements JSONSchemaElement{
 				item.add(element.toGrammar());
 
 		if(items != null)
-			item.add(items.toGrammar());
+			item.setAdditionalItems(items.toGrammar());
 
 		if(additionalItems != null)
 			item.setAdditionalItems(additionalItems.toGrammar());

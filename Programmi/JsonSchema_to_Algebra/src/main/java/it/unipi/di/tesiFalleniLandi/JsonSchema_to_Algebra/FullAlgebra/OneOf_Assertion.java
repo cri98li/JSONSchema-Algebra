@@ -61,6 +61,7 @@ public class OneOf_Assertion implements Assertion{
 	@Override
 	public Assertion not() {
 		List<Assertion> notXorList = new LinkedList<>();
+
 		for(Assertion a : xorList) {
 			Assertion not = a.not();
 			if(not != null)
