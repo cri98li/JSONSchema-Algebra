@@ -33,17 +33,21 @@ public class GenNum implements GenAssertion {
     }
 
     public GenNum() {
+        logger.debug("Creation");
     }
 
     public void setMinMax(WitnessBet WitnessBet){
         min=WitnessBet.getMin();
         max=WitnessBet.getMax();
+        logger.debug("Set min to {} max to {}", min, max);
     }
 
     public void setMinMax(WitnessXBet witnessXBet){
         min=witnessXBet.getMin();
         max=witnessXBet.getMax();
         minExclusive=maxExclusive=true;
+        logger.debug("Set Xmin to {} Xmax to {}", min, max);
+
     }
 
     /**
@@ -60,10 +64,17 @@ public class GenNum implements GenAssertion {
             }
         }
     }
+
+    /**
+     *
+     * @param mof
+     * @throws Exception
+     */
     public void setMof(WitnessMof mof) throws Exception {
         this.mof = mof.getValue();
         //check invariant1
         invariant1();
+        logger.debug("Set mof to {}", this.mof);
     }
 
     public void setNotMofs(List<WitnessNotMof> notMofs) throws Exception{
@@ -76,7 +87,10 @@ public class GenNum implements GenAssertion {
         //invariant2
         if(containsPairMultiple(this.notMofs))
             throw new Exception("NotMof List contains a pair of multiples");
+        logger.debug("Set NotMofs to {}", this.notMofs);
+
     }
+
 
     /**
      * constructor with optional arguments

@@ -16,6 +16,8 @@ public class Endpoint {
     private static Logger logger = LogManager.getLogger(Endpoint.class);
 
     public static void main(String[] args) throws IOException, WitnessException, REException {
+
+
         String path = System.getProperty("user.dir")+ "/testFiles/";
         String file = "test"//"canon1" //"example_4-5"//
                 ;
@@ -23,7 +25,8 @@ public class Endpoint {
         String inputFileName = path+file+extension;
 
         Assertion schema = Utils_FullAlgebra.parseFile(inputFileName);
-        System.out.println("parsed "+inputFileName);
+        logger.info("parsed ", inputFileName);
+//        System.out.println("parsed "+inputFileName);
 //        System.out.println(schema.toGrammarString());
 
         //System.out.println(schema.toGrammarString());
@@ -63,6 +66,8 @@ public class Endpoint {
 
         env.varNormalization_separation(null, null);
 
+        env = env.DNF();
+
 //        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
         System.out.println("\r\n\r\n Expansion: \r\n");
@@ -80,27 +85,31 @@ public class Endpoint {
         env.toOrPattReq();
         env.objectPrepare();
 
-//        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
-//        System.out.println(result);
+        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//        System.out.println(env);
+        String outputFileName = path+"prep_"+file+extension;
+        FileWriter fw = new FileWriter(outputFileName);
+        fw.write(result);
+        fw.close();
+        System.out.println("output "+ outputFileName);
 
 
 //        System.out.println(env);
 
         System.out.println("\r\n\r\n witness generation: \r\n");
         System.out.flush();
-        GenEnv genv = new GenEnv(env);
+        GenEnv genv = null;
+        try {
+            genv = new GenEnv(env);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         System.out.println(genv);
 
-//        //another round of normalization
-//        env = env.varNormalization_expansion(null);
 
-//        String result = Utils.beauty(env.getFullAlgebra().toGrammarString());
 
-//        String outputFileName = path+"fullprep_"+file+extension;
-//        FileWriter fw = new FileWriter(outputFileName);
-//        fw.write(result);
-//        fw.close();
-//        System.out.println("output "+ outputFileName);
+
+
     }
 }

@@ -66,7 +66,7 @@ public class GenObject implements GenAssertion {
         }
 
         public GOrPattReq(WitnessOrPattReq wor){
-            reqList=wor.getReqList().stream().map(w->new GPattReq(w)).collect(Collectors.toList());
+//            reqList=wor.getReqList().stream().map(w->new GPattReq(w)).collect(Collectors.toList());
         }
     }
 
@@ -94,7 +94,8 @@ public class GenObject implements GenAssertion {
             else
                 new Exception("Request Properties must be normalized and map to WitnessVar or WitnessBool");
             key=pattReq.getPattern();
-            orpList=pattReq.getOrpList().stream().map(e->new GOrPattReq(e)).collect(Collectors.toList());
+            orpList=pattReq.getOrpList().stream()
+                    .map(e->new GOrPattReq(e)).collect(Collectors.toList());
         }
     }
 

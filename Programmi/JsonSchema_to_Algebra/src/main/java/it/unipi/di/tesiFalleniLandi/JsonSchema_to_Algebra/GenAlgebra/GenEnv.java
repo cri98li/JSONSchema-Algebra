@@ -4,6 +4,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,6 +13,8 @@ import java.util.stream.Collectors;
 import static it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.*;
 
 public class GenEnv {
+
+    private static Logger logger = LogManager.getLogger(GenEnv.class);
 
     private HashMap<GenVar, List<GenAssertion>> varList;
     private BiMap<GenVar,GenVar> coVar;
@@ -48,12 +52,9 @@ public class GenEnv {
      * @param witAssert
      * @return
      */
-    private List<GenAssertion> fromWitnessDNF(WitnessAssertion witAssert){
+    private List<GenAssertion> fromWitnessDNF(WitnessAssertion witAssert) throws Exception {
+        logger.debug("Extracting assertions from {} ...",witAssert.toString());
         List<GenAssertion> result = new LinkedList<GenAssertion>();
-        //testing
-//        LinkedList<GenAssertion> list = new LinkedList();
-//        list.add(new GenBool());
-
 
         if(witAssert instanceof WitnessBoolean){
             result.add(((WitnessBoolean) witAssert).getValue()==true ?
@@ -69,14 +70,20 @@ public class GenEnv {
                             e.printStackTrace();
                         }
                     }
-                System.out.println("result "+ result);
-
             }
-            else
+            else if(witAssert instanceof WitnessAnd){ //singleton
+                try {
+                    result.add(fromWitness(witAssert));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+                else
                 {
-                    new Exception("Expected WitnessOr found " +  witAssert.toString());
+                    throw new Exception("Expected WitnessOr found " +  witAssert.getClass());
                 }
 
+        logger.debug("... extracted {}",result);
         return result;
     }
 
@@ -85,7 +92,7 @@ public class GenEnv {
      * @param witnessType
      * @return
      */
-    private GenAssertion fromSingletonTypeOnly(WitnessType witnessType)  {
+    private GenAssertion fromSingletonTypeOnly(WitnessType witnessType) throws Exception {
         return fromSingletonTypeWithConstraints(witnessType, new LinkedList<>());
     }
 
@@ -188,7 +195,7 @@ public class GenEnv {
 
         //WitnessOrPattReq
         List<WitnessOrPattReq> witnessOrPattReqList = constraints.stream()
-                .filter(o->o instanceof WitnessProperty)
+                .filter(o->o instanceof WitnessOrPattReq)
                 .map(e->(WitnessOrPattReq)e)
                 .collect(Collectors.toList());
         genObject.setRPart(witnessOrPattReqList);
@@ -202,12 +209,11 @@ public class GenEnv {
          * @return
          */
     private GenAssertion fromSingletonTypeWithConstraints(WitnessType witnessType,
-                                                          List<WitnessAssertion> constraints )
-    {
+                                                          List<WitnessAssertion> constraints ) throws Exception {
         GenAssertion result = null;
         String[] typeList = witnessType.getType().toArray(String[]::new);
         if(typeList.length !=1)
-            new Exception("Type construct must contain ONE type. Current constructs contains  " + typeList.length + " types");
+            throw new Exception("Type construct must contain ONE type. Current constructs contains  " + typeList.length + " types");
         //get the first (and unique) element of the list
         String typeName = typeList[0];
         //check to which case the group corresponds
@@ -241,7 +247,7 @@ public class GenEnv {
             case TYPE_ARRAY:
                 result = new GenArray();
                 break;
-            default:new Exception("Undefined Type "+typeName);
+            default:throw new Exception("Undefined Type "+typeName);
         }
         return result;
     }
@@ -251,17 +257,24 @@ public class GenEnv {
      * @return
      */
     private GenAssertion fromWitness(WitnessAssertion typedGroup) throws Exception {
+        logger.debug("Converting assertion {} to GenAssertion", typedGroup);
         GenAssertion result = null;
         if(typedGroup instanceof WitnessType){
             result= fromSingletonTypeOnly((WitnessType) typedGroup);
+            return result;
         }
         else
             if(typedGroup instanceof WitnessAnd){
                 //retrieve the type construct
-                List<WitnessAssertion> wAssertList = ((WitnessAnd) typedGroup).getAndList()
-                        .values().stream().flatMap(List::stream)
-                        .collect(Collectors.toList());
-
+//                List<WitnessAssertion> wAssertList = ((WitnessAnd) typedGroup).getAndList()
+//                        .values().stream().flatMap(List::stream)
+//                        .collect(Collectors.toList());
+                List<WitnessAssertion> wAssertList = new LinkedList<>();
+                for(List<WitnessAssertion> witnessAssertionList:
+                        ((WitnessAnd) typedGroup).getAndList().values()){
+                    for(WitnessAssertion witnessAssertion: witnessAssertionList)
+                        wAssertList.add(witnessAssertion);
+                }
                 List<WitnessAssertion> wTypeList =  wAssertList.stream()
                         .filter(o->o instanceof WitnessType)
                         .collect(Collectors.toList());
@@ -274,21 +287,36 @@ public class GenEnv {
                 WitnessType wType = (WitnessType) wTypeList.get(0); //by default get the first element
                 //check again is type is not a singleton
                 result = fromSingletonTypeWithConstraints(wType,wAssertList);
+                return result;
 
         }
             else
-                throw new Exception("Typed group must be either And or Type but found "+typedGroup.getClass());
-        return result;
+                if(typedGroup instanceof WitnessVar){
+                    return getByNameElseCreate(((WitnessVar)typedGroup).getName());
+                }
+                    else
+                    {
+                        throw new Exception("Typed group must be either And or Type or ref, but found "+typedGroup);
+                    }
     }
 
-    public GenEnv(WitnessEnv env){
 
-        //rootvar
-        rootVar=new GenVar(env.getRootVar().getName());
+    /**
+     *
+     * @param env
+     * @throws Exception
+     */
+    public GenEnv(WitnessEnv env) throws Exception {
+        logger.debug("Creating a GenEnv from a witnees Env");
+        logger.debug("Creating varList");
         //varlist
         varList = new HashMap<>();
         for (Map.Entry<WitnessVar, WitnessAssertion> e : env.getVarList().entrySet())
             varList.put(new GenVar(e.getKey().getName()), fromWitnessDNF(e.getValue()));
+        logger.debug("Setting rootvar");
+        //rootvar
+        rootVar = getByNameElseCreate(env.getRootVar().getName());
+        logger.debug("Creating covar");
         //covar
         coVar = HashBiMap.create();
         for (Map.Entry<WitnessVar, WitnessVar> e:env.getCoVar().entrySet())
@@ -302,6 +330,18 @@ public class GenEnv {
         //TODO
 
 
+    }
+
+    public GenVar getByNameElseCreate(String name){
+        GenVar res = null;
+        for(GenVar v: varList.keySet())
+            if(v.getName().compareTo(name)==0){
+                res = v;
+                break;
+                }
+        if(res==null)
+            res = new GenVar(name);
+        return res;
     }
 
 

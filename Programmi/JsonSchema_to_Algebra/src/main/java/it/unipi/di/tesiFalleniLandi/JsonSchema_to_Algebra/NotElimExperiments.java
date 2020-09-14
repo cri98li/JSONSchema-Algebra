@@ -32,12 +32,17 @@ import java.util.concurrent.*;
 public class NotElimExperiments
 {
 	private static HashMap<Integer,String> operations = new HashMap<>();
+	private static HashMap<Long,String> errors = new HashMap<>();
+
+	private static String _objectid = "objectid";
 	private static String _size_before = "size_before";
 	private static String _size_after = "size_after";
 	private static String _exec_time = "exec_time";
 	private static String _error = "error";
 	private static String _operation = "operation";
-	private static long _error_code = -666l;
+	private static String _idrun = "idrun";
+
+//	private static long _error_code = -666l;
 
 
 
@@ -46,10 +51,18 @@ public class NotElimExperiments
 		operations.put(2, "JsonSchema2witnessAlgebra");
 		operations.put(3, "JsonSchema2fullAlgebra_notElimination");
 		operations.put(4, "JsonSchema2witnessAlgebra_notElimination");
+
+		errors.put(0l, "FileNotFoundException");
+		errors.put(1l, "IOException");
+		errors.put(2l, "JsonSyntaxException");
+		errors.put(3l, "TimeoutException");
+		errors.put(4l, "NotEliminationCode");
+		errors.put(99l, "Exception");
+
 	}
 
 
-	private static HashMap<String, Long> operation(File file, Integer code) throws IOException {
+	private static HashMap<String, Long> operation(File file, Integer code, Integer idrun) throws IOException {
 		Instant start = Instant.now();
 		String extension = ".algebra";
 		Assertion jsonSchema=null;
@@ -57,40 +70,44 @@ public class NotElimExperiments
 		JSONSchema root;
 		HashMap<String, Long> result = new LinkedHashMap<>();
 
-
 		Gson gson = new GsonBuilder()
 				.disableHtmlEscaping()
 				.setPrettyPrinting()
 				.serializeNulls()
 				.create();
 
+		JsonObject schemaObject = null,object=null;
 		try (Reader reader = new FileReader(file.getAbsolutePath())) {
-			JsonObject schemaObject = null,object = gson.fromJson(reader, JsonObject.class);
-			//extract id and  schema_file
-			Iterator<?> it = object.keySet().iterator();
-			while(it.hasNext()) {
-				String key = (String) it.next();
-				switch (key) {
-					case "id":
-						result.put(key, object.get(key).getAsLong());
-						break;
-					case "schema_file":
-						schemaObject = object.getAsJsonObject(key);
-						break;
-				}
+			try {
+				object = gson.fromJson(reader, JsonObject.class);
+			} catch (JsonSyntaxException e) {
+				result.put(_error, 2l);
+				return result;
 			}
-			root = new JSONSchema(schemaObject);
-			//convert to full algebra
-			jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-		}catch (Exception e){
-			System.out.println("skipped file " + file.getName()+" due to  "+e.getCause());
-			result.put(_error,_error_code);
+		}catch (FileNotFoundException e) {
+			result.put(_error, 0l);
+			return result;
+		} catch (IOException e) {
+			result.put(_error, 1l);
 			return result;
 		}
+
+		//extract id and  schema_file
+		Iterator<?> it = object.keySet().iterator();
+		while(it.hasNext()) {
+			String key = (String) it.next();
+			switch (key) {
+				case "id":
+					result.put(_objectid, object.get(key).getAsLong());
+					break;
+				case "schema_file":
+					schemaObject = object.getAsJsonObject(key);
+					break;
+			}
+		}
+		root = new JSONSchema(schemaObject);
+			//convert to full algebra
+		jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
 
 		switch (code){
 			case 1: //JsonSchema2fullAlgebra
@@ -112,7 +129,7 @@ public class NotElimExperiments
 
 				} catch (Exception e){
 					System.out.println("skipped file " + file.getName()+" due to  "+e.getCause());
-					result.put(_error,_error_code);
+					result.put(_error,4l);
 					return result;
 				}
 
@@ -133,21 +150,21 @@ public class NotElimExperiments
 		Instant end = Instant.now();
 		result.put(_exec_time, Duration.between(start, end).toMillis());
 		result.put(_operation,(long) code);
-
-		//write the result
-//		FileWriter fw = new FileWriter(path+"_"+operations.get(code)+extension);
-//		fw.write(outputSchema);
-//		fw.close();
-
+		result.put(_idrun,(long) idrun);
 		return result;
 	}
 
 
 	public static void main(String[] args ) throws IOException{
 
+
+
+
+		int timeout = 1; //in minutes
+
 		NotElimExperiments obj = new NotElimExperiments();
-		if(args.length !=2){
-			System.out.println("Expects 2 arguments: file name and experiments code (1 to 4)");
+		if(args.length !=3){
+			System.out.println("Expects 3 arguments: directory path,  experiments code (1 to 4), idrun");
 			operations.forEach((k,v) -> System.out.println("code: "+k+"  corresponds to: "+v));
 			System.exit(-1);
 		}
@@ -155,8 +172,13 @@ public class NotElimExperiments
 		int op = Integer.parseInt(args[1]);
 		File dir = new File(path);
 		File [] files = dir.listFiles();
-		BufferedWriter dest = new BufferedWriter(new FileWriter(path+"/output.csv"));
+		Integer idrun = Integer.parseInt(args[2]);
+
+		BufferedWriter res = new BufferedWriter(new FileWriter(path+"/output.csv"));
+		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/errors.log"));
+
 		StringBuilder b = new StringBuilder();
+		StringBuilder l = new StringBuilder();
 
 		boolean headerOut = false;
 		for (File file : files) {
@@ -166,7 +188,7 @@ public class NotElimExperiments
 				@Override
 				public void run() {
 					try {
-						result[0] = operation(file,op);
+						result[0] = operation(file,op,idrun);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -178,7 +200,7 @@ public class NotElimExperiments
 			executor.shutdown(); // This does not cancel the already-scheduled task.
 
 			try {
-				future.get(1, TimeUnit.MINUTES);
+				future.get(timeout, TimeUnit.MINUTES);
 			}
 			catch (InterruptedException ie) {
 				/* Handle the interruption. Or ignore it. */
@@ -188,13 +210,22 @@ public class NotElimExperiments
 			}
 			catch (TimeoutException te) {
 				/* Handle the timeout. Or ignore it. */
+				result[0].put(_error,3l);
 			}
 			if (!executor.isTerminated())
 				executor.shutdownNow();
 
 
 
-			if(!result[0].keySet().contains(_error))
+
+
+			if(result[0].keySet().contains(_error))
+			{
+				result[0].forEach((k, v) ->l.append(k).append("\t").append(errors.get(v)));
+				l.replace(l.length()-1,l.length(),"");
+				l.append("\r\n");
+			}
+			else
 			{
 				if(!headerOut){
 					result[0].forEach((k, v) -> b.append(k).append(","));
@@ -210,8 +241,10 @@ public class NotElimExperiments
 
 		}
 
-		dest.write(b.toString());
-		dest.close();
+		err.write(l.toString());
+		err.close();
+		res.write(b.toString());
+		res.close();
 
 	}
 }

@@ -3,10 +3,13 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 import com.google.gson.JsonElement;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class GenVar implements GenAssertion{
+    private static Logger logger = LogManager.getLogger(GenVar.class);
 
     private String name ;
     private List<GenVar> uses;
@@ -21,8 +24,14 @@ public class GenVar implements GenAssertion{
                 '}'+_sep ;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public GenVar(String varname) {
         name=varname;
+        logger.debug("Created a var named {} ",this.name);
+
     }
 
     public boolean isOpen() {
