@@ -5,22 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.AlgebraParser;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.ErrorListener;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaLexer;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.MainClass_Algebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.MainClass_JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.ReportResults;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessVar;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import patterns.REException;
 
 import java.io.*;
@@ -32,7 +21,9 @@ import java.util.concurrent.*;
 public class NotElimExperiments
 {
 	private static HashMap<Integer,String> operations = new HashMap<>();
-	private static HashMap<Long,String> errors = new HashMap<>();
+
+	private  HashMap<String,String> errorsMap; //filename->exception code
+	private  HashMap<String, Long> resultMap; //key->value
 
 	private static String _objectid = "objectid";
 	private static String _size_before = "size_before";
@@ -42,7 +33,14 @@ public class NotElimExperiments
 	private static String _operation = "operation";
 	private static String _idrun = "idrun";
 
-//	private static long _error_code = -666l;
+
+	public void addError(String fname, String exception) {
+		errorsMap.put(fname,exception.replace("\n", " ").replace("\r", " "));
+	}
+
+	public void addResult(String key, Long val) {
+		resultMap.put(key,val);
+	}
 
 
 
@@ -52,23 +50,25 @@ public class NotElimExperiments
 		operations.put(3, "JsonSchema2fullAlgebra_notElimination");
 		operations.put(4, "JsonSchema2witnessAlgebra_notElimination");
 
-		errors.put(0l, "FileNotFoundException");
-		errors.put(1l, "IOException");
-		errors.put(2l, "JsonSyntaxException");
-		errors.put(3l, "TimeoutException");
-		errors.put(4l, "NotEliminationCode");
-		errors.put(99l, "Exception");
+		errorsMap = new HashMap<>();
+		resultMap = new HashMap<>();
+
+//		errors.put(0l, "FileNotFoundException");
+//		errors.put(1l, "IOException");
+//		errors.put(2l, "JsonSyntaxException");
+//		errors.put(3l, "TimeoutException");
+//		errors.put(4l, "NotEliminationCode");
+//		errors.put(99l, "Exception");
 
 	}
 
-
-	private static HashMap<String, Long> operation(File file, Integer code, Integer idrun) throws IOException {
+	public boolean operation(File file, Integer code, Integer idrun, Integer timeout)  {
 		Instant start = Instant.now();
 		String extension = ".algebra";
-		Assertion jsonSchema=null;
-		String outputSchema = null;
+		final Assertion[] jsonSchema = {null};
+		final String[] outputSchema = {null};
 		JSONSchema root;
-		HashMap<String, Long> result = new LinkedHashMap<>();
+		String filename = file.getName();
 
 		Gson gson = new GsonBuilder()
 				.disableHtmlEscaping()
@@ -81,85 +81,131 @@ public class NotElimExperiments
 			try {
 				object = gson.fromJson(reader, JsonObject.class);
 			} catch (JsonSyntaxException e) {
-				result.put(_error, 2l);
-				return result;
+				this.addError(filename,e.getMessage());
+				return false;
 			}
 		}catch (FileNotFoundException e) {
-			result.put(_error, 0l);
-			return result;
+			this.addError(filename,e.getMessage());
+			return false;
 		} catch (IOException e) {
-			result.put(_error, 1l);
-			return result;
+			this.addError(filename,e.getMessage());
+			return false;
 		}
 
-		//extract id and  schema_file
-		Iterator<?> it = object.keySet().iterator();
-		while(it.hasNext()) {
-			String key = (String) it.next();
-			switch (key) {
-				case "id":
-					result.put(_objectid, object.get(key).getAsLong());
-					break;
-				case "schema_file":
-					schemaObject = object.getAsJsonObject(key);
-					break;
+		try{
+			//extract line and  schema_file
+			Iterator<?> it = object.keySet().iterator();
+			while(it.hasNext()) {
+				String key = (String) it.next();
+				switch (key) {
+					case "line":
+						resultMap.put(_objectid, object.get(key).getAsLong());
+						break;
+					case "schema_file":
+						schemaObject = object.getAsJsonObject(key);
+						break;
+				}
 			}
+
+			root = new JSONSchema(schemaObject);
+//			//convert to full algebra
+//			jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
+		}catch (Exception e) {
+			this.addError(filename,e.getMessage());
+			return false;
 		}
-		root = new JSONSchema(schemaObject);
-			//convert to full algebra
-		jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
+
 
 		switch (code){
 			case 1: //JsonSchema2fullAlgebra
-				outputSchema = Utils.beauty(jsonSchema.toGrammarString());
+				outputSchema[0] = Utils.beauty(jsonSchema[0].toGrammarString());
 				break;
 			case 2: //JsonSchema2witnessAlgebra
 				try {
-					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema);
-					outputSchema = Utils.beauty(env.getFullAlgebra().toGrammarString());
+					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
+					outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
 				} catch (REException e) {
-					e.printStackTrace();
+					this.addError(filename,e.getMessage());
+					return false;
 				}
 				break;
 			case 3: //fullAlgebra_notElimination
-				try {
-					String before = Utils.beauty(jsonSchema.toGrammarString());
-					result.put(_size_before, (long) before.length());
-					outputSchema = Utils.beauty(jsonSchema.notElimination().toGrammarString());
+//				try {
+//					//convert to full algebra
+//					jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
+//					String before = Utils.beauty(jsonSchema.toGrammarString());
+//					addResult(_size_before, (long) before.length());
+//				} catch (Exception e){
+//					this.addError(filename,e.getMessage());
+//					return false;
+//				}
 
-				} catch (Exception e){
-					System.out.println("skipped file " + file.getName()+" due to  "+e.getCause());
-					result.put(_error,4l);
-					return result;
-				}
+					//timeout code
+					Assertion finalJsonSchema = jsonSchema[0];
+					final Runnable stuffToDo = new Thread() {
+						@Override
+						public void run() {
+							try{
+								jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+								String before = Utils.beauty(jsonSchema[0].toGrammarString());
+								addResult(_size_before, (long) before.length());
+								outputSchema[0] = Utils.beauty(finalJsonSchema.notElimination().toGrammarString());
+							}catch (Exception e){
+								addError(filename,e.getMessage());
+								return;
+							}
+						}
+					};
+					final ExecutorService executor = Executors.newSingleThreadExecutor();
+					final Future future = executor.submit(stuffToDo);
+					executor.shutdown(); // This does not cancel the already-scheduled task.
 
+					try {
+						future.get(timeout, TimeUnit.MINUTES);
+					}
+					catch (InterruptedException ie) {
+						/* Handle the interruption. Or ignore it. */
+						this.addError(filename,ie.getMessage());
+						return false;
+					}
+					catch (ExecutionException ee) {
+						/* Handle the error. Or ignore it. */
+						this.addError(filename,ee.getMessage());
+						return false;
+					}
+					catch (TimeoutException te) {
+						/* Handle the timeout. Or ignore it. */
+//						this.addError(filename,te.getCause().getMessage());
+						this.addError(filename,"Timeout");
+						return false;
+					}
+					if(errorsMap.containsKey(filename))
+						return false;
+
+					if (!executor.isTerminated())
+						executor.shutdownNow();
 				break;
 			case 4: //witnessAlgebra_notElimination
 				try {
-					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema);
+					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
 					env.buildOBDD_notElimination(); //modify in-place
-					outputSchema = Utils.beauty(env.getFullAlgebra().toGrammarString());
+					outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
 				} catch (REException e) {
-					e.printStackTrace();
+					this.addError(filename,e.getMessage());
+					return false;
 				}
 				break;
-			default:
-				System.out.println("requested experiment is unknown!");
 		}
-		result.put(_size_after, (long) outputSchema.length());
+		addResult(_size_after, (long) outputSchema[0].length());
 		Instant end = Instant.now();
-		result.put(_exec_time, Duration.between(start, end).toMillis());
-		result.put(_operation,(long) code);
-		result.put(_idrun,(long) idrun);
-		return result;
+		addResult(_exec_time, Duration.between(start, end).toMillis());
+		addResult(_operation,(long) code);
+		addResult(_idrun,(long) idrun);
+		return true;
 	}
 
 
 	public static void main(String[] args ) throws IOException{
-
-
-
-
 		int timeout = 1; //in minutes
 
 		NotElimExperiments obj = new NotElimExperiments();
@@ -175,76 +221,82 @@ public class NotElimExperiments
 		Integer idrun = Integer.parseInt(args[2]);
 
 		BufferedWriter res = new BufferedWriter(new FileWriter(path+"/output.csv"));
-		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/errors.log"));
+		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/output.log"));
 
-		StringBuilder b = new StringBuilder();
-		StringBuilder l = new StringBuilder();
 
 		boolean headerOut = false;
+		boolean b = false;
+
 		for (File file : files) {
-			final HashMap<String, Long>[] result = new HashMap[]{new LinkedHashMap<>()};
-
-			final Runnable stuffToDo = new Thread() {
-				@Override
-				public void run() {
-					try {
-						result[0] = operation(file,op,idrun);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			};
-
-			final ExecutorService executor = Executors.newSingleThreadExecutor();
-			final Future future = executor.submit(stuffToDo);
-			executor.shutdown(); // This does not cancel the already-scheduled task.
-
-			try {
-				future.get(timeout, TimeUnit.MINUTES);
+			System.out.println(file);
+			try{
+				b = obj.operation(file, op, idrun, timeout);
 			}
-			catch (InterruptedException ie) {
-				/* Handle the interruption. Or ignore it. */
+			catch (OutOfMemoryError e) {
+				obj.addError(file.getName(),e.getMessage());
 			}
-			catch (ExecutionException ee) {
-				/* Handle the error. Or ignore it. */
-			}
-			catch (TimeoutException te) {
-				/* Handle the timeout. Or ignore it. */
-				result[0].put(_error,3l);
-			}
-			if (!executor.isTerminated())
-				executor.shutdownNow();
+			StringBuilder r = new StringBuilder();
+			StringBuilder e = new StringBuilder();
 
-
-
-
-
-			if(result[0].keySet().contains(_error))
+			if(b)
 			{
-				result[0].forEach((k, v) ->l.append(k).append("\t").append(errors.get(v)));
-				l.replace(l.length()-1,l.length(),"");
-				l.append("\r\n");
-			}
-			else
-			{
+				//write result
 				if(!headerOut){
-					result[0].forEach((k, v) -> b.append(k).append(","));
-					b.replace(b.length()-1,b.length(),"");
-					b.append("\r\n");
+					obj.resultMap.forEach((k, v) -> r.append(k).append(","));
+					r.replace(r.length()-1,r.length(),"");//remove last comma
+					r.append("\r\n");
 					headerOut=true;
 				}
-				result[0].forEach((k, v) -> b.append(v).append(","));
-				b.replace(b.length()-1,b.length(),"");
-				b.append("\r\n");
+				obj.resultMap.forEach((k, v) -> r.append(v).append(","));
+				r.replace(r.length()-1,r.length(),"");//remove last comma
+				r.append("\r\n");
+				res.write(r.toString());
+				//clear
+				obj.resultMap.clear();
+				res.flush();
 			}
-
-
+			else{
+				//write error
+				obj.errorsMap.forEach((k, v) ->e.append(k).append("\t").append(v));
+				e.append("\r\n");
+				err.write(e.toString());
+				obj.errorsMap.clear();
+				err.flush();
+			}
 		}
 
-		err.write(l.toString());
 		err.close();
-		res.write(b.toString());
 		res.close();
 
 	}
+
+//	public void writeResultsErrors(String path) throws IOException {
+//
+//		BufferedWriter res = new BufferedWriter(new FileWriter(path+"/output.csv"));
+//		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/output.log"));
+//
+//		StringBuilder r = new StringBuilder();
+//		StringBuilder e = new StringBuilder();
+//
+//		boolean headerOut = false;
+//
+//		if(!headerOut){
+//			this.resultMap.forEach((k, v) -> r.append(k).append(","));
+//			r.replace(r.length()-1,r.length(),"");//remove last comma
+//			r.append("\r\n");
+//			headerOut=true;
+//		}
+//		this.resultMap.forEach((k, v) -> r.append(v).append(","));
+//		r.replace(r.length()-1,r.length(),"");//remove last comma
+//		r.append("\r\n");
+//		res.write(r.toString());
+//
+//		errorsMap.forEach((k, v) ->e.append(k).append("\t").append(v));
+//		e.append("\r\n");
+//		err.write(e.toString());
+//
+//		err.close();
+//		res.close();
+//
+//	}
 }
