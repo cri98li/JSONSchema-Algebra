@@ -263,7 +263,7 @@ public class NotElimExperiments
 			}
 			else{
 				//write error
-				obj.errorsMap.forEach((k, v) ->e.append(k).append("\t").append(v));
+				obj.errorsMap.forEach((k, v) ->e.append(idrun).append("\t").append(op).append("\t").append(k).append("\t").append(v));
 				e.append("\r\n");
 				err.write(e.toString());
 				obj.errorsMap.clear();
