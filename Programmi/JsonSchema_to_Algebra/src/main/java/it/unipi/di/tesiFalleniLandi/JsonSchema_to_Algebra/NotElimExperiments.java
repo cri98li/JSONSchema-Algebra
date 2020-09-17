@@ -37,6 +37,10 @@ public class NotElimExperiments
 	public void addError(String fname, String exception) {
 		errorsMap.put(fname,exception.replace("\n", " ").replace("\r", " "));
 	}
+	public void addError(String fname, Exception exception) {
+		errorsMap.put(fname,exception.getMessage().replace("\n", " ").replace("\r", " "));
+		exception.printStackTrace();
+	}
 
 	public void addResult(String key, Long val) {
 		resultMap.put(key,val);
@@ -81,14 +85,14 @@ public class NotElimExperiments
 			try {
 				object = gson.fromJson(reader, JsonObject.class);
 			} catch (JsonSyntaxException e) {
-				this.addError(filename,e.getMessage());
+				this.addError(filename,e);
 				return false;
 			}
 		}catch (FileNotFoundException e) {
-			this.addError(filename,e.getMessage());
+			this.addError(filename,e);
 			return false;
 		} catch (IOException e) {
-			this.addError(filename,e.getMessage());
+			this.addError(filename,e);
 			return false;
 		}
 
@@ -108,95 +112,94 @@ public class NotElimExperiments
 			}
 
 			root = new JSONSchema(schemaObject);
-//			//convert to full algebra
-//			jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
 		}catch (Exception e) {
-			this.addError(filename,e.getMessage());
+			this.addError(filename,e);
 			return false;
 		}
 
 
-		switch (code){
-			case 1: //JsonSchema2fullAlgebra
-				outputSchema[0] = Utils.beauty(jsonSchema[0].toGrammarString());
-				break;
-			case 2: //JsonSchema2witnessAlgebra
-				try {
-					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
-					outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
-				} catch (REException e) {
-					this.addError(filename,e.getMessage());
-					return false;
-				}
-				break;
-			case 3: //fullAlgebra_notElimination
-//				try {
-//					//convert to full algebra
-//					jsonSchema = Utils_JSONSchema.normalize(root).toGrammar();
-//					String before = Utils.beauty(jsonSchema.toGrammarString());
-//					addResult(_size_before, (long) before.length());
-//				} catch (Exception e){
-//					this.addError(filename,e.getMessage());
-//					return false;
-//				}
 
-					//timeout code
-					Assertion finalJsonSchema = jsonSchema[0];
-					final Runnable stuffToDo = new Thread() {
-						@Override
-						public void run() {
-							try{
-								jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
-								String before = Utils.beauty(jsonSchema[0].toGrammarString());
-								addResult(_size_before, (long) before.length());
-								outputSchema[0] = Utils.beauty(finalJsonSchema.notElimination().toGrammarString());
-							}catch (Exception e){
-								addError(filename,e.getMessage());
-								return;
-							}
+		//timeout
+
+		final Runnable JsonSchema2fullAlgebra = new Thread() {
+			@Override
+			public void run() {
+				switch (code){
+					case 1: //JsonSchema2fullAlgebra
+						try{
+							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+						}catch (Exception e){
+							addError(filename,e);
+							return;
 						}
-					};
-					final ExecutorService executor = Executors.newSingleThreadExecutor();
-					final Future future = executor.submit(stuffToDo);
-					executor.shutdown(); // This does not cancel the already-scheduled task.
+						break;
+					case 2: //JsonSchema2witnessAlgebra
+						try{
+							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
+							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
+						}catch (REException e) {
+							addError(filename,e);
+							return;
+						}
+						break;
+					case 3: //fullAlgebra_notElimination
+						try {
+							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+							String before = Utils.beauty(jsonSchema[0].toGrammarString());
+							addResult(_size_before, (long) before.length());
+							outputSchema[0] = Utils.beauty(jsonSchema[0].notElimination().toGrammarString());
+							addResult(_size_after, (long) outputSchema[0].length());
+						}catch (Exception e){
+							addError(filename,e);
+							return;
+						}
+						break;
+					case 4: //witnessAlgebra_notElimination
+						try {
+							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
+							String before = Utils.beauty(env.getFullAlgebra().toGrammarString());
+							addResult(_size_before, (long) before.length());
+							env.buildOBDD_notElimination(); //modify in-place
+							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
+							addResult(_size_after, (long) outputSchema[0].length());
+						} catch (REException e) {
+							addError(filename,e);
+							return;
+						}
+						break;
 
-					try {
-						future.get(timeout, TimeUnit.MINUTES);
-					}
-					catch (InterruptedException ie) {
-						/* Handle the interruption. Or ignore it. */
-						this.addError(filename,ie.getMessage());
-						return false;
-					}
-					catch (ExecutionException ee) {
-						/* Handle the error. Or ignore it. */
-						this.addError(filename,ee.getMessage());
-						return false;
-					}
-					catch (TimeoutException te) {
-						/* Handle the timeout. Or ignore it. */
-//						this.addError(filename,te.getCause().getMessage());
-						this.addError(filename,"Timeout");
-						return false;
-					}
-					if(errorsMap.containsKey(filename))
-						return false;
-
-					if (!executor.isTerminated())
-						executor.shutdownNow();
-				break;
-			case 4: //witnessAlgebra_notElimination
-				try {
-					WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
-					env.buildOBDD_notElimination(); //modify in-place
-					outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
-				} catch (REException e) {
-					this.addError(filename,e.getMessage());
-					return false;
 				}
-				break;
+
+				}
+		};
+		final ExecutorService executor = Executors.newSingleThreadExecutor();
+		final Future future = executor.submit(JsonSchema2fullAlgebra);
+		executor.shutdown(); // This does not cancel the already-scheduled task.
+
+		try {
+			future.get(timeout, TimeUnit.MINUTES);
 		}
-		addResult(_size_after, (long) outputSchema[0].length());
+		catch (InterruptedException ie) {
+			this.addError(filename,ie);
+			return false;
+		}
+		catch (ExecutionException ee) {
+			this.addError(filename,ee);
+			return false;
+		}
+		catch (TimeoutException te) {
+			this.addError(filename,"Timeout");
+			return false;
+		}
+		if(errorsMap.containsKey(filename))
+			return false;
+
+		if (!executor.isTerminated())
+			executor.shutdownNow();
+
+
 		Instant end = Instant.now();
 		addResult(_exec_time, Duration.between(start, end).toMillis());
 		addResult(_operation,(long) code);
@@ -227,13 +230,16 @@ public class NotElimExperiments
 		boolean headerOut = false;
 		boolean b = false;
 
+		String filename="";
 		for (File file : files) {
+			filename=file.getName();
 			System.out.println(file);
 			try{
 				b = obj.operation(file, op, idrun, timeout);
 			}
 			catch (OutOfMemoryError e) {
-				obj.addError(file.getName(),e.getMessage());
+//				obj.addError(filename,e.);
+//				obj.addError(file.getName(),e.getMessage());
 			}
 			StringBuilder r = new StringBuilder();
 			StringBuilder e = new StringBuilder();
