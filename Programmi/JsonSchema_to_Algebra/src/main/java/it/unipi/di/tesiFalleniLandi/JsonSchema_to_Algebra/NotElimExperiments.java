@@ -105,6 +105,8 @@ public class NotElimExperiments
 					case "line":
 						resultMap.put(_objectid, object.get(key).getAsLong());
 						break;
+					case "id":
+						resultMap.put(_objectid, object.get(key).getAsLong());
 					case "schema_file":
 						schemaObject = object.getAsJsonObject(key);
 						break;
