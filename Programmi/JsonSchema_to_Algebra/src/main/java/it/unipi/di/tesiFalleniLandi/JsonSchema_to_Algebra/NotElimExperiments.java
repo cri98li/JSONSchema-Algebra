@@ -223,8 +223,12 @@ public class NotElimExperiments
 		File [] files = dir.listFiles();
 		Integer idrun = Integer.parseInt(args[2]);
 
-		BufferedWriter res = new BufferedWriter(new FileWriter(path+"/output.csv"));
-		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/output.log"));
+		String _output =  "output";
+		String _op = "_" + operations.get(op) ;
+
+
+		BufferedWriter res = new BufferedWriter(new FileWriter(path+"/"+ _output + _op + ".csv"));
+		BufferedWriter err = new BufferedWriter(new FileWriter(path+"/" + _output+ _op + ".log"));
 
 
 		boolean headerOut = false;
