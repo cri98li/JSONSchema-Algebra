@@ -102,7 +102,7 @@ public class NotElimExperiments
 			while(it.hasNext()) {
 				String key = (String) it.next();
 				switch (key) {
-					case "line":
+					case "id":
 						resultMap.put(_objectid, object.get(key).getAsLong());
 						break;
 					case "schema_file":
@@ -242,7 +242,7 @@ public class NotElimExperiments
 				b = obj.operation(file, op, idrun, timeout);
 			}
 			catch (OutOfMemoryError e) {
-//				obj.addError(filename,e.);
+				obj.addError(filename,"OOM");
 //				obj.addError(file.getName(),e.getMessage());
 			}
 			StringBuilder r = new StringBuilder();
