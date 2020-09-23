@@ -102,7 +102,7 @@ public class NotElimExperiments
 			while(it.hasNext()) {
 				String key = (String) it.next();
 				switch (key) {
-					case "id":
+					case "line":
 						resultMap.put(_objectid, object.get(key).getAsLong());
 						break;
 					case "id":

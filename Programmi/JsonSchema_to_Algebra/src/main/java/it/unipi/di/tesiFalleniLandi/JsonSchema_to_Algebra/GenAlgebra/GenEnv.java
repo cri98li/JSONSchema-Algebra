@@ -48,12 +48,48 @@ public class GenEnv {
     }
 
     /**
+     *
+     * @param env
+     * @throws Exception
+     */
+    public GenEnv(WitnessEnv env) throws Exception {
+        logger.debug("Creating a GenEnv from a WitnessEnv");
+        logger.debug("Creating varList");
+        //varlist
+        varList = new HashMap<>();
+        for (Map.Entry<WitnessVar, WitnessAssertion> e : env.getVarList().entrySet())
+            varList.put(new GenVar(e.getKey().getName()), fromWitnessDNF(e.getValue()));
+        logger.debug("Setting rootvar");
+        //rootvar
+        rootVar = getByNameElseCreate(env.getRootVar().getName());
+        logger.debug("Creating covar");
+        //covar
+        coVar = HashBiMap.create();
+        for (Map.Entry<WitnessVar, WitnessVar> e:env.getCoVar().entrySet())
+            coVar.put(new GenVar(e.getKey().getName()),new GenVar(e.getValue().getName()));
+        //instantiate  var structures
+        openVars = new LinkedList<>();
+        sleepingVars = new LinkedList<>();
+        emptyVars = new LinkedList<>();
+        popVars = new LinkedList<>();
+        //initially set all vars to open
+        openVars.addAll(varList.keySet());
+
+
+
+    }
+
+    /**
      * Maps a DNF to a list of GenAssertion objects
-     * @param witAssert
+     * @param witAssert can be either WitnessBoolean, WitnessOr, WitnessAnd
+     *                 WitnessBoolean -> List[GenVarBool]
+     *                 WitnessOr(w1,w2,..)-> List[[[w1]], [[w2]], ...]
+     *                 WitnessAnd(w1, w2,...) -> List[ [[w1, w2, ... ]] ]
+     *                  [[w]] = fromWitness(w)
      * @return
      */
     private List<GenAssertion> fromWitnessDNF(WitnessAssertion witAssert) throws Exception {
-        logger.debug("Extracting assertions from {} ...",witAssert.toString());
+        logger.debug("Extracting assertions from {} ...", witAssert.toString());
         List<GenAssertion> result = new LinkedList<GenAssertion>();
 
         if(witAssert instanceof WitnessBoolean){
@@ -80,11 +116,66 @@ public class GenEnv {
             }
                 else
                 {
-                    throw new Exception("Expected WitnessOr found " +  witAssert.getClass());
+                    throw new Exception("Expected WitnessBoolean, WitnessOr, or WitnessAnd ;  found " +  witAssert.getClass());
                 }
 
         logger.debug("... extracted {}",result);
         return result;
+    }
+
+    /**
+     * Generates a GenAssertion for a typed group
+     * @param typedGroup can be either WitnessType, WitnessAnd, WitnessVar
+     *                   WitnessType -> Corresponding genType
+     *                   WitnessAnd -> Corresponding genType with constraints
+     *                   WitnessVar -> genVar
+     * @return
+     */
+    private GenAssertion fromWitness(WitnessAssertion typedGroup) throws Exception {
+        logger.debug("Converting assertion {} to GenAssertion", typedGroup);
+        GenAssertion result = null;
+
+        if(typedGroup instanceof WitnessType){
+            result= fromSingletonTypeOnly((WitnessType) typedGroup);
+            return result;
+        }
+        else
+        if(typedGroup instanceof WitnessAnd){
+            //retrieve the type assertion
+//                List<WitnessAssertion> wAssertList = ((WitnessAnd) typedGroup).getAndList()
+//                        .values().stream().flatMap(List::stream)
+//                        .collect(Collectors.toList());
+            List<WitnessAssertion> wAssertList = new LinkedList<>();
+            for(List<WitnessAssertion> witnessAssertionList:
+                    ((WitnessAnd) typedGroup).getAndList().values()){
+                for(WitnessAssertion witnessAssertion: witnessAssertionList)
+                    wAssertList.add(witnessAssertion);
+            }
+
+            //1-retrieve the type assertion
+            List<WitnessAssertion> wTypeList =  wAssertList.stream()
+                    .filter(o->o instanceof WitnessType)
+                    .collect(Collectors.toList());
+
+            if(wTypeList.size()<1)
+                throw new Exception("No type construct in a typed group");
+            else if(wTypeList.size()>1)
+                throw new Exception("More than one type construct in a typed group");
+            WitnessType wType = (WitnessType) wTypeList.get(0); //by default get the first element
+
+            //2- retrieve the constraints
+            result = fromSingletonTypeWithConstraints(wType,wAssertList);
+            return result;
+
+        }
+        else
+        if(typedGroup instanceof WitnessVar){
+            return getByNameElseCreate(((WitnessVar)typedGroup).getName());
+        }
+        else
+        {
+            throw new Exception("Typed group must be either And or Type or ref, but found "+typedGroup);
+        }
     }
 
     /**
@@ -95,6 +186,63 @@ public class GenEnv {
     private GenAssertion fromSingletonTypeOnly(WitnessType witnessType) throws Exception {
         return fromSingletonTypeWithConstraints(witnessType, new LinkedList<>());
     }
+
+    /**
+     *
+     * @param witnessType
+     * @param constraints
+     * @return
+     */
+    private GenAssertion fromSingletonTypeWithConstraints(WitnessType witnessType,
+                                                          List<WitnessAssertion> constraints ) throws Exception {
+        GenAssertion result = null;
+        String[] typeList = witnessType.getType().toArray(String[]::new);
+        if(typeList.length !=1)
+            throw new Exception("Type assertion must contain ONE type. Current assertion contains  " + typeList.length + " types");
+        //get the first (and unique) element of the list
+        String typeName = typeList[0];
+        //check to which case the group corresponds
+        switch (typeName){
+            case TYPE_BOOLEAN:
+                result = new GenBool();
+                break;
+            case TYPE_NULL:
+                result = new GenNull();
+                break;
+            case TYPE_NUMBER:
+                result = new GenNum();
+                if(constraints.size()>0){
+                    try {
+                        attachNumConstraints((GenNum) result, constraints);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case TYPE_STRING:
+                result = new GenString();
+                if(constraints.size()>0){
+                    try {
+                        attachStringConstraints((GenString)result, constraints);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case TYPE_OBJECT:
+                result = new GenObject();
+                if(constraints.size()>0)
+                    attachObjectConstraints((GenObject)result, constraints);
+                break;
+            case TYPE_ARRAY:
+                result = new GenArray();
+                break;
+            default:throw new Exception("Undefined Type "+typeName);
+        }
+        return result;
+    }
+
+
 
     /**
      * attaches numeric constraints, if any
@@ -181,7 +329,7 @@ public class GenEnv {
                 .map(e->(WitnessPro)e)
                 .collect(Collectors.toList());
         if(witnessProList.size()>1)
-            new Exception("More than one Witness XBet constraints");
+            new Exception("More than one WitnessPro constraints");
         else
         if(witnessProList.size()==1)
             genObject.setMinMaxPro(witnessProList.get(0));
@@ -199,139 +347,18 @@ public class GenEnv {
                 .map(e->(WitnessOrPattReq)e)
                 .collect(Collectors.toList());
         genObject.setRPart(witnessOrPattReqList);
-
+        genObject.setObjectReqList();
     }
 
-        /**
-         *
-         * @param witnessType
-         * @param constraints
-         * @return
-         */
-    private GenAssertion fromSingletonTypeWithConstraints(WitnessType witnessType,
-                                                          List<WitnessAssertion> constraints ) throws Exception {
-        GenAssertion result = null;
-        String[] typeList = witnessType.getType().toArray(String[]::new);
-        if(typeList.length !=1)
-            throw new Exception("Type construct must contain ONE type. Current constructs contains  " + typeList.length + " types");
-        //get the first (and unique) element of the list
-        String typeName = typeList[0];
-        //check to which case the group corresponds
-        switch (typeName){
-            case TYPE_BOOLEAN:
-                result = new GenBool();
-                break;
-            case TYPE_NULL:
-                result = new GenNull();
-                break;
-            case TYPE_NUMBER:
-                result = new GenNum();
-                try {
-                    attachNumConstraints((GenNum) result, constraints);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case TYPE_STRING:
-                result = new GenString();
-                try {
-                    attachStringConstraints((GenString)result, constraints);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case TYPE_OBJECT:
-                result = new GenObject();
-                attachObjectConstraints((GenObject)result, constraints);
-                break;
-            case TYPE_ARRAY:
-                result = new GenArray();
-                break;
-            default:throw new Exception("Undefined Type "+typeName);
-        }
-        return result;
-    }
+
+
+
     /**
-     * Generates a GenAssertion for a typed object
-     * @param typedGroup
+     * returns variable named name if it exists in GenEnv
+     * otherwise creates a fresh one
+     * @param name
      * @return
      */
-    private GenAssertion fromWitness(WitnessAssertion typedGroup) throws Exception {
-        logger.debug("Converting assertion {} to GenAssertion", typedGroup);
-        GenAssertion result = null;
-        if(typedGroup instanceof WitnessType){
-            result= fromSingletonTypeOnly((WitnessType) typedGroup);
-            return result;
-        }
-        else
-            if(typedGroup instanceof WitnessAnd){
-                //retrieve the type construct
-//                List<WitnessAssertion> wAssertList = ((WitnessAnd) typedGroup).getAndList()
-//                        .values().stream().flatMap(List::stream)
-//                        .collect(Collectors.toList());
-                List<WitnessAssertion> wAssertList = new LinkedList<>();
-                for(List<WitnessAssertion> witnessAssertionList:
-                        ((WitnessAnd) typedGroup).getAndList().values()){
-                    for(WitnessAssertion witnessAssertion: witnessAssertionList)
-                        wAssertList.add(witnessAssertion);
-                }
-                List<WitnessAssertion> wTypeList =  wAssertList.stream()
-                        .filter(o->o instanceof WitnessType)
-                        .collect(Collectors.toList());
-
-                if(wTypeList.size()<1)
-                    throw new Exception("No type construct in a typed group");
-                else if(wTypeList.size()>1)
-                    throw new Exception("More than one type construct in a typed group");
-
-                WitnessType wType = (WitnessType) wTypeList.get(0); //by default get the first element
-                //check again is type is not a singleton
-                result = fromSingletonTypeWithConstraints(wType,wAssertList);
-                return result;
-
-        }
-            else
-                if(typedGroup instanceof WitnessVar){
-                    return getByNameElseCreate(((WitnessVar)typedGroup).getName());
-                }
-                    else
-                    {
-                        throw new Exception("Typed group must be either And or Type or ref, but found "+typedGroup);
-                    }
-    }
-
-
-    /**
-     *
-     * @param env
-     * @throws Exception
-     */
-    public GenEnv(WitnessEnv env) throws Exception {
-        logger.debug("Creating a GenEnv from a witnees Env");
-        logger.debug("Creating varList");
-        //varlist
-        varList = new HashMap<>();
-        for (Map.Entry<WitnessVar, WitnessAssertion> e : env.getVarList().entrySet())
-            varList.put(new GenVar(e.getKey().getName()), fromWitnessDNF(e.getValue()));
-        logger.debug("Setting rootvar");
-        //rootvar
-        rootVar = getByNameElseCreate(env.getRootVar().getName());
-        logger.debug("Creating covar");
-        //covar
-        coVar = HashBiMap.create();
-        for (Map.Entry<WitnessVar, WitnessVar> e:env.getCoVar().entrySet())
-            coVar.put(new GenVar(e.getKey().getName()),new GenVar(e.getValue().getName()));
-        //instantiate  var structures
-        openVars = new LinkedList<>();
-        sleepingVars = new LinkedList<>();
-        emptyVars = new LinkedList<>();
-        popVars = new LinkedList<>();
-        //initially set all vars to open
-        //TODO
-
-
-    }
-
     public GenVar getByNameElseCreate(String name){
         GenVar res = null;
         for(GenVar v: varList.keySet())

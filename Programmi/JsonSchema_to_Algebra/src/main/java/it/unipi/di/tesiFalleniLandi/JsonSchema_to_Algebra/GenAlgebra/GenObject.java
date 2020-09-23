@@ -6,6 +6,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class GenObject implements GenAssertion {
     }
 
     /*local classes*/
+    /* WitnessProperty counterpart*/
     public class GProperty {
         private ComplexPattern key;
         private GenVar schema;
@@ -55,21 +57,7 @@ public class GenObject implements GenAssertion {
         }
     }
 
-    public class GOrPattReq {
-        private List<GPattReq> reqList;
-
-        @Override
-        public String toString() {
-            return "GOrPattReq{" +
-                    "reqList=" + reqList +
-                    '}';
-        }
-
-        public GOrPattReq(WitnessOrPattReq wor){
-//            reqList=wor.getReqList().stream().map(w->new GPattReq(w)).collect(Collectors.toList());
-        }
-    }
-
+    /*WitnessPattReq counterpart*/
     public class GPattReq {
         private ComplexPattern key;
         private GenVar schema;
@@ -94,27 +82,61 @@ public class GenObject implements GenAssertion {
             else
                 new Exception("Request Properties must be normalized and map to WitnessVar or WitnessBool");
             key=pattReq.getPattern();
-            orpList=pattReq.getOrpList().stream()
-                    .map(e->new GOrPattReq(e)).collect(Collectors.toList());
+//            orpList=pattReq.getOrpList()
+//                    .stream().map(e->new GOrPattReq(e)).collect(Collectors.toList());
         }
     }
+
+
+    /*WitnessOrPattReq counterpart*/
+    public class GOrPattReq {
+        private List<GPattReq> reqList;
+
+        @Override
+        public String toString() {
+            return "GOrPattReq{" +
+                    "reqList=" + reqList +
+                    '}';
+        }
+
+        public GOrPattReq(WitnessOrPattReq witnessOrPattReq){
+            reqList = new LinkedList<>();
+            reqList = witnessOrPattReq.getReqList().stream().map(w->new GPattReq(w)).collect(Collectors.toList());
+//            for(WitnessPattReq witnessPattReq: witnessOrPattReq.getReqList())
+//                reqList.add(new GPattReq(witnessPattReq));
+        }
+    }
+
 
     /*Methods*/
 
     public GenObject() {
+        this.CPart = new LinkedList<>();
+        this.RPart = new LinkedList<>();
+        this.objectReqList = new LinkedList<>();
     }
 
     public void setCPart(List<WitnessProperty> propList) {
-        this.CPart = propList.stream().map(p->new GProperty(p)).collect(Collectors.toList());;
+        this.CPart = propList.stream().map(p->new GProperty(p)).collect(Collectors.toList());
     }
 
     public void setRPart(List<WitnessOrPattReq> orPattReqList) {
         this.RPart = orPattReqList.stream().map(p->new GOrPattReq(p)).collect(Collectors.toList());
     }
 
-    public void setObjectReqList(List<GPattReq> objectReqList) {
-        this.objectReqList = objectReqList;
+    public void setObjectReqList() {
+        if(this.RPart.size()>0){
+            //flatten RPart
+            List<GPattReq> gPattReqList = new LinkedList<>();
+            for(GOrPattReq gOrPattReq: RPart)
+                for(GPattReq gPattReq: gOrPattReq.reqList)
+                    this.objectReqList.add(gPattReq);
+        }
     }
+
+//    public void setObjectReqList(List<GPattReq> objectReqList) {
+//        this.objectReqList = objectReqList;
+//    }
 
     public void setMinMaxPro( WitnessPro minMaxPro){
         minPro=minMaxPro.getMin();
