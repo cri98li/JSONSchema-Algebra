@@ -77,7 +77,12 @@ public class Const_Assertion implements Assertion{
 			Set<Map.Entry<String, JsonElement>> keys = object.entrySet();
 
 			for (Map.Entry<String, JsonElement> entry : keys) {
-				properties.addProperties(entry.getKey(), new Const_Assertion(entry.getValue()));
+				try {
+					properties.addProperties(entry.getKey(), new Const_Assertion(entry.getValue()));
+				} catch (REException e) {
+					logger.catching(e);
+					throw new RuntimeException(e);
+				}
 				req.add(entry.getKey());
 			}
 

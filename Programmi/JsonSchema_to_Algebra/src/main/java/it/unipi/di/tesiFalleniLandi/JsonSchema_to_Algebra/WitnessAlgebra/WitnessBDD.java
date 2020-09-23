@@ -43,7 +43,7 @@ public class WitnessBDD {
     }
 
     public WitnessVar createVar(){
-        int i = bdd.createVar();
+        int i = bdd.ref(bdd.createVar());
         WitnessVar var = varManager.buildVar("OBDD_"+i);
         indexNode.put(var, i);
 
@@ -59,15 +59,16 @@ public class WitnessBDD {
             Integer coI = indexNode.get(coVar);
 
             if(coI == null) {
-                coI = bdd.createVar();
+                coI = bdd.ref(bdd.createVar());
                 indexNode.put(coVar, coI);
             }
 
-            Integer i = bdd.not(coI);
+            Integer i = bdd.ref(bdd.not(coI));
             indexNode.put(var, i);
 
+
         }else {
-            int i = bdd.createVar();
+            int i = bdd.ref(bdd.createVar());
             indexNode.put(var, i);
         }
     }
@@ -89,7 +90,7 @@ public class WitnessBDD {
 
         if(i1 == null || i2 == null) throw new WitnessBDDException("Variable not found!");
 
-        int newI = bdd.and(i1, i2);
+        int newI = bdd.ref(bdd.and(i1, i2));
 
         WitnessVar var = indexNode.inverse().get(newI);
 
@@ -108,7 +109,7 @@ public class WitnessBDD {
 
         if(i1 == null || i2 == null) throw new WitnessBDDException("Variable not found!");
 
-        int newI = bdd.or(i1, i2);
+        int newI = bdd.ref(bdd.or(i1, i2));
 
         WitnessVar var = indexNode.inverse().get(newI);
 
