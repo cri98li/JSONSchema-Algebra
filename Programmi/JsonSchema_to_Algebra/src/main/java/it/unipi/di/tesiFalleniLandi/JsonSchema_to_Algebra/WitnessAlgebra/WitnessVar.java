@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Ref_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
@@ -131,6 +132,10 @@ public class WitnessVar implements WitnessAssertion{
         visitedVar.add(this);
         Float count = env.getDefinition(this).countVarWithoutBDD(env, visitedVar);
         visitedVar.remove(this);
+
+        //if(name.startsWith(AlgebraStrings.NOT_DEFS))
+        //  return 2f + count;
+
         return 1f + count;
     }
 

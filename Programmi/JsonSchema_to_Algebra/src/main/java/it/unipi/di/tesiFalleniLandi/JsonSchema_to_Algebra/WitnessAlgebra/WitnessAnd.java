@@ -786,63 +786,39 @@ public class WitnessAnd implements WitnessAssertion{
                 for (WitnessPattReq req : new LinkedList<>(newRList))   //to avoid concurrentModificationException
                     ((WitnessOrPattReq) ORP_assertion).fullConnect(req);
             }
+        }
 
 
-            //init coMatrix
-            LinkedList<Map.Entry<WitnessPattReq, WitnessPattReq>> CoMatrix = new LinkedList<>();
+        //init coMatrix
+        LinkedList<Map.Entry<WitnessPattReq, WitnessPattReq>> CoMatrix = new LinkedList<>();
 
-            for (WitnessAssertion assertion : CPart) {
+        for (WitnessAssertion assertion : CPart) {
 
-                List<WitnessPattReq> coList = coReqs.get(assertion);
+            List<WitnessPattReq> coList = coReqs.get(assertion);
 
-                for (int i = 0; i < coList.size() - 1; i++) {
-                    for (int j = i + 1; j < coList.size(); j++) {
-                        logger.debug("Adding to coMatrix the entry < {} ; {} >", coList.get(i), coList.get(j));
-                        CoMatrix.add(new AbstractMap.SimpleEntry<>(coList.get(i), coList.get(j)));
-                    }
+            for (int i = 0; i < coList.size() - 1; i++) {
+                for (int j = i + 1; j < coList.size(); j++) {
+                    logger.debug("Adding to coMatrix the entry < {} ; {} >", coList.get(i), coList.get(j));
+                    CoMatrix.add(new AbstractMap.SimpleEntry<>(coList.get(i), coList.get(j)));
                 }
             }
-
-            List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
-
-            newDefinitions.addAll(env.varNormalization_separation(env, env.variableNamingSystem));
-            //env.buildOBDD_notElimination();
-
-            newDefinitions = new LinkedList<>(); //reset the newDefinitions list
-
-            splitOriginalRList(ORPart, CoMatrix, env);
-
-            newDefinitions.addAll(this.varNormalization_separation(env, env.variableNamingSystem));
-            env.buildOBDD_notElimination();
-
-            return newDefinitions;
-            /*
-            //variable normalization
-            for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varNormalization_separation(env)) {
-                env.add(entry.getKey(), entry.getValue());
-                newDefinitions.add(new AbstractMap.SimpleEntry<String, WitnessAssertion>(new String(entry.getKey().getName()), entry.getKey()));
-            }
-
-            env.buildOBDD_notElimination();
-
-            for(Map.Entry<String, WitnessAssertion> entry : newDefinitions)
-                if(env.containsVar(new Witness))
-                env.add(entry.getKey(), entry.getValue().varNormalization_expansion(env));
-
-            splitOriginalRList(ORPart, CoMatrix, env);
-
-            newDefinitions = new LinkedList<>();
-
-            //variable normalization
-            newDefinitions.addAll(this.varNormalization_separation(env));
-
-            env.buildOBDD_notElimination();
-
-            for(Map.Entry<WitnessVar, WitnessAssertion> entry : newDefinitions)
-                env.add(entry.getKey(), entry.getValue().varNormalization_expansion(env));
-        }*/
         }
-        return new LinkedList<>();
+
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
+        newDefinitions.addAll(env.varNormalization_separation(env, env.variableNamingSystem));
+
+        //no more necessary
+        //env.buildOBDD_notElimination();
+        //newDefinitions = new LinkedList<>(); //reset the newDefinitions list
+
+        if (ORPart != null)
+            splitOriginalRList(ORPart, CoMatrix, env);
+
+        newDefinitions.addAll(this.varNormalization_separation(env, env.variableNamingSystem));
+        env.buildOBDD_notElimination();
+
+        return newDefinitions;
     }
 
     public boolean notObviouslyEmpty(){
@@ -1149,6 +1125,7 @@ public class WitnessAnd implements WitnessAssertion{
                 throw new WitnessException(s);
             }
              */
+
 
             WitnessPattReq fragment = env.pattReqManager.build(patt, schema);
             //fragment: satisfies subset and fails all assertions in coSubset

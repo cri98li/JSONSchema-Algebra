@@ -112,11 +112,11 @@ public class PatternRequired_Assertion implements Assertion{
 
 	@Override
 	public WitnessAssertion toWitnessAlgebra(WitnessVarManager varManager, Defs_Assertion env, WitnessPattReqManager pattReqManager) throws REException {
-		WitnessOr or = new WitnessOr();
+		//WitnessOr or = new WitnessOr();
 		WitnessAnd and = new WitnessAnd();
-		Type_Assertion tmp = new Type_Assertion();
-		tmp.add(AlgebraStrings.TYPE_OBJECT);
-		WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager,env, pattReqManager);
+		//Type_Assertion tmp = new Type_Assertion();
+		//tmp.add(AlgebraStrings.TYPE_OBJECT);
+		//WitnessAssertion type = tmp.not().toWitnessAlgebra(varManager,env, pattReqManager);
 
 		Set<Map.Entry<ComplexPattern, Assertion>> entrySet = pattReq.entrySet();
 
@@ -126,10 +126,11 @@ public class PatternRequired_Assertion implements Assertion{
 			and.add(pattReq);
 		}
 
-		or.add(type);
-		or.add(and);
+		//or.add(type);
+		//or.add(and);
 
-		return or;
+		//return or;
+		return and;
 	}
 
 }

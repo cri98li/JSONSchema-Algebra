@@ -24,11 +24,11 @@ public class Properties_Assertion implements Assertion{
 		logger.trace("Created a new Properties_Assertion: {}", this);
 	}
 	
-	public void addProperties(String key, Assertion value) {
+	public void addProperties(String key, Assertion value) throws REException {
 		if(properties_patternProperties.containsKey(key))
 			throw new ParseCancellationException("Detected 2 properties with the same name");
 		logger.trace("Adding as Properties <{}, {}> to {}", key, value, this);
-		properties_patternProperties.put(ComplexPattern.createFromName(key), value);
+		properties_patternProperties.put(ComplexPattern.createFromRegexp(key), value);
 	}
 
 	public void addPatternProperties(String key, Assertion value) throws REException {

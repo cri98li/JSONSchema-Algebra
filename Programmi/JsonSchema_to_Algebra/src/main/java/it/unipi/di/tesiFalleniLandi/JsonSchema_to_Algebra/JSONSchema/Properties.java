@@ -136,8 +136,15 @@ public class Properties implements JSONSchemaElement{
 		if(properties != null){
 			for(Map.Entry<String, JSONSchema> entry : properties.entrySet()){
 				Assertion returnedValue = entry.getValue().toGrammar();
-				if(returnedValue != null)
-					fullAlgebra_properties.addProperties(entry.getKey(), returnedValue); //TODO: check encoding escape
+				if(returnedValue != null) {
+					String tmp = new JsonPrimitive(entry.getKey()).toString();
+					try {
+						fullAlgebra_properties.addProperties(tmp.substring(1, tmp.length()-1), returnedValue); //TODO: check encoding escape
+					} catch (REException e) {
+						logger.catching(e);
+						throw new RuntimeException(e);
+					}
+				}
 			}
 		}
 

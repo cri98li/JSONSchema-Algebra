@@ -1,4 +1,1569 @@
-rootdef "root" = items[
-	;
-	mof(1)
-]
+rootdef "root" = {
+	type[
+		obj
+	],
+	req[
+		"false"
+	],
+	props[
+		"data": {
+			type[
+				arr
+			],
+			items[
+				{
+					type[
+						obj
+					],
+					req[
+						"true"
+					],
+					props[
+						"id": {
+							type[
+								str
+							],
+							req[
+								"true"
+							]
+						},
+						"organism": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"taxid": {
+									type[
+										num
+									],
+									req[
+										"true"
+									]
+								},
+								"scientific": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								},
+								"common": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"type": {
+							type[
+								obj
+							],
+							req[
+								"true"
+							],
+							props[
+								"name": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"id": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"label": {
+							type[
+								str
+							],
+							req[
+								"true"
+							]
+						},
+						"object": {
+							type[
+								str
+							],
+							req[
+								"true"
+							]
+						},
+						"identifier": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"id": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"db": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								};
+								
+							]
+						},
+						"sequence": {
+							type[
+								str
+							],
+							req[
+								"false"
+							]
+						},
+						"setComponents": {
+							type[
+								arr
+							],
+							items[
+								{
+									type[
+										obj
+									],
+									req[
+										"true"
+									],
+									props[
+										"organism": {
+											type[
+												obj
+											],
+											req[
+												"false"
+											],
+											props[
+												"taxid": {
+													type[
+														num
+													],
+													req[
+														"true"
+													]
+												},
+												"scientific": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												},
+												"common": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"type": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"label": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"identifier": {
+											type[
+												obj
+											],
+											req[
+												"false"
+											],
+											props[
+												"id": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"db": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												};
+												
+											]
+										},
+										"sequence": {
+											type[
+												str
+											],
+											req[
+												"false"
+											]
+										};
+										
+									]
+								};
+								
+							],
+							req[
+								"false"
+							]
+						};
+						
+					]
+				},
+				{
+					type[
+						obj
+					],
+					req[
+						"true"
+					],
+					props[
+						"experiment": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"figures": {
+									type[
+										arr
+									],
+									items[
+										{
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										};
+										
+									],
+									req[
+										"false"
+									]
+								},
+								"host": {
+									type[
+										obj
+									],
+									req[
+										"false"
+									],
+									props[
+										"taxid": {
+											type[
+												num
+											],
+											req[
+												"true"
+											]
+										},
+										"tissue": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"scientific": {
+											type[
+												str
+											],
+											req[
+												"false"
+											]
+										},
+										"compartment": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"cellType": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"common": {
+											type[
+												str
+											],
+											req[
+												"false"
+											]
+										};
+										
+									]
+								},
+								"pubid": {
+									type[
+										arr
+									],
+									items[
+										{
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"id": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"db": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												};
+												
+											]
+										};
+										
+									],
+									req[
+										"false"
+									]
+								},
+								"detmethod": {
+									type[
+										obj
+									],
+									req[
+										"true"
+									],
+									props[
+										"name": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"id": {
+											type[
+												str
+											],
+											req[
+												"false"
+											]
+										};
+										
+									]
+								},
+								"experimentModifications": {
+									type[
+										arr
+									],
+									items[
+										{
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										};
+										
+									],
+									req[
+										"false"
+									]
+								},
+								"sourceDatabase": {
+									type[
+										obj
+									],
+									req[
+										"false"
+									],
+									props[
+										"name": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"id": {
+											type[
+												str
+											],
+											req[
+												"false"
+											]
+										};
+										
+									]
+								};
+								
+							]
+						},
+						"id": {
+							type[
+								str
+							],
+							req[
+								"true"
+							]
+						},
+						"confidences": {
+							type[
+								arr
+							],
+							items[
+								{
+									type[
+										obj
+									],
+									req[
+										"true"
+									],
+									props[
+										"type": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"value": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										};
+										
+									]
+								};
+								
+							],
+							req[
+								"false"
+							]
+						},
+						"evidenceType": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"name": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"id": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"participants": {
+							type[
+								arr
+							],
+							items[
+								{
+									type[
+										obj
+									],
+									req[
+										"true"
+									],
+									props[
+										"id": {
+											type[
+												int
+											],
+											req[
+												"true"
+											]
+										},
+										"interactorRef": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"confidences": {
+											type[
+												arr
+											],
+											items[
+												{
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"type": {
+															type[
+																obj
+															],
+															req[
+																"true"
+															],
+															props[
+																"name": {
+																	type[
+																		str
+																	],
+																	req[
+																		"true"
+																	]
+																},
+																"id": {
+																	type[
+																		str
+																	],
+																	req[
+																		"false"
+																	]
+																};
+																
+															]
+														},
+														"value": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														};
+														
+													]
+												};
+												
+											],
+											req[
+												"false"
+											]
+										},
+										"expressedIn": {
+											type[
+												obj
+											],
+											req[
+												"false"
+											],
+											props[
+												"taxid": {
+													type[
+														num
+													],
+													req[
+														"true"
+													]
+												},
+												"tissue": {
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"name": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														},
+														"id": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														};
+														
+													]
+												},
+												"scientific": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												},
+												"compartment": {
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"name": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														},
+														"id": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														};
+														
+													]
+												},
+												"cellType": {
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"name": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														},
+														"id": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														};
+														
+													]
+												},
+												"common": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"identificationMethods": {
+											type[
+												arr
+											],
+											items[
+												{
+													type[
+														obj
+													],
+													req[
+														"false"
+													],
+													props[
+														"name": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														},
+														"id": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														};
+														
+													]
+												};
+												
+											],
+											req[
+												"false"
+											]
+										},
+										"expRole": {
+											type[
+												obj
+											],
+											req[
+												"false"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"features": {
+											type[
+												arr
+											],
+											items[
+												{
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"name": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														},
+														"role": {
+															type[
+																obj
+															],
+															req[
+																"true"
+															],
+															props[
+																"name": {
+																	type[
+																		str
+																	],
+																	req[
+																		"true"
+																	]
+																},
+																"id": {
+																	type[
+																		str
+																	],
+																	req[
+																		"false"
+																	]
+																};
+																
+															]
+														},
+														"id": {
+															type[
+																int
+															],
+															req[
+																"true"
+															]
+														},
+														"detMethods": {
+															type[
+																arr
+															],
+															items[
+																{
+																	type[
+																		obj
+																	],
+																	req[
+																		"false"
+																	],
+																	props[
+																		"name": {
+																			type[
+																				str
+																			],
+																			req[
+																				"true"
+																			]
+																		},
+																		"id": {
+																			type[
+																				str
+																			],
+																			req[
+																				"false"
+																			]
+																		};
+																		
+																	]
+																};
+																
+															],
+															req[
+																"false"
+															]
+														},
+														"linkedFeatures": {
+															type[
+																arr
+															],
+															items[
+																{
+																	type[
+																		int
+																	],
+																	req[
+																		"true"
+																	]
+																};
+																
+															],
+															req[
+																"false"
+															]
+														},
+														"type": {
+															type[
+																obj
+															],
+															req[
+																"true"
+															],
+															props[
+																"name": {
+																	type[
+																		str
+																	],
+																	req[
+																		"true"
+																	]
+																},
+																"id": {
+																	type[
+																		str
+																	],
+																	req[
+																		"false"
+																	]
+																};
+																
+															]
+														},
+														"category": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														},
+														"parameters": {
+															type[
+																arr
+															],
+															items[
+																{
+																	type[
+																		obj
+																	],
+																	req[
+																		"true"
+																	],
+																	props[
+																		"type": {
+																			type[
+																				obj
+																			],
+																			req[
+																				"true"
+																			],
+																			props[
+																				"name": {
+																					type[
+																						str
+																					],
+																					req[
+																						"true"
+																					]
+																				},
+																				"id": {
+																					type[
+																						str
+																					],
+																					req[
+																						"false"
+																					]
+																				};
+																				
+																			]
+																		},
+																		"value": {
+																			type[
+																				str
+																			],
+																			req[
+																				"true"
+																			]
+																		},
+																		"unit": {
+																			type[
+																				obj
+																			],
+																			req[
+																				"false"
+																			],
+																			props[
+																				"name": {
+																					type[
+																						str
+																					],
+																					req[
+																						"true"
+																					]
+																				},
+																				"id": {
+																					type[
+																						str
+																					],
+																					req[
+																						"false"
+																					]
+																				};
+																				
+																			]
+																		};
+																		
+																	]
+																};
+																
+															],
+															req[
+																"false"
+															]
+														},
+														"sequenceData": {
+															type[
+																arr
+															],
+															items[
+																{
+																	type[
+																		obj
+																	],
+																	req[
+																		"true"
+																	],
+																	props[
+																		"interactorRef": {
+																			type[
+																				str
+																			],
+																			req[
+																				"true"
+																			]
+																		},
+																		"participantRef": {
+																			type[
+																				int
+																			],
+																			req[
+																				"true"
+																			]
+																		},
+																		"pos": {
+																			type[
+																				str
+																			],
+																			req[
+																				"true"
+																			]
+																		};
+																		
+																	]
+																};
+																
+															],
+															req[
+																"true"
+															]
+														},
+														"InterPro": {
+															type[
+																str
+															],
+															req[
+																"false"
+															]
+														};
+														
+													]
+												};
+												
+											],
+											req[
+												"false"
+											]
+										},
+										"parameters": {
+											type[
+												arr
+											],
+											items[
+												{
+													type[
+														obj
+													],
+													req[
+														"true"
+													],
+													props[
+														"type": {
+															type[
+																obj
+															],
+															req[
+																"true"
+															],
+															props[
+																"name": {
+																	type[
+																		str
+																	],
+																	req[
+																		"true"
+																	]
+																},
+																"id": {
+																	type[
+																		str
+																	],
+																	req[
+																		"false"
+																	]
+																};
+																
+															]
+														},
+														"value": {
+															type[
+																str
+															],
+															req[
+																"true"
+															]
+														},
+														"unit": {
+															type[
+																obj
+															],
+															req[
+																"false"
+															],
+															props[
+																"name": {
+																	type[
+																		str
+																	],
+																	req[
+																		"true"
+																	]
+																},
+																"id": {
+																	type[
+																		str
+																	],
+																	req[
+																		"false"
+																	]
+																};
+																
+															]
+														};
+														
+													]
+												};
+												
+											],
+											req[
+												"false"
+											]
+										},
+										"bioRole": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										};
+										
+									]
+								};
+								
+							],
+							req[
+								"true"
+							]
+						},
+						"identifiers": {
+							type[
+								arr
+							],
+							items[
+								{
+									type[
+										obj
+									],
+									req[
+										"false"
+									],
+									props[
+										"id": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"db": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										};
+										
+									]
+								};
+								
+							],
+							req[
+								"false"
+							]
+						},
+						"organism": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"taxid": {
+									type[
+										num
+									],
+									req[
+										"true"
+									]
+								},
+								"scientific": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								},
+								"common": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"expansion": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"name": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"id": {
+									type[
+										int
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"object": {
+							type[
+								str
+							],
+							req[
+								"true"
+							]
+						},
+						"interactionType": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"name": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"id": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						},
+						"parameters": {
+							type[
+								arr
+							],
+							items[
+								{
+									type[
+										obj
+									],
+									req[
+										"true"
+									],
+									props[
+										"type": {
+											type[
+												obj
+											],
+											req[
+												"true"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										},
+										"value": {
+											type[
+												str
+											],
+											req[
+												"true"
+											]
+										},
+										"unit": {
+											type[
+												obj
+											],
+											req[
+												"false"
+											],
+											props[
+												"name": {
+													type[
+														str
+													],
+													req[
+														"true"
+													]
+												},
+												"id": {
+													type[
+														str
+													],
+													req[
+														"false"
+													]
+												};
+												
+											]
+										};
+										
+									]
+								};
+								
+							],
+							req[
+								"false"
+							]
+						},
+						"complexType": {
+							type[
+								obj
+							],
+							req[
+								"false"
+							],
+							props[
+								"name": {
+									type[
+										str
+									],
+									req[
+										"true"
+									]
+								},
+								"id": {
+									type[
+										str
+									],
+									req[
+										"false"
+									]
+								};
+								
+							]
+						};
+						
+					]
+				};
+				
+			],
+			req[
+				"true"
+			]
+		};
+		
+	]
+}
