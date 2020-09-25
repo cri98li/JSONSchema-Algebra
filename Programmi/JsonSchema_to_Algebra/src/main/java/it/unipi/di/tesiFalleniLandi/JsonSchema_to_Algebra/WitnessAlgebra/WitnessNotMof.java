@@ -26,7 +26,7 @@ public class WitnessNotMof implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessNotMof{" +
+        return "NotMof{" +
                 "value=" + value +
                 '}';
     }

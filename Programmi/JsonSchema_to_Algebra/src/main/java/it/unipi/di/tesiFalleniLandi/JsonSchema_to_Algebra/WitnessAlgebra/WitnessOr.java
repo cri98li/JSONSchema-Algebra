@@ -125,7 +125,7 @@ public class WitnessOr implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessOr{" + "\r\n" +
+        return "Or{" + "\r\n" +
                 "orList=" + orList +
                 "\r\n" +
                 '}';
@@ -383,7 +383,7 @@ public class WitnessOr implements WitnessAssertion{
         WitnessVar obbdVarName = null;
 
         if(orList.size() == 0)
-            logger.fatal("WitnessOr vuoto");
+            logger.fatal("Or vuoto");
 
         for(Map.Entry<Object, List<WitnessAssertion>> entry : orList.entrySet()) {
             for(WitnessAssertion assertion : entry.getValue()) {
@@ -428,6 +428,19 @@ public class WitnessOr implements WitnessAssertion{
             List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
             for(WitnessAssertion assertion : ands) {
                 newDefinitions.addAll(((WitnessAnd)assertion).objectPrepare(env));
+            }
+        }
+
+        return newDefinitions;
+    }
+
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> arrayPreparation(WitnessEnv env) throws WitnessException, REException {
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
+        if(orList.containsKey(WitnessAnd.class)){ //call object prepare only for AND assertion
+            List<WitnessAssertion> ands = orList.get(WitnessAnd.class);
+            for(WitnessAssertion assertion : ands) {
+                newDefinitions.addAll(((WitnessAnd)assertion).arrayPreparation(env));
             }
         }
 

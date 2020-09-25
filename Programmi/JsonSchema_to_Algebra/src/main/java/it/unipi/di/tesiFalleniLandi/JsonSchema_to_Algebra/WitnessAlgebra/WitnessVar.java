@@ -29,8 +29,8 @@ public class WitnessVar implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessVar{" +
-                "name='" + name + '\'' +
+        return "Var{" +
+                name +
                 '}';
     }
 

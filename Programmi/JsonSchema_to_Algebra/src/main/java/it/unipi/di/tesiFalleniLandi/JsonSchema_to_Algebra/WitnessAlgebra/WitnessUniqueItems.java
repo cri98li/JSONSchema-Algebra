@@ -19,7 +19,7 @@ public class WitnessUniqueItems implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessUniqueItems{}";
+        return "UniqueItems{}";
     }
 
     @Override

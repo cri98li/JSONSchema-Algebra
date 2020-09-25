@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 
@@ -11,13 +12,13 @@ public class MainClass_Algebra {
 		
         Assertion schema = Utils_FullAlgebra.parseFile(path);
 
-		JsonObject JSON = (JsonObject) schema.toJSONSchema(null);
+		JsonElement JSON = schema.toJSONSchema(null);
 		System.out.println(JSON.toString());
 
 		schema = schema.notElimination();
 		System.out.println(Utils.beauty(schema.toGrammarString()));
 
-		JSON = (JsonObject) schema.toJSONSchema(null);
+		JSON = schema.toJSONSchema(null);
 		System.out.println(JSON.toString());
 	}
 }

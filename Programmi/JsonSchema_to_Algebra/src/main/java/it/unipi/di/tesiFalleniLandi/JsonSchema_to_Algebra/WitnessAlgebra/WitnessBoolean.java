@@ -15,12 +15,12 @@ public class WitnessBoolean implements WitnessAssertion{
 
     public WitnessBoolean(boolean val){
         this.value = val;
-        logger.debug("Created a new WitnessBoolean: {}", this);
+        logger.trace("Created a new WitnessBoolean: {}", this);
     }
 
     @Override
     public String toString() {
-        return "WitnessBoolean{" +
+        return "Boolean{" +
                 "value=" + value +
                 '}';
     }

@@ -212,7 +212,7 @@ public class WitnessOrPattReq implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessOrPattReq{" +
+        return "OrPattReq{" +
                 "reqList=" + reqList +
                 '}';
     }

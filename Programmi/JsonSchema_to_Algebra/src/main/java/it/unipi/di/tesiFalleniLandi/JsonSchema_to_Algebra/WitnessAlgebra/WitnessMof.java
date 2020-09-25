@@ -27,7 +27,7 @@ public class WitnessMof implements WitnessAssertion{ //fare anche il caso merge 
 
     @Override
     public String toString() {
-        return "WitnessMof{" +
+        return "Mof{" +
                 "value=" + value +
                 '}';
     }

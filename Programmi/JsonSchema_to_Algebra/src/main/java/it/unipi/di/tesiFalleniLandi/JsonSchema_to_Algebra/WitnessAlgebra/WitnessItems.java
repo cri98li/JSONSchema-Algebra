@@ -2,6 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Boolean_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Items_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
@@ -55,7 +56,7 @@ public class WitnessItems implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessItems{" +
+        return "Items{" +
                 "items=" + items +
                 ", additionalItems=" + additionalItems +
                 '}';
@@ -79,7 +80,7 @@ public class WitnessItems implements WitnessAssertion{
     public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessAssertion result = null;
 
-        if(items.size() == 0 && additionalItems.getClass() == WitnessBoolean.class)
+        if(items.size() == 0 && additionalItems instanceof WitnessBoolean)
             if(((WitnessBoolean)additionalItems).getValue())
                 result = additionalItems;
             else {
@@ -192,9 +193,39 @@ public class WitnessItems implements WitnessAssertion{
         return ite;
     }
 
+    //TODO: test
+    protected WitnessItems mergeElement(WitnessContains c){
+        if(c.getContains() instanceof Boolean_Assertion && ((WitnessBoolean) c.getContains()).getValue()){
+            Double max = c.getMax();
+            if(!max.isInfinite()) {
+
+                if(max > items.size())
+                    //Allunghiamo l'items fino a max
+                    /*while(items.size() != max)
+                        items.add(additionalItems);*/;
+                else
+                    //Tagliamo items
+                    while(items.size() != max)
+                        items.remove(items.size()-1);
+
+                additionalItems = new WitnessBoolean(false);
+            }
+        }
+
+        return this;
+    }
+
     @Override
     public WitnessType getGroupType() {
         return new WitnessType(AlgebraStrings.TYPE_ARRAY);
+    }
+
+    public List<WitnessAssertion> getItems() {
+        return items;
+    }
+
+    public WitnessAssertion getAdditionalItems() {
+        return additionalItems;
     }
 
     @Override

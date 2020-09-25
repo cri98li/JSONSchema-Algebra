@@ -23,7 +23,7 @@ public class WitnessPattReqManager {
 
         if(instances.containsKey(tmp.toString())) {
             if (instances.get(tmp.toString()).get() != null) {
-                logger.trace("WitnessPattReq returning an OLD instance: ", instances.get(tmp.toString()).get());
+                logger.trace("PattReq returning an OLD instance: ", instances.get(tmp.toString()).get());
 
                 return instances.get(tmp.toString()).get();
             } else
@@ -31,7 +31,7 @@ public class WitnessPattReqManager {
         }
 
         instances.put(tmp.toString(), new WeakReference<>(tmp));
-        logger.trace("WitnessPattReq returning a NEW instance: ", instances.get(tmp.toString()));
+        logger.trace("PattReq returning a NEW instance: ", instances.get(tmp.toString()));
         return tmp;
     }
 }

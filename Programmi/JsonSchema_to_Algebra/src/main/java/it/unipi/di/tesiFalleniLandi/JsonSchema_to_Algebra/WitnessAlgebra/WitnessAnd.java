@@ -133,8 +133,13 @@ public class WitnessAnd implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessAnd{" + "\r\n" +
-                "andList=" + andList.toString()
+        LinkedList<WitnessAssertion> assList = new LinkedList<>();
+        for(Map.Entry<?, List<WitnessAssertion>> ass : andList.entrySet())
+            assList.addAll(ass.getValue());
+
+
+        return "And{" + "\r\n" +
+                assList.toString()
                  + "\r\n" +
                 '}';
     }
@@ -1153,6 +1158,41 @@ public class WitnessAnd implements WitnessAssertion{
         }
         returnList.add(creaSingoletto(head)); // subsetsNoHead does not contain the empty set, hence we must add this singleton
         return returnList;
+    }
+
+    public List<Map.Entry<WitnessVar, WitnessAssertion>> arrayPreparation(WitnessEnv env) throws WitnessException, REException {
+        //checking if it's an object group
+        if (andList.get(WitnessType.class) == null) { //and without type specified
+            logger.debug("Preparing WitnessAnd without type specified");
+            return new LinkedList<>();
+        }
+        if (andList.get(WitnessType.class) != null && !andList.get(WitnessType.class).contains(new WitnessType(AlgebraStrings.TYPE_ARRAY))) { //if is not an object type
+            logger.debug("Preparing WitnessAnd without type array assertion");
+            return new LinkedList<>();
+        }
+        if (andList.get(WitnessType.class).size() > 1) {//if contains more than one type
+            logger.error("Preparing WitnessAnd with more than one type specified");
+            return new LinkedList<>();
+        }
+
+        List<WitnessAssertion> containsList = null;
+        List<WitnessAssertion> itemsList = null;
+
+        if(andList.containsKey(WitnessContains.class))
+            containsList = andList.get(WitnessContains.class);
+
+        if(andList.containsKey(WitnessItems.class))
+            itemsList = andList.remove(WitnessItems.class);
+
+        if(itemsList.size() > 1)
+            throw new RuntimeException("list of items should contains only one WitnessItems assertion");
+
+        WitnessItemsPrepared itemsPrepared = WitnessItemsPrepared.prepareArrayGroup((WitnessItems) itemsList.get(0), containsList, env);
+
+        this.add(itemsPrepared);
+
+        return new LinkedList<>();
+
     }
 
 

@@ -74,6 +74,13 @@ public class MainWitness {
 
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
+        System.out.println("\r\n\r\n arrayPrepare: \r\n");
+        System.out.flush();
+
+        env.arrayPreparation();
+
+        System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
+
         System.out.println("\r\n\r\n FINE! \r\n");
         System.out.flush();
 

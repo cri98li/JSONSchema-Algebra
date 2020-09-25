@@ -260,7 +260,7 @@ public class WitnessEnv implements WitnessAssertion {
 
     @Override
     public String toString() {
-        return "WitnessEnv{" +
+        return "Env{" +
                 "var=" + varList +
                 ", rootVar=" + rootVar +
                 '}';
@@ -739,6 +739,33 @@ public class WitnessEnv implements WitnessAssertion {
             }
 
             entrySet = newDefinitions;
+        }
+    }
+
+    public void arrayPreparation() throws REException, WitnessException {
+
+        Collection<Map.Entry<WitnessVar, WitnessAssertion>> entrySet = new HashMap<>(varList).entrySet();
+        List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+
+        for (Map.Entry<WitnessVar, WitnessAssertion> entry : entrySet) {
+
+            if (entry.getValue().getClass() == WitnessAnd.class)
+                newDefinitions.addAll(((WitnessAnd) entry.getValue()).arrayPreparation(this));
+            else if (entry.getValue().getClass() == WitnessOr.class)
+                newDefinitions.addAll(((WitnessOr) entry.getValue()).arrayPreparation(this));
+                //else if(entry.getValue().getClass() == WitnessType.class && entry.getValue().equals(new WitnessType("obj"))){ //only type object
+            else {
+                // in case of definitions likes:
+                // def "x" = type[arr]
+                // we have to prepare that definition but the assertion type[obj] is not contained in boolean operator (AND, OR)
+                WitnessAnd tmp = new WitnessAnd();
+                tmp.add(entry.getValue());
+                newDefinitions.addAll(tmp.arrayPreparation(this)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
+                    /*if (tmp.getIfUnitaryAnd() != null)
+                        varList.put(entry.getKey(), tmp.getIfUnitaryAnd());
+                    else
+                        varList.put(entry.getKey(), tmp);*/
+            }
         }
     }
 }

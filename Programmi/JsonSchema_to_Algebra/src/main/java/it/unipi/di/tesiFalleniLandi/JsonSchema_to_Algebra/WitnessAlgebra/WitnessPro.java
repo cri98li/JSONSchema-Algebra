@@ -43,7 +43,7 @@ public class WitnessPro implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessPro{" +
+        return "Pro{" +
                 "min=" + min +
                 ", max=" + max +
                 '}';

@@ -58,7 +58,7 @@ public class WitnessType implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessType{" +
+        return "Type{" +
                 "type=" + type +
                 '}';
     }

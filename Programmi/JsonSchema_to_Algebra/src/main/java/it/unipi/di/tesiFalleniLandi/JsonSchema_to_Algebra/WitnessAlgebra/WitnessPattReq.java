@@ -85,7 +85,7 @@ public class WitnessPattReq implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessPattReq{" +
+        return "PattReq{" +
                 "key=" + key +
                 ", value=" + value +
                 ", orpList=" + //orpList +

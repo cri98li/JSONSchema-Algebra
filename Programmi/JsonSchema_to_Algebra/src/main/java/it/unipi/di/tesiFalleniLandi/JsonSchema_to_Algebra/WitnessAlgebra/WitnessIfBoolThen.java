@@ -22,7 +22,7 @@ public class WitnessIfBoolThen implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessIfBoolThen{" +
+        return "IfBoolThen{" +
                 "value=" + value +
                 '}';
     }

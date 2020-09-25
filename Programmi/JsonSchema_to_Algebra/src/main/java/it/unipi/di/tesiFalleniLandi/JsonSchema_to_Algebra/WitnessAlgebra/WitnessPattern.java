@@ -24,7 +24,7 @@ public class WitnessPattern implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessPattern{" +
+        return "Pattern{" +
                 "pattern=" + pattern +
                 '}';
     }

@@ -16,7 +16,7 @@ public class WitnessRepeateditems implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessRepeateditems{}";
+        return "Repeateditems{}";
     }
 
     @Override

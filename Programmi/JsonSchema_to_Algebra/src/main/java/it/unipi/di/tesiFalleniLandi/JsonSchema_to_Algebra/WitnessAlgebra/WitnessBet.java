@@ -31,7 +31,7 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessBet{" +
+        return "Bet{" +
                 "min=" + min +
                 ", max=" + max +
                 '}';
@@ -194,7 +194,6 @@ public class WitnessBet implements WitnessAssertion{
 
     @Override
     public void getReport(ReportResults reportResults) {
-
     }
 
 

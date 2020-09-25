@@ -54,16 +54,18 @@ public class Defs_Assertion implements Assertion{
 
 	@Override
 	public JsonElement toJSONSchema(WitnessVarManager rootVar) {
-		JsonObject obj = new JsonObject();
+
+		JsonElement obj = new JsonObject();
 		if(rootDef != null)
-			obj = defs.get(rootDef).toJSONSchema(varManager).getAsJsonObject();
+			obj = defs.get(rootDef).toJSONSchema(varManager);
 
 		JsonObject jsonDefs = new JsonObject();
 		for(Entry<String, Assertion> a : defs.entrySet())
 			if(!a.getKey().equals(rootDef))
-				jsonDefs.add(a.getKey(), a.getValue().toJSONSchema(varManager).getAsJsonObject());
+				jsonDefs.add(a.getKey(), a.getValue().toJSONSchema(varManager));
 
-		obj.add("$defs", jsonDefs);
+		if(obj instanceof JsonObject)
+			((JsonObject)obj).add("$defs", jsonDefs);
 
 		return obj;
 	}

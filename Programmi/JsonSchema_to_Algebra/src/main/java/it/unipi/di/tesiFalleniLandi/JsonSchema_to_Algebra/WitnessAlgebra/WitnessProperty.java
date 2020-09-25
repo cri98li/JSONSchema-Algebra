@@ -45,7 +45,7 @@ public class WitnessProperty implements WitnessAssertion{
 
     @Override
     public String toString() {
-        return "WitnessProperty{" +
+        return "Property{" +
                 "key=" + key +
                 ", value=" + value +
                 '}';

@@ -31,7 +31,7 @@ public class WitnessContains implements WitnessAssertion{
         if(contains != null && contains.getClass() == WitnessAnd.class && ((WitnessAnd) contains).getIfUnitaryAnd() != null)
             contains = ((WitnessAnd) contains).getIfUnitaryAnd();
         this.contains = contains;
-        logger.debug("Created a new WitnessContains: {}", this);
+        logger.trace("Created a new WitnessContains: {}", this);
     }
 
     public WitnessContains(Long min, Long max, WitnessAssertion contains) {
@@ -50,16 +50,52 @@ public class WitnessContains implements WitnessAssertion{
         this.contains = contains;
 
         isAnArray = contains.getClass() == WitnessBoolean.class;
-        logger.debug("Created a new WitnessContains: {}", this);
+        logger.trace("Created a new WitnessContains: {}", this);
+    }
+
+    protected Double getMin() {
+        return min;
+    }
+
+    protected Double getMax() {
+        return max;
+    }
+
+    public static void setLogger(Logger logger) {
+        WitnessContains.logger = logger;
+    }
+
+    public void setMin(Double min) {
+        this.min = min;
+    }
+
+    public void setMax(Double max) {
+        this.max = max;
+    }
+
+    public void setContains(WitnessAssertion contains) {
+        this.contains = contains;
+    }
+
+    public void setAnArray(boolean anArray) {
+        isAnArray = anArray;
+    }
+
+    protected WitnessAssertion getContains() {
+        return contains;
     }
 
     @Override
     public String toString() {
-        return "WitnessContains{" +
+        return "Contains{" +
                 "min=" + min +
                 ", max=" + max +
                 ", contains=" + contains +
                 '}';
+    }
+
+    public boolean isContainsTrue(){
+        return (contains.getClass()==WitnessBoolean.class && ((WitnessBoolean)contains).getValue());
     }
 
     @Override
@@ -75,7 +111,7 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessAssertion mergeWith(WitnessAssertion a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
-        logger.debug("Merging {} with {}", a, this);
+        logger.trace("Merging {} with {}", a, this);
         if(this.contains != null && this.contains.getClass() == WitnessBoolean.class) {
             if (!((WitnessBoolean)this.contains).getValue())
                 return new WitnessBoolean(false);

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.AllOf;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,15 +48,17 @@ public class Type_Assertion implements Assertion{
 		if(types.contains(AlgebraStrings.TYPE_NUMNOTINT)){
 			AnyOf_Assertion or = new AnyOf_Assertion();
 			if(types.size() == 1){
-				Type_Assertion type = new Type_Assertion();
-				type.add(AlgebraStrings.TYPE_INTEGER);
-				return new Not_Assertion(type).toJSONSchema(rootVar);
+				AllOf_Assertion allOf = new AllOf_Assertion();
+				allOf.add(new Type_Assertion(AlgebraStrings.TYPE_NUMBER));
+				allOf.add(new NotMof_Assertion(1));
+				return allOf.toJSONSchema(rootVar);
 			}
 
 			Type_Assertion type = new Type_Assertion();
-			Type_Assertion typeNumNot = new Type_Assertion();
-			typeNumNot.add(AlgebraStrings.TYPE_INTEGER);
-			or.add(new Not_Assertion(typeNumNot));
+			AllOf_Assertion allOf = new AllOf_Assertion();
+			allOf.add(new Type_Assertion(AlgebraStrings.TYPE_NUMBER));
+			allOf.add(new NotMof_Assertion(1));
+			or.add(allOf);
 			or.add(type);
 			for(String str : types)
 				if(!str.equals(AlgebraStrings.TYPE_NUMNOTINT))
