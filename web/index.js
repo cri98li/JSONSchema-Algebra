@@ -127,7 +127,7 @@ function sendRequest(){
                     && action != "variableNormalization"
                     && action != "DNF"
                     && action != "objPrepare"
-                    && action != "arrayPrepare"
+                    && action != "arrPrepare"
                     && action != "objArrPrepare")
                 $("#outputTextarea").val(JSON.stringify(JSON.parse(data), null, '\t'));
             else
