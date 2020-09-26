@@ -171,8 +171,9 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
-        return new Exist_Assertion(min.longValue(),
-                max == Double.POSITIVE_INFINITY ? null : max.longValue(),
+        return new Exist_Assertion(
+                (min == Double.NEGATIVE_INFINITY) ? null : min.longValue(),
+                (max == Double.POSITIVE_INFINITY) ? null : max.longValue(),
                 (contains != null) ? contains.getFullAlgebra() : null);
     }
 
@@ -218,10 +219,18 @@ public class WitnessContains implements WitnessAssertion{
 
         if(min != null && max != null) {
             WitnessOr or = new WitnessOr();
-            if(min > 0)
+            boolean run = false;
+            if(min > 0) {
                 or.add(new WitnessContains(0., min - 1, contains));
-            or.add(new WitnessContains(max + 1, Double.POSITIVE_INFINITY, contains));
-            and.add(or);
+                run = true;
+            }
+            if(max != Double.POSITIVE_INFINITY) { //without min=max+1, but if max =+inf...
+                or.add(new WitnessContains(max + 1, Double.POSITIVE_INFINITY, contains));
+                run = true;
+            }
+
+            if(run) and.add(or);
+
             return and;
         }
 

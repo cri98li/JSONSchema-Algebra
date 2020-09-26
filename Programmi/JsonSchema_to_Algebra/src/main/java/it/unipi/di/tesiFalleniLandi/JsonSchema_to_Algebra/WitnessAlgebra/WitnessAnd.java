@@ -109,9 +109,11 @@ public class WitnessAnd implements WitnessAssertion{
             }
         }
 
-        if(andList.containsKey(el.getClass())) //if andList already contains the key
+        if(andList.containsKey(el.getClass())) { //if andList already contains the key
+            if (el instanceof WitnessVar && andList.get(WitnessVar.class).contains(el))
+                return true;
             andList.get(el.getClass()).add(el); //insert the assertion in the right list
-        else {
+        }else {
             //create a new list with el, then put it in the hashMap
             List<WitnessAssertion> list = new LinkedList<>();
             list.add(el);
@@ -170,6 +172,7 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
 
+    //merge non esaustiva
     @Override
     public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(block) return new WitnessBoolean(false);
@@ -1179,13 +1182,16 @@ public class WitnessAnd implements WitnessAssertion{
         List<WitnessAssertion> itemsList = null;
 
         if(andList.containsKey(WitnessContains.class))
-            containsList = andList.get(WitnessContains.class);
+            containsList = andList.remove(WitnessContains.class);
+        else
+            return new LinkedList<>();
 
-        if(andList.containsKey(WitnessItems.class))
+        if(andList.containsKey(WitnessItems.class)) {
             itemsList = andList.remove(WitnessItems.class);
-
-        if(itemsList.size() > 1)
-            throw new RuntimeException("list of items should contains only one WitnessItems assertion");
+            if (itemsList.size() > 1)
+                throw new RuntimeException("list of items should contains only one WitnessItems assertion");
+        }else
+            return new LinkedList<>();
 
         WitnessItemsPrepared itemsPrepared = WitnessItemsPrepared.prepareArrayGroup((WitnessItems) itemsList.get(0), containsList, env);
 

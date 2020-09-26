@@ -2,9 +2,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra;
 
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern.ComplexPattern;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
-import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Pattern_Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Exceptions.WitnessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -244,8 +242,29 @@ public class WitnessItemsPrepared implements WitnessAssertion{
 
     @Override
     public Assertion getFullAlgebra() {
-        return new Pattern_Assertion(ComplexPattern.createFromName(this.toString()));
-        //throw new UnsupportedOperationException("tbd");
+        ItemsPrepared_Assertion itemsPrepared_assertion = new ItemsPrepared_Assertion();
+
+        for(WitnessAssertion[] tmpList : items){
+            Assertion[] assertionList = new Assertion[tmpList.length];
+            for(int i = 0; i<tmpList.length; i++)
+                assertionList[i] = tmpList[i].getFullAlgebra();
+
+            itemsPrepared_assertion.addItems(assertionList);
+        }
+
+        Assertion[] additionalItemsArray = new Assertion[additionalItems.length];
+        for(int i = 0; i<additionalItems.length; i++)
+            additionalItemsArray[i] = additionalItems[i].getFullAlgebra();
+
+        itemsPrepared_assertion.addAdditionalItems(additionalItemsArray);
+
+        Exist_Assertion[] containsArray = new Exist_Assertion[contains.length];
+        for(int i = 0; i<contains.length; i++)
+            containsArray[i] = (Exist_Assertion) contains[i].getFullAlgebra();
+
+        itemsPrepared_assertion.addContains(containsArray);
+
+        return itemsPrepared_assertion;
     }
 
     @Override

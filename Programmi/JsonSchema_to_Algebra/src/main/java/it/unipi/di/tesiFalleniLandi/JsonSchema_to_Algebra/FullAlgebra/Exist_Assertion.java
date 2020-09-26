@@ -85,7 +85,8 @@ public class Exist_Assertion implements Assertion{
 			AnyOf_Assertion or = new AnyOf_Assertion();
 			if(min > 0)
 				or.add(new Exist_Assertion(0L, min - 1, contains));
-			or.add(new Exist_Assertion(max + 1, null, contains));
+			if(max != Long.MAX_VALUE)
+				or.add(new Exist_Assertion(max + 1, null, contains));
 			and.add(or);
 			return and;
 		}

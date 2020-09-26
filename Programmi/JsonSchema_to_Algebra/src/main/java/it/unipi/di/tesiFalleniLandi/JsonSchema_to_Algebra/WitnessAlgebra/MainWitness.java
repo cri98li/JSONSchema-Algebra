@@ -84,11 +84,11 @@ public class MainWitness {
         System.out.println("\r\n\r\n FINE! \r\n");
         System.out.flush();
 
-        Collection<Map.Entry<WitnessVar, ReportResults>> o2 = env.getReport();
+        /*Collection<Map.Entry<WitnessVar, ReportResults>> o2 = env.getReport();
         printReportResult(o2);
 
 
-        printReportResultCompare(o1, o2);
+        printReportResultCompare(o1, o2);*/
 
     }
 

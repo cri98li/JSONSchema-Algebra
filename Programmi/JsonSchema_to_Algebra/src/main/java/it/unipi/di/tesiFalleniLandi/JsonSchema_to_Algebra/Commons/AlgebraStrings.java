@@ -1,5 +1,7 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons;
 
+import java.util.List;
+
 /**
  * Metodi e classi utilizzati per costruire l'output in grammatica.
  */
@@ -187,7 +189,60 @@ public class AlgebraStrings {
 
 
 
+	//ItemsPrepared
+	public static String ITEMSPREPARED(List<String[]> items, String[] additionalItem, String[] contains){
+		StringBuilder b = new StringBuilder("items#(\r\n");
 
+		boolean run = false;
+		for(int i = 0; i < items.size(); i++) {
+			b.append("{")
+					.append(i)
+					.append("->")
+					.append(printFunction(items.get(i)))
+					.append("},\r\n");
+
+			run = true;
+		}
+
+		if(run) b.delete(b.length()-3, b.length()); //removing ",\r\n"
+
+		b.append(";\r\n");
+
+		if(additionalItem != null)
+			b.append(printFunction(additionalItem));
+
+		b.append("\r\n|\r\n ");
+
+		run = false;
+
+		for(String s : contains){
+			run = true;
+			b.append(s)
+					.append(",\r\n");
+		}
+
+		if(run) b.delete(b.length()-3, b.length()); //removing ",\r\n"
+
+		return b.append(")")
+				.toString();
+	}
+
+
+	private static String printFunction(String[] f){
+		StringBuilder b = new StringBuilder("[");
+
+
+		boolean run = false;
+		for(int i = 0; i < f.length; i++) {
+			b.append(f[i])
+					.append(", ");
+			run = true;
+		}
+
+		if(run) b.delete(b.length()-2, b.length());
+
+		return b.append("]").toString();
+	}
 
 
 
