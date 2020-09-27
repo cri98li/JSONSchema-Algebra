@@ -816,8 +816,9 @@ public class WitnessAnd implements WitnessAssertion{
 
         newDefinitions.addAll(env.varNormalization_separation(env, env.variableNamingSystem));
 
+        //newDefinition contiene variabili rinoninate che dovrebbero essere rimosse
+        //se le rimuoviamo cosi non vengono espanse dopo
         //no more necessary
-        //env.buildOBDD_notElimination();
         //newDefinitions = new LinkedList<>(); //reset the newDefinitions list
 
         if (ORPart != null)

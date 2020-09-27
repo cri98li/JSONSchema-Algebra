@@ -28,7 +28,7 @@ public class Properties_Assertion implements Assertion{
 		if(properties_patternProperties.containsKey(key))
 			throw new ParseCancellationException("Detected 2 properties with the same name");
 		logger.trace("Adding as Properties <{}, {}> to {}", key, value, this);
-		properties_patternProperties.put(ComplexPattern.createFromRegexp(key), value);
+		properties_patternProperties.put(ComplexPattern.createFromName(key), value);
 	}
 
 	public void addPatternProperties(String key, Assertion value) throws REException {
@@ -69,13 +69,15 @@ public class Properties_Assertion implements Assertion{
 			Set<ComplexPattern> keys = properties_patternProperties.keySet();
 
 			for(ComplexPattern key : keys) {
+				String keyString = key.toString();
+				keyString = keyString.substring(1, keyString.length() -1);
 				if(key.domainSize() == 1 && !key.isComplex()) //TODO: verificare
-					tmpProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema(rootVar));
+					tmpProps.add(keyString.substring(1, keyString.length()-1), properties_patternProperties.get(key).toJSONSchema(rootVar));
 				else
-					tmpPattProps.add(key.toString(), properties_patternProperties.get(key).toJSONSchema(rootVar));
+					tmpPattProps.add(keyString, properties_patternProperties.get(key).toJSONSchema(rootVar));
 			}
 
-			if(tmpPattProps.size() > 0)
+			if(tmpProps.size() > 0)
 				obj.add("properties", tmpProps);
 			if(tmpPattProps.size() > 0)
 				obj.add("patternProperties", tmpPattProps);

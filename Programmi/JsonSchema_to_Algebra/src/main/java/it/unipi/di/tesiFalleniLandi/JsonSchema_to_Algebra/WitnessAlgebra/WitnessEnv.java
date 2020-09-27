@@ -79,12 +79,21 @@ public class WitnessEnv implements WitnessAssertion {
      */
     public void add(WitnessVar key, WitnessAssertion value){
         logger.trace("Adding to env <{}, {}>", key, value);
-        if(WitnessAnd.class == value.getClass() && ((WitnessAnd)value).getIfUnitaryAnd() != null)
+        if(WitnessAnd.class == value.getClass() && ((WitnessAnd)value).getIfUnitaryAnd() != null) {
             add(key, ((WitnessAnd) value).getIfUnitaryAnd());
+        }
         else {
             varList.put(key, value);
             varToBeElaborated.add(key); //TODO: variabili da elaborare è qui!! attenzione
         }
+
+
+        //check WitnessVarManager count
+        String[] splittedName = key.getName().split("_");
+        try{
+            int count = Integer.parseInt(splittedName[splittedName.length -1]);
+            variableNamingSystem.setCountMin(count +1);
+        }catch (NumberFormatException e){}
     }
 
     public void buildOBDD_notElimination(){
@@ -577,6 +586,7 @@ public class WitnessEnv implements WitnessAssertion {
     @Override
     public List<Map.Entry<WitnessVar, WitnessAssertion>> varNormalization_separation(WitnessEnv env, WitnessVarManager varManager) throws WitnessException, REException {
         List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
+        List<String> checkList = new LinkedList<>();
 
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : this.varList.entrySet())
             newDefinitions.addAll(entry.getValue().varNormalization_separation(this, this.variableNamingSystem));
@@ -584,13 +594,17 @@ public class WitnessEnv implements WitnessAssertion {
         //update the environment with the new definitions
         for(Map.Entry<WitnessVar, WitnessAssertion> entry : newDefinitions){
             this.add(entry.getKey(), entry.getValue());
+            checkList.add(entry.getKey().getName());
         }
 
         buildOBDD_notElimination();
 
-        for(Map.Entry<WitnessVar, WitnessAssertion> entry : newDefinitions){
-            WitnessVar covar = getCoVar(entry.getKey());
-            varList.put(covar, getDefinition(covar).groupize()); //We do not use the add method because the variables are already elaborated
+        for(int i = newDefinitions.size() -1; i >= 0; i--){
+            if(checkList.contains(newDefinitions.get(i).getKey().getName())) {
+                WitnessVar covar = getCoVar(newDefinitions.get(i).getKey());
+                varList.put(covar, getDefinition(covar).groupize()); //We do not use the add method because the variables are already elaborated
+            }else
+                newDefinitions.remove(i);
         }
 
         return newDefinitions;
@@ -688,7 +702,7 @@ public class WitnessEnv implements WitnessAssertion {
                     newDefinitions.addAll(((WitnessOr) entry.getValue()).objectPrepare(this));
                     //else if(entry.getValue().getClass() == WitnessType.class && entry.getValue().equals(new WitnessType("obj"))){ //only type object
                 else {
-                    // in case of definitions likes:
+                    // in case of definitions like:
                     // def "x" = type[obj]
                     // we have to prepare that definition but the assertion type[obj] is not contained in boolean operator (AND, OR)
                     WitnessAnd tmp = new WitnessAnd();
@@ -708,6 +722,7 @@ public class WitnessEnv implements WitnessAssertion {
             }
 
             Collections.sort(tmp, Comparator.comparingInt(Map.Entry::getValue));
+            Collections.reverse(tmp);
 
             buildOBDD_notElimination();
 
@@ -727,7 +742,8 @@ public class WitnessEnv implements WitnessAssertion {
 
             logger.debug("Expanding {} variables", newDefinitions.size());
 
-            for(Map.Entry<WitnessVar, WitnessAssertion> newDef : newDefinitions){
+            for(int i = newDefinitions.size() -1; i >= 0; i--){
+                Map.Entry<WitnessVar, WitnessAssertion> newDef = newDefinitions.get(i);
                 WitnessAssertion normalizedValue = newDef.getValue();
 
                 normalizedValue = normalizedValue.varNormalization_expansion(this);
@@ -736,6 +752,7 @@ public class WitnessEnv implements WitnessAssertion {
                 normalizedValue = normalizedValue.DNF();
 
                 varList.put(newDef.getKey(), normalizedValue);
+                newDefinitions.set(i, new AbstractMap.SimpleEntry<>(newDef.getKey(), normalizedValue));
             }
 
             entrySet = newDefinitions;

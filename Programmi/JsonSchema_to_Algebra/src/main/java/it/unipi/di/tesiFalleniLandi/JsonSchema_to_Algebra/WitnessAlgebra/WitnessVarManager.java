@@ -93,6 +93,10 @@ public class WitnessVarManager {
         }
     }
 
+    protected void setCountMin(int n){
+        if(n > count) count = n;
+    }
+
     public String getName(WitnessAssertion assertion){
         return assertion.getClass().getSimpleName()+ "_" + count++;
     }

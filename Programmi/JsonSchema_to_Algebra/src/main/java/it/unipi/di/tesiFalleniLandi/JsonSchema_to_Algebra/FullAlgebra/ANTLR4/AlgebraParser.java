@@ -5,6 +5,7 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.AssertionContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.ANTLR4.GrammaticaParser.Json_valueContext;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.*;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessBDD;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import patterns.REException;
@@ -721,8 +722,13 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 				}
 				else throw new ParseCancellationException("Multiple rootdef detected!");
 			}
-			else
-				defs.add(idList.get(i).getText().subSequence(1, idList.get(i).getText().length()-1).toString(),  (Assertion) visit(list.get(i)));
+			else {
+				String defName = idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString();
+
+				if(defName.equals("OBDD_false") || defName.equals("OBDD_true")) continue;
+
+				defs.add(defName, (Assertion) visit(list.get(i)));
+			}
 		}
 
 		return defs;

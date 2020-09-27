@@ -2,7 +2,7 @@
     "configuration": {
         "status": "info",
         "ThresholdFilter": {
-            "level": "off"
+            "level": "warn"
         },
         "appenders": {
             "Console": {
