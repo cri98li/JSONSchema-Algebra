@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GenObject implements GenAssertion {
     private static Logger logger = LogManager.getLogger(GenObject.class);
@@ -37,6 +38,10 @@ public class GenObject implements GenAssertion {
         private ComplexPattern key;
         private GenVar schema;
 
+        public GenVar usedVar() {
+            return schema;
+        }
+
         @Override
         public String toString() {
             return "GProperty{" +
@@ -63,6 +68,10 @@ public class GenObject implements GenAssertion {
         private GenVar schema;
         private List<GOrPattReq> orpList;
 //        private boolean isSimple;
+
+        public GenVar usedVar() {
+            return schema;
+        }
 
         @Override
         public String toString() {
@@ -91,6 +100,10 @@ public class GenObject implements GenAssertion {
     /*WitnessOrPattReq counterpart*/
     public class GOrPattReq {
         private List<GPattReq> reqList;
+
+        public List<GenVar> usedVars() {
+            return reqList.stream().map(p->p.usedVar()).collect(Collectors.toList());
+        }
 
         @Override
         public String toString() {
@@ -158,6 +171,15 @@ public class GenObject implements GenAssertion {
     @Override
     public WitnessAssertion toWitnessAlgebra() {
         return null;
+    }
+
+    @Override
+    public List<GenVar> usedVars() {
+        List<GenVar> cpart_vars = CPart.stream().map(gp->gp.usedVar()).collect(Collectors.toList());
+        List<GenVar> rpart_vars = RPart.stream().flatMap(op->op.usedVars().stream()).collect(Collectors.toList());
+//        List<List<GenVar>> rpart_vars_list = RPart.stream().map(op->op.usedVars()).collect(Collectors.toList());
+//        List<GenVar> rpart_vars = rpart_vars_list.stream().flatMap(List::stream).distinct().collect(Collectors.toList());
+        return Stream.concat(cpart_vars.stream(), rpart_vars.stream()).distinct().collect(Collectors.toList());
     }
 
 

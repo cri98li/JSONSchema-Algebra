@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -188,6 +189,11 @@ public class GenNum implements GenAssertion {
     @Override
     public WitnessAssertion toWitnessAlgebra() {
         return null;
+    }
+
+    @Override
+    public List<GenVar> usedVars() {
+        return new LinkedList<>();
     }
 
 

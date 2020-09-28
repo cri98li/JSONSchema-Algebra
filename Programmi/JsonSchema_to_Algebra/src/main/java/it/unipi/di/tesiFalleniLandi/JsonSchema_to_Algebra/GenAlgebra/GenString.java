@@ -5,6 +5,9 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.ComplexPattern
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessPattern;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GenString implements GenAssertion{
     private ComplexPattern pattern;
 
@@ -38,6 +41,11 @@ public class GenString implements GenAssertion{
     @Override
     public WitnessAssertion toWitnessAlgebra() {
         return null;
+    }
+
+    @Override
+    public List<GenVar> usedVars() {
+        return new LinkedList<>();
     }
 
 

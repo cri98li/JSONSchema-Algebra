@@ -5,6 +5,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 public class GenVarTrue extends GenVar {
 
     public GenVarTrue(String varname) {
-        super(varname);
+        super("true");
     }
 }

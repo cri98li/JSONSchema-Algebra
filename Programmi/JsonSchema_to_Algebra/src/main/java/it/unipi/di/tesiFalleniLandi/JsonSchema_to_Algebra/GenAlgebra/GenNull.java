@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GenNull implements GenAssertion{
     @Override
     public String toString() {
@@ -25,5 +28,8 @@ public class GenNull implements GenAssertion{
         return null;
     }
 
-
+    @Override
+    public List<GenVar> usedVars() {
+        return new LinkedList<>();
+    }
 }

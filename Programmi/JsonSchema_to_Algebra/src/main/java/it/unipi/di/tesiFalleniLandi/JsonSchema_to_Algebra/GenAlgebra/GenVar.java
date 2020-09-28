@@ -6,21 +6,71 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.Witness
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenVar implements GenAssertion{
     private static Logger logger = LogManager.getLogger(GenVar.class);
+    enum statuses {Open, Sleeping, Empty, Populated };
 
     private String name ;
     private List<GenVar> uses;
     private List<GenVar> isUsedBy;
+    private int evalOrder;
+    private statuses status;
+
+    public statuses getStatus() {
+        return status;
+    }
+
+    public void setStatus(statuses status) {
+        this.status = status;
+    }
+
+    public void setEvalOrder(boolean containsBaseType) {
+        this.evalOrder = this.inDegree();
+        if(containsBaseType) //lower the score in case baseType
+            this.evalOrder --;
+    }
+
+    public int getEvalOrder() {
+        return evalOrder;
+    }
+
+    public List<GenVar> getUses() {
+        return this.uses;
+    }
+
+    public void addIsUsedBy(GenVar using) {
+        this.isUsedBy.add(using);
+    }
+
+    public void setIsUsedBy(List<GenVar> isUsedBy) {
+        this.isUsedBy = isUsedBy;
+    }
+
+    private int inDegree(){
+        return isUsedBy.size();
+    }
+
+    private int outDegree(){
+        return uses.size();
+    }
+
+    public void setUses(List<GenAssertion> genAssertionList) {
+        this.uses = genAssertionList.stream()
+                .flatMap(a->a.usedVars().stream())
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String toString() {
         return "GenVar{" +
                 "name='" + name + '\'' +
-                ", uses=" + uses +
-                ", isUsedBy=" + isUsedBy +
+                ", uses=" + uses.stream().map(v->v.getName()).collect(Collectors.toList())  +
+//                ", isUsedBy=" + isUsedBy +
+                ", isUsedBy=" + isUsedBy.stream().map(v->v.getName()).collect(Collectors.toList()) +
                 '}'+_sep ;
     }
 
@@ -30,24 +80,27 @@ public class GenVar implements GenAssertion{
 
     public GenVar(String varname) {
         name=varname;
+        this.isUsedBy = new LinkedList<>();
+        this.uses = new LinkedList<>();
         logger.debug("Created a var named {} ",this.name);
 
     }
 
+
     public boolean isOpen() {
-        return false; //TODO implement
+        return status==statuses.Open;
     }
 
     public boolean isEmpty() {
-        return false; //TODO implement
+        return status==statuses.Empty;
     }
 
     public boolean isPop() {
-        return false; //TODO implement
+        return status==statuses.Populated;
     }
 
-    public boolean isTrue(){
-        return false; //TODO implment
+    public boolean isSleeping(){
+        return status==statuses.Sleeping;
     }
 
 
@@ -64,6 +117,11 @@ public class GenVar implements GenAssertion{
     @Override
     public WitnessAssertion toWitnessAlgebra() {
         return null;
+    }
+
+    @Override
+    public List<GenVar> usedVars() {
+        return new LinkedList<>();
     }
 
 

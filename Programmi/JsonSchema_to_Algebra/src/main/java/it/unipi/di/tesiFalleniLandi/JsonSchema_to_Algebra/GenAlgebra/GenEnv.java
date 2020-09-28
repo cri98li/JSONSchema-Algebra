@@ -3,6 +3,7 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,11 +17,24 @@ public class GenEnv {
 
     private static Logger logger = LogManager.getLogger(GenEnv.class);
 
-    private HashMap<GenVar, List<GenAssertion>> varList;
+//    private HashMap<GenVar, List<GenAssertion>> varList;
+    private HashMap<GenVar, GenTypedAssertion> varList;
     private BiMap<GenVar,GenVar> coVar;
     private GenVar rootVar;
     private List<GenVar> openVars, sleepingVars, emptyVars, popVars;
     private String _sep = "\r\n";
+
+
+    private List<String> queueToString(List<GenVar> listGenVar) {
+        return  listGenVar.stream().map(v->v.getName()).collect(Collectors.toList());
+    }
+
+    public void showQueues(){
+        System.out.println(queueToString(openVars));
+        System.out.println(queueToString(sleepingVars));
+        System.out.println(queueToString(emptyVars));
+        System.out.println(queueToString(popVars));
+    }
 
     @Override
     public String toString() {
@@ -66,7 +80,13 @@ public class GenEnv {
         //covar
         coVar = HashBiMap.create();
         for (Map.Entry<WitnessVar, WitnessVar> e:env.getCoVar().entrySet())
-            coVar.put(new GenVar(e.getKey().getName()),new GenVar(e.getValue().getName()));
+        //dependency graph
+        varList.forEach((var,typedAssertion)->var.setUses(typedAssertion.getTypedAssertion()));
+        varList.keySet().forEach(var->{
+            var.getUses().forEach(innerv -> innerv.addIsUsedBy(var));
+        });
+        //prepare lists
+        varList.forEach((var,typedAssertion)->var.setEvalOrder(typedAssertion.containsBaseType()));
         //instantiate  var structures
         openVars = new LinkedList<>();
         sleepingVars = new LinkedList<>();
@@ -74,21 +94,19 @@ public class GenEnv {
         popVars = new LinkedList<>();
         //initially set all vars to open
         openVars.addAll(varList.keySet());
-
-
-
+        openVars.sort(Comparator.comparing(GenVar::getEvalOrder));
     }
 
     /**
      * Maps a DNF to a list of GenAssertion objects
      * @param witAssert can be either WitnessBoolean, WitnessOr, WitnessAnd
      *                 WitnessBoolean -> List[GenVarBool]
-     *                 WitnessOr(w1,w2,..)-> List[[[w1]], [[w2]], ...]
+     *                 WitnessOr(w1,w2,..)-> List[ [[w1]], [[w2]], ...]
      *                 WitnessAnd(w1, w2,...) -> List[ [[w1, w2, ... ]] ]
      *                  [[w]] = fromWitness(w)
      * @return
      */
-    private List<GenAssertion> fromWitnessDNF(WitnessAssertion witAssert) throws Exception {
+    private GenTypedAssertion fromWitnessDNF(WitnessAssertion witAssert) throws Exception {
         logger.debug("Extracting assertions from {} ...", witAssert.toString());
         List<GenAssertion> result = new LinkedList<GenAssertion>();
 
@@ -120,7 +138,7 @@ public class GenEnv {
                 }
 
         logger.debug("... extracted {}",result);
-        return result;
+        return new GenTypedAssertion(result);
     }
 
     /**
@@ -352,7 +370,6 @@ public class GenEnv {
 
 
 
-
     /**
      * returns variable named name if it exists in GenEnv
      * otherwise creates a fresh one
@@ -371,9 +388,18 @@ public class GenEnv {
         return res;
     }
 
+    public JsonElement dummyJson(){
+        JsonObject innerObject = new JsonObject();
+        innerObject.addProperty("name", "john");
+        return innerObject;
+    }
 
     public JsonElement generate() {
-        return null;
+//        openVars.forEach(v->System.out.println(v + "\t" + v.getEvalOrder()));
+        showQueues();
+        //pick head and generate witness
+
+        return this.dummyJson();
     }
 
 
