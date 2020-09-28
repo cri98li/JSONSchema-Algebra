@@ -195,11 +195,8 @@ public class AlgebraStrings {
 
 		boolean run = false;
 		for(int i = 0; i < items.size(); i++) {
-			b.append("{")
-					.append(i)
-					.append("->")
-					.append(printFunction(items.get(i)))
-					.append("},\r\n");
+			b.append(printFunction(items.get(i)))
+					.append(",\r\n");
 
 			run = true;
 		}
@@ -229,19 +226,20 @@ public class AlgebraStrings {
 
 
 	private static String printFunction(String[] f){
-		StringBuilder b = new StringBuilder("[");
+		StringBuilder b = new StringBuilder();
 
 
 		boolean run = false;
 		for(int i = 0; i < f.length; i++) {
-			b.append(f[i])
-					.append(", ");
+			b.append("{")
+					.append(i)
+					.append("->[")
+					.append(f[i])
+					.append("] }");
 			run = true;
 		}
 
-		if(run) b.delete(b.length()-2, b.length());
-
-		return b.append("]").toString();
+		return b.toString();
 	}
 
 

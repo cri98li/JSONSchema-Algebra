@@ -1179,24 +1179,25 @@ public class WitnessAnd implements WitnessAssertion{
             return new LinkedList<>();
         }
 
-        List<WitnessAssertion> containsList = null;
-        List<WitnessAssertion> itemsList = null;
+        List<WitnessAssertion> containsList = andList.remove(WitnessContains.class);
+        List<WitnessAssertion> itemsList = andList.remove(WitnessItems.class);
 
-        if(andList.containsKey(WitnessContains.class))
-            containsList = andList.remove(WitnessContains.class);
-        else
+        if(containsList == null) containsList = new LinkedList<>();
+        if(itemsList == null) itemsList = new LinkedList<>();
+
+        if(containsList.isEmpty())
             return new LinkedList<>();
 
-        if(andList.containsKey(WitnessItems.class)) {
-            itemsList = andList.remove(WitnessItems.class);
-            if (itemsList.size() > 1)
-                throw new RuntimeException("list of items should contains only one WitnessItems assertion");
-        }else
-            return new LinkedList<>();
+        if (itemsList.size() > 1)
+            throw new RuntimeException("list of items should contains only one WitnessItems assertion");
 
-        WitnessItemsPrepared itemsPrepared = WitnessItemsPrepared.prepareArrayGroup((WitnessItems) itemsList.get(0), containsList, env);
+        Map.Entry<WitnessContains, WitnessItemsPrepared> result = WitnessItemsPrepared.prepareArrayGroup(
+                itemsList.isEmpty() ? null : (WitnessItems) itemsList.get(0),
+                containsList,
+                env);
 
-        this.add(itemsPrepared);
+        this.add(result.getKey());
+        this.add(result.getValue());
 
         return new LinkedList<>();
 

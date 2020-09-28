@@ -164,9 +164,7 @@ public class WitnessContains implements WitnessAssertion{
 
     @Override
     public WitnessType getGroupType() {
-        if(contains.getClass() == WitnessBoolean.class || isAnArray)
-            return new WitnessType(AlgebraStrings.TYPE_ARRAY);
-        return new WitnessType(AlgebraStrings.TYPE_OBJECT);
+        return new WitnessType(AlgebraStrings.TYPE_ARRAY);
     }
 
     @Override

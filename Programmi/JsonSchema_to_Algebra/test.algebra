@@ -1,9 +1,9 @@
-allOf[
-type[obj],
-props["^a" : mof(2),
-"^aa" : mof(3); mof(5)
-],
-orPattReq["^a" : mof(2),
-"^aa" : mof(3)
+rootdef "root" = {
+    contains(3,+inf;pattern("a")),
+items[
+type[
+null
+]; mof(2)
+
 ]
-]
+}

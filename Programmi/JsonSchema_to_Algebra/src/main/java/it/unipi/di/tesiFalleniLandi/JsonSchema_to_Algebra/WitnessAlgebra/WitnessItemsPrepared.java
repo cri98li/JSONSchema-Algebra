@@ -54,8 +54,15 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         additionalItems = new WitnessAssertion[0];
     }
 
-    public static WitnessItemsPrepared prepareArrayGroup(WitnessItems item, List<WitnessAssertion> contains, WitnessEnv env) throws REException, WitnessException {
-        //Se items == null??
+    //return the counting contraint and the prepared items
+    public static Map.Entry<WitnessContains, WitnessItemsPrepared> prepareArrayGroup(WitnessItems item,
+                                                                                     List<WitnessAssertion> contains,
+                                                                                     WitnessEnv env) throws REException, WitnessException
+    {
+        if(item == null){
+            item = new WitnessItems();
+            item.setAdditionalItems(new WitnessBoolean(true));
+        }
 
         List<WitnessItemsPrepared> instances = new LinkedList<>();
         WitnessContains contains_true = null;
@@ -100,15 +107,17 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         }
 
         //Trasformazione items in items#
-        instances.add(WitnessItemsPrepared.transformToItemsPrepared(normalizedItems));
+        instances.add(transformToItemsPrepared(normalizedItems));
 
         //Trasformazione di ogni contains in items#
         for(WitnessAssertion tmp : contains) {
             WitnessContains c = (WitnessContains) tmp;
-            instances.add(WitnessItemsPrepared.transformToItemsPrepared(c, env));
+            instances.add(transformToItemsPrepared(c, env));
         }
 
-        //unione di tuti gli items#
+        //instances.add(transformToItemsPrepared(contains_true, env));
+
+        //unione di tutti gli items#
         itemsPrepared = instances.remove(0);
         for(WitnessItemsPrepared i : instances)
             itemsPrepared = merge(itemsPrepared, i);
@@ -118,7 +127,7 @@ public class WitnessItemsPrepared implements WitnessAssertion{
 
         env.buildOBDD_notElimination();
 
-        return itemsPrepared;
+        return new AbstractMap.SimpleEntry<>(contains_true, itemsPrepared);
     }
 
     private static WitnessItemsPrepared transformToItemsPrepared(WitnessItems items){
@@ -132,6 +141,11 @@ public class WitnessItemsPrepared implements WitnessAssertion{
             witnessAssertionsArray[0] = ass;
 
             itemsPrepared.items.add(witnessAssertionsArray);
+        }
+
+        if(items.getAdditionalItems() != null) {
+            itemsPrepared.additionalItems = new WitnessAssertion[1];
+            itemsPrepared.additionalItems[0] = items.getAdditionalItems();
         }
 
         return itemsPrepared;
@@ -192,8 +206,8 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         WitnessAssertion[] result = new WitnessAssertion[2^(arr1.length+arr2.length)];
 
         for(int i = 0; i < result.length; i++){
-            int bm1 =i/(2^ arr2.length);
-            int bm2 =i%(2^ arr2.length);
+            int bm1 = (int) (i/(Math.pow(2, arr2.length)));
+            int bm2 = (int) (i%(Math.pow(2, arr2.length)));
 
             WitnessAnd and = new WitnessAnd();
             and.add(arr1[bm1]);
