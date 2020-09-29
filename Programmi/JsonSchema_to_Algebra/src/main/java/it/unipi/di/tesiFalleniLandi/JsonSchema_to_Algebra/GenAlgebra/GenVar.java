@@ -8,11 +8,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GenVar implements GenAssertion{
     private static Logger logger = LogManager.getLogger(GenVar.class);
-    enum statuses {Open, Sleeping, Empty, Populated };
+//    enum statuses {Open, Sleeping, Empty, Populated };
 
     private String name ;
     private List<GenVar> uses;
@@ -34,7 +35,12 @@ public class GenVar implements GenAssertion{
             this.evalOrder --;
     }
 
-    public int getEvalOrder() {
+    public boolean allVarsPopOrEmp() {
+        Optional<Boolean> obj = uses.stream().map(v -> v.isOpen() || v.isEmpty()).reduce((b1, b2) -> b1 && b2);
+        return obj.orElse(true); //if uses is empty
+    }
+
+        public int getEvalOrder() {
         return evalOrder;
     }
 
@@ -91,9 +97,7 @@ public class GenVar implements GenAssertion{
         return status==statuses.Open;
     }
 
-    public boolean isEmpty() {
-        return status==statuses.Empty;
-    }
+    public boolean isEmpty() {return status==statuses.Empty;}
 
     public boolean isPop() {
         return status==statuses.Populated;

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.*;
 
+
 public class GenEnv {
 
     private static Logger logger = LogManager.getLogger(GenEnv.class);
@@ -23,7 +24,11 @@ public class GenEnv {
     private GenVar rootVar;
     private List<GenVar> openVars, sleepingVars, emptyVars, popVars;
     private String _sep = "\r\n";
+    private int _iterationFactor = 10;
 
+    private int nbVar(){
+        return varList.size();
+    }
 
     private List<String> queueToString(List<GenVar> listGenVar) {
         return  listGenVar.stream().map(v->v.getName()).collect(Collectors.toList());
@@ -388,18 +393,45 @@ public class GenEnv {
         return res;
     }
 
-    public JsonElement dummyJson(){
+    private JsonElement dummyJson(){
         JsonObject innerObject = new JsonObject();
-        innerObject.addProperty("name", "john");
+        innerObject.addProperty("Problem", "Exceeded allowed iterations");
         return innerObject;
     }
 
-    public JsonElement generate() {
-//        openVars.forEach(v->System.out.println(v + "\t" + v.getEvalOrder()));
-        showQueues();
-        //pick head and generate witness
+//    private boolean noWitness(JsonElement e){
+//        return  e.getAsJsonObject().get(_status).getAsInt()==_noWitness;
+//    }
 
-        return this.dummyJson();
+    public JsonElement generate() {
+        logger.debug("openvars {}", openVars.stream().map(v->v.getName() + "," + v.getEvalOrder()));
+
+        long nbIterations = 0, maxIterations = _iterationFactor*nbVar();
+        JsonElement witness = null;
+        GenVar currentVar = null;
+        GenTypedAssertion currentAssertion = null;
+        showQueues();
+        //pick head and generate
+        while (nbIterations<maxIterations && (!sleepingVars.isEmpty()||!openVars.isEmpty())){
+            nbIterations++;
+            currentVar = openVars.get(0);
+            currentAssertion = varList.get(currentVar);
+            if(currentAssertion.containsBaseType()||currentVar.allVarsPopOrEmp()){
+                witness = currentAssertion.generate();
+                currentVar.setStatus(GenAssertion.statuses.Populated);
+                popVars.add(currentVar);
+            } else
+            {
+                currentVar.setStatus(GenAssertion.statuses.Sleeping);
+                sleepingVars.add(currentVar);
+            }
+            openVars.remove(0);
+        }
+
+        if(nbIterations==maxIterations)
+            return dummyJson();
+
+        return witness;
     }
 
 

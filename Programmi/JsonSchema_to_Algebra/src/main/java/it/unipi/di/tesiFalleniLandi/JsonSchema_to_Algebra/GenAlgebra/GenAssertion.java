@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface GenAssertion extends Cloneable{
     public String _sep = "\r\n";
+    public enum statuses {Open, Sleeping, Empty, Populated };
+//    public String _status = "_status";
+//    public int _noWitness = -1;
+
 
 
     public JsonElement generate();
