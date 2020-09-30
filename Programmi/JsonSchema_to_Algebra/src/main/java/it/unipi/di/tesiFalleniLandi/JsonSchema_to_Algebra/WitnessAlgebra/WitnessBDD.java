@@ -84,6 +84,23 @@ public class WitnessBDD {
     }
     */
 
+    public WitnessVar not(WitnessEnv env, WitnessVar u) throws WitnessException {
+        Integer i = indexNode.get(u);
+
+        if(i == null) throw new WitnessBDDException("Variable not found!");
+
+        int newI = bdd.ref(bdd.not(i));
+
+        WitnessVar var = indexNode.inverse().get(newI);
+
+        if(var == null) {
+            var = varManager.buildVar("OBDD_" + newI);
+            indexNode.put(var, newI);
+        }
+
+        return var;
+    }
+
     public WitnessVar and(WitnessEnv env, WitnessVar u1, WitnessVar u2) throws WitnessException {
         Integer i1 = indexNode.get(u1);
         Integer i2 = indexNode.get(u2);

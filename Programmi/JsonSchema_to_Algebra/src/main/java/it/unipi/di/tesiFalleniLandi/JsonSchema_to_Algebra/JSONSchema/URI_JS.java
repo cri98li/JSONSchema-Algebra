@@ -78,6 +78,9 @@ public class URI_JS {
 		normalizedURI += "#/$defs/"; 	// uri --> #/$defs
 		
 		if(splittedURI[i].equals("#")) i++;
+		//TODO: controllo indici
+		if(i>=splittedURI.length)
+			throw new UnsupportedURIRuntimeException("Unsupported URI");
 		if(splittedURI[i].equals("definitions") || splittedURI[i].equals("$defs")) i++;
 
 		normalizedName = splittedURI[i++];
