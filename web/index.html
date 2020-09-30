@@ -53,9 +53,9 @@
                         <option value="Canonicalization">Canonicalization</option>
                         <option value="variableNormalization">Variable Normalization</option>
                         <option value="DNF">DNF</option>
-                        <option value="objPrepare">objectPrepare</option>
-                        <option value="arrPrepare">arrayPrepare</option>
-                        <option value="objArrPrepare">Obj and Arr Prepare</option>
+                        <option value="objPrepare">Object Prepare</option>
+                        <option value="arrPrepare">Array Prepare</option>
+                        <option value="objArrPrepare">Object and Array Prepare</option>
                     </select>
                     <div class="input-group-append">
                         <button type="button" id="translate" class="btn btn-light mr-5" onclick="sendRequest()">Translate</button>
@@ -71,7 +71,10 @@
 
         <div class="container-fluid">
             <div class="row mt-5">
-                <div class="col-12 text-right">
+                <div class="col-6">
+                    Last update: <i id="version"></i>
+                </div>
+                <div class="col-6 text-right">
                     <a href="test/" class="text-decoration-none">Test page</a>
                 </div>
             </div>
