@@ -305,6 +305,9 @@ public class WitnessEnv implements WitnessAssertion {
 
             WitnessVar complementVarName = variableNamingSystem.buildVar(complementName);
 
+            if(coVar.containsKey(var) || coVar.containsValue(var)) //TODO: evito di aggiungere entry duplicate nella coVar
+                break;
+
             coVar.put(var, complementVarName);
 
             if(!varList.containsKey(complementVarName)) //if complementVarName is a new variable

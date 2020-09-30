@@ -1,14 +1,4 @@
-rootdef "root" = {
-	props[
-		"^size$": enum[
-			"S","M","L"
-		],
-		"^color$": enum[
-			"white","black"
-		];
-		
-	],
-	req[
-		"color"
-	]
-}
+rootdef "root" = props[
+	"^a$": not(ref("root"));
+	
+]

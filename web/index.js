@@ -161,6 +161,11 @@ function sendRequest(){
 
 }
 
+$( document ).ready(function() {
+    $.get( "https://jsonschema.duckdns.org:8080/version", function( data ) {
+        $( "#version" ).html( data );
+    });
+});
 
 //LISTENER
 $('#inputFileButton').click( function(){
