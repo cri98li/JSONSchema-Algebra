@@ -85,11 +85,11 @@ public class WitnessProperty implements WitnessAssertion{
     public WitnessAssertion mergeElement(WitnessProperty a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessProperty result = null;
 
-        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value, varManager, pattReqManager) != null)
-            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value, varManager, pattReqManager));
-
         if(a.value.equals(this.value))
             result =  new WitnessProperty(a.key.union(this.key), this.value);
+
+        if(a.key.toString().equals(this.key.toString()) && a.value.mergeWith(this.value, varManager, pattReqManager) != null)
+            result = new WitnessProperty(a.key.clone(), a.value.mergeWith(this.value, varManager, pattReqManager));
 
         logger.trace("Merge result: ", result);
 

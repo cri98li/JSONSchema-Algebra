@@ -136,8 +136,9 @@ public class Defs_Assertion implements Assertion{
 			else
 				newEnv.add(this.varManager.buildVar(entry.getKey()), entry.getValue().toWitnessAlgebra(this.varManager, this, this.pattReqManager));
 
-		newEnv.buildOBDD_notElimination();
+
 		newEnv.checkLoopRef(null, null);
+		newEnv.buildOBDD_notElimination();
 		newEnv.reachableRefs(null, null);
 
 		return newEnv;

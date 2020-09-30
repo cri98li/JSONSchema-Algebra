@@ -30,9 +30,9 @@ public class Ref_Assertion implements Assertion{
 		JsonObject obj = new JsonObject();
 
 		if(ref.equals(rootVar)) {
-			obj.addProperty("ref", "#" + ref);
+			obj.addProperty("$ref", "#" + ref);
 		}else {
-			obj.addProperty("ref", "#/$defs/" + ref);
+			obj.addProperty("$ref", "#/$defs/" + ref);
 		}
 
 		return obj;

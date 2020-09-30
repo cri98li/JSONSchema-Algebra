@@ -1,7 +1,4 @@
+def "propa" = not(ref("propa")),
 rootdef "root" = props[
-
-              "^a$": not(ref("propa"));
-
-],
-
-def "propa" = not(ref("propa"))
+"^a$": not(ref("propa"));
+]
