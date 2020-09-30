@@ -22,7 +22,7 @@ public class URI_JS {
 	private static Logger logger = LogManager.getLogger(URI_JS.class);
 
 	public URI_JS(String uri) {
-		if(uri.toLowerCase().contains(".json") || !uri.startsWith("#/"))
+		if(uri.toLowerCase().contains(".json") || !uri.startsWith("#"))
 			throw new UnsupportedURIRuntimeException("Unsupported URI");
 
 		this.uri = uri;

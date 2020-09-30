@@ -1,6 +1,3 @@
-{ "properties": {
-  "color": {"enum": ["white", "black"]},
-  "size": { "enum": ["S", "M", "L"] }
-},
-  "required": ["color"]
+{
+  "properties": {"a": {"not": {"$ref": "#"}}}
 }
