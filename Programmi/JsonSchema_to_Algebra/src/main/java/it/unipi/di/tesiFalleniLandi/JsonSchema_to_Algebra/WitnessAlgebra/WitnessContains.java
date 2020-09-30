@@ -122,6 +122,7 @@ public class WitnessContains implements WitnessAssertion{
         return null;
     }
 
+
     @Override
     public WitnessAssertion merge(WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         WitnessContains newContains = this.clone();
@@ -140,6 +141,10 @@ public class WitnessContains implements WitnessAssertion{
                 return new WitnessBoolean(false);
             }
         }
+
+        if(!(this.contains instanceof  WitnessBoolean) || !(a.contains instanceof WitnessBoolean) ||
+                !((WitnessBoolean) a.contains).getValue() || !((WitnessBoolean)this.contains).getValue())
+            return null;
 
         WitnessContains contains = new WitnessContains();
 

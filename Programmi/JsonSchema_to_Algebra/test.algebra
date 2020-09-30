@@ -2,7 +2,6 @@ rootdef "root" = {
     contains(3,+inf;pattern("a")),
     contains(2,10;mof(39)),
    items[
-
       type[null]; mof(2)
 
    ]
