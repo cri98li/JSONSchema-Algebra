@@ -6,9 +6,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.Utils;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Assertion;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Defs_Assertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.FullAlgebra.Utils_FullAlgebra;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.JSONSchema;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.JSONSchema.Utils_JSONSchema;
+import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessAssertion;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.WitnessEnv;
 import patterns.REException;
 
@@ -52,7 +54,7 @@ public class NotElimExperiments
 		operations.put(1, "JsonSchema2fullAlgebra");
 		operations.put(2, "JsonSchema2witnessAlgebra");
 		operations.put(3, "JsonSchema2fullAlgebra_notElimination");
-		operations.put(4, "JsonSchema2witnessAlgebra_notElimination");
+//		operations.put(4, "JsonSchema2witnessAlgebra_notElimination");
 
 		errorsMap = new HashMap<>();
 		resultMap = new HashMap<>();
@@ -69,16 +71,20 @@ public class NotElimExperiments
 	public boolean operation(File file, Integer code, Integer idrun, Integer timeout)  {
 		Instant start = Instant.now();
 		String extension = ".algebra";
-		final Assertion[] jsonSchema = {null};
-		final String[] outputSchema = {null};
+		final Assertion[] fullAlgebra = {null};
+		final WitnessAssertion[] witnessAlgera = {null};
+//		final String[] outputSchema = {null};
+//		final Defs_Assertion[] fullAlgebra = {null};
 		JSONSchema root;
 		String filename = file.getName();
 
-		Gson gson = new GsonBuilder()
-				.disableHtmlEscaping()
-				.setPrettyPrinting()
-				.serializeNulls()
-				.create();
+//		Gson gson = new GsonBuilder()
+//				.disableHtmlEscaping()
+//				.setPrettyPrinting()
+//				.serializeNulls()
+//				.create();
+
+		Gson gson = new Gson();
 
 		JsonObject schemaObject = null,object=null;
 		try (Reader reader = new FileReader(file.getAbsolutePath())) {
@@ -107,6 +113,7 @@ public class NotElimExperiments
 						break;
 					case "id":
 						resultMap.put(_objectid, object.get(key).getAsLong());
+						break;
 					case "schema_file":
 						schemaObject = object.getAsJsonObject(key);
 						break;
@@ -129,7 +136,8 @@ public class NotElimExperiments
 				switch (code){
 					case 1: //JsonSchema2fullAlgebra
 						try{
-							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
+							Utils_JSONSchema.normalize(root).toGrammar();
+//							fullAlgebra[0] = Utils_FullAlgebra.parseString(Utils_JSONSchema.normalize(root).toGrammar().toGrammarString());
 						}catch (Exception e){
 							addError(filename,e);
 							return;
@@ -137,9 +145,11 @@ public class NotElimExperiments
 						break;
 					case 2: //JsonSchema2witnessAlgebra
 						try{
-							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
-							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
-							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
+							Utils_JSONSchema.normalize(root).toGrammar().toWitnessAlgebra(null,null,null);
+//							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(fullAlgebra[0]);
+//							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//							Utils_FullAlgebra.parseString(Utils_JSONSchema.toGrammarString(Utils_JSONSchema.normalize(root)))
+//									.toWitnessAlgebra(null,null, null);
 						}catch (REException e) {
 							addError(filename,e);
 							return;
@@ -147,30 +157,27 @@ public class NotElimExperiments
 						break;
 					case 3: //fullAlgebra_notElimination
 						try {
-							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
-							String before = Utils.beauty(jsonSchema[0].toGrammarString());
-							addResult(_size_before, (long) before.length());
-							outputSchema[0] = Utils.beauty(jsonSchema[0].notElimination().toGrammarString());
-							addResult(_size_after, (long) outputSchema[0].length());
+							fullAlgebra[0] = Utils_JSONSchema.normalize(root).toGrammar();
+							addResult(_size_before, (long) Utils.beauty(fullAlgebra[0].toGrammarString()).length());
+							addResult(_size_after,  (long)Utils.beauty(fullAlgebra[0].notElimination().toGrammarString()).length());
 						}catch (Exception e){
 							addError(filename,e);
 							return;
 						}
 						break;
-					case 4: //witnessAlgebra_notElimination
-						try {
-							jsonSchema[0] = Utils_JSONSchema.normalize(root).toGrammar();
-							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(jsonSchema[0]);
-							String before = Utils.beauty(env.getFullAlgebra().toGrammarString());
-							addResult(_size_before, (long) before.length());
-							env.buildOBDD_notElimination(); //modify in-place
-							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
-							addResult(_size_after, (long) outputSchema[0].length());
-						} catch (REException e) {
-							addError(filename,e);
-							return;
-						}
-						break;
+//					case 4: //witnessAlgebra_notElimination
+//						try {
+//							WitnessEnv env = Utils_FullAlgebra.getWitnessAlgebra(fullAlgebra[0]);
+//							String before = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//							addResult(_size_before, (long) before.length());
+//							env.buildOBDD_notElimination(); //modify in-place
+//							outputSchema[0] = Utils.beauty(env.getFullAlgebra().toGrammarString());
+//							addResult(_size_after, (long) outputSchema[0].length());
+//						} catch (REException e) {
+//							addError(filename,e);
+//							return;
+//						}
+//						break;
 
 				}
 
@@ -215,7 +222,7 @@ public class NotElimExperiments
 
 		NotElimExperiments obj = new NotElimExperiments();
 		if(args.length !=3){
-			System.out.println("Expects 3 arguments: directory path,  experiments code (1 to 4), idrun");
+			System.out.println("Expects 3 arguments: directory path,  experiments code, idrun");
 			operations.forEach((k,v) -> System.out.println("code: "+k+"  corresponds to: "+v));
 			System.exit(-1);
 		}

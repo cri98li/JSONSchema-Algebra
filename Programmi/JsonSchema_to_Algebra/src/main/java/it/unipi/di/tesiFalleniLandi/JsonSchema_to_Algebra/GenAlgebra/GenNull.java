@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GenNull implements GenAssertion{
+
     @Override
     public String toString() {
         return "GenNull";

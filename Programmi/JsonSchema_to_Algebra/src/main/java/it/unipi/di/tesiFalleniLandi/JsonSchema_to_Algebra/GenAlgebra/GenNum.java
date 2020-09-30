@@ -2,10 +2,12 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.json.JsonNumber;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -178,7 +180,7 @@ public class GenNum implements GenAssertion {
 
     @Override
     public JsonElement generate() {
-        return null;
+        return new JsonPrimitive(123);
     }
 
     @Override

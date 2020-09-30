@@ -35,10 +35,10 @@ public class GenEnv {
     }
 
     public void showQueues(){
-        System.out.println(queueToString(openVars));
-        System.out.println(queueToString(sleepingVars));
-        System.out.println(queueToString(emptyVars));
-        System.out.println(queueToString(popVars));
+        System.out.println("openVars=" + queueToString(openVars));
+        System.out.println("sleepingVars=" +queueToString(sleepingVars));
+        System.out.println("emptyVars=" + queueToString(emptyVars));
+        System.out.println("popVars=" + queueToString(popVars));
     }
 
     @Override
@@ -403,6 +403,11 @@ public class GenEnv {
 //        return  e.getAsJsonObject().get(_status).getAsInt()==_noWitness;
 //    }
 
+    /**
+     * policy for choosing variable to generate
+     *
+     * @return
+     */
     public JsonElement generate() {
         logger.debug("openvars {}", openVars.stream().map(v->v.getName() + "," + v.getEvalOrder()));
 
