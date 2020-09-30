@@ -1165,12 +1165,14 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     public List<Map.Entry<WitnessVar, WitnessAssertion>> arrayPreparation(WitnessEnv env) throws WitnessException, REException {
-        //checking if it's an object group
+        //checking if it's an array group
         if (andList.get(WitnessType.class) == null) { //and without type specified
             logger.debug("Preparing WitnessAnd without type specified");
             return new LinkedList<>();
         }
-        if (andList.get(WitnessType.class) != null && !andList.get(WitnessType.class).contains(new WitnessType(AlgebraStrings.TYPE_ARRAY))) { //if is not an object type
+        if (andList.get(WitnessType.class) != null
+                && !andList.get(WitnessType.class).contains(new WitnessType(AlgebraStrings.TYPE_ARRAY))) {
+            //if is not an array type
             logger.debug("Preparing WitnessAnd without type array assertion");
             return new LinkedList<>();
         }

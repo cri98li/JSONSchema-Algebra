@@ -6,16 +6,26 @@ import org.apache.logging.log4j.Logger;
 import patterns.Pattern;
 import patterns.REException;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Estensione della classe Pattern di stefanie. Ci consente di fare ottimizzazioni e aggiungere funzionalità
  * senza ostacolare la collaborazione con Stefanie
  */
 public class ComplexPattern implements ComplexPatternElement {
+    public static void main(String[] args) throws REException {
+
+        ComplexPattern p = ComplexPattern.createFromRegexp(".*a");
+
+        Collection<String> string = p.generateWords();
+
+        Iterator<String> it = string.iterator();
+
+        for(int i = 0; i < 10 && it.hasNext(); i++)
+            System.out.println(it.next());
+    }
+
+
     /**
      * Offrono funzionalità di caching per azioni già performate. Vedi file f10188.json negazione
      */

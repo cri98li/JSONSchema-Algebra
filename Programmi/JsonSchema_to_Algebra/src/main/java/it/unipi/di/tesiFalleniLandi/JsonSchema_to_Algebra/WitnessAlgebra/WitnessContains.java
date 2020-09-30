@@ -22,6 +22,7 @@ public class WitnessContains implements WitnessAssertion{
         this.min = 0.0;
         this.max = Double.POSITIVE_INFINITY;
         isAnArray = false;
+        //contains = new WitnessBoolean(true);
         logger.debug("Created a new WitnessContains: {}", this);
     }
 
@@ -131,6 +132,7 @@ public class WitnessContains implements WitnessAssertion{
         return newContains;
     }
 
+    //TODO: riscrivere regola merging
     public WitnessAssertion mergeElement(WitnessContains a, WitnessVarManager varManager, WitnessPattReqManager pattReqManager) throws REException {
         if(a.contains.getClass() == WitnessBoolean.class || isAnArray) {
             if (!((WitnessBoolean)a.contains).getValue()) {
@@ -141,7 +143,7 @@ public class WitnessContains implements WitnessAssertion{
 
         WitnessContains contains = new WitnessContains();
 
-        contains.contains = contains.mergeWith(a.contains, varManager, pattReqManager);
+        contains.contains = this.contains.mergeWith(a.contains, varManager, pattReqManager);
 
         contains.min = (min < a.min) ? a.min : min;
 
@@ -251,7 +253,7 @@ public class WitnessContains implements WitnessAssertion{
         contains.max = max;
         contains.isAnArray = isAnArray;
 
-        if(contains != null) {
+        if(this.contains != null) {
             if (this.contains.getClass() != WitnessAnd.class) {
                 WitnessAnd and = new WitnessAnd();
                 and.add(this.contains);
@@ -294,7 +296,7 @@ public class WitnessContains implements WitnessAssertion{
     }
 
     @Override
-    public WitnessAssertion varNormalization_expansion(WitnessEnv env) throws WitnessException {
+    public WitnessAssertion varNormalization_expansion(WitnessEnv env) {
         return this;
     }
 

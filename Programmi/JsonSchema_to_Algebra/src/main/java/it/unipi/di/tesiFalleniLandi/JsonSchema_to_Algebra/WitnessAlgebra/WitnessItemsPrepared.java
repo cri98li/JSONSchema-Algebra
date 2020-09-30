@@ -79,7 +79,7 @@ public class WitnessItemsPrepared implements WitnessAssertion{
 
             //Searching for contains_true
             if (c.getContains() instanceof WitnessBoolean && ((WitnessBoolean) c.getContains()).getValue()) {
-                if (contains_true != null) //se ce ne sono di più
+                if (contains_true != null) //if there is more than 1 #_m^M:t
                     throw new UnsupportedOperationException("Multiple #:true");
                 contains_true = c;
                 contains.remove(c);
@@ -91,22 +91,22 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         if(contains_true == null)
             contains_true = new WitnessContains(0, Double.POSITIVE_INFINITY, new WitnessBoolean(true));
 
-        //Normalizzazione di items
+        //Normalization of items
         WitnessItems normalizedItems = item.mergeElement(contains_true);
 
-        //Normalizzazione di contains_true
+        //Normalization of contains_true
         contains_true.setMin(maxOfMin);
         if(maxOfMin > contains_true.getMax())
-            contains_true.setContains(new WitnessBoolean(false));
+            contains_true.setContains(new WitnessBoolean(false)); //TODO: CHECK
 
-        //Normalizzazione degli altri contains (#)
+        //Normalization of the other contains (#)
         for (WitnessAssertion tmp : contains) {
             WitnessContains c = (WitnessContains) tmp;
             if(c.getMax() > contains_true.getMax())
                 c.setMax(Double.POSITIVE_INFINITY);
         }
 
-        //Trasformazione items in items#
+        //Transformation of items to items#
         instances.add(transformToItemsPrepared(normalizedItems));
 
         //Trasformazione di ogni contains in items#
@@ -125,7 +125,7 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         //separazione TODO:finire
         itemsPrepared.varNormalization_separation(env, env.variableNamingSystem);
 
-        env.buildOBDD_notElimination();
+        //env.buildOBDD_notElimination();
 
         return new AbstractMap.SimpleEntry<>(contains_true, itemsPrepared);
     }
@@ -146,6 +146,10 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         if(items.getAdditionalItems() != null) {
             itemsPrepared.additionalItems = new WitnessAssertion[1];
             itemsPrepared.additionalItems[0] = items.getAdditionalItems();
+        }else{
+            //TODO: check
+            itemsPrepared.additionalItems = new WitnessAssertion[1];
+            itemsPrepared.additionalItems[0] = new WitnessBoolean(true);
         }
 
         return itemsPrepared;
@@ -168,10 +172,8 @@ public class WitnessItemsPrepared implements WitnessAssertion{
     private static WitnessItemsPrepared merge(WitnessItemsPrepared a, WitnessItemsPrepared b){
         WitnessItemsPrepared merged = new WitnessItemsPrepared();
 
-        //Special case
-
         //General case
-        //a è sempre il minimo
+        //"a" is always smaller than "b"
         if(a.items.size() > b.items.size()){
             WitnessItemsPrepared c = a;
             a=b;
@@ -200,14 +202,11 @@ public class WitnessItemsPrepared implements WitnessAssertion{
     }
 
     private static WitnessAssertion[] multiply(WitnessAssertion[] arr1, WitnessAssertion[] arr2){
-
-        //if(arr1==null)
-
-        WitnessAssertion[] result = new WitnessAssertion[2^(arr1.length+arr2.length)];
+        WitnessAssertion[] result = new WitnessAssertion[arr1.length*arr2.length];
 
         for(int i = 0; i < result.length; i++){
-            int bm1 = (int) (i/(Math.pow(2, arr2.length)));
-            int bm2 = (int) (i%(Math.pow(2, arr2.length)));
+            int bm1 = i/arr2.length;
+            int bm2 = i%arr2.length;
 
             WitnessAnd and = new WitnessAnd();
             and.add(arr1[bm1]);

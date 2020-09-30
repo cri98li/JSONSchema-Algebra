@@ -768,13 +768,15 @@ public class WitnessEnv implements WitnessAssertion {
 
             if (entry.getValue().getClass() == WitnessAnd.class)
                 newDefinitions.addAll(((WitnessAnd) entry.getValue()).arrayPreparation(this));
+
             else if (entry.getValue().getClass() == WitnessOr.class)
                 newDefinitions.addAll(((WitnessOr) entry.getValue()).arrayPreparation(this));
+
                 //else if(entry.getValue().getClass() == WitnessType.class && entry.getValue().equals(new WitnessType("obj"))){ //only type object
             else {
                 // in case of definitions likes:
                 // def "x" = type[arr]
-                // we have to prepare that definition but the assertion type[obj] is not contained in boolean operator (AND, OR)
+                // we have to prepare that definition but the assertion type[arr] is not contained in boolean operator (AND, OR)
                 WitnessAnd tmp = new WitnessAnd();
                 tmp.add(entry.getValue());
                 newDefinitions.addAll(tmp.arrayPreparation(this)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
