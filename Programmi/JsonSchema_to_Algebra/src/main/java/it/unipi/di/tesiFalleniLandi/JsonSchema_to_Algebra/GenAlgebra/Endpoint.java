@@ -109,8 +109,8 @@ public class Endpoint {
 
         String witness = genv.generate().toString();
 
-//        System.out.flush();
-//        System.out.println(witness);
+        System.out.flush();
+        System.out.println("==witness== \n"+witness);
 
 
 

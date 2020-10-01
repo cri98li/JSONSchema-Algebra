@@ -107,6 +107,7 @@ public class GenVar implements GenAssertion{
         return status==statuses.Sleeping;
     }
 
+    public boolean isRoot() {return name.equals(it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.ROOTDEF_DEFAULTNAME);}
 
     @Override
     public JsonElement generate() {

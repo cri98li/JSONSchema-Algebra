@@ -14,13 +14,14 @@ import java.util.stream.Collectors;
 public class GenTypedAssertion implements GenAssertion{
 //    private List<GenAssertion> typedAssertion;
     private HashMap<String,List<GenAssertion>> typedAssertionMap;
-    private Class[] orderedTypes = {GenNull.class, GenNum.class, GenString.class, GenArray.class, GenObject.class};
+    private Class[] orderedTypes = {GenNum.class, GenString.class, GenArray.class, GenObject.class, GenNull.class, GenNull.class};
     private String[] orderedTypeNames = Arrays.stream(orderedTypes).map(t->t.getSimpleName()).toArray(String[]::new);
 
 
     public List<GenAssertion> getTypedAssertion() {
 //        return new ArrayList<>(typedAssertionMap.values());
-        return typedAssertionMap.values().stream().flatMap(l->l.stream()).collect(Collectors.toList());
+        return typedAssertionMap.values().stream()
+                .flatMap(l->l.stream()).collect(Collectors.toList());
     }
 
     public GenTypedAssertion(List<GenAssertion> typedAssertion) {

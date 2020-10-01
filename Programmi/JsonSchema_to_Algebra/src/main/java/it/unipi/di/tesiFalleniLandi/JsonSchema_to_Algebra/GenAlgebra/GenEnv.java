@@ -424,6 +424,8 @@ public class GenEnv {
             if(currentAssertion.containsBaseType()||currentVar.allVarsPopOrEmp()){
                 witness = currentAssertion.generate();
                 currentVar.setStatus(GenAssertion.statuses.Populated);
+                if(currentVar.isRoot())
+                    break;
                 popVars.add(currentVar);
             } else
             {
