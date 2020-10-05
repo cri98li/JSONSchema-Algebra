@@ -24,6 +24,8 @@ public class WitnessVarManager {
         count = 0l;
     }
 
+    //TODO: specifiche
+
     public WitnessVar buildVar(String name){
         String newName = resolveName(name);
         WitnessVar var = new WitnessVar(newName);
