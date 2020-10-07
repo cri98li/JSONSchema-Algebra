@@ -1196,7 +1196,13 @@ public class WitnessAnd implements WitnessAssertion{
         if (itemsList.size() > 1)
             throw new RuntimeException("list of items should contains only one WitnessItems assertion");
 
-        List result = WitnessItemsPrepared.prepareArrayGroup(
+        /**
+         * result.get:
+         * 1 --> List of all the contains
+         * 2 --> List with the new items#
+         * 3 --> List of the new variables
+         */
+        List<Object> result = WitnessItemsPrepared.prepareArrayGroup(
                 itemsList.isEmpty() ? null : (WitnessItems) itemsList.get(0),
                 containsList,
                 env);
