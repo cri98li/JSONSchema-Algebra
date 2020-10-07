@@ -31,7 +31,7 @@ public class GenString implements GenAssertion{
     }
     @Override
     public JsonElement generate() {
-        return new JsonPrimitive("abc");
+        return new JsonPrimitive(pattern.generateWords().iterator().next());
     }
 
     @Override
