@@ -64,6 +64,8 @@ public class MainWitness {
         env = env.DNF();
         System.out.println(Utils.beauty(env.getFullAlgebra().toGrammarString()));
 
+        env = (WitnessEnv) env.merge(null, null); //TODO: fare merge per evitare errore in Array Preparation
+
         Collection<Map.Entry<WitnessVar, ReportResults>> o1 = env.getReport();
         printReportResult(o1);
 

@@ -55,7 +55,7 @@ public class WitnessItemsPrepared implements WitnessAssertion{
     }
 
     //return the counting contraint and the prepared items
-    public static Map.Entry<WitnessContains, WitnessItemsPrepared> prepareArrayGroup(WitnessItems item,
+    public static List prepareArrayGroup(WitnessItems item,
                                                                                      List<WitnessAssertion> contains,
                                                                                      WitnessEnv env) throws REException, WitnessException
     {
@@ -123,11 +123,15 @@ public class WitnessItemsPrepared implements WitnessAssertion{
             itemsPrepared = merge(itemsPrepared, i);
 
         //separazione TODO:finire
-        itemsPrepared.varNormalization_separation(env, env.variableNamingSystem);
 
-        //env.buildOBDD_notElimination();
+        List result = new LinkedList();
+        result.add(contains_true);
+        result.add(itemsPrepared);
+        result.add(itemsPrepared.varNormalization_separation(env, env.variableNamingSystem));
 
-        return new AbstractMap.SimpleEntry<>(contains_true, itemsPrepared);
+        env.buildOBDD_notElimination();
+
+        return result;
     }
 
     private static WitnessItemsPrepared transformToItemsPrepared(WitnessItems items){

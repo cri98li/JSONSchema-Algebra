@@ -202,7 +202,8 @@ public class WitnessPattReq implements WitnessAssertion{
                 WitnessAnd and = new WitnessAnd();
                 and.add(value);
                 pattReq.value = and.groupize();
-            } else pattReq.value = value.groupize();
+            } else
+                pattReq.value = value.groupize();
         }
 
         return pattReq;
