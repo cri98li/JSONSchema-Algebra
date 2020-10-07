@@ -54,11 +54,12 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         additionalItems = new WitnessAssertion[0];
     }
 
-    //return the counting contraint and the prepared items
+    // prepares an array group (item + list of contains)
     /*
-     * 1 --> List of all the contains
+     * Returns a list of three elements:
+     * 1 --> List of all the minItems/maxItems constraints
      * 2 --> List with the new items#
-     * 3 --> List of the new variables
+     * 3 --> List of the new variables built during variable separation
      */
     public static List prepareArrayGroup(WitnessItems item,
                                          List<WitnessAssertion> contains,

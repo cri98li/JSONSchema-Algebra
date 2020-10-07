@@ -681,13 +681,13 @@ public class WitnessEnv implements WitnessAssertion {
     public void objectPrepare() throws REException, WitnessException {
         toOrPattReq();
 
-        Collection<Map.Entry<WitnessVar, WitnessAssertion>> entrySet = new HashMap<>(varList).entrySet();
+        Collection<Map.Entry<WitnessVar, WitnessAssertion>> toBePrepared = new HashMap<>(varList).entrySet();
 
-        while (!entrySet.isEmpty()) {
+        while (!toBePrepared.isEmpty()) {
             List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
 
-            for (Map.Entry<WitnessVar, WitnessAssertion> entry : entrySet) {
+            for (Map.Entry<WitnessVar, WitnessAssertion> entry : toBePrepared) {
 
                 if (entry.getValue().getClass() == WitnessAnd.class)
                     newDefinitions.addAll(((WitnessAnd) entry.getValue()).objectPrepare(this));
@@ -743,24 +743,28 @@ public class WitnessEnv implements WitnessAssertion {
                 normalizedValue = normalizedValue.merge(variableNamingSystem, pattReqManager);
                 normalizedValue = normalizedValue.groupize();
                 normalizedValue = normalizedValue.DNF();
+                normalizedValue = normalizedValue.merge(variableNamingSystem, pattReqManager);
 
                 varList.put(newDef.getKey(), normalizedValue);
                 newDefinitions.set(i, new AbstractMap.SimpleEntry<>(newDef.getKey(), normalizedValue));
             }
 
-            entrySet = newDefinitions;
+            toBePrepared = newDefinitions;
         }
     }
 
     public void arrayPreparation() throws REException, WitnessException {
 
-        Collection<Map.Entry<WitnessVar, WitnessAssertion>> entrySet = new HashMap<>(varList).entrySet();
+        Collection<Map.Entry<WitnessVar, WitnessAssertion>> toBePrepared = new HashMap<>(varList).entrySet();
 
-        while (!entrySet.isEmpty()) {
+        while (!toBePrepared.isEmpty()) {
             List<Map.Entry<WitnessVar, WitnessAssertion>> newDefinitions = new LinkedList<>();
 
-            for (Map.Entry<WitnessVar, WitnessAssertion> entry : entrySet) {
-
+            // Invokes arrayPreparation on every body of the environment and collects the new variables
+            for (Map.Entry<WitnessVar, WitnessAssertion> entry : toBePrepared) {
+                //arrayPreparation is only defined for WitnessAnd amd WitnessOr
+                //Hence in the following lines we transform every WitnessAssertion into an Or or an And
+                //Actually, we should only meet either WitnessAnd or WitnessOr
                 if (entry.getValue().getClass() == WitnessAnd.class)
                     newDefinitions.addAll(((WitnessAnd) entry.getValue()).arrayPreparation(this));
 
@@ -778,27 +782,28 @@ public class WitnessEnv implements WitnessAssertion {
                 }
             }
 
-            List<Map.Entry<String, Integer>> tmp = new LinkedList<>();
+            List<Map.Entry<String, Integer>> varCountList = new LinkedList<>();
 
             for (Map.Entry<WitnessVar, WitnessAssertion> newDef : newDefinitions) {
-                add(newDef.getKey(), newDef.getValue());
-                tmp.add(new AbstractMap.SimpleEntry<>(new String(newDef.getKey().getName()), newDef.getValue().countVarToBeExp(this)));
+                this.add(newDef.getKey(), newDef.getValue());
+                varCountList.add(new AbstractMap.SimpleEntry<>(new String(newDef.getKey().getName()),
+                                                               newDef.getValue().countVarToBeExp(this)));
             }
 
-            Collections.sort(tmp, Comparator.comparingInt(Map.Entry::getValue));
-            Collections.reverse(tmp);
+            Collections.sort(varCountList, Comparator.comparingInt(Map.Entry::getValue));
+            Collections.reverse(varCountList);
 
-            buildOBDD_notElimination();
+            this.buildOBDD_notElimination();
 
             //mi ricosctruisco il set su cui scorrere, ci aggiungo anche le variabili negate????
             newDefinitions = new LinkedList<>();
-            for (Map.Entry<String, Integer> newDef : tmp) {
+            for (Map.Entry<String, Integer> newDef : varCountList) {
                 String name = newDef.getKey();
                 WitnessVar varName = variableNamingSystem.buildVar(name);
                 if (name.equals(varName.getName())) {//se NON è stata rinominata è una variabile nuova
                     newDefinitions.add(new AbstractMap.SimpleEntry<>(varName, getDefinition(varName)));
 
-                    // il suo complemento
+                    // since I did notElimination, every variable has its complement
                     WitnessVar coName = getCoVar(varName);
                     newDefinitions.add(new AbstractMap.SimpleEntry<>(coName, varList.get(coName)));
                 }
@@ -806,6 +811,11 @@ public class WitnessEnv implements WitnessAssertion {
 
             logger.debug("Expanding {} variables", newDefinitions.size());
 
+            // for every new variable, normalize the body, put <var,normalized> in the
+            // environment and in the newDefinitions list
+            // The list is sorted so that the last element does not depend on preceding
+            // elements; we go backwards since Java does not like forward loops that
+            // modify elements, since we decided to overwrite "newDefinitions"
             for (int i = newDefinitions.size() - 1; i >= 0; i--) {
                 Map.Entry<WitnessVar, WitnessAssertion> newDef = newDefinitions.get(i);
                 WitnessAssertion normalizedValue = newDef.getValue();
@@ -814,12 +824,13 @@ public class WitnessEnv implements WitnessAssertion {
                 normalizedValue = normalizedValue.merge(variableNamingSystem, pattReqManager);
                 normalizedValue = normalizedValue.groupize();
                 normalizedValue = normalizedValue.DNF();
+                normalizedValue = normalizedValue.merge(variableNamingSystem, pattReqManager);
 
                 varList.put(newDef.getKey(), normalizedValue);
                 newDefinitions.set(i, new AbstractMap.SimpleEntry<>(newDef.getKey(), normalizedValue));
             }
 
-            entrySet = newDefinitions;
+            toBePrepared = newDefinitions;
         }
     }
 }
