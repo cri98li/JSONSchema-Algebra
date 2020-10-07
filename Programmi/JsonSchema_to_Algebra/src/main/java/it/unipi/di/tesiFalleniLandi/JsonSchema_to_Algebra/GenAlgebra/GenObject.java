@@ -177,8 +177,6 @@ public class GenObject implements GenAssertion {
     public List<GenVar> usedVars() {
         List<GenVar> cpart_vars = CPart.stream().map(gp->gp.usedVar()).collect(Collectors.toList());
         List<GenVar> rpart_vars = RPart.stream().flatMap(op->op.usedVars().stream()).collect(Collectors.toList());
-//        List<List<GenVar>> rpart_vars_list = RPart.stream().map(op->op.usedVars()).collect(Collectors.toList());
-//        List<GenVar> rpart_vars = rpart_vars_list.stream().flatMap(List::stream).distinct().collect(Collectors.toList());
         return Stream.concat(cpart_vars.stream(), rpart_vars.stream()).distinct().collect(Collectors.toList());
     }
 
