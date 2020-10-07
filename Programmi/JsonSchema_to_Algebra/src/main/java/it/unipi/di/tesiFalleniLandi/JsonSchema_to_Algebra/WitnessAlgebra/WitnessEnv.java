@@ -85,7 +85,8 @@ public class WitnessEnv implements WitnessAssertion {
         }
         else {
             varList.put(key, value);
-            varToBeElaborated.add(key); //TODO: variabili da elaborare è qui!! attenzione
+            varToBeElaborated.add(key); // this add is not needed in the "then" branch, since it
+                                        // recursively calls add, and at the next call we arrive here
         }
 
         //check WitnessVarManager count
