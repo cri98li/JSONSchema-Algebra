@@ -55,9 +55,14 @@ public class WitnessItemsPrepared implements WitnessAssertion{
     }
 
     //return the counting contraint and the prepared items
+    /*
+     * 1 --> List of all the contains
+     * 2 --> List with the new items#
+     * 3 --> List of the new variables
+     */
     public static List prepareArrayGroup(WitnessItems item,
-                                                                                     List<WitnessAssertion> contains,
-                                                                                     WitnessEnv env) throws REException, WitnessException
+                                         List<WitnessAssertion> contains,
+                                         WitnessEnv env) throws REException, WitnessException
     {
         if(item == null){
             item = new WitnessItems();

@@ -775,10 +775,6 @@ public class WitnessEnv implements WitnessAssertion {
                     WitnessAnd tmp = new WitnessAnd();
                     tmp.add(entry.getValue());
                     newDefinitions.addAll(tmp.arrayPreparation(this)); // if the element is not a type[obj], the method call tmp.objectPrepare(this) have no effect
-                    /*if (tmp.getIfUnitaryAnd() != null)
-                        varList.put(entry.getKey(), tmp.getIfUnitaryAnd());
-                    else
-                        varList.put(entry.getKey(), tmp);*/
                 }
             }
 
