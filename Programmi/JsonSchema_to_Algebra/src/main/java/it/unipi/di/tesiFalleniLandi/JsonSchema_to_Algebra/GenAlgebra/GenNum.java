@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class GenNum implements GenAssertion {
     private static Logger logger = LogManager.getLogger(GenNum.class);
+    private JsonElement witness;
 
 
     private Double min, max;
@@ -35,6 +36,11 @@ public class GenNum implements GenAssertion {
                 ", mof=" + mof +
                 ", notMofs=" + notMofs +
                 '}';
+    }
+
+    @Override
+    public JsonElement getWitness() {
+        return witness;
     }
 
     public GenNum() {
@@ -226,20 +232,21 @@ public class GenNum implements GenAssertion {
         else
             return _nongen;
     }
-
+//TODO check again
     @Override
-    public JsonElement generate() {
-        Double result = null;
+    public statuses generate() {
         if(min>max)
-            result = _nongen;
+            return statuses.Empty;
         else if(min==max)
-                result = generateMofNotMof(min,mof,notMofs);
+        {
+            witness = new JsonPrimitive(generateMofNotMof(min,mof,notMofs));
+            return statuses.Populated;
+        }
         else //min<max  I do not bother with the directions
-            result = fromToMofNotMof(min+1,max-1,mof,notMofs); //TODO to be checked
-        if(result==_nongen)
-            return new JsonNull();
-        else
-            return new JsonPrimitive(result);
+        {
+            witness = new JsonPrimitive(fromToMofNotMof(min+1,max-1,mof,notMofs)); //TODO to be checked
+            return statuses.Populated;
+        }
     }
 
     @Override

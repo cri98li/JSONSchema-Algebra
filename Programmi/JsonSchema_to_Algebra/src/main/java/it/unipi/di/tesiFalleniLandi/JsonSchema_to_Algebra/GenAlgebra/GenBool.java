@@ -9,21 +9,30 @@ import java.util.Random;
 import java.util.LinkedList;
 import java.util.List;
 
+import static it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra.GenAssertion.statuses.Populated;
+
 public class GenBool implements GenAssertion{
+    private JsonElement witness;
     @Override
     public String toString() {
         return "GenBool";
     }
 
     @Override
-    public JsonElement generate() {
+    public JsonElement getWitness() {
+        return witness;
+    }
+
+    @Override
+    public statuses generate() {
         Random r = new Random();
         int chance = r.nextInt(2);
         if (chance == 1) {
-            return new JsonPrimitive(true);
+            witness = new JsonPrimitive(true);
         } else {
-            return new JsonPrimitive(false);
+            witness = new JsonPrimitive(false);
         }
+        return statuses.Populated;
     }
 
     @Override

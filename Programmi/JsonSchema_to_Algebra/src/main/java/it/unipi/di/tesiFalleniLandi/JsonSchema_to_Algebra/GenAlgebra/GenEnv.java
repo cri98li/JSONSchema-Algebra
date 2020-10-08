@@ -408,7 +408,7 @@ public class GenEnv {
      *
      * @return
      */
-    public JsonElement generate() {
+    public JsonElement generate() throws Exception {
         logger.debug("openvars {}", openVars.stream().map(v->v.getName() + "," + v.getEvalOrder()));
 
         long nbIterations = 0, maxIterations = _iterationFactor*nbVar();
@@ -422,7 +422,10 @@ public class GenEnv {
             currentVar = openVars.get(0);
             currentAssertion = varList.get(currentVar);
             if(currentAssertion.containsBaseType()||currentVar.allVarsPopOrEmp()){
-                witness = currentAssertion.generate();
+                if(currentAssertion.generate() == GenAssertion.statuses.Populated)
+                    witness = currentAssertion.getWitness();
+                else
+                    throw new Exception("Unexpected situation ");
                 currentVar.setStatus(GenAssertion.statuses.Populated);
                 if(currentVar.isRoot())
                     break;
@@ -434,7 +437,6 @@ public class GenEnv {
             }
             openVars.remove(0);
         }
-
         if(nbIterations==maxIterations)
             return dummyJson();
 

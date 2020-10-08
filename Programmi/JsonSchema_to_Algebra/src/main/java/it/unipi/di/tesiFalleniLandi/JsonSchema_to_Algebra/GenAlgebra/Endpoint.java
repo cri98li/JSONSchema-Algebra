@@ -105,12 +105,12 @@ public class Endpoint {
             e.printStackTrace();
         }
 
-        System.out.println(genv);
+//        System.out.println(genv);
 
-        String witness = genv.generate().toString();
-
-        System.out.flush();
-        System.out.println("==witness== \n"+witness);
+//        String witness = genv.generate().toString();
+//
+//        System.out.flush();
+//        System.out.println("==witness== \n"+witness);
 
 
 

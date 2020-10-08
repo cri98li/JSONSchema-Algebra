@@ -8,11 +8,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GenObject implements GenAssertion {
     private static Logger logger = LogManager.getLogger(GenObject.class);
+    private JsonElement witness;
 
 
     private Double minPro, maxPro;
@@ -30,6 +33,11 @@ public class GenObject implements GenAssertion {
                 ", RPart=" + RPart +_sep +
                 ", objectReqList=" + objectReqList +_sep +
                 '}'+ _sep;
+    }
+
+    @Override
+    public JsonElement getWitness() {
+        return witness;
     }
 
     /*local classes*/
@@ -118,6 +126,20 @@ public class GenObject implements GenAssertion {
 //            for(WitnessPattReq witnessPattReq: witnessOrPattReq.getReqList())
 //                reqList.add(new GPattReq(witnessPattReq));
         }
+
+        /**
+         * returns true when all variables are empty or when the request list is empty
+         * @return
+         */
+        public boolean allVarsEmpty(){
+            Optional<Boolean> res = null;
+            res = this.reqList.stream().map(req->req.usedVar().isEmpty())
+                    .reduce((a,b)->a&&b);
+            if(res.isPresent())
+                return res.get();
+            else
+                return true; //empty list is considered to be Empty
+        }
     }
 
 
@@ -158,9 +180,55 @@ public class GenObject implements GenAssertion {
 
     //TODO invariants
 
+    //aux methods
+    //TODO implement
+    private List<List<GPattReq>> optimizedHittingSet(){
+        return new LinkedList<>();
+    }
+
+    //TODO implement
+    private boolean noPatternIsRepeatedTooOften(List<GPattReq> set){
+        return false;
+    }
+
+    private boolean allVarsPop(List<GPattReq> list){
+        Optional<Boolean> tv = list.stream().map(p->p.usedVar().isPop()).reduce((a,b)->a&&b);
+        if(tv.isPresent())
+            return tv.get();
+        else
+            return false;
+    }
+
     @Override
-    public JsonElement generate() {
-        return null;
+    public statuses generate() {
+        for(GOrPattReq orp: RPart)
+            if(orp.allVarsEmpty())
+                return statuses.Empty;
+
+        int s = CPart.stream().filter(p->p.usedVar().isOpen()||p.usedVar().isPop())
+                .collect(Collectors.toList()).size();
+        if(s<minPro)
+            return statuses.Empty;
+
+//        List<List<GPattReq>> solutionSet = optimizedHittingSet();
+        List<List<GPattReq>> reducedSolutionSet = optimizedHittingSet().stream()
+                .filter(set->set.size()<maxPro&&noPatternIsRepeatedTooOften(set))
+                .collect(Collectors.toList());
+        if(reducedSolutionSet.isEmpty())
+            return statuses.Empty;
+
+        List<List<GPattReq>> popSolutionSet = reducedSolutionSet.stream().filter(l->allVarsPop(l))
+                .collect(Collectors.toList());
+        if(popSolutionSet.isEmpty())
+            return statuses.Open;
+
+        //pick solution randomly
+        Random r = new Random();
+        int position = r.nextInt(popSolutionSet.size()-1);
+        List<GPattReq> solution = popSolutionSet.get(position);
+
+
+        return statuses.Populated;
     }
 
     @Override

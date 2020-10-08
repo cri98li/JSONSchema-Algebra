@@ -11,6 +11,8 @@ import java.util.List;
 
 public class GenString implements GenAssertion{
     private ComplexPattern pattern;
+    private JsonElement witness;
+
 
     @Override
     public String toString() {
@@ -22,6 +24,11 @@ public class GenString implements GenAssertion{
     public GenString() {
     }
 
+    public JsonElement getWitness() {
+        return witness;
+    }
+
+
     public void setPattern(ComplexPattern pattern) {
         this.pattern = pattern;
     }
@@ -30,8 +37,9 @@ public class GenString implements GenAssertion{
         pattern = wp.getPattern();
     }
     @Override
-    public JsonElement generate() {
-        return new JsonPrimitive(pattern.generateWords().iterator().next());
+    public statuses generate() {
+        witness = new JsonPrimitive(pattern.generateWords().iterator().next());
+        return statuses.Populated;
     }
 
     @Override

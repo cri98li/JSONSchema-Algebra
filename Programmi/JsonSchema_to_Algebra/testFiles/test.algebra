@@ -1,1 +1,5 @@
-rootdef "root" = allOf[bet(10, 30),bet(20, +inf),pattern("a")]
+rootdef "root" =
+allOf[
+  type[obj],
+  props["^.*a" : mof(2); true]
+]
