@@ -2,13 +2,11 @@ package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.json.JsonNumber;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class GenNum implements GenAssertion {
 
     public GenNum() {
         logger.debug("Creation");
-        mof = 1d; //defaul value
+//        mof = 1d; //defaul value
     }
 
     public void setMinMax(WitnessBet WitnessBet){
