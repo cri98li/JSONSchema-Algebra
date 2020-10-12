@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import dk.brics.automaton.Automaton;
-import dk.brics.automaton.RegExp;
 import dk.brics.automaton.RunAutomaton;
+import jdk.nashorn.internal.runtime.regexp.RegExp;
 
 /**
  * Functionality tests directly using the Bricks automaton library.
@@ -34,7 +34,7 @@ public class AutomatonTest {
 
 	@Test
 	public void testPattern() {
-		// From schema 48427
+		// From schema pp_48427.json
 		String pattern = "Normal|Fighting|Flying|Poison|Ground|Rock|Bug|Ghost|Steel|Fire|Water|Grass|Electric|Psychic|Ice|Dragon|Dark|Fairy";
 
 		Automaton a = (new RegExp(pattern)).toAutomaton();
