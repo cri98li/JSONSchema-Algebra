@@ -31,4 +31,14 @@ public class AutomatonTest {
 		assertTrue(ra.run("0"));
 		// assertTrue(ra.run("!"));
 	}
+
+	@Test
+	public void testPattern() {
+		// From schema 48427
+		String pattern = "Normal|Fighting|Flying|Poison|Ground|Rock|Bug|Ghost|Steel|Fire|Water|Grass|Electric|Psychic|Ice|Dragon|Dark|Fairy";
+
+		Automaton a = (new RegExp(pattern)).toAutomaton();
+		RunAutomaton ra = new RunAutomaton(a);
+		assertTrue(ra.run("Ice"));
+	}
 }
