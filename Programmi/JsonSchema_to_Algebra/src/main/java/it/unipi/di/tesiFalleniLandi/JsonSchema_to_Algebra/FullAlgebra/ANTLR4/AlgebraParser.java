@@ -714,23 +714,19 @@ public class AlgebraParser extends GrammaticaBaseVisitor<AlgebraParserElement>{
 		List<AssertionContext> list = ctx.assertion();
 		List<TerminalNode> idList = ctx.STRING();
 
+		String rootName = idList.remove(0).getText().replace("\"","");
+		Boolean rootFound = false;
 		for(int i = 0; i < list.size(); i++) {
-			if(ctx.getText().contains("rootdef"+idList.get(i).getText())) {
-				if (defs.getRootName() == null) {
-					String tmp = idList.get(i).getText().replace("rootdef", "").trim();
-					defs.setRootDef(tmp.substring(1, tmp.length() - 1), (Assertion) visit(list.get(i)));
-				}
-				else throw new ParseCancellationException("Multiple rootdef detected!");
-			}
-			else {
-				String defName = idList.get(i).getText().subSequence(1, idList.get(i).getText().length() - 1).toString();
-
-				if(defName.equals("OBDD_false") || defName.equals("OBDD_true")) continue;
-
+			String defName = idList.get(i).getText().replace("\"","");
+			if(defName.equals("OBDD_false") || defName.equals("OBDD_true")) continue;
+			if (defName.equals(rootName)) {
+				defs.setRootDef(defName, (Assertion) visit(list.get(i)));
+				rootFound = true;
+			} else {
 				defs.add(defName, (Assertion) visit(list.get(i)));
 			}
 		}
-
+		if (!rootFound) { throw new ParseCancellationException("root variable not defined"); }
 		return defs;
 	}
 

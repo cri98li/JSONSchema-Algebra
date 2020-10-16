@@ -2,11 +2,12 @@ package patterns;
 
 import static org.junit.Assert.assertTrue;
 
+import dk.brics.automaton.RegExp;
 import org.junit.Test;
 
 import dk.brics.automaton.Automaton;
 import dk.brics.automaton.RunAutomaton;
-import jdk.nashorn.internal.runtime.regexp.RegExp;
+// import jdk.nashorn.internal.runtime.regexp.RegExp;
 
 /**
  * Functionality tests directly using the Bricks automaton library.

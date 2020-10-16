@@ -106,7 +106,9 @@ properties : 'props''[' ( pAssertion ':' assertion (','pAssertion ':' assertion)
 
 const_assertion : 'const''(' json_value ')'																			#ParseConst;
 
-def_assertion: ('def'|'rootdef') STRING '=' assertion 	(',' (('def'|'rootdef') STRING '=' assertion))*										#ParseDef;
+def_assertion:  STRING 'defs' '[' STRING ':' assertion ( ',' STRING ':' assertion) * ']'                  #ParseDef;
+
+/* ('def'|'rootdef') STRING '=' assertion 	(',' (('def'|'rootdef') STRING '=' assertion))*	*/
 
 DEF_FIRMA: (ESC+ STRING);
 
