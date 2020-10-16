@@ -1,0 +1,10 @@
+To start Ubuntu:
+  go to the directory, SHIFT-right click on the white space, open Linux shell
+
+To modify the grammar syntax:
+  go to:
+    C:\Users\ghell\OneDrive\Documenti\GitHub\JSONSchema-Algebra\Programmi
+          \JsonSchema_to_Algebra\src\main\java\it\unipi\di\tesiFalleniLandi
+	  \JsonSchema_to_Algebra\FullAlgebra\ANTLR4
+  open grammatica.g4 in IntelliJ
+  modify accordingly the method visitParseItems found in AlgebraParser.java inside ALTLR4
