@@ -1,6 +1,10 @@
 To start Ubuntu:
   go to the directory, SHIFT-right click on the white space, open Linux shell
 
+Instaling ANTLER:
+  sudo apt update
+  sudo apt install antlr4
+
 To modify the grammar syntax:
   go to:
     C:\Users\ghell\OneDrive\Documenti\GitHub\JSONSchema-Algebra\Programmi
@@ -8,3 +12,11 @@ To modify the grammar syntax:
 	  \JsonSchema_to_Algebra\FullAlgebra\ANTLR4
   open grammatica.g4 in IntelliJ
   modify accordingly the method visitParseItems found in AlgebraParser.java inside ALTLR4
+
+To modify prettyprinting:
+  change the method toString
+
+Using gitHub Desktop:
+  - to update: Fetch
+  - to commit: add description/summary, Commit to master, Push origin
+
