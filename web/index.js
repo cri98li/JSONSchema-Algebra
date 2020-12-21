@@ -113,7 +113,7 @@ function sendRequest(){
 
     $.ajax({ 
         type : "POST", 
-        url : "https://jsonschema.duckdns.org:8080/execute?op="+action, 
+        url : "https://mqmukc9q5h.execute-api.eu-west-1.amazonaws.com/pubblico/jsonschema-to-algebra?action="+action, 
         data : inputTextarea,
         beforeSend: function(xhr){xhr.setRequestHeader('Content-Type', 'text/plain');},
         success : function(data) { 
