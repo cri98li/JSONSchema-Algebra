@@ -54,6 +54,7 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         additionalItems = new WitnessAssertion[0];
     }
 
+<<<<<<< Updated upstream
     // prepares an array group (item + list of contains)
     /*
      * Returns a list of three elements:
@@ -64,6 +65,12 @@ public class WitnessItemsPrepared implements WitnessAssertion{
     public static List prepareArrayGroup(WitnessItems item,
                                          List<WitnessAssertion> contains,
                                          WitnessEnv env) throws REException, WitnessException
+=======
+    //return the counting contraint and the prepared items
+    public static List prepareArrayGroup(WitnessItems item,
+                                                                                     List<WitnessAssertion> contains,
+                                                                                     WitnessEnv env) throws REException, WitnessException
+>>>>>>> Stashed changes
     {
         if(item == null){
             item = new WitnessItems();

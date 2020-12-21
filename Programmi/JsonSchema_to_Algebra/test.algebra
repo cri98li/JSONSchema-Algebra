@@ -12,8 +12,18 @@ rootdef "root" = {
 }
 */
 
+<<<<<<< Updated upstream
 "root"
 defs [
 "a" : true,
 "root" :  mof(2)
 ]
+=======
+rootdef "root" =  {
+    props["^a$":{
+             contains(4,+inf;pattern("c")),
+             items[type[int];true]
+        }
+    ;]
+}
+>>>>>>> Stashed changes

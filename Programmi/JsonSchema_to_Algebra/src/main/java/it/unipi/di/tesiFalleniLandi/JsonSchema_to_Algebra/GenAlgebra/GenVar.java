@@ -114,11 +114,14 @@ public class GenVar implements GenAssertion{
     }
 
     public boolean isRoot() {return name.equals(it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.ROOTDEF_DEFAULTNAME);}
+<<<<<<< Updated upstream
 
     @Override
     public JsonElement getWitness() {
         return witness;
     }
+=======
+>>>>>>> Stashed changes
 
     @Override
     public statuses generate() {

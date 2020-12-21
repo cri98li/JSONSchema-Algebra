@@ -457,6 +457,7 @@ public class GenEnv {
             currentAssertion = varList.get(currentVar);
 
             if(currentAssertion.containsBaseType()||currentVar.allVarsPopOrEmp()){
+<<<<<<< Updated upstream
                 if(currentAssertion.generate() == GenAssertion.statuses.Populated){
                     currentVar.setStatus(GenAssertion.statuses.Populated);
                     currentVar.setWitness(currentAssertion.getWitness());
@@ -467,6 +468,12 @@ public class GenEnv {
                     witness = currentVar.getWitness();
 //                    break; // no need because we should have openVars = sleepingVars = ()
                 }
+=======
+                witness = currentAssertion.generate();
+                currentVar.setStatus(GenAssertion.statuses.Populated);
+                if(currentVar.isRoot())
+                    break;
+>>>>>>> Stashed changes
                 popVars.add(currentVar);
             } else //wait for more vars to be generated
             {

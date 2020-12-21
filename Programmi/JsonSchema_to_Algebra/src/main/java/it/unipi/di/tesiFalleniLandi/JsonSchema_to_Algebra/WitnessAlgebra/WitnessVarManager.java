@@ -30,11 +30,15 @@ public class WitnessVarManager {
         count = 0l;
     }
 
+<<<<<<< Updated upstream
     /**
      * Creates a WitnessVar with name "name", adds the WitnessVar to instancesOfName(name)
      * @param name : name of the new WitnessVar
      * @return the WitnessVar created
      */
+=======
+    //TODO: specifiche
+>>>>>>> Stashed changes
 
     public WitnessVar buildVar(String name){
         // The next line should always leave "name==newName" - we may raise an error if it is

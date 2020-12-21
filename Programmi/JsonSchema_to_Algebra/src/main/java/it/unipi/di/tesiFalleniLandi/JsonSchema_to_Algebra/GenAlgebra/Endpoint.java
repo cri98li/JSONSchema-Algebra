@@ -107,6 +107,7 @@ public class Endpoint {
 
         System.out.println(genv);
 
+<<<<<<< Updated upstream
         try {
             String witness = genv.generate().toString();
         } catch (Exception e) {
@@ -115,6 +116,12 @@ public class Endpoint {
 //
 //        System.out.flush();
 //        System.out.println("==witness== \n"+witness);
+=======
+        String witness = genv.generate().toString();
+
+        System.out.flush();
+        System.out.println("==witness== \n"+witness);
+>>>>>>> Stashed changes
 
 
 
