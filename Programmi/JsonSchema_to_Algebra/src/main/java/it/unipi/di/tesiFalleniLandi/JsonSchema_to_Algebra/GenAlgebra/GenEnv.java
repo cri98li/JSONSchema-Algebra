@@ -1,5 +1,6 @@
 package it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.GenAlgebra;
 
+import com.amazonaws.transform.MapEntry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.gson.JsonElement;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.*;
 
@@ -19,7 +21,7 @@ public class GenEnv {
     private static Logger logger = LogManager.getLogger(GenEnv.class);
 
 //    private HashMap<GenVar, List<GenAssertion>> varList;
-    private HashMap<GenVar, GenTypedAssertion> varList;
+    private Map<GenVar, GenTypedAssertion> varList;
     private BiMap<GenVar,GenVar> coVar;
     private GenVar rootVar;
     private List<GenVar> openVars, sleepingVars, emptyVars, popVars;
@@ -67,6 +69,25 @@ public class GenEnv {
     }
 
     /**
+     * chain may be cyclic
+     * @param root
+     * @return
+     */
+    private List<GenVar> reachableFrom(GenVar root, List<GenVar> met){
+        List<GenVar> toExplore = root.usedVars(), metextended;
+        if(toExplore.isEmpty())
+            return Stream.of(root).collect(Collectors.toList());
+        else {
+            toExplore.removeAll(met);
+            metextended = met.stream().collect(Collectors.toList());
+            metextended.add(root);
+            metextended.addAll(toExplore.stream().flatMap(e-> reachableFrom(e, metextended).stream())
+                    .collect(Collectors.toList()));
+            return metextended;
+        }
+    }
+
+    /**
      *
      * @param env
      * @throws Exception
@@ -76,8 +97,9 @@ public class GenEnv {
         logger.debug("Creating varList");
         //varlist
         varList = new HashMap<>();
-        for (Map.Entry<WitnessVar, WitnessAssertion> e : env.getVarList().entrySet())
-            varList.put(new GenVar(e.getKey().getName()), fromWitnessDNF(e.getValue()));
+        env.getVarList().forEach((var, asser)->varList.put(new GenVar(var.getName()), fromWitnessDNF(asser)));
+//        for (Map.Entry<WitnessVar, WitnessAssertion> e : env.getVarList().entrySet())
+//            varList.put(new GenVar(e.getKey().getName()), fromWitnessDNF(e.getValue()));
         logger.debug("Setting rootvar");
         //rootvar
         rootVar = getByNameElseCreate(env.getRootVar().getName());
@@ -90,6 +112,13 @@ public class GenEnv {
         varList.keySet().forEach(var->{
             var.getUses().forEach(innerv -> innerv.addIsUsedBy(var));
         });
+        //consider only those vars reached from the root for generation
+        List<String> reachableFromRoot = reachableFrom(rootVar, new LinkedList<>()).stream()
+                .map(v->v.getName()).collect(Collectors.toList());
+        logger.debug("vars reachable from root are {}", reachableFromRoot);
+        varList=varList.entrySet().stream().filter(e->reachableFromRoot.contains(e.getKey().getName()))
+                .collect(Collectors.toMap(e->e.getKey(),e->e.getValue()));
+        logger.debug("vars to consider {}", varList.keySet());
         //prepare lists
         varList.forEach((var,typedAssertion)->var.setEvalOrder(typedAssertion.containsBaseType()));
         //instantiate  var structures
@@ -100,6 +129,7 @@ public class GenEnv {
         //initially set all vars to open
         openVars.addAll(varList.keySet());
         openVars.sort(Comparator.comparing(GenVar::getEvalOrder));
+
     }
 
     /**
@@ -111,7 +141,7 @@ public class GenEnv {
      *                  [[w]] = fromWitness(w)
      * @return
      */
-    private GenTypedAssertion fromWitnessDNF(WitnessAssertion witAssert) throws Exception {
+    private GenTypedAssertion fromWitnessDNF(WitnessAssertion witAssert) {
         logger.debug("Extracting assertions from {} ...", witAssert.toString());
         List<GenAssertion> result = new LinkedList<GenAssertion>();
 
@@ -139,7 +169,8 @@ public class GenEnv {
             }
                 else
                 {
-                    throw new Exception("Expected WitnessBoolean, WitnessOr, or WitnessAnd ;  found " +  witAssert.getClass());
+                    //TODO throw
+                    new Exception("Expected WitnessBoolean, WitnessOr, or WitnessAnd ;  found " +  witAssert.getClass());
                 }
 
         logger.debug("... extracted {}",result);
@@ -408,7 +439,7 @@ public class GenEnv {
      *
      * @return
      */
-    public JsonElement generate() {
+    public JsonElement generate() throws Exception {
         logger.debug("openvars {}", openVars.stream().map(v->v.getName() + "," + v.getEvalOrder()));
 
         long nbIterations = 0, maxIterations = _iterationFactor*nbVar();
@@ -416,23 +447,34 @@ public class GenEnv {
         GenVar currentVar = null;
         GenTypedAssertion currentAssertion = null;
         showQueues();
+
         //pick head and generate
         while (nbIterations<maxIterations && (!sleepingVars.isEmpty()||!openVars.isEmpty())){
             nbIterations++;
+            if(openVars.isEmpty()) //sleepingVars is not empty
+                openVars.add(sleepingVars.remove(0));
             currentVar = openVars.get(0);
             currentAssertion = varList.get(currentVar);
+
             if(currentAssertion.containsBaseType()||currentVar.allVarsPopOrEmp()){
-                witness = currentAssertion.generate();
-                currentVar.setStatus(GenAssertion.statuses.Populated);
+                if(currentAssertion.generate() == GenAssertion.statuses.Populated){
+                    currentVar.setStatus(GenAssertion.statuses.Populated);
+                    currentVar.setWitness(currentAssertion.getWitness());
+                }
+                else
+                    throw new Exception("Unexpected situation ");
+                if(currentVar.isRoot()){
+                    witness = currentVar.getWitness();
+//                    break; // no need because we should have openVars = sleepingVars = ()
+                }
                 popVars.add(currentVar);
-            } else
+            } else //wait for more vars to be generated
             {
                 currentVar.setStatus(GenAssertion.statuses.Sleeping);
                 sleepingVars.add(currentVar);
             }
             openVars.remove(0);
         }
-
         if(nbIterations==maxIterations)
             return dummyJson();
 

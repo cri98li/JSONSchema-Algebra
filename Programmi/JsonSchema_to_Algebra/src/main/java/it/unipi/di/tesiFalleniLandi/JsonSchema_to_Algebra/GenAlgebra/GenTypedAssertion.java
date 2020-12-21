@@ -12,15 +12,21 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class GenTypedAssertion implements GenAssertion{
+    private JsonElement witness;
 //    private List<GenAssertion> typedAssertion;
     private HashMap<String,List<GenAssertion>> typedAssertionMap;
-    private Class[] orderedTypes = {GenNull.class, GenNum.class, GenString.class, GenArray.class, GenObject.class};
+    private Class[] orderedTypes = {GenNum.class, GenString.class, GenArray.class, GenObject.class, GenNull.class, GenNull.class};
     private String[] orderedTypeNames = Arrays.stream(orderedTypes).map(t->t.getSimpleName()).toArray(String[]::new);
 
+    @Override
+    public JsonElement getWitness() {
+        return witness;
+    }
 
     public List<GenAssertion> getTypedAssertion() {
 //        return new ArrayList<>(typedAssertionMap.values());
-        return typedAssertionMap.values().stream().flatMap(l->l.stream()).collect(Collectors.toList());
+        return typedAssertionMap.values().stream()
+                .flatMap(l->l.stream()).collect(Collectors.toList());
     }
 
     public GenTypedAssertion(List<GenAssertion> typedAssertion) {
@@ -37,14 +43,14 @@ public class GenTypedAssertion implements GenAssertion{
 
 
     @Override
-    public JsonElement generate() {
+    public statuses generate() {
         JsonElement result = null;
         for(String t :orderedTypeNames){
             GenAssertion g = typedAssertionMap.get(t).get(0); //default generate one randomly
-            result =  g.generate();
+            g.generate();
             break; //generate the first witness according to the order chosen in @orderedTypes
         }
-        return result;
+        return statuses.Populated; //TODO deal with the other cases
     }
 
     @Override

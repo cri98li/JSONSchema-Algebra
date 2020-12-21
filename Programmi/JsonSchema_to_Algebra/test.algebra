@@ -1,4 +1,19 @@
-def "propa" = not(ref("propa")),
-rootdef "root" = props[
-"^a$": not(ref("propa"));
+/*
+rootdef "root" = {
+        contains(3,+inf;pattern("a")),
+                items[
+                  props["^a$":{
+                    contains(4,+inf;pattern("c")),
+                    items[type[int];true]
+                    }
+                  ;]
+                ; mof(2)
+        ]
+}
+*/
+
+"root"
+defs [
+"a" : true,
+"root" :  mof(2)
 ]

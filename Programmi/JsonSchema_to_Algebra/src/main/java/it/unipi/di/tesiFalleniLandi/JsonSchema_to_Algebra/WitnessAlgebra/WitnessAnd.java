@@ -336,6 +336,7 @@ public class WitnessAnd implements WitnessAssertion{
     }
 
     public boolean isAGroup(){
+
         if(andList.size() == 1 && andList.containsKey(WitnessBoolean.class))
             return false;
 
@@ -1187,21 +1188,29 @@ public class WitnessAnd implements WitnessAssertion{
         if(containsList == null) containsList = new LinkedList<>();
         if(itemsList == null) itemsList = new LinkedList<>();
 
-        if(containsList.isEmpty())
+        if(containsList.isEmpty()) {
+            andList.put(WitnessItems.class, itemsList);
             return new LinkedList<>();
+        }
 
         if (itemsList.size() > 1)
             throw new RuntimeException("list of items should contains only one WitnessItems assertion");
 
-        Map.Entry<WitnessContains, WitnessItemsPrepared> result = WitnessItemsPrepared.prepareArrayGroup(
+        /**
+         * result.get:
+         * 1 --> List of all the contains
+         * 2 --> List with the new items#
+         * 3 --> List of the new variables
+         */
+        List<Object> result = WitnessItemsPrepared.prepareArrayGroup(
                 itemsList.isEmpty() ? null : (WitnessItems) itemsList.get(0),
                 containsList,
                 env);
 
-        this.add(result.getKey());
-        this.add(result.getValue());
+        this.add((WitnessContains) result.get(0));
+        this.add((WitnessItemsPrepared) result.get(1));
 
-        return new LinkedList<>();
+        return (List<Map.Entry<WitnessVar, WitnessAssertion>>) result.get(2);
 
     }
 

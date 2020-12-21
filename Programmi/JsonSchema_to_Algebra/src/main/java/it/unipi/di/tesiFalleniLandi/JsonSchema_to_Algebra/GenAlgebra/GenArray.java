@@ -7,16 +7,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GenArray implements GenAssertion {
+    private JsonElement witness;
 
     private Double minItems, maxItems;
     private enum GenArrayType {NOCONT, ONECONT, MANYSIMPLECONT, GENERALCASE};
     private List<GenVar> items;
     private GenVar additionalItems;
 
+    public JsonElement getWitness() {
+        return witness;
+    }
 
 
     @Override
-    public JsonElement generate() {
+    public statuses generate() {
         return null;
     }
 

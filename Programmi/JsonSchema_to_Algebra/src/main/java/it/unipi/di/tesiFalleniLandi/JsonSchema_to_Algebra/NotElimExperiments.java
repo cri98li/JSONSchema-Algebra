@@ -158,8 +158,10 @@ public class NotElimExperiments
 					case 3: //fullAlgebra_notElimination
 						try {
 							fullAlgebra[0] = Utils_JSONSchema.normalize(root).toGrammar();
-							addResult(_size_before, (long) Utils.beauty(fullAlgebra[0].toGrammarString()).length());
-							addResult(_size_after,  (long)Utils.beauty(fullAlgebra[0].notElimination().toGrammarString()).length());
+							String fstr = Utils.beauty(fullAlgebra[0].toGrammarString());
+							addResult(_size_before, (long) fstr.length());
+							String nfstr = Utils.beauty(Utils_FullAlgebra.parseString(fstr).notElimination().toGrammarString());
+							addResult(_size_after,  (long) nfstr.length());
 						}catch (Exception e){
 							addError(filename,e);
 							return;

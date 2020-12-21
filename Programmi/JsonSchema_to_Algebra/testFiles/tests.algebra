@@ -2,3 +2,5 @@ allOf[
   type[obj],
   props["^.*a" : mof(2); true]
 ]
+
+allOf[bet(10, 30),bet(20, +inf),pattern("a")]

@@ -7,7 +7,6 @@ import it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.WitnessAlgebra.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.json.JsonNumber;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,12 +15,14 @@ import java.util.stream.Collectors;
 
 public class GenNum implements GenAssertion {
     private static Logger logger = LogManager.getLogger(GenNum.class);
+    private JsonElement witness;
 
 
     private Double min, max;
     private boolean minExclusive, maxExclusive;
     private Double mof;
     private List<Double> notMofs; //keep sorted
+    private Double _nongen = -999d;
 
     @Override
     public String toString() {
@@ -35,8 +36,14 @@ public class GenNum implements GenAssertion {
                 '}';
     }
 
+    @Override
+    public JsonElement getWitness() {
+        return witness;
+    }
+
     public GenNum() {
         logger.debug("Creation");
+//        mof = 1d; //defaul value
     }
 
     public void setMinMax(WitnessBet WitnessBet){
@@ -177,10 +184,67 @@ public class GenNum implements GenAssertion {
         return false;
     }
 
+    /**
+     * whether n is a multiple of a given element in notmof
+     * @param n
+     * @param notmof
+     * @return
+     */
+    private boolean existsNotMof(Double n, List<Double> notmof){
+        boolean res = false;
+        for(Double nm:notmof)
+            if(n%nm==0){
+                res = true;
+                break;
+            }
+        return res;
+    }
 
+
+    /**
+     *
+     * @param n
+     * @param mof
+     * @param notMofs
+     * @return
+     */
+    private Double generateMofNotMof(Double n, Double mof, List<Double> notMofs){
+        return fromToMofNotMof(n,mof,Double.MAX_VALUE,notMofs);
+    }
+
+    /**
+     *
+     * @param min
+     * @param max
+     * @param mof
+     * @param notMofs
+     * @return
+     */
+    private Double fromToMofNotMof(Double min, Double max, Double mof,  List<Double> notMofs){
+        Double result = min * mof;
+        while (existsNotMof(result,notMofs)&&result<max){
+            result++;
+        }
+        if(result<max)
+            return result;
+        else
+            return _nongen;
+    }
+//TODO check again
     @Override
-    public JsonElement generate() {
-        return new JsonPrimitive(123);
+    public statuses generate() {
+        if(min>max)
+            return statuses.Empty;
+        else if(min==max)
+        {
+            witness = new JsonPrimitive(generateMofNotMof(min,mof,notMofs));
+            return statuses.Populated;
+        }
+        else //min<max  I do not bother with the directions
+        {
+            witness = new JsonPrimitive(fromToMofNotMof(min+1,max-1,mof,notMofs)); //TODO to be checked
+            return statuses.Populated;
+        }
     }
 
     @Override

@@ -15,8 +15,13 @@ public class GenNull implements GenAssertion{
     }
 
     @Override
-    public JsonElement generate() {
+    public JsonElement getWitness() {
         return new JsonNull();
+    }
+
+    @Override
+    public statuses generate() {
+        return statuses.Populated;
     }
 
     @Override

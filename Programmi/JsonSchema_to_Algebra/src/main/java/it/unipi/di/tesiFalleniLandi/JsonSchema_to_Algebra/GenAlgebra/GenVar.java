@@ -15,6 +15,12 @@ public class GenVar implements GenAssertion{
     private static Logger logger = LogManager.getLogger(GenVar.class);
 //    enum statuses {Open, Sleeping, Empty, Populated };
 
+    private JsonElement witness;
+
+    public void setWitness(JsonElement witness) {
+        this.witness = witness;
+    }
+
     private String name ;
     private List<GenVar> uses;
     private List<GenVar> isUsedBy;
@@ -31,7 +37,7 @@ public class GenVar implements GenAssertion{
 
     public void setEvalOrder(boolean containsBaseType) {
         this.evalOrder = this.inDegree();
-        if(containsBaseType) //lower the score in case baseType
+        if(containsBaseType) //inscrease the importance in case it is a baseType
             this.evalOrder --;
     }
 
@@ -107,9 +113,15 @@ public class GenVar implements GenAssertion{
         return status==statuses.Sleeping;
     }
 
+    public boolean isRoot() {return name.equals(it.unipi.di.tesiFalleniLandi.JsonSchema_to_Algebra.Commons.AlgebraStrings.ROOTDEF_DEFAULTNAME);}
 
     @Override
-    public JsonElement generate() {
+    public JsonElement getWitness() {
+        return witness;
+    }
+
+    @Override
+    public statuses generate() {
         return null;
     }
 
@@ -125,7 +137,7 @@ public class GenVar implements GenAssertion{
 
     @Override
     public List<GenVar> usedVars() {
-        return new LinkedList<>();
+        return this.getUses();
     }
 
 

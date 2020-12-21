@@ -20,7 +20,7 @@ import java.util.Set;
 public class Defs_Assertion implements Assertion{
 	private HashMap<String, Assertion> defs; // all the definitions
 	private String rootDef; // name of the main definition
-	private Defs_Assertion env = null; //used by pattOfS //TODO: Attenzione!!!!!!!!!!!
+	//private Defs_Assertion env = null; //used by pattOfS //TODO: Attenzione!!!!!!!!!!!
 	private WitnessVarManager varManager;
 	private WitnessPattReqManager pattReqManager;
 
@@ -28,7 +28,7 @@ public class Defs_Assertion implements Assertion{
 
 	public Defs_Assertion() {
 		logger.trace("Creating an empty Defs_Assertion");
-		env = this;
+		//env = this;
 		defs = new HashMap<>();
 		varManager = new WitnessVarManager();
 		pattReqManager = new WitnessPattReqManager();
@@ -106,24 +106,22 @@ public class Defs_Assertion implements Assertion{
 		if(defs != null) {
 			Set<Entry<String, Assertion>> entrySet = defs.entrySet();
 
+			def.append("\""+rootDef+"\""+" defs [\r\n");
+
+			def.append("\"" + rootDef + "\"" + " : ").append(defs.get(rootDef).toGrammarString());
 			for (Entry<String, Assertion> entry : entrySet) {
 				String tmp = entry.getValue().toGrammarString();
-				if(tmp.isEmpty()) continue;
-
-				if (!Objects.equals(entry.getKey(), rootDef)) {
-					def.append(AlgebraStrings.COMMA)
-							.append(AlgebraStrings.DEFS(entry.getKey(), tmp));
-				} else if (rootDef != null)
-					def.append(AlgebraStrings.COMMA)
-							.append(AlgebraStrings.ROOTDEF("\"" + rootDef + "\"", tmp));
-				else
-					def.append(AlgebraStrings.COMMA)
-							.append(AlgebraStrings.ROOTDEF("\"" + AlgebraStrings.ROOTDEF_DEFAULTNAME + "\"", ""));
+				if (tmp.isEmpty()) continue;  //
+				if (!entry.getKey().equals(rootDef)) {
+					def.append(AlgebraStrings.COMMA + "\"" + entry.getKey() + "\"" + " : " + tmp);
+				}
 			}
 		}
 
 		if(def.length() == 0) return "";
-		return def.substring(AlgebraStrings.COMMA.length());
+		def.substring(AlgebraStrings.COMMA.length());
+		def.append("\r\n]");
+		return def.toString();
 	}
 
 	@Override

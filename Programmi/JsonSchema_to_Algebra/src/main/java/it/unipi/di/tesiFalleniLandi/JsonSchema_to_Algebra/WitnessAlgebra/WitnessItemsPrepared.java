@@ -54,10 +54,16 @@ public class WitnessItemsPrepared implements WitnessAssertion{
         additionalItems = new WitnessAssertion[0];
     }
 
-    //return the counting contraint and the prepared items
-    public static Map.Entry<WitnessContains, WitnessItemsPrepared> prepareArrayGroup(WitnessItems item,
-                                                                                     List<WitnessAssertion> contains,
-                                                                                     WitnessEnv env) throws REException, WitnessException
+    // prepares an array group (item + list of contains)
+    /*
+     * Returns a list of three elements:
+     * 1 --> List of all the minItems/maxItems constraints
+     * 2 --> List with the new items#
+     * 3 --> List of the new variables built during variable separation
+     */
+    public static List prepareArrayGroup(WitnessItems item,
+                                         List<WitnessAssertion> contains,
+                                         WitnessEnv env) throws REException, WitnessException
     {
         if(item == null){
             item = new WitnessItems();
@@ -123,11 +129,15 @@ public class WitnessItemsPrepared implements WitnessAssertion{
             itemsPrepared = merge(itemsPrepared, i);
 
         //separazione TODO:finire
-        itemsPrepared.varNormalization_separation(env, env.variableNamingSystem);
 
-        //env.buildOBDD_notElimination();
+        List result = new LinkedList();
+        result.add(contains_true);
+        result.add(itemsPrepared);
+        result.add(itemsPrepared.varNormalization_separation(env, env.variableNamingSystem));
 
-        return new AbstractMap.SimpleEntry<>(contains_true, itemsPrepared);
+        env.buildOBDD_notElimination();
+
+        return result;
     }
 
     private static WitnessItemsPrepared transformToItemsPrepared(WitnessItems items){
